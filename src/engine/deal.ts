@@ -128,3 +128,34 @@ function dealFacts(rng: number, ids: readonly string[], content: Content) {
 function nameOf(content: Content, id: string): string {
   return content.characters.find((c) => c.id === id)?.name ?? id;
 }
+
+/** Someone goes to the top, and whoever was there now answers to them. */
+export function raiseOnMap(map: PowerMap, id: string): PowerMap {
+  const [top] = map.order;
+  if (top === id || top === undefined) return map;
+  return {
+    order: [id, ...map.order.filter((o) => o !== id)],
+    influence: [
+      { who: id, over: top },
+      ...map.influence.filter((i) => i.over !== id),
+    ],
+  };
+}
+
+/** Someone goes to the bottom, and whoever answered to them moves up a level. */
+export function lowerOnMap(map: PowerMap, id: string): PowerMap {
+  const order = [...map.order.filter((o) => o !== id), id];
+  const [top] = order;
+  if (top === undefined || top === id) return map;
+  // Someone at the very top has no one above them, so the next person takes over.
+  const above = map.influence.find((i) => i.over === id)?.who ?? top;
+  return {
+    order,
+    influence: [
+      ...map.influence
+        .filter((i) => i.over !== id && i.over !== top)
+        .map((i) => (i.who === id ? { who: above, over: i.over } : i)),
+      { who: above, over: id },
+    ],
+  };
+}

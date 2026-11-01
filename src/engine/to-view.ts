@@ -72,6 +72,7 @@ export function legalChoices(state: State, world: World): Choice[] {
     case "dialog":
     case "notice":
     case "move":
+    case "event":
       return [{ type: "continue" }];
     case "story":
       return [{ type: "continue" }];
@@ -155,24 +156,31 @@ function toStoryView(
   );
   const fill = (written: string | undefined) =>
     written === undefined ? [] : [fillParts(state, content, written)];
+  // Each Company Event of the month, in the story's own words for it.
+  const events = state.eventsLanded
+    .filter((landed) => landed.month === state.month)
+    .flatMap(({ id }) => content.events.filter((e) => e.id === id))
+    .map((e) => e.story);
   return {
     kind: "story",
     title,
     reportedHeading,
     happenedHeading,
-    reported: told.flatMap((e) => fill(e.reported)),
-    happened: told.flatMap((e) => fill(e.happened)),
+    reported: [...events, ...told].flatMap((e) => fill(e.reported)),
+    happened: [...events, ...told].flatMap((e) => fill(e.happened)),
   };
 }
 
-/** The formal hierarchy, the same in every deal. */
-function toOrgChart(content: Content): ChartEntry[] {
-  return content.characters.map((c) => ({
-    name: c.name,
-    title: c.title,
-    reportsTo:
-      content.characters.find((m) => m.id === c.reportsTo)?.name ?? null,
-  }));
+/** The formal hierarchy, the same in every deal until a Company Event moves it. */
+function toOrgChart(state: State, content: Content): ChartEntry[] {
+  return content.characters.map((c) => {
+    const manager = state.reportsTo[c.id] ?? c.reportsTo;
+    return {
+      name: c.name,
+      title: c.title,
+      reportsTo: content.characters.find((m) => m.id === manager)?.name ?? null,
+    };
+  });
 }
 
 function toStepView(state: State, world: World): StepView {
@@ -245,6 +253,16 @@ function toStepView(state: State, world: World): StepView {
         body: fillParts(state, content, move.body),
       };
     }
+    case "event": {
+      const event = content.events.find((e) => e.id === step.id);
+      if (!event) throw new Error(`Unknown Company Event "${step.id}".`);
+      return {
+        kind: "event",
+        from: event.from,
+        title: event.title,
+        body: event.body,
+      };
+    }
     case "story":
       return toStoryView(state, content);
     case "results":
@@ -309,7 +327,7 @@ export function toView(state: State, world: World): PlayerView {
       label: actionsLabel,
     },
     buzzwords: buzzwordsOf(content, state.buzzwords),
-    orgChart: toOrgChart(content),
+    orgChart: toOrgChart(state, content),
     hotspots: actionsThisMonth(state, content).map((a) =>
       toHotspot(state, content, a),
     ),

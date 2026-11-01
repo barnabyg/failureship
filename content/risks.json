@@ -2,15 +2,28 @@
   {
     "id": "security-skimped",
     "addedBy": "cut-security",
-    "after": { "min": 2, "max": 4 },
+    "after": {
+      "min": 2,
+      "max": 4
+    },
     "note": "You took the money out of the security budget in the Budget Round. Your name is on the form.",
     "route": {
       "character": "analyst",
-      "chance": { "believer": 0.9, "incompetent": 0.3, "practitioner": 0.6 },
+      "chance": {
+        "believer": 0.9,
+        "incompetent": 0.3,
+        "practitioner": 0.6
+      },
       "motive": "The Senior Analyst had noticed that nobody now reviews the door logs, and wanted that to be someone else's fault.",
-      "means": { "did": "cut-security" }
+      "means": {
+        "did": "cut-security"
+      }
     },
-    "traced": { "not": { "did": "covered-tracks" } },
+    "traced": {
+      "not": {
+        "did": "covered-tracks"
+      }
+    },
     "onPlayer": {
       "id": "security-landed",
       "as": "move",
@@ -30,19 +43,31 @@
     },
     "landedOnYou": "It came out, and the form led straight to you.",
     "landedElsewhere": "It came out, and with the form gone, someone in Facilities took it for you.",
-    "neverCameOut": "It never came out. The door logs are still not being reviewed."
+    "neverCameOut": "It never came out. The door logs are still not being reviewed.",
+    "event": "breach"
   },
   {
     "id": "metric-gamed",
     "addedBy": "gamed-metric",
-    "after": { "min": 1, "max": 2 },
+    "after": {
+      "min": 1,
+      "max": 2
+    },
     "note": "You worked out how to game the new metric, and then you did.",
     "route": {
       "character": "projects",
-      "chance": { "believer": 0.8, "incompetent": 0.2, "practitioner": 0.5 },
+      "chance": {
+        "believer": 0.8,
+        "incompetent": 0.2,
+        "practitioner": 0.5
+      },
       "motive": "The Project Co-ordinator's own numbers looked worse beside yours, and they wanted to know why."
     },
-    "traced": { "not": { "did": "covered-tracks" } },
+    "traced": {
+      "not": {
+        "did": "covered-tracks"
+      }
+    },
     "onPlayer": {
       "id": "metric-landed",
       "as": "notice",
@@ -65,14 +90,25 @@
   {
     "id": "demand-faked",
     "addedBy": "faked-demand",
-    "after": { "min": 2, "max": 3 },
+    "after": {
+      "min": 2,
+      "max": 3
+    },
     "note": "You told your boss's boss that a Demand had been met, when it had not.",
     "route": {
       "character": "admin",
-      "chance": { "believer": 0.9, "incompetent": 0.4, "practitioner": 0.7 },
+      "chance": {
+        "believer": 0.9,
+        "incompetent": 0.4,
+        "practitioner": 0.7
+      },
       "motive": "The Office Co-ordinator keeps the minutes, and the minutes did not agree with you."
     },
-    "traced": { "not": { "did": "covered-tracks" } },
+    "traced": {
+      "not": {
+        "did": "covered-tracks"
+      }
+    },
     "onPlayer": {
       "id": "demand-landed",
       "as": "move",

@@ -68,6 +68,8 @@ What can be done on the floor, and the results.
 
 Actions a month, months in a run and the cost of each choice.
 
+- `disasterChance` is how often a month brings a disaster with no clue, as in
+  [`events.json`](#eventsjson).
 - `signsMisleadChance` is how often a Scene's signs swap `{holder}` with `{bystander}`,
   so that one Scene never settles who holds influence. A Scene's results still go by the
   truth.
@@ -143,6 +145,30 @@ of them, and goes on like any other Demand.
 ## `dialogs.json`
 
 Short text dialogs, such as the pub. A choice's `dialog` opens one.
+
+## `events.json`
+
+Company Events: things that happen to the company as a whole. They land after the player's
+actions and before the month closes, ahead of the month's Character Move. How to write one is in
+[Write a Company Event](../README.md#write-a-company-event) in the README.
+
+Each has `from`, `title`, `body`, and `story`, the official story's own `reported` and optional
+`happened` words for it. It can carry `sets` and `project`. It has no `mistake`, so a surprise is
+never a big mistake by itself. A risk that lands can still be one, through its own Bill.
+
+Each has exactly one way to land, or it is refused:
+
+- A hidden risk's `event` names it, and it lands in the month the risk comes out.
+- `schedule` comes from outside: the `months` it can land in, a seeded `chance` in each until it
+  does, and an optional `clue` for the Notebook, `before` months earlier.
+- `"disaster": true` arrives with no clue. Each month, `disasterChance` in `balance.json` is the
+  chance of one, and a run does not repeat one.
+
+`reshuffle` changes the charts. `reports` moves a Character on the Org Chart, so `character` now
+reports `to` someone else, and a move that would make a loop does not happen. `rises` sends someone
+to the top of the Power Map, and `falls` to the bottom, which changes later signs. Your boss and your
+boss's boss cannot be moved in `reports`, since nothing creates a vacancy yet. An event that moves
+anyone needs `changed`, which the results screen shows beside the charts.
 
 ## `families.json`
 
@@ -271,6 +297,7 @@ traced. The player never sees the list during play. How to write one is in
 - `traced` is read as it comes out. If it holds, `onPlayer` is sent. If not, `onSomeoneElse`
   is, if it is written, and otherwise nothing happens. Either is a Bill, as in
   [`threads.json`](#threadsjson), so a risk that lands can be `"mistake": "big"`.
+- `event` names a Company Event, from [`events.json`](#eventsjson), that lands as it comes out.
 - `note` says what was building up, and `landedOnYou`, `landedElsewhere` and `neverCameOut` say
   what became of it. The results screen lists every risk that was added.
 

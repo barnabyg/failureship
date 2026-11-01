@@ -32,7 +32,7 @@ one. Each of the nine months has the same shape and different contents:
 1. **A Notification arrives.** Answer it. The answer may cost one of your 3 actions.
 2. **Spend your remaining actions** by clicking a place on the floor or its label.
    The panel at the bottom left always says what you can do now.
-3. **A Character Move lands on you.** You do not get a choice.
+3. **Any Company Event, then a Character Move, lands on you.** You do not get a choice.
 4. **The month closes** with the official story beside what actually happened.
 
 There are four ways to spend an action:
@@ -63,7 +63,8 @@ Press **Notebook** at any step, at no cost. It keeps claims and important signs 
 you, and it never says which to trust. Mark each Character with the kind you suspect.
 
 Press **Org Chart** at any step to see the formal hierarchy, also at no cost. The real
-one is the hidden Power Map, dealt from the seed.
+one is the hidden Power Map, dealt from the seed. A Company Event can change either of them
+mid-run, and later signs and charts follow.
 
 After nine months the results screen shows who was really who: each Character's kind
 and Hidden Fact, your marks against the truth, how you played by family of Move, what
@@ -152,6 +153,7 @@ format, the page shows what is wrong instead of the game.
 | `scenes.json`         | Each month's Scene: its signs, its choices and their results                                                         |
 | `moves.json`          | Character Moves, and when each can land                                                                              |
 | `threads.json`        | What comes back months later: what starts each Thread, and the Bill it sends                                         |
+| `events.json`         | Company Events: where each comes from, how it moves the charts, and the official story's words                       |
 | `risks.json`          | Hidden risks: what adds each, who it comes out through, and whether it can be traced to you                          |
 | `mistakes.json`       | The words of a Final Warning and of being fired                                                                      |
 | `official-story.json` | The official story, assembled from entries according to what you did                                                 |
@@ -183,6 +185,20 @@ A Thread is how an earlier choice comes back. To add one, needing no code:
 
 The player hears nothing of a Thread until its Bill arrives. Results then trace it back to what
 started it.
+
+### Write a Company Event
+
+A Company Event happens to the company as a whole. To add one, needing no code, add an entry to
+`content/events.json` with `from`, `title`, `body` and its `story`, then give it one way to land:
+
+- Name it as the `event` of a hidden risk in `content/risks.json`.
+- Give it a `schedule`, for something from outside, with the `months` and `chance`, and a `clue`
+  if the Notebook should see it coming.
+- Say `"disaster": true`, for one with no clue. `disasterChance` in `content/balance.json` sets
+  how often these come. It cannot be a big mistake, because a surprise should be funny and not unfair.
+
+Its `reshuffle` can move people on the Org Chart and the Power Map, and `changed` says so on the
+results screen. Your boss stays your boss for now, so neither of your bosses can be moved on the chart.
 
 ### Write a hidden risk
 
@@ -218,7 +234,7 @@ at a later month. `npm run build` and `npm run play` ignore it.
   `month.ts` holds the month's order; `outcome.ts` is the one place any consequence
   takes effect; `state.ts` and `reads.ts` are what the mechanics share; `boss.ts`,
   `demands.ts`, `find-out.ts`, `notebook.ts`, `over-head.ts`, `project.ts` and
-  `scenes.ts` are mechanics of their own, as are `mistakes.ts`, `risks.ts`, and `threads.ts`
+  `scenes.ts` are mechanics of their own, as are `company-events.ts`, `mistakes.ts`, `risks.ts`, and `threads.ts`
   with `bills.ts`; `to-view.ts` builds the player view, and
   `to-results.ts` its reveal at the end; `save.ts` writes and reads a run. Everything
   in a run's `State` is plain data, so a mechanic gets saving for free. Raise

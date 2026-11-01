@@ -79,6 +79,7 @@ export type Step =
       verdict?: string | undefined;
     }
   | { kind: "move"; id: string }
+  | { kind: "event"; id: string }
   | { kind: "story" }
   | { kind: "results" };
 
@@ -171,6 +172,11 @@ export interface State extends MonthRecord {
   }[];
   /** Bills waiting to land this month as Character Moves. */
   billsDue: string[];
+  /** Who has been moved on the Org Chart, and who to. */
+  reportsTo: Record<string, string>;
+  /** Company Events waiting to land this month. */
+  eventsDue: string[];
+  eventsLanded: { id: string; month: number }[];
   /** Told to the player, and shown from then on. */
   finalWarning: boolean;
   /** The month the player was fired in, which ends the run. */

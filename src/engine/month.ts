@@ -1,4 +1,5 @@
 import { landBill, playThreads } from "./bills";
+import { landEvent, scheduleEvents } from "./company-events";
 import { everyNotification, type Content } from "./content";
 import { dealWithAbsence, followUpDemands } from "./demands";
 import { applyOutcome } from "./outcome";
@@ -36,6 +37,7 @@ export function openMonth(state: State, content: Content): void {
   followUpDemands(state, content);
   playThreads(state, content);
   surfaceRisks(state, content);
+  scheduleEvents(state, content);
   const { input } = content.project;
   const colleague = state.truth.characters.find(
     (c) => c.id === input?.character,
@@ -62,15 +64,19 @@ export function leaveStory(state: State, world: World): void {
   }
   state.month += 1;
   // What the boss thinks is mostly about lately, so it stays worth reading.
-  state.truth.bossOpinion = Math.trunc(
-    state.truth.bossOpinion * world.content.balance.opinion.keeps,
-  );
+  // Adding zero turns -0 into 0, which is all that a save can hold.
+  state.truth.bossOpinion =
+    Math.trunc(state.truth.bossOpinion * world.content.balance.opinion.keeps) +
+    0;
   Object.assign(state, freshMonth(world.content, state.month));
   openMonth(state, world.content);
   state.step = nextStep(state, world);
 }
 
-/** The month's order: Notifications, actions, a Move, then the month closes. */
+/**
+ * The month's order: Notifications, actions, any Company Event, a Move, and then
+ * the month closes.
+ */
 export function nextStep(state: State, world: World): Step {
   const { content } = world;
   const due = state.noticesDue.shift();
@@ -102,6 +108,7 @@ export function nextStep(state: State, world: World): Step {
   }
   return (
     dealWithAbsence(state, content) ??
+    landEvent(state, content) ??
     landBill(state, content) ??
     landMove(state, content) ?? { kind: "story" }
   );

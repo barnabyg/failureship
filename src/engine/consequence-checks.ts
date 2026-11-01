@@ -18,6 +18,7 @@ function flagsThatCanBeSet(content: Content): Set<string> {
     ),
     ...content.moves.flatMap((m) => m.sets),
     ...everyBill(content).flatMap((b) => b.sets),
+    ...content.events.flatMap((e) => e.sets),
     ...Object.values(content.demands?.sets ?? {}),
     ...(content.demands?.missed?.sets ?? []),
     ...Object.values(content.overHead?.sets ?? {}),
@@ -48,6 +49,65 @@ function findBrokenBills(content: Content): string[] {
     } else if (bill.options.length > 0) {
       problems.push(`${owner} has options, so must be a notification.`);
     }
+  }
+  return problems;
+}
+
+/** An event must have a way to land, and must leave the player's bosses alone. */
+export function findBrokenEvents(content: Content): string[] {
+  const problems: string[] = [];
+  const known = new Set(content.characters.map((c) => c.id));
+  const bosses = [content.boss.character, content.overHead?.character];
+  const ids = new Set<string>();
+  const fromRisks = new Set(content.risks.flatMap((r) => r.event ?? []));
+  for (const event of content.events) {
+    const owner = `Company Event "${event.id}"`;
+    if (ids.has(event.id)) problems.push(`${owner} is written twice.`);
+    ids.add(event.id);
+    const ways = [event.schedule, event.disaster || undefined].filter(
+      (way) => way !== undefined,
+    );
+    if (ways.length + Number(fromRisks.has(event.id)) !== 1) {
+      problems.push(
+        `${owner} needs one way to land: a schedule, a disaster or a risk.`,
+      );
+    }
+    for (const month of event.schedule?.months ?? []) {
+      if (month > content.balance.monthsPerRun) {
+        problems.push(
+          `${owner} is set in month ${String(month)}, past the run.`,
+        );
+      }
+    }
+    const { reports, rises, falls } = event.reshuffle;
+    for (const { character, to } of reports) {
+      // Vacancies, and a change of boss, wait for the next phase.
+      if (bosses.includes(character)) {
+        problems.push(`${owner} moves "${character}", who has to stay put.`);
+      }
+      for (const id of [character, to]) {
+        if (!known.has(id)) problems.push(`${owner} names unknown "${id}".`);
+      }
+    }
+    for (const id of [...rises, ...falls]) {
+      if (!known.has(id)) problems.push(`${owner} names unknown "${id}".`);
+    }
+    const moved = reports.length + rises.length + falls.length > 0;
+    if (moved !== (event.changed !== undefined)) {
+      problems.push(
+        `${owner} needs "changed" if and only if it moves anyone on the charts.`,
+      );
+    }
+  }
+  for (const id of fromRisks) {
+    if (!ids.has(id))
+      problems.push(`A risk names unknown Company Event "${id}".`);
+  }
+  if (
+    content.balance.disasterChance > 0 &&
+    !content.events.some((e) => e.disaster)
+  ) {
+    problems.push("A disaster has a chance, but no disaster is written.");
   }
   return problems;
 }

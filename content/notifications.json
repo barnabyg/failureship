@@ -453,34 +453,6 @@
     ]
   },
   {
-    "id": "shared-drive",
-    "months": [6],
-    "from": "From: IT Services",
-    "subject": "The shared drive is 98% full",
-    "body": "Everyone is asked to remove anything they no longer need from the shared drive by Friday. IT Services would like it known that it does not look at what gets removed, and that it could not if it wanted to.",
-    "options": [
-      {
-        "id": "clear-your-files",
-        "family": "deflect",
-        "label": "Clear out everything with your name on it, to be helpful",
-        "sets": ["covered-tracks"],
-        "result": {
-          "title": "Housekeeping",
-          "body": "It takes an afternoon. IT Services sends you a certificate for your contribution to storage. There is now very little on the shared drive to say that you have ever done anything, which you decide is fine."
-        }
-      },
-      {
-        "id": "leave-your-files",
-        "label": "Leave it. Someone else will",
-        "sets": ["left-your-files"],
-        "result": {
-          "title": "Housekeeping",
-          "body": "Someone else does. It is not clear who, or what they removed, and on Monday the shared drive is 99% full."
-        }
-      }
-    ]
-  },
-  {
     "id": "bonus-pot",
     "months": [6],
     "from": "From: Your boss, Dennis Prowse",
@@ -569,6 +541,34 @@
         "result": {
           "title": "The bonus pot",
           "body": "Everyone gets enough for a modest lunch. Nobody thanks you, and everybody tells you that they would have done the same, and that they deserved more."
+        }
+      }
+    ]
+  },
+  {
+    "id": "shared-drive",
+    "months": [6],
+    "from": "From: IT Services",
+    "subject": "The shared drive is 98% full",
+    "body": "Everyone is asked to remove anything they no longer need from the shared drive by Friday. IT Services would like it known that it does not look at what gets removed, and that it could not if it wanted to.",
+    "options": [
+      {
+        "id": "clear-your-files",
+        "family": "deflect",
+        "label": "Clear out everything with your name on it, to be helpful",
+        "sets": ["covered-tracks"],
+        "result": {
+          "title": "Housekeeping",
+          "body": "It takes an afternoon. IT Services sends you a certificate for your contribution to storage. There is now very little on the shared drive to say that you have ever done anything, which you decide is fine."
+        }
+      },
+      {
+        "id": "leave-your-files",
+        "label": "Leave it. Someone else will",
+        "sets": ["left-your-files"],
+        "result": {
+          "title": "Housekeeping",
+          "body": "Someone else does. It is not clear who, or what they removed, and on Monday the shared drive is 99% full."
         }
       }
     ]

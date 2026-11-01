@@ -33,6 +33,7 @@
   "resultsMistakesHeading": "What you were warned about",
   "resultsThreadsHeading": "What came back",
   "resultsRisksHeading": "What was building up",
+  "resultsChangesHeading": "What moved the charts",
   "resultsWhoHeading": "Who was really who",
   "resultsNoFact": "Nothing. Exactly what it looked like.",
   "findOutSourceHeading": "Whom do you ask?",
@@ -74,6 +75,7 @@
     "scene": "Read the room: who interrupts, who gets looked at, who gets ignored. No single sign settles what anyone is, so watch over the months. Then choose how to behave.",
     "notice": "Read the result, then press Continue.",
     "move": "This has happened to you, and there is nothing to choose. Press Continue to see how the month is reported.",
+    "event": "This has happened to the whole company, and there is nothing to choose. Press Continue.",
     "story": "The month has closed. Read what was reported, then press Continue to move on.",
     "results": "The run is over. Type its seed to play the same deal again, or start a new run."
   },

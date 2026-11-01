@@ -388,6 +388,17 @@ function ResultsPanel({
           <Chart entries={step.powerMap} />
         </div>
       </div>
+      {step.changes.length > 0 && (
+        <div className="callout" data-testid="results-changes">
+          <h3>{panelText.resultsChangesHeading}</h3>
+          {step.changes.map((row, index) => (
+            <p key={index} data-testid="result-change">
+              <strong>{monthLabel(row.month)}. </strong>
+              {row.changed}
+            </p>
+          ))}
+        </div>
+      )}
     </Panel>
   );
 }
@@ -566,6 +577,13 @@ export function StepPanel({ view, onChoose }: StepPanelProps) {
     case "move":
       return (
         <Panel testId="panel-move" eyebrow={step.from} title={step.title}>
+          <p>{step.body}</p>
+          <Continue onChoose={onChoose} />
+        </Panel>
+      );
+    case "event":
+      return (
+        <Panel testId="panel-event" eyebrow={step.from} title={step.title}>
           <p>{step.body}</p>
           <Continue onChoose={onChoose} />
         </Panel>

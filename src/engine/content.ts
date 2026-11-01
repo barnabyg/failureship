@@ -247,11 +247,56 @@ const risk = z.strictObject({
   /** Whether it can be traced to the player, as it comes out. */
   traced: condition,
   onPlayer: bill,
+  /** A Company Event that lands as it comes out, as well as anything below. */
+  event: id.optional(),
   /** What happens if it cannot be traced. Left out, nothing does. */
   onSomeoneElse: bill.optional(),
   landedOnYou: text,
   landedElsewhere: text,
   neverCameOut: text,
+});
+
+/**
+ * Something that happens to the company as a whole. A risk can name one, or it has
+ * a `schedule`, or it is a `disaster`, which arrives with no clue. It has no way of
+ * being a big mistake, so a surprise is never unfair by itself.
+ */
+const companyEvent = z.strictObject({
+  id,
+  from: text,
+  title: text,
+  body: text,
+  /** What the results screen says it changed on the charts. */
+  changed: text.optional(),
+  /** From outside: the months it can land in, and a clue before it does. */
+  schedule: z
+    .strictObject({
+      months: z.array(z.number().int().positive()).min(1),
+      /** The seeded chance in each of those months, until it lands. */
+      chance: z.number().min(0).max(1),
+      clue: z
+        .strictObject({
+          before: z.number().int().positive(),
+          source: text,
+          text,
+        })
+        .optional(),
+    })
+    .optional(),
+  /** Drawn at `balance.disasterChance`, with no clue. */
+  disaster: z.boolean().default(false),
+  /** Who moves on the Org Chart, and who rises or falls on the Power Map. */
+  reshuffle: z
+    .strictObject({
+      reports: z.array(z.strictObject({ character: id, to: id })).default([]),
+      rises: z.array(id).default([]),
+      falls: z.array(id).default([]),
+    })
+    .default({ reports: [], rises: [], falls: [] }),
+  /** The official story's own way of reporting it. */
+  story: z.strictObject({ reported: text, happened: text.optional() }),
+  sets,
+  project: projectChange,
 });
 
 const chasedDemand = z.strictObject({
@@ -638,6 +683,8 @@ export const contentSchema = z.strictObject({
     actionCosts: z.record(id, z.number().int().nonnegative()),
     /** How often a Scene's signs swap who holds influence with the next person. */
     signsMisleadChance: z.number().min(0).max(1),
+    /** How often a month brings a disaster with no clue. */
+    disasterChance: z.number().min(0).max(1).default(0),
     /** The hidden opinion at which the boss's treatment changes. */
     opinion: z.strictObject({
       warmAt: z.number().int().positive(),
@@ -767,6 +814,7 @@ export const contentSchema = z.strictObject({
   moves: z.array(move),
   threads: z.array(thread).default([]),
   risks: z.array(risk).default([]),
+  events: z.array(companyEvent).default([]),
   officialStory: z.strictObject({
     title: text,
     reportedHeading: text.optional(),
@@ -784,6 +832,7 @@ export const contentSchema = z.strictObject({
       claim: text,
       notice: text,
       move: text,
+      event: text,
       story: text,
       results: text,
     }),

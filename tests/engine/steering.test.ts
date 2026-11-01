@@ -118,11 +118,22 @@ describe("nine months that do not feel like one month repeated", () => {
   });
 
   it("gives you an action at any meeting you do not go to", () => {
-    const { views } = walk(3, (view, turn) => {
-      const open = view.choices.filter(
+    const { views } = walk(3, (view) => {
+      const { step } = view;
+      const free =
+        step.kind === "notification"
+          ? step.options.find((o) => o.costLabel === "Costs nothing")
+          : undefined;
+      if (step.kind === "notification" && free) {
+        return {
+          type: "notification" as const,
+          notificationId: step.id,
+          optionId: free.id,
+        };
+      }
+      const choice = view.choices.find(
         (c) => !(c.type === "action" && c.actionId.startsWith("meeting")),
       );
-      const choice = open[turn % open.length];
       if (!choice) throw new Error("No choice.");
       return choice;
     });

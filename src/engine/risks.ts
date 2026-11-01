@@ -24,6 +24,7 @@ export function surfaceRisks(state: State, content: Content): void {
     if (!motive || !matches(state, content, route.means)) continue;
     const traced = matches(state, content, written.traced);
     risk.cameOut = { month: state.month, onPlayer: traced };
+    if (written.event !== undefined) state.eventsDue.push(written.event);
     const bill = traced ? written.onPlayer : written.onSomeoneElse;
     if (bill) sendBill(state, content, bill);
   }

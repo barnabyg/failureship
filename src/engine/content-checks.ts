@@ -1,5 +1,9 @@
 import { z } from "zod";
-import { findBrokenRisks, findBrokenThreads } from "./consequence-checks";
+import {
+  findBrokenEvents,
+  findBrokenRisks,
+  findBrokenThreads,
+} from "./consequence-checks";
 import {
   CLAIM_STATUSES,
   DEMAND_ANSWERS,
@@ -76,6 +80,8 @@ function flagsSetByHiddenResults(content: Content): Set<string> {
       ...b.sets,
       ...b.options.flatMap((o) => o.sets),
     ]),
+    // Whether a Company Event lands is drawn too.
+    ...content.events.flatMap((e) => e.sets),
     // Whether a Demand is forgotten or chased goes by the boss's kind.
     ...Object.values(content.demands?.sets ?? {}),
     // Whether the boss finds out goes by the boss's kind too.
@@ -621,6 +627,10 @@ function findBrokenReferences(content: Content): string[] {
   problems.push(...findBrokenMistakes(content));
   problems.push(...findBrokenThreads(content));
   problems.push(...findBrokenRisks(content));
+  problems.push(...findBrokenEvents(content));
+  for (const event of content.events) {
+    checkProject(`Company Event "${event.id}"`, event.project);
+  }
   for (const risk of content.risks) {
     const owner = `Risk "${risk.id}"`;
     checkCondition(owner, risk.traced);

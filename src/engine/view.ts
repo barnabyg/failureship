@@ -104,6 +104,7 @@ export type StepView =
       verdict?: string | undefined;
     }
   | { kind: "move"; from: string; title: string; body: string }
+  | { kind: "event"; from: string; title: string; body: string }
   | {
       kind: "story";
       title: string;
@@ -125,6 +126,8 @@ export type StepView =
         playedIn: number;
         playedOut: string;
       }[];
+      /** What moved the charts during the run. */
+      changes: { month: number; title: string; changed: string }[];
       /** What was building up, including what never came out. */
       risks: {
         addedIn: number;

@@ -18,6 +18,12 @@ export function toResultsView(
       : content.ui.results),
     ending: toEnding(state, content),
     mistakes: state.mistakes,
+    changes: state.eventsLanded.flatMap(({ id, month }) => {
+      const written = content.events.find((e) => e.id === id);
+      return written?.changed === undefined
+        ? []
+        : [{ month, title: written.title, changed: written.changed }];
+    }),
     risks: state.truth.risks.flatMap((risk) => {
       const written = content.risks.find((r) => r.id === risk.id);
       if (!written) return [];
