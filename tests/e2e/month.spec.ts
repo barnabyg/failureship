@@ -27,6 +27,10 @@ test("plays through a month on a fixed-camera Floor 1", async ({ page }) => {
   await page.getByTestId("continue").click();
 
   await expect(page.getByTestId("panel-story")).toBeVisible();
+  await expect(page.getByTestId("panel-story")).toContainText(
+    "Junior employee Monthly Summary",
+  );
+  await expect(page.getByTestId("job-title")).toHaveText("Junior employee");
   await expect(page.getByTestId("hotspot-meeting")).toBeDisabled();
 });
 

@@ -1,8 +1,8 @@
 {
   "title": "Failureship",
   "tagline": "Deliver nothing. Demonstrate everything. Get promoted.",
-  "floorName": "Floor 1",
-  "floorRole": "Junior employee",
+  "jobHeading": "Job title",
+  "jobTitle": "Junior employee",
   "monthHeading": "Month",
   "monthLabel": "{n} of {total}",
   "actionsHeading": "Actions",

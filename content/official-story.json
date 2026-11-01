@@ -1,31 +1,31 @@
 {
-  "title": "Floor 1 Monthly Summary",
+  "title": "Junior employee Monthly Summary",
   "reportedHeading": "As reported upstairs",
   "happenedHeading": "What actually happened",
   "entries": [
     {
       "months": [1],
-      "reported": "Floor 1 remains on track against its objectives, which are being finalised."
+      "reported": "You remain on track against your objectives, which are being finalised."
     },
     {
       "months": [2],
-      "reported": "Floor 1 has embedded the lessons of last month, and identified further lessons."
+      "reported": "You have embedded the lessons of last month, and identified further lessons."
     },
     {
       "months": [3],
-      "reported": "Floor 1 engaged fully with the company's refreshed direction."
+      "reported": "You engaged fully with the company's refreshed direction."
     },
     {
       "months": [4],
-      "reported": "Floor 1 is taking a disciplined approach to its budget, which is under discussion."
+      "reported": "You are taking a disciplined approach to a budget that is under discussion."
     },
     {
       "months": [5],
-      "reported": "Floor 1's delivery is green overall, on the agreed definition of green."
+      "reported": "Your delivery is green overall, on the agreed definition of green."
     },
     {
       "months": [6],
-      "reported": "Floor 1 closes the review period meeting expectations, which are under review."
+      "reported": "You close the review period meeting expectations, which are under review."
     },
     {
       "when": {

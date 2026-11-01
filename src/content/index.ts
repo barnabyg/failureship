@@ -67,8 +67,8 @@ const panelSchema = z.strictObject(
     [
       "title",
       "tagline",
-      "floorName",
-      "floorRole",
+      "jobHeading",
+      "jobTitle",
       "monthHeading",
       "monthLabel",
       "actionsHeading",

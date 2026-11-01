@@ -93,8 +93,8 @@ export function App() {
         </div>
         <dl>
           <div>
-            <dt>{panelText.floorName}</dt>
-            <dd>{panelText.floorRole}</dd>
+            <dt>{panelText.jobHeading}</dt>
+            <dd data-testid="job-title">{panelText.jobTitle}</dd>
           </div>
           <div data-testid="month">
             <dt>{panelText.monthHeading}</dt>
