@@ -136,6 +136,7 @@ Winning is reaching the penthouse and securing your payout, and how you got ther
 ## Scope of the first version
 
 - Floors 1–3 are playable. Only the current floor is shown, with a lift indicating the route to a higher floor (changed at the Phase 1 checkpoint).
+- The player's job title leads, in the header and the official story, and the floor is a side-effect of it (changed at the Phase 2 checkpoint).
 - About 18 months at three actions each, aiming for about 25 minutes.
 - About eight Characters: your bosses, one or two Rivals, Believers and Incompetents.
 - A comic stand-in for winning at the end of Floor 3.
