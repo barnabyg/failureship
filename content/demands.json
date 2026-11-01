@@ -14,8 +14,8 @@
     }
   },
   "chasedPenalty": {
-    "believer": -2,
-    "incompetent": -2,
+    "believer": -3,
+    "incompetent": -3,
     "practitioner": -3
   },
   "sets": {
@@ -98,7 +98,7 @@
             "label": "Drop everything and cancel the meetings now",
             "cost": "standard",
             "sets": ["delivered-demand"],
-            "approach": "results",
+            "approach": "late-answer",
             "result": {
               "title": "Meetings",
               "body": "You cancel them that afternoon, and send a short note. You are told that the priorities have moved on, but that it is good to see it done."
@@ -190,7 +190,7 @@
             "label": "Stay late and write an evaluation of something",
             "cost": "standard",
             "sets": ["faked-demand"],
-            "approach": "theatre",
+            "approach": "late-answer",
             "result": {
               "title": "The evaluation",
               "body": "You write nine pages, from the company's own website. It concludes that further evaluation is needed. You are told it is exactly what was wanted, and that it is late."
@@ -284,7 +284,7 @@
             "label": "Rewrite the plan in the hour",
             "cost": "standard",
             "sets": ["delivered-demand"],
-            "approach": "results",
+            "approach": "late-answer",
             "result": {
               "title": "Travel",
               "body": "You send it with four minutes to spare. It has one mistake in it, and that is the part everyone reads."

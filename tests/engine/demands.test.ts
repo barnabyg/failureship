@@ -399,7 +399,7 @@ describe("Demands in the game", () => {
     }
   });
 
-  it("go worse when chased than answering at once, for every Demand and boss", () => {
+  it("go worse when chased than any answer at once, for every Demand and boss", () => {
     const { demands, boss } = gameContent;
     const worth = (kind: Kind, id: string | undefined) =>
       boss.approaches.find((a) => a.id === id)?.shift[kind] ?? 0;
@@ -407,7 +407,7 @@ describe("Demands in the game", () => {
       for (const item of items) {
         const stall = item.options.find((o) => o.id === "stall");
         const answers = item.options.filter((o) => o.id !== "stall");
-        const direct = Math.max(...answers.map((o) => worth(kind, o.approach)));
+        const worst = Math.min(...answers.map((o) => worth(kind, o.approach)));
         const late = Math.max(
           ...item.chased.options.map((o) => worth(kind, o.approach)),
         );
@@ -416,7 +416,7 @@ describe("Demands in the game", () => {
           (demands?.chasedPenalty[kind] ?? 0) +
           late;
 
-        expect(chased, `${item.id}, ${kind}`).toBeLessThan(direct);
+        expect(chased, `${item.id}, ${kind}`).toBeLessThan(worst);
       }
     }
   });

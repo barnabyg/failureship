@@ -381,6 +381,28 @@
           "Your boss says that you must let your boss know how that goes, and enters it in a calendar."
         ]
       }
+    },
+    {
+      "id": "late-answer",
+      "shift": {
+        "believer": 1,
+        "incompetent": 0,
+        "practitioner": 0
+      },
+      "reaction": {
+        "believer": [
+          "Your boss says thank you, and that it would have been better to hear sooner. Your boss is right, and is kind about it.",
+          "Your boss reads it, and asks what got in the way the first time."
+        ],
+        "incompetent": [
+          "Your boss says great, and asks whether this is the thing that everyone has been asking your boss about.",
+          "Your boss forwards it upstairs, with an apology for the delay that names you twice."
+        ],
+        "practitioner": [
+          "Your boss accepts it without looking up. It is on file now, with the date on which it was asked for, and the date on which you did it.",
+          "Your boss thanks you for getting there in the end, in front of someone who needed to hear it."
+        ]
+      }
     }
   ]
 }
