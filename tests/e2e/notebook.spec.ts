@@ -42,7 +42,7 @@ test("a clue arrives, a Character is marked, and the mark is on the results scre
 
 test("the Notebook opens from every step of a month", async ({ page }) => {
   const opensAndCloses = async (panel: string) => {
-    const left = await page.getByTestId("actions-left").innerText();
+    const left = (await page.getByTestId("actions-left").textContent()) ?? "";
     await openNotebook(page);
     await closeNotebook(page);
     await expect(page.getByTestId(panel)).toBeVisible();
