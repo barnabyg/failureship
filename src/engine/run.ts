@@ -1,6 +1,7 @@
 import { makeClaim, verdictOfClaim, type Claim } from "./claims";
 import {
   KINDS,
+  MOVE_FAMILIES,
   behavioursOpenTo,
   chasedIdOf,
   everyDemand,
@@ -10,6 +11,7 @@ import {
   type Content,
   type Kind,
   type Mood,
+  type MoveFamily,
   type SceneData,
 } from "./content";
 import {
@@ -151,6 +153,8 @@ interface State extends MonthRecord {
     /** Given at a missed meeting, and yet to arrive as a Notification. */
     due?: boolean;
   }[];
+  /** How many Moves of each family the player has made. Never shown in play. */
+  played: Partial<Record<MoveFamily, number>>;
   /** How often the player has gone over the boss's head. */
   overHeadUses: number;
   /** The missed meetings' actions given so far, each of them once in a run. */
@@ -223,6 +227,7 @@ export function startRun(options: {
     approachUses: {},
     verdict: null,
     openDemands: [],
+    played: {},
     overHeadUses: 0,
     actionsGiven: [],
     noticesDue: [],
@@ -410,6 +415,7 @@ function apply(state: State, world: World, choice: Choice): void {
       if (!action) throw new IllegalChoiceError(choice.actionId);
       state.spent += costOf(content, action.cost);
       state.visited.push(action.id);
+      countMove(state, action.family);
       const reaction = applyOutcome(state, content, action, action.label);
       if (action.scene !== undefined) {
         state.step = openScene(state, world, action.scene);
@@ -479,6 +485,10 @@ function goOverHead(state: State, content: Content, label: string): Step {
     title: label,
     body: inTurn(lines, state.overHeadUses) ?? label,
   };
+}
+
+function countMove(state: State, family: MoveFamily | undefined): void {
+  if (family) state.played[family] = (state.played[family] ?? 0) + 1;
 }
 
 /** Moves the boss's opinion, and keeps that for the results screen. */
@@ -560,6 +570,7 @@ function answerNotification(
     });
   }
 
+  countMove(state, option.family);
   state.spent += costOf(content, option.cost);
   state.unanswered = state.unanswered.filter(
     (id) => id !== choice.notificationId,
@@ -785,6 +796,7 @@ function behaveInScene(
     matches(state, world.content, r.when, scene.cast),
   );
   if (!result) throw new IllegalChoiceError(choice.optionId);
+  countMove(state, option?.family);
   const heard = heardAbout(state, option?.about);
   const fill = (written: string) =>
     fillSubject(
@@ -1211,6 +1223,18 @@ function toResultsView(
     })),
     factEvents: state.factEvents,
     boss: toBossResults(state, content),
+    played: MOVE_FAMILIES.flatMap((id) => {
+      const written = content.families?.[id];
+      return written
+        ? [
+            {
+              family: written.label,
+              note: written.note,
+              count: state.played[id] ?? 0,
+            },
+          ]
+        : [];
+    }),
     claims: state.claims.map((claim) => {
       const { label, note } = content.sources.verdicts[claim.status];
       const said = state.truth.characters.find((c) => c.id === claim.source);

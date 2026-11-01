@@ -180,6 +180,22 @@ function ResultsPanel({
           ))}
         </tbody>
       </table>
+      {step.played.length > 0 && (
+        <>
+          <h3>{panelText.resultsPlayedHeading}</h3>
+          <table className="results">
+            <tbody>
+              {step.played.map((row) => (
+                <tr key={row.family} data-testid="result-family">
+                  <th scope="row">{row.family}</th>
+                  <td className="results-kind">{row.count}</td>
+                  <td>{row.note}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </>
+      )}
       <h3>{panelText.resultsMarksHeading}</h3>
       <table className="results">
         <tbody>

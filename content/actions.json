@@ -56,7 +56,7 @@
   },
   {
     "id": "meeting-calibration",
-    "months": [6],
+    "months": [9],
     "label": "Meeting Room 1B",
     "description": "Annual Calibration, at which nobody is compared with anybody.",
     "place": "meeting-room",
@@ -67,6 +67,7 @@
   },
   {
     "id": "over-head",
+    "family": "attack",
     "label": "Your boss's boss's office",
     "description": "You could go and tell your boss's boss what is really going on. Your boss need never know.",
     "place": "head-office",
@@ -105,11 +106,24 @@
       {
         "title": "Kitchen",
         "body": "The mugs have been counted, and an email is on its way. You put yours back and hold it there for a moment, in case anyone is looking."
+      },
+      {
+        "title": "Kitchen",
+        "body": "Someone has put up a sign about the sign about the microwave. You read both, and take your soup back upstairs cold."
+      },
+      {
+        "title": "Kitchen",
+        "body": "A person from another floor asks you whether this kitchen is always this quiet. You say that it depends. They write that down, and leave."
+      },
+      {
+        "title": "Kitchen",
+        "body": "The good teabags are in a locked drawer now. Everyone knows who has the key, and nobody has said so. You have the other kind, and hold it up to the light."
       }
     ]
   },
   {
     "id": "one-to-one",
+    "family": "find-out",
     "label": "The Senior Analyst's desk",
     "description": "A one-to-one, which is a conversation that can be logged.",
     "place": "analyst-desk",
@@ -139,11 +153,24 @@
       {
         "title": "One-to-one",
         "body": "The Senior Analyst says that this has been really useful, and asks what it was that you wanted. You say that it was nothing. The Senior Analyst makes a note of that."
+      },
+      {
+        "title": "One-to-one",
+        "body": "The Senior Analyst has moved the meeting to a walking meeting, and walks off. You catch up by the stairs. The meeting is over."
+      },
+      {
+        "title": "One-to-one",
+        "body": "You are asked what your biggest learning has been this year. You say that it is still landing. The Senior Analyst nods, and logs it."
+      },
+      {
+        "title": "One-to-one",
+        "body": "The Senior Analyst says that this is a safe space, and closes the laptop, and opens it again. You talk about the car park, because it is safest."
       }
     ]
   },
   {
     "id": "ask-around",
+    "family": "find-out",
     "label": "The photocopier",
     "description": "Everyone comes here eventually, and nobody here has anything to copy.",
     "place": "photocopier",
@@ -154,6 +181,7 @@
   },
   {
     "id": "inside-info",
+    "family": "find-out",
     "label": "The loading bay",
     "description": "People come here to smoke, and to sell things they know for a coffee or a favour.",
     "place": "loading-bay",
@@ -164,6 +192,7 @@
   },
   {
     "id": "work",
+    "family": "deliver",
     "label": "Your desk",
     "description": "Doing your actual job, on your actual project. It remains an option.",
     "place": "your-desk",
@@ -193,11 +222,56 @@
       {
         "title": "Your desk",
         "body": "A full, quiet afternoon of real work. You are startled to find that you enjoyed it, and you tell no one."
+      },
+      {
+        "title": "Your desk",
+        "body": "You clear the backlog. A new backlog is created for you, and it has a better name."
+      },
+      {
+        "title": "Your desk",
+        "body": "You find the bug that everyone has been reporting as a feature. You fix it, and three people ask you to put it back."
+      },
+      {
+        "title": "Your desk",
+        "body": "You spend a morning writing the handover note that nobody wrote for you. You read it through, and it is good. You keep it, in case."
       }
     ],
     "approach": "results",
     "project": {
       "real": "better"
     }
+  },
+  {
+    "id": "meeting-metric",
+    "months": [6],
+    "label": "Meeting Room 1B",
+    "description": "The first results of your boss's new metric, which nobody has been asked to understand.",
+    "place": "meeting-room",
+    "cost": "standard",
+    "scene": "metric-review",
+    "oncePerMonth": true,
+    "sets": ["attended-meeting"]
+  },
+  {
+    "id": "meeting-hiring",
+    "months": [7],
+    "label": "Meeting Room 1B",
+    "description": "A Recruitment Panel. You are on it, for balance, and one of the candidates knows you.",
+    "place": "meeting-room",
+    "cost": "standard",
+    "scene": "hiring-panel",
+    "oncePerMonth": true,
+    "sets": ["attended-meeting"]
+  },
+  {
+    "id": "meeting-speak-up",
+    "months": [8],
+    "label": "Meeting Room 1B",
+    "description": "A Listening Session, in complete confidence, in front of everybody. There are biscuits.",
+    "place": "meeting-room",
+    "cost": "standard",
+    "scene": "speak-up-session",
+    "oncePerMonth": true,
+    "sets": ["attended-meeting"]
   }
 ]

@@ -146,6 +146,8 @@ export type StepView =
           verdict: string;
         } | null;
       };
+      /** How the player played, by family of Move. */
+      played: { family: string; note: string; count: number }[];
       claims: {
         month: number;
         source: string;

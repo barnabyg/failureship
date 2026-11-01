@@ -40,7 +40,7 @@ test("lying in the report sets the reported status apart from the real one", asy
   await page.getByTestId("continue").click();
   await finishMonth(page);
 
-  await expect(page.getByTestId("month")).toContainText("2 of 6");
+  await expect(page.getByTestId("month")).toContainText("2 of 9");
   await openProject(page);
   await expect(page.getByTestId("project-reported")).toHaveText("Green");
 });

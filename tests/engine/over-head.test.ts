@@ -189,7 +189,7 @@ describe("going over your boss's head", () => {
       150;
 
     expect(mean(true)).toBeLessThan(mean(false));
-  });
+  }, 30_000);
 
   it("never shows either opinion or kind before the run ends", () => {
     for (const seed of SEEDS.slice(0, 60)) {

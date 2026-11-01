@@ -47,7 +47,7 @@ function resultsOf(view: PlayerView | undefined) {
   return view.step;
 }
 
-describe("six months that do not feel like one month repeated", () => {
+describe("nine months that do not feel like one month repeated", () => {
   it("gives every month its own Scene and Notifications", () => {
     const months = Array.from(
       { length: gameContent.balance.monthsPerRun },
@@ -84,7 +84,7 @@ describe("six months that do not feel like one month repeated", () => {
         : [],
     );
 
-    expect(new Set(titles).size).toBe(6);
+    expect(new Set(titles).size).toBe(9);
   });
 
   it("lands a different Move every month", () => {
@@ -95,7 +95,7 @@ describe("six months that do not feel like one month repeated", () => {
       );
 
       expect(new Set(moves).size).toBe(moves.length);
-      expect(moves).toHaveLength(6);
+      expect(moves).toHaveLength(9);
     }
   });
 
@@ -105,7 +105,7 @@ describe("six months that do not feel like one month repeated", () => {
       v.step.kind === "story" ? [JSON.stringify(v.step.reported)] : [],
     );
 
-    expect(new Set(stories).size).toBe(6);
+    expect(new Set(stories).size).toBe(9);
   });
 
   it("gives you an action at any meeting you do not go to", () => {
@@ -159,7 +159,7 @@ describe("six months that do not feel like one month repeated", () => {
       for (const more of known?.moreResults ?? []) told.add(more.body);
     }
 
-    expect(told.size).toBe(18);
+    expect(told.size).toBe(27);
   });
 });
 
@@ -304,9 +304,9 @@ describe("the owner's data files", () => {
     }
   });
 
-  it("has enough of everything for six months", () => {
-    expect(gameContent.scenes.length).toBeGreaterThanOrEqual(6);
-    expect(gameContent.notifications.length).toBeGreaterThanOrEqual(6);
+  it("has enough of everything for nine months", () => {
+    expect(gameContent.scenes.length).toBeGreaterThanOrEqual(9);
+    expect(gameContent.notifications.length).toBeGreaterThanOrEqual(9);
     expect(gameContent.moves.length).toBeGreaterThanOrEqual(10);
     expect(gameContent.buzzwords.length).toBeGreaterThanOrEqual(3);
   });

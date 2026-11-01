@@ -45,6 +45,7 @@
   "resultsBossHeading": "Your boss, and what your choices did for them",
   "resultsBossNoChoices": "You did nothing your boss noticed. It was a position.",
   "resultsHeadHeading": "Your boss's boss, and what they really made of you",
+  "resultsPlayedHeading": "How you played",
   "resultsClaimsHeading": "What you were told",
   "resultsNoClaims": "You asked nobody anything. It was a position.",
   "resultsMonthLabel": "Month {n}",

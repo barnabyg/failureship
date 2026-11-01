@@ -14,6 +14,20 @@ const opinion = z.number().int().default(0);
 /** How far this moves the hidden opinion of the boss's boss. */
 const headOpinion = z.number().int().default(0);
 
+export const MOVE_FAMILIES = [
+  "impress",
+  "fabricate",
+  "trade",
+  "find-out",
+  "deflect",
+  "attack",
+  "deliver",
+] as const;
+export type MoveFamily = (typeof MOVE_FAMILIES)[number];
+
+/** What sort of Move a choice is. Only the results screen ever says. */
+const family = z.enum(MOVE_FAMILIES).optional();
+
 /** Something written once for each kind of boss. */
 const perKind = <T extends z.ZodType>(value: T) =>
   z.strictObject({ believer: value, incompetent: value, practitioner: value });
@@ -82,6 +96,7 @@ const condition: z.ZodType<Condition> = z.lazy(() =>
 const notificationOption = z.strictObject({
   id,
   label: text,
+  family,
   cost: id.optional(),
   dialog: id.optional(),
   learns: z.array(id).default([]),
@@ -158,6 +173,7 @@ const sceneResult = z.strictObject({
 const sceneOption = z.strictObject({
   id,
   label: text,
+  family,
   /** The option appears once the player has heard this Hidden Fact of someone. */
   about: id.optional(),
   /** The option appears only when this holds. */
@@ -194,6 +210,7 @@ const action = z.strictObject({
   description: text,
   place: id,
   cost: id,
+  family,
   result: notice.optional(),
   /** Further results, used in turn so that a place reads differently each month. */
   moreResults: z.array(notice).default([]),
@@ -522,6 +539,20 @@ const contentSchema = z.strictObject({
       .min(1),
   }),
   overHead: overHead.optional(),
+  /** What the results screen calls each family of Moves. */
+  families: z
+    .strictObject(
+      Object.fromEntries(
+        MOVE_FAMILIES.map((f) => [
+          f,
+          z.strictObject({ label: text, note: text }),
+        ]),
+      ) as Record<
+        MoveFamily,
+        z.ZodObject<{ label: typeof text; note: typeof text }>
+      >,
+    )
+    .optional(),
   sources,
   notebook,
   project,

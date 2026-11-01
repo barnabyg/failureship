@@ -254,6 +254,28 @@
       }
     },
     {
+      "id": "cronyism",
+      "shift": {
+        "believer": -3,
+        "incompetent": 0,
+        "practitioner": 2
+      },
+      "reaction": {
+        "believer": [
+          "Your boss is furious, in the quiet way, and asks you to explain what your friend is able to do. You begin. Your boss waits.",
+          "Your boss has read the file, and asks to speak to you, and it is the first time that you have seen your boss not offer you a chair."
+        ],
+        "incompetent": [
+          "Your boss says that it is good to have some new energy, and asks your friend to explain the role to the team.",
+          "Your boss has not noticed, and congratulates your friend on their long service."
+        ],
+        "practitioner": [
+          "Your boss looks at the appointment, and at you, and says that it is good to know that you understand how things work. You feel that something has been agreed.",
+          "Your boss mentions that they have a nephew. They do not say anything further for now."
+        ]
+      }
+    },
+    {
       "id": "blame",
       "shift": {
         "believer": -2,

@@ -280,6 +280,7 @@ body {
   display: flex;
   justify-content: space-between;
   gap: 16px;
+  padding: 4px 12px;
   text-align: left;
 }
 
@@ -360,7 +361,7 @@ body {
 
 .scene-columns {
   display: grid;
-  grid-template-columns: 1fr 260px;
+  grid-template-columns: 1fr 300px;
   gap: 20px;
 }
 

@@ -83,7 +83,7 @@ dangerous. Start at `http://localhost:5173/?seed=8`.
 | Restart from seed 1, and do the same in month 2                                                   | The Project Co-ordinator takes the blame and you get away with it. Blaming the Senior Analyst is what goes badly on this seed.                                   |
 | In month 1 on seed 1, look at who the signs point to                                              | They point to the Senior Analyst, not your boss. The same warm agreement now does little for you. Signs mislead about one Scene in five, so watch more than one. |
 | Compare your boss's treatment of you in month 2 after agreeing with your boss or your boss's boss | The sign under "How your boss is with you" is usually warmer after agreeing with your boss. No sign is sure.                                                     |
-| On seed 8, turn down the pub and file the report, then read the meeting's signs in month 1        | Your boss overruns the meeting, and the Office Co-ordinator reads back minutes that have changed. Only those roles can show those signs.                         |
+| On seed 8, turn down the pub and file the report, then read the meeting's signs in month 1        | Your boss overruns the meeting, and the Project Co-ordinator closes a late task and reopens it. Only those roles can show those signs.                           |
 | Go to the photocopier in two different months                                                     | Each source sounds like their role: the Senior Analyst talks in figures, the Office Co-ordinator in minutes and stationery.                                      |
 | Go to the loading bay, buy from the Office Co-ordinator, and ask about someone                    | Often a Hidden Fact. If it is one of the useful ones, a later Scene offers a new option about it, whether it is true.                                            |
 | Play to the end of any run, and read the results screen                                           | Your marks against the truth, each claim's truth, and which clues were false or did not matter.                                                                  |
@@ -115,6 +115,7 @@ format, the page shows what is wrong instead of the game.
 | `official-story.json` | The official story, assembled from entries according to what you did                                                 |
 | `behaviours.json`     | What Characters can be seen doing, which roles can do it, and how likely each kind is to do it                       |
 | `boss.json`           | Who your boss is, the signs of how they treat you, and what impresses each kind                                      |
+| `families.json`       | What the results screen calls each family of Moves, and what it says of them                                         |
 | `over-head.json`      | Going over your boss's head: the odds, the effects, the words and your boss's boss's signs                           |
 | `sources.json`        | Find Out: who can be asked, how each role talks, how reliable each kind is, and every claim                          |
 | `notebook.json`       | Events the Notebook keeps a clue of, and what each clue was worth                                                    |
@@ -208,6 +209,12 @@ it works, `effects` says how far each opinion moves, and your boss gains little 
 boss's boss has little influence. `findsOut` is the seeded chance of your boss hearing of
 it, by your boss's kind, which grows by `perUse` with each trip, and how sharply their
 opinion then falls. `verdict` is what the results screen says your boss's boss made of you.
+
+A Notification option, a Scene option or an action can carry `"family": "attack"`,
+which is one of `impress`, `fabricate`, `trade`, `find-out`, `deflect`, `attack` or
+`deliver`. Nothing during play shows it. `families.json` says what the results screen
+calls each family, where **How you played** counts the Moves the player made in it. A
+choice with an `approach` should say which family it is, and a test fails if it does not.
 
 An approach can have `overdone`, which changes how the listed kinds take it after
 `after` uses in a run. This is how a Practitioner boss turns on someone who shines.

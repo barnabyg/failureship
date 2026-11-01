@@ -7,6 +7,7 @@
     "options": [
       {
         "id": "pub",
+        "family": "find-out",
         "label": "Go to the pub with your boss",
         "cost": "pub",
         "sets": ["went-to-pub"],
@@ -35,6 +36,7 @@
     "options": [
       {
         "id": "do-training",
+        "family": "deliver",
         "label": "Sit through the module properly",
         "cost": "standard",
         "sets": ["did-training"],
@@ -46,6 +48,7 @@
       },
       {
         "id": "skip-training",
+        "family": "fabricate",
         "label": "Leave it running in another window",
         "sets": ["skipped-training"],
         "result": {
@@ -70,6 +73,7 @@
     "options": [
       {
         "id": "front-row",
+        "family": "impress",
         "label": "Get there early and sit at the front",
         "cost": "standard",
         "sets": ["sat-at-front"],
@@ -98,6 +102,7 @@
     "options": [
       {
         "id": "animate",
+        "family": "impress",
         "label": "Stay late and make everything fly in",
         "cost": "standard",
         "sets": ["animated-deck"],
@@ -114,6 +119,7 @@
       },
       {
         "id": "plain",
+        "family": "deliver",
         "label": "Send three plain slides that say what is happening",
         "sets": ["plain-deck"],
         "result": {
@@ -131,13 +137,14 @@
   },
   {
     "id": "self-assessment",
-    "months": [6],
+    "months": [9],
     "from": "From: Human Resources",
     "subject": "Your Self-Assessment closes today",
     "body": "Please rate your own performance this year as Exceeds, Meets or Developing. There is no right answer. Developing is not available at your grade this year, because of the curve.",
     "options": [
       {
         "id": "exceeds",
+        "family": "impress",
         "label": "Spend an evening writing why you exceed",
         "cost": "standard",
         "sets": ["said-exceeds"],
@@ -169,6 +176,7 @@
     "options": [
       {
         "id": "chase",
+        "family": "deliver",
         "label": "Go over and chase them",
         "cost": "standard",
         "sets": ["input-arrived", "chased-input"],
@@ -202,6 +210,7 @@
       },
       {
         "id": "file-without",
+        "family": "fabricate",
         "label": "File it without them, and estimate",
         "cost": "report",
         "sets": ["report-settled", "filed-report", "filed-without-input"],
@@ -229,6 +238,7 @@
     "options": [
       {
         "id": "report",
+        "family": "deliver",
         "label": "File it, and say how the project really is",
         "cost": "report",
         "sets": ["filed-report"],
@@ -243,6 +253,7 @@
       },
       {
         "id": "lie",
+        "family": "fabricate",
         "label": "File it, and make the project green",
         "cost": "report",
         "sets": ["filed-report", "lied-in-report"],
@@ -262,6 +273,7 @@
       },
       {
         "id": "skip",
+        "family": "deflect",
         "label": "Do not file it, and see who notices",
         "sets": ["skipped-report"],
         "project": {
@@ -297,5 +309,151 @@
         }
       ]
     }
+  },
+  {
+    "id": "made-up-schedule",
+    "months": [6],
+    "from": "From: Your boss, Dennis Prowse",
+    "subject": "Schedule for upstairs: dates only, please",
+    "body": "Upstairs would like a schedule for your project, by Friday. Your boss adds that they do not need the detail, only the dates, and that the dates should be good ones.",
+    "options": [
+      {
+        "id": "invent-dates",
+        "family": "fabricate",
+        "label": "Write down some good dates",
+        "sets": ["made-up-schedule"],
+        "approach": "theatre",
+        "result": {
+          "title": "The schedule",
+          "body": "It takes ten minutes. The dates are very good. The last one falls on a Tuesday, for realism, and it has been entered into a system."
+        }
+      },
+      {
+        "id": "real-dates",
+        "family": "deliver",
+        "label": "Work out when it will really be done",
+        "cost": "standard",
+        "sets": ["real-schedule"],
+        "approach": "truth",
+        "result": {
+          "title": "The schedule",
+          "body": "You ring the supplier and go through it line by line. The date you arrive at is the first accurate date this project has had. It is next year."
+        }
+      },
+      {
+        "id": "ask-for-the-dates",
+        "family": "deflect",
+        "label": "Ask your boss which dates they would like",
+        "sets": ["asked-for-dates"],
+        "approach": "hand-off",
+        "result": {
+          "title": "RE: The schedule",
+          "body": "Your boss replies with some dates. They are the same as the dates last year, with the year changed. You put your name on them, under your boss's."
+        }
+      }
+    ]
+  },
+  {
+    "id": "desk-moves",
+    "months": [7],
+    "from": "From: Facilities",
+    "subject": "Workplace Refresh: please confirm your team's desks",
+    "body": "Following the Workplace Refresh, your team has one desk by the window, and one with no window, beside the printer. You have been asked to say who sits where. Nobody at Facilities wishes to know why.",
+    "options": [
+      {
+        "id": "window-for-a-friend",
+        "family": "trade",
+        "label": "Give the window to someone who can do you a favour",
+        "sets": ["gave-window"],
+        "approach": "favour",
+        "result": {
+          "title": "The window",
+          "body": "You move a box, and a plant, and a person. The person with the window thanks you warmly, and says that they will not forget this. They say it twice, so as to be clear."
+        }
+      },
+      {
+        "id": "no-window-analyst",
+        "family": "attack",
+        "label": "Move the Senior Analyst to the desk with no window",
+        "sets": ["moved-a-colleague"],
+        "approach": "blame",
+        "bet": {
+          "chance": 0.6,
+          "lost": {
+            "sets": ["desk-move-noticed"],
+            "opinion": -2,
+            "result": {
+              "title": "The printer",
+              "body": "It turns out that the Senior Analyst sits on the Health and Safety committee. An email about the safe distance from printers is copied to your boss, with a diagram, and your name is on the diagram."
+            }
+          }
+        },
+        "result": {
+          "title": "The printer",
+          "body": "The Senior Analyst carries everything across in one trip, without a word, and sets up facing you. The printer starts up. It will not stop for some time."
+        }
+      },
+      {
+        "id": "no-window-coordinator",
+        "family": "attack",
+        "label": "Move the Project Co-ordinator to the desk with no window",
+        "sets": ["moved-a-colleague"],
+        "approach": "blame",
+        "bet": {
+          "chance": 0.7,
+          "lost": {
+            "sets": ["desk-move-noticed"],
+            "opinion": -2,
+            "result": {
+              "title": "The printer",
+              "body": "The Project Co-ordinator raises it with someone. You do not know with whom, but you have had a form to fill in about your approach to desks, and your boss has had a copy."
+            }
+          }
+        },
+        "result": {
+          "title": "The printer",
+          "body": "The Project Co-ordinator takes it calmly, and asks whether this is about the figures. You say no. It is now about the figures."
+        }
+      },
+      {
+        "id": "leave-the-desks",
+        "label": "Reply that everyone is fine where they are",
+        "sets": ["left-the-desks"],
+        "result": {
+          "title": "RE: Workplace Refresh",
+          "body": "Facilities replies that this is noted, and that your team will be refreshed in the next phase. Nobody knows what happens in the next phase."
+        }
+      }
+    ]
+  },
+  {
+    "id": "word-for-a-word",
+    "months": [8],
+    "from": "From: The Office Co-ordinator, Marjorie Tull",
+    "subject": "A quick word, if you have a moment",
+    "body": "The Office Co-ordinator has been here for twenty-six years, and has noticed that this has never led to anything. They wonder whether you might mention them to your boss. They also mention, in passing, that they know where several things are kept.",
+    "options": [
+      {
+        "id": "make-the-deal",
+        "family": "trade",
+        "label": "Agree to mention them, if they tell you what they know",
+        "cost": "standard",
+        "sets": ["made-a-deal"],
+        "approach": "favour",
+        "result": {
+          "title": "A quick word",
+          "body": "You mention them to your boss, who asks who that is. You report that it went very well. In return you are told where several things are kept. None of them is what you had in mind."
+        }
+      },
+      {
+        "id": "turn-it-down",
+        "label": "Say that you are not really in a position to",
+        "sets": ["turned-down-a-deal"],
+        "result": {
+          "title": "A quick word",
+          "body": "The Office Co-ordinator says of course, and that they quite understand, and writes something down. Your stationery order is now being looked at."
+        }
+      }
+    ]
   }
 ]

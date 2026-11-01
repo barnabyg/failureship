@@ -1,6 +1,6 @@
 {
   "actionsPerMonth": 3,
-  "monthsPerRun": 6,
+  "monthsPerRun": 9,
   "actionCosts": {
     "standard": 1,
     "report": 1,

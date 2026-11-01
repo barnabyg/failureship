@@ -66,7 +66,7 @@ test("a Scene shows behaviour that belongs to a role", async ({ page }) => {
     signs.filter({ hasText: "Your boss overruns the meeting" }),
   ).toHaveCount(1);
   await expect(
-    signs.filter({ hasText: "The Office Co-ordinator reads back" }),
+    signs.filter({ hasText: "The Project Co-ordinator marks a late task" }),
   ).toHaveCount(1);
 });
 

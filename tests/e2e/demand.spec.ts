@@ -30,7 +30,7 @@ test("a stalled Demand stays open, and a chase follows it into a later month", a
   await answerAnyNotification(page);
   await attendAndFinishMonth(page);
 
-  await expect(page.getByTestId("month")).toContainText("3 of 6");
+  await expect(page.getByTestId("month")).toContainText("3 of 9");
   await expect(page.getByTestId("panel-notification")).toContainText(
     "where are we on this",
   );
@@ -49,7 +49,7 @@ test("a stalled Demand can be forgotten, which closes it", async ({ page }) => {
   await answerAnyNotification(page);
   await attendAndFinishMonth(page);
 
-  await expect(page.getByTestId("month")).toContainText("3 of 6");
+  await expect(page.getByTestId("month")).toContainText("3 of 9");
   await expect(page.getByTestId("panel-notice")).toContainText(
     "not mentioned again",
   );

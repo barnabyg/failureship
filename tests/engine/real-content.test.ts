@@ -343,7 +343,7 @@ describe("the real month", () => {
       "Your boss overruns the meeting by twenty minutes, then schedules another to cover what was missed.",
     );
     expect(signs).toContain(
-      "The Office Co-ordinator reads back last month's minutes, in which several things have changed.",
+      "The Project Co-ordinator marks a late task as complete, and opens a new one with the same name.",
     );
     expect(of(8).boss?.kind).toBe("incompetent");
     expect(of(1).boss?.kind).toBe("believer");

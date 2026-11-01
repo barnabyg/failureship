@@ -32,6 +32,7 @@
       "options": [
         {
           "id": "deliver",
+          "family": "deliver",
           "label": "Cancel half of the floor's meetings",
           "headOpinion": 1,
           "cost": "standard",
@@ -44,6 +45,7 @@
         },
         {
           "id": "push-back",
+          "family": "deflect",
           "label": "Reply that the kick-off meeting alone defeats the purpose",
           "sets": ["pushed-back"],
           "approach": "push-back",
@@ -54,6 +56,7 @@
         },
         {
           "id": "hand-off",
+          "family": "deflect",
           "label": "Hand it to the Office Co-ordinator, who runs the calendar",
           "sets": ["handed-off"],
           "approach": "hand-off",
@@ -64,6 +67,7 @@
         },
         {
           "id": "fake",
+          "family": "fabricate",
           "label": "Rename half of the meetings as workshops",
           "cost": "standard",
           "sets": ["faked-demand"],
@@ -75,6 +79,7 @@
         },
         {
           "id": "stall",
+          "family": "deflect",
           "label": "Reply that this is being looked at",
           "stalls": true,
           "sets": ["stalled-demand"],
@@ -96,6 +101,7 @@
         "options": [
           {
             "id": "do-it-late",
+            "family": "deliver",
             "label": "Drop everything and cancel the meetings now",
             "cost": "standard",
             "sets": ["delivered-demand"],
@@ -107,6 +113,7 @@
           },
           {
             "id": "excuse",
+            "family": "deflect",
             "label": "Say that it is being looked at, again",
             "sets": ["stalled-demand"],
             "approach": "neglect",
@@ -127,6 +134,7 @@
       "options": [
         {
           "id": "deliver",
+          "family": "deliver",
           "label": "Go to the demonstration and roll it out",
           "cost": "standard",
           "sets": ["rolled-out-tool", "delivered-demand"],
@@ -136,6 +144,7 @@
         },
         {
           "id": "push-back",
+          "family": "deflect",
           "label": "Ask your boss which of your problems it solves",
           "sets": ["pushed-back"],
           "approach": "push-back",
@@ -146,6 +155,7 @@
         },
         {
           "id": "hand-off",
+          "family": "deflect",
           "label": "Hand it to the Senior Analyst, who likes that sort of thing",
           "sets": ["handed-off"],
           "approach": "hand-off",
@@ -156,6 +166,7 @@
         },
         {
           "id": "fake",
+          "family": "fabricate",
           "label": "Tell your boss it is rolled out, and add an icon to the shared drive",
           "cost": "standard",
           "sets": ["faked-demand"],
@@ -167,6 +178,7 @@
         },
         {
           "id": "stall",
+          "family": "deflect",
           "label": "Reply that it is being evaluated",
           "stalls": true,
           "sets": ["stalled-tool"],
@@ -188,6 +200,7 @@
         "options": [
           {
             "id": "do-it-late",
+            "family": "deliver",
             "label": "Stay late and write an evaluation of something",
             "cost": "standard",
             "sets": ["faked-demand"],
@@ -199,6 +212,7 @@
           },
           {
             "id": "excuse",
+            "family": "deflect",
             "label": "Say that the evaluation is still in progress",
             "sets": ["stalled-tool"],
             "approach": "neglect",
@@ -219,6 +233,7 @@
       "options": [
         {
           "id": "deliver",
+          "family": "deliver",
           "label": "Rewrite the plan so that the visits become calls",
           "cost": "standard",
           "sets": ["delivered-demand"],
@@ -230,6 +245,7 @@
         },
         {
           "id": "push-back",
+          "family": "deflect",
           "label": "Reply that it cannot be both, and ask which",
           "sets": ["pushed-back"],
           "approach": "push-back",
@@ -240,6 +256,7 @@
         },
         {
           "id": "hand-off",
+          "family": "deflect",
           "label": "Hand it to the Project Co-ordinator, who books the visits",
           "sets": ["handed-off"],
           "approach": "hand-off",
@@ -250,6 +267,7 @@
         },
         {
           "id": "fake",
+          "family": "fabricate",
           "label": "Confirm that it is in hand, and claim the visits as remote",
           "cost": "standard",
           "sets": ["faked-demand"],
@@ -261,6 +279,7 @@
         },
         {
           "id": "stall",
+          "family": "deflect",
           "label": "Reply that you are working through the implications",
           "stalls": true,
           "sets": ["stalled-demand"],
@@ -282,6 +301,7 @@
         "options": [
           {
             "id": "do-it-late",
+            "family": "deliver",
             "label": "Rewrite the plan in the hour",
             "cost": "standard",
             "sets": ["delivered-demand"],
@@ -293,6 +313,7 @@
           },
           {
             "id": "excuse",
+            "family": "deflect",
             "label": "Reply that you are still working through the implications",
             "sets": ["stalled-demand"],
             "approach": "neglect",
@@ -312,6 +333,7 @@
     "options": [
       {
         "id": "deliver",
+        "family": "deliver",
         "label": "Find out what it is, and do it",
         "cost": "standard",
         "sets": ["delivered-demand"],
@@ -323,6 +345,7 @@
       },
       {
         "id": "push-back",
+        "family": "deflect",
         "label": "Reply that you were not at the meeting",
         "sets": ["pushed-back"],
         "approach": "push-back",
@@ -333,6 +356,7 @@
       },
       {
         "id": "hand-off",
+        "family": "deflect",
         "label": "Hand it to whoever is next on the distribution list",
         "sets": ["handed-off"],
         "approach": "hand-off",
@@ -343,6 +367,7 @@
       },
       {
         "id": "fake",
+        "family": "fabricate",
         "label": "Mark it as complete in the action log",
         "cost": "standard",
         "sets": ["faked-demand"],
@@ -354,6 +379,7 @@
       },
       {
         "id": "stall",
+        "family": "deflect",
         "label": "Reply that this is being looked at",
         "stalls": true,
         "sets": ["stalled-demand"],
@@ -375,6 +401,7 @@
       "options": [
         {
           "id": "do-it-late",
+          "family": "deliver",
           "label": "Stop what you are doing, and do it",
           "cost": "standard",
           "sets": ["delivered-demand"],
@@ -386,6 +413,7 @@
         },
         {
           "id": "excuse",
+          "family": "deflect",
           "label": "Say that it is still being looked at",
           "sets": ["stalled-demand"],
           "approach": "neglect",

@@ -25,7 +25,7 @@ test("restarts from a typed seed in the middle of a run", async ({ page }) => {
 
   await expect(page.getByTestId("seed")).toHaveText("8");
   await expect(page).toHaveURL(/seed=8/);
-  await expect(page.getByTestId("month")).toContainText("1 of 6");
+  await expect(page.getByTestId("month")).toContainText("1 of 9");
   await expect(page.getByTestId("actions-left")).toContainText("3");
   await expect(page.getByTestId("panel-notification")).toBeVisible();
 
@@ -136,5 +136,5 @@ test("a new run can be started from the end", async ({ page }) => {
   await page.getByTestId("new-run").click();
 
   await expect(page.getByTestId("seed")).not.toHaveText("1");
-  await expect(page.getByTestId("month")).toContainText("1 of 6");
+  await expect(page.getByTestId("month")).toContainText("1 of 9");
 });
