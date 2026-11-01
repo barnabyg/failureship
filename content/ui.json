@@ -17,8 +17,14 @@
   "signsHeading": "What you notice",
   "optionsHeading": "How do you behave?",
   "seedLabel": "Seed",
-  "replayLabel": "Replay this month",
-  "newSeedLabel": "Replay with a different seed",
+  "seedInputLabel": "Type a seed",
+  "seedRefused": "\"{seed}\" cannot be used as a seed. A seed is a whole number, from 0 to 4294967295.",
+  "restartLabel": "Restart from seed",
+  "newRunLabel": "New run",
+  "leaveTitle": "Abandon this run?",
+  "leaveBody": "You are in month {month}. Nothing about this run will be kept, which is also the company's position on it.",
+  "leaveConfirm": "Abandon the run",
+  "leaveCancel": "Stay in this run",
   "hints": {
     "notification": "Answer the Notification on the right. Each answer shows what it costs. Nothing else can happen until you do.",
     "dialog": "Read what was said, then press Continue to go back to the office.",
@@ -27,7 +33,7 @@
     "notice": "Read the result, then press Continue.",
     "move": "This has happened to you, and there is nothing to choose. Press Continue to close the month.",
     "story": "The month has closed. Read what was reported, then press Continue.",
-    "ended": "The run is over. Replay it to choose differently, or use a different seed to change who really holds influence."
+    "ended": "The run is over. Type its seed to play the same deal again, or start a new run."
   },
   "actionCount": { "one": "1 action", "other": "{n} actions" },
   "costLabel": "Costs {actions}",

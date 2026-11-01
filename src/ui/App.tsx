@@ -1,12 +1,19 @@
 import { useCallback, useState } from "react";
 import { gameContent, panelText } from "../content";
-import { startRun, type Choice, type PlayerView, type Run } from "../engine";
+import {
+  parseSeed,
+  startRun,
+  type Choice,
+  type PlayerView,
+  type Run,
+} from "../engine";
+import { Modal } from "./Modal";
 import { StepPanel } from "./panels";
+import { RunControls } from "./RunControls";
 import { TowerStage } from "./TowerStage";
 
-function readSeed(): number {
-  const raw = new URLSearchParams(window.location.search).get("seed");
-  return raw !== null && /^\d+$/.test(raw) ? Number(raw) : randomSeed();
+function refusedMessage(typed: string): string {
+  return panelText.seedRefused.replace("{seed}", typed.trim());
 }
 
 function randomSeed(): number {
@@ -21,8 +28,27 @@ function begin(seed: number): { run: Run; view: PlayerView } {
   return { run, view: run.view() };
 }
 
+/** The first run: the address's seed, or a new one and a message saying why. */
+function beginFromAddress() {
+  const written = new URLSearchParams(window.location.search).get("seed");
+  const seed = written === null ? null : parseSeed(written);
+  return {
+    game: begin(seed ?? randomSeed()),
+    refused: written !== null && seed === null ? refusedMessage(written) : null,
+  };
+}
+
+function monthText(view: PlayerView): string {
+  return panelText.monthLabel
+    .replace("{n}", String(view.month))
+    .replace("{total}", String(view.totalMonths));
+}
+
 export function App() {
-  const [{ run, view }, setGame] = useState(() => begin(readSeed()));
+  const [first] = useState(beginFromAddress);
+  const [{ run, view }, setGame] = useState(first.game);
+  const [message, setMessage] = useState(first.refused);
+  const [leavingFor, setLeavingFor] = useState<number | null>(null);
 
   const choose = useCallback(
     (choice: Choice) => {
@@ -33,6 +59,15 @@ export function App() {
 
   const restart = (seed: number) => {
     setGame(begin(seed));
+    setMessage(null);
+    setLeavingFor(null);
+  };
+
+  /** Leaving a run still in play needs confirming. A finished one does not. */
+  const leaveFor = (seed: number) => {
+    setMessage(null);
+    if (view.choices.length === 0) restart(seed);
+    else setLeavingFor(seed);
   };
 
   return (
@@ -55,11 +90,7 @@ export function App() {
           </div>
           <div data-testid="month">
             <dt>{panelText.monthHeading}</dt>
-            <dd>
-              {panelText.monthLabel
-                .replace("{n}", String(view.month))
-                .replace("{total}", String(view.totalMonths))}
-            </dd>
+            <dd>{monthText(view)}</dd>
           </div>
           <div data-testid="actions-left">
             <dt>{panelText.actionsHeading}</dt>
@@ -74,24 +105,59 @@ export function App() {
             </div>
           )}
         </dl>
+        <RunControls
+          seed={view.seed}
+          onNewRun={() => {
+            leaveFor(randomSeed());
+          }}
+          onRestart={leaveFor}
+          onRefused={(typed) => {
+            setMessage(refusedMessage(typed));
+          }}
+        />
       </header>
+      {message !== null && (
+        <p className="seed-message" role="alert" data-testid="seed-message">
+          {message}
+        </p>
+      )}
       <aside className="next" aria-live="polite">
         <h2>{panelText.whatNext}</h2>
         <p data-testid="hint">{view.hint}</p>
       </aside>
-      <StepPanel
-        view={view}
-        onChoose={choose}
-        onReplay={() => {
-          restart(view.seed);
-        }}
-        onNewSeed={() => {
-          restart(randomSeed());
-        }}
-      />
-      <footer className="seed">
-        {panelText.seedLabel}: <span data-testid="seed">{view.seed}</span>
-      </footer>
+      <StepPanel view={view} onChoose={choose} />
+      {leavingFor !== null && (
+        <Modal
+          testId="confirm-leave"
+          title={panelText.leaveTitle}
+          onClose={() => {
+            setLeavingFor(null);
+          }}
+        >
+          <p>{panelText.leaveBody.replace("{month}", monthText(view))}</p>
+          <div className="panel-actions">
+            <button
+              type="button"
+              className="primary"
+              data-testid="confirm-leave-yes"
+              onClick={() => {
+                restart(leavingFor);
+              }}
+            >
+              {panelText.leaveConfirm}
+            </button>
+            <button
+              type="button"
+              data-testid="confirm-leave-no"
+              onClick={() => {
+                setLeavingFor(null);
+              }}
+            >
+              {panelText.leaveCancel}
+            </button>
+          </div>
+        </Modal>
+      )}
     </main>
   );
 }

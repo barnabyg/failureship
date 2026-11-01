@@ -69,8 +69,7 @@ test("the full month reads differently for different choices", async ({
   const afterPub = await page.getByTestId("story-reported").innerText();
   await expect(page.getByTestId("story-happened")).toBeVisible();
 
-  await page.getByTestId("replay").click();
-  await expect(page).toHaveURL(/seed=1/);
+  await page.goto("/?seed=1");
   await page.getByTestId("option-report").click();
   await page.getByTestId("continue").click();
   await page.getByTestId("hotspot-meeting").click();
@@ -118,22 +117,4 @@ test("every Scene choice is visible without scrolling at 1280x800", async ({
     (el) => el.scrollHeight > el.clientHeight,
   );
   expect(scrolls).toBe(false);
-});
-
-test("a different seed starts the month again with a new seed", async ({
-  page,
-}) => {
-  await page.goto("/?seed=1");
-  await page.getByTestId("option-report").click();
-  await page.getByTestId("continue").click();
-  await page.getByTestId("hotspot-kitchen").click();
-  await page.getByTestId("continue").click();
-  await page.getByTestId("hotspot-work").click();
-  await page.getByTestId("continue").click();
-  await page.getByTestId("continue").click();
-
-  await page.getByTestId("new-seed").click();
-
-  await expect(page.getByTestId("panel-notification")).toBeVisible();
-  await expect(page.getByTestId("seed")).not.toHaveText("1");
 });

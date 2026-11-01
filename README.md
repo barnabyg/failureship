@@ -32,23 +32,27 @@ pick one. The month has the same steps each time:
 3. **A Character Move lands on you.** You do not get a choice.
 4. **The month closes** with the official story beside what actually happened.
 
-When the month closes, **Replay this month** keeps the seed, and **Replay with a
-different seed** deals a new one.
+Press **Continue** on the official story to open the next month. After six months
+the run ends.
+
+At any step, **New run** deals a new seed, and typing a seed then pressing
+**Restart from seed** plays that deal from month 1. Leaving a run in progress asks
+first. Swap a seed with a friend and you both get the same deal.
 
 ### See each choice's different result
 
 Start at `http://localhost:5173/?seed=1`.
 
-| Try this                                                      | Expect                                                                                                                                     |
-| ------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------ |
-| Go to the pub                                                 | A short dialog with the office behind it. You learn the Buzzword "strategic patience", and it appears at the top of the screen.            |
-| Then go to Meeting Room 1B                                    | The Scene offers an extra option about strategic patience. Using it gives its own result.                                                  |
-| Replay, finish the report, then go to Meeting Room 1B         | No trace of the Buzzword option or the phrase anywhere in the month.                                                                       |
-| In the meeting, agree with each person in turn across replays | Seed 1 has Dennis holding influence, so agreeing with Dennis goes well and agreeing with Priya or Marjorie does not.                       |
-| Repeat the meeting on seeds 8 and 5                           | The signs point elsewhere. On seed 8 Priya holds influence, and on seed 5 Marjorie does. The same choice now has a different result.       |
-| Compare two official stories                                  | "As reported upstairs" and "What actually happened" change with the Notification answer, the Scene choice and how you spent other actions. |
-| Skip the meeting altogether                                   | The official story records you as present anyway.                                                                                          |
-| Replay the same seed and choices                              | The same Move and the same official story, every time.                                                                                     |
+| Try this                                                       | Expect                                                                                                                                     |
+| -------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------ |
+| Go to the pub                                                  | A short dialog with the office behind it. You learn the Buzzword "strategic patience", and it appears at the top of the screen.            |
+| Then go to Meeting Room 1B                                     | The Scene offers an extra option about strategic patience. Using it gives its own result.                                                  |
+| Restart, finish the report, then go to Meeting Room 1B         | No trace of the Buzzword option or the phrase anywhere in the month.                                                                       |
+| In the meeting, agree with each person in turn across restarts | Seed 1 has Dennis holding influence, so agreeing with Dennis goes well and agreeing with Priya or Marjorie does not.                       |
+| Repeat the meeting on seeds 8 and 5                            | The signs point elsewhere. On seed 8 Priya holds influence, and on seed 5 Marjorie does. The same choice now has a different result.       |
+| Compare two official stories                                   | "As reported upstairs" and "What actually happened" change with the Notification answer, the Scene choice and how you spent other actions. |
+| Skip the meeting altogether                                    | The official story records you as present anyway.                                                                                          |
+| Restart the same seed and repeat your choices                  | The same Move and the same official story, every time.                                                                                     |
 
 ## Change the game
 

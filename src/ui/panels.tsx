@@ -44,13 +44,9 @@ function Continue({ onChoose }: { onChoose: (choice: Choice) => void }) {
 function StoryPanel({
   step,
   onChoose,
-  onReplay,
-  onNewSeed,
 }: {
   step: Extract<StepView, { kind: "story" }>;
   onChoose: (choice: Choice) => void;
-  onReplay: () => void;
-  onNewSeed: () => void;
 }) {
   return (
     <Panel testId="panel-story" title={step.title}>
@@ -70,15 +66,7 @@ function StoryPanel({
           ))}
         </div>
       )}
-      <div className="panel-actions">
-        <Continue onChoose={onChoose} />
-        <button type="button" data-testid="replay" onClick={onReplay}>
-          {panelText.replayLabel}
-        </button>
-        <button type="button" data-testid="new-seed" onClick={onNewSeed}>
-          {panelText.newSeedLabel}
-        </button>
-      </div>
+      <Continue onChoose={onChoose} />
     </Panel>
   );
 }
@@ -86,17 +74,10 @@ function StoryPanel({
 interface StepPanelProps {
   view: PlayerView;
   onChoose: (choice: Choice) => void;
-  onReplay: () => void;
-  onNewSeed: () => void;
 }
 
 /** The panel for the current step of the month, if it needs one. */
-export function StepPanel({
-  view,
-  onChoose,
-  onReplay,
-  onNewSeed,
-}: StepPanelProps) {
+export function StepPanel({ view, onChoose }: StepPanelProps) {
   const { step } = view;
   switch (step.kind) {
     case "actions":
@@ -210,14 +191,7 @@ export function StepPanel({
         </Panel>
       );
     case "story":
-      return (
-        <StoryPanel
-          step={step}
-          onChoose={onChoose}
-          onReplay={onReplay}
-          onNewSeed={onNewSeed}
-        />
-      );
+      return <StoryPanel step={step} onChoose={onChoose} />;
     case "ended":
       return (
         <Panel testId="panel-ended" title={step.title}>

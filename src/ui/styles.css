@@ -294,12 +294,85 @@ body {
   gap: 8px;
 }
 
-.seed {
+.run-controls {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 0.8125rem;
+}
+
+.run-controls-row {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
+.run-controls button,
+.modal button {
+  padding: 1px 10px;
+  border: 1px solid var(--accent);
+  border-radius: 4px;
+  background: transparent;
+  color: var(--accent);
+  font: inherit;
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+.run-controls button:hover,
+.run-controls button:focus-visible,
+.modal button:hover,
+.modal button:focus-visible,
+.modal button.primary {
+  background: var(--accent);
+  color: var(--accent-ink);
+}
+
+.run-controls input {
+  width: 120px;
+  padding: 1px 6px;
+  border: 1px solid var(--rule);
+  border-radius: 4px;
+  background: #ffffff;
+  color: var(--ink);
+  font: inherit;
+}
+
+.seed-message {
   position: absolute;
-  right: 16px;
-  bottom: 8px;
-  color: #c9ccce;
-  font-size: 0.75rem;
+  top: 88px;
+  left: 12px;
+  max-width: 480px;
+  margin: 0;
+  padding: 6px 12px;
+  border-left: 4px solid #b3402e;
+  border-radius: 4px;
+  background: var(--paper);
+  font-size: 0.875rem;
+}
+
+.modal {
+  width: min(480px, calc(100% - 24px));
+  padding: 16px 20px;
+  border: none;
+  border-radius: 4px;
+  background: var(--paper);
+  color: var(--ink);
+  box-shadow: 0 8px 28px rgb(0 0 0 / 45%);
+}
+
+.modal::backdrop {
+  background: rgb(0 0 0 / 45%);
+}
+
+.modal h2 {
+  margin: 0 0 8px;
+  font-size: 1.25rem;
+}
+
+.modal button {
+  padding: 6px 14px;
 }
 
 @media (prefers-reduced-motion: no-preference) {
