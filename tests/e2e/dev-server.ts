@@ -1,13 +1,15 @@
 import path from "node:path";
-import { createServer } from "vite";
+import { createServer, type Plugin } from "vite";
 
 /** The dev server `npm run play` uses, on a port the system chooses. */
-export async function startDevServer(cacheDir?: string) {
+export async function startDevServer(
+  options: { cacheDir?: string; plugins?: Plugin[] } = {},
+) {
   const server = await createServer({
     root: path.join(import.meta.dirname, "../.."),
     logLevel: "silent",
     server: { port: 0, watch: null },
-    ...(cacheDir === undefined ? {} : { cacheDir }),
+    ...options,
   });
   await server.listen();
   const origin = server.resolvedUrls?.local[0];
