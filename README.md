@@ -160,17 +160,19 @@ tests, dependency audit and build. The browser tests need Chromium once:
 `npx playwright install chromium`.
 
 - `content/` holds the game's data and text.
-- `src/content/` loads and checks it at start-up.
+- `src/content/` loads it at start-up, through the checks in `src/engine/`, and
+  checks the panel text itself.
 - `src/engine/` holds the rules: headless, seeded, and free of Three.js and React.
   `run.ts` coordinates a run; `state.ts` and `reads.ts` are what its mechanics
   share; `boss.ts`, `demands.ts` and `over-head.ts` are mechanics of their own;
-  `to-view.ts` builds the player view. `content.ts` is the schema, and
-  `content-checks.ts` parses data against it and checks it across files.
+  `to-view.ts` builds the player view. `src/engine/content.ts` holds the content
+  schema, and `src/engine/content-checks.ts` holds the checks: it parses data against
+  the schema and checks it across files.
 - `src/tower/` draws the tower and holds no rules.
 - `src/ui/` holds the React panels over the tower.
 
 A Scene that data cannot express can name a `script`, which is passed to
-`startRun` in `sceneScripts`. This format is a trial, as the spec says.
+`startRun` in `sceneScripts`. This format is a trial, as the spec, issue #1, says.
 
 ### Checks and exceptions
 
