@@ -4,8 +4,9 @@ A satirical, single-player browser game. You climb a ten-storey office tower by
 reading people. The design is in
 [failureship-grill-outcome.md](failureship-grill-outcome.md).
 
-This is the Phase 2 build: a run of six months on a furnished Floor 1, ready
-for the owner to play and steer.
+This is the Phase 3 build: a run of six months on a furnished Floor 1, with kinds
+of boss, a Project, the Monthly Status Report and Demands, ready for the owner to
+play and steer.
 
 ## Play
 
@@ -80,10 +81,16 @@ dangerous. Start at `http://localhost:5173/?seed=8`.
 | Restart from seed 1, and do the same in month 2                                                   | The Project Co-ordinator takes the blame and you get away with it. Blaming the Senior Analyst is what goes badly on this seed.                                   |
 | In month 1 on seed 1, look at who the signs point to                                              | They point to the Senior Analyst, not your boss. The same warm agreement now does little for you. Signs mislead about one Scene in five, so watch more than one. |
 | Compare your boss's treatment of you in month 2 after agreeing with your boss or your boss's boss | The sign under "How your boss is with you" is usually warmer after agreeing with your boss. No sign is sure.                                                     |
-| On seed 8, file the report, then read the meeting's signs in month 1                              | Your boss overruns the meeting, and the Office Co-ordinator reads back minutes that have changed. Only those roles can show those signs.                         |
+| On seed 8, turn down the pub and file the report, then read the meeting's signs in month 1        | Your boss overruns the meeting, and the Office Co-ordinator reads back minutes that have changed. Only those roles can show those signs.                         |
 | Go to the photocopier in two different months                                                     | Each source sounds like their role: the Senior Analyst talks in figures, the Office Co-ordinator in minutes and stationery.                                      |
 | Go to the loading bay, buy from the Office Co-ordinator, and ask about someone                    | Often a Hidden Fact. If it is one of the useful ones, a later Scene offers a new option about it, whether it is true.                                            |
 | Play to the end of any run, and read the results screen                                           | Your marks against the truth, each claim's truth, and which clues were false or did not matter.                                                                  |
+| Seed 1 (a Believer boss) and seed 8 (an Incompetent one). In month 1, agree warmly with your boss | Your boss's reaction reads quite differently, and neither says what kind your boss is. The results screen does.                                                  |
+| Seed 1. In month 1, file the report honestly, then press Your project                             | Real and reported are both Amber. Restart and choose "make the project green": real stays Amber and reported is Green.                                           |
+| Seed 4. In months 1 and 2, do not file the report                                                 | The Project goes Red in month 2, and the Project Status Review opens by itself. Making it amber changes the reported status.                                     |
+| Seed 1, month 2                                                                                   | The report waits on the Project Co-ordinator's late figures. Chase them, wait, or file without them.                                                             |
+| Seed 4. In month 2, stall the Demand from your boss's boss                                        | It shows under Open Demands. In month 3 you are chased. On seed 8 it is forgotten instead.                                                                       |
+| Play to Annual Calibration, and to the results screen                                             | Your boss gives a verdict that depends on how you have done. The results screen shows your boss's kind and how your choices landed.                              |
 | Restart the same seed and repeat your choices                                                     | The same signs, claims, Move and official story, every time.                                                                                                     |
 
 ## Change the game
@@ -96,6 +103,8 @@ format, the page shows what is wrong instead of the game.
 | --------------------- | -------------------------------------------------------------------------------------------------------------------- |
 | `ui.json`             | Headings, buttons and the "What you can do now" hints                                                                |
 | `notifications.json`  | The month's Notifications, their choices and their results                                                           |
+| `demands.json`        | Demands, their five answers, what happens when they are chased or forgotten, and those odds                          |
+| `project.json`        | The player's Project: its owner, statuses, starting point and written events                                         |
 | `dialogs.json`        | Short text dialogs, such as the pub                                                                                  |
 | `buzzwords.json`      | Buzzwords and their meanings                                                                                         |
 | `actions.json`        | What can be done on the floor, and the results                                                                       |
@@ -103,7 +112,7 @@ format, the page shows what is wrong instead of the game.
 | `moves.json`          | Character Moves, and when each can land                                                                              |
 | `official-story.json` | The official story, assembled from entries according to what you did                                                 |
 | `behaviours.json`     | What Characters can be seen doing, which roles can do it, and how likely each kind is to do it                       |
-| `boss.json`           | Who your boss is, and the signs of how they treat you                                                                |
+| `boss.json`           | Who your boss is, the signs of how they treat you, and what impresses each kind                                      |
 | `sources.json`        | Find Out: who can be asked, how each role talks, how reliable each kind is, and every claim                          |
 | `notebook.json`       | Events the Notebook keeps a clue of, and what each clue was worth                                                    |
 | `characters.json`     | Job titles, roles, how text refers to each person, names, and who reports to whom on the Org Chart                   |
@@ -124,7 +133,8 @@ present, so the meeting has everyone in it. `holderIs` means the same in a Scene
 results. A `when` or `requires` condition can be
 `{ "holderIs": "boss" }`, `{ "hasBuzzword": "strategic-patience" }`,
 `{ "flag": "went-to-pub" }`, `{ "heardFact": "lost-list" }`, `{ "not": ... }` or `{ "all": [...] }`,
-and a Scene result's `when` can also use `factNature` and `heardTrue`, described below. Options
+and a Scene result's `when` can also use `factNature` and `heardTrue`, described below. A
+Scene result or a Move's `when` can also use `{ "bossIs": "practitioner" }`. Options
 gated with `requires` cannot depend on the hidden truth. Flags come from `sets`,
 and are wiped when a new month opens. Buzzwords carry over for the whole run.
 
@@ -147,6 +157,47 @@ The opinion has no number on screen. It shows only through `boss.json`: when the
 is in a Scene, one sign is picked using the `likelihood` for how the opinion stands,
 which `balance.json` sets with `warmAt` and `coldAt`. Every sign must be possible from
 at least two of `warm`, `neutral` and `cold`, so that no sign settles it.
+
+A choice can also carry `"approach": "theatre"`. `boss.json` lists each approach, how
+far it moves the opinion of each kind of boss, and how each kind shows it, so the same
+choice can warm one boss and chill another. The player reads that from `reaction`
+lines and never from a label: a line naming a kind, or an approach that every kind
+takes alike, stops the game from starting. A choice can write its own `reaction` for
+each kind. A result's `when` can read `{ "bossIs": "believer" }`, but an option's
+`requires` cannot, because options never appear or disappear on the boss's kind. A
+Scene with a `verdict` adds what the boss finally says, by how the opinion stands.
+
+`project.json` holds the player's Project: its owner, its `statuses` from best to worst,
+where it `start`s, and the `events` that happen to it as a month opens. Press
+**Your project** at any step, at no cost, to see how it really is and how it has been
+reported. A Notification option, Scene result or action can carry
+`"project": { "real": "better", "reported": "worse" }`. Each side is a status's id,
+`better` or `worse`, and `reported` can also be `real`, which is what telling the truth
+does. Nothing else moves them. A Notification's body can say `{real}` and `{reported}`.
+
+`project.json`'s `flagged` says at which reported status the Project is flagged, and
+which Scene then opens and what it costs. That Scene belongs to no month and no action:
+it opens once each time the reported status arrives at `at`, before the player's
+actions, whichever month that is.
+
+`project.json`'s `input` names who the report needs figures from, the months they can
+be late, and the `chance` of that for each kind they might be. Lateness is drawn from
+the seed and never from the player's choices, and it sets a flag for the month. It must
+be possible from at least two kinds, and certain from none, so that it never settles
+what someone is. A Notification with a `when` waits until that holds. An option with a
+`bet` has a seeded `chance` of going well, and otherwise uses what `lost` says.
+
+`demands.json` holds Demands, which arrive as Notifications with their `months` and
+must offer `deliver`, `push-back`, `hand-off`, `fake` and `stall`. An answer that needs a
+colleague names them by role. `"stalls": true` on `stall` leaves the Demand open, and the
+player can see it under **Your project**. Each later month, a seeded draw uses `odds` for
+the boss's kind: it is `forgotten`, or it is `chased`, which costs the `chasedPenalty`
+and arrives as a Notification of its own, or nothing happens yet. `sets` names the
+flags for that month. `chased` must have an
+answer that costs nothing.
+
+An approach can have `overdone`, which changes how the listed kinds take it after
+`after` uses in a run. This is how a Practitioner boss turns on someone who shines.
 
 An action with `"findOut": "ask"` spends an action to get a claim from a source.
 A method with `"someoneThere": true` deals one of its `sources` to be there, and its
@@ -212,5 +263,5 @@ A Scene that data cannot express can name a `script`, which is passed to
 - The `minimatch` override in `package.json` patches GHSA-g3hv-75wg-m249 in the
   lint tooling. Remove it when `eslint` depends on a patched version itself.
 - `build.chunkSizeWarningLimit` in `vite.config.ts` is raised because Three.js
-  is most of the single bundle. Review it if hosting is ever added.
+  and the game's text make up the single bundle. Review it if hosting is ever added.
 - `.prettierignore` leaves the owner's design records and agent docs unformatted.

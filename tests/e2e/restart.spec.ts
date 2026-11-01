@@ -1,17 +1,15 @@
 import { expect, test, type Page } from "@playwright/test";
-import { playToResults } from "./play";
+import { answerAnyNotification, playToResults } from "./play";
 
 async function reachSecondAction(page: Page) {
-  await page.getByTestId("option-report").click();
-  await page.getByTestId("continue").click();
+  await answerAnyNotification(page);
   await page.getByTestId("hotspot-kitchen").click();
   await page.getByTestId("continue").click();
 }
 
 test("restarts from a typed seed in the middle of a run", async ({ page }) => {
   await page.goto("/?seed=8");
-  await page.getByTestId("option-report").click();
-  await page.getByTestId("continue").click();
+  await answerAnyNotification(page);
   await page.getByTestId("hotspot-meeting").click();
   const signs = await page.getByTestId("panel-scene").innerText();
   await page.getByTestId("scene-option-say-nothing").click();
@@ -31,8 +29,7 @@ test("restarts from a typed seed in the middle of a run", async ({ page }) => {
   await expect(page.getByTestId("actions-left")).toContainText("3");
   await expect(page.getByTestId("panel-notification")).toBeVisible();
 
-  await page.getByTestId("option-report").click();
-  await page.getByTestId("continue").click();
+  await answerAnyNotification(page);
   await page.getByTestId("hotspot-meeting").click();
   expect(await page.getByTestId("panel-scene").innerText()).toBe(signs);
 });

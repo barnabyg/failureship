@@ -12,6 +12,18 @@ export function draw(state: number): Draw {
   return { value: ((t ^ (t >>> 14)) >>> 0) / 4294967296, next };
 }
 
+/**
+ * A draw of its own for one seeded question, such as whether this month's input
+ * is late. The answer stays the same whatever the player has done so far.
+ */
+export function drawFor(seed: number, question: string, month: number): number {
+  let hash = 0x811c9dc5 ^ seed;
+  for (const char of `${question}:${String(month)}`) {
+    hash = Math.imul(hash ^ (char.codePointAt(0) ?? 0), 0x01000193);
+  }
+  return draw(hash).value;
+}
+
 /** Fisher-Yates, drawing from the generator. */
 export function shuffle<T>(
   state: number,

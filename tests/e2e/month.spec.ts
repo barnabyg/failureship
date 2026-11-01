@@ -1,4 +1,5 @@
 import { expect, test, type Page } from "@playwright/test";
+import { answerAnyNotification } from "./play";
 
 async function spendAction(page: Page, id: string) {
   await page.getByTestId(`hotspot-${id}`).click();
@@ -6,8 +7,7 @@ async function spendAction(page: Page, id: string) {
 }
 
 async function fileTheReport(page: Page) {
-  await page.getByTestId("option-report").click();
-  await page.getByTestId("continue").click();
+  await answerAnyNotification(page);
 }
 
 test("plays through a month on a fixed-camera Floor 1", async ({ page }) => {

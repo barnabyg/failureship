@@ -89,6 +89,15 @@
       "source": "Your own observation",
       "text": "That went badly, and nobody will say why. There is something you were not told.",
       "verdict": "held"
+    },
+    {
+      "id": "input-late",
+      "when": {
+        "flag": "input-late"
+      },
+      "source": "Your inbox",
+      "text": "The Project Co-ordinator's figures were late for your report. That could mean several things, and you have only seen the one thing happen.",
+      "verdict": "idle"
     }
   ]
 }

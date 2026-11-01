@@ -44,24 +44,32 @@ describe("six months that do not feel like one month repeated", () => {
     const inMonth = (item: { months?: number[] | undefined }, month: number) =>
       item.months?.includes(month) ?? true;
     const presented = months.map((month) => {
+      // The Project Status Review opens when flagged, so it belongs to no month.
       const scenes = gameContent.scenes
-        .filter((s) => inMonth(s, month))
+        .filter((s) => s.months !== undefined && inMonth(s, month))
         .map((s) => s.id);
-      const notifications = gameContent.notifications
-        .filter((n) => inMonth(n, month))
+      // The Monthly Status Report recurs, so it is not what sets a month apart.
+      const notifications = [
+        ...gameContent.notifications,
+        ...(gameContent.demands?.items ?? []),
+      ]
+        .filter((n) => n.months !== undefined && inMonth(n, month))
         .map((n) => n.id);
       expect(scenes, `month ${String(month)}`).toHaveLength(1);
-      expect(notifications, `month ${String(month)}`).toHaveLength(1);
+      expect(notifications.length, `month ${String(month)}`).toBeGreaterThan(0);
       return [...scenes, ...notifications];
     });
 
-    expect(new Set(presented.flat()).size).toBe(months.length * 2);
+    const everything = presented.flat();
+    expect(new Set(everything).size).toBe(everything.length);
   });
 
   it("opens a different Scene in each month of a real run", () => {
     const { views } = walk(1, attendsEverything);
     const titles = views.flatMap((v) =>
-      v.step.kind === "scene" ? [v.step.title] : [],
+      v.step.kind === "scene" && v.step.id !== "red-project"
+        ? [v.step.title]
+        : [],
     );
 
     expect(new Set(titles).size).toBe(6);

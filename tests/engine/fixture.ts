@@ -9,6 +9,8 @@ interface RawOption {
   sets?: string[];
   opinion?: number;
   result?: { title: string; body: string };
+  approach?: string;
+  project?: { real?: string; reported?: string };
 }
 
 interface RawNotification {
@@ -32,8 +34,11 @@ interface RawSceneOption {
     body: string;
     sets?: string[];
     opinion?: number;
+    approach?: string;
+    reaction?: { believer: string; incompetent: string; practitioner: string };
     factAt?: string;
     factNote?: string;
+    project?: { real?: string; reported?: string };
   }[];
 }
 
@@ -47,6 +52,7 @@ interface RawScene {
   options: RawSceneOption[];
   script?: string;
   months?: number[];
+  verdict?: { warm: string; neutral: string; cold: string };
 }
 
 interface RawMove {
@@ -109,6 +115,20 @@ export function fixtureRaw() {
         text: string;
         likelihood: { warm: number; neutral: number; cold: number };
       }[],
+      approaches: [] as {
+        id: string;
+        shift: { believer: number; incompetent: number; practitioner: number };
+        reaction: {
+          believer: string[];
+          incompetent: string[];
+          practitioner: string[];
+        };
+        overdone?: {
+          after: number;
+          shift: Partial<Record<string, number>>;
+          reaction: Partial<Record<string, string[]>>;
+        };
+      }[],
     },
     sources: sourcesRaw(),
     notebook: {
@@ -119,6 +139,34 @@ export function fixtureRaw() {
         text: string;
         verdict: string;
       }[],
+    },
+    project: {
+      name: "PROJECT-NAME",
+      owner: "PROJECT-OWNER",
+      statuses: [
+        { id: "good", label: "STATUS-GOOD" },
+        { id: "fair", label: "STATUS-FAIR" },
+        { id: "bad", label: "STATUS-BAD" },
+      ],
+      start: { real: "fair", reported: "good" },
+      events: [] as {
+        months: number[];
+        text: string;
+        project?: { real?: string; reported?: string };
+      }[],
+      flagged: undefined as
+        { at: string; scene: string; cost: string } | undefined,
+      input: undefined as
+        | {
+            character: string;
+            chance: {
+              believer: number;
+              incompetent: number;
+              practitioner: number;
+            };
+            sets: string;
+          }
+        | undefined,
     },
     hiddenTruth: {
       kinds: {
@@ -202,6 +250,11 @@ export function fixtureRaw() {
       },
       costLabel: "Costs {actions}",
       freeLabel: "Costs nothing",
+      bossLanded: {
+        warmer: "LANDED-WARMER",
+        cooler: "LANDED-COOLER",
+        unmoved: "LANDED-UNMOVED",
+      },
       results: { title: "The end", intro: "Here is who was who." },
     },
   };

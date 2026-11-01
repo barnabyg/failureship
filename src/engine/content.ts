@@ -11,28 +11,23 @@ const sets = z.array(id).default([]);
 /** How far this moves the boss's hidden opinion of the player. */
 const opinion = z.number().int().default(0);
 
-const notificationOption = z.strictObject({
-  id,
-  label: text,
-  cost: id.optional(),
-  dialog: id.optional(),
-  learns: z.array(id).default([]),
-  sets,
-  opinion,
-  result: notice.optional(),
-});
+/** Something written once for each kind of boss. */
+const perKind = <T extends z.ZodType>(value: T) =>
+  z.strictObject({ believer: value, incompetent: value, practitioner: value });
 
-/** The months something belongs to. Left out, it belongs to every month. */
-const months = z.array(z.number().int().positive()).min(1).optional();
+/** How the choice comes across, which `boss.approaches` reads by the boss's kind. */
+const approachTag = id.optional();
 
-const notification = z.strictObject({
-  id,
-  months,
-  from: text,
-  subject: text,
-  body: text,
-  options: z.array(notificationOption).min(1),
-});
+/** This choice's own words for how the boss takes it, in place of the approach's. */
+const ownReaction = perKind(text).optional();
+
+/**
+ * How a choice or event moves the Project. Each is a status's id, or `better`
+ * or `worse`, and a reported status can also be `real`, which tells the truth.
+ */
+const projectChange = z
+  .strictObject({ real: id.optional(), reported: id.optional() })
+  .optional();
 
 const dialog = z.strictObject({
   id,
@@ -42,6 +37,9 @@ const dialog = z.strictObject({
 
 const buzzword = z.strictObject({ id, term: text, meaning: text });
 
+export const KINDS = ["believer", "incompetent", "practitioner"] as const;
+export type Kind = (typeof KINDS)[number];
+
 export const MOODS = ["warm", "neutral", "cold"] as const;
 export type Mood = (typeof MOODS)[number];
 
@@ -50,6 +48,7 @@ export type Nature = (typeof NATURES)[number];
 
 export type Condition =
   | { holderIs: string }
+  | { bossIs: Kind }
   | { factNature: { character: string; nature: Nature } }
   | { heardFact: string }
   | { heardTrue: string }
@@ -61,6 +60,7 @@ export type Condition =
 const condition: z.ZodType<Condition> = z.lazy(() =>
   z.union([
     z.strictObject({ holderIs: id }),
+    z.strictObject({ bossIs: z.enum(KINDS) }),
     z.strictObject({
       factNature: z.strictObject({
         character: id,
@@ -76,11 +76,71 @@ const condition: z.ZodType<Condition> = z.lazy(() =>
   ]),
 );
 
+const notificationOption = z.strictObject({
+  id,
+  label: text,
+  cost: id.optional(),
+  dialog: id.optional(),
+  learns: z.array(id).default([]),
+  sets,
+  opinion,
+  approach: approachTag,
+  reaction: ownReaction,
+  project: projectChange,
+  result: notice.optional(),
+  /** Leaves a Demand open, as a bet that the boss forgets it. */
+  stalls: z.boolean().default(false),
+  /** A seeded chance that this goes the other way, into `lost`. */
+  bet: z
+    .strictObject({
+      chance: z.number().min(0).max(1),
+      lost: z.strictObject({
+        sets,
+        opinion,
+        approach: approachTag,
+        reaction: ownReaction,
+        project: projectChange,
+        result: notice,
+      }),
+    })
+    .optional(),
+});
+
+/** The months something belongs to. Left out, it belongs to every month. */
+const months = z.array(z.number().int().positive()).min(1).optional();
+
+const notification = z.strictObject({
+  id,
+  months,
+  /** The Notification waits until this holds, and goes unseen if it never does. */
+  when: condition.optional(),
+  from: text,
+  subject: text,
+  body: text,
+  options: z.array(notificationOption).min(1),
+});
+
+/** An instruction from above, which can be answered in the five ways below. */
+const demand = notification.extend({
+  /** What happens if the boss forgets a stalled Demand. */
+  forgotten: notice,
+  /** What arrives if the boss chases a stalled Demand instead. */
+  chased: z.strictObject({
+    from: text,
+    subject: text,
+    body: text,
+    options: z.array(notificationOption).min(1),
+  }),
+});
+
 const sceneResult = z.strictObject({
   when: condition.optional(),
   body: text,
   sets,
   opinion,
+  approach: approachTag,
+  reaction: ownReaction,
+  project: projectChange,
   /** Says on the results screen that a Hidden Fact caused this. */
   factNote: text.optional(),
   /** Whose Hidden Fact it was, unless the option is `about` one. */
@@ -115,6 +175,8 @@ const scene = z.strictObject({
   options: z.array(sceneOption).min(1),
   /** Names code in `sceneScripts`, for a Scene that data cannot express. */
   script: id.optional(),
+  /** What the boss finally says of the player, by how the opinion stands. */
+  verdict: z.strictObject({ warm: text, neutral: text, cold: text }).optional(),
 });
 
 const action = z.strictObject({
@@ -133,6 +195,9 @@ const action = z.strictObject({
   /** A Find Out action names how the player goes about it. */
   findOut: id.optional(),
   sets,
+  approach: approachTag,
+  reaction: ownReaction,
+  project: projectChange,
 });
 
 const move = z.strictObject({
@@ -181,9 +246,6 @@ const room = z.strictObject({
   /** A label for a place the player can see but not act on. */
   sign: z.strictObject({ title: text, detail: text }).optional(),
 });
-
-export const KINDS = ["believer", "incompetent", "practitioner"] as const;
-export type Kind = (typeof KINDS)[number];
 
 const kindRule = z.strictObject({
   label: text,
@@ -285,6 +347,22 @@ const sources = z.strictObject({
   }),
 });
 
+/** A way of coming across, and how each kind of boss takes it. */
+const bossApproach = z.strictObject({
+  id,
+  shift: perKind(z.number().int()),
+  /** How each kind shows it, used in turn so that it reads differently each month. */
+  reaction: perKind(lines),
+  /** Past this many uses in a run, these kinds take it differently. */
+  overdone: z
+    .strictObject({
+      after: z.number().int().positive(),
+      shift: perKind(z.number().int()).partial(),
+      reaction: perKind(lines).partial(),
+    })
+    .optional(),
+});
+
 const bossSign = z.strictObject({
   id,
   text,
@@ -315,6 +393,31 @@ const notebook = z.strictObject({
   ),
 });
 
+const project = z.strictObject({
+  name: text,
+  owner: text,
+  /** Best first, which is what `better` and `worse` go by. */
+  statuses: z.array(z.strictObject({ id, label: text })).min(2),
+  start: z.strictObject({ real: id, reported: id }),
+  /** What happens to the Project whatever the player does, as a month opens. */
+  events: z
+    .array(z.strictObject({ months, text, project: projectChange }))
+    .default([]),
+  /** Reported as this, the Project is flagged, and has to be explained. */
+  flagged: z.strictObject({ at: id, scene: id, cost: id }).optional(),
+  /** Who the report needs figures from, and how often they arrive late. */
+  input: z
+    .strictObject({
+      character: id,
+      /** The months in which they can be late. Left out, any month. */
+      months,
+      chance: perKind(z.number().min(0).max(1)),
+      /** Set for the month when they are late. */
+      sets: id,
+    })
+    .optional(),
+});
+
 const contentSchema = z.strictObject({
   balance: z.strictObject({
     actionsPerMonth: z.number().int().positive(),
@@ -332,6 +435,7 @@ const contentSchema = z.strictObject({
     /** Whose opinion of the player is tracked. */
     character: id,
     signs: z.array(bossSign),
+    approaches: z.array(bossApproach).default([]),
   }),
   hiddenTruth: z.strictObject({
     kinds: z.strictObject({
@@ -361,6 +465,23 @@ const contentSchema = z.strictObject({
   }),
   sources,
   notebook,
+  project,
+  demands: z
+    .strictObject({
+      /** Each month, how likely each kind of boss is to forget or to chase. */
+      odds: perKind(
+        z.strictObject({
+          forgets: z.number().min(0).max(1),
+          chases: z.number().min(0).max(1),
+        }),
+      ),
+      /** What being chased costs with each kind, before any answer is given. */
+      chasedPenalty: perKind(z.number().int().nonpositive()),
+      /** Set for the month when a stalled Demand is forgotten or chased. */
+      sets: z.strictObject({ forgotten: id, chased: id }),
+      items: z.array(demand),
+    })
+    .optional(),
   characters: z
     .array(
       z.strictObject({
@@ -409,6 +530,8 @@ const contentSchema = z.strictObject({
     clueVerdicts: z.strictObject({ held: text, wrong: text, idle: text }),
     costLabel: text,
     freeLabel: text,
+    /** How the results screen says a choice landed with the boss. */
+    bossLanded: z.strictObject({ warmer: text, cooler: text, unmoved: text }),
     results: z.strictObject({ title: text, intro: text }),
   }),
 });
@@ -416,6 +539,35 @@ const contentSchema = z.strictObject({
 export type Content = z.infer<typeof contentSchema>;
 export type Room = Content["floor"]["rooms"][number];
 export type SceneData = Content["scenes"][number];
+type SceneResult = SceneData["options"][number]["results"][number];
+
+export const DEMAND_ANSWERS = [
+  "deliver",
+  "push-back",
+  "hand-off",
+  "fake",
+  "stall",
+] as const;
+
+/** The Notification that chases a stalled Demand. */
+export function chasedIdOf(demandId: string): string {
+  return `${demandId}-chased`;
+}
+
+/** Every Notification there is, including Demands and their chasers. */
+export function everyNotification(content: Content) {
+  const items = content.demands?.items ?? [];
+  return [
+    ...content.notifications,
+    ...items,
+    ...items.map(({ id: demandId, chased }) => ({
+      ...chased,
+      id: chasedIdOf(demandId),
+      months: undefined,
+      when: undefined,
+    })),
+  ];
+}
 
 /** Thrown when a data file breaks the content format, naming what is wrong. */
 export class ContentError extends Error {
@@ -442,6 +594,7 @@ function dependsOnHiddenTruth(
   if ("flag" in condition) return hiddenFlags.has(condition.flag);
   if (
     "holderIs" in condition ||
+    "bossIs" in condition ||
     "factNature" in condition ||
     "heardTrue" in condition
   ) {
@@ -456,16 +609,21 @@ function dependsOnHiddenTruth(
   return false;
 }
 
-/** Flags that say which way a hidden result went, so they carry the truth too. */
+/** Flags that say which way something hidden went, so they carry the truth too. */
 function flagsSetByHiddenResults(content: Content): Set<string> {
   const options = content.scenes.flatMap((s) => s.options);
-  return new Set(
-    options
+  return new Set([
+    ...options
       .filter((o) =>
         o.results.some((r) => r.when && dependsOnHiddenTruth(r.when)),
       )
       .flatMap((o) => o.results.flatMap((r) => r.sets)),
-  );
+    ...content.moves
+      .filter((m) => m.when && dependsOnHiddenTruth(m.when))
+      .flatMap((m) => m.sets),
+    // Whether a Demand is forgotten or chased goes by the boss's kind.
+    ...Object.values(content.demands?.sets ?? {}),
+  ]);
 }
 
 function findBrokenDeal(
@@ -625,6 +783,96 @@ function findBrokenBossSigns(content: Content): string[] {
   return problems;
 }
 
+/** An approach must split the kinds, and its words must never name one. */
+function findBrokenApproaches(content: Content): string[] {
+  const problems: string[] = [];
+  for (const approach of content.boss.approaches) {
+    const owner = `Approach "${approach.id}"`;
+    if (new Set(Object.values(approach.shift)).size === 1) {
+      problems.push(`${owner} is taken the same way by every kind.`);
+    }
+    const written = [
+      ...Object.values(approach.reaction).flat(),
+      ...Object.values(approach.overdone?.reaction ?? {}).flatMap(
+        (l) => l ?? [],
+      ),
+    ];
+    problems.push(...findNamedKinds(content, owner, written));
+  }
+  return problems;
+}
+
+/** The player reads a kind from signs, so no reaction may say it out loud. */
+function findNamedKinds(
+  content: Content,
+  owner: string,
+  written: readonly string[],
+): string[] {
+  const labels = Object.values(content.hiddenTruth.kinds).map((k) =>
+    k.label.toLowerCase(),
+  );
+  return written
+    .filter((line) => labels.some((l) => line.toLowerCase().includes(l)))
+    .map((line) => `${owner} names a kind: "${line}"`);
+}
+
+/** Lateness must be a clue about someone's kind, and never settle it. */
+function findBrokenInput(content: Content): string[] {
+  const { input } = content.project;
+  if (!input) return [];
+  const problems: string[] = [];
+  if (!content.characters.some((c) => c.id === input.character)) {
+    problems.push(`The report's input names unknown "${input.character}".`);
+  }
+  const chances = Object.values(input.chance);
+  if (chances.filter((c) => c > 0).length < 2) {
+    problems.push("Late input can come from only one kind.");
+  }
+  if (new Set(chances).size === 1) {
+    problems.push("Late input gives no evidence: every kind is as likely.");
+  }
+  if (chances.includes(1)) {
+    problems.push(
+      "Late input is certain from one kind, which would settle it.",
+    );
+  }
+  return problems;
+}
+
+/** A Demand must offer every answer, and stalling must be a real bet. */
+function findBrokenDemands(content: Content): string[] {
+  const { demands } = content;
+  if (!demands) return [];
+  const problems: string[] = [];
+  for (const [kind, { forgets, chases }] of Object.entries(demands.odds)) {
+    if (forgets === 0 || chases === 0) {
+      problems.push(`A ${kind} boss must be able to forget and to chase.`);
+    }
+    if (forgets + chases > 1) {
+      problems.push(`A ${kind} boss's Demand odds add up to more than one.`);
+    }
+  }
+  for (const item of demands.items) {
+    const owner = `Demand "${item.id}"`;
+    const ids = item.options.map((o) => o.id);
+    for (const answer of DEMAND_ANSWERS) {
+      if (!ids.includes(answer)) problems.push(`${owner} needs "${answer}".`);
+    }
+    for (const option of item.options) {
+      if (option.stalls !== (option.id === "stall")) {
+        problems.push(`${owner} must stall on "stall", and only there.`);
+      }
+    }
+    const answerable = item.chased.options.some(
+      (o) => (content.balance.actionCosts[o.cost ?? ""] ?? 0) === 0,
+    );
+    if (!answerable) {
+      problems.push(`${owner}'s chaser needs an answer that costs nothing.`);
+    }
+  }
+  return problems;
+}
+
 /** Sources must be worth weighing: never always right, and never always wrong. */
 function findBrokenSources(content: Content): string[] {
   const { methods, reliability, motives, claims, voices } = content.sources;
@@ -753,6 +1001,37 @@ function findBrokenReferences(content: Content): string[] {
       }
     }
   };
+  const checkApproach = (
+    owner: string,
+    { approach, reaction }: Pick<SceneResult, "approach" | "reaction">,
+  ) => {
+    if (
+      approach !== undefined &&
+      !content.boss.approaches.some((a) => a.id === approach)
+    ) {
+      problems.push(`${owner} uses unknown approach "${approach}".`);
+    }
+    if (reaction) {
+      if (approach === undefined) {
+        problems.push(`${owner} has a reaction with no approach to move it.`);
+      }
+      problems.push(...findNamedKinds(content, owner, Object.values(reaction)));
+    }
+  };
+  const statuses = new Set(content.project.statuses.map((s) => s.id));
+  const checkStatus = (owner: string, status: string) => {
+    if (!statuses.has(status)) {
+      problems.push(`${owner} names unknown status "${status}".`);
+    }
+  };
+  const checkProject = (owner: string, change: SceneResult["project"]) => {
+    const { real, reported } = change ?? {};
+    const relative = (to: string) => to === "better" || to === "worse";
+    if (real !== undefined && !relative(real)) checkStatus(owner, real);
+    if (reported !== undefined && !relative(reported) && reported !== "real") {
+      checkStatus(owner, reported);
+    }
+  };
   const checkCost = (owner: string, cost: string | undefined) => {
     if (cost !== undefined && !(cost in content.balance.actionCosts)) {
       problems.push(`${owner} has unknown cost "${cost}".`);
@@ -762,8 +1041,40 @@ function findBrokenReferences(content: Content): string[] {
   problems.push(...findBrokenDeal(content, characters));
   problems.push(...findBrokenBehaviours(content));
   problems.push(...findBrokenBossSigns(content));
+  problems.push(...findBrokenApproaches(content));
   problems.push(...findBrokenSources(content));
+  problems.push(...findBrokenInput(content));
+  problems.push(...findBrokenDemands(content));
+  const { flagged } = content.project;
+  if (flagged) {
+    checkStatus("The Project's flag", flagged.at);
+    checkCost("The Project's flag", flagged.cost);
+    const review = content.scenes.find((s) => s.id === flagged.scene);
+    if (!review) {
+      problems.push(
+        `The Project's flag opens unknown Scene "${flagged.scene}".`,
+      );
+    }
+    if (review?.months) {
+      problems.push(
+        `Scene "${flagged.scene}" opens when flagged, not by month.`,
+      );
+    }
+    if (content.actions.some((a) => a.scene === flagged.scene)) {
+      problems.push(
+        `Scene "${flagged.scene}" opens when flagged, not by action.`,
+      );
+    }
+  }
+  checkStatus("The Project", content.project.start.real);
+  checkStatus("The Project", content.project.start.reported);
+  for (const e of content.project.events) {
+    checkMonths("A Project event", e.months);
+    checkProject("A Project event", e.project);
+  }
   for (const a of content.actions) {
+    checkApproach(`Action "${a.id}"`, a);
+    checkProject(`Action "${a.id}"`, a.project);
     if (!rooms.has(a.place)) {
       problems.push(`Action "${a.id}" is at unknown place "${a.place}".`);
     }
@@ -835,6 +1146,8 @@ function findBrokenReferences(content: Content): string[] {
         checkParts(optionOwner, r.factNote ?? "", about);
         if (r.factAt !== undefined) checkCharacter(optionOwner, r.factAt);
         if (r.when) checkCondition(optionOwner, r.when);
+        checkApproach(optionOwner, r);
+        checkProject(optionOwner, r.project);
       }
       if (o.requires) {
         checkCondition(optionOwner, o.requires);
@@ -869,11 +1182,30 @@ function findBrokenReferences(content: Content): string[] {
     if (e.when) checkCondition(owner, e.when);
     checkMonths(owner, e.months);
   }
-  for (const n of content.notifications) {
+  for (const n of everyNotification(content)) {
     checkMonths(`Notification "${n.id}"`, n.months);
+    if (n.when) {
+      checkCondition(`Notification "${n.id}"`, n.when);
+      if (dependsOnHiddenTruth(n.when, hiddenFlags)) {
+        problems.push(`Notification "${n.id}" is gated on the hidden truth.`);
+      }
+    }
+    for (const [, token] of n.body.matchAll(/\{(\w+)\}/g)) {
+      if (token !== "real" && token !== "reported") {
+        problems.push(
+          `Notification "${n.id}" uses unknown token "{${token ?? ""}}".`,
+        );
+      }
+    }
     for (const o of n.options) {
       const owner = `Notification "${n.id}" option "${o.id}"`;
       checkCost(owner, o.cost);
+      checkApproach(owner, o);
+      checkProject(owner, o.project);
+      if (o.bet) {
+        checkApproach(owner, o.bet.lost);
+        checkProject(owner, o.bet.lost.project);
+      }
       if (o.dialog !== undefined && !dialogs.has(o.dialog)) {
         problems.push(`${owner} opens unknown dialog "${o.dialog}".`);
       }

@@ -4,6 +4,7 @@ import behaviours from "../../content/behaviours.json";
 import boss from "../../content/boss.json";
 import buzzwords from "../../content/buzzwords.json";
 import characters from "../../content/characters.json";
+import demands from "../../content/demands.json";
 import dialogs from "../../content/dialogs.json";
 import floor from "../../content/floor-1.json";
 import hiddenTruth from "../../content/hidden-truth.json";
@@ -11,6 +12,7 @@ import moves from "../../content/moves.json";
 import notebook from "../../content/notebook.json";
 import notifications from "../../content/notifications.json";
 import officialStory from "../../content/official-story.json";
+import project from "../../content/project.json";
 import scenes from "../../content/scenes.json";
 import sources from "../../content/sources.json";
 import ui from "../../content/ui.json";
@@ -24,6 +26,7 @@ const {
   clueVerdicts,
   costLabel,
   freeLabel,
+  bossLanded,
   results,
   ...presentation
 } = ui;
@@ -34,6 +37,8 @@ export const gameContent = parseContent({
   hiddenTruth,
   sources,
   notebook,
+  project,
+  demands,
   characters,
   behaviours,
   scenes,
@@ -51,6 +56,7 @@ export const gameContent = parseContent({
     clueVerdicts,
     costLabel,
     freeLabel,
+    bossLanded,
     results,
   },
 });
@@ -86,6 +92,11 @@ const panelSchema = z.strictObject(
       "optionsHeading",
       "seedLabel",
       "orgChartHeading",
+      "projectHeading",
+      "projectOwnerLabel",
+      "projectRealLabel",
+      "projectReportedLabel",
+      "openDemandsHeading",
       "powerMapHeading",
       "closeLabel",
       "resultsWhoHeading",
@@ -102,6 +113,8 @@ const panelSchema = z.strictObject(
       "resultsMarkWrong",
       "resultsCluesHeading",
       "resultsFactEventsHeading",
+      "resultsBossHeading",
+      "resultsBossNoChoices",
       "resultsClaimsHeading",
       "resultsNoClaims",
       "resultsMonthLabel",

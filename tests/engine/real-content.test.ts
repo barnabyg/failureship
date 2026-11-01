@@ -2,7 +2,12 @@ import { readdirSync, readFileSync } from "node:fs";
 import path from "node:path";
 import { describe, expect, it } from "vitest";
 import { gameContent, parsePanelText, panelText } from "../../src/content";
-import { startRun, type Choice, type PlayerView } from "../../src/engine";
+import {
+  startRun,
+  type Choice,
+  type PlayerView,
+  type Run,
+} from "../../src/engine";
 import { readHiddenTruth } from "../../src/engine/hidden-truth";
 
 const SEEDS = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
@@ -24,11 +29,14 @@ function everyPath(seed: number): PlayerView[][] {
       paths.push(views);
       return;
     }
-    // Every source and subject would multiply the paths and show nothing new.
+    // Every source and subject would multiply the paths and show nothing new,
+    // and so would the three actions left by not filing the report.
     const choices =
       last?.step.kind === "find-out"
         ? last.choices.slice(0, 1)
-        : (last?.choices ?? []);
+        : (last?.choices ?? []).filter(
+            (c) => !(c.type === "notification" && c.optionId === "skip"),
+          );
     for (const choice of choices) walk([...script, choice]);
   };
   walk([]);
@@ -42,6 +50,22 @@ function holderInMeeting(seed: number) {
   return readHiddenTruth(run).powerMap.order.find((id) =>
     meeting?.cast.includes(id),
   );
+}
+
+/** Turns down the pub and files the report, to reach month 1's floor. */
+function fileTheReport(run: Run) {
+  run.choose({
+    type: "notification",
+    notificationId: "pub-invite",
+    optionId: "decline",
+  });
+  run.choose({ type: "continue" });
+  run.choose({
+    type: "notification",
+    notificationId: "monthly-report",
+    optionId: "report",
+  });
+  run.choose({ type: "continue" });
 }
 
 describe("the real month", () => {
@@ -206,12 +230,7 @@ describe("the real month", () => {
         ?.nature;
     };
     const run = startRun({ seed: 22, content: gameContent });
-    run.choose({
-      type: "notification",
-      notificationId: "report-or-pub",
-      optionId: "report",
-    });
-    run.choose({ type: "continue" });
+    fileTheReport(run);
     run.choose({ type: "action", actionId: "inside-info" });
     const told = run.choose({
       type: "find-out",
@@ -221,6 +240,58 @@ describe("the real month", () => {
 
     expect(nature(3, "projects")).toBe("dangerous");
     expect(JSON.stringify(told.step)).toContain("abolished");
+  });
+
+  // The late-input browser test relies on this.
+  it("keeps the report's input late in month 2 on seed 1", () => {
+    const run = startRun({ seed: 1, content: gameContent });
+    fileTheReport(run);
+    let view = run.view();
+    while (view.month === 1) {
+      const next = view.choices.at(-1);
+      if (!next) throw new Error(`Stuck at ${view.step.kind}.`);
+      view = run.choose(next);
+    }
+    run.choose({
+      type: "notification",
+      notificationId: "training",
+      optionId: "skip-training",
+    });
+    run.choose({ type: "continue" });
+    run.choose({
+      type: "notification",
+      notificationId: "fewer-meetings",
+      optionId: "push-back",
+    });
+
+    expect(run.choose({ type: "continue" }).step).toMatchObject({
+      id: "report-input-late",
+    });
+  });
+
+  // The Demand browser test relies on these.
+  it.each([
+    [4, "notification"],
+    [8, "notice"],
+  ])("keeps what follows a stalled Demand on seed %i", (seed, kind) => {
+    const run = startRun({ seed, content: gameContent });
+    let view = run.view();
+    while (view.month < 3) {
+      const { step } = view;
+      const stall =
+        step.kind === "notification" && step.id === "fewer-meetings";
+      const next: Choice | undefined = stall
+        ? {
+            type: "notification",
+            notificationId: "fewer-meetings",
+            optionId: "stall",
+          }
+        : view.choices.at(-1);
+      if (!next) throw new Error(`Stuck at ${step.kind}.`);
+      view = run.choose(next);
+    }
+
+    expect(view.step.kind).toBe(kind);
   });
 
   // The README contrasts these two seeds in its test scenario.
@@ -241,12 +312,7 @@ describe("the real month", () => {
 
     const meeting = (seed: number) => {
       const run = startRun({ seed, content: gameContent });
-      run.choose({
-        type: "notification",
-        notificationId: "report-or-pub",
-        optionId: "report",
-      });
-      run.choose({ type: "continue" });
+      fileTheReport(run);
       const view = run.choose({ type: "action", actionId: "meeting" });
       if (view.step.kind !== "scene") throw new Error(view.step.kind);
       return view.step;

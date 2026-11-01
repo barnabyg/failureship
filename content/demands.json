@@ -1,0 +1,307 @@
+{
+  "odds": {
+    "believer": {
+      "forgets": 0.1,
+      "chases": 0.6
+    },
+    "incompetent": {
+      "forgets": 0.6,
+      "chases": 0.2
+    },
+    "practitioner": {
+      "forgets": 0.15,
+      "chases": 0.45
+    }
+  },
+  "chasedPenalty": {
+    "believer": -3,
+    "incompetent": -3,
+    "practitioner": -3
+  },
+  "sets": {
+    "forgotten": "demand-forgotten",
+    "chased": "demand-chased"
+  },
+  "items": [
+    {
+      "id": "fewer-meetings",
+      "months": [2],
+      "from": "From: Your boss's boss, Hugh Lamb",
+      "subject": "Meetings: reduce by half, by Friday",
+      "body": "Your boss's boss would like the floor's meetings reduced by half by Friday. A kick-off meeting has been arranged to discuss how, with a weekly meeting to follow, to track progress.",
+      "options": [
+        {
+          "id": "deliver",
+          "label": "Cancel half of the floor's meetings",
+          "cost": "standard",
+          "sets": ["delivered-demand"],
+          "approach": "results",
+          "result": {
+            "title": "Meetings",
+            "body": "You go through the calendar and cancel half of it. Nothing happens. Nobody can find any evidence that anything has ever depended on these meetings, and several people are upset."
+          }
+        },
+        {
+          "id": "push-back",
+          "label": "Reply that the kick-off meeting alone defeats the purpose",
+          "sets": ["pushed-back"],
+          "approach": "push-back",
+          "result": {
+            "title": "RE: Meetings",
+            "body": "You send it before you can stop yourself. It is the shortest email ever sent on this floor, and it is being forwarded."
+          }
+        },
+        {
+          "id": "hand-off",
+          "label": "Hand it to the Office Co-ordinator, who runs the calendar",
+          "sets": ["handed-off"],
+          "approach": "hand-off",
+          "result": {
+            "title": "FW: Meetings",
+            "body": "The Office Co-ordinator accepts it without a word, and books a meeting to discuss it. You are invited."
+          }
+        },
+        {
+          "id": "fake",
+          "label": "Rename half of the meetings as workshops",
+          "cost": "standard",
+          "sets": ["faked-demand"],
+          "approach": "theatre",
+          "result": {
+            "title": "Meetings",
+            "body": "By Friday meetings are down by half, and workshops are up by the same amount. You send a chart. It has an arrow on it."
+          }
+        },
+        {
+          "id": "stall",
+          "label": "Reply that this is being looked at",
+          "stalls": true,
+          "sets": ["stalled-demand"],
+          "approach": "stall",
+          "result": {
+            "title": "RE: Meetings",
+            "body": "You receive a thumbs up from someone's assistant. It is now being looked at, by you, in the sense that you have looked at it."
+          }
+        }
+      ],
+      "forgotten": {
+        "title": "Meetings",
+        "body": "A new message from your boss's boss arrives about a different thing entirely, and the meetings are not mentioned again. They continue. You remove the note from your screen."
+      },
+      "chased": {
+        "from": "From: Your boss's boss, Hugh Lamb",
+        "subject": "RE: Meetings: where are we on this?",
+        "body": "Your boss's boss has noticed that nothing has changed, and has asked you to say why, with your boss copied in. It has been some time, and you have not got an answer.",
+        "options": [
+          {
+            "id": "do-it-late",
+            "label": "Drop everything and cancel the meetings now",
+            "cost": "standard",
+            "sets": ["delivered-demand"],
+            "approach": "late-answer",
+            "result": {
+              "title": "Meetings",
+              "body": "You cancel them that afternoon, and send a short note. You are told that the priorities have moved on, but that it is good to see it done."
+            }
+          },
+          {
+            "id": "excuse",
+            "label": "Say that it is being looked at, again",
+            "sets": ["stalled-demand"],
+            "approach": "neglect",
+            "result": {
+              "title": "RE: Meetings",
+              "body": "You say it again, with a date this time. It is a date in the past. Nobody replies, in a way that you can feel."
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": "new-tool",
+      "months": [4],
+      "from": "From: Your boss, Dennis Prowse",
+      "subject": "FW: This solves ALL your problems (read this!!)",
+      "body": "Your boss has read an article about a new software tool that solves all your problems, and wants it rolled out by the end of the month. Your boss has not said which problems. The article is by the company that sells it.",
+      "options": [
+        {
+          "id": "deliver",
+          "label": "Go to the demonstration and roll it out",
+          "cost": "standard",
+          "sets": ["rolled-out-tool", "delivered-demand"],
+          "dialog": "tool-demo",
+          "learns": ["single-source-of-truth"],
+          "approach": "results"
+        },
+        {
+          "id": "push-back",
+          "label": "Ask your boss which of your problems it solves",
+          "sets": ["pushed-back"],
+          "approach": "push-back",
+          "result": {
+            "title": "RE: FW: This solves ALL your problems",
+            "body": "You ask it as a real question. A long time goes by, in which your boss could be doing anything."
+          }
+        },
+        {
+          "id": "hand-off",
+          "label": "Hand it to the Senior Analyst, who likes that sort of thing",
+          "sets": ["handed-off"],
+          "approach": "hand-off",
+          "result": {
+            "title": "FW: This solves ALL your problems",
+            "body": "The Senior Analyst replies that this is really interesting, and that the Senior Analyst will be sure to give you credit when it goes wrong."
+          }
+        },
+        {
+          "id": "fake",
+          "label": "Tell your boss it is rolled out, and add an icon to the shared drive",
+          "cost": "standard",
+          "sets": ["faked-demand"],
+          "approach": "theatre",
+          "result": {
+            "title": "This solves ALL your problems",
+            "body": "The icon opens an empty folder. Three people have told you it is already saving them time."
+          }
+        },
+        {
+          "id": "stall",
+          "label": "Reply that it is being evaluated",
+          "stalls": true,
+          "sets": ["stalled-tool"],
+          "approach": "stall",
+          "result": {
+            "title": "RE: FW: This solves ALL your problems",
+            "body": "Your boss replies with a thumbs up. The word evaluated seems to have the force of a finished thing. You make a note to find out what you have evaluated."
+          }
+        }
+      ],
+      "forgotten": {
+        "title": "This solves ALL your problems",
+        "body": "Your boss has read a new article, about a different tool, by a different company. The first tool is never spoken of again, and nor is your evaluation of it."
+      },
+      "chased": {
+        "from": "From: Your boss, Dennis Prowse",
+        "subject": "RE: RE: FW: Where is the evaluation?",
+        "body": "Your boss would like to see the evaluation of the new tool today, as your boss has told several people upstairs that it went well.",
+        "options": [
+          {
+            "id": "do-it-late",
+            "label": "Stay late and write an evaluation of something",
+            "cost": "standard",
+            "sets": ["faked-demand"],
+            "approach": "late-answer",
+            "result": {
+              "title": "The evaluation",
+              "body": "You write nine pages, from the company's own website. It concludes that further evaluation is needed. You are told it is exactly what was wanted, and that it is late."
+            }
+          },
+          {
+            "id": "excuse",
+            "label": "Say that the evaluation is still in progress",
+            "sets": ["stalled-tool"],
+            "approach": "neglect",
+            "result": {
+              "title": "RE: The evaluation",
+              "body": "You are asked to confirm the end date. You confirm one. It has now been written down, and copied to people you have never met."
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": "travel-freeze",
+      "months": [5],
+      "from": "From: The Chief Financial Officer",
+      "subject": "Travel: frozen, with immediate effect",
+      "body": "All travel is frozen with immediate effect, and all client visits are to continue as planned. Please confirm by the end of the month how your team will achieve both. This has come down to you through your boss, your boss's boss and several people's assistants.",
+      "options": [
+        {
+          "id": "deliver",
+          "label": "Rewrite the plan so that the visits become calls",
+          "cost": "standard",
+          "sets": ["delivered-demand"],
+          "approach": "results",
+          "result": {
+            "title": "Travel",
+            "body": "You make every call yourself, and it works, more or less. One client says that it is the first time anyone from your company has answered a question."
+          }
+        },
+        {
+          "id": "push-back",
+          "label": "Reply that it cannot be both, and ask which",
+          "sets": ["pushed-back"],
+          "approach": "push-back",
+          "result": {
+            "title": "RE: Travel",
+            "body": "You ask which. Your reply goes up through each of the assistants, and comes back down a week later, with the word both underlined."
+          }
+        },
+        {
+          "id": "hand-off",
+          "label": "Hand it to the Project Co-ordinator, who books the visits",
+          "sets": ["handed-off"],
+          "approach": "hand-off",
+          "result": {
+            "title": "FW: Travel",
+            "body": "The Project Co-ordinator thanks you, in the voice of someone who has been handed a lot of things. A spreadsheet goes round. Your name is on it, as the sponsor."
+          }
+        },
+        {
+          "id": "fake",
+          "label": "Confirm that it is in hand, and claim the visits as remote",
+          "cost": "standard",
+          "sets": ["faked-demand"],
+          "approach": "theatre",
+          "result": {
+            "title": "Travel",
+            "body": "You confirm that it is in hand. People go on travelling, and put it down as something else. The saving is reported upstairs, and looks very good."
+          }
+        },
+        {
+          "id": "stall",
+          "label": "Reply that you are working through the implications",
+          "stalls": true,
+          "sets": ["stalled-demand"],
+          "approach": "stall",
+          "result": {
+            "title": "RE: Travel",
+            "body": "Nobody replies. Implications, you are starting to learn, are something that can take as long as you need."
+          }
+        }
+      ],
+      "forgotten": {
+        "title": "Travel",
+        "body": "The freeze has been lifted, as the Chief Financial Officer needs to go to a conference. Nobody asks you what you worked out."
+      },
+      "chased": {
+        "from": "From: The Chief Financial Officer's assistant",
+        "subject": "RE: Travel: outstanding responses",
+        "body": "You are the last person outstanding. Your name is on a list that is going to the Chief Financial Officer, and to your boss, in about an hour.",
+        "options": [
+          {
+            "id": "do-it-late",
+            "label": "Rewrite the plan in the hour",
+            "cost": "standard",
+            "sets": ["delivered-demand"],
+            "approach": "late-answer",
+            "result": {
+              "title": "Travel",
+              "body": "You send it with four minutes to spare. It has one mistake in it, and that is the part everyone reads."
+            }
+          },
+          {
+            "id": "excuse",
+            "label": "Reply that you are still working through the implications",
+            "sets": ["stalled-demand"],
+            "approach": "neglect",
+            "result": {
+              "title": "RE: Travel",
+              "body": "Your name stays on the list. The list is forwarded, and your boss has been asked about it, by someone who had to look up who your boss was."
+            }
+          }
+        ]
+      }
+    }
+  ]
+}

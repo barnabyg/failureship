@@ -1,4 +1,5 @@
 import { expect, test, type Page } from "@playwright/test";
+import { answerAnyNotification, skipTheReport } from "./play";
 
 async function expectToSayWhatIsNext(page: Page) {
   await expect(page.getByTestId("hint")).not.toBeEmpty();
@@ -7,8 +8,13 @@ async function expectToSayWhatIsNext(page: Page) {
 
 async function reachMeeting(page: Page, answer: "pub" | "report", seed = 1) {
   await page.goto(`/?seed=${String(seed)}`);
-  await page.getByTestId(`option-${answer}`).click();
-  await page.getByTestId("continue").click();
+  if (answer === "pub") {
+    await page.getByTestId("option-pub").click();
+    await page.getByTestId("continue").click();
+    await skipTheReport(page);
+  } else {
+    await answerAnyNotification(page);
+  }
   await page.getByTestId("hotspot-meeting").click();
 }
 
@@ -84,6 +90,7 @@ test("the full month reads differently for different choices", async ({
   await page.getByTestId("option-pub").click();
   await expectToSayWhatIsNext(page);
   await page.getByTestId("continue").click();
+  await skipTheReport(page);
   await expectToSayWhatIsNext(page);
   await page.getByTestId("hotspot-meeting").click();
   await expectToSayWhatIsNext(page);
@@ -104,8 +111,7 @@ test("the full month reads differently for different choices", async ({
   await expect(page.getByTestId("story-happened")).toBeVisible();
 
   await page.goto("/?seed=1");
-  await page.getByTestId("option-report").click();
-  await page.getByTestId("continue").click();
+  await answerAnyNotification(page);
   await page.getByTestId("hotspot-meeting").click();
   await expect(page.getByTestId("panel-scene")).not.toContainText(
     "strategic patience",

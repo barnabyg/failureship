@@ -1,20 +1,10 @@
 [
   {
-    "id": "report-or-pub",
+    "id": "pub-invite",
     "from": "From: Your boss, Dennis Prowse",
-    "subject": "RE: RE: FW: this evening",
-    "body": "Your Monthly Status Report is due tonight, and nothing matters more to the people upstairs. Separately, a few of us are going to the Feathers at five. No pressure either way. I will remember which you chose.",
+    "subject": "RE: RE: FW: the Feathers at five",
+    "body": "A few of us are going to the Feathers at five. Your Monthly Status Report is also due tonight, and I am sure you have that in hand. No pressure either way. I will remember which you chose.",
     "options": [
-      {
-        "id": "report",
-        "label": "Finish the Monthly Status Report",
-        "cost": "report",
-        "sets": ["filed-report"],
-        "result": {
-          "title": "Monthly Status Report filed",
-          "body": "You file it at 23:58. An automatic reply confirms that your report has been received and may be read."
-        }
-      },
       {
         "id": "pub",
         "label": "Go to the pub with your boss",
@@ -22,7 +12,16 @@
         "sets": ["went-to-pub"],
         "dialog": "pub",
         "learns": ["strategic-patience"],
-        "opinion": 1
+        "approach": "favour"
+      },
+      {
+        "id": "decline",
+        "label": "Say that you have too much on",
+        "sets": ["declined-pub"],
+        "result": {
+          "title": "The Feathers",
+          "body": "Your boss replies with a thumbs up. Later you can hear them all from the car park, and you are the only person left on the floor."
+        }
       }
     ],
     "months": [1]
@@ -42,16 +41,22 @@
         "result": {
           "title": "Speaking Up: completed",
           "body": "You score 100%. The certificate says that you feel safe to raise concerns. There is a box for concerns about the certificate, and it is not working."
-        }
+        },
+        "approach": "results"
       },
       {
         "id": "skip-training",
         "label": "Leave it running in another window",
         "sets": ["skipped-training"],
-        "opinion": 1,
         "result": {
           "title": "Speaking Up: completed",
-          "body": "It finishes while you are at lunch. Your boss mentions doing it the same way. You score 100%."
+          "body": "It finishes while you are at lunch. You score 100%."
+        },
+        "approach": "theatre",
+        "reaction": {
+          "believer": "Your boss mentions, in passing, that the module takes forty-five minutes, and that the log says you did it in nine. Your boss does not ask anything further, and goes on not asking it for some time.",
+          "incompetent": "Your boss mentions doing it the same way, and asks you how to make the window stay open.",
+          "practitioner": "Your boss mentions doing it the same way, and that it would be a pity if the logs were ever read."
         }
       }
     ]
@@ -69,7 +74,8 @@
         "cost": "standard",
         "sets": ["sat-at-front"],
         "dialog": "town-hall-front",
-        "learns": ["north-star"]
+        "learns": ["north-star"],
+        "approach": "theatre"
       },
       {
         "id": "back-row",
@@ -79,33 +85,6 @@
         "result": {
           "title": "Town Hall recording",
           "body": "You watch it at twice the speed. The direction is the same, but more urgent."
-        }
-      }
-    ]
-  },
-  {
-    "id": "new-tool",
-    "months": [4],
-    "from": "From: Your boss, Dennis Prowse",
-    "subject": "FW: This solves ALL your problems (read this!!)",
-    "body": "Your boss has read an article about a new software tool that solves all your problems, and wants it rolled out by the end of the month. Your boss has not said which problems. The article is by the company that sells it.",
-    "options": [
-      {
-        "id": "roll-out",
-        "label": "Go to the demonstration and roll it out",
-        "cost": "standard",
-        "sets": ["rolled-out-tool"],
-        "opinion": 1,
-        "dialog": "tool-demo",
-        "learns": ["single-source-of-truth"]
-      },
-      {
-        "id": "say-evaluated",
-        "label": "Reply that it is being evaluated",
-        "sets": ["stalled-tool"],
-        "result": {
-          "title": "RE: FW: This solves ALL your problems",
-          "body": "Your boss replies with a thumbs up. The word evaluated seems to have the force of a finished thing. You make a note to find out what you have evaluated."
         }
       }
     ]
@@ -122,20 +101,30 @@
         "label": "Stay late and make everything fly in",
         "cost": "standard",
         "sets": ["animated-deck"],
-        "opinion": 2,
         "result": {
           "title": "Slides for upstairs",
-          "body": "Each bullet point arrives from a different direction. The word Growth spins. Your boss watches it twice, in silence, and asks whether you have ever thought about moving up."
+          "body": "Each bullet point arrives from a different direction. The word Growth spins."
+        },
+        "approach": "theatre",
+        "reaction": {
+          "believer": "Your boss watches it to the end, and asks which of the slides says what is happening. None of them does. Your boss asks you to try again, gently, which is worse.",
+          "incompetent": "Your boss watches it twice, in silence, and asks whether you have ever thought about moving up.",
+          "practitioner": "Your boss takes the file without comment. It goes upstairs that evening with a different name in the corner, and you are told that it went well."
         }
       },
       {
         "id": "plain",
         "label": "Send three plain slides that say what is happening",
         "sets": ["plain-deck"],
-        "opinion": -1,
         "result": {
           "title": "Slides for upstairs",
-          "body": "Your boss replies at 07:12 asking whether this is the draft."
+          "body": "Three slides. Each of them says what is happening. It takes you twenty minutes."
+        },
+        "approach": "truth",
+        "reaction": {
+          "believer": "Your boss reads all three, then rings you to ask about the second. It is a real question. You have not been asked one here before.",
+          "incompetent": "Your boss replies at 07:12 asking whether this is the draft.",
+          "practitioner": "Your boss replies at 07:12: let's not put this in writing. The slides are not mentioned again, and neither, for a while, are you."
         }
       }
     ]
@@ -155,7 +144,8 @@
         "result": {
           "title": "Self-Assessment submitted",
           "body": "You use the word impact eleven times. An automatic reply thanks you for your honesty, which it has rated Meets."
-        }
+        },
+        "approach": "theatre"
       },
       {
         "id": "meets",
@@ -167,5 +157,145 @@
         }
       }
     ]
+  },
+  {
+    "id": "report-input-late",
+    "when": {
+      "flag": "input-late"
+    },
+    "from": "From: Monthly Status Report reminder",
+    "subject": "Waiting on: figures from the Project Co-ordinator",
+    "body": "Your report is due tonight, and it needs the figures from the Project Co-ordinator, which have not arrived. You have a read receipt, and an out-of-office that says back shortly. The report will go out with your name on it either way.",
+    "options": [
+      {
+        "id": "chase",
+        "label": "Go over and chase them",
+        "cost": "standard",
+        "sets": ["input-arrived", "chased-input"],
+        "result": {
+          "title": "The figures",
+          "body": "You stand beside the Project Co-ordinator's desk until the figures exist. You are thanked for your patience. You have lost most of an afternoon, and you still have a report to write."
+        }
+      },
+      {
+        "id": "wait",
+        "label": "Wait, and hope they come in time",
+        "sets": ["input-arrived", "waited-input"],
+        "bet": {
+          "chance": 0.5,
+          "lost": {
+            "sets": ["report-settled", "skipped-report", "missed-deadline"],
+            "project": {
+              "reported": "worse"
+            },
+            "approach": "neglect",
+            "result": {
+              "title": "The figures",
+              "body": "They come in at 00:04, with an apology and the whole team copied in. The deadline was midnight. Someone upstairs, having nothing to go on, has coloured your project in for you."
+            }
+          }
+        },
+        "result": {
+          "title": "The figures",
+          "body": "They come in at 17:58, with no explanation and a small error, which you fix. You still have a report to write."
+        }
+      },
+      {
+        "id": "file-without",
+        "label": "File it without them, and estimate",
+        "cost": "report",
+        "sets": ["report-settled", "filed-report", "filed-without-input"],
+        "project": {
+          "reported": "amber"
+        },
+        "approach": "theatre",
+        "reaction": {
+          "believer": "Your boss asks where the figures in your report came from. You say that they are indicative. Your boss asks what they indicate.",
+          "incompetent": "Your boss says that the report reads very confidently, and asks you to do them all like that.",
+          "practitioner": "Your boss notes that the figures are estimates, and that they have your name on them, and files a copy."
+        },
+        "result": {
+          "title": "Monthly Status Report filed",
+          "body": "You file it at 23:58, marked amber, with the figures described as indicative. Nobody has ever asked what that means. Someone may."
+        }
+      }
+    ]
+  },
+  {
+    "id": "monthly-report",
+    "from": "From: Your boss, Dennis Prowse",
+    "subject": "Monthly Status Report: due tonight",
+    "body": "Your Monthly Status Report is due tonight, and nothing matters more to the people upstairs. Your project is really {real}. It was last reported as {reported}.",
+    "options": [
+      {
+        "id": "report",
+        "label": "File it, and say how the project really is",
+        "cost": "report",
+        "sets": ["filed-report"],
+        "project": {
+          "reported": "real"
+        },
+        "approach": "plain-report",
+        "result": {
+          "title": "Monthly Status Report filed",
+          "body": "You file it at 23:58. An automatic reply confirms that your report has been received and may be read."
+        }
+      },
+      {
+        "id": "lie",
+        "label": "File it, and make the project green",
+        "cost": "report",
+        "sets": ["filed-report", "lied-in-report"],
+        "project": {
+          "reported": "green"
+        },
+        "approach": "theatre",
+        "reaction": {
+          "believer": "Your boss replies that this is good to hear, and asks what changed. You have no answer ready, and your boss waits for one.",
+          "incompetent": "Your boss replies with three exclamation marks, and forwards it to everyone.",
+          "practitioner": "Your boss replies with a single word: Noted. The report goes upstairs that night, and a copy goes into a drawer."
+        },
+        "result": {
+          "title": "Monthly Status Report filed",
+          "body": "You file it at 23:58. It is the greenest thing you have ever made. An automatic reply says that it may be read."
+        }
+      },
+      {
+        "id": "skip",
+        "label": "Do not file it, and see who notices",
+        "sets": ["skipped-report"],
+        "project": {
+          "reported": "worse"
+        },
+        "approach": "neglect",
+        "result": {
+          "title": "Monthly Status Report",
+          "body": "You go home. By the morning someone upstairs, having nothing to go on, has coloured your project in for you, and not hopefully."
+        }
+      }
+    ],
+    "when": {
+      "all": [
+        {
+          "not": {
+            "flag": "report-settled"
+          }
+        },
+        {
+          "not": {
+            "all": [
+              {
+                "flag": "input-late"
+              },
+              {
+                "not": {
+                  "flag": "input-arrived"
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
   }
 ]

@@ -1,0 +1,53 @@
+{
+  "name": "The Back Office Modernisation",
+  "owner": "You, on behalf of your boss, who is accountable, and will say so if it goes well",
+  "statuses": [
+    {
+      "id": "green",
+      "label": "Green"
+    },
+    {
+      "id": "amber",
+      "label": "Amber"
+    },
+    {
+      "id": "red",
+      "label": "Red"
+    }
+  ],
+  "start": {
+    "real": "amber",
+    "reported": "green"
+  },
+  "events": [
+    {
+      "months": [3],
+      "text": "The supplier's only engineer has gone on a sabbatical that the supplier describes as open-ended.",
+      "project": {
+        "real": "worse"
+      }
+    },
+    {
+      "months": [5],
+      "text": "The old system has been switched off a month early, to save money. Nobody has told the new one.",
+      "project": {
+        "real": "worse"
+      }
+    }
+  ],
+  "input": {
+    "character": "projects",
+    "months": [2, 3, 4, 5, 6],
+    "chance": {
+      "believer": 0.15,
+      "incompetent": 0.5,
+      "practitioner": 0.35
+    },
+    "sets": "input-late"
+  },
+  "flagged": {
+    "at": "red",
+    "scene": "red-project",
+    "cost": "standard"
+  }
+}

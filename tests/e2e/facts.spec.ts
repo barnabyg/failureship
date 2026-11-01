@@ -7,8 +7,7 @@ import {
 } from "./play";
 
 async function fileTheReport(page: Page) {
-  await page.getByTestId("option-report").click();
-  await page.getByTestId("continue").click();
+  await answerAnyNotification(page);
 }
 
 // The real-content test keeps these seeds true: the Office Co-ordinator tells you on seed 22

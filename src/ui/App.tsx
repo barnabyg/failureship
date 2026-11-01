@@ -9,7 +9,7 @@ import {
 } from "../engine";
 import { Chart } from "./Chart";
 import { Modal } from "./Modal";
-import { Notebook } from "./Notebook";
+import { Notebook, monthLabel } from "./Notebook";
 import { StepPanel } from "./panels";
 import { RunControls } from "./RunControls";
 import { TowerStage } from "./TowerStage";
@@ -50,6 +50,7 @@ export function App() {
   const [leavingFor, setLeavingFor] = useState<number | null>(null);
   const [orgChartOpen, setOrgChartOpen] = useState(false);
   const [notebookOpen, setNotebookOpen] = useState(false);
+  const [projectOpen, setProjectOpen] = useState(false);
 
   // In an effect, because React may run a state initialiser twice in development.
   useEffect(() => {
@@ -106,6 +107,12 @@ export function App() {
               {panelText.actionsLeft.replace("{actions}", view.actions.label)}
             </dd>
           </div>
+          {view.openDemands.length > 0 && (
+            <div data-testid="open-demands">
+              <dt>{panelText.openDemandsHeading}</dt>
+              <dd>{view.openDemands.length}</dd>
+            </div>
+          )}
           {view.buzzwords.length > 0 && (
             <div className="status-buzzwords" data-testid="buzzwords">
               <dt>{panelText.buzzwordsHeading}</dt>
@@ -131,6 +138,15 @@ export function App() {
             }}
           >
             {panelText.orgChartHeading}
+          </button>
+          <button
+            type="button"
+            data-testid="open-project"
+            onClick={() => {
+              setProjectOpen(true);
+            }}
+          >
+            {panelText.projectHeading}
           </button>
           <button
             type="button"
@@ -167,6 +183,58 @@ export function App() {
             data-testid="close-org-chart"
             onClick={() => {
               setOrgChartOpen(false);
+            }}
+          >
+            {panelText.closeLabel}
+          </button>
+        </Modal>
+      )}
+      {projectOpen && (
+        <Modal
+          testId="project"
+          title={view.project.name}
+          onClose={() => {
+            setProjectOpen(false);
+          }}
+        >
+          <dl className="signs">
+            <div>
+              <dt>{panelText.projectOwnerLabel}</dt>
+              <dd data-testid="project-owner">{view.project.owner}</dd>
+            </div>
+            <div>
+              <dt>{panelText.projectRealLabel}</dt>
+              <dd data-testid="project-real">{view.project.real}</dd>
+            </div>
+            <div>
+              <dt>{panelText.projectReportedLabel}</dt>
+              <dd data-testid="project-reported">{view.project.reported}</dd>
+            </div>
+          </dl>
+          {view.project.news.map((item) => (
+            <p key={item.month} data-testid="project-news">
+              <strong>{monthLabel(item.month)}. </strong>
+              {item.text}
+            </p>
+          ))}
+          {view.openDemands.length > 0 && (
+            <>
+              <h3>{panelText.openDemandsHeading}</h3>
+              <ul>
+                {view.openDemands.map((item) => (
+                  <li key={item.subject} data-testid="open-demand">
+                    <strong>{monthLabel(item.month)}. </strong>
+                    {item.subject}
+                  </li>
+                ))}
+              </ul>
+            </>
+          )}
+          <button
+            type="button"
+            data-testid="close-project"
+            onClick={() => {
+              setProjectOpen(false);
             }}
           >
             {panelText.closeLabel}

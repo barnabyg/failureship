@@ -48,6 +48,16 @@ function Continue({ onChoose }: { onChoose: (choice: Choice) => void }) {
   );
 }
 
+/** How the boss took a choice, kept apart from what happened in the room. */
+function Reaction({ text }: { text: string | undefined }) {
+  if (text === undefined) return null;
+  return (
+    <p className="signs" data-testid="boss-reaction">
+      {text}
+    </p>
+  );
+}
+
 function StoryPanel({
   step,
   onChoose,
@@ -192,6 +202,35 @@ function ResultsPanel({
           ))}
         </tbody>
       </table>
+      <div className="callout" data-testid="results-boss">
+        <h3>{panelText.resultsBossHeading}</h3>
+        <p>
+          {step.boss.title}, {step.boss.name}:{" "}
+          <strong data-testid="result-boss-kind">{step.boss.kind}</strong>
+        </p>
+        {step.boss.verdict !== null && (
+          <p data-testid="result-boss-verdict">{step.boss.verdict}</p>
+        )}
+        {step.boss.choices.length === 0 ? (
+          <p>{panelText.resultsBossNoChoices}</p>
+        ) : (
+          <table className="results">
+            <tbody>
+              {step.boss.choices.map((row, index) => (
+                <tr key={index} data-testid="result-boss-choice">
+                  <th scope="row">
+                    {row.choice}
+                    <span className="results-title">
+                      {monthLabel(row.month)}
+                    </span>
+                  </th>
+                  <td className="results-kind">{row.landed}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        )}
+      </div>
       {step.factEvents.length > 0 && (
         <div className="callout" data-testid="results-fact-events">
           <h3>{panelText.resultsFactEventsHeading}</h3>
@@ -410,6 +449,7 @@ export function StepPanel({ view, onChoose }: StepPanelProps) {
               {word.term}. {word.meaning}
             </p>
           ))}
+          <Reaction text={step.reaction} />
           <Continue onChoose={onChoose} />
         </Panel>
       );
@@ -417,6 +457,12 @@ export function StepPanel({ view, onChoose }: StepPanelProps) {
       return (
         <Panel testId="panel-notice" title={step.title}>
           <p>{step.body}</p>
+          <Reaction text={step.reaction} />
+          {step.verdict !== undefined && (
+            <p className="callout" data-testid="boss-verdict">
+              {step.verdict}
+            </p>
+          )}
           <Continue onChoose={onChoose} />
         </Panel>
       );
