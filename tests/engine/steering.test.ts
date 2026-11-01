@@ -42,6 +42,11 @@ function attendsEverything(view: PlayerView, turn: number) {
   return choice;
 }
 
+/** The same, but lasts the whole run: the first thing said in a meeting is safe. */
+function lastsTheRun(view: PlayerView, turn: number) {
+  return attendsEverything(view, view.step.kind === "scene" ? 0 : turn);
+}
+
 function resultsOf(view: PlayerView | undefined) {
   if (view?.step.kind !== "results") throw new Error(view?.step.kind);
   return view.step;
@@ -77,7 +82,7 @@ describe("nine months that do not feel like one month repeated", () => {
   });
 
   it("opens a different Scene in each month of a real run", () => {
-    const { views } = walk(1, attendsEverything);
+    const { views } = walk(1, lastsTheRun);
     const titles = views.flatMap((v) =>
       v.step.kind === "scene" && v.step.id !== "red-project"
         ? [v.step.title]
@@ -89,7 +94,7 @@ describe("nine months that do not feel like one month repeated", () => {
 
   it("lands a different Move every month", () => {
     for (const seed of [1, 2, 3, 4, 5]) {
-      const { views } = walk(seed, attendsEverything);
+      const { views } = walk(seed, lastsTheRun);
       const moves = views.flatMap((v) =>
         v.step.kind === "move" ? [v.step.title] : [],
       );
@@ -100,7 +105,7 @@ describe("nine months that do not feel like one month repeated", () => {
   });
 
   it("tells a different official story every month", () => {
-    const { views } = walk(1, attendsEverything);
+    const { views } = walk(1, lastsTheRun);
     const stories = views.flatMap((v) =>
       v.step.kind === "story" ? [JSON.stringify(v.step.reported)] : [],
     );

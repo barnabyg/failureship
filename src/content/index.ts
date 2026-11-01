@@ -9,6 +9,7 @@ import dialogs from "../../content/dialogs.json";
 import families from "../../content/families.json";
 import floor from "../../content/floor-1.json";
 import hiddenTruth from "../../content/hidden-truth.json";
+import mistakes from "../../content/mistakes.json";
 import moves from "../../content/moves.json";
 import notebook from "../../content/notebook.json";
 import notifications from "../../content/notifications.json";
@@ -37,6 +38,7 @@ export const gameContent = parseContent({
   balance,
   boss,
   overHead,
+  mistakes,
   families,
   hiddenTruth,
   sources,
@@ -104,6 +106,9 @@ const panelSchema = z.strictObject(
       "openDemandsHeading",
       "powerMapHeading",
       "closeLabel",
+      "standingHeading",
+      "finalWarningLabel",
+      "resultsMistakesHeading",
       "resultsWhoHeading",
       "resultsNoFact",
       "findOutSourceHeading",

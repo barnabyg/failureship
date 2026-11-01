@@ -58,6 +58,16 @@ function Reaction({ text }: { text: string | undefined }) {
   );
 }
 
+/** Said before a choice that could end the run on the spot. */
+function Stakes({ text }: { text: string | undefined }) {
+  if (text === undefined) return null;
+  return (
+    <span className="option-stakes" data-testid="stakes">
+      {text}
+    </span>
+  );
+}
+
 function StoryPanel({
   step,
   onChoose,
@@ -165,6 +175,24 @@ function ResultsPanel({
   return (
     <Panel testId="panel-results" title={step.title} wide>
       <p>{step.intro}</p>
+      {step.ending.text !== null && (
+        <p className="callout" data-testid="results-ending">
+          {step.ending.text}
+        </p>
+      )}
+      {step.mistakes.length > 0 && (
+        <>
+          <h3>{panelText.resultsMistakesHeading}</h3>
+          <ul>
+            {step.mistakes.map((row, index) => (
+              <li key={index} data-testid="result-mistake">
+                <strong>{monthLabel(row.month)}. </strong>
+                {row.choice}
+              </li>
+            ))}
+          </ul>
+        </>
+      )}
       <h3>{panelText.resultsWhoHeading}</h3>
       <table className="results">
         <tbody>
@@ -370,6 +398,7 @@ export function StepPanel({ view, onChoose }: StepPanelProps) {
               >
                 <span>{option.label}</span>
                 <span className="option-cost">{option.costLabel}</span>
+                <Stakes text={option.stakes} />
               </button>
             ))}
           </div>
@@ -452,6 +481,7 @@ export function StepPanel({ view, onChoose }: StepPanelProps) {
                     }}
                   >
                     {option.label}
+                    <Stakes text={option.stakes} />
                   </button>
                 ))}
               </div>

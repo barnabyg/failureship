@@ -73,6 +73,9 @@ function dealtState(seed: number, content: Content): State {
     actionsGiven: [],
     noticesDue: [],
     project: { ...content.project.start, news: [], flagged: false },
+    finalWarning: false,
+    firedIn: null,
+    mistakes: [],
     step: { kind: "actions" },
     truth: {
       characters: motives.characters,

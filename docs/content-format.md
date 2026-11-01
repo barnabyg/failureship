@@ -164,6 +164,21 @@ A Hidden Fact says `{name}`, so that it reads correctly for whoever is dealt it,
 `told` is how someone would say it out loud, and its `text` is how the results screen states
 it.
 
+## `mistakes.json`
+
+The words of a Final Warning and of being fired, and what the results screen says of them.
+
+A choice's outcome, a Move or a Bill can say `"mistake": "big"`. Nothing else is needed for
+it to count. The first puts the player on a Final Warning, which they are told about and can
+see from then on. The second gets them fired, which ends the run at the results screen. There
+is no meter behind this.
+
+A Notification option's outcome or a Scene result can instead say `"mistake": "catastrophic"`,
+which gets the player fired outright. It is fair only if they are warned, so the option must
+carry `stakes`, words shown on the choice before it is made. Stakes with nothing catastrophic
+behind them, or the reverse, are refused. An action cannot be catastrophic, and can be a big
+mistake only if it has a `result`.
+
 ## `moves.json`
 
 Character Moves, and when each can land. A Move does not land twice in a run while another

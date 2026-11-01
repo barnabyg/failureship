@@ -46,6 +46,18 @@ const projectChange = z
   .strictObject({ real: id.optional(), reported: id.optional() })
   .optional();
 
+/**
+ * Whether this is a big mistake. A first is a Final Warning, and a second gets the
+ * player fired. Anything that can happen to the player can be one of these.
+ */
+const bigMistake = z.literal("big").optional();
+
+/** A choice can also be catastrophic, which gets the player fired outright. */
+const choiceMistake = z.enum(["big", "catastrophic"]).optional();
+
+/** What the player is told before choosing something catastrophic. */
+const stakes = text.optional();
+
 const dialog = z.strictObject({
   id,
   title: text,
@@ -106,6 +118,8 @@ const notificationOption = z.strictObject({
   approach: approachTag,
   reaction: ownReaction,
   project: projectChange,
+  mistake: choiceMistake,
+  stakes,
   result: notice.optional(),
   /** Leaves a Demand open, as a bet that the boss forgets it. */
   stalls: z.boolean().default(false),
@@ -120,6 +134,7 @@ const notificationOption = z.strictObject({
         approach: approachTag,
         reaction: ownReaction,
         project: projectChange,
+        mistake: choiceMistake,
         result: notice,
       }),
     })
@@ -164,6 +179,7 @@ const sceneResult = z.strictObject({
   approach: approachTag,
   reaction: ownReaction,
   project: projectChange,
+  mistake: choiceMistake,
   /** Says on the results screen that a Hidden Fact caused this. */
   factNote: text.optional(),
   /** Whose Hidden Fact it was, unless the option is `about` one. */
@@ -178,6 +194,7 @@ const sceneOption = z.strictObject({
   about: id.optional(),
   /** The option appears only when this holds. */
   requires: condition.optional(),
+  stakes,
   results: z.array(sceneResult).min(1),
 });
 
@@ -225,6 +242,7 @@ const action = z.strictObject({
   approach: approachTag,
   reaction: ownReaction,
   project: projectChange,
+  mistake: bigMistake,
 });
 
 const move = z.strictObject({
@@ -237,6 +255,7 @@ const move = z.strictObject({
   /** Lands ahead of other Moves whenever its condition holds. */
   priority: z.boolean().default(false),
   sets,
+  mistake: bigMistake,
 });
 
 const storyEntry = z
@@ -498,6 +517,20 @@ const overHead = z.strictObject({
   sets: z.strictObject({ went: id, caught: id }),
 });
 
+/** The words of a Final Warning and of being fired. */
+const mistakes = z.strictObject({
+  finalWarning: notice,
+  /** After a second big mistake. */
+  fired: notice,
+  /** After a catastrophic one. */
+  firedOutright: notice,
+  /** The results screen's title and opening, for a run that ended this way. */
+  results: z.strictObject({ title: text, intro: text }),
+  /** How the results screen says the run ended. This one says {month}. */
+  firedIn: text,
+  finished: text,
+});
+
 export const contentSchema = z.strictObject({
   balance: z.strictObject({
     actionsPerMonth: z.number().int().positive(),
@@ -546,6 +579,7 @@ export const contentSchema = z.strictObject({
       .min(1),
   }),
   overHead: overHead.optional(),
+  mistakes: mistakes.optional(),
   /** What the results screen calls each family of Moves. */
   families: z
     .strictObject(

@@ -210,6 +210,12 @@ export function App() {
               {panelText.actionsLeft.replace("{actions}", view.actions.label)}
             </dd>
           </div>
+          {view.finalWarning && (
+            <div className="status-warning" data-testid="final-warning">
+              <dt>{panelText.standingHeading}</dt>
+              <dd>{panelText.finalWarningLabel}</dd>
+            </div>
+          )}
           {view.buzzwords.length > 0 && (
             <div className="status-buzzwords" data-testid="buzzwords">
               <dt>{panelText.buzzwordsHeading}</dt>

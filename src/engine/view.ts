@@ -28,6 +28,8 @@ export interface NotificationOption {
   label: string;
   costLabel: string;
   affordable: boolean;
+  /** What is at stake, if this could end things on the spot. */
+  stakes?: string | undefined;
 }
 
 export interface DialogLine {
@@ -82,7 +84,7 @@ export type StepView =
       treatment: string | null;
       /** The same of the boss's boss, if they are in the room. */
       headTreatment: string | null;
-      options: { id: string; label: string }[];
+      options: { id: string; label: string; stakes?: string | undefined }[];
     }
   | {
       kind: "find-out";
@@ -114,6 +116,10 @@ export type StepView =
       kind: "results";
       title: string;
       intro: string;
+      /** How the run ended. */
+      ending: { fired: boolean; text: string | null };
+      /** The big mistakes the player made, in order. */
+      mistakes: { month: number; choice: string }[];
       characters: {
         name: string;
         title: string;
@@ -177,6 +183,8 @@ export interface PlayerView {
   };
   /** Demands the player stalled and has not yet heard the last of. */
   openDemands: { month: number; subject: string }[];
+  /** Whether one more big mistake gets the player fired. */
+  finalWarning: boolean;
   seed: number;
   month: number;
   totalMonths: number;

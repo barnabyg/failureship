@@ -13,7 +13,11 @@ export function toResultsView(
   const { order, influence } = state.truth.powerMap;
   return {
     kind: "results",
-    ...content.ui.results,
+    ...(state.firedIn !== null && content.mistakes
+      ? content.mistakes.results
+      : content.ui.results),
+    ending: toEnding(state, content),
+    mistakes: state.mistakes,
     characters: state.truth.characters.map((dealt) => {
       const known = content.characters.find((c) => c.id === dealt.id);
       return {
@@ -76,6 +80,20 @@ export function toResultsView(
         motive: (motive?.text ?? "").replaceAll("{name}", source),
       };
     }),
+  };
+}
+
+function toEnding(
+  state: State,
+  content: Content,
+): Extract<StepView, { kind: "results" }>["ending"] {
+  const fired = state.firedIn !== null;
+  const written = fired
+    ? content.mistakes?.firedIn
+    : content.mistakes?.finished;
+  return {
+    fired,
+    text: written?.replaceAll("{month}", String(state.firedIn)) ?? null,
   };
 }
 

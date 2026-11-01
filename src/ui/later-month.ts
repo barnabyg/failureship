@@ -39,6 +39,8 @@ export function playToMonth(run: Run, written: string | null): PlayerView {
   const month = Number(written);
   let view = run.view();
   if (!Number.isInteger(month) || month > view.totalMonths) return view;
-  while (view.month < month) view = run.choose(plainChoice(view));
+  while (view.month < month && view.choices.length > 0) {
+    view = run.choose(plainChoice(view));
+  }
   return view;
 }

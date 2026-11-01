@@ -86,6 +86,7 @@ function notificationOptions(
     label: o.label,
     costLabel: costLabel(content, o.cost),
     affordable: costOf(content, o.cost) <= remaining(state, content),
+    stakes: o.stakes,
   }));
 }
 
@@ -133,6 +134,7 @@ function toSceneView(
     options: offeredOptions(state, content, scene).map((o) => ({
       id: o.id,
       label: fillSubject(state, content, o.about, fill(o.label)),
+      stakes: o.stakes,
     })),
   };
 }
@@ -289,6 +291,7 @@ export function toView(state: State, world: World): PlayerView {
       const item = everyDemand(content).find((d) => d.id === id);
       return item ? [{ month, subject: item.subject }] : [];
     }),
+    finalWarning: state.finalWarning,
     seed: state.seed,
     month: state.month,
     totalMonths: content.balance.monthsPerRun,

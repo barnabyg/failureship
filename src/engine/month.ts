@@ -71,6 +71,7 @@ export function nextStep(state: State, world: World): Step {
   const { content } = world;
   const due = state.noticesDue.shift();
   if (due) return { kind: "notice", ...due };
+  if (state.firedIn !== null) return { kind: "results" };
   const notifications = everyNotification(content);
   for (const id of state.unanswered) {
     const notification = notifications.find((n) => n.id === id);
@@ -115,6 +116,6 @@ function landMove(state: State, content: Content): Step | null {
   const { item, next } = pick(state.rng, pool.length > 0 ? pool : eligible);
   state.rng = next;
   state.movesLanded.push(item.id);
-  applyOutcome(state, content, { sets: item.sets }, item.title);
+  applyOutcome(state, content, item, item.title);
   return { kind: "move", id: item.id };
 }

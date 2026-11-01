@@ -149,6 +149,12 @@ export interface State extends MonthRecord {
     /** Flagged, and not yet explained. */
     flagged: boolean;
   };
+  /** Told to the player, and shown from then on. */
+  finalWarning: boolean;
+  /** The month the player was fired in, which ends the run. */
+  firedIn: number | null;
+  /** The big mistakes so far, for the results screen. */
+  mistakes: { month: number; choice: string }[];
   step: Step;
   truth: HiddenTruth;
 }

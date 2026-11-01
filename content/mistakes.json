@@ -1,0 +1,20 @@
+{
+  "finalWarning": {
+    "title": "A letter in a plain envelope",
+    "body": "Someone from People and Culture sits you down in the room with the tissues. You are now on a Final Warning. It has been explained that this is a supportive process, and that it ends with you being supported out of the building if there is another incident."
+  },
+  "fired": {
+    "title": "You have been released to the wider market",
+    "body": "You were on a Final Warning, and there has been another incident. Your pass stops working between the lift and your desk. A colleague you have never met carries your plant to the loading bay, and asks you to sign for it."
+  },
+  "firedOutright": {
+    "title": "You have been released to the wider market, today",
+    "body": "Nobody needs a second incident. By the time you reach your desk there is a box on it, and someone from Security is holding the lid. An all-staff email thanks you for your contribution, and spells your name wrong."
+  },
+  "results": {
+    "title": "Your employment has concluded",
+    "intro": "You did not reach the end of your review period. A form says that you left to pursue other opportunities. Here is what the form leaves out."
+  },
+  "firedIn": "You were fired in month {month}.",
+  "finished": "You lasted the whole review period, and nobody has fired you yet."
+}

@@ -1,5 +1,6 @@
 import { landWithBoss } from "./boss";
 import type { Content, Kind, MoveFamily } from "./content";
+import { makeMistake } from "./mistakes";
 import { moveProject, type ProjectChange } from "./project";
 import type { State } from "./state";
 
@@ -11,6 +12,7 @@ export interface Outcome {
   approach?: string | undefined;
   reaction?: Readonly<Record<Kind, string>> | undefined;
   project?: ProjectChange | undefined;
+  mistake?: "big" | "catastrophic" | undefined;
 }
 
 /** Counts a Move the player made, for how they played. */
@@ -19,8 +21,8 @@ export function countMove(state: State, family: MoveFamily | undefined): void {
 }
 
 /**
- * The one place a consequence takes effect: sets its flags, moves the Project and
- * lands with both bosses. Returns the sign of how the boss took it, if it has one.
+ * The one place a consequence takes effect: sets its flags, moves the Project,
+ * counts any big mistake and lands with both bosses. Returns the sign of how the boss took it, if it has one.
  */
 export function applyOutcome(
   state: State,
@@ -31,5 +33,6 @@ export function applyOutcome(
   state.flags.push(...(outcome.sets ?? []));
   state.truth.headOpinion += outcome.headOpinion ?? 0;
   moveProject(state, content, outcome.project);
+  if (outcome.mistake) makeMistake(state, content, outcome.mistake, label);
   return landWithBoss(state, content, outcome, label);
 }

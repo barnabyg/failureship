@@ -70,6 +70,11 @@ and Hidden Fact, your marks against the truth, how you played by family of Move,
 your boss and your boss's boss really made of you, each claim and whether it was true,
 each clue and what it was worth, and the Org Chart beside the true Power Map.
 
+You can also be fired. Some choices are big mistakes, and blaming someone with a dangerous
+Hidden Fact is one. The first puts you on a **Final Warning**, shown beside your job title
+from then on. The second ends the run, at the same results screen. A few choices fire you
+outright, and those say so on the button before you press it.
+
 At any step, **New run** deals a new seed, and typing a seed then pressing
 **Restart from seed** plays that deal from month 1. Leaving a run in progress asks
 first. Swap a seed with a friend and you both get the same deal.
@@ -145,6 +150,7 @@ format, the page shows what is wrong instead of the game.
 | `actions.json`        | What can be done on the floor, and the results                                                                       |
 | `scenes.json`         | Each month's Scene: its signs, its choices and their results                                                         |
 | `moves.json`          | Character Moves, and when each can land                                                                              |
+| `mistakes.json`       | The words of a Final Warning and of being fired                                                                      |
 | `official-story.json` | The official story, assembled from entries according to what you did                                                 |
 | `behaviours.json`     | What Characters can be seen doing, which roles can do it, and how likely each kind is to do it                       |
 | `boss.json`           | Who your boss is, the signs of how they treat you, and what impresses each kind                                      |
