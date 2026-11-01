@@ -288,9 +288,13 @@ function isAvailable(
   action: Content["actions"][number],
 ): boolean {
   return (
-    !state.visited.includes(action.id) &&
+    !isDone(state, action) &&
     costOf(content, action.cost) <= remaining(state, content)
   );
+}
+
+function isDone(state: State, action: Content["actions"][number]): boolean {
+  return action.oncePerMonth && state.visited.includes(action.id);
 }
 
 function legalChoices(state: State, world: World): Choice[] {
@@ -465,7 +469,7 @@ function toHotspot(
   content: Content,
   action: Content["actions"][number],
 ): Hotspot {
-  const done = state.visited.includes(action.id);
+  const done = isDone(state, action);
   return {
     id: action.id,
     label: action.label,

@@ -6,6 +6,7 @@
     "place": "meeting-room",
     "cost": "standard",
     "scene": "meeting",
+    "oncePerMonth": true,
     "sets": ["attended-meeting"]
   },
   {

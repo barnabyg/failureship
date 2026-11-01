@@ -85,6 +85,8 @@ const action = z.strictObject({
   cost: id,
   result: notice.optional(),
   scene: id.optional(),
+  /** A place like a meeting can be gone to only once a month. */
+  oncePerMonth: z.boolean().default(false),
   sets,
 });
 

@@ -6,7 +6,7 @@ import {
   type Run,
 } from "../../src/engine";
 import { readHiddenTruth } from "../../src/engine/hidden-truth";
-import { emptyMonth, emptyMonthRaw } from "./fixture";
+import { emptyMonth, emptyMonthRaw, sceneFixture } from "./fixture";
 
 function spendAction(run: Run, actionId: string) {
   run.choose({ type: "action", actionId });
@@ -59,14 +59,38 @@ describe("a month", () => {
     expect(run.view().actions.remaining).toBe(0);
   });
 
-  it("will not spend an action on a place already visited this month", () => {
+  it("lets a place be visited again this month", () => {
     const run = startRun({ seed: 1, content: emptyMonth() });
     spendAction(run, "kettle");
+    spendAction(run, "kettle");
 
-    expect(() => run.choose({ type: "action", actionId: "kettle" })).toThrow(
+    expect(run.view().actions.remaining).toBe(1);
+    expect(run.view().hotspots.find((h) => h.id === "kettle")?.state).toBe(
+      "available",
+    );
+  });
+
+  it("spends every action, however many balance data gives", () => {
+    const raw = emptyMonthRaw();
+    raw.balance.actionsPerMonth = 6;
+    const run = startRun({ seed: 1, content: parseContent(raw) });
+
+    for (let spent = 0; spent < 6; spent++) spendAction(run, "kettle");
+
+    expect(run.view().actions.remaining).toBe(0);
+    expect(run.view().step.kind).toBe("story");
+  });
+
+  it("will not reopen a place that is once a month", () => {
+    const run = startRun({ seed: 1, content: sceneFixture() });
+    run.choose({ type: "action", actionId: "meeting" });
+    run.choose({ type: "scene", sceneId: "meeting", optionId: "stay-quiet" });
+    run.choose({ type: "continue" });
+
+    expect(() => run.choose({ type: "action", actionId: "meeting" })).toThrow(
       /not available/i,
     );
-    expect(run.view().hotspots.find((h) => h.id === "kettle")?.state).toBe(
+    expect(run.view().hotspots.find((h) => h.id === "meeting")?.state).toBe(
       "done",
     );
   });

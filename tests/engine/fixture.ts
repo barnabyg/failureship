@@ -202,7 +202,12 @@ export function sceneFixtureRaw() {
   return {
     ...raw,
     actions: [
-      { ...action("meeting"), result: undefined, scene: "meeting" },
+      {
+        ...action("meeting"),
+        result: undefined,
+        scene: "meeting",
+        oncePerMonth: true,
+      },
       ...raw.actions,
     ],
     floor: { rooms: [...raw.floor.rooms, room("meeting", 9)] },
