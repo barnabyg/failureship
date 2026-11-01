@@ -48,6 +48,12 @@
         ]
       },
       {
+        "id": "use-buzzword",
+        "label": "Placeholder: use the Buzzword",
+        "requires": { "hasBuzzword": "placeholder-word" },
+        "results": [{ "body": "Placeholder: the Buzzword landed." }]
+      },
+      {
         "id": "say-nothing",
         "label": "Placeholder: say nothing",
         "results": [{ "body": "Placeholder: you are minuted as present." }]

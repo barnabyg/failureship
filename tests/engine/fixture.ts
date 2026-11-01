@@ -22,6 +22,7 @@ type RawCondition = Record<string, unknown>;
 interface RawSceneOption {
   id: string;
   label: string;
+  requires?: RawCondition;
   results: { when?: RawCondition; body: string }[];
 }
 
@@ -190,6 +191,22 @@ export function sceneFixtureRaw() {
 
 export function sceneFixture(): Content {
   return parseContent(sceneFixtureRaw());
+}
+
+/** The whole month so far: the Notification, then a Scene with a gated option. */
+export function buzzwordFixtureRaw() {
+  const raw = sceneFixtureRaw();
+  raw.scenes[0]?.options.push({
+    id: "use-word",
+    label: "Say FIXTURE-TERM",
+    requires: { hasBuzzword: "fixture-word" },
+    results: [{ body: "WORD-LANDED" }],
+  });
+  return { ...raw, notifications: fixtureRaw().notifications };
+}
+
+export function buzzwordFixture(): Content {
+  return parseContent(buzzwordFixtureRaw());
 }
 
 export function fixture(): Content {

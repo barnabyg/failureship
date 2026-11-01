@@ -30,7 +30,10 @@ const dialog = z.strictObject({
 
 const buzzword = z.strictObject({ id, term: text, meaning: text });
 
-const condition = z.strictObject({ holderIs: id });
+const condition = z.union([
+  z.strictObject({ holderIs: id }),
+  z.strictObject({ hasBuzzword: id }),
+]);
 
 const sceneResult = z.strictObject({
   when: condition.optional(),
@@ -40,6 +43,8 @@ const sceneResult = z.strictObject({
 const sceneOption = z.strictObject({
   id,
   label: text,
+  /** The option appears only when this holds. */
+  requires: condition.optional(),
   results: z.array(sceneResult).min(1),
 });
 
@@ -134,6 +139,11 @@ export function parseContent(raw: unknown): Content {
   return content;
 }
 
+/** Showing or hiding an option on this would tell the player the truth. */
+function dependsOnHiddenTruth(condition: Condition): boolean {
+  return "holderIs" in condition;
+}
+
 function findBrokenReferences(content: Content): string[] {
   const rooms = new Set(content.floor.rooms.map((r) => r.id));
   const dialogs = new Set(content.dialogs.map((d) => d.id));
@@ -144,6 +154,14 @@ function findBrokenReferences(content: Content): string[] {
   const checkCharacter = (owner: string, character: string) => {
     if (!characters.has(character)) {
       problems.push(`${owner} names unknown Character "${character}".`);
+    }
+  };
+  const checkCondition = (owner: string, condition: Condition) => {
+    if ("holderIs" in condition) checkCharacter(owner, condition.holderIs);
+    if ("hasBuzzword" in condition && !buzzwords.has(condition.hasBuzzword)) {
+      problems.push(
+        `${owner} needs unknown Buzzword "${condition.hasBuzzword}".`,
+      );
     }
   };
   const checkRoles = (owner: string, written: string) => {
@@ -184,7 +202,13 @@ function findBrokenReferences(content: Content): string[] {
       checkRoles(optionOwner, o.label);
       for (const r of o.results) {
         checkRoles(optionOwner, r.body);
-        if (r.when) checkCharacter(optionOwner, r.when.holderIs);
+        if (r.when) checkCondition(optionOwner, r.when);
+      }
+      if (o.requires) {
+        checkCondition(optionOwner, o.requires);
+        if (dependsOnHiddenTruth(o.requires)) {
+          problems.push(`${optionOwner} is gated on the hidden truth.`);
+        }
       }
       if (o.results.at(-1)?.when !== undefined) {
         problems.push(`${optionOwner} needs a fallback result with no "when".`);

@@ -199,7 +199,9 @@ function behaveInScene(
   choice: Extract<Choice, { type: "scene" }>,
 ): void {
   const scene = sceneData(state, world, choice.sceneId);
-  const option = scene.options.find((o) => o.id === choice.optionId);
+  const option = offeredOptions(state, scene).find(
+    (o) => o.id === choice.optionId,
+  );
   const result = option?.results.find((r) => matches(state, r.when));
   if (!result) throw new IllegalChoiceError(choice.optionId);
   state.step = {
@@ -210,10 +212,15 @@ function behaveInScene(
 }
 
 function matches(state: State, condition: Condition | undefined): boolean {
-  return (
-    condition === undefined ||
-    condition.holderIs === state.truth.powerMap.holder
-  );
+  if (condition === undefined) return true;
+  if ("holderIs" in condition) {
+    return condition.holderIs === state.truth.powerMap.holder;
+  }
+  return state.buzzwords.includes(condition.hasBuzzword);
+}
+
+function offeredOptions(state: State, scene: SceneData) {
+  return scene.options.filter((o) => matches(state, o.requires));
 }
 
 function sceneData(state: State, world: World, id: string): SceneData {
@@ -278,11 +285,13 @@ function legalChoices(state: State, world: World): Choice[] {
         .filter((a) => isAvailable(state, content, a))
         .map((a) => ({ type: "action", actionId: a.id }));
     case "scene":
-      return sceneData(state, world, step.id).options.map((o) => ({
-        type: "scene",
-        sceneId: step.id,
-        optionId: o.id,
-      }));
+      return offeredOptions(state, sceneData(state, world, step.id)).map(
+        (o) => ({
+          type: "scene",
+          sceneId: step.id,
+          optionId: o.id,
+        }),
+      );
     case "dialog":
     case "notice":
       return [{ type: "continue" }];
@@ -325,7 +334,10 @@ function toSceneView(
         .map((x) => ({ name: x.name, title: x.title })),
     ),
     signs: scene.signs.map((s) => ({ label: s.label, text: fill(s.text) })),
-    options: scene.options.map((o) => ({ id: o.id, label: fill(o.label) })),
+    options: offeredOptions(state, scene).map((o) => ({
+      id: o.id,
+      label: fill(o.label),
+    })),
   };
 }
 
