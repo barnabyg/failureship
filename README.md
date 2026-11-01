@@ -81,6 +81,7 @@ format, the page shows what is wrong instead of the game.
 | `official-story.json` | The official story, assembled from entries according to what you did    |
 | `behaviours.json`     | What Characters can be seen doing, and how likely each kind is to do it |
 | `boss.json`           | Who your boss is, and the signs of how they treat you                   |
+| `sources.json`        | Find Out: who can be asked, how reliable each kind is, and every claim  |
 | `characters.json`     | Names, public job titles and who reports to whom on the Org Chart       |
 | `hidden-truth.json`   | The rules of the deal: kinds, their weights, and the Hidden Facts       |
 | `balance.json`        | Actions a month, months in a run and the cost of each choice            |
@@ -107,6 +108,11 @@ The opinion has no number on screen. It shows only through `boss.json`: when the
 is in a Scene, one sign is picked using the `likelihood` for how the opinion stands,
 which `balance.json` sets with `warmAt` and `coldAt`. Every sign must be possible from
 at least two of `warm`, `neutral` and `cold`, so that no sign settles it.
+
+An action with `"findOut": "ask"` spends an action to get a claim from a source.
+`sources.json` sets how often each kind of source tells the truth, is mistaken, is
+out of date or lies. A dealt motive shifts those weights. A claim's words never
+depend on which of these it is, so the results screen is the only place that says.
 
 A Hidden Fact says `{name}`, so that it reads correctly for whoever is dealt it,
 and can list `"characters"` to limit who that can be.

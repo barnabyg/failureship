@@ -7,6 +7,12 @@ import { readHiddenTruth } from "../../src/engine/hidden-truth";
 
 const SEEDS = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
 
+const isFindOut = (choice: Choice) =>
+  choice.type === "action" &&
+  gameContent.actions.some(
+    (a) => a.id === choice.actionId && a.findOut !== undefined,
+  );
+
 /** Every way through the first month, as the views seen along each one. */
 function everyPath(seed: number): PlayerView[][] {
   const paths: PlayerView[][] = [];
@@ -18,7 +24,12 @@ function everyPath(seed: number): PlayerView[][] {
       paths.push(views);
       return;
     }
-    for (const choice of last?.choices ?? []) walk([...script, choice]);
+    // Every source and subject would multiply the paths and show nothing new.
+    const choices =
+      last?.step.kind === "find-out"
+        ? last.choices.slice(0, 1)
+        : (last?.choices ?? []);
+    for (const choice of choices) walk([...script, choice]);
   };
   walk([]);
   return paths;
@@ -70,7 +81,11 @@ describe("the real month", () => {
       const facts = dealt.characters.flatMap((c) =>
         c.fact ? [c.fact.text] : [],
       );
-      for (const views of everyPath(seed)) {
+      // A claim can pass on a real fact, so asking is checked separately.
+      const unasked = everyPath(seed).filter(
+        (views) => !views.some((v) => v.step.kind === "find-out"),
+      );
+      for (const views of unasked) {
         for (const view of views) {
           const seen = JSON.stringify(view);
           for (const fact of facts) expect(seen).not.toContain(fact);
@@ -117,7 +132,8 @@ describe("the real month", () => {
           if (fact) expect(seen).not.toContain(fact.text);
         }
         walk = (walk * 31 + 7) % 1009;
-        const choice = view.choices[walk % view.choices.length];
+        const open = view.choices.filter((c) => !isFindOut(c));
+        const choice = open[walk % open.length];
         if (!choice) throw new Error(`Stuck at ${view.step.kind}.`);
         view = run.choose(choice);
       }

@@ -34,6 +34,26 @@
     }
   },
   {
+    "id": "ask-around",
+    "label": "The photocopier",
+    "description": "Everyone comes here eventually, and nobody here has anything to copy.",
+    "place": "photocopier",
+    "cost": "standard",
+    "findOut": "ask",
+    "oncePerMonth": true,
+    "sets": ["asked-around"]
+  },
+  {
+    "id": "inside-info",
+    "label": "The loading bay",
+    "description": "People come here to smoke, and to sell things they know for a coffee or a favour.",
+    "place": "loading-bay",
+    "cost": "standard",
+    "findOut": "buy",
+    "oncePerMonth": true,
+    "sets": ["bought-information"]
+  },
+  {
     "id": "work",
     "label": "Your desk",
     "description": "Doing your actual job. It remains an option.",

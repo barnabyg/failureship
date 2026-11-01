@@ -1,6 +1,8 @@
+import { makeClaim, type Claim } from "./claims";
 import type { Condition, Content, Mood, SceneData } from "./content";
 import {
   dealCharacters,
+  dealMotives,
   dealPowerMap,
   type DealtCharacter,
   type PowerMap,
@@ -12,6 +14,7 @@ import type {
   Choice,
   Hotspot,
   NotificationOption,
+  Person,
   PlayerView,
   StepView,
 } from "./view";
@@ -52,6 +55,8 @@ type Step =
       shown: ShownBehaviour[];
       treatment: string | null;
     }
+  | { kind: "find-out"; method: string }
+  | { kind: "claim"; index: number }
   | { kind: "notice"; title: string; body: string }
   | { kind: "move"; id: string }
   | { kind: "story" }
@@ -72,6 +77,7 @@ interface State extends MonthRecord {
   rng: number;
   month: number;
   buzzwords: string[];
+  claims: Claim[];
   step: Step;
   truth: HiddenTruth;
 }
@@ -112,15 +118,17 @@ export function startRun(options: {
   const world: World = { content, sceneScripts };
   const dealt = dealCharacters(seed, content);
   const power = dealPowerMap(dealt.next, content);
+  const motives = dealMotives(power.next, dealt.characters, content);
   const state: State = {
     seed,
-    rng: power.next,
+    rng: motives.next,
     month: 1,
     ...freshMonth(content, 1),
     buzzwords: [],
+    claims: [],
     step: { kind: "actions" },
     truth: {
-      characters: dealt.characters,
+      characters: motives.characters,
       powerMap: power.powerMap,
       bossOpinion: 0,
     },
@@ -185,11 +193,16 @@ function apply(state: State, world: World, choice: Choice): void {
       state.flags.push(...action.sets);
       if (action.scene !== undefined) {
         state.step = openScene(state, world, action.scene);
+      } else if (action.findOut !== undefined) {
+        state.step = { kind: "find-out", method: action.findOut };
       } else if (action.result) {
         state.step = { kind: "notice", ...action.result };
       }
       return;
     }
+    case "find-out":
+      hearClaim(state, world, choice);
+      return;
     case "scene":
       behaveInScene(state, world, choice);
       return;
@@ -198,6 +211,33 @@ function apply(state: State, world: World, choice: Choice): void {
       else state.step = nextStep(state, world);
       return;
   }
+}
+
+function methodOf(content: Content, id: string) {
+  const method = content.sources.methods.find((m) => m.id === id);
+  if (!method) throw new Error(`Unknown Find Out "${id}".`);
+  return method;
+}
+
+function hearClaim(
+  state: State,
+  { content }: World,
+  choice: Extract<Choice, { type: "find-out" }>,
+): void {
+  if (state.step.kind !== "find-out") {
+    throw new IllegalChoiceError(choice.sourceId);
+  }
+  const made = makeClaim(state.rng, content, {
+    month: state.month,
+    method: methodOf(content, state.step.method),
+    source: choice.sourceId,
+    subject: choice.subjectId,
+    characters: state.truth.characters,
+    powerMap: state.truth.powerMap,
+  });
+  state.rng = made.next;
+  state.claims.push(made.claim);
+  state.step = { kind: "claim", index: state.claims.length - 1 };
 }
 
 function answerNotification(
@@ -431,6 +471,17 @@ function legalChoices(state: State, world: World): Choice[] {
         sceneId: step.id,
         optionId: o.id,
       }));
+    case "find-out":
+      return methodOf(content, step.method).sources.flatMap((sourceId) =>
+        content.characters
+          .filter((c) => c.id !== sourceId)
+          .map((c) => ({
+            type: "find-out" as const,
+            sourceId,
+            subjectId: c.id,
+          })),
+      );
+    case "claim":
     case "dialog":
     case "notice":
     case "move":
@@ -491,6 +542,11 @@ function toSceneView(
   };
 }
 
+function personOf(content: Content, id: string): Person {
+  const known = content.characters.find((c) => c.id === id);
+  return { id, name: known?.name ?? id, title: known?.title ?? "" };
+}
+
 function toStoryView(
   state: State,
   content: Content,
@@ -538,6 +594,20 @@ function toResultsView(
         reportsTo: above ? nameOf(above.who) : null,
       };
     }),
+    claims: state.claims.map((claim) => {
+      const { label, note } = content.sources.verdicts[claim.status];
+      const said = state.truth.characters.find((c) => c.id === claim.source);
+      const motive = content.sources.motives.find((m) => m.id === said?.motive);
+      const source = nameOf(claim.source);
+      return {
+        month: claim.month,
+        source,
+        text: claim.text,
+        verdict: label,
+        note,
+        motive: (motive?.text ?? "").replaceAll("{name}", source),
+      };
+    }),
   };
 }
 
@@ -579,6 +649,27 @@ function toStepView(state: State, world: World): StepView {
     }
     case "scene":
       return toSceneView(state, world, step);
+    case "find-out": {
+      const method = methodOf(content, step.method);
+      return {
+        kind: "find-out",
+        title: method.title,
+        prompt: method.prompt,
+        sources: method.sources.map((id) => personOf(content, id)),
+        subjects: content.characters.map((c) => personOf(content, c.id)),
+      };
+    }
+    case "claim": {
+      const claim = state.claims[step.index];
+      if (!claim) throw new Error(`Unknown claim ${String(step.index)}.`);
+      const source = personOf(content, claim.source).name;
+      return {
+        kind: "claim",
+        source,
+        title: content.ui.claimTitle.replaceAll("{source}", source),
+        text: claim.text,
+      };
+    }
     case "move": {
       const move = content.moves.find((m) => m.id === step.id);
       if (!move) throw new Error(`Unknown Move "${step.id}".`);

@@ -1,0 +1,99 @@
+{
+  "methods": [
+    {
+      "id": "ask",
+      "title": "At the photocopier",
+      "prompt": "Someone is always waiting here, and everyone has a view. A question costs you nothing but the afternoon.",
+      "sources": ["head", "boss", "admin", "analyst", "projects"],
+      "topics": { "kind": 5, "influence": 3, "fact": 2 }
+    },
+    {
+      "id": "buy",
+      "title": "At the loading bay",
+      "prompt": "A coffee, a favour, an agreement not to mention something. Only two people on this floor sell, and they sell secrets.",
+      "sources": ["admin", "projects"],
+      "topics": { "kind": 1, "influence": 1, "fact": 8 }
+    }
+  ],
+  "reliability": {
+    "believer": { "true": 7, "mistaken": 2, "outOfDate": 3, "false": 0 },
+    "incompetent": { "true": 3, "mistaken": 7, "outOfDate": 3, "false": 0 },
+    "practitioner": { "true": 4, "mistaken": 0, "outOfDate": 1, "false": 6 }
+  },
+  "motives": [
+    {
+      "id": "protecting-themselves",
+      "text": "{name} was keeping out of trouble, and told you whatever would achieve that.",
+      "adjust": { "true": -1, "mistaken": 0, "outOfDate": 0, "false": 2 }
+    },
+    {
+      "id": "wants-your-seat",
+      "text": "{name} had an eye on your job, and any confusion on your part was welcome.",
+      "adjust": { "true": -2, "mistaken": 0, "outOfDate": 0, "false": 3 }
+    },
+    {
+      "id": "lonely",
+      "text": "{name} was glad that anyone had asked, and did not want the conversation to end.",
+      "adjust": { "true": 0, "mistaken": 2, "outOfDate": 1, "false": 0 }
+    },
+    {
+      "id": "nothing-to-gain",
+      "text": "{name} wanted nothing from you, which on this floor is unusual.",
+      "adjust": { "true": 2, "mistaken": 0, "outOfDate": 0, "false": -1 }
+    }
+  ],
+  "claims": {
+    "kind": {
+      "believer": [
+        "{subject} actually reads the values statement. Then does what it says.",
+        "{subject} stays late because of the work. Not so as to be seen. I have checked.",
+        "With {subject}, what you see is what there is. It is very awkward for everyone."
+      ],
+      "incompetent": [
+        "{subject} has no idea what is going on. Nobody has wanted to be the one to say so.",
+        "Between us, {subject} has been forwarding the same spreadsheet since the spring.",
+        "{subject} is lovely. Ask {subject} what the department does, though, and watch."
+      ],
+      "practitioner": [
+        "Do not be fooled by {subject}. Every kind word goes in a ledger somewhere.",
+        "{subject} has never once been in the room when anything went wrong. Think about how hard that is.",
+        "{subject} knows exactly what everyone here wants. Be careful what you tell {subject}."
+      ]
+    },
+    "influence": {
+      "high": [
+        "When something really gets decided, {subject} has usually decided it already.",
+        "Forget the chart. People check with {subject} first.",
+        "If {subject} says no, it does not matter who said yes."
+      ],
+      "low": [
+        "{subject} is not in the conversations you think {subject} is in.",
+        "Nobody will tell you this, but {subject} has no say in anything that matters.",
+        "People nod at {subject}, then go and ask someone else."
+      ]
+    },
+    "fact": [
+      "Keep this to yourself. {fact}",
+      "You did not hear this from me. {fact}",
+      "I probably should not say. {fact}"
+    ]
+  },
+  "verdicts": {
+    "true": {
+      "label": "True",
+      "note": "It was so. Whether that did you any good is another matter."
+    },
+    "mistaken": {
+      "label": "Mistaken",
+      "note": "Your source believed every word of it."
+    },
+    "outOfDate": {
+      "label": "Out of date",
+      "note": "It was so, two reorganisations ago."
+    },
+    "false": {
+      "label": "Deliberately false",
+      "note": "Your source knew otherwise, and chose this."
+    }
+  }
+}

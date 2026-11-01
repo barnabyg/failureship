@@ -37,6 +37,24 @@
       "colour": "#a8a29a"
     },
     {
+      "id": "photocopier",
+      "x": -5,
+      "z": 2.5,
+      "width": 1.6,
+      "depth": 1.2,
+      "height": 1,
+      "colour": "#9fa8a0"
+    },
+    {
+      "id": "loading-bay",
+      "x": 6.4,
+      "z": 2.2,
+      "width": 2,
+      "depth": 1.6,
+      "height": 0.7,
+      "colour": "#8d8578"
+    },
+    {
       "id": "lift",
       "x": 0.4,
       "z": -2.4,

@@ -1,4 +1,4 @@
-import { useEffect, useRef, type ReactNode } from "react";
+import { useEffect, useRef, useState, type ReactNode } from "react";
 import { panelText } from "../content";
 import type { ChartEntry, Choice, PlayerView, StepView } from "../engine";
 import { Chart } from "./Chart";
@@ -77,6 +77,71 @@ function StoryPanel({
   );
 }
 
+function FindOutPanel({
+  step,
+  onChoose,
+}: {
+  step: Extract<StepView, { kind: "find-out" }>;
+  onChoose: (choice: Choice) => void;
+}) {
+  const [source, setSource] = useState<string | null>(null);
+  return (
+    <Panel testId="panel-find-out" title={step.title}>
+      <p>{step.prompt}</p>
+      <h3>{panelText.findOutSourceHeading}</h3>
+      <div className="options">
+        {step.sources.map((person) => (
+          <button
+            key={person.id}
+            type="button"
+            className={person.id === source ? "option primary" : "option"}
+            aria-pressed={person.id === source}
+            data-testid={`source-${person.id}`}
+            onClick={() => {
+              setSource(person.id);
+            }}
+          >
+            <span>{person.name}</span>
+            <span className="option-cost">{person.title}</span>
+          </button>
+        ))}
+      </div>
+      {source !== null && (
+        <>
+          <h3 className="find-out-subject">
+            {panelText.findOutSubjectHeading}
+          </h3>
+          <div className="options">
+            {step.subjects
+              .filter((person) => person.id !== source)
+              .map((person) => (
+                <button
+                  key={person.id}
+                  type="button"
+                  className="option"
+                  data-testid={`subject-${person.id}`}
+                  onClick={() => {
+                    onChoose({
+                      type: "find-out",
+                      sourceId: source,
+                      subjectId: person.id,
+                    });
+                  }}
+                >
+                  {person.name}
+                </button>
+              ))}
+          </div>
+        </>
+      )}
+    </Panel>
+  );
+}
+
+function monthLabel(month: number): string {
+  return panelText.resultsMonthLabel.replace("{n}", String(month));
+}
+
 function ResultsPanel({
   step,
   orgChart,
@@ -102,6 +167,33 @@ function ResultsPanel({
           ))}
         </tbody>
       </table>
+      <h3>{panelText.resultsClaimsHeading}</h3>
+      {step.claims.length === 0 ? (
+        <p data-testid="results-no-claims">{panelText.resultsNoClaims}</p>
+      ) : (
+        <table className="results">
+          <tbody>
+            {step.claims.map((claim, index) => (
+              <tr key={index} data-testid="result-claim">
+                <th scope="row">
+                  {claim.source}
+                  <span className="results-title">
+                    {monthLabel(claim.month)}
+                  </span>
+                </th>
+                <td>
+                  {claim.text}
+                  <span className="results-title">{claim.motive}</span>
+                </td>
+                <td className="results-kind">
+                  {claim.verdict}
+                  <span className="results-title">{claim.note}</span>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      )}
       <div className="results-charts">
         <div data-testid="results-org-chart">
           <h3>{panelText.orgChartHeading}</h3>
@@ -232,6 +324,17 @@ export function StepPanel({ view, onChoose }: StepPanelProps) {
               </div>
             </div>
           </div>
+        </Panel>
+      );
+    case "find-out":
+      return <FindOutPanel step={step} onChoose={onChoose} />;
+    case "claim":
+      return (
+        <Panel testId="panel-claim" eyebrow={step.source} title={step.title}>
+          <p className="callout" data-testid="claim-text">
+            {step.text}
+          </p>
+          <Continue onChoose={onChoose} />
         </Panel>
       );
     case "dialog":

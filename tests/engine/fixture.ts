@@ -105,6 +105,7 @@ export function fixtureRaw() {
         likelihood: { warm: number; neutral: number; cold: number };
       }[],
     },
+    sources: sourcesRaw(),
     hiddenTruth: {
       kinds: {
         believer: { label: "KIND-BELIEVER", weight: 1 },
@@ -163,16 +164,73 @@ export function fixtureRaw() {
         dialog: "Press continue.",
         actions: "Click the floor. You have {actions} left.",
         scene: "Watch the room, then choose.",
+        "find-out": "Pick a source.",
+        claim: "This is what you were told.",
         notice: "Press continue.",
         move: "Something has happened to you.",
         story: "The month has closed.",
         results: "The run is over.",
       },
       actionCount: { one: "1 action", other: "{n} actions" },
+      claimTitle: "{source} says",
       costLabel: "Costs {actions}",
       freeLabel: "Costs nothing",
       results: { title: "The end", intro: "Here is who was who." },
     },
+  };
+}
+
+const NO_CHANGE = { true: 0, mistaken: 0, outOfDate: 0, false: 0 };
+
+export function sourcesRaw() {
+  return {
+    methods: [
+      {
+        id: "ask",
+        title: "Ask around",
+        prompt: "Whom do you ask?",
+        sources: ["ana", "ben", "cal"],
+        topics: { kind: 1, influence: 1, fact: 1 },
+      },
+    ],
+    reliability: {
+      believer: { true: 8, mistaken: 2, outOfDate: 2, false: 0 },
+      incompetent: { true: 2, mistaken: 8, outOfDate: 2, false: 0 },
+      practitioner: { true: 3, mistaken: 0, outOfDate: 1, false: 8 },
+    },
+    motives: [
+      { id: "no-reason", text: "{name} had no reason.", adjust: NO_CHANGE },
+    ],
+    claims: {
+      kind: {
+        believer: ["{subject} SAID-BELIEVER"],
+        incompetent: ["{subject} SAID-INCOMPETENT"],
+        practitioner: ["{subject} SAID-PRACTITIONER"],
+      },
+      influence: { high: ["{subject} SAID-HIGH"], low: ["{subject} SAID-LOW"] },
+      fact: ["HEARD: {fact}"],
+    },
+    verdicts: {
+      true: { label: "VERDICT-TRUE", note: "It was so." },
+      mistaken: { label: "VERDICT-MISTAKEN", note: "They believed it." },
+      outOfDate: { label: "VERDICT-OLD", note: "It used to be so." },
+      false: { label: "VERDICT-FALSE", note: "They knew it was not." },
+    },
+  };
+}
+
+/** A month with no Notifications and a Find Out action on the floor. */
+export function findOutFixtureRaw() {
+  const raw = emptyMonthRaw();
+  const ask = {
+    ...action("copier"),
+    result: undefined,
+    findOut: "ask",
+    oncePerMonth: true,
+  };
+  return {
+    ...raw,
+    actions: [ask, action("kettle"), action("desk"), action("plant")],
   };
 }
 

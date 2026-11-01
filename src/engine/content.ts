@@ -103,6 +103,8 @@ const action = z.strictObject({
   scene: id.optional(),
   /** A place like a meeting can be gone to only once a month. */
   oncePerMonth: z.boolean().default(false),
+  /** A Find Out action names how the player goes about it. */
+  findOut: id.optional(),
   sets,
 });
 
@@ -139,7 +141,8 @@ const room = z.strictObject({
   sign: z.strictObject({ title: text, detail: text }).optional(),
 });
 
-export type Kind = "believer" | "incompetent" | "practitioner";
+export const KINDS = ["believer", "incompetent", "practitioner"] as const;
+export type Kind = (typeof KINDS)[number];
 
 const kindRule = z.strictObject({
   label: text,
@@ -156,6 +159,76 @@ const behaviour = z.strictObject({
     believer: z.number().nonnegative(),
     incompetent: z.number().nonnegative(),
     practitioner: z.number().nonnegative(),
+  }),
+});
+
+export const CLAIM_STATUSES = [
+  "true",
+  "mistaken",
+  "outOfDate",
+  "false",
+] as const;
+export type ClaimStatus = (typeof CLAIM_STATUSES)[number];
+
+const statusWeights = (number: z.ZodNumber) =>
+  z.strictObject({
+    true: number,
+    mistaken: number,
+    outOfDate: number,
+    false: number,
+  });
+
+const lines = z.array(text).min(1);
+
+const sources = z.strictObject({
+  methods: z.array(
+    z.strictObject({
+      id,
+      title: text,
+      prompt: text,
+      /** Who can be asked this way. */
+      sources: z.array(id).min(1),
+      /** How often a claim made this way is about each thing. */
+      topics: z.strictObject({
+        kind: z.number().nonnegative(),
+        influence: z.number().nonnegative(),
+        fact: z.number().nonnegative(),
+      }),
+    }),
+  ),
+  /** How often each kind of source gives each sort of claim. */
+  reliability: z.strictObject({
+    believer: statusWeights(z.number().nonnegative()),
+    incompetent: statusWeights(z.number().nonnegative()),
+    practitioner: statusWeights(z.number().nonnegative()),
+  }),
+  /** What a source wants, dealt per run. It shifts the weights above. */
+  motives: z
+    .array(
+      z.strictObject({
+        id,
+        /** Says {name}, and is shown on the results screen. */
+        text,
+        adjust: statusWeights(z.number()),
+      }),
+    )
+    .min(1),
+  /** The words of a claim, which say nothing of whether it is true. */
+  claims: z.strictObject({
+    kind: z.strictObject({
+      believer: lines,
+      incompetent: lines,
+      practitioner: lines,
+    }),
+    influence: z.strictObject({ high: lines, low: lines }),
+    fact: lines,
+  }),
+  /** What the results screen says of each sort of claim. */
+  verdicts: z.strictObject({
+    true: z.strictObject({ label: text, note: text }),
+    mistaken: z.strictObject({ label: text, note: text }),
+    outOfDate: z.strictObject({ label: text, note: text }),
+    false: z.strictObject({ label: text, note: text }),
   }),
 });
 
@@ -208,6 +281,7 @@ const contentSchema = z.strictObject({
       )
       .min(1),
   }),
+  sources,
   characters: z
     .array(
       z.strictObject({
@@ -239,12 +313,16 @@ const contentSchema = z.strictObject({
       dialog: text,
       actions: text,
       scene: text,
+      "find-out": text,
+      claim: text,
       notice: text,
       move: text,
       story: text,
       results: text,
     }),
     actionCount: z.strictObject({ one: text, other: text }),
+    /** Says {source}. */
+    claimTitle: text,
     costLabel: text,
     freeLabel: text,
     results: z.strictObject({ title: text, intro: text }),
@@ -397,6 +475,63 @@ function findBrokenBossSigns(content: Content): string[] {
   return problems;
 }
 
+/** Sources must be worth weighing: never always right, and never always wrong. */
+function findBrokenSources(content: Content): string[] {
+  const { methods, reliability, motives, claims } = content.sources;
+  const problems: string[] = [];
+  const allowed = (owner: string, written: string, tokens: string[]) => {
+    for (const [, token] of written.matchAll(/\{(\w+)\}/g)) {
+      if (!tokens.includes(token ?? "")) {
+        problems.push(`${owner} uses unknown token "{${token ?? ""}}".`);
+      }
+    }
+  };
+  for (const method of methods) {
+    const owner = `Find Out method "${method.id}"`;
+    for (const source of method.sources) {
+      if (!content.characters.some((c) => c.id === source)) {
+        problems.push(`${owner} names unknown Character "${source}".`);
+      }
+    }
+    if (Object.values(method.topics).every((t) => t === 0)) {
+      problems.push(`${owner} has nothing to claim.`);
+    }
+  }
+  for (const kind of KINDS) {
+    for (const motive of motives) {
+      const open = CLAIM_STATUSES.filter(
+        (s) => reliability[kind][s] + motive.adjust[s] > 0,
+      );
+      if (open.length < 2) {
+        problems.push(
+          `A ${kind} with motive "${motive.id}" would always be read the same way.`,
+        );
+      }
+    }
+  }
+  for (const motive of motives) {
+    allowed(`Motive "${motive.id}"`, motive.text, ["name"]);
+  }
+  const pools = [
+    ...KINDS.flatMap((k) => claims.kind[k]),
+    ...claims.influence.high,
+    ...claims.influence.low,
+  ];
+  for (const line of pools) {
+    if (!line.includes("{subject}")) {
+      problems.push(`A claim needs to say {subject}: "${line}"`);
+    }
+    allowed("A claim", line, ["subject"]);
+  }
+  for (const line of claims.fact) {
+    if (!line.includes("{fact}")) {
+      problems.push(`A claim about a fact needs to say {fact}: "${line}"`);
+    }
+    allowed("A claim", line, ["fact"]);
+  }
+  return problems;
+}
+
 function findBrokenReferences(content: Content): string[] {
   const rooms = new Set(content.floor.rooms.map((r) => r.id));
   const dialogs = new Set(content.dialogs.map((d) => d.id));
@@ -446,6 +581,7 @@ function findBrokenReferences(content: Content): string[] {
   problems.push(...findBrokenDeal(content, characters));
   problems.push(...findBrokenBehaviours(content));
   problems.push(...findBrokenBossSigns(content));
+  problems.push(...findBrokenSources(content));
   for (const a of content.actions) {
     if (!rooms.has(a.place)) {
       problems.push(`Action "${a.id}" is at unknown place "${a.place}".`);
@@ -463,8 +599,19 @@ function findBrokenReferences(content: Content): string[] {
     ) {
       problems.push(`Action "${a.id}" is set when its Scene never opens.`);
     }
-    if ((a.scene === undefined) === (a.result === undefined)) {
-      problems.push(`Action "${a.id}" needs a Scene or a result, not both.`);
+    const outcomes = [a.scene, a.result, a.findOut].filter(
+      (o) => o !== undefined,
+    );
+    if (outcomes.length !== 1) {
+      problems.push(
+        `Action "${a.id}" needs one of a Scene, a result or a Find Out.`,
+      );
+    }
+    if (
+      a.findOut !== undefined &&
+      !content.sources.methods.some((m) => m.id === a.findOut)
+    ) {
+      problems.push(`Action "${a.id}" uses unknown Find Out "${a.findOut}".`);
     }
   }
   for (const c of content.characters) {

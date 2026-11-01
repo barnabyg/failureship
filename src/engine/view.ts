@@ -3,7 +3,8 @@ export type Choice =
   | { type: "continue" }
   | { type: "action"; actionId: string }
   | { type: "notification"; notificationId: string; optionId: string }
-  | { type: "scene"; sceneId: string; optionId: string };
+  | { type: "scene"; sceneId: string; optionId: string }
+  | { type: "find-out"; sourceId: string; subjectId: string };
 
 export interface Hotspot {
   id: string;
@@ -39,6 +40,12 @@ export interface ChartEntry {
   reportsTo: string | null;
 }
 
+export interface Person {
+  id: string;
+  name: string;
+  title: string;
+}
+
 export type StepView =
   | {
       kind: "notification";
@@ -68,6 +75,14 @@ export type StepView =
       treatment: string | null;
       options: { id: string; label: string }[];
     }
+  | {
+      kind: "find-out";
+      title: string;
+      prompt: string;
+      sources: Person[];
+      subjects: Person[];
+    }
+  | { kind: "claim"; source: string; title: string; text: string }
   | { kind: "notice"; title: string; body: string }
   | { kind: "move"; from: string; title: string; body: string }
   | {
@@ -89,6 +104,14 @@ export type StepView =
         fact: string | null;
       }[];
       powerMap: ChartEntry[];
+      claims: {
+        month: number;
+        source: string;
+        text: string;
+        verdict: string;
+        note: string;
+        motive: string;
+      }[];
     };
 
 /** Only what the player is entitled to see. It never holds undiscovered truth. */

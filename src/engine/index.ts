@@ -10,6 +10,7 @@ export type {
   DialogLine,
   Hotspot,
   NotificationOption,
+  Person,
   PlayerView,
   StepView,
 } from "./view";

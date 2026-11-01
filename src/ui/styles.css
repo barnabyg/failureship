@@ -286,6 +286,15 @@ body {
   cursor: default;
 }
 
+.panel button.option.primary {
+  background: var(--accent);
+  color: var(--accent-ink);
+}
+
+.find-out-subject {
+  margin-top: 12px;
+}
+
 .option-cost {
   flex: none;
   font-size: 0.8125rem;

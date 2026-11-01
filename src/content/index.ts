@@ -11,17 +11,26 @@ import moves from "../../content/moves.json";
 import notifications from "../../content/notifications.json";
 import officialStory from "../../content/official-story.json";
 import scenes from "../../content/scenes.json";
+import sources from "../../content/sources.json";
 import ui from "../../content/ui.json";
 import { z } from "zod";
 import { ContentError, parseContent } from "../engine";
 
-const { hints, actionCount, costLabel, freeLabel, results, ...presentation } =
-  ui;
+const {
+  hints,
+  actionCount,
+  claimTitle,
+  costLabel,
+  freeLabel,
+  results,
+  ...presentation
+} = ui;
 
 export const gameContent = parseContent({
   balance,
   boss,
   hiddenTruth,
+  sources,
   characters,
   behaviours,
   scenes,
@@ -32,7 +41,7 @@ export const gameContent = parseContent({
   moves,
   officialStory,
   floor,
-  ui: { hints, actionCount, costLabel, freeLabel, results },
+  ui: { hints, actionCount, claimTitle, costLabel, freeLabel, results },
 });
 
 const panelSchema = z.strictObject(
@@ -63,6 +72,11 @@ const panelSchema = z.strictObject(
       "closeLabel",
       "resultsWhoHeading",
       "resultsNoFact",
+      "findOutSourceHeading",
+      "findOutSubjectHeading",
+      "resultsClaimsHeading",
+      "resultsNoClaims",
+      "resultsMonthLabel",
       "seedInputLabel",
       "seedRefused",
       "restartLabel",
