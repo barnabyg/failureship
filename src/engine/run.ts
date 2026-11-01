@@ -39,6 +39,7 @@ type Step =
   | { kind: "actions" }
   | { kind: "scene"; id: string }
   | { kind: "notice"; title: string; body: string }
+  | { kind: "move"; id: string }
   | { kind: "story" };
 
 interface State {
@@ -49,6 +50,8 @@ interface State {
   visited: string[];
   unanswered: string[];
   buzzwords: string[];
+  flags: string[];
+  moveLanded: boolean;
   step: Step;
   truth: HiddenTruth;
 }
@@ -97,6 +100,8 @@ export function startRun(options: {
     visited: [],
     unanswered: content.notifications.map((n) => n.id),
     buzzwords: [],
+    flags: [],
+    moveLanded: false,
     step: { kind: "actions" },
     truth: { fact: fact.item, powerMap: dealt.powerMap },
   };
@@ -151,6 +156,7 @@ function apply(state: State, world: World, choice: Choice): void {
       if (!action) throw new IllegalChoiceError(choice.actionId);
       state.spent += costOf(content, action.cost);
       state.visited.push(action.id);
+      state.flags.push(...action.sets);
       if (action.scene !== undefined) {
         state.step = { kind: "scene", id: action.scene };
       } else if (action.result) {
@@ -183,6 +189,7 @@ function answerNotification(
     (id) => id !== choice.notificationId,
   );
   state.buzzwords.push(...option.learns);
+  state.flags.push(...option.sets);
 
   if (option.dialog !== undefined) {
     state.step = { kind: "dialog", id: option.dialog, learned: option.learns };
@@ -204,6 +211,7 @@ function behaveInScene(
   );
   const result = option?.results.find((r) => matches(state, r.when));
   if (!result) throw new IllegalChoiceError(choice.optionId);
+  state.flags.push(...result.sets);
   state.step = {
     kind: "notice",
     title: scene.title,
@@ -216,7 +224,12 @@ function matches(state: State, condition: Condition | undefined): boolean {
   if ("holderIs" in condition) {
     return condition.holderIs === state.truth.powerMap.holder;
   }
-  return state.buzzwords.includes(condition.hasBuzzword);
+  if ("hasBuzzword" in condition) {
+    return state.buzzwords.includes(condition.hasBuzzword);
+  }
+  if ("flag" in condition) return state.flags.includes(condition.flag);
+  if ("not" in condition) return !matches(state, condition.not);
+  return condition.all.every((inner) => matches(state, inner));
 }
 
 function offeredOptions(state: State, scene: SceneData) {
@@ -242,7 +255,7 @@ function fillRoles(state: State, content: Content, written: string): string {
     .replaceAll("{bystander}", name(bystander));
 }
 
-/** The month's order: Notifications, then actions, then the month closes. */
+/** The month's order: Notifications, actions, a Move, then the month closes. */
 function nextStep(state: State, { content }: World): Step {
   for (const id of state.unanswered) {
     const notification = content.notifications.find((n) => n.id === id);
@@ -254,7 +267,19 @@ function nextStep(state: State, { content }: World): Step {
   if (content.actions.some((a) => isAvailable(state, content, a))) {
     return { kind: "actions" };
   }
-  return { kind: "story" };
+  return landMove(state, content) ?? { kind: "story" };
+}
+
+/** Picks the month's Character Move from those whose conditions hold. */
+function landMove(state: State, content: Content): Step | null {
+  if (state.moveLanded) return null;
+  state.moveLanded = true;
+  const eligible = content.moves.filter((m) => matches(state, m.when));
+  if (eligible.length === 0) return null;
+  const { item, next } = pick(state.rng, eligible);
+  state.rng = next;
+  state.flags.push(...item.sets);
+  return { kind: "move", id: item.id };
 }
 
 function isAvailable(
@@ -294,6 +319,7 @@ function legalChoices(state: State, world: World): Choice[] {
       );
     case "dialog":
     case "notice":
+    case "move":
       return [{ type: "continue" }];
     case "story":
       return [];
@@ -341,6 +367,25 @@ function toSceneView(
   };
 }
 
+function toStoryView(
+  state: State,
+  content: Content,
+): Extract<StepView, { kind: "story" }> {
+  const { title, reportedHeading, happenedHeading, entries } =
+    content.officialStory;
+  const told = entries.filter((e) => matches(state, e.when));
+  const fill = (written: string | undefined) =>
+    written === undefined ? [] : [fillRoles(state, content, written)];
+  return {
+    kind: "story",
+    title,
+    reportedHeading,
+    happenedHeading,
+    reported: told.flatMap((e) => fill(e.reported)),
+    happened: told.flatMap((e) => fill(e.happened)),
+  };
+}
+
 function toStepView(state: State, world: World): StepView {
   const { content } = world;
   const { step } = state;
@@ -369,8 +414,18 @@ function toStepView(state: State, world: World): StepView {
     }
     case "scene":
       return toSceneView(state, world, step.id);
+    case "move": {
+      const move = content.moves.find((m) => m.id === step.id);
+      if (!move) throw new Error(`Unknown Move "${step.id}".`);
+      return {
+        kind: "move",
+        from: move.from,
+        title: move.title,
+        body: fillRoles(state, content, move.body),
+      };
+    }
     case "story":
-      return { kind: "story", ...content.officialStory };
+      return toStoryView(state, content);
     case "actions":
     case "notice":
       return step;

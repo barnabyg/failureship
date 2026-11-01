@@ -6,6 +6,7 @@ interface RawOption {
   cost?: string;
   dialog?: string;
   learns?: string[];
+  sets?: string[];
   result?: { title: string; body: string };
 }
 
@@ -23,7 +24,7 @@ interface RawSceneOption {
   id: string;
   label: string;
   requires?: RawCondition;
-  results: { when?: RawCondition; body: string }[];
+  results: { when?: RawCondition; body: string; sets?: string[] }[];
 }
 
 interface RawScene {
@@ -35,6 +36,21 @@ interface RawScene {
   signs: { label: string; text: string }[];
   options: RawSceneOption[];
   script?: string;
+}
+
+interface RawMove {
+  id: string;
+  from: string;
+  title: string;
+  body: string;
+  when?: RawCondition;
+  sets?: string[];
+}
+
+interface RawStoryEntry {
+  when?: RawCondition;
+  reported?: string;
+  happened?: string;
 }
 
 /**
@@ -101,7 +117,11 @@ export function fixtureRaw() {
       action("copier"),
       action("plant"),
     ],
-    officialStory: { title: "Official story", reported: ["All is well."] },
+    moves: [] as RawMove[],
+    officialStory: {
+      title: "Official story",
+      entries: [{ reported: "All is well." }] as RawStoryEntry[],
+    },
     floor: { rooms: ["kettle", "desk", "copier", "plant"].map(room) },
     ui: {
       hints: {
@@ -110,6 +130,7 @@ export function fixtureRaw() {
         actions: "Click the floor. You have {actions} left.",
         scene: "Watch the room, then choose.",
         notice: "Press continue.",
+        move: "Something has happened to you.",
         story: "The month has closed.",
       },
       actionCount: { one: "1 action", other: "{n} actions" },
@@ -207,6 +228,74 @@ export function buzzwordFixtureRaw() {
 
 export function buzzwordFixture(): Content {
   return parseContent(buzzwordFixtureRaw());
+}
+
+/** The whole month: choices leave flags that the Move and the story read. */
+export function closingFixtureRaw() {
+  const raw = buzzwordFixtureRaw();
+  const [report, pub] = raw.notifications[0]?.options ?? [];
+  if (report) report.sets = ["filed"];
+  if (pub) pub.sets = ["pub"];
+  const scene = raw.scenes[0];
+  const backAna = scene?.options.find((o) => o.id === "back-ana");
+  const quiet = scene?.options.find((o) => o.id === "stay-quiet");
+  const word = scene?.options.find((o) => o.id === "use-word");
+  if (backAna) {
+    backAna.results = [
+      { when: { holderIs: "ana" }, body: "Right.", sets: ["backed-right"] },
+      { body: "Wrong.", sets: ["backed-wrong"] },
+    ];
+  }
+  if (quiet) quiet.results = [{ body: "Quiet.", sets: ["quiet"] }];
+  if (word) word.results = [{ body: "WORD-LANDED", sets: ["used-word"] }];
+  raw.moves = [
+    {
+      id: "credit",
+      from: "Ben Bird",
+      title: "MOVE-CREDIT",
+      body: "Ben takes the credit.",
+    },
+    {
+      id: "steal",
+      from: "Cal Cope",
+      title: "MOVE-STEAL",
+      body: "Cal steals your stapler.",
+    },
+    {
+      id: "word-stolen",
+      from: "Cal Cope",
+      title: "MOVE-WORD",
+      body: "Cal uses your word.",
+      when: { flag: "used-word" },
+      sets: ["word-stolen"],
+    },
+  ];
+  raw.officialStory.entries = [
+    { reported: "The team met its objectives." },
+    {
+      when: { flag: "filed" },
+      reported: "REPORTED-FILED",
+      happened: "HAPPENED-FILED",
+    },
+    {
+      when: { flag: "pub" },
+      reported: "REPORTED-PUB",
+      happened: "HAPPENED-PUB",
+    },
+    { when: { flag: "backed-right" }, reported: "REPORTED-RIGHT" },
+    { when: { flag: "backed-wrong" }, reported: "REPORTED-WRONG" },
+    { when: { flag: "quiet" }, reported: "REPORTED-QUIET" },
+    {
+      when: { all: [{ flag: "used-word" }, { not: { flag: "word-stolen" } }] },
+      reported: "REPORTED-WORD-KEPT",
+    },
+    { when: { flag: "word-stolen" }, happened: "HAPPENED-WORD-STOLEN" },
+  ];
+  return raw;
+}
+
+export function closingFixture(): Content {
+  return parseContent(closingFixtureRaw());
 }
 
 export function fixture(): Content {

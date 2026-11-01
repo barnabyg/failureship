@@ -52,9 +52,22 @@ function StoryPanel({
 }) {
   return (
     <Panel testId="panel-story" title={step.title}>
-      {step.reported.map((line) => (
-        <p key={line}>{line}</p>
-      ))}
+      <div data-testid="story-reported">
+        {step.reportedHeading !== undefined && <h3>{step.reportedHeading}</h3>}
+        {step.reported.map((line) => (
+          <p key={line}>{line}</p>
+        ))}
+      </div>
+      {step.happened.length > 0 && (
+        <div className="callout" data-testid="story-happened">
+          {step.happenedHeading !== undefined && (
+            <h3>{step.happenedHeading}</h3>
+          )}
+          {step.happened.map((line) => (
+            <p key={line}>{line}</p>
+          ))}
+        </div>
+      )}
       <div className="panel-actions">
         <button
           type="button"
@@ -184,6 +197,13 @@ export function StepPanel({
     case "notice":
       return (
         <Panel testId="panel-notice" title={step.title}>
+          <p>{step.body}</p>
+          <Continue onChoose={onChoose} />
+        </Panel>
+      );
+    case "move":
+      return (
+        <Panel testId="panel-move" eyebrow={step.from} title={step.title}>
           <p>{step.body}</p>
           <Continue onChoose={onChoose} />
         </Panel>

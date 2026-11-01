@@ -59,7 +59,15 @@ export type StepView =
       options: { id: string; label: string }[];
     }
   | { kind: "notice"; title: string; body: string }
-  | { kind: "story"; title: string; reported: string[] };
+  | { kind: "move"; from: string; title: string; body: string }
+  | {
+      kind: "story";
+      title: string;
+      reportedHeading?: string | undefined;
+      happenedHeading?: string | undefined;
+      reported: string[];
+      happened: string[];
+    };
 
 /** Only what the player is entitled to see. It never holds undiscovered truth. */
 export interface PlayerView {

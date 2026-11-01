@@ -177,6 +177,23 @@ body {
   margin: 0 0 12px;
 }
 
+.panel h3 {
+  margin: 0 0 4px;
+  color: var(--muted);
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.callout > p:last-child {
+  margin-bottom: 0;
+}
+
+.panel .callout {
+  margin-bottom: 12px;
+}
+
 .eyebrow {
   color: var(--muted);
   font-size: 0.8125rem;

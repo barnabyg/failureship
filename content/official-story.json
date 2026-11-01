@@ -1,4 +1,52 @@
 {
   "title": "Official story",
-  "reported": ["Placeholder: the month went according to plan."]
+  "reportedHeading": "Reported",
+  "happenedHeading": "What happened",
+  "entries": [
+    {
+      "reported": "Placeholder: the month went according to plan."
+    },
+    {
+      "when": {
+        "flag": "filed-report"
+      },
+      "reported": "Placeholder: the report was on time.",
+      "happened": "Placeholder: nobody read it."
+    },
+    {
+      "when": {
+        "flag": "went-to-pub"
+      },
+      "reported": "Placeholder: the report was delayed for stakeholder engagement.",
+      "happened": "Placeholder: you were at the pub."
+    },
+    {
+      "when": {
+        "flag": "backed-holder"
+      },
+      "reported": "Placeholder: you showed leadership.",
+      "happened": "Placeholder: you agreed with the right person."
+    },
+    {
+      "when": {
+        "flag": "backed-wrong-person"
+      },
+      "reported": "Placeholder: you offered challenge.",
+      "happened": "Placeholder: you agreed with the wrong person."
+    },
+    {
+      "when": {
+        "flag": "said-nothing"
+      },
+      "reported": "Placeholder: you attended.",
+      "happened": "Placeholder: you said nothing."
+    },
+    {
+      "when": {
+        "flag": "used-buzzword"
+      },
+      "reported": "Placeholder: you shaped the agenda.",
+      "happened": "Placeholder: you repeated a phrase from the pub."
+    }
+  ]
 }

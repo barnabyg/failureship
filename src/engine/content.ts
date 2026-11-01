@@ -5,12 +5,16 @@ const id = z.string().min(1);
 
 const notice = z.strictObject({ title: text, body: text });
 
+/** Flags record what the player did, for later conditions to read. */
+const sets = z.array(id).default([]);
+
 const notificationOption = z.strictObject({
   id,
   label: text,
   cost: id.optional(),
   dialog: id.optional(),
   learns: z.array(id).default([]),
+  sets,
   result: notice.optional(),
 });
 
@@ -30,14 +34,27 @@ const dialog = z.strictObject({
 
 const buzzword = z.strictObject({ id, term: text, meaning: text });
 
-const condition = z.union([
-  z.strictObject({ holderIs: id }),
-  z.strictObject({ hasBuzzword: id }),
-]);
+export type Condition =
+  | { holderIs: string }
+  | { hasBuzzword: string }
+  | { flag: string }
+  | { not: Condition }
+  | { all: Condition[] };
+
+const condition: z.ZodType<Condition> = z.lazy(() =>
+  z.union([
+    z.strictObject({ holderIs: id }),
+    z.strictObject({ hasBuzzword: id }),
+    z.strictObject({ flag: id }),
+    z.strictObject({ not: condition }),
+    z.strictObject({ all: z.array(condition).min(1) }),
+  ]),
+);
 
 const sceneResult = z.strictObject({
   when: condition.optional(),
   body: text,
+  sets,
 });
 
 const sceneOption = z.strictObject({
@@ -68,7 +85,27 @@ const action = z.strictObject({
   cost: id,
   result: notice.optional(),
   scene: id.optional(),
+  sets,
 });
+
+const move = z.strictObject({
+  id,
+  from: text,
+  title: text,
+  body: text,
+  when: condition.optional(),
+  sets,
+});
+
+const storyEntry = z
+  .strictObject({
+    when: condition.optional(),
+    reported: text.optional(),
+    happened: text.optional(),
+  })
+  .refine((e) => e.reported !== undefined || e.happened !== undefined, {
+    message: "A story entry needs reported or happened text.",
+  });
 
 const room = z.strictObject({
   id,
@@ -97,9 +134,12 @@ const contentSchema = z.strictObject({
   dialogs: z.array(dialog),
   buzzwords: z.array(buzzword),
   actions: z.array(action).min(1),
+  moves: z.array(move),
   officialStory: z.strictObject({
     title: text,
-    reported: z.array(text).min(1),
+    reportedHeading: text.optional(),
+    happenedHeading: text.optional(),
+    entries: z.array(storyEntry).min(1),
   }),
   floor: z.strictObject({ rooms: z.array(room).min(1) }),
   ui: z.strictObject({
@@ -109,6 +149,7 @@ const contentSchema = z.strictObject({
       actions: text,
       scene: text,
       notice: text,
+      move: text,
       story: text,
     }),
     actionCount: z.strictObject({ one: text, other: text }),
@@ -120,7 +161,6 @@ const contentSchema = z.strictObject({
 export type Content = z.infer<typeof contentSchema>;
 export type Room = Content["floor"]["rooms"][number];
 export type SceneData = Content["scenes"][number];
-export type Condition = z.infer<typeof condition>;
 
 /** Thrown when a data file breaks the content format, naming what is wrong. */
 export class ContentError extends Error {
@@ -141,7 +181,10 @@ export function parseContent(raw: unknown): Content {
 
 /** Showing or hiding an option on this would tell the player the truth. */
 function dependsOnHiddenTruth(condition: Condition): boolean {
-  return "holderIs" in condition;
+  if ("holderIs" in condition) return true;
+  if ("not" in condition) return dependsOnHiddenTruth(condition.not);
+  if ("all" in condition) return condition.all.some(dependsOnHiddenTruth);
+  return false;
 }
 
 function findBrokenReferences(content: Content): string[] {
@@ -158,6 +201,10 @@ function findBrokenReferences(content: Content): string[] {
   };
   const checkCondition = (owner: string, condition: Condition) => {
     if ("holderIs" in condition) checkCharacter(owner, condition.holderIs);
+    if ("not" in condition) checkCondition(owner, condition.not);
+    if ("all" in condition) {
+      for (const inner of condition.all) checkCondition(owner, inner);
+    }
     if ("hasBuzzword" in condition && !buzzwords.has(condition.hasBuzzword)) {
       problems.push(
         `${owner} needs unknown Buzzword "${condition.hasBuzzword}".`,
@@ -214,6 +261,17 @@ function findBrokenReferences(content: Content): string[] {
         problems.push(`${optionOwner} needs a fallback result with no "when".`);
       }
     }
+  }
+  for (const m of content.moves) {
+    const owner = `Move "${m.id}"`;
+    checkRoles(owner, m.body);
+    if (m.when) checkCondition(owner, m.when);
+  }
+  for (const e of content.officialStory.entries) {
+    const owner = "An official story entry";
+    checkRoles(owner, e.reported ?? "");
+    checkRoles(owner, e.happened ?? "");
+    if (e.when) checkCondition(owner, e.when);
   }
   for (const n of content.notifications) {
     for (const o of n.options) {

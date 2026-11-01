@@ -5,6 +5,7 @@ import characters from "../../content/characters.json";
 import dialogs from "../../content/dialogs.json";
 import floor from "../../content/floor-1.json";
 import hiddenTruth from "../../content/hidden-truth.json";
+import moves from "../../content/moves.json";
 import notifications from "../../content/notifications.json";
 import officialStory from "../../content/official-story.json";
 import scenes from "../../content/scenes.json";
@@ -22,6 +23,7 @@ export const gameContent = parseContent({
   dialogs,
   buzzwords,
   actions,
+  moves,
   officialStory,
   floor,
   ui: { hints, actionCount, costLabel, freeLabel },

@@ -23,6 +23,9 @@ test("plays through a month on a fixed-camera Floor 1", async ({ page }) => {
 
   await spendAction(page, "work");
 
+  await expect(page.getByTestId("panel-move")).toBeVisible();
+  await page.getByTestId("continue").click();
+
   await expect(page.getByTestId("panel-story")).toBeVisible();
   await expect(page.getByTestId("hotspot-meeting")).toBeDisabled();
 });

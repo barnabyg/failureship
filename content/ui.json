@@ -18,6 +18,7 @@
     "actions": "Placeholder: click a place on the floor. You have {actions} left.",
     "scene": "Placeholder: watch the room, then choose.",
     "notice": "Placeholder: press Continue.",
+    "move": "Placeholder: something has happened to you.",
     "story": "Placeholder: the month has closed."
   },
   "actionCount": { "one": "1 action", "other": "{n} actions" },

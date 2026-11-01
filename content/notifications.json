@@ -9,12 +9,14 @@
         "id": "report",
         "label": "Placeholder: finish the report",
         "cost": "report",
+        "sets": ["filed-report"],
         "result": { "title": "Report", "body": "Placeholder: report filed." }
       },
       {
         "id": "pub",
         "label": "Placeholder: go to the pub",
         "cost": "pub",
+        "sets": ["went-to-pub"],
         "dialog": "pub",
         "learns": ["placeholder-word"]
       }
