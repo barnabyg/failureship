@@ -727,6 +727,62 @@
       },
       "reported": "You participated in the Listening Session.",
       "happened": "You took a biscuit. It has been noted."
+    },
+    {
+      "when": {
+        "flag": "bonus-to-allies"
+      },
+      "reported": "Bonuses were allocated to reflect your team's key contributors.",
+      "happened": "You paid the people who can help you."
+    },
+    {
+      "when": {
+        "flag": "bonus-to-workers"
+      },
+      "reported": "Bonuses were allocated following a thorough assessment.",
+      "happened": "You paid the people who did the work, and wrote down why."
+    },
+    {
+      "when": {
+        "flag": "bonus-to-boss"
+      },
+      "reported": "Your boss was recognised for outstanding leadership.",
+      "happened": "You suggested that. It was your idea, and everybody knows."
+    },
+    {
+      "when": {
+        "flag": "bonus-split"
+      },
+      "reported": "Bonuses were distributed in line with the company's values.",
+      "happened": "You split it equally, and it bought everyone a modest lunch."
+    },
+    {
+      "when": {
+        "flag": "bought-chairs"
+      },
+      "reported": "You invested in your team's physical wellbeing.",
+      "happened": "There are forty chairs in the corridor."
+    },
+    {
+      "when": {
+        "flag": "fixed-with-underspend"
+      },
+      "reported": "A minor licensing matter was regularised.",
+      "happened": "You spent it on what the project needed. Nobody will know."
+    },
+    {
+      "when": {
+        "flag": "returned-underspend"
+      },
+      "reported": "A budget variance was identified and is being investigated.",
+      "happened": "You gave the money back. Finance has no code for it."
+    },
+    {
+      "when": {
+        "flag": "booked-away-day"
+      },
+      "reported": "You led a resilience day for your team.",
+      "happened": "You spent it on a hotel that your boss is fond of."
     }
   ]
 }

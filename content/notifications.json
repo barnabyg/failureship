@@ -455,5 +455,144 @@
         }
       }
     ]
+  },
+  {
+    "id": "bonus-pot",
+    "months": [6],
+    "from": "From: Your boss, Dennis Prowse",
+    "subject": "Bonus pot: your recommendation, by tonight",
+    "body": "A small bonus pot has been found, and it has to be gone by the end of the day. You have been asked to say who on the floor gets it. It is a one-off, it is confidential, and everybody already knows about it.",
+    "options": [
+      {
+        "id": "bonus-allies",
+        "family": "trade",
+        "label": "Give it to the people who can do something for you",
+        "sets": ["bonus-to-allies"],
+        "approach": "cronyism",
+        "reaction": {
+          "believer": "Your boss reads the list, and asks you to take them through what each person did to earn it. You take them through it. It does not take long.",
+          "incompetent": "Your boss signs the list, and says that it is great to see you backing the team.",
+          "practitioner": "Your boss reads the list, and adds one name to it, in pencil, and says that you are learning."
+        },
+        "result": {
+          "title": "The bonus pot",
+          "body": "The bonuses go out on Friday. Three people are suddenly very glad to see you, and the two who did the work have been told that it was a difficult year."
+        }
+      },
+      {
+        "id": "bonus-workers",
+        "family": "deliver",
+        "label": "Give it to the people who did the work, and write down why",
+        "cost": "standard",
+        "sets": ["bonus-to-workers"],
+        "approach": "results",
+        "project": {
+          "real": "better"
+        },
+        "result": {
+          "title": "The bonus pot",
+          "body": "It takes you an evening to write down who did what. The Project Co-ordinator reads the letter twice, and something on your project gets done that afternoon that nobody had asked for."
+        }
+      },
+      {
+        "id": "bonus-boss",
+        "family": "impress",
+        "label": "Suggest that it should go to your boss, for leadership",
+        "sets": ["bonus-to-boss"],
+        "approach": "flatter",
+        "reaction": {
+          "believer": "Your boss says no, and sounds appalled, and asks you to think again about who did the work on this floor.",
+          "incompetent": "Your boss says that it would be wrong to refuse, as it would send the wrong message about leadership.",
+          "practitioner": "Your boss accepts on behalf of the team, and the team is told that it has been recognised."
+        },
+        "result": {
+          "title": "The bonus pot",
+          "body": "You put it in writing, with the word leadership in it three times. The floor learns where the bonus went at about the same moment it learns whose idea that was."
+        }
+      },
+      {
+        "id": "bonus-split",
+        "family": "deflect",
+        "label": "Split it equally between everybody",
+        "sets": ["bonus-split"],
+        "approach": "plain-report",
+        "reaction": {
+          "believer": "Your boss says that it is fair, and that fair is not the same as right, and asks whether you thought about the difference.",
+          "incompetent": "Your boss asks whether you could have made it a bit more strategic.",
+          "practitioner": "Your boss says nothing about it, in the tone of someone who has seen a chance go by."
+        },
+        "result": {
+          "title": "The bonus pot",
+          "body": "Everyone gets enough for a modest lunch. Nobody thanks you, and everybody tells you that they would have done the same, and that they deserved more."
+        }
+      }
+    ]
+  },
+  {
+    "id": "underspend",
+    "months": [8],
+    "from": "From: Finance",
+    "subject": "Use it or lose it: your underspend, by Friday",
+    "body": "Your team has some budget left this year. Whatever is not spent by Friday will be taken off next year's, on the grounds that you did not need it. Finance stresses that this is not an instruction to spend it, and that it must be spent.",
+    "options": [
+      {
+        "id": "underspend-chairs",
+        "family": "impress",
+        "label": "Buy something large, where upstairs will see it",
+        "sets": ["bought-chairs"],
+        "approach": "theatre",
+        "reaction": {
+          "believer": "Your boss walks round the new chairs, and asks what they are for, and who decided. Your boss sits in none of them.",
+          "incompetent": "Your boss says that this is what investment looks like, and has a photograph taken with one.",
+          "practitioner": "Your boss has a chair sent up to the floor above, with a note, and it is your boss's name on the note."
+        },
+        "result": {
+          "title": "The underspend",
+          "body": "Forty ergonomic chairs arrive, and are stacked in the corridor. The Office Co-ordinator has to sign for them, and looks at you while doing so. There is now nowhere to walk."
+        }
+      },
+      {
+        "id": "underspend-project",
+        "family": "deliver",
+        "label": "Spend it on what your project really needs",
+        "cost": "standard",
+        "sets": ["fixed-with-underspend"],
+        "approach": "results",
+        "project": {
+          "real": "better"
+        },
+        "result": {
+          "title": "The underspend",
+          "body": "It takes a day of forms. You buy the licence that everyone has been sharing, and the Senior Analyst stops having to log in as someone who left in 2021. Nobody will ever know that this happened."
+        }
+      },
+      {
+        "id": "underspend-return",
+        "family": "deliver",
+        "label": "Hand it back, and say that you did not need it",
+        "sets": ["returned-underspend"],
+        "approach": "truth",
+        "result": {
+          "title": "The underspend",
+          "body": "Nobody has done this before, and Finance has no code for it. You are rung twice, and asked if you are all right. Your team's budget will be lower next year, and your team has heard."
+        }
+      },
+      {
+        "id": "underspend-hotel",
+        "family": "trade",
+        "label": "Book an away-day, at a hotel your boss is fond of",
+        "sets": ["booked-away-day"],
+        "approach": "cronyism",
+        "reaction": {
+          "believer": "Your boss asks what the away-day is for, and whether it could be spent on the project. It is a real question, and the deposit has gone.",
+          "incompetent": "Your boss says that this is exactly what the team needs, and asks if there will be a spa.",
+          "practitioner": "Your boss says that they know the manager, and that you are the sort of person who remembers things like that."
+        },
+        "result": {
+          "title": "The underspend",
+          "body": "The team spends a day in a room with no windows, at a hotel, on a theme of resilience. The Project Co-ordinator misses a deadline to be there. Everyone is given a lanyard."
+        }
+      }
+    ]
   }
 ]

@@ -219,6 +219,11 @@ choice with an `approach` should say which family it is, and a test fails if it 
 An approach can have `overdone`, which changes how the listed kinds take it after
 `after` uses in a run. This is how a Practitioner boss turns on someone who shines.
 
+A Budget is a one-off decision and never a running balance, so it needs nothing of its
+own: the Budget Round is a Scene in `scenes.json`, and the bonus pot and the underspend
+are Notifications in `notifications.json`, with `months`, `approach` and `project` like
+any other choice. Nothing tracks money between them.
+
 An action with `"findOut": "ask"` spends an action to get a claim from a source.
 A method with `"someoneThere": true` deals one of its `sources` to be there, and its
 `prompt` can say `{source}`. Otherwise the player chooses from them.

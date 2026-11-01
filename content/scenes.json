@@ -539,6 +539,7 @@
           },
           {
             "body": "The Project Co-ordinator's project is reduced to a small working group, consisting of the Project Co-ordinator. You have saved nine per cent.",
+            "project": { "real": "worse" },
             "sets": ["cut-a-colleague"],
             "approach": "blame"
           }
@@ -588,6 +589,7 @@
         "results": [
           {
             "body": "Everyone is very moved. Your work is cut. You are still expected to do it, but now without the budget.",
+            "project": { "real": "worse" },
             "sets": ["cut-own-work"],
             "approach": "ownership"
           }
