@@ -220,6 +220,8 @@ const sources = z.strictObject({
       prompt: text,
       /** Who can be asked this way. */
       sources: z.array(id).min(1),
+      /** One of them is already there, so the player does not choose. */
+      someoneThere: z.boolean().default(false),
       /** How often a claim made this way is about each thing. */
       topics: z.strictObject({
         kind: z.number().nonnegative(),
@@ -580,6 +582,7 @@ function findBrokenSources(content: Content): string[] {
         problems.push(`${owner} names unknown Character "${source}".`);
       }
     }
+    checkTokens(owner, method.prompt, method.someoneThere ? ["source"] : []);
     if (Object.values(method.topics).every((t) => t === 0)) {
       problems.push(`${owner} has nothing to claim.`);
     }

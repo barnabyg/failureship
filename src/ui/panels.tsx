@@ -85,28 +85,33 @@ function FindOutPanel({
   step: Extract<StepView, { kind: "find-out" }>;
   onChoose: (choice: Choice) => void;
 }) {
-  const [source, setSource] = useState<string | null>(null);
+  const [only] = step.sources.length === 1 ? step.sources : [];
+  const [source, setSource] = useState<string | null>(only?.id ?? null);
   return (
     <Panel testId="panel-find-out" title={step.title}>
-      <p>{step.prompt}</p>
-      <h3>{panelText.findOutSourceHeading}</h3>
-      <div className="options">
-        {step.sources.map((person) => (
-          <button
-            key={person.id}
-            type="button"
-            className={person.id === source ? "option primary" : "option"}
-            aria-pressed={person.id === source}
-            data-testid={`source-${person.id}`}
-            onClick={() => {
-              setSource(person.id);
-            }}
-          >
-            <span>{person.name}</span>
-            <span className="option-cost">{person.title}</span>
-          </button>
-        ))}
-      </div>
+      <p data-testid="find-out-prompt">{step.prompt}</p>
+      {only === undefined && (
+        <>
+          <h3>{panelText.findOutSourceHeading}</h3>
+          <div className="options">
+            {step.sources.map((person) => (
+              <button
+                key={person.id}
+                type="button"
+                className={person.id === source ? "option primary" : "option"}
+                aria-pressed={person.id === source}
+                data-testid={`source-${person.id}`}
+                onClick={() => {
+                  setSource(person.id);
+                }}
+              >
+                <span>{person.name}</span>
+                <span className="option-cost">{person.title}</span>
+              </button>
+            ))}
+          </div>
+        </>
+      )}
       {source !== null && (
         <>
           <h3 className="find-out-subject">

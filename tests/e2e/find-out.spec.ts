@@ -12,11 +12,14 @@ test("spends an action to find something out, and sees the claim", async ({
   await expect(page.getByTestId("panel-find-out")).toBeVisible();
   await expect(page.getByTestId("actions-left")).toContainText("1");
 
-  await page.getByTestId("source-analyst").click();
-  await expect(page.getByTestId("subject-analyst")).toHaveCount(0);
-  await page.getByTestId("subject-boss").click();
+  // Someone is already there, so the choice is only whom to ask about.
+  await expect(page.locator('[data-testid^="source-"]')).toHaveCount(0);
+  await expect(page.locator('[data-testid^="subject-"]')).toHaveCount(4);
+  const prompt = await page.getByTestId("find-out-prompt").innerText();
+  const there = /^(\w+ \w+) is/.exec(prompt)?.[1] ?? "nobody";
+  await page.locator('[data-testid^="subject-"]').first().click();
 
-  await expect(page.getByTestId("panel-claim")).toContainText("Priya Venn");
+  await expect(page.getByTestId("panel-claim")).toContainText(there);
   await expect(page.getByTestId("claim-text")).not.toBeEmpty();
   await expect(page.getByTestId("panel-claim")).not.toContainText(
     /deliberately false|mistaken|out of date/i,

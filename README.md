@@ -36,8 +36,9 @@ There are three ways to spend an action:
 - **Meeting Room 1B** opens that month's Scene. Everyone present behaves according
   to their dealt kind, and no single sign settles what they are. Your boss's
   treatment of you shows what they think of you, but only roughly.
-- **The photocopier** and **the loading bay** are Find Out. You pick a source and a
-  subject, and get a claim that may be true, mistaken, out of date or deliberately
+- **The photocopier** and **the loading bay** are Find Out. At the photocopier, someone
+  is already there and you choose whom to ask about. At the loading bay, you also
+  choose who to buy from. Either way you get a claim that may be true, mistaken, out of date or deliberately
   false. Asking is mostly about people. Buying is mostly about Hidden Facts.
 - **The kitchen, Priya's desk and your desk** do what they look like.
 
@@ -127,6 +128,8 @@ which `balance.json` sets with `warmAt` and `coldAt`. Every sign must be possibl
 at least two of `warm`, `neutral` and `cold`, so that no sign settles it.
 
 An action with `"findOut": "ask"` spends an action to get a claim from a source.
+A method with `"someoneThere": true` deals one of its `sources` to be there, and its
+`prompt` can say `{source}`. Otherwise the player chooses from them.
 `sources.json` sets how often each kind of source tells the truth, is mistaken, is
 out of date or lies. A dealt motive shifts those weights. A claim's words never
 depend on which of these it is, so the results screen is the only place that says.

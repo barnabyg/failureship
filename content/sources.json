@@ -3,8 +3,9 @@
     {
       "id": "ask",
       "title": "At the photocopier",
-      "prompt": "Someone is always waiting here, and everyone has a view. A question costs you nothing but the afternoon.",
+      "prompt": "{source} is at the photocopier, waiting for it to warm up. It will be a while, and you could ask about anyone.",
       "sources": ["head", "boss", "admin", "analyst", "projects"],
+      "someoneThere": true,
       "topics": { "kind": 5, "influence": 3, "fact": 2 }
     },
     {

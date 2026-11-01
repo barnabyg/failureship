@@ -209,6 +209,7 @@ export function sourcesRaw() {
         title: "Ask around",
         prompt: "Whom do you ask?",
         sources: ["ana", "ben", "cal"],
+        someoneThere: false,
         topics: { kind: 1, influence: 1, fact: 1 },
       },
     ],

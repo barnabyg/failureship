@@ -1,5 +1,5 @@
 import { expect, test, type Page } from "@playwright/test";
-import { answerAnyNotification, playToResults } from "./play";
+import { answerAnyNotification, askAtPhotocopier, playToResults } from "./play";
 
 async function openNotebook(page: Page) {
   await page.getByTestId("open-notebook").click();
@@ -20,14 +20,15 @@ test("a clue arrives, a Character is marked, and the mark is on the results scre
   await closeNotebook(page);
 
   await answerAnyNotification(page);
-  await page.getByTestId("hotspot-ask-around").click();
-  await page.getByTestId("source-analyst").click();
-  await page.getByTestId("subject-boss").click();
+  await askAtPhotocopier(page);
   const claim = await page.getByTestId("claim-text").innerText();
+  const source = await page
+    .locator('[data-testid="panel-claim"] .eyebrow')
+    .innerText();
 
   await openNotebook(page);
   const clue = page.getByTestId("clue").filter({ hasText: claim });
-  await expect(clue).toContainText("Priya Venn");
+  await expect(clue).toContainText(source);
   await expect(clue).toContainText("Month 1");
   await page.getByTestId("mark-boss").selectOption("practitioner");
   await closeNotebook(page);
@@ -56,8 +57,7 @@ test("the Notebook opens from every step of a month", async ({ page }) => {
   await page.getByTestId("continue").click();
   await page.getByTestId("hotspot-ask-around").click();
   await opensAndCloses("panel-find-out");
-  await page.getByTestId("source-analyst").click();
-  await page.getByTestId("subject-boss").click();
+  await page.locator('[data-testid^="subject-"]').first().click();
   await opensAndCloses("panel-claim");
   await page.getByTestId("continue").click();
   await page.getByTestId("hotspot-meeting").click();

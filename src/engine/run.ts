@@ -65,7 +65,7 @@ type Step =
       /** Whether this Scene's signs point at the wrong person. */
       misleading: boolean;
     }
-  | { kind: "find-out"; method: string }
+  | { kind: "find-out"; method: string; sources: string[] }
   | { kind: "claim"; index: number }
   | { kind: "notice"; title: string; body: string }
   | { kind: "move"; id: string }
@@ -257,7 +257,7 @@ function apply(state: State, world: World, choice: Choice): void {
       if (action.scene !== undefined) {
         state.step = openScene(state, world, action.scene);
       } else if (action.findOut !== undefined) {
-        state.step = { kind: "find-out", method: action.findOut };
+        state.step = arriveToFindOut(state, content, action.findOut);
       } else if (action.result) {
         const results = [action.result, ...action.moreResults];
         const result = results[(state.month - 1) % results.length];
@@ -282,6 +282,17 @@ function methodOf(content: Content, id: string) {
   const method = content.sources.methods.find((m) => m.id === id);
   if (!method) throw new Error(`Unknown Find Out "${id}".`);
   return method;
+}
+
+/** Who is there to ask: whoever happens to be there, or a choice of them. */
+function arriveToFindOut(state: State, content: Content, id: string): Step {
+  const method = methodOf(content, id);
+  if (!method.someoneThere) {
+    return { kind: "find-out", method: id, sources: method.sources };
+  }
+  const there = pick(state.rng, method.sources);
+  state.rng = there.next;
+  return { kind: "find-out", method: id, sources: [there.item] };
 }
 
 function hearClaim(
@@ -659,7 +670,7 @@ function legalChoices(state: State, world: World): Choice[] {
         optionId: o.id,
       }));
     case "find-out":
-      return methodOf(content, step.method).sources.flatMap((sourceId) =>
+      return step.sources.flatMap((sourceId) =>
         content.characters
           .filter((c) => c.id !== sourceId)
           .map((c) => ({
@@ -860,11 +871,12 @@ function toStepView(state: State, world: World): StepView {
       return toSceneView(state, world, step);
     case "find-out": {
       const method = methodOf(content, step.method);
+      const sources = step.sources.map((id) => personOf(content, id));
       return {
         kind: "find-out",
         title: method.title,
-        prompt: method.prompt,
-        sources: method.sources.map((id) => personOf(content, id)),
+        prompt: method.prompt.replaceAll("{source}", sources[0]?.name ?? ""),
+        sources,
         subjects: content.characters.map((c) => personOf(content, c.id)),
       };
     }

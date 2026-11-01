@@ -35,3 +35,10 @@ export async function playToResults(page: Page) {
     await finishMonth(page);
   }
 }
+
+/** Asks whoever is at the photocopier about the first person on the list. */
+export async function askAtPhotocopier(page: Page) {
+  await page.getByTestId("hotspot-ask-around").click();
+  await page.locator('[data-testid^="subject-"]').first().click();
+  await expect(page.getByTestId("panel-claim")).toBeVisible();
+}

@@ -206,6 +206,66 @@ describe("Find Out", () => {
   });
 });
 
+describe("a place where someone is already there", () => {
+  function thereRaw() {
+    const raw = findOutFixtureRaw();
+    const [method] = raw.sources.methods;
+    if (method) {
+      method.someoneThere = true;
+      method.prompt = "{source} is here.";
+    }
+    return raw;
+  }
+
+  function arrive(seed: number) {
+    const run = startRun({ seed, content: parseContent(thereRaw()) });
+    const view = run.choose({ type: "action", actionId: "copier" });
+    if (view.step.kind !== "find-out") throw new Error(view.step.kind);
+    return { run, view, step: view.step };
+  }
+
+  it("offers one person, and a choice of whom to ask about", () => {
+    const { view, step } = arrive(1);
+    const [there] = step.sources;
+
+    expect(step.sources).toHaveLength(1);
+    expect(step.prompt).toBe(`${there?.name ?? ""} is here.`);
+    expect(view.choices).toHaveLength(2);
+    expect(view.choices.every((c) => c.type === "find-out")).toBe(true);
+  });
+
+  it("refuses to ask anyone else", () => {
+    const { run, step } = arrive(1);
+    const other = ["ana", "ben", "cal"].find(
+      (id) => id !== step.sources[0]?.id,
+    );
+
+    expect(() =>
+      run.choose({
+        type: "find-out",
+        sourceId: other ?? "",
+        subjectId: step.sources[0]?.id ?? "",
+      }),
+    ).toThrow(IllegalChoiceError);
+  });
+
+  it("depends on the seed, and is the same again for that seed", () => {
+    const there = (seed: number) => arrive(seed).step.sources[0]?.id;
+    const seeds = Array.from({ length: 30 }, (_, i) => i + 1);
+
+    expect(new Set(seeds.map(there))).toEqual(new Set(["ana", "ben", "cal"]));
+    for (const seed of seeds) expect(there(seed)).toBe(there(seed));
+  });
+
+  it("rejects a prompt that names {source} when the player chooses", () => {
+    const raw = thereRaw();
+    const [method] = raw.sources.methods;
+    if (method) method.someoneThere = false;
+
+    expect(() => parseContent(raw)).toThrow(/source/);
+  });
+});
+
 describe("sources in content", () => {
   it("rejects a source who is not a Character", () => {
     const raw = findOutFixtureRaw();
@@ -260,6 +320,13 @@ describe("the game's sources", () => {
       );
       expect(open.length, `month ${String(month)}`).toBeGreaterThan(0);
     }
+  });
+
+  it("has someone already at the photocopier, and a choice when buying", () => {
+    const [ask, buy] = gameContent.sources.methods;
+
+    expect(ask?.someoneThere).toBe(true);
+    expect(buy?.someoneThere).toBe(false);
   });
 
   it("offers both asking and buying", () => {

@@ -24,6 +24,7 @@ function factsFixtureRaw() {
     title: "Ask",
     prompt: "Whom?",
     sources: ["ana", "ben", "cal"],
+    someoneThere: false,
     topics: { kind: 0, influence: 0, fact: 1 },
   };
   raw.scenes[0]?.options.push(

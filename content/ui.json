@@ -51,7 +51,7 @@
     "notification": "Answer the Notification on the right. Each answer shows what it costs. Nothing else can happen until you do.",
     "dialog": "Read what was said, then press Continue to go back to the office.",
     "actions": "Click a place on the floor, or its label. You have {actions} left, and then the month closes. The Notebook and Org Chart are free.",
-    "find-out": "Pick who to ask, then who to ask about. Think about who they are and what they might want. The action is already spent.",
+    "find-out": "Choose who to ask about. Think about who is telling you, and what they might want. The action is already spent.",
     "claim": "This is what you were told. Nobody says whether it is true. Press Continue.",
     "scene": "Read the room: who interrupts, who gets looked at, who gets ignored. No single sign settles what anyone is, so watch over the months. Then choose how to behave.",
     "notice": "Read the result, then press Continue.",
