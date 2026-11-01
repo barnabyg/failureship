@@ -8,6 +8,7 @@ import {
   type Run,
 } from "../engine";
 import { Chart } from "./Chart";
+import { playToMonth } from "./later-month";
 import { Modal } from "./Modal";
 import { Notebook, monthLabel } from "./Notebook";
 import { StepPanel } from "./panels";
@@ -29,10 +30,17 @@ function begin(seed: number): { run: Run; view: PlayerView } {
 
 /** The first run: the address's seed, or a new one and a message saying why. */
 function beginFromAddress() {
-  const written = new URLSearchParams(window.location.search).get("seed");
+  const address = new URLSearchParams(window.location.search);
+  const written = address.get("seed");
   const seed = written === null ? null : parseSeed(written);
+  const game = begin(seed ?? randomSeed());
+  // Only Playwright's build has this mode. Every other build drops this branch,
+  // and later-month.ts with it, which tests/engine/later-month.test.ts checks.
+  if (import.meta.env.MODE === "e2e") {
+    game.view = playToMonth(game.run, address.get("month"));
+  }
   return {
-    game: begin(seed ?? randomSeed()),
+    game,
     refused: written !== null && seed === null ? refusedMessage(written) : null,
   };
 }

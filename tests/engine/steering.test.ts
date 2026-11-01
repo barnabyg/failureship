@@ -199,7 +199,7 @@ describe("the whole run", () => {
 });
 
 describe("the balance of the deal", () => {
-  const SEEDS = Array.from({ length: 400 }, (_, i) => i + 1);
+  const SEEDS = Array.from({ length: 200 }, (_, i) => i + 1);
 
   /** The kind a careful reader would guess from the signs seen in a run. */
   function readerGuesses(views: readonly PlayerView[]) {

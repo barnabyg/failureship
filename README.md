@@ -157,7 +157,9 @@ Each file's fields, and the conditions they can use, are in the
 
 `npm run verify` runs every check: formatting, lint, types, engine tests, browser
 tests, dependency audit and build. The browser tests need Chromium once:
-`npx playwright install chromium`.
+`npx playwright install chromium`. They run against their own build,
+`vite build --mode e2e` in `dist-e2e/`, the only one where `?month=N` starts a run
+at a later month. `npm run build` and `npm run play` ignore it.
 
 - `content/` holds the game's data and text.
 - `src/content/` loads it at start-up, through the checks in `src/engine/`, and
