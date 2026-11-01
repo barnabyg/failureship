@@ -160,6 +160,8 @@ export interface PlayerView {
     owner: string;
     real: string;
     reported: string;
+    realColour: string;
+    reportedColour: string;
     news: { month: number; text: string }[];
   };
   /** Demands the player stalled and has not yet heard the last of. */

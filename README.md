@@ -86,7 +86,7 @@ dangerous. Start at `http://localhost:5173/?seed=8`.
 | Go to the loading bay, buy from the Office Co-ordinator, and ask about someone                    | Often a Hidden Fact. If it is one of the useful ones, a later Scene offers a new option about it, whether it is true.                                            |
 | Play to the end of any run, and read the results screen                                           | Your marks against the truth, each claim's truth, and which clues were false or did not matter.                                                                  |
 | Seed 1 (a Believer boss) and seed 8 (an Incompetent one). In month 1, agree warmly with your boss | Your boss's reaction reads quite differently, and neither says what kind your boss is. The results screen does.                                                  |
-| Seed 1. In month 1, file the report honestly, then press Your project                             | Real and reported are both Amber. Restart and choose "make the project green": real stays Amber and reported is Green.                                           |
+| Seed 1. In month 1, file the report honestly, then read the Your project card                     | Real and reported are both Amber. Restart and choose "make the project green": real stays Amber and reported is Green.                                           |
 | Seed 4. In months 1 and 2, do not file the report                                                 | The Project goes Red in month 2, and the Project Status Review opens by itself. Making it amber changes the reported status.                                     |
 | Seed 1, month 2                                                                                   | The report waits on the Project Co-ordinator's late figures. Chase them, wait, or file without them.                                                             |
 | Seed 4. In month 2, stall the Demand from your boss's boss                                        | It shows under Open Demands. In month 3 you are chased. On seed 8 it is forgotten instead.                                                                       |
@@ -168,9 +168,9 @@ each kind. A result's `when` can read `{ "bossIs": "believer" }`, but an option'
 Scene with a `verdict` adds what the boss finally says, by how the opinion stands.
 
 `project.json` holds the player's Project: its owner, its `statuses` from best to worst,
-where it `start`s, and the `events` that happen to it as a month opens. Press
-**Your project** at any step, at no cost, to see how it really is and how it has been
-reported. A Notification option, Scene result or action can carry
+where it `start`s, and the `events` that happen to it as a month opens. The
+**Your project** card stays on the floor, showing how it really is and how it has been
+reported, each with its status's `colour`. Click it at any step, at no cost, for the details. A Notification option, Scene result or action can carry
 `"project": { "real": "better", "reported": "worse" }`. Each side is a status's id,
 `better` or `worse`, and `reported` can also be `real`, which is what telling the truth
 does. Nothing else moves them. A Notification's body can say `{real}` and `{reported}`.
@@ -190,7 +190,7 @@ what someone is. A Notification with a `when` waits until that holds. An option 
 `demands.json` holds Demands, which arrive as Notifications with their `months` and
 must offer `deliver`, `push-back`, `hand-off`, `fake` and `stall`. An answer that needs a
 colleague names them by role. `"stalls": true` on `stall` leaves the Demand open, and the
-player can see it under **Your project**. Each later month, a seeded draw uses `odds` for
+player can see it on the **Your project** card. Each later month, a seeded draw uses `odds` for
 the boss's kind: it is `forgotten`, or it is `chased`, which costs the `chasedPenalty`
 and arrives as a Notification of its own, or nothing happens yet. `sets` names the
 flags for that month. `chased` must have an

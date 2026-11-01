@@ -37,6 +37,67 @@ function beginFromAddress() {
   };
 }
 
+/** The player's Project, always in view, since the gap in it is the game. */
+function ProjectCard({
+  view,
+  onOpen,
+}: {
+  view: PlayerView;
+  onOpen: () => void;
+}) {
+  const { project, openDemands } = view;
+  return (
+    <button
+      type="button"
+      className="project-card"
+      data-testid="open-project"
+      onClick={onOpen}
+    >
+      <span className="project-card-heading">{panelText.projectHeading}</span>
+      <strong>{project.name}</strong>
+      <span className="project-card-statuses">
+        <ProjectStatus
+          label={panelText.projectRealLabel}
+          status={project.real}
+          colour={project.realColour}
+          testId="card-real"
+        />
+        <ProjectStatus
+          label={panelText.projectReportedLabel}
+          status={project.reported}
+          colour={project.reportedColour}
+          testId="card-reported"
+        />
+      </span>
+      {openDemands.length > 0 && (
+        <span data-testid="open-demands">
+          {panelText.openDemandsHeading}: {openDemands.length}
+        </span>
+      )}
+    </button>
+  );
+}
+
+function ProjectStatus(props: {
+  label: string;
+  status: string;
+  colour: string;
+  testId: string;
+}) {
+  return (
+    <span>
+      <span className="project-card-label">{props.label}</span>
+      <span className="project-card-status">
+        <span
+          className="project-card-dot"
+          style={{ backgroundColor: props.colour }}
+        />
+        <span data-testid={props.testId}>{props.status}</span>
+      </span>
+    </span>
+  );
+}
+
 function monthText(view: PlayerView): string {
   return panelText.monthLabel
     .replace("{n}", String(view.month))
@@ -107,12 +168,6 @@ export function App() {
               {panelText.actionsLeft.replace("{actions}", view.actions.label)}
             </dd>
           </div>
-          {view.openDemands.length > 0 && (
-            <div data-testid="open-demands">
-              <dt>{panelText.openDemandsHeading}</dt>
-              <dd>{view.openDemands.length}</dd>
-            </div>
-          )}
           {view.buzzwords.length > 0 && (
             <div className="status-buzzwords" data-testid="buzzwords">
               <dt>{panelText.buzzwordsHeading}</dt>
@@ -141,15 +196,6 @@ export function App() {
           </button>
           <button
             type="button"
-            data-testid="open-project"
-            onClick={() => {
-              setProjectOpen(true);
-            }}
-          >
-            {panelText.projectHeading}
-          </button>
-          <button
-            type="button"
             data-testid="open-notebook"
             onClick={() => {
               setNotebookOpen(true);
@@ -159,11 +205,19 @@ export function App() {
           </button>
         </RunControls>
       </header>
-      {message !== null && (
-        <p className="seed-message" role="alert" data-testid="seed-message">
-          {message}
-        </p>
-      )}
+      <div className="top-left">
+        {message !== null && (
+          <p className="seed-message" role="alert" data-testid="seed-message">
+            {message}
+          </p>
+        )}
+        <ProjectCard
+          view={view}
+          onOpen={() => {
+            setProjectOpen(true);
+          }}
+        />
+      </div>
       <aside className="next" aria-live="polite">
         <h2>{panelText.whatNext}</h2>
         <p data-testid="hint">{view.hint}</p>
