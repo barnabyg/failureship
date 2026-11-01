@@ -1,7 +1,9 @@
 import {
   AmbientLight,
   BoxGeometry,
+  type BufferGeometry,
   Color,
+  ConeGeometry,
   DirectionalLight,
   Mesh,
   MeshLambertMaterial,
@@ -21,6 +23,8 @@ export interface RoomModel {
   depth: number;
   height: number;
   colour: string;
+  /** Marks the lift, which rises out of the floor to show the way up. */
+  lift: boolean;
 }
 
 export interface ScreenPoint {
@@ -30,12 +34,11 @@ export interface ScreenPoint {
 
 const FLOOR_WIDTH = 16;
 const FLOOR_DEPTH = 8;
-const STOREY_HEIGHT = 4.2;
-const STOREYS = 10;
+const WALL_HEIGHT = 4.2;
 
 /**
- * A blocked-out cutaway of the tower seen from a fixed camera. It knows about
- * rooms and clicks, and nothing about the rules of the game.
+ * A blocked-out cutaway of the current floor seen from a fixed camera. It knows
+ * about rooms and clicks, and nothing about the rules of the game.
  */
 export class Tower {
   private readonly scene = new Scene();
@@ -62,8 +65,8 @@ export class Tower {
     const sun = new DirectionalLight("#ffffff", 1.8);
     sun.position.set(-6, 14, 10);
     this.scene.add(sun);
-    this.camera.position.set(0, 9.5, 20);
-    this.camera.lookAt(0, 2.6, 0);
+    this.camera.position.set(0, 8.5, 18);
+    this.camera.lookAt(0, 2.8, 0);
 
     this.renderer = createRenderer();
     if (this.renderer) {
@@ -124,34 +127,49 @@ export class Tower {
     }
     this.scene.traverse((object) => {
       if (object instanceof Mesh) {
-        (object.geometry as BoxGeometry).dispose();
+        (object.geometry as BufferGeometry).dispose();
         (object.material as MeshLambertMaterial).dispose();
       }
     });
   }
 
   private buildShell(): void {
-    const slab = new BoxGeometry(FLOOR_WIDTH, 0.3, FLOOR_DEPTH);
-    const wallColour = "#51585e";
-    for (let storey = 0; storey < STOREYS; storey++) {
-      const y = storey * STOREY_HEIGHT;
-      const ground = new Mesh(
-        slab,
-        new MeshLambertMaterial({
-          color: storey === 0 ? "#5b5f58" : "#3a4045",
-        }),
+    const ground = new Mesh(
+      new BoxGeometry(FLOOR_WIDTH, 0.3, FLOOR_DEPTH),
+      new MeshLambertMaterial({ color: "#5b5f58" }),
+    );
+    ground.position.set(0, -0.15, 0);
+    this.scene.add(ground);
+    const back = new Mesh(
+      new BoxGeometry(FLOOR_WIDTH, WALL_HEIGHT, 0.2),
+      new MeshLambertMaterial({ color: "#51585e" }),
+    );
+    back.position.set(0, WALL_HEIGHT / 2, -FLOOR_DEPTH / 2);
+    this.scene.add(back);
+  }
+
+  /** Doors at floor level and an arrow above them, pointing the way up. */
+  private addLiftDetails(room: RoomModel): void {
+    const front = room.z + room.depth / 2;
+    const doorHeight = 2.4;
+    for (const side of [-1, 1]) {
+      const door = new Mesh(
+        new BoxGeometry(room.width * 0.36, doorHeight, 0.06),
+        new MeshLambertMaterial({ color: "#a9afb4" }),
       );
-      ground.position.set(0, y - 0.15, 0);
-      this.scene.add(ground);
-      const back = new Mesh(
-        new BoxGeometry(FLOOR_WIDTH, STOREY_HEIGHT, 0.2),
-        new MeshLambertMaterial({
-          color: storey === 0 ? wallColour : "#2c3236",
-        }),
+      door.position.set(
+        room.x + side * room.width * 0.19,
+        doorHeight / 2,
+        front + 0.03,
       );
-      back.position.set(0, y + STOREY_HEIGHT / 2, -FLOOR_DEPTH / 2);
-      this.scene.add(back);
+      this.scene.add(door);
     }
+    const arrow = new Mesh(
+      new ConeGeometry(0.34, 0.6, 3),
+      new MeshLambertMaterial({ color: "#e0b040", emissive: "#6a4e10" }),
+    );
+    arrow.position.set(room.x, doorHeight + 0.65, front + 0.2);
+    this.scene.add(arrow);
   }
 
   private addRoom(room: RoomModel): void {
@@ -164,6 +182,7 @@ export class Tower {
     this.scene.add(mesh);
     this.rooms.set(room.id, mesh);
     this.tops.set(room.id, new Vector3(room.x, room.height, room.z));
+    if (room.lift) this.addLiftDetails(room);
   }
 
   private roomAt(event: MouseEvent): string | null {

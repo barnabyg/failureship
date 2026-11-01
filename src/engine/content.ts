@@ -117,6 +117,9 @@ const room = z.strictObject({
   depth: z.number().positive(),
   height: z.number().positive(),
   colour: z.string().regex(/^#[0-9a-fA-F]{6}$/),
+  lift: z.boolean().default(false),
+  /** A label for a place the player can see but not act on. */
+  sign: z.strictObject({ title: text, detail: text }).optional(),
 });
 
 const contentSchema = z.strictObject({

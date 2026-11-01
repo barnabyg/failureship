@@ -56,20 +56,20 @@ All the text and numbers are in `content/`, and editing them needs no code
 change. The running game reloads when you save a file. If an edit breaks the
 format, the page shows what is wrong instead of the game.
 
-| File                  | What it holds                                                        |
-| --------------------- | -------------------------------------------------------------------- |
-| `ui.json`             | Headings, buttons and the "What you can do now" hints                |
-| `notifications.json`  | The month's Notifications, their choices and their results           |
-| `dialogs.json`        | Short text dialogs, such as the pub                                  |
-| `buzzwords.json`      | Buzzwords and their meanings                                         |
-| `actions.json`        | What can be done on the floor, and the results                       |
-| `scenes.json`         | The meeting: its signs, its choices and their results                |
-| `moves.json`          | Character Moves, and when each can land                              |
-| `official-story.json` | The official story, assembled from entries according to what you did |
-| `characters.json`     | Names and public job titles                                          |
-| `hidden-truth.json`   | Hidden Facts, and who can be dealt a role in the Power Map           |
-| `balance.json`        | Actions a month and the cost of each choice                          |
-| `floor-1.json`        | The rooms on the floor: positions, sizes and colours                 |
+| File                  | What it holds                                                         |
+| --------------------- | --------------------------------------------------------------------- |
+| `ui.json`             | Headings, buttons and the "What you can do now" hints                 |
+| `notifications.json`  | The month's Notifications, their choices and their results            |
+| `dialogs.json`        | Short text dialogs, such as the pub                                   |
+| `buzzwords.json`      | Buzzwords and their meanings                                          |
+| `actions.json`        | What can be done on the floor, and the results                        |
+| `scenes.json`         | The meeting: its signs, its choices and their results                 |
+| `moves.json`          | Character Moves, and when each can land                               |
+| `official-story.json` | The official story, assembled from entries according to what you did  |
+| `characters.json`     | Names and public job titles                                           |
+| `hidden-truth.json`   | Hidden Facts, and who can be dealt a role in the Power Map            |
+| `balance.json`        | Actions a month and the cost of each choice                           |
+| `floor-1.json`        | The rooms on the floor: positions, sizes, colours and the lift's sign |
 
 In a Scene, `{holder}`, `{ignored}` and `{bystander}` are replaced by the names of
 the Characters dealt those roles. A `when` or `requires` condition can be
