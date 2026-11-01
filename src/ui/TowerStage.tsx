@@ -57,6 +57,21 @@ export function TowerStage({ rooms, hotspots, legal, onChoose }: Props) {
 
   return (
     <div className="stage" ref={stage}>
+      {rooms.map((room) => {
+        const point = points.get(room.id);
+        if (!point || !room.sign) return null;
+        return (
+          <div
+            key={room.id}
+            className="hotspot room-sign"
+            data-testid={`room-sign-${room.id}`}
+            style={{ left: point.x, top: point.y }}
+          >
+            <span className="hotspot-label">{room.sign.title}</span>
+            <span className="hotspot-detail">{room.sign.detail}</span>
+          </div>
+        );
+      })}
       {hotspots.map((hotspot) => {
         const point = points.get(hotspot.place);
         if (!point) return null;

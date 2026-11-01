@@ -183,7 +183,7 @@ Accessibility (_carried over_): readable text, reduced motion and no reliance on
 
 ## 15. Interface
 
-- **Main view:** a Three.js cutaway tower with a fixed camera, used to navigate by clicking. Upper floors are visible but locked.
+- **Main view:** a Three.js cutaway tower with a fixed camera, used to navigate by clicking. It shows only the current floor, with a lift indicating the route to a higher floor.
 - **Panels:** React, over the top of the tower, for Scenes, the Notebook and everything else. Most of the play in a game about reading people happens here.
 - **Signs in Scenes:** who interrupts whom, who everyone looks at before answering, and who gets ignored.
 - **Promotion:** the camera rides the lift to a richer floor, and your past decisions stay visible on the floors below.
@@ -202,7 +202,7 @@ Candidate endings, not yet decided (_carried over_):
 
 ## 17. Scope of the first version
 
-- Floors 1–3 are playable, and the other seven are visible but locked.
+- Floors 1–3 are playable. Only the current floor is shown, with a lift indicating the route to a higher floor (changed at the Phase 1 checkpoint).
 - About 18 months at three actions each, aiming for about 25 minutes.
 - About eight Characters: your bosses, one or two Rivals, Believers and Incompetents.
 - A comic stand-in for winning at the end of Floor 3. The original proposal's 'Acting Regional Visionary' end screen is one candidate.

@@ -79,6 +79,14 @@ body {
   cursor: default;
 }
 
+.room-sign {
+  border: 2px dashed #e0b040;
+  background: #2c3236;
+  color: #f3f1ea;
+  cursor: default;
+  pointer-events: none;
+}
+
 .hotspot-label {
   font-weight: 600;
 }
