@@ -32,6 +32,13 @@ export interface DialogLine {
   text: string;
 }
 
+/** One person in a hierarchy, and the name of the person above them. */
+export interface ChartEntry {
+  name: string;
+  title: string;
+  reportsTo: string | null;
+}
+
 export type StepView =
   | {
       kind: "notification";
@@ -78,6 +85,7 @@ export type StepView =
         kind: string;
         fact: string | null;
       }[];
+      powerMap: ChartEntry[];
     };
 
 /** Only what the player is entitled to see. It never holds undiscovered truth. */
@@ -87,6 +95,7 @@ export interface PlayerView {
   totalMonths: number;
   actions: { total: number; spent: number; remaining: number; label: string };
   buzzwords: Buzzword[];
+  orgChart: ChartEntry[];
   hotspots: Hotspot[];
   step: StepView;
   hint: string;

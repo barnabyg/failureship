@@ -126,6 +126,12 @@ test("a whole run ends on a results screen", async ({ page }) => {
 
   await expect(page.getByTestId("panel-results")).toBeVisible();
   await expect(page.getByTestId("result-character")).toHaveCount(5);
+  await expect(page.getByTestId("results-org-chart")).toContainText(
+    "Hugh Lamb",
+  );
+  await expect(page.getByTestId("results-power-map")).toContainText(
+    "Hugh Lamb",
+  );
   await expect(page.getByTestId("panel-results")).toContainText(
     /Believer|Incompetent|Practitioner/,
   );

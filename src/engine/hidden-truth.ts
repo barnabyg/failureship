@@ -6,3 +6,4 @@
  */
 export { hiddenTruthOf as readHiddenTruth } from "./run";
 export type { HiddenTruth } from "./run";
+export type { PowerMap } from "./deal";

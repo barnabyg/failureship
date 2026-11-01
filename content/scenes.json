@@ -6,7 +6,7 @@
     "narration": [
       "Item one on the agenda is the agenda. The projector shows a slide titled Where We Are. Nobody can say."
     ],
-    "cast": ["boss", "analyst", "admin"],
+    "cast": ["boss", "analyst", "admin", "projects"],
     "signs": [
       {
         "label": "Who interrupts whom",
@@ -63,6 +63,21 @@
           },
           {
             "body": "Marjorie smiles and asks whether you would mind taking the minutes. You are now the person who takes the minutes.",
+            "sets": ["backed-wrong-person"]
+          }
+        ]
+      },
+      {
+        "id": "back-projects",
+        "label": "Agree warmly with Callum",
+        "results": [
+          {
+            "when": { "holderIs": "projects" },
+            "body": "Callum makes a small note and does not look up. By Thursday a project you had never heard of has your name on the good half of it.",
+            "sets": ["backed-holder"]
+          },
+          {
+            "body": "Callum looks surprised, then grateful, then worried for you. The agenda moves on without either of you.",
             "sets": ["backed-wrong-person"]
           }
         ]

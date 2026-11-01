@@ -164,10 +164,18 @@ const contentSchema = z.strictObject({
         }),
       )
       .min(1),
-    /** Who may be dealt a role in the Power Map. Needs at least three people. */
-    cast: z.array(id).min(3),
   }),
-  characters: z.array(z.strictObject({ id, name: text, title: text })),
+  characters: z
+    .array(
+      z.strictObject({
+        id,
+        name: text,
+        title: text,
+        /** Who this Character answers to on the Org Chart. */
+        reportsTo: id.optional(),
+      }),
+    )
+    .min(3),
   scenes: z.array(scene),
   notifications: z.array(notification),
   dialogs: z.array(dialog),
@@ -344,13 +352,31 @@ function findBrokenReferences(content: Content): string[] {
       problems.push(`Action "${a.id}" needs a Scene or a result, not both.`);
     }
   }
-  for (const c of content.hiddenTruth.cast) {
-    checkCharacter("The hidden truth's cast", c);
+  for (const c of content.characters) {
+    const owner = `Character "${c.id}"`;
+    if (c.reportsTo !== undefined) checkCharacter(owner, c.reportsTo);
+    const seen = new Set([c.id]);
+    let above = content.characters.find((m) => m.id === c.reportsTo);
+    while (above) {
+      if (seen.has(above.id)) {
+        problems.push(`${owner} is in a loop on the Org Chart.`);
+        break;
+      }
+      seen.add(above.id);
+      const manager = above.reportsTo;
+      above = content.characters.find((m) => m.id === manager);
+    }
   }
   for (const s of content.scenes) {
     const owner = `Scene "${s.id}"`;
     checkMonths(owner, s.months);
     for (const c of s.cast) checkCharacter(owner, c);
+    if (
+      s.cast.length < 3 &&
+      /\{(holder|ignored|bystander)\}/.test(JSON.stringify(s))
+    ) {
+      problems.push(`${owner} names roles, which need three people present.`);
+    }
     for (const line of s.narration) checkRoles(owner, line);
     for (const sign of s.signs) checkRoles(owner, sign.text);
     for (const o of s.options) {

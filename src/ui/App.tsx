@@ -7,6 +7,7 @@ import {
   type PlayerView,
   type Run,
 } from "../engine";
+import { Chart } from "./Chart";
 import { Modal } from "./Modal";
 import { StepPanel } from "./panels";
 import { RunControls } from "./RunControls";
@@ -49,6 +50,7 @@ export function App() {
   const [{ run, view }, setGame] = useState(first.game);
   const [message, setMessage] = useState(first.refused);
   const [leavingFor, setLeavingFor] = useState<number | null>(null);
+  const [orgChartOpen, setOrgChartOpen] = useState(false);
 
   const choose = useCallback(
     (choice: Choice) => {
@@ -114,7 +116,17 @@ export function App() {
           onRefused={(typed) => {
             setMessage(refusedMessage(typed));
           }}
-        />
+        >
+          <button
+            type="button"
+            data-testid="open-org-chart"
+            onClick={() => {
+              setOrgChartOpen(true);
+            }}
+          >
+            {panelText.orgChartHeading}
+          </button>
+        </RunControls>
       </header>
       {message !== null && (
         <p className="seed-message" role="alert" data-testid="seed-message">
@@ -126,6 +138,26 @@ export function App() {
         <p data-testid="hint">{view.hint}</p>
       </aside>
       <StepPanel view={view} onChoose={choose} />
+      {orgChartOpen && (
+        <Modal
+          testId="org-chart"
+          title={panelText.orgChartHeading}
+          onClose={() => {
+            setOrgChartOpen(false);
+          }}
+        >
+          <Chart entries={view.orgChart} />
+          <button
+            type="button"
+            data-testid="close-org-chart"
+            onClick={() => {
+              setOrgChartOpen(false);
+            }}
+          >
+            {panelText.closeLabel}
+          </button>
+        </Modal>
+      )}
       {leavingFor !== null && (
         <Modal
           testId="confirm-leave"

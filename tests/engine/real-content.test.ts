@@ -24,9 +24,13 @@ function everyPath(seed: number): PlayerView[][] {
   return paths;
 }
 
-function isHolderSeed(seed: number, holder: string) {
+/** Who holds influence among the people in the meeting, on this deal. */
+function holderInMeeting(seed: number) {
   const run = startRun({ seed, content: gameContent });
-  return readHiddenTruth(run).powerMap.holder === holder;
+  const meeting = gameContent.scenes.find((s) => s.id === "meeting");
+  return readHiddenTruth(run).powerMap.order.find((id) =>
+    meeting?.cast.includes(id),
+  );
 }
 
 describe("the real month", () => {
@@ -123,24 +127,27 @@ describe("the real month", () => {
     expect(stories.size).toBeGreaterThan(20);
   });
 
-  it("gives every seed the same set of Characters, with a real holder", () => {
-    const holders = new Set(
-      SEEDS.map(
-        (seed) =>
-          readHiddenTruth(startRun({ seed, content: gameContent })).powerMap
-            .holder,
-      ),
-    );
+  it("lets anyone in the meeting hold influence, depending on the deal", () => {
+    const seeds = Array.from({ length: 60 }, (_, i) => i + 1);
+    const holders = new Set(seeds.map(holderInMeeting));
 
-    expect(holders).toEqual(new Set(["boss", "analyst", "admin"]));
+    expect(holders).toEqual(new Set(["boss", "analyst", "admin", "projects"]));
+  });
+
+  it("gives every Character a place on one Org Chart", () => {
+    const { orgChart } = startRun({ seed: 1, content: gameContent }).view();
+
+    expect(orgChart).toHaveLength(5);
+    expect(orgChart.filter((e) => e.reportsTo === null)).toHaveLength(1);
   });
 
   // The README names these seeds in its test scenario.
   it.each([
-    [1, "boss"],
-    [8, "analyst"],
-    [5, "admin"],
+    [8, "boss"],
+    [1, "analyst"],
+    [6, "admin"],
+    [2, "projects"],
   ])("keeps the seed %i documented for %s", (seed, holder) => {
-    expect(isHolderSeed(seed, holder)).toBe(true);
+    expect(holderInMeeting(seed)).toBe(holder);
   });
 });

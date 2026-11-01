@@ -5,6 +5,7 @@ export { parseSeed } from "./seed";
 export type { Run, SceneScript } from "./run";
 export type {
   Buzzword,
+  ChartEntry,
   Choice,
   DialogLine,
   Hotspot,

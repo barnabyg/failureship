@@ -324,6 +324,52 @@ body {
   font-weight: 600;
 }
 
+.results-charts {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+.scene-columns {
+  display: grid;
+  grid-template-columns: 3fr 2fr;
+  gap: 20px;
+}
+
+@media (max-width: 800px) {
+  .results-charts,
+  .scene-columns {
+    grid-template-columns: 1fr;
+  }
+}
+
+.chart {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font-size: 0.9375rem;
+}
+
+.chart .chart {
+  margin-left: 8px;
+  padding-left: 12px;
+  border-left: 2px solid var(--rule);
+}
+
+.chart li {
+  padding-top: 4px;
+}
+
+.chart-title {
+  display: block;
+  color: var(--muted);
+  font-size: 0.8125rem;
+}
+
+.modal .chart {
+  margin-bottom: 12px;
+}
+
 .run-controls {
   display: flex;
   flex-direction: column;

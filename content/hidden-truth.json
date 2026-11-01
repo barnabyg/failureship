@@ -44,6 +44,5 @@
       "id": "competitor-offer",
       "text": "{name} has a signed offer from the company's largest competitor, and is staying on to see how this ends."
     }
-  ],
-  "cast": ["boss", "analyst", "admin"]
+  ]
 }

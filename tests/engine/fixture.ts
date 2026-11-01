@@ -103,13 +103,12 @@ export function fixtureRaw() {
         { id: "fact-b", text: "SECRET-BRAVO about {name}" },
         { id: "fact-c", text: "SECRET-CHARLIE about {name}" },
       ] as { id: string; text: string; characters?: string[] }[],
-      cast: ["ana", "ben", "cal"],
     },
     characters: [
       { id: "ana", name: "Ana Abel", title: "Boss" },
-      { id: "ben", name: "Ben Bird", title: "Analyst" },
-      { id: "cal", name: "Cal Cope", title: "Clerk" },
-    ],
+      { id: "ben", name: "Ben Bird", title: "Analyst", reportsTo: "ana" },
+      { id: "cal", name: "Cal Cope", title: "Clerk", reportsTo: "ana" },
+    ] as { id: string; name: string; title: string; reportsTo?: string }[],
     scenes: [] as RawScene[],
     notifications,
     dialogs: [

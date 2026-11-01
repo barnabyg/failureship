@@ -1,20 +1,20 @@
 import type { Condition, Content, SceneData } from "./content";
-import { dealCharacters, type DealtCharacter } from "./deal";
-import { draw, pick } from "./rng";
+import {
+  dealCharacters,
+  dealPowerMap,
+  type DealtCharacter,
+  type PowerMap,
+} from "./deal";
+import { pick } from "./rng";
 import type {
   Buzzword,
+  ChartEntry,
   Choice,
   Hotspot,
   NotificationOption,
   PlayerView,
   StepView,
 } from "./view";
-
-export interface PowerMap {
-  holder: string;
-  ignored: string;
-  bystander: string;
-}
 
 export interface HiddenTruth {
   characters: DealtCharacter[];
@@ -97,11 +97,11 @@ export function startRun(options: {
     }
   }
   const world: World = { content, sceneScripts };
-  const power = dealPowerMap(draw(seed).next, content.hiddenTruth.cast);
-  const dealt = dealCharacters(power.next, content);
+  const dealt = dealCharacters(seed, content);
+  const power = dealPowerMap(dealt.next, content);
   const state: State = {
     seed,
-    rng: dealt.next,
+    rng: power.next,
     month: 1,
     ...freshMonth(content, 1),
     buzzwords: [],
@@ -125,27 +125,6 @@ export function startRun(options: {
   };
   truths.set(run, () => structuredClone(state.truth));
   return run;
-}
-
-function dealPowerMap(
-  rng: number,
-  cast: readonly string[],
-): { powerMap: PowerMap; next: number } {
-  const holder = pick(rng, cast);
-  const others = cast.filter((c) => c !== holder.item);
-  const ignored = pick(holder.next, others);
-  const bystander = pick(
-    ignored.next,
-    others.filter((c) => c !== ignored.item),
-  );
-  return {
-    powerMap: {
-      holder: holder.item,
-      ignored: ignored.item,
-      bystander: bystander.item,
-    },
-    next: bystander.next,
-  };
 }
 
 function freshMonth(content: Content, month: number): MonthRecord {
@@ -241,27 +220,43 @@ function behaveInScene(
   const option = offeredOptions(state, scene).find(
     (o) => o.id === choice.optionId,
   );
-  const result = option?.results.find((r) => matches(state, r.when));
+  const result = option?.results.find((r) =>
+    matches(state, r.when, scene.cast),
+  );
   if (!result) throw new IllegalChoiceError(choice.optionId);
   state.flags.push(...result.sets);
   state.step = {
     kind: "notice",
     title: scene.title,
-    body: fillRoles(state, world.content, result.body),
+    body: fillRoles(state, world.content, result.body, scene.cast),
   };
 }
 
-function matches(state: State, condition: Condition | undefined): boolean {
+/** Roles are relative to who is in the room. Left out, that is everyone. */
+function rolesIn(powerMap: PowerMap, room?: readonly string[]) {
+  const present = powerMap.order.filter((id) => room?.includes(id) ?? true);
+  return {
+    holder: present[0],
+    bystander: present[1],
+    ignored: present.at(-1),
+  };
+}
+
+function matches(
+  state: State,
+  condition: Condition | undefined,
+  room?: readonly string[],
+): boolean {
   if (condition === undefined) return true;
   if ("holderIs" in condition) {
-    return condition.holderIs === state.truth.powerMap.holder;
+    return condition.holderIs === rolesIn(state.truth.powerMap, room).holder;
   }
   if ("hasBuzzword" in condition) {
     return state.buzzwords.includes(condition.hasBuzzword);
   }
   if ("flag" in condition) return state.flags.includes(condition.flag);
-  if ("not" in condition) return !matches(state, condition.not);
-  return condition.all.every((inner) => matches(state, inner));
+  if ("not" in condition) return !matches(state, condition.not, room);
+  return condition.all.every((inner) => matches(state, inner, room));
 }
 
 function offeredOptions(state: State, scene: SceneData) {
@@ -277,10 +272,15 @@ function sceneData(state: State, world: World, id: string): SceneData {
 }
 
 /** Writes the dealt Characters' names into text that names roles. */
-function fillRoles(state: State, content: Content, written: string): string {
-  const name = (id: string) =>
-    content.characters.find((c) => c.id === id)?.name ?? id;
-  const { holder, ignored, bystander } = state.truth.powerMap;
+function fillRoles(
+  state: State,
+  content: Content,
+  written: string,
+  room?: readonly string[],
+): string {
+  const name = (id: string | undefined) =>
+    content.characters.find((c) => c.id === id)?.name ?? "";
+  const { holder, ignored, bystander } = rolesIn(state.truth.powerMap, room);
   return written
     .replaceAll("{holder}", name(holder))
     .replaceAll("{ignored}", name(ignored))
@@ -396,8 +396,9 @@ function toSceneView(
   id: string,
 ): Extract<StepView, { kind: "scene" }> {
   const { content } = world;
-  const fill = (written: string) => fillRoles(state, content, written);
   const scene = sceneData(state, world, id);
+  const fill = (written: string) =>
+    fillRoles(state, content, written, scene.cast);
   return {
     kind: "scene",
     id: scene.id,
@@ -441,6 +442,9 @@ function toResultsView(
   state: State,
   content: Content,
 ): Extract<StepView, { kind: "results" }> {
+  const nameOf = (id: string) =>
+    content.characters.find((c) => c.id === id)?.name ?? id;
+  const { order, influence } = state.truth.powerMap;
   return {
     kind: "results",
     ...content.ui.results,
@@ -453,7 +457,25 @@ function toResultsView(
         fact: dealt.fact?.text ?? null,
       };
     }),
+    powerMap: order.map((id) => {
+      const above = influence.find((i) => i.over === id);
+      return {
+        name: nameOf(id),
+        title: content.characters.find((c) => c.id === id)?.title ?? "",
+        reportsTo: above ? nameOf(above.who) : null,
+      };
+    }),
   };
+}
+
+/** The formal hierarchy, the same in every deal. */
+function toOrgChart(content: Content): ChartEntry[] {
+  return content.characters.map((c) => ({
+    name: c.name,
+    title: c.title,
+    reportsTo:
+      content.characters.find((m) => m.id === c.reportsTo)?.name ?? null,
+  }));
 }
 
 function toStepView(state: State, world: World): StepView {
@@ -519,6 +541,7 @@ function toView(state: State, world: World): PlayerView {
       label: actionsLabel,
     },
     buzzwords: buzzwordsOf(content, state.buzzwords),
+    orgChart: toOrgChart(content),
     hotspots: actionsThisMonth(state, content).map((a) =>
       toHotspot(state, content, a),
     ),

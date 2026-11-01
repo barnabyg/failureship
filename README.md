@@ -32,9 +32,13 @@ pick one. The month has the same steps each time:
 3. **A Character Move lands on you.** You do not get a choice.
 4. **The month closes** with the official story beside what actually happened.
 
+Press **Org Chart** at any step to see the formal hierarchy, at no cost. The real
+one is the hidden Power Map, dealt from the seed.
+
 Press **Continue** on the official story to open the next month. After six months
 the results screen shows who was really who: each Character's kind and Hidden
-Fact, including facts you could never have known.
+Fact, including facts you could never have known, and the Org Chart beside the
+true Power Map.
 
 At any step, **New run** deals a new seed, and typing a seed then pressing
 **Restart from seed** plays that deal from month 1. Leaving a run in progress asks
@@ -42,15 +46,15 @@ first. Swap a seed with a friend and you both get the same deal.
 
 ### See each choice's different result
 
-Start at `http://localhost:5173/?seed=1`.
+Start at `http://localhost:5173/?seed=8`.
 
 | Try this                                                       | Expect                                                                                                                                     |
 | -------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------ |
 | Go to the pub                                                  | A short dialog with the office behind it. You learn the Buzzword "strategic patience", and it appears at the top of the screen.            |
 | Then go to Meeting Room 1B                                     | The Scene offers an extra option about strategic patience. Using it gives its own result.                                                  |
 | Restart, finish the report, then go to Meeting Room 1B         | No trace of the Buzzword option or the phrase anywhere in the month.                                                                       |
-| In the meeting, agree with each person in turn across restarts | Seed 1 has Dennis holding influence, so agreeing with Dennis goes well and agreeing with Priya or Marjorie does not.                       |
-| Repeat the meeting on seeds 8 and 5                            | The signs point elsewhere. On seed 8 Priya holds influence, and on seed 5 Marjorie does. The same choice now has a different result.       |
+| In the meeting, agree with each person in turn across restarts | Seed 8 has Dennis holding influence in the room, so agreeing with Dennis goes well and agreeing with anyone else does not.                 |
+| Repeat the meeting on seeds 1, 6 and 2                         | The signs point elsewhere: to Priya on seed 1, Marjorie on seed 6 and Callum on seed 2. The same choice now has a different result.        |
 | Compare two official stories                                   | "As reported upstairs" and "What actually happened" change with the Notification answer, the Scene choice and how you spent other actions. |
 | Skip the meeting altogether                                    | The official story records you as present anyway.                                                                                          |
 | Restart the same seed and repeat your choices                  | The same Move and the same official story, every time.                                                                                     |
@@ -71,13 +75,15 @@ format, the page shows what is wrong instead of the game.
 | `scenes.json`         | The meeting: its signs, its choices and their results                 |
 | `moves.json`          | Character Moves, and when each can land                               |
 | `official-story.json` | The official story, assembled from entries according to what you did  |
-| `characters.json`     | Names and public job titles                                           |
+| `characters.json`     | Names, public job titles and who reports to whom on the Org Chart     |
 | `hidden-truth.json`   | The rules of the deal: kinds, their weights, and the Hidden Facts     |
 | `balance.json`        | Actions a month, months in a run and the cost of each choice          |
 | `floor-1.json`        | The rooms on the floor: positions, sizes, colours and the lift's sign |
 
 In a Scene, `{holder}`, `{ignored}` and `{bystander}` are replaced by the names of
-the Characters dealt those roles. A `when` or `requires` condition can be
+the most influential, the least influential and the next most influential of those
+present, read from the dealt Power Map. `holderIs` means the same in a Scene's
+results. A `when` or `requires` condition can be
 `{ "holderIs": "boss" }`, `{ "hasBuzzword": "strategic-patience" }`,
 `{ "flag": "went-to-pub" }`, `{ "not": ... }` or `{ "all": [...] }`. Options
 gated with `requires` cannot depend on the hidden truth. Flags come from `sets`,

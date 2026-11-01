@@ -1,6 +1,7 @@
 import { useEffect, useRef, type ReactNode } from "react";
 import { panelText } from "../content";
-import type { Choice, PlayerView, StepView } from "../engine";
+import type { ChartEntry, Choice, PlayerView, StepView } from "../engine";
+import { Chart } from "./Chart";
 
 interface PanelProps {
   testId: string;
@@ -78,8 +79,10 @@ function StoryPanel({
 
 function ResultsPanel({
   step,
+  orgChart,
 }: {
   step: Extract<StepView, { kind: "results" }>;
+  orgChart: readonly ChartEntry[];
 }) {
   return (
     <Panel testId="panel-results" title={step.title} wide>
@@ -99,6 +102,16 @@ function ResultsPanel({
           ))}
         </tbody>
       </table>
+      <div className="results-charts">
+        <div data-testid="results-org-chart">
+          <h3>{panelText.orgChartHeading}</h3>
+          <Chart entries={orgChart} />
+        </div>
+        <div data-testid="results-power-map">
+          <h3>{panelText.powerMapHeading}</h3>
+          <Chart entries={step.powerMap} />
+        </div>
+      </div>
     </Panel>
   );
 }
@@ -147,46 +160,57 @@ export function StepPanel({ view, onChoose }: StepPanelProps) {
       );
     case "scene":
       return (
-        <Panel testId="panel-scene" eyebrow={step.location} title={step.title}>
-          {step.narration.map((line) => (
-            <p key={line}>{line}</p>
-          ))}
-          <h3>{panelText.castHeading}</h3>
-          <ul className="cast">
-            {step.cast.map((person) => (
-              <li key={person.name}>
-                <strong>{person.name}</strong>, {person.title}
-              </li>
-            ))}
-          </ul>
-          <h3>{panelText.signsHeading}</h3>
-          <dl className="signs">
-            {step.signs.map((sign) => (
-              <div key={sign.label} data-testid="sign">
-                <dt>{sign.label}</dt>
-                <dd>{sign.text}</dd>
+        <Panel
+          testId="panel-scene"
+          eyebrow={step.location}
+          title={step.title}
+          wide
+        >
+          <div className="scene-columns">
+            <div>
+              {step.narration.map((line) => (
+                <p key={line}>{line}</p>
+              ))}
+              <h3>{panelText.castHeading}</h3>
+              <ul className="cast">
+                {step.cast.map((person) => (
+                  <li key={person.name}>
+                    <strong>{person.name}</strong>, {person.title}
+                  </li>
+                ))}
+              </ul>
+              <h3>{panelText.signsHeading}</h3>
+              <dl className="signs">
+                {step.signs.map((sign) => (
+                  <div key={sign.label} data-testid="sign">
+                    <dt>{sign.label}</dt>
+                    <dd>{sign.text}</dd>
+                  </div>
+                ))}
+              </dl>
+            </div>
+            <div>
+              <h3>{panelText.optionsHeading}</h3>
+              <div className="options">
+                {step.options.map((option) => (
+                  <button
+                    key={option.id}
+                    type="button"
+                    className="option"
+                    data-testid={`scene-option-${option.id}`}
+                    onClick={() => {
+                      onChoose({
+                        type: "scene",
+                        sceneId: step.id,
+                        optionId: option.id,
+                      });
+                    }}
+                  >
+                    {option.label}
+                  </button>
+                ))}
               </div>
-            ))}
-          </dl>
-          <h3>{panelText.optionsHeading}</h3>
-          <div className="options">
-            {step.options.map((option) => (
-              <button
-                key={option.id}
-                type="button"
-                className="option"
-                data-testid={`scene-option-${option.id}`}
-                onClick={() => {
-                  onChoose({
-                    type: "scene",
-                    sceneId: step.id,
-                    optionId: option.id,
-                  });
-                }}
-              >
-                {option.label}
-              </button>
-            ))}
+            </div>
           </div>
         </Panel>
       );
@@ -225,6 +249,6 @@ export function StepPanel({ view, onChoose }: StepPanelProps) {
     case "story":
       return <StoryPanel step={step} onChoose={onChoose} />;
     case "results":
-      return <ResultsPanel step={step} />;
+      return <ResultsPanel step={step} orgChart={view.orgChart} />;
   }
 }

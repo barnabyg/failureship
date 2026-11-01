@@ -1,10 +1,40 @@
 import type { Content, Kind } from "./content";
-import { pickWeighted, shuffle } from "./rng";
+import { pick, pickWeighted, shuffle } from "./rng";
 
 export interface DealtCharacter {
   id: string;
   kind: Kind;
   fact: { id: string; text: string } | null;
+}
+
+/**
+ * The hidden truth of who really has influence over whom. Kept small for now:
+ * who protects or owes whom can join it later as further lists of ties.
+ */
+export interface PowerMap {
+  /** Everyone, most influential first. */
+  order: string[];
+  /** Each person after the first, with the one person who has influence over them. */
+  influence: { who: string; over: string }[];
+}
+
+/** Each person, in a dealt order, comes under someone dealt before them. */
+export function dealPowerMap(
+  rng: number,
+  content: Content,
+): { powerMap: PowerMap; next: number } {
+  const dealt = shuffle(
+    rng,
+    content.characters.map((c) => c.id),
+  );
+  const influence: PowerMap["influence"] = [];
+  let next = dealt.next;
+  dealt.items.slice(1).forEach((over, index) => {
+    const above = pick(next, dealt.items.slice(0, index + 1));
+    influence.push({ who: above.item, over });
+    next = above.next;
+  });
+  return { powerMap: { order: dealt.items, influence }, next };
 }
 
 /** Deals every Character a kind, and most of them a Hidden Fact. */

@@ -237,7 +237,7 @@ describe("the player view before the run ends", () => {
     const beforeTheEnd = (seed: number) => {
       const { run, views } = playWhole(seed, content);
       return {
-        deal: readHiddenTruth(run).characters,
+        deal: readHiddenTruth(run),
         views: views
           .filter((v) => v.step.kind !== "results")
           .map((v) => ({ ...v, seed: 0 })),
