@@ -1,41 +1,144 @@
-> **Superseded.** This original proposal is kept for reference. The current design is in [docs/design.md](docs/design.md). Where the two disagree, the design wins.
+> **Source of truth.** This proposal has been rewritten to reflect [failureship-grill-outcome.md](failureship-grill-outcome.md). Where the two disagree, the grill outcome wins. Material kept from the original proposal that the grilling did not discuss is marked _carried over_, and the real-life Scenarios behind the design are recorded only in the grill outcome.
 
 # FAILURESHIP
 
 ## Climb the ladder. Manage the narrative. Leave the consequences downstairs.
 
-**Game proposal — working draft, 31 October 2026**
+**Game proposal — working draft, 1 November 2026**
 
 ## 1. High concept
 
-_Failureship_ is a satirical, single-player corporate management game in which the player starts as an insignificant junior employee on the ground floor of an office tower and schemes their way to the CEO's penthouse.
+_Failureship_ is a satirical, single-player browser game. You start as an insignificant junior employee on the ground floor of a ten-storey office tower and climb it by reading people.
 
-The objective is **not** to fix the company. It is to become the most successful practitioner of _failureship_: taking credit, accumulating power, expanding bureaucracy, gaming metrics, avoiding blame, launching unnecessary transformations and profiting from the difference between **appearing effective** and **being effective**.
+You win by reaching the CEO's penthouse and securing your payout, **not** by fixing the company. The objective is to become the most successful practitioner of _failureship_: advancing personally through the gap between **appearing effective** and **being effective**, while others absorb the cost.
 
-The building is the game's central visual metaphor and primary navigation interface. At the bottom: stained carpets, broken coffee machines and fluorescent lights. At the top: marble, private lifts, executive dining and magnificent views. Every promotion literally moves the player up a floor. Their surroundings become more luxurious as the organisation becomes less functional.
+The building is the game's central visual metaphor and main screen. At the bottom: stained carpets, broken coffee machines and fluorescent lights. At the top: marble, private lifts, executive dining and magnificent views. Every promotion rides the lift to a richer floor.
 
 **Tagline:** _Deliver nothing. Demonstrate everything. Get promoted._
 
-**Audience:** Agile coaches, product managers, engineers and anyone who recognises corporate dysfunction. The humour should be accessible to people outside those professions too.
+**Audience:** A personal project, to share with a small group of friends. The humour must work for anyone who has had a job, with no specialist jargon needed to get the joke.
 
-**Platform:** Desktop-first browser game, single-player, mouse-driven. No account or network connection required for the initial version.
+**Platform:** Single-player browser game with no accounts or backend. Desktop-first and mouse-driven (_carried over_).
 
-**Target feel:** Wickedly funny, strategically satisfying and recognisable. Players should laugh at choices they have actually seen rewarded in real organisations.
+**Voice:** Deadpan corporate sincerity. The satire comes from the rules.
 
-## 2. Design pillars
+**Challenge:** The player has to work at it. Taking the amoral choice each time must not lead straight to the top. Amoral Moves always carry risk, you often act on incomplete information, and a bad call puts you on the receiving end of someone else's failureship.
 
-1. **Be the villain, gleefully.** The player is an amoral career climber, not a frustrated reformer. Ethical options can exist, but the game's reward system celebrates the art of getting ahead.
-2. **The tower is the game.** Promotions physically change the accessible environment, people, powers and visual quality of life. Avoid a generic card game with a tower pasted behind it.
-3. **Perverse incentives drive the mechanics.** Seemingly damaging behaviour should be instrumentally rational in the right circumstances. The satire comes from the rules, not merely the jokes.
-4. **Consequences persist.** Today's triumphant governance reform becomes next quarter's capacity crisis. A player may escape the consequences by being promoted first.
-5. **Laugh _and_ strategise.** Choices must have meaningful trade-offs, dependencies and timing. There should be multiple viable routes to success, not one universally correct cynical answer.
-6. **Recognisable, not cruel.** Satirise institutions, incentives, leadership clichés and power dynamics. Characters are fictional composites, not thinly disguised real colleagues.
+**Pressure from above:** Many Demands cannot honestly be met, so the organisation itself pushes people towards failureship.
 
-## 3. The office tower
+## 2. The defining decision: people first, not a company simulation
 
-A cross-section/side-on view of a ten-storey corporate headquarters is the main screen. Each floor is a distinct miniature workplace. Elevators, stairs, doors, NPCs and visible office activity make the ascent tangible. Clicking a floor opens its available people, departments, actions and problems.
+The original proposal centred the game on a simulated company, with delivery, overhead, morale, quality and finance gauges, dysfunction loops, and scored quarterly reviews deciding promotion. That was rejected. Reading people is the core of the game, because that is what failureship feels like from the inside. Running both at full depth would split the player's attention and is too much for a personal project.
 
-| Floor | Career stage            | Environment                                       | New opportunity                                            |
+- The company is reduced to hidden risks built up by the player's decisions, which surface as Company Events or through Characters.
+- Projects are only an owner, a real status and a reported status. Budgets are one-off decisions. Both are props.
+- Promotion comes from a vacancy and the decision of whoever really holds influence, not from a score.
+- Gauges stay visible but are comic, have little effect on play and never reveal the Power Map.
+- Do not rebuild the company simulation or its metres. Dysfunction loops stay out unless real Scenarios support them.
+
+## 3. Design pillars
+
+1. **Read people.** Uncovering who really holds influence is the core of the game. Most of the play happens in Scenes, the Notebook and the decisions they inform.
+2. **Be the villain, but work for it.** The player is a career climber, not a reformer, but amorality alone does not win. Moves carry risk, and what works depends on who is in the room.
+3. **The tower is the map and the reward.** It is where you navigate and see how far you have come, and your past decisions stay visible on the floors below.
+4. **Perverse incentives drive the rules.** Damaging behaviour can be the rational choice in the right circumstances. The satire comes from the rules, not merely the jokes.
+5. **Consequences persist.** Characters remember, hidden risks build up, and a Bill is usually indirect and can take months to arrive. You moved Frank to the desk with no window, and months later it turns out Frank is on the Health and Safety committee.
+6. **Recognisable, not cruel.** Satirise institutions, incentives, leadership clichés and power dynamics. Characters are fictional composites, not thinly disguised real colleagues (_carried over_).
+
+## 4. A month
+
+A turn is one month.
+
+1. **Notifications arrive**, such as the Monthly Status Report, a Demand or a meeting. Some offer a choice, like finishing the report or going to the pub with your boss.
+2. **You spend three actions** by clicking around the tower. Navigation is up to the player, with plenty of indications of what they can do. Some actions open Scenes. Skipping a meeting is allowed at some risk. Trips outside the office, such as the pub, are short text dialogs, and the screen stays on the office.
+3. **Any Company Event or Character Move lands on you.**
+4. **The month closes.** Gauges update for any Thread that has played out, and the official story comes out.
+
+## 5. Reading people
+
+- **Two power structures.** The Org Chart is public. The Power Map is hidden, and uncovering it is the core of the game.
+- **Three kinds of Character.** Every Character is a Believer, an Incompetent or a Practitioner, and the kind stays hidden until you have read it. Telling a Practitioner from someone with a genuine heart of gold is a skill of the game.
+- **Ambiguous behaviour.** The same behaviour can come from any kind. A late colleague may be incompetent, sabotaging you, or overloaded by your own decisions.
+- **Believers change.** A Believer burned repeatedly may become a Practitioner or a whistleblower, or may leave. Other kinds do not change.
+- **Rival is a relationship, not a kind.** A Rival is any Practitioner currently competing with you for something, so today's boss can be tomorrow's Rival.
+- **Hidden Facts.** Most Characters have one, such as a friendship, a side role or something they know. Some are dangerous and some are useful. For example, you blame a failure on Bob without knowing Bob is friends with the CEO.
+- **Dealt per run.** Kinds and Hidden Facts are dealt from a seed, so friends can compare stories without spoiling the game.
+- **Finding out costs actions.** It competes directly with acting. Information you buy may be mistaken, out of date or deliberately false. For example, you could offer a long-term employee a promotion in exchange for inside information.
+- **Surprises are allowed.** Life does not always come with clues, so some disasters have none. How often is a balance question.
+- **The Notebook.** It saves important clues automatically, including some that turn out not to matter and some that are false. It keeps what mattered, not everything. You can mark each Character with the kind you suspect.
+
+## 6. Impressing the boss
+
+You are always trying to impress your boss or your boss's boss. Going over your boss's head is a powerful, risky Move. Their opinion of you has no number and is read only through signs in Scenes.
+
+What works depends on the boss's kind. The higher you go, the fewer Believers there are.
+
+| Boss         | What impresses them                                                       |
+| ------------ | ------------------------------------------------------------------------- |
+| Believer     | Real results. Theatre puts them off, so a Practitioner player must adapt. |
+| Incompetent  | Slides and confidence. They cannot tell the difference.                   |
+| Practitioner | Making them look good, or giving them something they want.                |
+
+Showing a true chart is a mistake in most rooms, but it can win over a Believer.
+
+## 7. Moves
+
+| Family        | Examples                                                          |
+| ------------- | ----------------------------------------------------------------- |
+| **Impress**   | A flattering question, an animated deck, a Buzzword, a consultant |
+| **Fabricate** | Gaming a metric, a made-up schedule, reporting a rollout as done  |
+| **Trade**     | Promises, deals, bonuses, desks, hiring friends                   |
+| **Find Out**  | The pub, buying inside information                                |
+| **Deflect**   | Blaming someone, stalling, explaining a red Project               |
+| **Attack**    | Rumours, tricky questions, reporting someone                      |
+| **Deliver**   | Actually doing the work                                           |
+
+- Rivals use the same Moves against you, and you can use theirs once you have the means.
+- Not every Move has a Bill, and a Bill is usually indirect.
+- Higher floors open up bigger Moves.
+- A pub trip might teach you a Buzzword, which then opens an option in a later Scene.
+
+## 8. Work and money
+
+- **Monthly Status Report.** It recurs every month and nothing matters more to the people above. It depends on input from others, competes with better offers, and is where you set a Project's reported status: do it, skip it, or lie in it.
+- **Projects.** Each has an owner, a real status and a reported status. There is no delivery simulation behind them. A Project flagged red has to be explained.
+- **Demands.** They are very important and recur as Notifications. You can deliver, push back, hand off, fake or stall. Stalling is a bet that the boss forgets.
+- **Grand Plans.** Each boss has one at a time, running over several months. Completing one is very important, and it can be done in appearance or in reality. What counts depends on the boss's kind, and a Plan completed only in appearance adds a hidden risk.
+- **Budgets.** They are props: one-off decisions such as who gets a bonus pot or what gets cut, never a running balance.
+
+## 9. Promotion
+
+Events drive promotion, not scores. Promotion needs a vacancy, and whoever really holds influence over it picks a candidate, with Rivals competing. Impressing your official boss all year can still lose to someone with the right friends.
+
+- **Main route:** complete your boss's Grand Plan, which usually promotes your boss and opens their seat.
+- **Engineered route:** create a vacancy by getting rid of your boss.
+- **Other vacancies:** a boss moves up, is fired or leaves, or a reorganisation creates a post.
+- **Quarterly reviews:** a comic ritual that rarely decides anything.
+
+## 10. Consequences
+
+- **Reputation.** There is no single score. What each Character believes about you depends on what has reached them through the Power Map, and Rivals can spread false stories the same way.
+- **Promises.** You can offer anything, whether or not you can deliver it. Characters judge whether they believe you and remember broken Promises.
+- **Deals.** They are worth only what the people in them can really deliver, and that can fail on both sides. A good word helps only if the boss actually listens to that person.
+- **Hidden risks.** The company's state is mostly a short list of risks your decisions have built up. They come out as a Company Event, or through a Character with a motive and the means to act. Whether a risk lands on you depends on whether it can be traced to you.
+- **Company Events.** They come from hidden risks, such as a breach after you skimped on security, or from outside, such as a takeover bid. They can reshuffle the Org Chart, so they are dangers and openings at once.
+- **Mistakes.** A big mistake can block a promotion or get you demoted, and puts you on a Final Warning. Another one gets you fired, which ends the game. Only a truly catastrophic Move gets you fired outright, and the game signals those stakes first.
+
+## 11. Gauges
+
+Gauges such as Teflon are comic and fun to watch, and have little effect on play. They reflect your track record, not your real danger, and never reveal the Power Map. A Gauge moves only when a Thread has played out: you did something, it paid off, a Gauge moves. Reaching a set level earns a Milestone, such as "Slippery as an eel" at 70 Teflon.
+
+Gauges are visible numbers, and a high one does not necessarily lead to promotion. Teflon is the only one named so far.
+
+There are no spendable meters. The original proposal's career capital, political capital and blame exposure do not drive play. The player really manages actions, Promises and favours, plus hidden risks, and favours owed are part of the Power Map.
+
+## 12. The tower
+
+The tower is the main screen, where you navigate and see your rewards. Scenes open on the relevant floor. Materials and lighting get richer as you climb, the camera rides the lift on promotion, and your past decisions stay visible on the floors below.
+
+The roles are decided. The environments and bigger Moves are illustrative (_carried over_).
+
+| Floor | Role                    | Environment                                       | Bigger Moves                                               |
 | ----- | ----------------------- | ------------------------------------------------- | ---------------------------------------------------------- |
 | 1     | Junior employee         | Grey cubicles, flickering lights, communal kettle | Take credit, cultivate sponsors, survive reviews           |
 | 2     | Team lead               | Slightly larger desk, temperamental printer       | Allocate work, choose what gets reported                   |
@@ -43,248 +146,182 @@ A cross-section/side-on view of a ten-storey corporate headquarters is the main 
 | 4     | Programme manager       | Glass partitions, branded wall decals             | Create programmes, dependencies and steering committees    |
 | 5     | Head of transformation  | Innovation lounge, motivational slogans           | Launch methodologies and company-wide initiatives          |
 | 6     | Director                | Corner office, executive assistant                | Compete for budgets, restructure departments               |
-| 7     | Vice president          | Private conference suite                          | Form alliances, trade favours, manage rivals               |
+| 7     | Vice president          | Private conference suite                          | Form alliances, trade favours, manage Rivals               |
 | 8     | Chief strategy officer  | Artworks and executive dining                     | Set targets, redefine success, hire consultants            |
-| 9     | Chief operating officer | Wood panelling, board access                      | Control the entire operating model and succession politics |
-| 10    | CEO penthouse           | Panoramic views, marble, private lift             | Win: secure the title, bonus and golden parachute          |
+| 9     | Chief operating officer | Wood panelling, board access                      | Succession politics                                        |
+| 10    | CEO                     | Panoramic views, marble, private lift             | Win: secure the title and your payout                      |
 
-The **visual progression is a major reward**: office size, furniture, clothing, views, number of assistants, and the deference shown by NPCs all increase. Lower floors remain visible and evolve as the player's decisions affect them. A new policy might spawn queues outside meeting rooms; a hiring freeze might leave desks empty; a transformation could cover walls with posters while work piles up.
+## 13. Example story
 
-**Important scope decision:** A 2D illustrated building with animated details is preferable to a 3D world. The game should feel like a lively management sim without requiring pathfinding, full character simulation or expensive art production.
+An illustration of how a Thread plays out, assembled from the owner's Scenarios and examples. It is not game content.
 
-## 4. The core game loop
+**Month 1:** A Notification offers a choice: finish the Monthly Status Report or go to the pub with your boss. You choose the pub and learn a Buzzword.
 
-Each turn represents **one month**. One complete run should eventually take roughly 30–60 minutes; exact pacing must be playtested.
+**Month 2:** You use the Buzzword at just the right moment in a meeting, where you hear about your boss's Grand Plan. You work out who to talk to.
 
-1. **Inspect:** View your floor, your department, political relationships, operational problems and active initiatives. Read the latest executive dashboard (which may differ from reality).
-2. **Scheme:** Spend a limited number of management actions (suggested starting point: **three per month**). Actions may involve people, projects, budgets, reporting, policies or personal publicity. Available actions expand with seniority.
-3. **React:** A contextual event interrupts: a missed delivery, whistleblower, customer complaint, executive visit, budget fight, audit or rival's manoeuvre. Choose a response.
-4. **Simulate:** The company's systems update: staffing, delivery capacity, morale, product quality, reporting burden, financial viability and the effects of earlier decisions.
-5. **Spin:** The official corporate narrative is produced. It may bear little relationship to operational reality. The player gains or loses visibility, allies and exposure to blame.
-6. **Advance:** At quarterly performance reviews, compete for promotion. Once promoted, ride the elevator to a more luxurious floor and gain new powers while leaving certain problems behind.
+**Month 4:** You move Frank to the desk with no window, so that you can give the good desk to someone you favour.
 
-The key distinction from a multiple-choice story: **the player makes proactive management decisions on a persistent organisation**, not just replies to a stream of jokes.
+**Month 6:** Your Project is flagged red. You could blame Bob, but you do not know that Bob is friends with the CEO.
 
-## 5. The simulation: two competing realities
+**Month 9:** Frank turns out to be on the Health and Safety committee, and calls you out for not putting your team through safety training.
 
-### A. Personal success (what wins)
+The story works because the consequences came from earlier choices and things the player could not see, not because the player picked the funny answer on every card.
 
-- **Career capital (0–100):** Recognition and promotion progress. The primary career score, earned through conspicuous achievements and sponsorship.
-- **Political capital (0–100):** A spendable resource for influencing decisions, securing appointments, suppressing problems or getting allies to take the fall.
-- **Blame exposure (0–100):** Risk that an audit, crisis or rival connects the player to a damaging decision. Too high can block promotion, force a demotion or end the run.
-- **Perks and bonuses:** Persistent rewards and a satisfying end-game score, rather than another metre to micromanage.
+## 14. Humour and presentation
 
-### B. Organisational reality (what the player manipulates)
+The voice is **deadpan corporate sincerity**. The game itself rarely admits anything is absurd; it congratulates the player in the language of leadership competency frameworks.
 
-- **Real delivery capacity:** Work that can genuinely be completed.
-- **Reporting/meeting overhead:** Capacity consumed by bureaucracy.
-- **Staff morale and retention:** Determines attrition, resistance and the supply of plausible scapegoats.
-- **Product/service quality:** Determines defects and customer crises, often with delay.
-- **Financial viability:** Keeps the business alive long enough for the player to climb; it is a constraint, **not** the player's objective.
+Sample lines (_carried over_):
 
-### C. The official story
-
-The visible executive dashboard is **not identical** to the internal state. The player can influence which metrics are chosen, what gets excluded, how results are framed and who is credited. For example, delivery can decline while the dashboard turns greener because teams have redefined 'done', reduced scope, or changed the baseline.
-
-**Core tension:** Optimise personal success while keeping the company _just viable enough_ not to collapse before your next promotion or payout. A collapsing business is not inherently a moral punishment: at the right career stage, a bailout, sale or golden parachute may be another route to victory.
-
-Avoid exposing ten equally important gauges on the main screen. Lead with career capital, political capital, blame exposure and corporate viability; put operational detail in drill-down views.
-
-## 6. Actions: the player's toolkit
-
-Actions should be unlocked by floor and should have both immediate and delayed consequences. Illustrative action families:
-
-| Action family              | Example actions                                                                       | Typical trade-off                                      |
-| -------------------------- | ------------------------------------------------------------------------------------- | ------------------------------------------------------ |
-| **Self-promotion**         | Publish a success story, claim team credit, volunteer for a high-profile presentation | Visibility vs resentment or scrutiny                   |
-| **Metric engineering**     | Change definitions, exclude exceptions, select a flattering comparison                | Dashboard improvement vs future credibility risk       |
-| **Meeting creation**       | Launch a steering group, add status reporting, create a governance layer              | Executive reassurance vs delivery capacity             |
-| **Political manoeuvring**  | Cultivate a sponsor, undermine a rival, trade a favour                                | Promotion leverage vs future obligations               |
-| **People management**      | Reward loyal performers, transfer troublesome experts, hire allies                    | Control vs competence and morale                       |
-| **Transformation theatre** | Launch a framework, announce a reorganisation, rename a department                    | Career visibility vs confusion and churn               |
-| **Budget empire**          | Seek headcount, protect a budget, hire consultants                                    | Departmental prestige vs financial viability           |
-| **Crisis management**      | Find a scapegoat, bury a report, stage a rescue programme                             | Escape immediate blame vs larger delayed risk          |
-| **Selective competence**   | Quietly fix a genuine problem                                                         | Preserve the business; often less visible than theatre |
-
-Actions should sometimes combine. For instance: **Create Programme → Hire Consultant → Establish Steering Committee → Redefine KPI → Claim Transformation Success**. A good combination is amusing _and_ mechanically useful.
-
-Crucially, effective villainy requires judgement. Hiring consultants every turn should eventually bankrupt you. Taking credit too often should breed enemies. Rigging every metric should eventually make the dashboard useless to its own author.
-
-## 7. Promotions, rivals and politics
-
-Quarterly reviews assess a blend of career capital, executive sponsorship, apparent departmental performance and blame exposure. Requirements become more political higher up the tower. Promotion should not be a simple experience-point threshold: vacancies, rival candidates and reputation matter.
-
-Include a small cast of **persistent fictional NPCs**, each with a role, agenda, influence, opinion of the player and memory of major past interactions:
-
-- **Martin, Transformation Director:** Seven successful transformations; no detectable transformation.
-- **Sarah, Product Lead:** Has actual customer evidence and is therefore regularly excluded from decisions.
-- **Nigel, Strategy Executive:** Strong sponsor if flattered; dangerous adversary if publicly contradicted.
-- **Priya, Engineering Manager:** Keeps the lights on while quietly documenting the damage.
-- **Clive, Consultant:** Converts obvious observations into expensive presentation decks.
-
-Relationships matter mechanically. A friendly executive might sponsor a promotion; an alienated engineer might become a whistleblower; a weakened rival may become a convenient scapegoat. NPC reactions should be deterministic or seeded, based on state and personality—not randomly improvised every turn.
-
-## 8. Dysfunction loops: the game engine's signature feature
-
-A **dysfunction loop** is a persistent chain of effects that creates new opportunities for self-serving management. Build the system around a few interacting loops rather than hundreds of disconnected event cards.
-
-**Governance spiral**
-
-More oversight → more reporting overhead → less delivery → worse targets → executive concern → demand for more oversight. The player can earn career capital from each 'response' while the business deteriorates.
-
-**Metric inflation**
-
-Raise targets or redefine measurements → green dashboard → praise and bonuses → reality diverges → a customer or auditor eventually spots the gap. Blame can be transferred if the player prepared a scapegoat.
-
-**Transformation carousel**
-
-Announce transformation → create short-term optimism → interrupt work → results disappoint → argue that the culture resisted change → launch a bigger transformation. A promotion resets the player's personal accountability window.
-
-**Empire-building trap**
-
-Hire reports → gain status and political weight → consume budget → demand more budget to manage the complexity → become 'too important to fail'.
-
-**Talent exodus**
-
-Reward visibility over competence → capable staff leave → quality and delivery deteriorate → hire consultants and impose controls → further demoralise remaining staff.
-
-These loops should leave **visible marks on the floors below**. The player's past should become part of the game's scenery.
-
-## 9. Example emergent story
-
-**Month 2, Floor 1:** The player takes credit for an engineer's automation work and earns the attention of Nigel.
-
-**Month 5, Floor 2:** That engineer distrusts the player. A missed deadline occurs. The player introduces mandatory daily executive reporting and earns praise for 'grip'.
-
-**Month 9, Floor 3:** The reporting burden has reduced throughput. The player proposes a cross-functional Transformation Delivery Office to address the productivity crisis.
-
-**Month 13, Floor 4:** The new office requires a programme manager and an outside consultancy. A giant green dashboard appears on a lower floor, while the actual delivery queue doubles.
-
-**Month 16:** The board applauds the improvement. The player is promoted. An exhausted Priya starts assembling the evidence. She may become a future antagonist—or the next useful scapegoat.
-
-The story is compelling because the consequences were generated from earlier choices, not because the player selected the 'funny' answer on every card.
-
-## 10. Humour, writing and presentation
-
-The voice should be **deadpan corporate sincerity**. The game itself rarely admits anything is absurd; it congratulates the player in the language of leadership competency frameworks.
-
-Example notifications:
-
-- _Your new reporting framework has improved visibility by 34%. Actual delivery is now classified as a legacy metric._
 - _Congratulations! You have successfully delegated accountability while retaining strategic ownership._
 - _The transformation has failed to achieve its objectives. This demonstrates the urgent need for Phase Two._
-- _Staff engagement has declined, but participation in the engagement survey has risen. The dashboard is green._
 - _Your former team has missed another deadline. Fortunately, you no longer manage them._
 
-Recurring visual jokes: the same 'transformation' banner is repainted with a new title; the executive floor gains a coffee bar as layoffs hit below; reports travel up the building and instructions travel down. The elevator can announce promotions with overwrought celebration.
+Recurring visual jokes (_carried over_): the same 'transformation' banner is repainted with a new title; the executive floor gains a coffee bar as layoffs hit below; reports travel up the building and instructions travel down.
 
-Audio, if used, should be optional and subtle: lift chime, printer, keyboard, muffled meetings, applause, notification stings. Accessibility matters: readable text, reduced motion and no reliance on colour alone.
+Accessibility (_carried over_): readable text, reduced motion and no reliance on colour alone.
 
-## 11. Interface proposal
+## 15. Interface
 
-**Main view:** Side-on cutaway tower, vertically scrollable. The current floor is emphasised; upper floors are visible but inaccessible. Floors are clickable; people and departments have simple animations.
+- **Main view:** a Three.js cutaway tower with a fixed camera, used to navigate by clicking. Upper floors are visible but locked.
+- **Panels:** React, over the top of the tower, for Scenes, the Notebook and everything else. Most of the play in a game about reading people happens here.
+- **Signs in Scenes:** who interrupts whom, who everyone looks at before answering, and who gets ignored.
+- **Promotion:** the camera rides the lift to a richer floor, and your past decisions stay visible on the floors below.
+- **Results:** the end-of-run screen reveals the hidden truth (see below).
 
-**Top strip:** Current role, month, career capital, political capital, blame exposure and business viability.
+## 16. Ending a run
 
-**Right panel:** Selected person/department/initiative and contextual actions. Show costs, immediate likely benefits and known risks. Keep some delayed effects hidden, but make the causal logic learnable.
+Winning is reaching the penthouse and securing your payout, and how you got there decides the ending. Being fired ends the game. Either way, the results screen shows who was really who and what you got wrong, including facts you could never have known.
 
-**Bottom strip:** Corporate news ticker, action log and notifications, e.g. 'Strategic alignment workshop achieves 100% attendance.'
+Candidate endings, not yet decided (_carried over_):
 
-**Overlays:** Executive dashboard (official story), operational truth (unlocked through access), relationships map, quarterly review and promotion ceremony.
+- **Visionary Leader:** become CEO of a barely functioning enterprise while collecting awards.
+- **The Golden Parachute:** secure personal protection before the sale, restructuring or collapse.
+- **Too Big to Fail:** oversee a disaster and emerge as the only person considered qualified to lead the next one.
+- **The Scapegoat:** get blamed and fired before reaching the top.
 
-**Promotion moment:** The camera follows the elevator rising to a newly unlocked, more opulent floor. Previously managed departments remain below, still reacting to the player's legacy.
+## 17. Scope of the first version
 
-Visual direction: playful, readable 2D illustration with exaggerated architecture and restrained animation. Prioritise strong art direction and clear information hierarchy over realistic graphics.
+- Floors 1–3 are playable, and the other seven are visible but locked.
+- About 18 months at three actions each, aiming for about 25 minutes.
+- About eight Characters: your bosses, one or two Rivals, Believers and Incompetents.
+- A comic stand-in for winning at the end of Floor 3. The original proposal's 'Acting Regional Visionary' end screen is one candidate.
+- Board and CFO material mostly waits for later floors, though a boss's boss or the CFO can still send a Demand down.
+- Saves in the browser and restart from a seed.
 
-## 12. Victory, defeat and replayability
+All the numbers are starting points, to be tuned through playtesting.
 
-**Main victory:** Reach Floor 10, acquire the CEO title and secure a personal payout. Final grade reflects floor reached, bonuses extracted, political reach, personal blame avoided and perhaps the spectacular extent of the damage left behind. Organisational wellbeing **does not** contribute positively to the score.
+**Success means** a newcomer understands the goal within two minutes, a run produces at least one memorable unintended consequence, at least two different approaches can earn promotion, and players want another run.
 
-**Possible endings:**
+## 18. Out of scope
 
-- **Visionary Leader:** Become CEO of a barely functioning enterprise while collecting awards.
-- **The Golden Parachute:** Engineer a sale, restructuring or collapse after securing personal protection.
-- **Too Big to Fail:** Oversee a disastrous turnaround and emerge as the only person considered qualified to lead the next one.
-- **The Scapegoat:** Get blamed and dismissed before reaching the top.
-- **The Quietly Competent:** Keep the business healthy but fail to become suitably visible; a tongue-in-cheek, low-scoring outcome.
+- Deployment and hosting
+- Multiplayer, accounts, a backend and monetisation
+- Free camera movement or a walking avatar (where the player goes is still their choice)
+- Any company, delivery or finance simulation
+- Dysfunction loops, unless later Scenarios show them
+- Live AI during play
+- A secret "be a good leader" victory
+- Audio
+- Floors 4–10 as playable content, and the full CEO win and payout endings, for the first version
 
-Replayability comes from different NPC relationships, event timing, organisational starting conditions, strategic combinations and the order in which dysfunction loops compound. Use a **seeded** simulation so runs can be reproduced for testing and shared with colleagues.
+## 19. Content and technology
 
-## 13. First playable: a deliberately constrained vertical slice
+**Content.** Scenes and Threads are written by hand as data files where possible, and those that need custom behaviour can use code. This is a trial, not a settled choice: the owner was unsure and suspects some Scenes will need code. Adding Scenarios later should not need code changes where it can be avoided. Claude drafts the text in the deadpan voice and the owner edits it. Characters' signs are mostly written per kind, not per named person, so the writing works for any deal.
 
-**Do not build all ten floors first.** Build the tower and its visual promise, but fully implement only Floors 1–3. The floors above are visible, locked and tantalising. A short 'Acting Regional Visionary' end-screen can stand in for the final CEO victory until the full game exists.
+**Technology.** The moonBase project is a reference for its graphics, not a requirement, and the choice of stack is left to the implementer: "If it doesn't work, don't use it."
 
-Suggested playable scope:
+- Strict TypeScript and Vite, with Vitest and Playwright for tests.
+- A Three.js tower: a fixed-camera cutaway with no free roaming and models built in code. The original proposal chose 2D illustration to save money, but the project has no artist, and lighting and materials can carry the rise in luxury that is the game's main visual reward.
+- React for Scenes, the Notebook and every other panel, over the top of the tower. moonBase uses plain HTML because most of its play is in the 3D view, so do not copy that choice here without that reason.
+- The rules are a headless, seeded engine that imports neither Three.js nor React, so the same seed and choices always produce the same outcome, and the tower can be replaced if it stops earning its cost.
+- 3D costs more than 2D, so the game is proved fun on a blocked-out tower before any detail is added.
 
-- A compelling 2D tower view with three distinct, interactive floors and seven locked preview floors.
-- 12 monthly turns, three actions per month, quarterly reviews, promotion to Floors 2 and 3.
-- Four prominent indicators: career capital, political capital, blame exposure and company viability.
-- Internal state for delivery, overhead, morale, quality and official dashboard narrative.
-- 12–18 reusable actions across credit-taking, governance, metric manipulation, political favours, staffing and selective competence.
-- Approximately 20–25 **authored event templates**, with conditions and variable text, not 25 unrelated one-off stories.
-- Three persistent NPCs to start (e.g. Nigel, Priya and Martin), with relationships and at least one memory-driven consequence each.
-- Three implemented dysfunction loops: governance spiral, metric inflation and talent exodus.
-- Quarterly promotion mechanics, several failure conditions, event history and a satirical results screen.
-- Save/load locally and seed/restart support.
+**Testing.**
 
-**Vertical-slice success criteria:** A newcomer can understand the goal within two minutes; a 15–25-minute playthrough creates at least one memorable unintended consequence; at least two different strategies can earn promotion; the tower visibly changes due to player actions; the player wants to try another run.
+- Tests describe behaviour a player or the interface can observe, through a public seam.
+- Most tests go through the headless engine's public interface, with a separate read of the hidden truth for setting up and checking outcomes. A test checks that the player's view never leaks that truth.
+- A small set of Playwright browser tests covers flows across the interface, engine and storage.
 
-## 14. Build approach for Codex
+## 20. Sequencing
 
-This is a **game proposal, not a final technical spec**. Codex should first turn the design into explicit rules, content schemas and small implementation tickets. Avoid generating a huge unvalidated codebase in one pass.
+Building in phases was not discussed in the grilling, so the original proposal's milestone sequence no longer applies. Only these decisions about order have been made:
 
-**Suggested stack (established tools):** TypeScript + React + Vite for the browser UI; CSS/SVG and modest animation for the 2D tower; a pure TypeScript simulation engine separated from rendering; Vitest for rules tests; Playwright for a small set of end-to-end flows. Use React state or a small state library only if complexity justifies it. No backend needed in the first prototype.
+- The first piece of work is one playable month on a blocked-out floor.
+- The game is proved fun before any tower detail is added.
+- The owner runs the `to-spec` skill and then the `to-tickets` skill after a grilling.
+- Scenario collection is closed for now: "I can always revisit them when the app is in progress."
 
-**Recommended architecture:**
+## 21. Open questions
 
-- `game/state`: versioned, serialisable GameState, including player, company, floors, NPCs, programmes, active effects, pending events and random seed.
-- `game/actions`: declarative, data-driven actions with prerequisites, costs, effects and delayed consequences.
-- `game/simulation`: pure `advanceMonth(state, decisions, seed)` logic, quarterly review and promotion resolution.
-- `game/events`: authored event templates with trigger predicates, choices, consequences and cooldowns.
-- `game/content`: character traits, floor definitions, text and balancing data.
-- `ui`: tower view, inspector, dashboards, event modal, review/promotion ceremony, history and results.
+- **Phases:** whether to work in phases, and what each one contains.
+- **Balance:** three actions a month, run length, how often disasters arrive with no clue.
+- **Gauges:** which ones exist besides Teflon, and whether a career-style number stays. The owner said to keep "the visible number", but which Gauges to have was never revisited.
 
-**Rules discipline:** Actions must produce clear, testable effects; delayed effects must be explicit and inspectable; state changes should be reproducible with a fixed seed; data content should be editable without code changes; saves should be versioned. Keep a developer/debug view showing the _true_ organisational state and why each modifier fired, even though the player's executive dashboard deliberately distorts reality.
+For playtesting (_carried over_):
 
-**Milestone sequence:**
+- **How visible should hidden consequences be?** Enough information to reward skill without spoiling surprises.
+- **How much control per floor?** Junior actions must remain satisfying, and higher-floor Moves should feel transformational rather than just numerically larger.
+- **How quickly should promotion happen?** The tower must deliver visual rewards often without making the climb trivial.
 
-1. **Playable skeleton:** Single floor, month advancement, three actions, one event, visible indicators, deterministic save/restart.
-2. **Tower and progression:** Three floors, elevator promotion, increasingly luxurious visuals, unlocked powers.
-3. **Organisational feedback:** Three dysfunction loops, delayed effects, official dashboard versus operational truth.
-4. **Politics and personality:** NPC motives, relationships, favours, betrayals, promotion rivals.
-5. **Content and polish:** Authored event pack, dialogue, animations, accessibility, end screens and balance.
+## 22. Smaller details accepted in the grilling
 
-**Acceptance tests worth writing early:**
+The owner agreed to these with a short "yes", so that may have endorsed a recommendation's main point rather than every detail. Treat them as defaults.
 
-- Same state + same choices + same seed produces the same outcome.
-- Advancing a month resolves delayed effects once, in a defined order.
-- Governance overhead reduces real capacity, even if the reported dashboard improves.
-- A metric redefinition can improve reported results without improving real output.
-- A promotion changes the player's floor and powers without erasing lower-floor consequences.
-- An NPC remembers a significant prior action and reacts later.
-- Company viability reaching a terminal limit triggers a defined outcome.
-- A saved game reloads to the identical state and can continue reproducibly.
+- **Actions:** they decide where you spend your time, such as a meeting, the kitchen or a one-to-one. Filing the Monthly Status Report costs an action.
+- **Signs in Scenes:** who interrupts whom, who everyone looks at before answering, and who gets ignored.
+- **Practitioner boss:** uses your good work, takes the credit, and sees you as a threat if you shine too much.
+- **Reputation:** a broken Promise is riskier the better connected its victim is, and good news travels too.
+- **Sources:** how far you can trust one depends on who they are and what they want.
+- **Budgets:** higher floors bring bigger ones, and their consequences go into hidden risks and Character memory.
+- **Grand Plans:** if one fails, your boss may look for someone to blame, possibly you.
+- **Passed-over colleagues:** they can exist as Characters who remember.
 
-## 15. Explicit non-goals for version one
+## 23. Language
 
-- No 3D world, free-roaming avatar or complex pathfinding.
-- No multiplayer, accounts, cloud backend or monetisation.
-- No live LLM needed during gameplay. Use AI to help _author_ content, not to make core rules unpredictable.
-- No attempt to simulate a real business's full finances or labour market.
-- No enormous catalogue of procedural jokes before the fundamental loop is fun.
-- No moral lecture or secret 'be a good leader' victory condition.
+Use these terms consistently in the design and the game.
 
-## 16. Open design decisions for playtesting
+### The premise
 
-1. **How visible should hidden consequences be?** Enough information to reward strategy without spoiling surprises.
-2. **How much control per floor?** Junior actions must remain satisfying; higher-floor powers should feel transformational rather than just numerically larger.
-3. **How quickly should promotion happen?** The tower must deliver visual rewards frequently without making career ascent trivial.
-4. **How close to collapse can the business get?** Players need room for spectacular mismanagement without premature game-over becoming frustrating.
-5. **How much dialogue versus systems?** Character comedy should add flavour, but the management simulation must carry the game.
+- **Failureship:** advancing personally through the gap between appearing effective and being effective, while others absorb the cost. Not the same as incompetence, bad management or failing upward, none of which requires someone to profit from the gap.
 
-## 17. Suggested next instruction for Codex
+### The organisation
 
-> Use this proposal as the product vision for a browser-based game called _Failureship_. Do **not** implement the whole proposal immediately. First identify ambiguities and propose a minimal deterministic simulation model, the GameState schema, the monthly turn sequence, promotion rules, and a small data-driven action/event format. Then create a staged implementation plan with independently testable tickets, starting with one playable floor and progressing toward a three-floor vertical slice. Preserve the satirical premise: the player wins by mastering perverse organisational incentives, not by improving the company. Keep the building visually central and distinguish reported metrics from real outcomes.
+- **Character:** a persistent fictional person in the company whom the player deals with. Not "NPC" or "colleague".
+- **Believer:** a Character who wants the best outcome for the company.
+- **Incompetent:** a Character who does damage through inability, with no scheme behind it.
+- **Practitioner:** a Character who practises failureship.
+- **Rival:** a Practitioner currently competing with the player for something.
+- **Org Chart:** the public, formal hierarchy of the company.
+- **Power Map:** the hidden truth of who actually has influence: who protects whom, who owes whom and who is on the way out.
+- **Hidden Fact:** the one thing about a Character that makes them matter more than they appear to.
+
+### Play
+
+- **Scene:** a short played moment, such as a meeting, where the player watches for signs of the Power Map and chooses how to behave.
+- **Notification:** a prompt at the start of a monthly turn saying what is on offer or expected.
+- **Final Warning:** the state after a big mistake in which one further big mistake gets the player fired.
+- **Demand:** an instruction from above that the player must answer, often one that cannot honestly be met.
+- **Grand Plan:** a boss's big ambition, which the player works to complete, in appearance or in reality.
+- **Monthly Status Report:** the recurring report to higher management, in which a Project's reported status gets set.
+- **Project:** a piece of work with an owner, a real status and a reported status.
+- **Promise:** a commitment the player makes to a Character, whether or not the player can deliver it.
+- **Buzzword:** a fashionable phrase the player has picked up, which opens an option in a later Scene.
+- **Thread:** a chain of play running from something the player did to the point where it pays off or backfires.
+- **Gauge:** a visible, comic measure of the player's career that moves only when a Thread plays out. It does not necessarily lead to promotion.
+- **Teflon:** the Gauge reflecting the player's ability to avoid blame.
+- **Milestone:** a comic title awarded when a Gauge reaches a set level.
+- **Notebook:** the player's retained record of important clues about the Power Map, which may include false or outdated claims.
+- **Company Event:** something that happens to the company as a whole, such as a takeover bid or a security breach.
+
+### Discovery
+
+- **Scenario:** a generic, non-identifiable account of office life drawn from real experience. It is input to the design, not content in the game. Names are not real people.
+- **Move:** something the player or a Character does to get ahead or to get by.
+- **Appearance:** what the Move looked like from above.
+- **Reality:** what the Move actually did to the work.
+- **Payoff:** who gained from the Move, and how.
+- **Bill:** who paid for the Move, how, and how long it took to arrive.
 
 ---
 
