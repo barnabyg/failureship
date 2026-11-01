@@ -1186,6 +1186,10 @@ function statusLabel(content: Content, id: string): string {
   return content.project.statuses.find((s) => s.id === id)?.label ?? id;
 }
 
+function statusColour(content: Content, id: string): string {
+  return content.project.statuses.find((s) => s.id === id)?.colour ?? "";
+}
+
 function toProjectView(state: State, content: Content): PlayerView["project"] {
   const { name, owner } = content.project;
   const { real, reported, news } = state.project;
@@ -1194,6 +1198,8 @@ function toProjectView(state: State, content: Content): PlayerView["project"] {
     owner,
     real: statusLabel(content, real),
     reported: statusLabel(content, reported),
+    realColour: statusColour(content, real),
+    reportedColour: statusColour(content, reported),
     news,
   };
 }

@@ -144,9 +144,9 @@ export function fixtureRaw() {
       name: "PROJECT-NAME",
       owner: "PROJECT-OWNER",
       statuses: [
-        { id: "good", label: "STATUS-GOOD" },
-        { id: "fair", label: "STATUS-FAIR" },
-        { id: "bad", label: "STATUS-BAD" },
+        { id: "good", label: "STATUS-GOOD", colour: "#00ff00" },
+        { id: "fair", label: "STATUS-FAIR", colour: "#ffaa00" },
+        { id: "bad", label: "STATUS-BAD", colour: "#ff0000" },
       ],
       start: { real: "fair", reported: "good" },
       events: [] as {

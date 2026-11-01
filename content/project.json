@@ -4,15 +4,18 @@
   "statuses": [
     {
       "id": "green",
-      "label": "Green"
+      "label": "Green",
+      "colour": "#3f8f4f"
     },
     {
       "id": "amber",
-      "label": "Amber"
+      "label": "Amber",
+      "colour": "#d9932b"
     },
     {
       "id": "red",
-      "label": "Red"
+      "label": "Red",
+      "colour": "#c0392b"
     }
   ],
   "start": {

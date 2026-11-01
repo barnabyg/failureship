@@ -233,6 +233,8 @@ export const FITTINGS = [
   "lift",
 ] as const;
 
+const colour = z.string().regex(/^#[0-9a-fA-F]{6}$/);
+
 const room = z.strictObject({
   id,
   x: z.number(),
@@ -240,7 +242,7 @@ const room = z.strictObject({
   width: z.number().positive(),
   depth: z.number().positive(),
   height: z.number().positive(),
-  colour: z.string().regex(/^#[0-9a-fA-F]{6}$/),
+  colour,
   /** What the room is furnished as. Without it, the room is a plain box. */
   fittings: z.enum(FITTINGS).optional(),
   /** A label for a place the player can see but not act on. */
@@ -397,7 +399,7 @@ const project = z.strictObject({
   name: text,
   owner: text,
   /** Best first, which is what `better` and `worse` go by. */
-  statuses: z.array(z.strictObject({ id, label: text })).min(2),
+  statuses: z.array(z.strictObject({ id, label: text, colour })).min(2),
   start: z.strictObject({ real: id, reported: id }),
   /** What happens to the Project whatever the player does, as a month opens. */
   events: z
