@@ -238,8 +238,14 @@ A Notification, action, Scene, Move, Notebook event or official story entry can 
 `"months": [2, 3]` to belong only to those months. Without it, it belongs to every
 month. An action can add `moreResults`, used in turn so that a place reads differently
 each month. A Move does not land twice in a run while another could. A Move with `"priority": true`
-lands ahead of the others whenever its `when` holds, which is how a meeting you skip
-gives you an action.
+lands ahead of the others whenever its `when` holds.
+
+`demands.json`'s `missed` says what a meeting you skip leaves you with. As the month
+closes, you are told about one of its `actions`, each given once in a run, and your boss
+takes the absence according to the `approach`. It then stays open, arrives the month
+after as a Notification with the `options` shared by all of them, and goes on like any
+other Demand. A month's meeting is the action that sets `attended`, and there must be an
+action written for every month.
 
 ## Develop
 

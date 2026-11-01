@@ -264,6 +264,15 @@ describe("the real month", () => {
       optionId: "push-back",
     });
 
+    // Month 1's meeting was missed, so its action comes before the report.
+    const given = run.choose({ type: "continue" }).step;
+    if (given.kind !== "notification") throw new Error(given.kind);
+    run.choose({
+      type: "notification",
+      notificationId: given.id,
+      optionId: "push-back",
+    });
+
     expect(run.choose({ type: "continue" }).step).toMatchObject({
       id: "report-input-late",
     });

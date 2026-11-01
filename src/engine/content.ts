@@ -120,17 +120,19 @@ const notification = z.strictObject({
   options: z.array(notificationOption).min(1),
 });
 
+const chasedDemand = z.strictObject({
+  from: text,
+  subject: text,
+  body: text,
+  options: z.array(notificationOption).min(1),
+});
+
 /** An instruction from above, which can be answered in the five ways below. */
 const demand = notification.extend({
   /** What happens if the boss forgets a stalled Demand. */
   forgotten: notice,
   /** What arrives if the boss chases a stalled Demand instead. */
-  chased: z.strictObject({
-    from: text,
-    subject: text,
-    body: text,
-    options: z.array(notificationOption).min(1),
-  }),
+  chased: chasedDemand,
 });
 
 const sceneResult = z.strictObject({
@@ -482,6 +484,36 @@ const contentSchema = z.strictObject({
       /** Set for the month when a stalled Demand is forgotten or chased. */
       sets: z.strictObject({ forgotten: id, chased: id }),
       items: z.array(demand),
+      /** What a meeting the player does not go to leaves them with. */
+      missed: z
+        .strictObject({
+          /** The flag that going to this month's meeting sets. */
+          attended: id,
+          /** Set for the month when a meeting is missed. */
+          sets,
+          /** How each kind of boss takes the absence. */
+          approach: id,
+          /** The answers, the same for whichever action the minutes record. */
+          options: z.array(notificationOption).min(1),
+          forgotten: notice,
+          chased: chasedDemand,
+          /** What the minutes can give. Each is given once in a run. */
+          actions: z
+            .array(
+              z.strictObject({
+                id,
+                /** What the player is told as the month closes. */
+                title: text,
+                body: text,
+                /** How the Demand arrives the month after. */
+                from: text,
+                subject: text,
+                ask: text,
+              }),
+            )
+            .min(1),
+        })
+        .optional(),
     })
     .optional(),
   characters: z
@@ -556,9 +588,26 @@ export function chasedIdOf(demandId: string): string {
   return `${demandId}-chased`;
 }
 
+/** Every Demand there is: those of a month, and those a missed meeting gives. */
+export function everyDemand(content: Content) {
+  const { items = [], missed } = content.demands ?? {};
+  const given = (missed?.actions ?? []).map((action) => ({
+    id: action.id,
+    months: undefined,
+    when: undefined,
+    from: action.from,
+    subject: action.subject,
+    body: action.ask,
+    options: missed?.options ?? [],
+    forgotten: missed?.forgotten ?? { title: "", body: "" },
+    chased: missed?.chased ?? { from: "", subject: "", body: "", options: [] },
+  }));
+  return [...items, ...given];
+}
+
 /** Every Notification there is, including Demands and their chasers. */
 export function everyNotification(content: Content) {
-  const items = content.demands?.items ?? [];
+  const items = everyDemand(content);
   return [
     ...content.notifications,
     ...items,
@@ -854,7 +903,21 @@ function findBrokenDemands(content: Content): string[] {
       problems.push(`A ${kind} boss's Demand odds add up to more than one.`);
     }
   }
-  for (const item of demands.items) {
+  const { missed } = demands;
+  if (missed) {
+    if (missed.actions.length < content.balance.monthsPerRun) {
+      problems.push("A missed meeting needs an action for every month.");
+    }
+    if (!content.actions.some((a) => a.sets.includes(missed.attended))) {
+      problems.push(`No action sets "${missed.attended}".`);
+    }
+    if (!content.boss.approaches.some((a) => a.id === missed.approach)) {
+      problems.push(`A missed meeting uses unknown "${missed.approach}".`);
+    }
+    const written = missed.actions.flatMap((a) => [a.title, a.body, a.ask]);
+    problems.push(...findNamedKinds(content, "A missed meeting", written));
+  }
+  for (const item of everyDemand(content)) {
     const owner = `Demand "${item.id}"`;
     const ids = item.options.map((o) => o.id);
     for (const answer of DEMAND_ANSWERS) {

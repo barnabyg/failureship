@@ -3,6 +3,7 @@ import {
   KINDS,
   behavioursOpenTo,
   chasedIdOf,
+  everyDemand,
   everyNotification,
   type ClueVerdict,
   type Condition,
@@ -116,6 +117,8 @@ interface MonthRecord {
   unanswered: string[];
   flags: string[];
   moveLanded: boolean;
+  /** Whether the month has dealt with the player missing its meeting. */
+  absenceDealtWith: boolean;
 }
 
 /** What belongs to the run, and carries from month to month. */
@@ -138,7 +141,15 @@ interface State extends MonthRecord {
   approachUses: Record<string, number>;
   verdict: string | null;
   /** Demands the player stalled, which stay open until forgotten or answered. */
-  openDemands: { id: string; month: number; chased: boolean }[];
+  openDemands: {
+    id: string;
+    month: number;
+    chased: boolean;
+    /** Given at a missed meeting, and yet to arrive as a Notification. */
+    due?: boolean;
+  }[];
+  /** The missed meetings' actions given so far, each of them once in a run. */
+  actionsGiven: string[];
   /** What the player is told before anything else, as a month opens. */
   noticesDue: { title: string; body: string }[];
   project: {
@@ -207,6 +218,7 @@ export function startRun(options: {
     approachUses: {},
     verdict: null,
     openDemands: [],
+    actionsGiven: [],
     noticesDue: [],
     project: { ...content.project.start, news: [], flagged: false },
     step: { kind: "actions" },
@@ -259,6 +271,7 @@ function freshMonth(content: Content, month: number): MonthRecord {
       .map((n) => n.id),
     flags: [],
     moveLanded: false,
+    absenceDealtWith: false,
   };
 }
 
@@ -288,8 +301,21 @@ function followUpDemands(state: State, content: Content): void {
   const kind = bossKindOf(state, content);
   const { forgets, chases } = demands.odds[kind];
   for (const open of [...state.openDemands]) {
-    const item = demands.items.find((d) => d.id === open.id);
+    const item = everyDemand(content).find((d) => d.id === open.id);
     if (!item || open.chased) continue;
+    if (open.due) {
+      open.due = false;
+      // After what belongs to this month, and ahead of what recurs.
+      const recurring = state.unanswered.findIndex((id) =>
+        content.notifications.some((n) => n.id === id && !n.months),
+      );
+      state.unanswered.splice(
+        recurring < 0 ? state.unanswered.length : recurring,
+        0,
+        open.id,
+      );
+      continue;
+    }
     const value = drawFor(state.seed, `demand:${open.id}`, state.month);
     if (value < forgets) {
       state.openDemands = state.openDemands.filter((d) => d !== open);
@@ -461,6 +487,11 @@ function answerNotification(
     .find((n) => n.id === choice.notificationId)
     ?.options.find((o) => o.id === choice.optionId);
   if (!option) throw new IllegalChoiceError(choice.optionId);
+  state.openDemands = state.openDemands.filter(
+    (d) =>
+      d.id !== choice.notificationId &&
+      chasedIdOf(d.id) !== choice.notificationId,
+  );
   if (option.stalls) {
     state.openDemands.push({
       id: choice.notificationId,
@@ -468,9 +499,6 @@ function answerNotification(
       chased: false,
     });
   }
-  state.openDemands = state.openDemands.filter(
-    (d) => chasedIdOf(d.id) !== choice.notificationId,
-  );
 
   state.spent += costOf(content, option.cost);
   state.unanswered = state.unanswered.filter(
@@ -833,7 +861,42 @@ function nextStep(state: State, world: World): Step {
   ) {
     return { kind: "actions" };
   }
-  return landMove(state, content) ?? { kind: "story" };
+  return (
+    dealWithAbsence(state, content) ??
+    landMove(state, content) ?? { kind: "story" }
+  );
+}
+
+/** A meeting the player missed gives them an action, and the boss notices. */
+function dealWithAbsence(state: State, content: Content): Step | null {
+  const missed = content.demands?.missed;
+  if (!missed || state.absenceDealtWith) return null;
+  state.absenceDealtWith = true;
+  const hadMeeting = actionsThisMonth(state, content).some((a) =>
+    a.sets.includes(missed.attended),
+  );
+  if (!hadMeeting || state.flags.includes(missed.attended)) return null;
+  const unused = missed.actions.filter(
+    (a) => !state.actionsGiven.includes(a.id),
+  );
+  const index = drawFor(state.seed, "minutes", state.month) * unused.length;
+  const action = unused[Math.floor(index)];
+  if (!action) return null;
+  state.actionsGiven.push(action.id);
+  state.openDemands.push({
+    id: action.id,
+    month: state.month,
+    chased: false,
+    due: true,
+  });
+  state.flags.push(...missed.sets);
+  const reaction = landWithBoss(
+    state,
+    content,
+    { approach: missed.approach },
+    action.title,
+  );
+  return { kind: "notice", title: action.title, body: action.body, reaction };
 }
 
 /** Picks the month's Character Move from those whose conditions hold. */
@@ -1222,7 +1285,7 @@ function toView(state: State, world: World): PlayerView {
     },
     project: toProjectView(state, content),
     openDemands: state.openDemands.flatMap(({ id, month }) => {
-      const item = content.demands?.items.find((d) => d.id === id);
+      const item = everyDemand(content).find((d) => d.id === id);
       return item ? [{ month, subject: item.subject }] : [];
     }),
     seed: state.seed,

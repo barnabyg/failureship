@@ -303,5 +303,171 @@
         ]
       }
     }
-  ]
+  ],
+  "missed": {
+    "attended": "attended-meeting",
+    "sets": ["given-action"],
+    "approach": "absent",
+    "options": [
+      {
+        "id": "deliver",
+        "label": "Find out what it is, and do it",
+        "cost": "standard",
+        "sets": ["delivered-demand"],
+        "approach": "results",
+        "result": {
+          "title": "Your action",
+          "body": "It takes most of a day to establish what the action was. You do it. The next set of minutes records it as completed by the Office Co-ordinator."
+        }
+      },
+      {
+        "id": "push-back",
+        "label": "Reply that you were not at the meeting",
+        "sets": ["pushed-back"],
+        "approach": "push-back",
+        "result": {
+          "title": "RE: Your action",
+          "body": "You point out that you were not there. You are sent the minutes, as proof that you were."
+        }
+      },
+      {
+        "id": "hand-off",
+        "label": "Hand it to whoever is next on the distribution list",
+        "sets": ["handed-off"],
+        "approach": "hand-off",
+        "result": {
+          "title": "FW: Your action",
+          "body": "You forward it with the words \"as discussed\". Nothing was discussed. It has worked before, and it works now."
+        }
+      },
+      {
+        "id": "fake",
+        "label": "Mark it as complete in the action log",
+        "cost": "standard",
+        "sets": ["faked-demand"],
+        "approach": "theatre",
+        "result": {
+          "title": "Your action",
+          "body": "You find the log, which takes a while, and turn the cell green. Nobody has ever checked that a green cell means anything, and you see no reason to be the first."
+        }
+      },
+      {
+        "id": "stall",
+        "label": "Reply that this is being looked at",
+        "stalls": true,
+        "sets": ["stalled-demand"],
+        "approach": "stall",
+        "result": {
+          "title": "RE: Your action",
+          "body": "The next set of minutes records that it is being looked at. You are now recorded as looking at it."
+        }
+      }
+    ],
+    "forgotten": {
+      "title": "Your action",
+      "body": "The new minutes have a new format, with fewer columns. Your action was in one of the other columns. You do not bring it up."
+    },
+    "chased": {
+      "from": "From: The Office Co-ordinator, Marjorie Tull",
+      "subject": "OVERDUE: your action from the minutes",
+      "body": "Your action is now listed in red, at the top of the minutes, and read out at the start of the meeting. Your boss has been copied in, and so has your boss's boss.",
+      "options": [
+        {
+          "id": "do-it-late",
+          "label": "Stop what you are doing, and do it",
+          "cost": "standard",
+          "sets": ["delivered-demand"],
+          "approach": "late-answer",
+          "result": {
+            "title": "Your action",
+            "body": "You do it that afternoon. It is recorded as closed, late, and you are thanked, also late."
+          }
+        },
+        {
+          "id": "excuse",
+          "label": "Say that it is still being looked at",
+          "sets": ["stalled-demand"],
+          "approach": "neglect",
+          "result": {
+            "title": "RE: Your action",
+            "body": "It stays in red. The Office Co-ordinator has started a new column, and it has your name at the top."
+          }
+        }
+      ]
+    },
+    "actions": [
+      {
+        "id": "minutes-item",
+        "title": "The minutes have been circulated",
+        "body": "You did not go to this month's meeting. The minutes have gone round anyway, and they record an action against your name. Nobody remembers agreeing it, including the person who wrote it down. It is due on Friday.",
+        "from": "From: The Office Co-ordinator, Marjorie Tull",
+        "subject": "ACTION: your name is in the minutes",
+        "ask": "The minutes say that you are to \"progress the outstanding item\". There are several outstanding items. Friday has gone, and the Office Co-ordinator would like an update for next month's minutes."
+      },
+      {
+        "id": "minutes-fire-doors",
+        "title": "Thanks for picking this up",
+        "body": "In your absence, the meeting agreed that you were best placed to take this forward. The minutes do not say what this is. Someone who was there thinks it may be to do with the fire doors. It is due on Friday.",
+        "from": "From: The Office Co-ordinator, Marjorie Tull",
+        "subject": "ACTION: the thing you are taking forward",
+        "ask": "You are recorded as taking this forward. It does seem to be to do with the fire doors, and the fire doors have asked for a named owner."
+      },
+      {
+        "id": "minutes-apologies",
+        "title": "Apologies for absence",
+        "body": "You are listed under Apologies for Absence, and also three times under Actions. Two of them are yours because you were not there to say otherwise. The third is to find out why you were not there.",
+        "from": "From: The Office Co-ordinator, Marjorie Tull",
+        "subject": "ACTION: find out why you were not there",
+        "ask": "The action against your name is to report back on why you were not at the meeting. A template has been provided."
+      },
+      {
+        "id": "minutes-party",
+        "title": "A volunteer has been found",
+        "body": "The meeting asked for a volunteer, and looked round the room. Your chair was the only one that did not object. You will find your name in the minutes against the Christmas party.",
+        "from": "From: The Office Co-ordinator, Marjorie Tull",
+        "subject": "ACTION: the Christmas party",
+        "ask": "You own the Christmas party. It is not clear which Christmas. Someone from Facilities would like to know your numbers."
+      },
+      {
+        "id": "minutes-summary",
+        "title": "Matters arising",
+        "body": "The minutes record that you will circulate a summary of the discussion. You were not at the discussion. They also record that you spoke well.",
+        "from": "From: The Office Co-ordinator, Marjorie Tull",
+        "subject": "ACTION: your summary of the discussion",
+        "ask": "Your summary of a discussion you did not attend is now overdue. Two people have asked to see it before it goes out, in case it mentions them."
+      },
+      {
+        "id": "minutes-drive",
+        "title": "Any other business",
+        "body": "Under Any Other Business, someone said that the shared drive was a mess. Someone else said that you knew about the shared drive. The minutes say that you are reviewing it.",
+        "from": "From: The Office Co-ordinator, Marjorie Tull",
+        "subject": "ACTION: the review of the shared drive",
+        "ask": "Your review of the shared drive is expected. The drive has eleven years in it, and a folder called DO NOT DELETE, which is empty."
+      },
+      {
+        "id": "minutes-wellbeing",
+        "title": "You have been nominated",
+        "body": "You have been nominated as the floor's Wellbeing Champion. The nomination was proposed, seconded and carried in the time it took someone to refill the water jug.",
+        "from": "From: The Office Co-ordinator, Marjorie Tull",
+        "subject": "ACTION: Wellbeing Champion, first report",
+        "ask": "The Wellbeing Champion's first report is due, with metrics. Nobody knows what the last one did, or where the last one went."
+      },
+      {
+        "id": "minutes-2019",
+        "title": "Actions carried forward",
+        "body": "An action from 2019 has been carried forward through eleven sets of minutes. Its owner left. Your name has been written beside it, because it was the shortest way to close the item.",
+        "from": "From: The Office Co-ordinator, Marjorie Tull",
+        "subject": "ACTION: carried forward from 2019",
+        "ask": "The action from 2019 is now yours to close. It concerns a system that has since been replaced, by the system that is being replaced."
+      },
+      {
+        "id": "minutes-register",
+        "title": "A note of thanks",
+        "body": "The minutes thank you for your kind offer to review the risk register. You have made no such offer. It has been noted that you were not there to withdraw it.",
+        "from": "From: The Office Co-ordinator, Marjorie Tull",
+        "subject": "ACTION: review the risk register",
+        "ask": "You kindly offered to review the risk register. It is due, and it has a new risk on it, which is that nobody has reviewed the risk register."
+      }
+    ]
+  }
 }

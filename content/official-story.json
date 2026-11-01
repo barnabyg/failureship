@@ -479,6 +479,27 @@
     },
     {
       "when": {
+        "flag": "tricky-question"
+      },
+      "reported": "You welcomed robust challenge from a colleague.",
+      "happened": "Someone asked about a number, in front of people, and smiled."
+    },
+    {
+      "when": {
+        "flag": "offsite-ask"
+      },
+      "reported": "You supported the board's offsite at short notice.",
+      "happened": "You wrote two hours of slides, for nobody."
+    },
+    {
+      "when": {
+        "flag": "reported-on"
+      },
+      "reported": "You had a supportive conversation with Human Resources.",
+      "happened": "Someone reported you. Nobody will say for what."
+    },
+    {
+      "when": {
         "flag": "working-group"
       },
       "reported": "You were selected to join a senior working group.",

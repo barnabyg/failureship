@@ -23,6 +23,9 @@ test("plays through a month on a fixed-camera Floor 1", async ({ page }) => {
 
   await spendAction(page, "work");
 
+  // The meeting was missed, and the minutes say so before anything else lands.
+  await expect(page.getByTestId("panel-notice")).toBeVisible();
+  await page.getByTestId("continue").click();
   await expect(page.getByTestId("panel-move")).toBeVisible();
   await page.getByTestId("continue").click();
 
@@ -40,6 +43,7 @@ test("plays from month 1 into month 2", async ({ page }) => {
   await fileTheReport(page);
   await spendAction(page, "kitchen");
   await spendAction(page, "work");
+  await page.getByTestId("continue").click();
   await page.getByTestId("continue").click();
   await expect(page.getByTestId("panel-story")).toBeVisible();
   await expect(page.getByTestId("month")).toContainText("1 of 6");

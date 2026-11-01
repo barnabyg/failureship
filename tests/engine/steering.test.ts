@@ -105,17 +105,14 @@ describe("six months that do not feel like one month repeated", () => {
       if (!choice) throw new Error("No choice.");
       return choice;
     });
-    const moves = views.flatMap((v) =>
-      v.step.kind === "move" ? [v.step.title] : [],
+    const written = gameContent.demands?.missed?.actions.map((a) => a.title);
+    const told = views.flatMap((v) =>
+      v.step.kind === "notice" && written?.includes(v.step.title)
+        ? [v.step.title]
+        : [],
     );
 
-    expect(new Set(moves.slice(0, 3))).toEqual(
-      new Set([
-        "The minutes have been circulated",
-        "Thanks for picking this up",
-        "Apologies for absence",
-      ]),
-    );
+    expect(new Set(told).size).toBe(gameContent.balance.monthsPerRun);
   });
 
   it("never gives you those actions when you do go", () => {

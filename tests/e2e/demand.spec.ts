@@ -1,11 +1,11 @@
 import { expect, test, type Page } from "@playwright/test";
-import { answerAnyNotification, finishMonth } from "./play";
+import { answerAnyNotification, attendAndFinishMonth } from "./play";
 
 /** Reaches month 2's Demand from your boss's boss, and stalls it. */
 async function stallTheDemand(page: Page, seed: number) {
   await page.goto(`/?seed=${String(seed)}`);
   await answerAnyNotification(page);
-  await finishMonth(page);
+  await attendAndFinishMonth(page);
   await page.getByTestId("option-skip-training").click();
   await page.getByTestId("continue").click();
   await expect(page.getByTestId("panel-notification")).toContainText(
@@ -28,7 +28,7 @@ test("a stalled Demand stays open, and a chase follows it into a later month", a
   await stallTheDemand(page, 4);
   await expect(page.getByTestId("open-demands")).toContainText("1");
   await answerAnyNotification(page);
-  await finishMonth(page);
+  await attendAndFinishMonth(page);
 
   await expect(page.getByTestId("month")).toContainText("3 of 6");
   await expect(page.getByTestId("panel-notification")).toContainText(
@@ -47,7 +47,7 @@ test("a stalled Demand can be forgotten, which closes it", async ({ page }) => {
   await stallTheDemand(page, 8);
   await expect(page.getByTestId("open-demands")).toContainText("1");
   await answerAnyNotification(page);
-  await finishMonth(page);
+  await attendAndFinishMonth(page);
 
   await expect(page.getByTestId("month")).toContainText("3 of 6");
   await expect(page.getByTestId("panel-notice")).toContainText(

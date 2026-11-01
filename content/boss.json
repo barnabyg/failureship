@@ -229,6 +229,31 @@
       }
     },
     {
+      "id": "absent",
+      "shift": {
+        "believer": -1,
+        "incompetent": 0,
+        "practitioner": -2
+      },
+      "reaction": {
+        "believer": [
+          "Your boss saved you a copy of the handout, and asks whether everything is all right. Your boss means it, which does not help.",
+          "Your boss says that the room needed your view, and sounds as though that had been true.",
+          "Your boss mentions, without any edge, that you were missed. Your boss has written down what you missed, in case you want it."
+        ],
+        "incompetent": [
+          "Your boss has not noticed that you were not there, and thanks you for your contribution.",
+          "Your boss asks you what was decided, on the understanding that you were there.",
+          "Your boss says it was a good session, and that you made some good points."
+        ],
+        "practitioner": [
+          "Your boss says that it is no problem at all. You learn later that your absence came up, and who raised it.",
+          "Your boss gave your apologies for you, in some detail, to people you have not met.",
+          "Your boss says that things were decided in your absence, and smiles, and does not say which."
+        ]
+      }
+    },
+    {
       "id": "blame",
       "shift": {
         "believer": -2,
