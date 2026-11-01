@@ -3,7 +3,7 @@ import path from "node:path";
 import { describe, expect, it } from "vitest";
 import { gameContent } from "../../src/content";
 import { parseContent, startRun, type Content } from "../../src/engine";
-import { sceneFixtureRaw } from "./fixture";
+import { findOutFixtureRaw, sceneFixtureRaw } from "./fixture";
 
 const LIKELY = { believer: 4, incompetent: 2, practitioner: 1 };
 
@@ -251,5 +251,97 @@ describe("how running text refers to people", () => {
     for (const { id, called } of gameContent.characters) {
       expect(called, id).toBeDefined();
     }
+  });
+});
+
+describe("how a source talks", () => {
+  function voicesFixtureRaw() {
+    const { characters, behaviours } = rolesFixtureRaw();
+    const raw = findOutFixtureRaw();
+    return {
+      ...raw,
+      characters,
+      behaviours,
+      sources: {
+        ...raw.sources,
+        voices: {
+          chair: ["CHAIR-ONE {said}", "CHAIR-TWO {said}"],
+          "minute-taker": ["MINUTES-ONE {said}"],
+        } as Record<string, string[]>,
+      },
+    };
+  }
+
+  function claimFrom(seed: number, sourceId: string, content: Content) {
+    const run = startRun({ seed, content });
+    run.choose({ type: "action", actionId: "copier" });
+    const subjectId = sourceId === "cal" ? "ana" : "cal";
+    const view = run.choose({ type: "find-out", sourceId, subjectId });
+    if (view.step.kind !== "claim") throw new Error(view.step.kind);
+    return { run, text: view.step.text };
+  }
+
+  it("depends on the source's role", () => {
+    const content = parseContent(voicesFixtureRaw());
+    for (let seed = 1; seed <= 40; seed++) {
+      expect(claimFrom(seed, "ana", content).text).toMatch(/^CHAIR-/);
+      expect(claimFrom(seed, "ben", content).text).toMatch(/^MINUTES-/);
+    }
+  });
+
+  it("leaves a role with no voice speaking plainly", () => {
+    const { text } = claimFrom(1, "cal", parseContent(voicesFixtureRaw()));
+
+    expect(text).not.toMatch(/CHAIR|MINUTES/);
+  });
+
+  it("says nothing of whether the claim is true", () => {
+    const content = parseContent(voicesFixtureRaw());
+    const seen = new Map<string, Set<string>>();
+    for (let seed = 1; seed <= 400; seed++) {
+      const { run, text } = claimFrom(seed, "ana", content);
+      let view = run.view();
+      while (view.choices.length > 0) {
+        const choice = view.choices.at(-1);
+        if (!choice) break;
+        view = run.choose(choice);
+      }
+      if (view.step.kind !== "results") throw new Error(view.step.kind);
+      const verdict = view.step.claims[0]?.verdict ?? "";
+      const voice = text.split(" ")[0] ?? "";
+      seen.set(verdict, (seen.get(verdict) ?? new Set()).add(voice));
+    }
+
+    expect(seen.size).toBeGreaterThanOrEqual(2);
+    for (const voices of seen.values()) {
+      expect(voices).toEqual(new Set(["CHAIR-ONE", "CHAIR-TWO"]));
+    }
+  });
+
+  it("gives every role in the game a voice of its own", () => {
+    const { voices } = gameContent.sources;
+    const heard = new Set<string>();
+    for (const { id, role } of gameContent.characters) {
+      const lines = voices[role ?? ""] ?? [];
+      expect(lines.length, id).toBeGreaterThanOrEqual(2);
+      for (const line of lines) {
+        expect(heard.has(line), line).toBe(false);
+        heard.add(line);
+      }
+    }
+  });
+
+  it("rejects a voice for a role that nobody has", () => {
+    const raw = voicesFixtureRaw();
+    raw.sources.voices.chiar = ["{said}"];
+
+    expect(() => parseContent(raw)).toThrow(/unknown role "chiar"/);
+  });
+
+  it("rejects a voice that leaves out what was said", () => {
+    const raw = voicesFixtureRaw();
+    raw.sources.voices.chair = ["Nothing to say."];
+
+    expect(() => parseContent(raw)).toThrow(/\{said\}/);
   });
 });

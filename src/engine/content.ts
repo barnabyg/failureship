@@ -245,6 +245,8 @@ const sources = z.strictObject({
       }),
     }),
   ),
+  /** How each role talks around a claim. Says {said}. A role left out speaks plainly. */
+  voices: z.record(id, lines).default({}),
   /** How many people, from the top of the Power Map, count as influential. */
   influentialCount: z.number().int().positive(),
   /** How often each kind of source gives each sort of claim. */
@@ -617,7 +619,7 @@ function findBrokenBossSigns(content: Content): string[] {
 
 /** Sources must be worth weighing: never always right, and never always wrong. */
 function findBrokenSources(content: Content): string[] {
-  const { methods, reliability, motives, claims } = content.sources;
+  const { methods, reliability, motives, claims, voices } = content.sources;
   const problems: string[] = [];
   const checkTokens = (owner: string, written: string, tokens: string[]) => {
     for (const [, token] of written.matchAll(/\{(\w+)\}/g)) {
@@ -642,6 +644,18 @@ function findBrokenSources(content: Content): string[] {
     }
     if (Object.values(method.topics).every((t) => t === 0)) {
       problems.push(`${owner} has nothing to claim.`);
+    }
+  }
+  const roles = new Set(content.characters.flatMap((c) => c.role ?? []));
+  for (const [role, spoken] of Object.entries(voices)) {
+    const owner = `The voice of "${role}"`;
+    if (!roles.has(role))
+      problems.push(`A voice names unknown role "${role}".`);
+    for (const line of spoken) {
+      if (!line.includes("{said}")) {
+        problems.push(`${owner} needs to say {said}: "${line}"`);
+      }
+      checkTokens(owner, line, ["said"]);
     }
   }
   for (const kind of KINDS) {

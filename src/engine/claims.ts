@@ -129,6 +129,11 @@ export function makeClaim(
     text = write(claims.kind[said]);
   }
 
+  // Drawn apart from the status, so that how someone talks says nothing of it.
+  const role = content.characters.find((c) => c.id === source.id)?.role;
+  const voices = role === undefined ? undefined : content.sources.voices[role];
+  if (voices) text = write(voices).replaceAll("{said}", text);
+
   const frame = pick(next, method.frames);
   next = frame.next;
 
