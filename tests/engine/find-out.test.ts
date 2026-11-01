@@ -125,20 +125,20 @@ describe("Find Out", () => {
   });
 
   it("words every status alike, so that wording gives nothing away", () => {
-    const { claims } = findOutFixtureRaw().sources;
-    const said = new Map<string, Set<string>>();
+    const said = new Map<string, string[]>();
     for (let seed = 1; seed <= 1500; seed++) {
       const run = startRun({ seed, content: content() });
       const view = askOnce(run);
       if (view.step.kind !== "claim") throw new Error(view.step.kind);
       const [{ verdict } = { verdict: "" }] = resultsOf(playOut(run)).claims;
-      const set = said.get(view.step.text) ?? new Set();
-      said.set(view.step.text, set.add(verdict));
+      said.set(view.step.text, [...(said.get(view.step.text) ?? []), verdict]);
     }
 
-    expect(claims.kind.believer).toHaveLength(1);
-    expect([...said.values()].some((v) => v.size > 1)).toBe(true);
-    expect(said.get("Cal Cope SAID-HIGH")?.size).toBeGreaterThan(1);
+    const common = [...said].filter(([, verdicts]) => verdicts.length >= 20);
+    expect(common.length).toBeGreaterThan(5);
+    for (const [text, verdicts] of common) {
+      expect(new Set(verdicts).size, text).toBeGreaterThan(1);
+    }
   });
 
   it("makes each kind of source reliable in its own way", () => {

@@ -1,3 +1,5 @@
+import { readdirSync, readFileSync } from "node:fs";
+import path from "node:path";
 import { describe, expect, it } from "vitest";
 import { gameContent } from "../../src/content";
 import { KINDS, startRun, type Kind, type PlayerView } from "../../src/engine";
@@ -244,8 +246,18 @@ describe("the balance of the deal", () => {
 });
 
 describe("the owner's data files", () => {
-  it("holds every word of the game in content, not in code", () => {
-    // Anything not in a data file would fail to parse or be missing here.
+  it("has no game text written into the interface", () => {
+    const folder = path.join(import.meta.dirname, "../../src/ui");
+    for (const file of readdirSync(folder)) {
+      if (!file.endsWith(".tsx")) continue;
+      const code = readFileSync(path.join(folder, file), "utf8");
+      // Words sitting between tags, or a label given as a literal.
+      expect(code, file).not.toMatch(/>\s*[A-Za-z][a-z]+ [a-z]+[^<{]*</);
+      expect(code, file).not.toMatch(/(title|label)="[^"]+"/);
+    }
+  });
+
+  it("has enough of everything for six months", () => {
     expect(gameContent.scenes.length).toBeGreaterThanOrEqual(6);
     expect(gameContent.notifications.length).toBeGreaterThanOrEqual(6);
     expect(gameContent.moves.length).toBeGreaterThanOrEqual(10);

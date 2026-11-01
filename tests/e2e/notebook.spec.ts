@@ -40,6 +40,36 @@ test("a clue arrives, a Character is marked, and the mark is on the results scre
   await expect(page.getByTestId("result-clue").first()).toBeVisible();
 });
 
+test("the Notebook opens from every step of a month", async ({ page }) => {
+  const opensAndCloses = async (panel: string) => {
+    const left = await page.getByTestId("actions-left").innerText();
+    await openNotebook(page);
+    await closeNotebook(page);
+    await expect(page.getByTestId(panel)).toBeVisible();
+    await expect(page.getByTestId("actions-left")).toHaveText(left);
+  };
+
+  await page.goto("/?seed=1");
+  await opensAndCloses("panel-notification");
+  await page.getByTestId("option-pub").click();
+  await opensAndCloses("panel-dialog");
+  await page.getByTestId("continue").click();
+  await page.getByTestId("hotspot-ask-around").click();
+  await opensAndCloses("panel-find-out");
+  await page.getByTestId("source-analyst").click();
+  await page.getByTestId("subject-boss").click();
+  await opensAndCloses("panel-claim");
+  await page.getByTestId("continue").click();
+  await page.getByTestId("hotspot-meeting").click();
+  await opensAndCloses("panel-scene");
+  await page.getByTestId("scene-option-say-nothing").click();
+  await opensAndCloses("panel-notice");
+  await page.getByTestId("continue").click();
+  await opensAndCloses("panel-move");
+  await page.getByTestId("continue").click();
+  await opensAndCloses("panel-story");
+});
+
 test("opening the Notebook costs nothing, from any step", async ({ page }) => {
   await page.goto("/?seed=1");
   await openNotebook(page);
