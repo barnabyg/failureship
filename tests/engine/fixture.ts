@@ -109,6 +109,15 @@ export function fixtureRaw() {
       { id: "ben", name: "Ben Bird", title: "Analyst", reportsTo: "ana" },
       { id: "cal", name: "Cal Cope", title: "Clerk", reportsTo: "ana" },
     ] as { id: string; name: string; title: string; reportsTo?: string }[],
+    behaviours: [] as {
+      id: string;
+      text: string;
+      likelihood: {
+        believer: number;
+        incompetent: number;
+        practitioner: number;
+      };
+    }[],
     scenes: [] as RawScene[],
     notifications,
     dialogs: [

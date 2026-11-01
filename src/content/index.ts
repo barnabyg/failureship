@@ -1,5 +1,6 @@
 import actions from "../../content/actions.json";
 import balance from "../../content/balance.json";
+import behaviours from "../../content/behaviours.json";
 import buzzwords from "../../content/buzzwords.json";
 import characters from "../../content/characters.json";
 import dialogs from "../../content/dialogs.json";
@@ -20,6 +21,7 @@ export const gameContent = parseContent({
   balance,
   hiddenTruth,
   characters,
+  behaviours,
   scenes,
   notifications,
   dialogs,
@@ -50,6 +52,7 @@ const panelSchema = z.strictObject(
       "whatNext",
       "castHeading",
       "signsHeading",
+      "behavioursHeading",
       "optionsHeading",
       "seedLabel",
       "orgChartHeading",

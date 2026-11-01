@@ -188,6 +188,18 @@ export function StepPanel({ view, onChoose }: StepPanelProps) {
                   </div>
                 ))}
               </dl>
+              {step.behaviours.length > 0 && (
+                <>
+                  <h3>{panelText.behavioursHeading}</h3>
+                  <ul className="signs behaviours">
+                    {step.behaviours.map((shown) => (
+                      <li key={shown.who} data-testid="behaviour">
+                        {shown.text}
+                      </li>
+                    ))}
+                  </ul>
+                </>
+              )}
             </div>
             <div>
               <h3>{panelText.optionsHeading}</h3>

@@ -5,7 +5,7 @@ import {
   type DealtCharacter,
   type PowerMap,
 } from "./deal";
-import { pick } from "./rng";
+import { pick, pickWeighted } from "./rng";
 import type {
   Buzzword,
   ChartEntry,
@@ -34,11 +34,17 @@ interface World {
   sceneScripts: SceneScripts;
 }
 
+/** Which behaviour a Character was seen showing when a Scene opened. */
+interface ShownBehaviour {
+  character: string;
+  behaviour: string;
+}
+
 type Step =
   | { kind: "notification"; id: string }
   | { kind: "dialog"; id: string; learned: string[] }
   | { kind: "actions" }
-  | { kind: "scene"; id: string }
+  | { kind: "scene"; id: string; shown: ShownBehaviour[] }
   | { kind: "notice"; title: string; body: string }
   | { kind: "move"; id: string }
   | { kind: "story" }
@@ -167,7 +173,7 @@ function apply(state: State, world: World, choice: Choice): void {
       state.visited.push(action.id);
       state.flags.push(...action.sets);
       if (action.scene !== undefined) {
-        state.step = { kind: "scene", id: action.scene };
+        state.step = openScene(state, world, action.scene);
       } else if (action.result) {
         state.step = { kind: "notice", ...action.result };
       }
@@ -209,6 +215,26 @@ function answerNotification(
   } else {
     state.step = nextStep(state, world);
   }
+}
+
+/** Everyone present shows one behaviour, chosen by their dealt kind. */
+function openScene(state: State, world: World, id: string): Step {
+  const { behaviours } = world.content;
+  const shown: ShownBehaviour[] = [];
+  if (behaviours.length > 0) {
+    for (const character of sceneData(state, world, id).cast) {
+      const kind = state.truth.characters.find((c) => c.id === character)?.kind;
+      if (kind === undefined) continue;
+      const chosen = pickWeighted(
+        state.rng,
+        behaviours,
+        (b) => b.likelihood[kind],
+      );
+      state.rng = chosen.next;
+      shown.push({ character, behaviour: chosen.item.id });
+    }
+  }
+  return { kind: "scene", id, shown };
 }
 
 function behaveInScene(
@@ -393,7 +419,7 @@ function notificationOptions(
 function toSceneView(
   state: State,
   world: World,
-  id: string,
+  { id, shown }: Extract<Step, { kind: "scene" }>,
 ): Extract<StepView, { kind: "scene" }> {
   const { content } = world;
   const scene = sceneData(state, world, id);
@@ -411,6 +437,12 @@ function toSceneView(
         .map((x) => ({ name: x.name, title: x.title })),
     ),
     signs: scene.signs.map((s) => ({ label: s.label, text: fill(s.text) })),
+    behaviours: shown.map(({ character, behaviour }) => {
+      const who =
+        content.characters.find((c) => c.id === character)?.name ?? character;
+      const written = content.behaviours.find((b) => b.id === behaviour);
+      return { who, text: (written?.text ?? "").replaceAll("{who}", who) };
+    }),
     options: offeredOptions(state, scene).map((o) => ({
       id: o.id,
       label: fill(o.label),
@@ -505,7 +537,7 @@ function toStepView(state: State, world: World): StepView {
       };
     }
     case "scene":
-      return toSceneView(state, world, step.id);
+      return toSceneView(state, world, step);
     case "move": {
       const move = content.moves.find((m) => m.id === step.id);
       if (!move) throw new Error(`Unknown Move "${step.id}".`);

@@ -63,6 +63,7 @@ export type StepView =
       narration: string[];
       cast: { name: string; title: string }[];
       signs: { label: string; text: string }[];
+      behaviours: { who: string; text: string }[];
       options: { id: string; label: string }[];
     }
   | { kind: "notice"; title: string; body: string }

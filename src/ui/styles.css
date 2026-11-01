@@ -175,7 +175,7 @@ body {
 }
 
 .panel-wide {
-  width: min(1040px, calc(100% - 24px));
+  width: min(880px, calc(100% - 24px));
 }
 
 .panel h2 {
@@ -243,8 +243,13 @@ body {
   background: #e7e3d6;
 }
 
-.signs div + div {
+.signs div + div,
+.signs li + li {
   margin-top: 4px;
+}
+
+.behaviours {
+  list-style: none;
 }
 
 .signs dt {
@@ -332,7 +337,7 @@ body {
 
 .scene-columns {
   display: grid;
-  grid-template-columns: 3fr 2fr;
+  grid-template-columns: 1fr 280px;
   gap: 20px;
 }
 

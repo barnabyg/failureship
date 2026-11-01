@@ -103,6 +103,27 @@ describe("the real month", () => {
     expect(told).not.toMatch(/\{(holder|ignored|bystander)\}/);
   });
 
+  it("never shows a dealt kind or Hidden Fact before the end of a run", () => {
+    for (const seed of SEEDS) {
+      const run = startRun({ seed, content: gameContent });
+      const { characters } = readHiddenTruth(run);
+      let view = run.view();
+      let walk = seed;
+      while (view.step.kind !== "results") {
+        const seen = JSON.stringify(view);
+        expect(seen).not.toMatch(/Believer|Incompetent|Practitioner/i);
+        expect(seen).not.toContain("powerMap");
+        for (const { fact } of characters) {
+          if (fact) expect(seen).not.toContain(fact.text);
+        }
+        walk = (walk * 31 + 7) % 1009;
+        const choice = view.choices[walk % view.choices.length];
+        if (!choice) throw new Error(`Stuck at ${view.step.kind}.`);
+        view = run.choose(choice);
+      }
+    }
+  });
+
   it("reveals every Character at the end of a run", () => {
     const run = startRun({ seed: 2, content: gameContent });
     let view = run.view();

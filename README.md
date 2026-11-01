@@ -32,6 +32,10 @@ pick one. The month has the same steps each time:
 3. **A Character Move lands on you.** You do not get a choice.
 4. **The month closes** with the official story beside what actually happened.
 
+Everyone in a Scene behaves according to their dealt kind, and no single sign
+settles what they are. Watch them across the months, then check your guesses on
+the results screen.
+
 Press **Org Chart** at any step to see the formal hierarchy, at no cost. The real
 one is the hidden Power Map, dealt from the seed.
 
@@ -65,20 +69,21 @@ All the text and numbers are in `content/`, and editing them needs no code
 change. The running game reloads when you save a file. If an edit breaks the
 format, the page shows what is wrong instead of the game.
 
-| File                  | What it holds                                                         |
-| --------------------- | --------------------------------------------------------------------- |
-| `ui.json`             | Headings, buttons and the "What you can do now" hints                 |
-| `notifications.json`  | The month's Notifications, their choices and their results            |
-| `dialogs.json`        | Short text dialogs, such as the pub                                   |
-| `buzzwords.json`      | Buzzwords and their meanings                                          |
-| `actions.json`        | What can be done on the floor, and the results                        |
-| `scenes.json`         | The meeting: its signs, its choices and their results                 |
-| `moves.json`          | Character Moves, and when each can land                               |
-| `official-story.json` | The official story, assembled from entries according to what you did  |
-| `characters.json`     | Names, public job titles and who reports to whom on the Org Chart     |
-| `hidden-truth.json`   | The rules of the deal: kinds, their weights, and the Hidden Facts     |
-| `balance.json`        | Actions a month, months in a run and the cost of each choice          |
-| `floor-1.json`        | The rooms on the floor: positions, sizes, colours and the lift's sign |
+| File                  | What it holds                                                           |
+| --------------------- | ----------------------------------------------------------------------- |
+| `ui.json`             | Headings, buttons and the "What you can do now" hints                   |
+| `notifications.json`  | The month's Notifications, their choices and their results              |
+| `dialogs.json`        | Short text dialogs, such as the pub                                     |
+| `buzzwords.json`      | Buzzwords and their meanings                                            |
+| `actions.json`        | What can be done on the floor, and the results                          |
+| `scenes.json`         | The meeting: its signs, its choices and their results                   |
+| `moves.json`          | Character Moves, and when each can land                                 |
+| `official-story.json` | The official story, assembled from entries according to what you did    |
+| `behaviours.json`     | What Characters can be seen doing, and how likely each kind is to do it |
+| `characters.json`     | Names, public job titles and who reports to whom on the Org Chart       |
+| `hidden-truth.json`   | The rules of the deal: kinds, their weights, and the Hidden Facts       |
+| `balance.json`        | Actions a month, months in a run and the cost of each choice            |
+| `floor-1.json`        | The rooms on the floor: positions, sizes, colours and the lift's sign   |
 
 In a Scene, `{holder}`, `{ignored}` and `{bystander}` are replaced by the names of
 the most influential, the least influential and the next most influential of those
@@ -88,6 +93,11 @@ results. A `when` or `requires` condition can be
 `{ "flag": "went-to-pub" }`, `{ "not": ... }` or `{ "all": [...] }`. Options
 gated with `requires` cannot depend on the hidden truth. Flags come from `sets`,
 and are wiped when a new month opens. Buzzwords carry over for the whole run.
+
+A behaviour says `{who}`, and is written for a kind of person, never a named one.
+When a Scene opens, each person present shows one, chosen by their dealt kind. Its
+`likelihood` gives the weight for each kind. Every behaviour must be possible from
+at least two kinds, with different likelihoods, or the game will not start.
 
 A Hidden Fact says `{name}`, so that it reads correctly for whoever is dealt it,
 and can list `"characters"` to limit who that can be.

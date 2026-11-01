@@ -30,6 +30,27 @@ test("opens the meeting Scene from the tower and makes a choice", async ({
   await expect(page.getByTestId("hotspot-kitchen")).toBeEnabled();
 });
 
+test("the Scene leaves the hint readable at 1280x800", async ({ page }) => {
+  await reachMeeting(page, "pub");
+
+  const panel = await page.getByTestId("panel-scene").boundingBox();
+  const hint = await page.locator(".next").boundingBox();
+  if (!panel || !hint) throw new Error("Nothing to measure.");
+
+  expect(hint.x + hint.width).toBeLessThanOrEqual(panel.x);
+});
+
+test("the meeting shows a dealt sign for each person present", async ({
+  page,
+}) => {
+  await reachMeeting(page, "report");
+
+  const signs = page.getByTestId("behaviour");
+  await expect(signs).toHaveCount(4);
+  await expect(signs.filter({ hasText: "Dennis Prowse" })).toHaveCount(1);
+  await expect(signs.filter({ hasText: "{who}" })).toHaveCount(0);
+});
+
 test("the same choice lands differently when someone else holds influence", async ({
   page,
 }) => {

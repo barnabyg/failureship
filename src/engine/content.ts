@@ -137,6 +137,18 @@ const kindRule = z.strictObject({
   weight: z.number().nonnegative(),
 });
 
+const behaviour = z.strictObject({
+  id,
+  /** Says {who}, so that it works for whichever Character shows it. */
+  text,
+  /** How likely each kind is to show this, relative to its other behaviours. */
+  likelihood: z.strictObject({
+    believer: z.number().nonnegative(),
+    incompetent: z.number().nonnegative(),
+    practitioner: z.number().nonnegative(),
+  }),
+});
+
 const contentSchema = z.strictObject({
   balance: z.strictObject({
     actionsPerMonth: z.number().int().positive(),
@@ -176,6 +188,7 @@ const contentSchema = z.strictObject({
       }),
     )
     .min(3),
+  behaviours: z.array(behaviour),
   scenes: z.array(scene),
   notifications: z.array(notification),
   dialogs: z.array(dialog),
@@ -284,6 +297,42 @@ function findBrokenDeal(
   return problems;
 }
 
+/** Signs must narrow the answer without ever settling it. */
+function findBrokenBehaviours(content: Content): string[] {
+  const problems: string[] = [];
+  const nameParts = content.characters.flatMap((c) => c.name.split(" "));
+  for (const b of content.behaviours) {
+    const owner = `Behaviour "${b.id}"`;
+    if (!b.text.includes("{who}")) {
+      problems.push(`${owner} needs to say {who}.`);
+    }
+    for (const [, token] of b.text.matchAll(/\{(\w+)\}/g)) {
+      if (token !== "who") {
+        problems.push(`${owner} uses unknown token "{${token ?? ""}}".`);
+      }
+    }
+    const words = b.text.split(/\W+/);
+    if (nameParts.some((part) => words.includes(part))) {
+      problems.push(`${owner} names a Character, not a kind of person.`);
+    }
+    const likelihoods = Object.values(b.likelihood);
+    if (likelihoods.filter((l) => l > 0).length < 2) {
+      problems.push(`${owner} can come from only one kind.`);
+    }
+    if (new Set(likelihoods).size === 1) {
+      problems.push(`${owner} gives no evidence: every kind is as likely.`);
+    }
+  }
+  if (content.behaviours.length > 0) {
+    for (const kind of ["believer", "incompetent", "practitioner"] as const) {
+      if (content.behaviours.every((b) => b.likelihood[kind] === 0)) {
+        problems.push(`No behaviour can be shown by a ${kind}.`);
+      }
+    }
+  }
+  return problems;
+}
+
 function findBrokenReferences(content: Content): string[] {
   const rooms = new Set(content.floor.rooms.map((r) => r.id));
   const dialogs = new Set(content.dialogs.map((d) => d.id));
@@ -331,6 +380,7 @@ function findBrokenReferences(content: Content): string[] {
   };
 
   problems.push(...findBrokenDeal(content, characters));
+  problems.push(...findBrokenBehaviours(content));
   for (const a of content.actions) {
     if (!rooms.has(a.place)) {
       problems.push(`Action "${a.id}" is at unknown place "${a.place}".`);
