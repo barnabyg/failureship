@@ -47,8 +47,9 @@ describe("six months that do not feel like one month repeated", () => {
       const scenes = gameContent.scenes
         .filter((s) => inMonth(s, month))
         .map((s) => s.id);
+      // The Monthly Status Report recurs, so it is not what sets a month apart.
       const notifications = gameContent.notifications
-        .filter((n) => inMonth(n, month))
+        .filter((n) => n.months !== undefined && inMonth(n, month))
         .map((n) => n.id);
       expect(scenes, `month ${String(month)}`).toHaveLength(1);
       expect(notifications, `month ${String(month)}`).toHaveLength(1);

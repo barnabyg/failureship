@@ -9,6 +9,8 @@ interface RawOption {
   sets?: string[];
   opinion?: number;
   result?: { title: string; body: string };
+  approach?: string;
+  project?: { real?: string; reported?: string };
 }
 
 interface RawNotification {
@@ -130,6 +132,21 @@ export function fixtureRaw() {
         source: string;
         text: string;
         verdict: string;
+      }[],
+    },
+    project: {
+      name: "PROJECT-NAME",
+      owner: "PROJECT-OWNER",
+      statuses: [
+        { id: "good", label: "STATUS-GOOD" },
+        { id: "fair", label: "STATUS-FAIR" },
+        { id: "bad", label: "STATUS-BAD" },
+      ],
+      start: { real: "fair", reported: "good" },
+      events: [] as {
+        months: number[];
+        text: string;
+        project?: { real?: string; reported?: string };
       }[],
     },
     hiddenTruth: {

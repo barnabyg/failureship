@@ -148,6 +148,18 @@
           "Your boss takes it upstairs that afternoon. Your name has come off it on the way.",
           "Your boss thanks you, and shows it to the floor above as a thing that your boss's team has done."
         ]
+      },
+      "overdone": {
+        "after": 2,
+        "shift": {
+          "practitioner": -2
+        },
+        "reaction": {
+          "practitioner": [
+            "Your boss stops by your desk to say how much everyone upstairs has been hearing about your work. Your boss does not seem pleased about it, and asks to see anything further first.",
+            "Your boss mentions that some people here are spreading themselves too thin, and looks at your project while saying so."
+          ]
+        }
       }
     },
     {
@@ -257,6 +269,50 @@
         "practitioner": [
           "Your boss thanks you warmly for your ownership, in front of everyone, and makes sure that it is minuted.",
           "Your boss looks at you with new interest, as one looks at somewhere to put things."
+        ]
+      }
+    },
+    {
+      "id": "plain-report",
+      "shift": {
+        "believer": 1,
+        "incompetent": -1,
+        "practitioner": 0
+      },
+      "reaction": {
+        "believer": [
+          "Your boss replies with a question about the second paragraph. Somebody has read it.",
+          "Your boss thanks you for being straight about it, and asks if you need anything."
+        ],
+        "incompetent": [
+          "Your boss replies asking whether this could be made to sound more like the others.",
+          "Your boss replies: thanks, can we discuss the tone."
+        ],
+        "practitioner": [
+          "Your boss replies with a thumbs up, and takes a copy.",
+          "Your boss says nothing about it. The numbers turn up in a meeting a week later, as your boss's own."
+        ]
+      }
+    },
+    {
+      "id": "neglect",
+      "shift": {
+        "believer": -2,
+        "incompetent": -1,
+        "practitioner": -1
+      },
+      "reaction": {
+        "believer": [
+          "Your boss comes over to ask if everything is all right, and clearly wants to know. That is the worst of it.",
+          "Your boss asks you, kindly, what got in the way."
+        ],
+        "incompetent": [
+          "Your boss forwards you a chaser about it, with the word Thoughts, and a question mark.",
+          "Your boss asks whether you could send last month's again, with a new date on it."
+        ],
+        "practitioner": [
+          "Your boss writes the date down, and does not mention it.",
+          "Your boss files something at 23:59 under your name, and lets you know."
         ]
       }
     }

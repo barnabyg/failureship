@@ -96,6 +96,7 @@ format, the page shows what is wrong instead of the game.
 | --------------------- | -------------------------------------------------------------------------------------------------------------------- |
 | `ui.json`             | Headings, buttons and the "What you can do now" hints                                                                |
 | `notifications.json`  | The month's Notifications, their choices and their results                                                           |
+| `project.json`        | The player's Project: its owner, statuses, starting point and written events                                         |
 | `dialogs.json`        | Short text dialogs, such as the pub                                                                                  |
 | `buzzwords.json`      | Buzzwords and their meanings                                                                                         |
 | `actions.json`        | What can be done on the floor, and the results                                                                       |
@@ -156,6 +157,17 @@ takes alike, stops the game from starting. A choice can write its own `reaction`
 each kind. A result's `when` can read `{ "bossIs": "believer" }`, but an option's
 `requires` cannot, because options never appear or disappear on the boss's kind. A
 Scene with a `verdict` adds what the boss finally says, by how the opinion stands.
+
+`project.json` holds the player's Project: its owner, its `statuses` from best to worst,
+where it `start`s, and the `events` that happen to it as a month opens. Press
+**Your project** at any step, at no cost, to see how it really is and how it has been
+reported. A Notification option, Scene result or action can carry
+`"project": { "real": "better", "reported": "worse" }`. Each side is a status's id,
+`better` or `worse`, and `reported` can also be `real`, which is what telling the truth
+does. Nothing else moves them. A Notification's body can say `{real}` and `{reported}`.
+
+An approach can have `overdone`, which changes how the listed kinds take it after
+`after` uses in a run. This is how a Practitioner boss turns on someone who shines.
 
 An action with `"findOut": "ask"` spends an action to get a claim from a source.
 A method with `"someoneThere": true` deals one of its `sources` to be there, and its

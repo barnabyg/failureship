@@ -11,6 +11,7 @@ import moves from "../../content/moves.json";
 import notebook from "../../content/notebook.json";
 import notifications from "../../content/notifications.json";
 import officialStory from "../../content/official-story.json";
+import project from "../../content/project.json";
 import scenes from "../../content/scenes.json";
 import sources from "../../content/sources.json";
 import ui from "../../content/ui.json";
@@ -35,6 +36,7 @@ export const gameContent = parseContent({
   hiddenTruth,
   sources,
   notebook,
+  project,
   characters,
   behaviours,
   scenes,
@@ -88,6 +90,10 @@ const panelSchema = z.strictObject(
       "optionsHeading",
       "seedLabel",
       "orgChartHeading",
+      "projectHeading",
+      "projectOwnerLabel",
+      "projectRealLabel",
+      "projectReportedLabel",
       "powerMapHeading",
       "closeLabel",
       "resultsWhoHeading",

@@ -1,5 +1,23 @@
 [
   {
+    "id": "credit-taken",
+    "from": "From: Your boss, Dennis Prowse",
+    "title": "A great month for the team",
+    "body": "Your boss has told the floor above about the good work your boss has been doing on your project. It is your work, and it has been described with great accuracy. Your name is in the copy line.",
+    "when": {
+      "all": [
+        {
+          "flag": "did-work"
+        },
+        {
+          "bossIs": "practitioner"
+        }
+      ]
+    },
+    "priority": true,
+    "sets": ["credit-taken"]
+  },
+  {
     "id": "minutes-action",
     "from": "From: The Office Co-ordinator, Marjorie Tull",
     "title": "The minutes have been circulated",
@@ -49,9 +67,9 @@
     "id": "report-chased",
     "from": "From: Your boss, Dennis Prowse",
     "title": "FW: Monthly Status Report OVERDUE",
-    "body": "Your boss has forwarded you a chaser about the report you did not file while you were at the pub with your boss. The whole message reads: Thoughts?",
+    "body": "Your boss has forwarded you a chaser about the report you did not file. The whole message reads: Thoughts?",
     "when": {
-      "flag": "went-to-pub"
+      "flag": "skipped-report"
     },
     "sets": ["report-chased"]
   },
@@ -61,7 +79,14 @@
     "title": "Thanks for your input",
     "body": "Your Monthly Status Report has gone upstairs under your boss's name, as an executive summary of your Monthly Status Report. The summary is your report.",
     "when": {
-      "flag": "filed-report"
+      "all": [
+        {
+          "flag": "filed-report"
+        },
+        {
+          "bossIs": "practitioner"
+        }
+      ]
     },
     "sets": ["report-renamed"]
   },

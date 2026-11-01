@@ -39,7 +39,34 @@
         "flag": "went-to-pub"
       },
       "reported": "The team invested in senior stakeholder engagement outside core hours.",
-      "happened": "You went to the pub. The Monthly Status Report was not filed."
+      "happened": "You went to the pub."
+    },
+    {
+      "when": {
+        "flag": "lied-in-report"
+      },
+      "reported": "Your project remains on track, as your report confirms.",
+      "happened": "You made it green. It is not green."
+    },
+    {
+      "when": {
+        "flag": "skipped-report"
+      },
+      "reported": "This month's report is being finalised.",
+      "happened": "You did not file it. Someone upstairs has chosen a colour for you."
+    },
+    {
+      "when": {
+        "flag": "credit-taken"
+      },
+      "reported": "Your boss drove strong delivery on a key project this month.",
+      "happened": "You did the work. It is in the copy line."
+    },
+    {
+      "when": {
+        "flag": "declined-pub"
+      },
+      "happened": "You stayed behind. Nothing was decided at the Feathers, and everyone there will remember it differently."
     },
     {
       "when": {

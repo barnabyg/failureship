@@ -1,5 +1,10 @@
 import { expect, test, type Page } from "@playwright/test";
-import { answerAnyNotification, askAtPhotocopier, playToResults } from "./play";
+import {
+  answerAnyNotification,
+  askAtPhotocopier,
+  playToResults,
+  skipTheReport,
+} from "./play";
 
 async function openNotebook(page: Page) {
   await page.getByTestId("open-notebook").click();
@@ -56,6 +61,7 @@ test("the Notebook opens from every step of a month", async ({ page }) => {
   await page.getByTestId("option-pub").click();
   await opensAndCloses("panel-dialog");
   await page.getByTestId("continue").click();
+  await skipTheReport(page);
   await page.getByTestId("hotspot-ask-around").click();
   await opensAndCloses("panel-find-out");
   await page.locator('[data-testid^="subject-"]').first().click();

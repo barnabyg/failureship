@@ -154,6 +154,14 @@ export interface PlayerView {
     clues: { month: number; source: string; text: string }[];
     marks: (Person & { mark: Kind | null })[];
   };
+  /** The player's own Project, which can be looked at any time for nothing. */
+  project: {
+    name: string;
+    owner: string;
+    real: string;
+    reported: string;
+    news: { month: number; text: string }[];
+  };
   seed: number;
   month: number;
   totalMonths: number;

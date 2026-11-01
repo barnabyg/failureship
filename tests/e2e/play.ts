@@ -14,9 +14,21 @@ export async function finishMonth(page: Page) {
   }
 }
 
-/** Answers the Notification with its first option. */
+/** Answers the month's Notifications, filing the report and saying no to the rest. */
 export async function answerAnyNotification(page: Page) {
-  await page.locator('[data-testid^="option-"]:enabled').first().click();
+  const panel = page.getByTestId("panel-notification");
+  await expect(panel).toBeVisible();
+  while (await panel.isVisible()) {
+    const report = page.getByTestId("option-report");
+    const free = panel.locator("button:enabled", { hasText: "Costs nothing" });
+    await ((await report.isVisible()) ? report : free.first()).click();
+    await page.getByTestId("continue").click();
+  }
+}
+
+/** Declines the month's offers and leaves the report unfiled, to keep the actions. */
+export async function skipTheReport(page: Page) {
+  await page.getByTestId("option-skip").click();
   await page.getByTestId("continue").click();
 }
 

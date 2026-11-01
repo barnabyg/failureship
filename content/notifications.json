@@ -1,20 +1,10 @@
 [
   {
-    "id": "report-or-pub",
+    "id": "pub-invite",
     "from": "From: Your boss, Dennis Prowse",
-    "subject": "RE: RE: FW: this evening",
-    "body": "Your Monthly Status Report is due tonight, and nothing matters more to the people upstairs. Separately, a few of us are going to the Feathers at five. No pressure either way. I will remember which you chose.",
+    "subject": "RE: RE: FW: the Feathers at five",
+    "body": "A few of us are going to the Feathers at five. Your Monthly Status Report is also due tonight, and I am sure you have that in hand. No pressure either way. I will remember which you chose.",
     "options": [
-      {
-        "id": "report",
-        "label": "Finish the Monthly Status Report",
-        "cost": "report",
-        "sets": ["filed-report"],
-        "result": {
-          "title": "Monthly Status Report filed",
-          "body": "You file it at 23:58. An automatic reply confirms that your report has been received and may be read."
-        }
-      },
       {
         "id": "pub",
         "label": "Go to the pub with your boss",
@@ -23,6 +13,15 @@
         "dialog": "pub",
         "learns": ["strategic-patience"],
         "approach": "favour"
+      },
+      {
+        "id": "decline",
+        "label": "Say that you have too much on",
+        "sets": ["declined-pub"],
+        "result": {
+          "title": "The Feathers",
+          "body": "Your boss replies with a thumbs up. Later you can hear them all from the car park, and you are the only person left on the floor."
+        }
       }
     ],
     "months": [1]
@@ -182,6 +181,60 @@
         "result": {
           "title": "Self-Assessment submitted",
           "body": "It takes four seconds. It is the most accurate thing you have written all year, and it will be read as a lack of ambition."
+        }
+      }
+    ]
+  },
+  {
+    "id": "monthly-report",
+    "from": "From: Your boss, Dennis Prowse",
+    "subject": "Monthly Status Report: due tonight",
+    "body": "Your Monthly Status Report is due tonight, and nothing matters more to the people upstairs. Your project is really {real}. It was last reported as {reported}.",
+    "options": [
+      {
+        "id": "report",
+        "label": "File it, and say how the project really is",
+        "cost": "report",
+        "sets": ["filed-report"],
+        "project": {
+          "reported": "real"
+        },
+        "approach": "plain-report",
+        "result": {
+          "title": "Monthly Status Report filed",
+          "body": "You file it at 23:58. An automatic reply confirms that your report has been received and may be read."
+        }
+      },
+      {
+        "id": "lie",
+        "label": "File it, and make the project green",
+        "cost": "report",
+        "sets": ["filed-report", "lied-in-report"],
+        "project": {
+          "reported": "green"
+        },
+        "approach": "theatre",
+        "reaction": {
+          "believer": "Your boss replies that this is good to hear, and asks what changed. You have no answer ready, and your boss waits for one.",
+          "incompetent": "Your boss replies with three exclamation marks, and forwards it to everyone.",
+          "practitioner": "Your boss replies with a single word: Noted. The report goes upstairs that night, and a copy goes into a drawer."
+        },
+        "result": {
+          "title": "Monthly Status Report filed",
+          "body": "You file it at 23:58. It is the greenest thing you have ever made. An automatic reply says that it may be read."
+        }
+      },
+      {
+        "id": "skip",
+        "label": "Do not file it, and see who notices",
+        "sets": ["skipped-report"],
+        "project": {
+          "reported": "worse"
+        },
+        "approach": "neglect",
+        "result": {
+          "title": "Monthly Status Report",
+          "body": "You go home. By the morning someone upstairs, having nothing to go on, has coloured your project in for you, and not hopefully."
         }
       }
     ]

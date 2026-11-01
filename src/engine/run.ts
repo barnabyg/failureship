@@ -100,6 +100,12 @@ interface BossLanding {
   shift: number;
 }
 
+/** A written event in the Project's life, which the player can read back. */
+interface ProjectNews {
+  month: number;
+  text: string;
+}
+
 /** What belongs to the month, and is wiped when the next one opens. */
 interface MonthRecord {
   noted: string[];
@@ -126,7 +132,10 @@ interface State extends MonthRecord {
   heard: { fact: string; subject: string }[];
   factEvents: { month: number; note: string; fact: string | null }[];
   bossLandings: BossLanding[];
+  /** How often each approach has been used, since some can be overdone. */
+  approachUses: Record<string, number>;
   verdict: string | null;
+  project: { real: string; reported: string; news: ProjectNews[] };
   step: Step;
   truth: HiddenTruth;
 }
@@ -183,7 +192,9 @@ export function startRun(options: {
     heard: [],
     factEvents: [],
     bossLandings: [],
+    approachUses: {},
     verdict: null,
+    project: { ...content.project.start, news: [] },
     step: { kind: "actions" },
     truth: {
       characters: motives.characters,
@@ -191,6 +202,7 @@ export function startRun(options: {
       bossOpinion: 0,
     },
   };
+  openMonth(state, content);
   state.step = nextStep(state, world);
 
   const view = () => toView(state, world);
@@ -234,6 +246,36 @@ function freshMonth(content: Content, month: number): MonthRecord {
   };
 }
 
+/** What happens as a month opens, whatever the player has done. */
+function openMonth(state: State, content: Content): void {
+  for (const event of content.project.events) {
+    if (inMonth(event, state.month)) {
+      moveProject(state, content, event.project);
+      state.project.news.push({ month: state.month, text: event.text });
+    }
+  }
+}
+
+function moveProject(
+  state: State,
+  content: Content,
+  change: { real?: string | undefined; reported?: string | undefined } = {},
+): void {
+  const { statuses } = content.project;
+  const { project } = state;
+  const moved = (from: string, to: string | undefined): string => {
+    const index = statuses.findIndex((s) => s.id === from);
+    if (to === "better") return statuses[Math.max(index - 1, 0)]?.id ?? from;
+    if (to === "worse") {
+      return statuses[Math.min(index + 1, statuses.length - 1)]?.id ?? from;
+    }
+    if (to === "real") return project.real;
+    return to ?? from;
+  };
+  project.real = moved(project.real, change.real);
+  project.reported = moved(project.reported, change.reported);
+}
+
 function inMonth(item: { months?: number[] | undefined }, month: number) {
   return item.months === undefined || item.months.includes(month);
 }
@@ -264,6 +306,7 @@ function leaveStory(state: State, world: World): void {
   }
   state.month += 1;
   Object.assign(state, freshMonth(world.content, state.month));
+  openMonth(state, world.content);
   state.step = nextStep(state, world);
 }
 
@@ -279,6 +322,7 @@ function apply(state: State, world: World, choice: Choice): void {
       state.spent += costOf(content, action.cost);
       state.visited.push(action.id);
       state.flags.push(...action.sets);
+      moveProject(state, content, action.project);
       const reaction = landWithBoss(state, content, action, action.label);
       if (action.scene !== undefined) {
         state.step = openScene(state, world, action.scene);
@@ -371,6 +415,7 @@ function answerNotification(
   const learned = option.learns.filter((w) => !state.buzzwords.includes(w));
   state.buzzwords.push(...learned);
   state.flags.push(...option.sets);
+  moveProject(state, content, option.project);
   const reaction = landWithBoss(state, content, option, option.label);
 
   if (option.dialog !== undefined) {
@@ -408,13 +453,23 @@ function landWithBoss(
   const approach = content.boss.approaches.find(
     (a) => a.id === choice.approach,
   );
-  const shift = (choice.opinion ?? 0) + (approach?.shift[kind] ?? 0);
+  const uses = approach ? (state.approachUses[approach.id] ?? 0) + 1 : 0;
+  if (approach) state.approachUses[approach.id] = uses;
+  const overdone =
+    approach?.overdone && uses > approach.overdone.after
+      ? approach.overdone
+      : undefined;
+  const shift =
+    (choice.opinion ?? 0) +
+    (overdone?.shift[kind] ?? approach?.shift[kind] ?? 0);
   state.truth.bossOpinion += shift;
   if (approach === undefined && shift === 0) return undefined;
   state.bossLandings.push({ month: state.month, choice: label, shift });
   if (approach === undefined) return undefined;
-  const lines = approach.reaction[kind];
-  return choice.reaction?.[kind] ?? lines[(state.month - 1) % lines.length];
+  const lines = overdone?.reaction[kind];
+  if (lines) return lines[(state.month - 1) % lines.length];
+  const usual = approach.reaction[kind];
+  return choice.reaction?.[kind] ?? usual[(state.month - 1) % usual.length];
 }
 
 /** Everyone present shows one behaviour, open to their role and chosen by their dealt kind. */
@@ -527,6 +582,7 @@ function behaveInScene(
   );
   if (!result) throw new IllegalChoiceError(choice.optionId);
   state.flags.push(...result.sets);
+  moveProject(state, world.content, result.project);
   const heard = heardAbout(state, option?.about);
   const fill = (written: string) =>
     fillSubject(
@@ -953,7 +1009,12 @@ function toStepView(state: State, world: World): StepView {
         id: n.id,
         from: n.from,
         subject: n.subject,
-        body: n.body,
+        body: n.body
+          .replaceAll("{real}", statusLabel(content, state.project.real))
+          .replaceAll(
+            "{reported}",
+            statusLabel(content, state.project.reported),
+          ),
         options: notificationOptions(state, content, n.id),
       };
     }
@@ -1014,6 +1075,22 @@ function toStepView(state: State, world: World): StepView {
   }
 }
 
+function statusLabel(content: Content, id: string): string {
+  return content.project.statuses.find((s) => s.id === id)?.label ?? id;
+}
+
+function toProjectView(state: State, content: Content): PlayerView["project"] {
+  const { name, owner } = content.project;
+  const { real, reported, news } = state.project;
+  return {
+    name,
+    owner,
+    real: statusLabel(content, real),
+    reported: statusLabel(content, reported),
+    news,
+  };
+}
+
 function toView(state: State, world: World): PlayerView {
   const { content } = world;
   const left = remaining(state, content);
@@ -1030,6 +1107,7 @@ function toView(state: State, world: World): PlayerView {
         mark: state.marks.get(c.id) ?? null,
       })),
     },
+    project: toProjectView(state, content),
     seed: state.seed,
     month: state.month,
     totalMonths: content.balance.monthsPerRun,

@@ -8,7 +8,14 @@ test("the month opens with a Notification that must be answered", async ({
   await expect(page.getByTestId("panel-notification")).toBeVisible();
   await expect(page.getByTestId("hotspot-kitchen")).toBeDisabled();
   await expect(page.getByTestId("option-pub")).toContainText("1 action");
+  await expect(page.getByTestId("option-decline")).toContainText(
+    "Costs nothing",
+  );
+  await page.getByTestId("option-decline").click();
+  await page.getByTestId("continue").click();
   await expect(page.getByTestId("option-report")).toContainText("1 action");
+  await expect(page.getByTestId("option-lie")).toContainText("1 action");
+  await expect(page.getByTestId("option-skip")).toContainText("Costs nothing");
 });
 
 test("the pub is a text dialog with the office still behind it", async ({
@@ -27,12 +34,18 @@ test("the pub is a text dialog with the office still behind it", async ({
 
   await page.getByTestId("continue").click();
 
+  await expect(page.getByTestId("panel-notification")).toBeVisible();
+  await page.getByTestId("option-report").click();
+  await page.getByTestId("continue").click();
+
   await expect(page.getByTestId("hotspot-kitchen")).toBeEnabled();
 });
 
 test("the report teaches no Buzzword", async ({ page }) => {
   await page.goto("/?seed=1");
 
+  await page.getByTestId("option-decline").click();
+  await page.getByTestId("continue").click();
   await page.getByTestId("option-report").click();
   await page.getByTestId("continue").click();
 

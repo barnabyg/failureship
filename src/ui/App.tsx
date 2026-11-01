@@ -9,7 +9,7 @@ import {
 } from "../engine";
 import { Chart } from "./Chart";
 import { Modal } from "./Modal";
-import { Notebook } from "./Notebook";
+import { Notebook, monthLabel } from "./Notebook";
 import { StepPanel } from "./panels";
 import { RunControls } from "./RunControls";
 import { TowerStage } from "./TowerStage";
@@ -50,6 +50,7 @@ export function App() {
   const [leavingFor, setLeavingFor] = useState<number | null>(null);
   const [orgChartOpen, setOrgChartOpen] = useState(false);
   const [notebookOpen, setNotebookOpen] = useState(false);
+  const [projectOpen, setProjectOpen] = useState(false);
 
   // In an effect, because React may run a state initialiser twice in development.
   useEffect(() => {
@@ -134,6 +135,15 @@ export function App() {
           </button>
           <button
             type="button"
+            data-testid="open-project"
+            onClick={() => {
+              setProjectOpen(true);
+            }}
+          >
+            {panelText.projectHeading}
+          </button>
+          <button
+            type="button"
             data-testid="open-notebook"
             onClick={() => {
               setNotebookOpen(true);
@@ -167,6 +177,45 @@ export function App() {
             data-testid="close-org-chart"
             onClick={() => {
               setOrgChartOpen(false);
+            }}
+          >
+            {panelText.closeLabel}
+          </button>
+        </Modal>
+      )}
+      {projectOpen && (
+        <Modal
+          testId="project"
+          title={view.project.name}
+          onClose={() => {
+            setProjectOpen(false);
+          }}
+        >
+          <dl className="signs">
+            <div>
+              <dt>{panelText.projectOwnerLabel}</dt>
+              <dd data-testid="project-owner">{view.project.owner}</dd>
+            </div>
+            <div>
+              <dt>{panelText.projectRealLabel}</dt>
+              <dd data-testid="project-real">{view.project.real}</dd>
+            </div>
+            <div>
+              <dt>{panelText.projectReportedLabel}</dt>
+              <dd data-testid="project-reported">{view.project.reported}</dd>
+            </div>
+          </dl>
+          {view.project.news.map((item) => (
+            <p key={item.month} data-testid="project-news">
+              <strong>{monthLabel(item.month)}. </strong>
+              {item.text}
+            </p>
+          ))}
+          <button
+            type="button"
+            data-testid="close-project"
+            onClick={() => {
+              setProjectOpen(false);
             }}
           >
             {panelText.closeLabel}

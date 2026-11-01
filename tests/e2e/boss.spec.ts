@@ -71,7 +71,9 @@ test("the results screen shows the boss's kind and how choices landed", async ({
   await playToResults(page);
 
   await expect(page.getByTestId("result-boss-kind")).toHaveText("Incompetent");
-  await expect(page.getByTestId("result-boss-choice").first()).toContainText(
-    "Went down well",
-  );
+  await expect(
+    page
+      .getByTestId("result-boss-choice")
+      .filter({ hasText: "Agree warmly with your boss" }),
+  ).toContainText("Went down well");
 });

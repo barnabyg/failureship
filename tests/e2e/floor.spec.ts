@@ -1,11 +1,11 @@
 import { expect, test } from "@playwright/test";
+import { answerAnyNotification } from "./play";
 
 test("the lift shows the route up, and cannot be taken yet", async ({
   page,
 }) => {
   await page.goto("/?seed=1");
-  await page.getByTestId("option-report").click();
-  await page.getByTestId("continue").click();
+  await answerAnyNotification(page);
 
   const sign = page.getByTestId("room-sign-lift");
   await expect(sign).toContainText("Floor 2");
@@ -37,8 +37,7 @@ test("the furniture is part of the place, and the scenery is not", async ({
   page,
 }) => {
   await page.goto("/?seed=1");
-  await page.getByTestId("option-report").click();
-  await page.getByTestId("continue").click();
+  await answerAnyNotification(page);
   const canvas = page.locator("canvas");
 
   // Bare carpet at the front of the floor, between the two desks.
@@ -66,8 +65,7 @@ test("a place lights up under the mouse, and dims once it is done", async ({
   page,
 }) => {
   await page.goto("/?seed=1");
-  await page.getByTestId("option-report").click();
-  await page.getByTestId("continue").click();
+  await answerAnyNotification(page);
   const canvas = page.locator("canvas");
   await page.mouse.move(640, 660);
   const resting = await canvas.screenshot();

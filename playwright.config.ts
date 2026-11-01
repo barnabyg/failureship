@@ -4,6 +4,8 @@ const port = 4179;
 
 export default defineConfig({
   testDir: "tests/e2e",
+  // A whole run is many clicks, and software WebGL is slow under many workers.
+  timeout: 60_000,
   maxFailures: process.env.CI ? 1 : 0,
   forbidOnly: Boolean(process.env.CI),
   reporter: "list",

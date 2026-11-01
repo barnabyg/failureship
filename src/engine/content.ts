@@ -21,6 +21,14 @@ const approachTag = id.optional();
 /** This choice's own words for how the boss takes it, in place of the approach's. */
 const ownReaction = perKind(text).optional();
 
+/**
+ * How a choice or event moves the Project. Each is a status's id, or `better`
+ * or `worse`, and a reported status can also be `real`, which tells the truth.
+ */
+const projectChange = z
+  .strictObject({ real: id.optional(), reported: id.optional() })
+  .optional();
+
 const notificationOption = z.strictObject({
   id,
   label: text,
@@ -31,6 +39,7 @@ const notificationOption = z.strictObject({
   opinion,
   approach: approachTag,
   reaction: ownReaction,
+  project: projectChange,
   result: notice.optional(),
 });
 
@@ -100,6 +109,7 @@ const sceneResult = z.strictObject({
   opinion,
   approach: approachTag,
   reaction: ownReaction,
+  project: projectChange,
   /** Says on the results screen that a Hidden Fact caused this. */
   factNote: text.optional(),
   /** Whose Hidden Fact it was, unless the option is `about` one. */
@@ -156,6 +166,7 @@ const action = z.strictObject({
   sets,
   approach: approachTag,
   reaction: ownReaction,
+  project: projectChange,
 });
 
 const move = z.strictObject({
@@ -311,6 +322,14 @@ const bossApproach = z.strictObject({
   shift: perKind(z.number().int()),
   /** How each kind shows it, used in turn so that it reads differently each month. */
   reaction: perKind(lines),
+  /** Past this many uses in a run, these kinds take it differently. */
+  overdone: z
+    .strictObject({
+      after: z.number().int().positive(),
+      shift: perKind(z.number().int()).partial(),
+      reaction: perKind(lines).partial(),
+    })
+    .optional(),
 });
 
 const bossSign = z.strictObject({
@@ -341,6 +360,18 @@ const notebook = z.strictObject({
       verdict: z.enum(CLUE_VERDICTS),
     }),
   ),
+});
+
+const project = z.strictObject({
+  name: text,
+  owner: text,
+  /** Best first, which is what `better` and `worse` go by. */
+  statuses: z.array(z.strictObject({ id, label: text })).min(2),
+  start: z.strictObject({ real: id, reported: id }),
+  /** What happens to the Project whatever the player does, as a month opens. */
+  events: z
+    .array(z.strictObject({ months, text, project: projectChange }))
+    .default([]),
 });
 
 const contentSchema = z.strictObject({
@@ -390,6 +421,7 @@ const contentSchema = z.strictObject({
   }),
   sources,
   notebook,
+  project,
   characters: z
     .array(
       z.strictObject({
@@ -831,6 +863,20 @@ function findBrokenReferences(content: Content): string[] {
       problems.push(...findNamedKinds(content, owner, Object.values(reaction)));
     }
   };
+  const statuses = new Set(content.project.statuses.map((s) => s.id));
+  const checkStatus = (owner: string, status: string) => {
+    if (!statuses.has(status)) {
+      problems.push(`${owner} names unknown status "${status}".`);
+    }
+  };
+  const checkProject = (owner: string, change: SceneResult["project"]) => {
+    const { real, reported } = change ?? {};
+    const relative = (to: string) => to === "better" || to === "worse";
+    if (real !== undefined && !relative(real)) checkStatus(owner, real);
+    if (reported !== undefined && !relative(reported) && reported !== "real") {
+      checkStatus(owner, reported);
+    }
+  };
   const checkCost = (owner: string, cost: string | undefined) => {
     if (cost !== undefined && !(cost in content.balance.actionCosts)) {
       problems.push(`${owner} has unknown cost "${cost}".`);
@@ -842,8 +888,15 @@ function findBrokenReferences(content: Content): string[] {
   problems.push(...findBrokenBossSigns(content));
   problems.push(...findBrokenApproaches(content));
   problems.push(...findBrokenSources(content));
+  checkStatus("The Project", content.project.start.real);
+  checkStatus("The Project", content.project.start.reported);
+  for (const e of content.project.events) {
+    checkMonths("A Project event", e.months);
+    checkProject("A Project event", e.project);
+  }
   for (const a of content.actions) {
     checkApproach(`Action "${a.id}"`, a);
+    checkProject(`Action "${a.id}"`, a.project);
     if (!rooms.has(a.place)) {
       problems.push(`Action "${a.id}" is at unknown place "${a.place}".`);
     }
@@ -916,6 +969,7 @@ function findBrokenReferences(content: Content): string[] {
         if (r.factAt !== undefined) checkCharacter(optionOwner, r.factAt);
         if (r.when) checkCondition(optionOwner, r.when);
         checkApproach(optionOwner, r);
+        checkProject(optionOwner, r.project);
       }
       if (o.requires) {
         checkCondition(optionOwner, o.requires);
@@ -952,10 +1006,18 @@ function findBrokenReferences(content: Content): string[] {
   }
   for (const n of content.notifications) {
     checkMonths(`Notification "${n.id}"`, n.months);
+    for (const [, token] of n.body.matchAll(/\{(\w+)\}/g)) {
+      if (token !== "real" && token !== "reported") {
+        problems.push(
+          `Notification "${n.id}" uses unknown token "{${token ?? ""}}".`,
+        );
+      }
+    }
     for (const o of n.options) {
       const owner = `Notification "${n.id}" option "${o.id}"`;
       checkCost(owner, o.cost);
       checkApproach(owner, o);
+      checkProject(owner, o.project);
       if (o.dialog !== undefined && !dialogs.has(o.dialog)) {
         problems.push(`${owner} opens unknown dialog "${o.dialog}".`);
       }

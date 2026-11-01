@@ -156,13 +156,13 @@
   {
     "id": "work",
     "label": "Your desk",
-    "description": "Doing your actual job. It remains an option.",
+    "description": "Doing your actual job, on your actual project. It remains an option.",
     "place": "your-desk",
     "cost": "standard",
     "sets": ["did-work"],
     "result": {
       "title": "Your desk",
-      "body": "You do two hours of real work. It goes well. Nobody sees it, and it does not appear in any report."
+      "body": "You do two hours of real work on your project. It goes well, and it does not appear in any report."
     },
     "moreResults": [
       {
@@ -185,6 +185,10 @@
         "title": "Your desk",
         "body": "A full, quiet afternoon of real work. You are startled to find that you enjoyed it, and you tell no one."
       }
-    ]
+    ],
+    "approach": "results",
+    "project": {
+      "real": "better"
+    }
   }
 ]
