@@ -68,21 +68,27 @@ test("a place lights up under the mouse, and dims once it is done", async ({
   await answerAnyNotification(page);
   const canvas = page.locator("canvas");
   await page.mouse.move(640, 660);
-  const resting = await canvas.screenshot();
+  // Only the tower: the browser redraws the labels' text a moment after load.
+  const lookAtTower = () =>
+    canvas.screenshot({ style: ".hotspot { visibility: hidden; }" });
+  const resting = await lookAtTower();
+  // A frame reaches the screen after it is drawn, so keep looking. Comparing to
+  // a boolean also spares a failure from diffing every byte of two images.
+  const looksAtRest = async () => (await lookAtTower()).equals(resting);
 
   const label = await page.getByTestId("hotspot-meeting").boundingBox();
   if (!label) throw new Error("The meeting room has no label position.");
   await page.mouse.move(label.x + label.width / 2, label.y + label.height + 24);
   await expect(canvas).toHaveCSS("cursor", "pointer");
-  expect(await canvas.screenshot()).not.toEqual(resting);
+  await expect.poll(looksAtRest).toBe(false);
 
   await page.mouse.move(640, 660);
   await expect(canvas).toHaveCSS("cursor", "default");
-  expect(await canvas.screenshot()).toEqual(resting);
+  await expect.poll(looksAtRest).toBe(true);
 
   await page.getByTestId("hotspot-meeting").click();
   await page.getByTestId("scene-option-say-nothing").click();
   await page.getByTestId("continue").click();
   await expect(page.getByTestId("hotspot-meeting")).toBeDisabled();
-  expect(await canvas.screenshot()).not.toEqual(resting);
+  await expect.poll(looksAtRest).toBe(false);
 });
