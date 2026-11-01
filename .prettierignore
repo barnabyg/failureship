@@ -1,5 +1,10 @@
+# Local to one machine and untracked. .claude/hygiene.json is tracked, and stays in.
+.claude/settings.local.json
+.claude/worktrees/
+
 # Generated output.
 dist/
+dist-e2e/
 playwright-report/
 test-results/
 package-lock.json

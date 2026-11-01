@@ -150,167 +150,31 @@ format, the page shows what is wrong instead of the game.
 | `balance.json`        | Actions a month, months in a run, the cost of each choice, how often signs mislead and when the boss's opinion shows |
 | `floor-1.json`        | The rooms on the floor: positions, sizes, colours and the lift's sign                                                |
 
-A Character's `called` is how running text refers to them, such as `your boss`, and
-it gets a capital only where a sentence starts. Write people into text that way too,
-and keep their `name` for a Notification or Move's `from` line. A test fails if a
-name turns up in the running text.
-
-In a Scene, `{holder}`, `{ignored}` and `{bystander}` are replaced by what text calls
-the most influential, the least influential and the next most influential of those
-present, read from the dealt Power Map's `order`. A Scene without the whole cast can
-therefore show a holder whom the Power Map's tree does not place above everyone
-present, so the meeting has everyone in it. `holderIs` means the same in a Scene's
-results. A `when` or `requires` condition can be
-`{ "holderIs": "boss" }`, `{ "hasBuzzword": "strategic-patience" }`,
-`{ "flag": "went-to-pub" }`, `{ "heardFact": "lost-list" }`, `{ "not": ... }` or `{ "all": [...] }`,
-and a Scene result's `when` can also use `factNature` and `heardTrue`, described below. A
-Scene result or a Move's `when` can also use `{ "bossIs": "practitioner" }`. Options
-gated with `requires` cannot depend on the hidden truth. Flags come from `sets`,
-and are wiped when a new month opens. Buzzwords carry over for the whole run.
-
-In `balance.json`, `signsMisleadChance` is how often a Scene's signs swap `{holder}`
-with `{bystander}`, so that one Scene never settles who holds influence. A Scene's
-results still go by the truth.
-
-A behaviour says `{who}`, and is written for a kind of person, never a named one.
-When a Scene opens, each person present shows one, chosen by their dealt kind. Its
-`likelihood` gives the weight for each kind. Every behaviour must be possible from
-at least two kinds, with different likelihoods, or the game will not start.
-
-A behaviour can list `"roles": ["team-leader"]`, and then only a Character with one of
-those roles in `characters.json` can show it. Every role must have a behaviour nobody
-else can show, and every Character must have something to show as each kind, or the
-game will not start.
-
-A choice can carry `"opinion": 1` or `-1` to move your boss's hidden opinion of you.
-The opinion has no number on screen. It shows only through `boss.json`: when the boss
-is in a Scene, one sign is picked using the `likelihood` for how the opinion stands,
-which `balance.json` sets with `warmAt` and `coldAt`. Its `keeps` says how much of the
-opinion carries into each new month, so that it is mostly about lately. Every sign must be possible from
-at least two of `warm`, `neutral` and `cold`, so that no sign settles it.
-
-A choice can also carry `"approach": "theatre"`. `boss.json` lists each approach, how
-far it moves the opinion of each kind of boss, and how each kind shows it, so the same
-choice can warm one boss and chill another. The player reads that from `reaction`
-lines and never from a label: a line naming a kind, or an approach that every kind
-takes alike, stops the game from starting. A choice can write its own `reaction` for
-each kind. A result's `when` can read `{ "bossIs": "believer" }`, but an option's
-`requires` cannot, because options never appear or disappear on the boss's kind. A
-Scene with a `verdict` adds what the boss finally says, by how the opinion stands.
-
-`project.json` holds the player's Project: its owner, its `statuses` from best to worst,
-where it `start`s, and the `events` that happen to it as a month opens. The
-**Your project** card stays on the floor, showing how it really is and how it has been
-reported, each with its status's `colour`. Click it at any step, at no cost, for the details. A Notification option, Scene result or action can carry
-`"project": { "real": "better", "reported": "worse" }`. Each side is a status's id,
-`better` or `worse`, and `reported` can also be `real`, which is what telling the truth
-does. Nothing else moves them. A Notification's body can say `{real}` and `{reported}`.
-
-`project.json`'s `flagged` says at which reported status the Project is flagged, and
-which Scene then opens and what it costs. That Scene belongs to no month and no action:
-it opens once each time the reported status arrives at `at`, before the player's
-actions, whichever month that is.
-
-`project.json`'s `input` names who the report needs figures from, the months they can
-be late, and the `chance` of that for each kind they might be. Lateness is drawn from
-the seed and never from the player's choices, and it sets a flag for the month. It must
-be possible from at least two kinds, and certain from none, so that it never settles
-what someone is. A Notification with a `when` waits until that holds. An option with a
-`bet` has a seeded `chance` of going well, and otherwise uses what `lost` says.
-
-`demands.json` holds Demands, which arrive as Notifications with their `months` and
-must offer `deliver`, `push-back`, `hand-off`, `fake` and `stall`. An answer that needs a
-colleague names them by role. `"stalls": true` on `stall` leaves the Demand open, and the
-player can see it on the **Your project** card. Each later month, a seeded draw uses `odds` for
-the boss's kind: it is `forgotten`, or it is `chased`, which costs the `chasedPenalty`
-and arrives as a Notification of its own, or nothing happens yet. `sets` names the
-flags for that month. `chased` must have an
-answer that costs nothing.
-
-`over-head.json` holds going over your boss's head, which an action with
-`"overHead": true` does. Your boss's boss has a hidden opinion of their own, which
-`signs` show whenever they are in a Scene, and which a choice can move with
-`"headOpinion": 1`. Its own `opinion` says when that shows. The seeded chance of it working is in `outcomes`, by their dealt
-kind and by whether they are among the `influentialCount` at the top of the Power Map. If
-it works, `effects` says how far each opinion moves, and your boss gains little if your
-boss's boss has little influence. `findsOut` is the seeded chance of your boss hearing of
-it, by your boss's kind, which grows by `perUse` with each trip, and how sharply their
-opinion then falls. `verdict` is what the results screen says your boss's boss made of you.
-
-A Notification option, a Scene option or an action can carry `"family": "attack"`,
-which is one of `impress`, `fabricate`, `trade`, `find-out`, `deflect`, `attack` or
-`deliver`. Nothing during play shows it. `families.json` says what the results screen
-calls each family, where **How you played** counts the Moves the player made in it. A
-choice with an `approach` should say which family it is, and a test fails if it does not.
-
-An approach can have `overdone`, which changes how the listed kinds take it after
-`after` uses in a run. This is how a Practitioner boss turns on someone who shines.
-
-A Budget is a one-off decision and never a running balance, so it needs nothing of its
-own: the Budget Round is a Scene in `scenes.json`, and the bonus pot and the underspend
-are Notifications in `notifications.json`, with `months`, `approach` and `project` like
-any other choice. Nothing tracks money between them.
-
-An action with `"findOut": "ask"` spends an action to get a claim from a source.
-A method with `"someoneThere": true` deals one of its `sources` to be there, and its
-`prompt` can say `{source}`. Otherwise the player chooses from them.
-`sources.json` sets how often each kind of source tells the truth, is mistaken, is
-out of date or lies. A dealt motive shifts those weights. A claim's words never
-depend on which of these it is, so the results screen is the only place that says.
-
-The Notebook keeps every claim by itself. It keeps a sign only if that sign is
-written with a `clue`, which can sit on a behaviour or on a Scene's sign. It also
-keeps `notebook.json`'s events, each noted once in a month when its `when` holds.
-Each has a `verdict` of `held`, `wrong` or `idle`, which only the results screen
-shows. A behaviour's clue counts as `held` if its likelihood is highest for the
-kind of the person who showed it, and otherwise as `wrong`.
-
-A Find Out method's `frames` are the conversation around a claim: each says `{said}`
-and can say `{source}`. `voices` in `sources.json` give each role its own way of
-putting a claim: each line says `{said}`, and is chosen apart from whether the claim
-is true. A Hidden Fact's `told` is how someone would say it out loud,
-and its `text` is how the results screen states it.
-
-A Hidden Fact says `{name}`, so that it reads correctly for whoever is dealt it,
-and can list `"characters"` to limit who that can be. Its `nature` is `dangerous`,
-`useful` or `idle`. A Scene result can read one with
-`{ "factNature": { "character": "projects", "nature": "dangerous" } }`, and a
-result with `factNote` is listed on the results screen beside the fact itself. `factAt`
-names whose fact it was, unless the option is `about` one.
-
-A Scene option with `"about": "lost-list"` appears once the player has been told
-that fact about someone, true or not, and can say `{subject}` for that person.
-Its results can check `{ "heardTrue": "lost-list" }`. An option must never appear
-or disappear on undiscovered truth, so `requires` with `holderIs`,
-`factNature` or `heardTrue` stops the game from starting. `heardFact` is fine.
-
-A Notification, action, Scene, Move, Notebook event or official story entry can list
-`"months": [2, 3]` to belong only to those months. Without it, it belongs to every
-month. An action can add `moreResults`, used in turn so that a place reads differently
-each month. A Move does not land twice in a run while another could. A Move with `"priority": true`
-lands ahead of the others whenever its `when` holds.
-
-`demands.json`'s `missed` says what a meeting you skip leaves you with. If you spent
-an action elsewhere and did not go, then as the month closes, you are told about one of its `actions`, each given once in a run, and your boss
-takes the absence according to the `approach`. It then stays open, arrives the month
-after as a Notification with the `options` shared by all of them, and goes on like any
-other Demand. A month's meeting is the action that sets `attended`, and there must be an
-action written for every month.
+Each file's fields, and the conditions they can use, are in the
+[content format reference](docs/content-format.md).
 
 ## Develop
 
 `npm run verify` runs every check: formatting, lint, types, engine tests, browser
 tests, dependency audit and build. The browser tests need Chromium once:
-`npx playwright install chromium`.
+`npx playwright install chromium`. They run against their own build,
+`vite build --mode e2e` in `dist-e2e/`, the only one where `?month=N` starts a run
+at a later month. `npm run build` and `npm run play` ignore it.
 
 - `content/` holds the game's data and text.
-- `src/content/` loads and checks it at start-up.
+- `src/content/` loads it at start-up, through the checks in `src/engine/`, and
+  checks the panel text itself.
 - `src/engine/` holds the rules: headless, seeded, and free of Three.js and React.
+  `run.ts` coordinates a run; `state.ts` and `reads.ts` are what its mechanics
+  share; `boss.ts`, `demands.ts` and `over-head.ts` are mechanics of their own;
+  `to-view.ts` builds the player view. `src/engine/content.ts` holds the content
+  schema, and `src/engine/content-checks.ts` holds the checks: it parses data against
+  the schema and checks it across files.
 - `src/tower/` draws the tower and holds no rules.
 - `src/ui/` holds the React panels over the tower.
 
 A Scene that data cannot express can name a `script`, which is passed to
-`startRun` in `sceneScripts`. This format is a trial, as the spec says.
+`startRun` in `sceneScripts`. This format is a trial, as the spec, issue #1, says.
 
 ### Checks and exceptions
 
@@ -325,3 +189,6 @@ A Scene that data cannot express can name a `script`, which is passed to
 - `build.chunkSizeWarningLimit` in `vite.config.ts` is raised because Three.js
   and the game's text make up the single bundle. Review it if hosting is ever added.
 - `.prettierignore` leaves the owner's design records and agent docs unformatted.
+- `.prettierignore` and `eslint.config.js` skip `.claude/worktrees/`, and
+  `.prettierignore` skips `.claude/settings.local.json`: both are untracked and local to
+  one machine. Review this if anything in them comes to be tracked.

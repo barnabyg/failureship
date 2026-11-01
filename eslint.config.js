@@ -7,7 +7,16 @@ const restrict = (patterns) => ({
 });
 
 export default tseslint.config(
-  { ignores: ["dist/", "playwright-report/", "test-results/"] },
+  {
+    ignores: [
+      "dist/",
+      "dist-e2e/",
+      "playwright-report/",
+      "test-results/",
+      // Other checkouts of this repository, with their own tsconfig.json.
+      ".claude/worktrees/",
+    ],
+  },
   js.configs.recommended,
   ...tseslint.configs.strictTypeChecked,
   {

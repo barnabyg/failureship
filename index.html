@@ -13,7 +13,9 @@
         const root = document.getElementById("root");
         if (!root || root.hasChildNodes()) return;
         const message = document.createElement("pre");
-        message.style.cssText = "padding:16px;color:#fff;white-space:pre-wrap";
+        // Its own colours: under the dev server the stylesheet never gets to run.
+        message.style.cssText =
+          "padding:16px;background:#20262b;color:#fff;white-space:pre-wrap";
         message.textContent = String(event.error ?? event.message);
         root.appendChild(message);
       });

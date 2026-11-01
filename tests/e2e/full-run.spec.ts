@@ -31,6 +31,15 @@ test("nine different months, all the way to the results screen", async ({
   await expect(page.getByTestId("panel-results")).toBeVisible();
   await expect(page.getByTestId("result-family")).toHaveCount(7);
   await expect(page.getByTestId("result-character")).toHaveCount(5);
+  await expect(page.getByTestId("results-org-chart")).toContainText(
+    "Hugh Lamb",
+  );
+  await expect(page.getByTestId("results-power-map")).toContainText(
+    "Hugh Lamb",
+  );
+  await expect(page.getByTestId("panel-results")).toContainText(
+    /Believer|Incompetent|Practitioner/,
+  );
   await expect(page.getByTestId("result-mark")).toHaveCount(5);
   await expect(page.getByTestId("result-clue").first()).toBeVisible();
   await expect(page.locator("body")).not.toContainText(/placeholder|lorem/i);
