@@ -1,7 +1,7 @@
 import type { Content } from "./content";
 import { isInfluential } from "./deal";
 import { applyOutcome } from "./outcome";
-import { bossKindOf, inTurn, moodAt } from "./reads";
+import { bossKindOf, inTurn, moodOfCharacter } from "./reads";
 import { drawFor, pickWeighted } from "./rng";
 import type { State, Step } from "./state";
 
@@ -74,7 +74,7 @@ export function treatHead(
 ): string | null {
   const written = content.overHead;
   if (!written || !cast.includes(written.character)) return null;
-  const mood = moodAt(state.truth.headOpinion, written.opinion);
+  const mood = moodOfCharacter(state, content, written.character);
   const value = drawFor(state.seed, "head-sign", state.month);
   const chosen = pickWeighted(
     Math.floor(value * 2 ** 32),

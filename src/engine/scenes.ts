@@ -11,6 +11,7 @@ import {
   offeredOptions,
   sceneData,
 } from "./reads";
+import { regardOf } from "./reputation";
 import { draw, pickWeighted } from "./rng";
 import { calledBy, sayPeople } from "./say";
 import {
@@ -48,6 +49,7 @@ export function openScene(state: State, world: World, id: string): Step {
     shown,
     treatment: treatBoss(state, world, cast),
     headTreatment: treatHead(state, content, cast),
+    regard: regardOf(state, content, cast),
     misleading,
   };
 }

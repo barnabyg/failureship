@@ -16,6 +16,7 @@ A `when` or `requires` holds one of these:
 | `{ "flag": "went-to-pub" }`                                            | A flag is set this month                                                                | Only if the flag does  |
 | `{ "did": "moved-a-colleague" }`                                       | A flag has been set in any month of the run                                             | Only if the flag does  |
 | `{ "remembers": { "character": "projects", "about": "passed-over" } }` | That Character keeps a memory written with that `about`                                 | Yes                    |
+| `{ "believes": { "character": "admin", "mood": "cold" } }`             | How that Character's belief about the player stands: `warm`, `neutral` or `cold`        | Yes                    |
 | `{ "hasBuzzword": "strategic-patience" }`                              | The player has learnt the Buzzword                                                      | No                     |
 | `{ "heardFact": "lost-list" }`                                         | The player has been told that Hidden Fact about someone, true or not                    | No                     |
 | `{ "heardTrue": "lost-list" }`                                         | What the player was told about that Hidden Fact is true                                 | Yes                    |
@@ -232,7 +233,9 @@ The month's Notifications, their choices and their results.
 
 An option's outcome or a Scene result can carry `"remembers"`, a list of what a Character
 keeps of this, each with their `character`, an `about` that the `remembers` condition reads, and
-`text`. A Budget comes back this way: a later Thread's outcome reads who remembers what.
+`text`, and optionally a `tone`, which moves what they believe of the player, as in
+[`reputation.json`](#reputationjson). A Budget comes back this way: a later Thread's outcome
+reads who remembers what.
 
 A Budget is a one-off decision and never a running balance, so it needs nothing of its own:
 the Budget Round is a Scene, and the bonus pot and the underspend are Notifications here,
@@ -281,6 +284,27 @@ reported status arrives at `at`, before the player's actions, whichever month th
 `chance` of that for each kind they might be. Lateness is drawn from the seed and never from
 the player's choices, and it sets a flag for the month. It must be possible from at least two
 kinds, and certain from none, so that it never settles what someone is.
+
+## `reputation.json`
+
+There is no single reputation score. Each Character has their own belief about the player, and
+that belief is what your boss's and your boss's boss's opinions are too, so there is one idea of
+what someone thinks of you. It has no number on screen. It shows through signs, and through
+anything written with the `believes` condition.
+
+A choice's outcome, a Bill or a Scene result can carry `news`: an `about` that the `remembers`
+condition reads, a `tone` of `good` or `bad`, the `text` that the results screen shows, and `at`,
+whom it was done in front of, or to. They know at once. Only true deeds start news, for now.
+
+- `travel` sets how far and how fast it goes. As each month opens, it moves `hopsPerMonth` steps
+  along the ties of the Power Map, no more than `maxHops` from where it started. `passOnChance` is
+  the seeded chance of each person telling each person tied to them, and `shift` is how far it then
+  moves their belief. So the same deed reaches different people on different deals.
+- `opinion` says when the belief of anyone but your bosses shows. Your bosses have their own, in
+  [`balance.json`](#balancejson) and [`over-head.json`](#over-headjson).
+- `signs` show how everyone else present in a Scene is with the player. Each says `{who}`, and
+  must be possible from at least two of `warm`, `neutral` and `cold`, so that no sign settles it.
+- `believes` and `how` are the results screen's words. `how.heardFrom` says `{who}`.
 
 ## `risks.json`
 

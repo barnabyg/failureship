@@ -84,6 +84,8 @@ export type StepView =
       treatment: string | null;
       /** The same of the boss's boss, if they are in the room. */
       headTreatment: string | null;
+      /** How anyone else present is with the player. Signs, and no more. */
+      regard: { who: string; text: string }[];
       options: { id: string; label: string; stakes?: string | undefined }[];
     }
   | {
@@ -125,6 +127,13 @@ export type StepView =
         started: string;
         playedIn: number;
         playedOut: string;
+      }[];
+      /** What each Character ended up believing, and how it reached them. */
+      beliefs: {
+        name: string;
+        title: string;
+        believes: string;
+        reached: { month: number; text: string; how: string }[];
       }[];
       /** What moved the charts during the run. */
       changes: { month: number; title: string; changed: string }[];

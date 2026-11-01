@@ -1,5 +1,5 @@
 import type { Content, Kind } from "./content";
-import { bossKindOf, inTurn, moodOf } from "./reads";
+import { bossKindOf, inTurn, moodOf, shiftBelief } from "./reads";
 import { pickWeighted } from "./rng";
 import type { State, World } from "./state";
 
@@ -30,7 +30,7 @@ export function landWithBoss(
   const shift =
     (choice.opinion ?? 0) +
     (overdone?.shift[kind] ?? approach?.shift[kind] ?? 0);
-  state.truth.bossOpinion += shift;
+  shiftBelief(state, content.boss.character, shift);
   if (approach === undefined && shift === 0) return undefined;
   state.bossLandings.push({ month: state.month, choice: label, shift });
   if (approach === undefined) return undefined;

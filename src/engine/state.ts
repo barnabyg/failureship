@@ -5,6 +5,7 @@ import type {
   Kind,
   MoveFamily,
   SceneData,
+  Tone,
 } from "./content";
 import type { DealtCharacter, PowerMap } from "./deal";
 
@@ -12,13 +13,31 @@ export class IllegalChoiceError extends Error {
   override name = "IllegalChoiceError";
 }
 
-export interface HiddenTruth {
+/** What has reached one Character, and how. */
+export interface Memory {
+  character: string;
+  about: string;
+  text: string;
+  month: number;
+  tone?: Tone | undefined;
+  /** Who told them. Null if they were there. */
+  via: string | null;
+  /** How far it had come along the Power Map. */
+  hops: number;
+  /** Which piece of news it was, if it was any that can travel. */
+  news: number | null;
+}
+
+export interface TruthOfRun {
   characters: DealtCharacter[];
   powerMap: PowerMap;
-  /** Moved by the player's choices. Shown only through how the boss behaves. */
-  bossOpinion: number;
-  /** The same of the boss's boss, whom the player can also try to impress. */
-  headOpinion: number;
+  /**
+   * What each Character believes of the player, which is the one idea of what
+   * someone thinks of you. Moved by what reaches them. Shown only through signs.
+   */
+  beliefs: Record<string, number>;
+  /** Everything that can travel, from where it started. */
+  news: { about: string; tone: Tone; text: string; month: number }[];
   /** What the player's decisions have built up. Never shown until the end. */
   risks: {
     id: string;
@@ -28,7 +47,15 @@ export interface HiddenTruth {
     cameOut: { month: number; onPlayer: boolean } | null;
   }[];
   /** What each Character has kept of what the player did. */
-  memories: { character: string; about: string; text: string; month: number }[];
+  memories: Memory[];
+}
+
+/** The true state of a run, as tests read it. */
+export interface HiddenTruth extends TruthOfRun {
+  /** What the boss believes of the player. */
+  bossOpinion: number;
+  /** The same of the boss's boss, whom the player can also try to impress. */
+  headOpinion: number;
 }
 
 /** Custom behaviour for a Scene: reshapes its data for the current truth. */
@@ -65,6 +92,8 @@ export type Step =
       shown: ShownBehaviour[];
       treatment: string | null;
       headTreatment: string | null;
+      /** How anyone else present is with the player. */
+      regard: { character: string; sign: string }[];
       /** Whether this Scene's signs point at the wrong person. */
       misleading: boolean;
     }
@@ -184,5 +213,5 @@ export interface State extends MonthRecord {
   /** The big mistakes so far, for the results screen. */
   mistakes: { month: number; choice: string }[];
   step: Step;
-  truth: HiddenTruth;
+  truth: TruthOfRun;
 }

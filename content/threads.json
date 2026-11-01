@@ -181,5 +181,33 @@
         }
       }
     ]
+  },
+  {
+    "id": "word-got-round",
+    "startedBy": "blamed-a-colleague",
+    "after": {
+      "min": 2,
+      "max": 3
+    },
+    "started": "You blamed a colleague in front of the floor, and the floor talks.",
+    "outcomes": [
+      {
+        "when": {
+          "believes": {
+            "character": "admin",
+            "mood": "cold"
+          }
+        },
+        "playedOut": "What you had done reached the Office Co-ordinator, who keeps the room bookings. Your meetings began to be in a different room from the one on the invitation.",
+        "bill": {
+          "id": "room-moved",
+          "as": "move",
+          "from": "From: The Office Co-ordinator, Marjorie Tull",
+          "title": "Room change",
+          "body": "Your one o'clock has been moved. Nobody can find the message that said so, though the Office Co-ordinator is quite sure that one was sent. By the time you arrive, it has finished, and it went very well.",
+          "sets": ["room-moved"]
+        }
+      }
+    ]
   }
 ]

@@ -300,6 +300,9 @@ describe("what a Character remembers", () => {
         about: "passed-over",
         text: "MEMORY-WORDS",
         month: 1,
+        via: null,
+        hops: 0,
+        news: null,
       },
     ]);
   });

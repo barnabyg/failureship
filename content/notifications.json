@@ -388,6 +388,12 @@
         "result": {
           "title": "The printer",
           "body": "The Senior Analyst carries everything across in one trip, without a word, and sets up facing you. The printer starts up. It will not stop for some time."
+        },
+        "news": {
+          "about": "moved-to-the-printer",
+          "tone": "bad",
+          "text": "You moved the Senior Analyst to the desk with no window.",
+          "at": ["analyst"]
         }
       },
       {
@@ -410,6 +416,12 @@
         "result": {
           "title": "The printer",
           "body": "The Project Co-ordinator takes it calmly, and asks whether this is about the figures. You say no. It is now about the figures."
+        },
+        "news": {
+          "about": "moved-to-the-printer",
+          "tone": "bad",
+          "text": "You moved the Project Co-ordinator to the desk with no window.",
+          "at": ["projects"]
         }
       },
       {
@@ -478,7 +490,8 @@
           {
             "character": "projects",
             "about": "passed-over",
-            "text": "You gave the bonus pot to others, and they did the work."
+            "text": "You gave the bonus pot to others, and they did the work.",
+            "tone": "bad"
           }
         ]
       },
@@ -500,7 +513,8 @@
           {
             "character": "projects",
             "about": "paid-for-the-work",
-            "text": "You gave them a share of the bonus pot, and wrote down why."
+            "text": "You gave them a share of the bonus pot, and wrote down why.",
+            "tone": "good"
           }
         ]
       },
@@ -523,7 +537,8 @@
           {
             "character": "projects",
             "about": "passed-over",
-            "text": "You gave the bonus pot to others, and they did the work."
+            "text": "You gave the bonus pot to others, and they did the work.",
+            "tone": "bad"
           }
         ]
       },

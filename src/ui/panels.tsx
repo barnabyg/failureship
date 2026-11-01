@@ -388,6 +388,34 @@ function ResultsPanel({
           <Chart entries={step.powerMap} />
         </div>
       </div>
+      {step.beliefs.length > 0 && (
+        <>
+          <h3>{panelText.resultsBeliefsHeading}</h3>
+          <table className="results">
+            <tbody>
+              {step.beliefs.map((person) => (
+                <tr key={person.name} data-testid="result-belief">
+                  <th scope="row">
+                    {person.title}
+                    <span className="results-title">{person.name}</span>
+                  </th>
+                  <td className="results-kind">{person.believes}</td>
+                  <td>
+                    {person.reached.length === 0
+                      ? panelText.resultsHeardNothing
+                      : person.reached.map((row, index) => (
+                          <p key={index} data-testid="result-reached">
+                            <strong>{monthLabel(row.month)}. </strong>
+                            {row.text} {row.how}
+                          </p>
+                        ))}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </>
+      )}
       {step.changes.length > 0 && (
         <div className="callout" data-testid="results-changes">
           <h3>{panelText.resultsChangesHeading}</h3>
@@ -476,12 +504,17 @@ export function StepPanel({ view, onChoose }: StepPanelProps) {
                   </div>
                 ))}
               </dl>
-              {step.behaviours.length > 0 && (
+              {step.behaviours.length + step.regard.length > 0 && (
                 <>
                   <h3>{panelText.behavioursHeading}</h3>
                   <ul className="signs behaviours">
                     {step.behaviours.map((shown) => (
                       <li key={shown.who} data-testid="behaviour">
+                        {shown.text}
+                      </li>
+                    ))}
+                    {step.regard.map((shown) => (
+                      <li key={`regard-${shown.who}`} data-testid="regard">
                         {shown.text}
                       </li>
                     ))}

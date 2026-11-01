@@ -1,7 +1,9 @@
 import { landWithBoss } from "./boss";
-import type { Content, Kind, MoveFamily } from "./content";
+import type { Content, Kind, MoveFamily, Tone } from "./content";
 import { makeMistake } from "./mistakes";
 import { moveProject, type ProjectChange } from "./project";
+import { shiftBelief } from "./reads";
+import { remember, startNews } from "./reputation";
 import { startRisks, startThreads } from "./threads";
 import type { State } from "./state";
 
@@ -14,7 +16,15 @@ export interface Outcome {
   reaction?: Readonly<Record<Kind, string>> | undefined;
   project?: ProjectChange | undefined;
   mistake?: "big" | "catastrophic" | undefined;
-  remembers?: readonly { character: string; about: string; text: string }[];
+  remembers?: readonly {
+    character: string;
+    about: string;
+    text: string;
+    tone?: Tone | undefined;
+  }[];
+  news?:
+    | { about: string; tone: Tone; text: string; at: readonly string[] }
+    | undefined;
 }
 
 /** Counts a Move the player made, for how they played. */
@@ -40,9 +50,11 @@ export function applyOutcome(
   startThreads(state, content, sets);
   startRisks(state, content, sets);
   for (const memory of outcome.remembers ?? []) {
-    state.truth.memories.push({ ...memory, month: state.month });
+    remember(state, content, memory);
   }
-  state.truth.headOpinion += outcome.headOpinion ?? 0;
+  if (outcome.news) startNews(state, content, outcome.news);
+  const head = content.overHead?.character;
+  if (head !== undefined) shiftBelief(state, head, outcome.headOpinion ?? 0);
   moveProject(state, content, outcome.project);
   if (outcome.mistake) makeMistake(state, content, outcome.mistake, label);
   return landWithBoss(state, content, outcome, label);

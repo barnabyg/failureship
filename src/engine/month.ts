@@ -3,9 +3,11 @@ import { landEvent, scheduleEvents } from "./company-events";
 import { everyNotification, type Content } from "./content";
 import { dealWithAbsence, followUpDemands } from "./demands";
 import { applyOutcome } from "./outcome";
+import { spreadNews } from "./reputation";
 import { surfaceRisks } from "./risks";
 import {
   actionsThisMonth,
+  beliefOf,
   costOf,
   inMonth,
   isAvailable,
@@ -34,6 +36,7 @@ export function freshMonth(content: Content, month: number): MonthRecord {
 
 /** What happens as a month opens, whatever the player has done. */
 export function openMonth(state: State, content: Content): void {
+  spreadNews(state, content);
   followUpDemands(state, content);
   playThreads(state, content);
   surfaceRisks(state, content);
@@ -65,9 +68,11 @@ export function leaveStory(state: State, world: World): void {
   state.month += 1;
   // What the boss thinks is mostly about lately, so it stays worth reading.
   // Adding zero turns -0 into 0, which is all that a save can hold.
-  state.truth.bossOpinion =
-    Math.trunc(state.truth.bossOpinion * world.content.balance.opinion.keeps) +
-    0;
+  const { character } = world.content.boss;
+  state.truth.beliefs[character] =
+    Math.trunc(
+      beliefOf(state, character) * world.content.balance.opinion.keeps,
+    ) + 0;
   Object.assign(state, freshMonth(world.content, state.month));
   openMonth(state, world.content);
   state.step = nextStep(state, world);

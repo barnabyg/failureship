@@ -4,10 +4,10 @@ A satirical, single-player browser game. You climb a ten-storey office tower by
 reading people. The design is in
 [failureship-grill-outcome.md](failureship-grill-outcome.md).
 
-This is the Phase 3 build: a run of nine months on a furnished Floor 1, with kinds
-of boss, a Project, the Monthly Status Report, Demands, one-off Budgets, every family
-of Moves and the chance to go over your boss's head, ready for the owner to play and
-steer.
+This is Phase 4 in progress: a run of nine months on a furnished Floor 1, with kinds of
+boss, a Project, the Monthly Status Report, Demands, one-off Budgets, every family of Moves
+and going over your boss's head. Now earlier choices come back through Threads, hidden risks
+and what people have heard, things happen to the company, you can be fired, and runs save.
 
 ## Play
 
@@ -66,6 +66,10 @@ Press **Org Chart** at any step to see the formal hierarchy, also at no cost. Th
 one is the hidden Power Map, dealt from the seed. A Company Event can change either of them
 mid-run, and later signs and charts follow.
 
+What you do can travel. There is no reputation score: each person believes what has reached them
+along the Power Map, and that shows only in how they are with you. So the same deed is known to
+some and unknown to others, and good news travels too.
+
 After nine months the results screen shows who was really who: each Character's kind
 and Hidden Fact, your marks against the truth, how you played by family of Move, what
 your boss and your boss's boss really made of you, each claim and whether it was true,
@@ -102,33 +106,34 @@ Play each one the same way first, then the way the table suggests. The same choi
 reads and lands differently, and the results screen shows how each of your choices
 went down. Then try these:
 
-| Try this                                                                                          | Expect                                                                                                                                                             |
-| ------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| Seed 8. In month 1 go to the pub, then Meeting Room 1B                                            | You learn "strategic patience", and the Scene offers an extra option using it. The signs point to your boss.                                                       |
-| Agree warmly with your boss                                                                       | It goes well: your boss holds influence on this seed.                                                                                                              |
-| Open the Notebook, and mark your boss as anything you like                                        | The action count does not change, and new clues are at the top.                                                                                                    |
-| Month 2. In the Lessons Learned Review, blame the Project Co-ordinator                            | It goes badly, and you are not told why. At the end, the results screen explains: the Project Co-ordinator has a dangerous Hidden Fact.                            |
-| Restart from seed 1, and do the same in month 2                                                   | The Project Co-ordinator takes the blame and you get away with it. Blaming the Senior Analyst is what goes badly on this seed.                                     |
-| In month 1 on seed 1, look at who the signs point to                                              | They point to the Senior Analyst, not your boss. The same warm agreement now does little for you. Signs mislead about one Scene in five, so watch more than one.   |
-| Compare your boss's treatment of you in month 2 after agreeing with your boss or your boss's boss | The sign under "How your boss is with you" is usually warmer after agreeing with your boss. No sign is sure.                                                       |
-| On seed 8, turn down the pub and file the report, then read the meeting's signs in month 1        | Your boss overruns the meeting, and the Project Co-ordinator closes a late task and reopens it. Only those roles can show those signs.                             |
-| Go to the photocopier in two different months                                                     | Each source sounds like their role: the Senior Analyst talks in figures, the Office Co-ordinator in minutes and stationery.                                        |
-| Go to the loading bay, buy from the Office Co-ordinator, and ask about someone                    | Often a Hidden Fact. If it is one of the useful ones, a later Scene offers a new option about it, whether it is true.                                              |
-| Play to the end of any run, and read the results screen                                           | Your marks against the truth, each claim's truth, and which clues were false or did not matter.                                                                    |
-| Seed 1 (a Believer boss) and seed 8 (an Incompetent one). In month 1, agree warmly with your boss | Your boss's reaction reads quite differently, and neither says what kind your boss is. The results screen does.                                                    |
-| Seed 1. In month 1, file the report honestly, then read the Your project card                     | Real and reported are both Amber. Restart and choose "make the project green": real stays Amber and reported is Green.                                             |
-| Seed 4. In months 1 and 2, do not file the report                                                 | The Project goes Red in month 2, and the Project Status Review opens by itself. Making it amber changes the reported status.                                       |
-| Seed 1, month 2                                                                                   | The report waits on the Project Co-ordinator's late figures. Chase them, wait, or file without them.                                                               |
-| Seed 4. Go to the meeting in month 1, then in month 2 stall the Demand from your boss's boss      | It shows under Open Demands. In month 3 you are chased. On seed 8 it is forgotten instead.                                                                         |
-| Seed 2. In month 1, go nowhere near Meeting Room 1B                                               | The minutes give you an action, shown under Open Demands. It arrives in month 2 with the same five answers as any Demand, and you saw none of the meeting's signs. |
-| Seed 4, month 1. Decline the pub, file the report, and go to your boss's boss's office            | It pays off: your boss's boss has real influence on this seed, and your boss does not hear of it. The next Scene shows how your boss's boss is with you.           |
-| Seed 13, the same                                                                                 | It works, but your boss's boss turns out to have little influence, and not much comes of it.                                                                       |
-| Seed 16, the same                                                                                 | It goes badly, and then **Your boss knows**. Watch how your boss treats you afterwards.                                                                            |
-| Any seed, month 6, then month 8                                                                   | The bonus pot and the underspend. Each is a one-off, with no balance anywhere. Choose who gets the money, and compare a Believer's reaction with a Practitioner's. |
-| Any seed, months 4 to 8                                                                           | The desk with no window, the new metric, the Recruitment Panel and the Listening Session. Nothing says which family of Move each of these is.                      |
-| Seed 2. In month 4, move the Project Co-ordinator to the desk with no window                      | Nothing, for now. Two or three months later the Health and Safety committee writes. The results screen traces it back to the desk.                                 |
-| Play to Annual Calibration in month 9, and to the results screen                                  | Your boss gives a verdict that depends on how you have done. The results screen shows both bosses' kinds, how your choices landed and how you played, by family.   |
-| Restart the same seed and repeat your choices                                                     | The same signs, claims, Move and official story, every time.                                                                                                       |
+| Try this                                                                                           | Expect                                                                                                                                                             |
+| -------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| Seed 8. In month 1 go to the pub, then Meeting Room 1B                                             | You learn "strategic patience", and the Scene offers an extra option using it. The signs point to your boss.                                                       |
+| Agree warmly with your boss                                                                        | It goes well: your boss holds influence on this seed.                                                                                                              |
+| Open the Notebook, and mark your boss as anything you like                                         | The action count does not change, and new clues are at the top.                                                                                                    |
+| Month 2. In the Lessons Learned Review, blame the Project Co-ordinator                             | It goes badly, and you are not told why. At the end, the results screen explains: the Project Co-ordinator has a dangerous Hidden Fact.                            |
+| Restart from seed 1, and do the same in month 2                                                    | The Project Co-ordinator takes the blame and you get away with it. Blaming the Senior Analyst is what goes badly on this seed.                                     |
+| In month 1 on seed 1, look at who the signs point to                                               | They point to the Senior Analyst, not your boss. The same warm agreement now does little for you. Signs mislead about one Scene in five, so watch more than one.   |
+| Compare your boss's treatment of you in month 2 after agreeing with your boss or your boss's boss  | The sign under "How your boss is with you" is usually warmer after agreeing with your boss. No sign is sure.                                                       |
+| On seed 8, turn down the pub and file the report, then read the meeting's signs in month 1         | Your boss overruns the meeting, and the Project Co-ordinator closes a late task and reopens it. Only those roles can show those signs.                             |
+| Go to the photocopier in two different months                                                      | Each source sounds like their role: the Senior Analyst talks in figures, the Office Co-ordinator in minutes and stationery.                                        |
+| Go to the loading bay, buy from the Office Co-ordinator, and ask about someone                     | Often a Hidden Fact. If it is one of the useful ones, a later Scene offers a new option about it, whether it is true.                                              |
+| Play to the end of any run, and read the results screen                                            | Your marks against the truth, each claim's truth, and which clues were false or did not matter.                                                                    |
+| Seed 1 (a Believer boss) and seed 8 (an Incompetent one). In month 1, agree warmly with your boss  | Your boss's reaction reads quite differently, and neither says what kind your boss is. The results screen does.                                                    |
+| Seed 1. In month 1, file the report honestly, then read the Your project card                      | Real and reported are both Amber. Restart and choose "make the project green": real stays Amber and reported is Green.                                             |
+| Seed 4. In months 1 and 2, do not file the report                                                  | The Project goes Red in month 2, and the Project Status Review opens by itself. Making it amber changes the reported status.                                       |
+| Seed 1, month 2                                                                                    | The report waits on the Project Co-ordinator's late figures. Chase them, wait, or file without them.                                                               |
+| Seed 4. Go to the meeting in month 1, then in month 2 stall the Demand from your boss's boss       | It shows under Open Demands. In month 3 you are chased. On seed 8 it is forgotten instead.                                                                         |
+| Seed 2. In month 1, go nowhere near Meeting Room 1B                                                | The minutes give you an action, shown under Open Demands. It arrives in month 2 with the same five answers as any Demand, and you saw none of the meeting's signs. |
+| Seed 4, month 1. Decline the pub, file the report, and go to your boss's boss's office             | It pays off: your boss's boss has real influence on this seed, and your boss does not hear of it. The next Scene shows how your boss's boss is with you.           |
+| Seed 13, the same                                                                                  | It works, but your boss's boss turns out to have little influence, and not much comes of it.                                                                       |
+| Seed 16, the same                                                                                  | It goes badly, and then **Your boss knows**. Watch how your boss treats you afterwards.                                                                            |
+| Any seed, month 6, then month 8                                                                    | The bonus pot and the underspend. Each is a one-off, with no balance anywhere. Choose who gets the money, and compare a Believer's reaction with a Practitioner's. |
+| Any seed, months 4 to 8                                                                            | The desk with no window, the new metric, the Recruitment Panel and the Listening Session. Nothing says which family of Move each of these is.                      |
+| Seed 2. In month 4, move the Project Co-ordinator to the desk with no window                       | Nothing, for now. Two or three months later the Health and Safety committee writes. The results screen traces it back to the desk.                                 |
+| Play to Annual Calibration in month 9, and to the results screen                                   | Your boss gives a verdict that depends on how you have done. The results screen shows both bosses' kinds, how your choices landed and how you played, by family.   |
+| Seed 2, month 2. Blame the Senior Analyst in the Lessons Learned Review, and read the later Scenes | Someone tied to them may start to treat you differently. The results screen shows who heard, and from whom.                                                        |
+| Restart the same seed and repeat your choices                                                      | The same signs, claims, Move and official story, every time.                                                                                                       |
 
 A month always leaves you something to decide. Every Notification has an answer that
 costs nothing. Beside the report, a month's own Notifications ask for at most one costly
@@ -154,6 +159,7 @@ format, the page shows what is wrong instead of the game.
 | `moves.json`          | Character Moves, and when each can land                                                                              |
 | `threads.json`        | What comes back months later: what starts each Thread, and the Bill it sends                                         |
 | `events.json`         | Company Events: where each comes from, how it moves the charts, and the official story's words                       |
+| `reputation.json`     | How far and how fast news travels, and the signs of what each Character believes of you                              |
 | `risks.json`          | Hidden risks: what adds each, who it comes out through, and whether it can be traced to you                          |
 | `mistakes.json`       | The words of a Final Warning and of being fired                                                                      |
 | `official-story.json` | The official story, assembled from entries according to what you did                                                 |
@@ -234,7 +240,8 @@ at a later month. `npm run build` and `npm run play` ignore it.
   `month.ts` holds the month's order; `outcome.ts` is the one place any consequence
   takes effect; `state.ts` and `reads.ts` are what the mechanics share; `boss.ts`,
   `demands.ts`, `find-out.ts`, `notebook.ts`, `over-head.ts`, `project.ts` and
-  `scenes.ts` are mechanics of their own, as are `company-events.ts`, `mistakes.ts`, `risks.ts`, and `threads.ts`
+  `scenes.ts` are mechanics of their own, as are `company-events.ts`, `mistakes.ts`, `reputation.ts`,
+  `risks.ts`, and `threads.ts`
   with `bills.ts`; `to-view.ts` builds the player view, and
   `to-results.ts` its reveal at the end; `save.ts` writes and reads a run. Everything
   in a run's `State` is plain data, so a mechanic gets saving for free. Raise

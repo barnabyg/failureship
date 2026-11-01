@@ -104,6 +104,7 @@ function toSceneView(
     shown,
     treatment,
     headTreatment,
+    regard,
     misleading,
   }: Extract<Step, { kind: "scene" }>,
 ): Extract<StepView, { kind: "scene" }> {
@@ -137,6 +138,11 @@ function toSceneView(
     treatment: content.boss.signs.find((s) => s.id === treatment)?.text ?? null,
     headTreatment:
       content.overHead?.signs.find((s) => s.id === headTreatment)?.text ?? null,
+    regard: regard.map(({ character, sign }) => {
+      const written = content.reputation?.signs.find((s) => s.id === sign);
+      const who = calledBy(content, character);
+      return { who, text: sayPeople(written?.text ?? "", { "{who}": who }) };
+    }),
     options: offeredOptions(state, content, scene).map((o) => ({
       id: o.id,
       label: fillSubject(state, content, o.about, fill(o.label)),

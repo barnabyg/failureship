@@ -58,10 +58,32 @@ const choiceMistake = z.enum(["big", "catastrophic"]).optional();
 /** What the player is told before choosing something catastrophic. */
 const stakes = text.optional();
 
+export const TONES = ["good", "bad"] as const;
+export type Tone = (typeof TONES)[number];
+
 /** What a Character keeps of this, which later conditions can read. */
 const remembers = z
-  .array(z.strictObject({ character: id, about: id, text }))
+  .array(
+    z.strictObject({
+      character: id,
+      about: id,
+      text,
+      /** Whether it moves what they believe of the player, and which way. */
+      tone: z.enum(TONES).optional(),
+    }),
+  )
   .default([]);
+
+/** A deed that can travel, from those it was done in front of, or to. */
+const news = z
+  .strictObject({
+    about: id,
+    tone: z.enum(TONES),
+    /** What the results screen says reached them. */
+    text,
+    at: z.array(id).min(1),
+  })
+  .optional();
 
 const dialog = z.strictObject({
   id,
@@ -90,6 +112,7 @@ export type Condition =
   | { flag: string }
   | { did: string }
   | { remembers: { character: string; about: string } }
+  | { believes: { character: string; mood: Mood } }
   | { not: Condition }
   | { all: Condition[] };
 
@@ -111,6 +134,9 @@ const condition: z.ZodType<Condition> = z.lazy(() =>
     z.strictObject({
       remembers: z.strictObject({ character: id, about: id }),
     }),
+    z.strictObject({
+      believes: z.strictObject({ character: id, mood: z.enum(MOODS) }),
+    }),
     z.strictObject({ not: condition }),
     z.strictObject({ all: z.array(condition).min(1) }),
   ]),
@@ -131,6 +157,7 @@ const notificationOption = z.strictObject({
   project: projectChange,
   mistake: choiceMistake,
   remembers,
+  news,
   stakes,
   result: notice.optional(),
   /** Leaves a Demand open, as a bet that the boss forgets it. */
@@ -148,6 +175,7 @@ const notificationOption = z.strictObject({
         project: projectChange,
         mistake: choiceMistake,
         remembers,
+        news,
         result: notice,
       }),
     })
@@ -188,6 +216,7 @@ const bill = z.strictObject({
   project: projectChange,
   mistake: bigMistake,
   remembers,
+  news,
 });
 
 export type Bill = z.infer<typeof bill>;
@@ -325,6 +354,7 @@ const sceneResult = z.strictObject({
   project: projectChange,
   mistake: choiceMistake,
   remembers,
+  news,
   /** Says on the results screen that a Hidden Fact caused this. */
   factNote: text.optional(),
   /** Whose Hidden Fact it was, unless the option is `about` one. */
@@ -676,6 +706,32 @@ const mistakes = z.strictObject({
   finished: text,
 });
 
+/** What Characters believe of the player, and how that reaches them. */
+const reputation = z.strictObject({
+  /** How far and how fast news goes along the Power Map's ties. */
+  travel: z.strictObject({
+    hopsPerMonth: z.number().int().positive(),
+    maxHops: z.number().int().nonnegative(),
+    /** The seeded chance of each person passing it on to each person tied to them. */
+    passOnChance: z.number().min(0).max(1),
+    shift: z.strictObject({
+      good: z.number().int().positive(),
+      bad: z.number().int().negative(),
+    }),
+  }),
+  /** The hidden belief at which the signs change. */
+  opinion: z.strictObject({
+    warmAt: z.number().int().positive(),
+    coldAt: z.number().int().negative(),
+  }),
+  /** How someone other than the bosses is with the player. Says {who}. */
+  signs: z.array(bossSign).min(1),
+  /** What the results screen says each ended up believing. */
+  believes: z.strictObject({ warm: text, neutral: text, cold: text }),
+  /** How something reached them. The second says {who}. */
+  how: z.strictObject({ direct: text, heardFrom: text }),
+});
+
 export const contentSchema = z.strictObject({
   balance: z.strictObject({
     actionsPerMonth: z.number().int().positive(),
@@ -727,6 +783,7 @@ export const contentSchema = z.strictObject({
   }),
   overHead: overHead.optional(),
   mistakes: mistakes.optional(),
+  reputation: reputation.optional(),
   /** What the results screen calls each family of Moves. */
   families: z
     .strictObject(

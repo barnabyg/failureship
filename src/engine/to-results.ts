@@ -1,5 +1,6 @@
 import { MOVE_FAMILIES, type Content } from "./content";
-import { bossKindOf, moodAt, moodOf, personOf } from "./reads";
+import { bossKindOf, moodOf, moodOfCharacter, personOf } from "./reads";
+import { calledBy, sayPeople } from "./say";
 import type { State } from "./state";
 import type { StepView } from "./view";
 
@@ -18,6 +19,7 @@ export function toResultsView(
       : content.ui.results),
     ending: toEnding(state, content),
     mistakes: state.mistakes,
+    beliefs: toBeliefs(state, content),
     changes: state.eventsLanded.flatMap(({ id, month }) => {
       const written = content.events.find((e) => e.id === id);
       return written?.changed === undefined
@@ -119,6 +121,32 @@ export function toResultsView(
   };
 }
 
+/** Everyone, what they ended up believing, and what reached them. It says no number. */
+function toBeliefs(
+  state: State,
+  content: Content,
+): Extract<StepView, { kind: "results" }>["beliefs"] {
+  const written = content.reputation;
+  if (!written) return [];
+  return content.characters.map(({ id, name, title }) => ({
+    name,
+    title,
+    believes: written.believes[moodOfCharacter(state, content, id)],
+    reached: state.truth.memories
+      .filter((m) => m.character === id)
+      .map(({ month, text, via }) => ({
+        month,
+        text,
+        how:
+          typeof via === "string"
+            ? sayPeople(written.how.heardFrom, {
+                "{who}": calledBy(content, via),
+              })
+            : written.how.direct,
+      })),
+  }));
+}
+
 function toEnding(
   state: State,
   content: Content,
@@ -172,6 +200,6 @@ function toHeadResults(
     name,
     title,
     kind: content.hiddenTruth.kinds[dealt.kind].label,
-    verdict: written.verdict[moodAt(state.truth.headOpinion, written.opinion)],
+    verdict: written.verdict[moodOfCharacter(state, content, dealt.id)],
   };
 }

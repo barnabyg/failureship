@@ -46,6 +46,7 @@ function dependsOnHiddenTruth(
   if ("flag" in condition) return hiddenFlags.has(condition.flag);
   if ("did" in condition) return hiddenFlags.has(condition.did);
   if (
+    "believes" in condition ||
     "remembers" in condition ||
     "holderIs" in condition ||
     "bossIs" in condition ||
@@ -516,6 +517,47 @@ function findBrokenMistakes(content: Content): string[] {
   return problems;
 }
 
+/** No sign may settle what someone believes, and news must start from someone. */
+function findBrokenReputation(
+  content: Content,
+  characters: ReadonlySet<string>,
+): string[] {
+  const written = content.reputation;
+  const problems = written
+    ? findBrokenOpinionSigns(
+        written.signs.map((s) => ({
+          ...s,
+          text: s.text.replaceAll("{who}", ""),
+        })),
+        "Reputation sign",
+      )
+    : [];
+  for (const sign of written?.signs ?? []) {
+    if (!sign.text.includes("{who}")) {
+      problems.push(`Reputation sign "${sign.id}" needs to say {who}.`);
+    }
+  }
+  const outcomes = [
+    ...content.scenes.flatMap((s) => s.options.flatMap((o) => o.results)),
+    ...everyNotification(content).flatMap((n) =>
+      n.options.flatMap((o) => [o, ...(o.bet ? [o.bet.lost] : [])]),
+    ),
+    ...everyBill(content),
+  ];
+  for (const outcome of outcomes) {
+    if (!outcome.news) continue;
+    if (!written) {
+      problems.push("News is written, but no reputation for it to reach.");
+    }
+    for (const character of outcome.news.at) {
+      if (!characters.has(character)) {
+        problems.push(`News names unknown Character "${character}".`);
+      }
+    }
+  }
+  return problems;
+}
+
 function findBrokenReferences(content: Content): string[] {
   const rooms = new Set(content.floor.rooms.map((r) => r.id));
   const dialogs = new Set(content.dialogs.map((d) => d.id));
@@ -541,6 +583,9 @@ function findBrokenReferences(content: Content): string[] {
     }
     if ("remembers" in condition) {
       checkCharacter(owner, condition.remembers.character);
+    }
+    if ("believes" in condition) {
+      checkCharacter(owner, condition.believes.character);
     }
     if ("heardFact" in condition) checkFact(owner, condition.heardFact);
     if ("heardTrue" in condition) checkFact(owner, condition.heardTrue);
@@ -628,6 +673,7 @@ function findBrokenReferences(content: Content): string[] {
   problems.push(...findBrokenThreads(content));
   problems.push(...findBrokenRisks(content));
   problems.push(...findBrokenEvents(content));
+  problems.push(...findBrokenReputation(content, characters));
   for (const event of content.events) {
     checkProject(`Company Event "${event.id}"`, event.project);
   }

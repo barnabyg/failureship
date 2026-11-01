@@ -3,6 +3,7 @@ import { KINDS, type Content, type Kind } from "./content";
 import { dealCharacters, dealMotives, dealPowerMap } from "./deal";
 import { freshMonth, nextStep, openMonth } from "./month";
 import { noteEvents } from "./notebook";
+import { beliefOf } from "./reads";
 import { readSave, UnusableSaveError, writeSave } from "./save";
 import {
   IllegalChoiceError,
@@ -86,8 +87,8 @@ function dealtState(seed: number, content: Content): State {
     truth: {
       characters: motives.characters,
       powerMap: power.powerMap,
-      bossOpinion: 0,
-      headOpinion: 0,
+      beliefs: {},
+      news: [],
       risks: [],
       memories: [],
     },
@@ -160,6 +161,10 @@ function runOf(state: State, world: World): Run {
     },
     save: () => writeSave(state, content),
   };
-  truths.set(run, () => structuredClone(state.truth));
+  truths.set(run, () => ({
+    ...structuredClone(state.truth),
+    bossOpinion: beliefOf(state, content.boss.character),
+    headOpinion: beliefOf(state, content.overHead?.character ?? ""),
+  }));
   return run;
 }

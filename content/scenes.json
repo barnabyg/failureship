@@ -200,7 +200,13 @@
           {
             "body": "The Project Co-ordinator goes pink and apologises to the room. It works. The minutes record a learning opportunity, and it is the Project Co-ordinator's.",
             "sets": ["blamed-a-colleague"],
-            "approach": "blame"
+            "approach": "blame",
+            "news": {
+              "about": "blamed-in-the-review",
+              "tone": "bad",
+              "text": "You blamed the Project Co-ordinator in the Lessons Learned Review, in front of everyone.",
+              "at": ["projects"]
+            }
           }
         ]
       },
@@ -226,7 +232,13 @@
           {
             "body": "The Senior Analyst looks at you for slightly too long, then agrees that lessons can be learned. It appears to work. The minutes record a learning opportunity, and it is the Senior Analyst's.",
             "sets": ["blamed-a-colleague"],
-            "approach": "blame"
+            "approach": "blame",
+            "news": {
+              "about": "blamed-in-the-review",
+              "tone": "bad",
+              "text": "You blamed the Senior Analyst in the Lessons Learned Review, in front of everyone.",
+              "at": ["analyst"]
+            }
           }
         ]
       },
@@ -252,7 +264,13 @@
           {
             "body": "The Office Co-ordinator sighs, and takes the action. It seems to work, although your stationery order has since been queried.",
             "sets": ["blamed-a-colleague"],
-            "approach": "blame"
+            "approach": "blame",
+            "news": {
+              "about": "blamed-in-the-review",
+              "tone": "bad",
+              "text": "You blamed the Office Co-ordinator in the Lessons Learned Review, in front of everyone.",
+              "at": ["admin"]
+            }
           }
         ]
       },
@@ -264,7 +282,13 @@
           {
             "body": "There is a long, relieved silence. You are now the person this happened to.",
             "sets": ["took-the-blame"],
-            "approach": "ownership"
+            "approach": "ownership",
+            "news": {
+              "about": "took-the-blame",
+              "tone": "good",
+              "text": "You took the blame in the Lessons Learned Review, when you need not have.",
+              "at": ["projects", "analyst"]
+            }
           }
         ]
       },
@@ -1330,7 +1354,13 @@
           {
             "body": "Your friend gets the job, and takes you for a drink, and asks what the job is. You now have someone on the floor who owes you, and who cannot do anything.",
             "sets": ["hired-a-friend"],
-            "approach": "cronyism"
+            "approach": "cronyism",
+            "news": {
+              "about": "hired-a-friend",
+              "tone": "bad",
+              "text": "You hired an old friend at the Recruitment Panel.",
+              "at": ["admin"]
+            }
           }
         ]
       },
@@ -1342,7 +1372,13 @@
           {
             "body": "You go through the evidence, and they are appointed. They are very good. Everyone has already started to wonder what they are after.",
             "sets": ["hired-the-best"],
-            "approach": "results"
+            "approach": "results",
+            "news": {
+              "about": "hired-the-best",
+              "tone": "good",
+              "text": "You argued for the best person at the Recruitment Panel, and got them.",
+              "at": ["analyst"]
+            }
           }
         ]
       },
@@ -1441,7 +1477,13 @@
           {
             "body": "You are thanked for your courage. The Senior Analyst has a brief, informal conversation, and comes back from it and sits down without looking at anyone. It is not known who said what, and everybody knows.",
             "sets": ["reported-a-colleague"],
-            "approach": "blame"
+            "approach": "blame",
+            "news": {
+              "about": "reported-a-colleague",
+              "tone": "bad",
+              "text": "You reported the Senior Analyst's expenses at the Listening Session.",
+              "at": ["analyst"]
+            }
           }
         ]
       },
@@ -1467,7 +1509,13 @@
           {
             "body": "By the time you reach your desk it has come back to you, with details. The Project Co-ordinator's project is in serious trouble, and people are being very kind about it.",
             "sets": ["started-a-rumour"],
-            "approach": "blame"
+            "approach": "blame",
+            "news": {
+              "about": "started-a-rumour",
+              "tone": "bad",
+              "text": "You started a rumour about the Project Co-ordinator's project, by the biscuits.",
+              "at": ["projects"]
+            }
           }
         ]
       },
