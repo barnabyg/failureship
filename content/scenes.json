@@ -6,7 +6,7 @@
     "narration": [
       "Item one on the agenda is the agenda. The projector shows a slide titled Where We Are. Nobody can say."
     ],
-    "cast": ["boss", "analyst", "admin", "projects"],
+    "cast": ["head", "boss", "analyst", "admin", "projects"],
     "signs": [
       {
         "label": "Who interrupts whom",
@@ -22,6 +22,21 @@
       }
     ],
     "options": [
+      {
+        "id": "back-head",
+        "label": "Agree warmly with Hugh",
+        "results": [
+          {
+            "when": { "holderIs": "head" },
+            "body": "Hugh does not look at you. The next agenda has your name on it, spelled correctly, and people start holding doors.",
+            "sets": ["backed-holder"]
+          },
+          {
+            "body": "Hugh thanks you, using the name of someone who left in March. Several people make a note of that, and of you.",
+            "sets": ["backed-wrong-person"]
+          }
+        ]
+      },
       {
         "id": "back-boss",
         "label": "Agree warmly with Dennis, your boss",

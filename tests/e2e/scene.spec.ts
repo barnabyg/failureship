@@ -46,7 +46,7 @@ test("the meeting shows a dealt sign for each person present", async ({
   await reachMeeting(page, "report");
 
   const signs = page.getByTestId("behaviour");
-  await expect(signs).toHaveCount(4);
+  await expect(signs).toHaveCount(5);
   await expect(signs.filter({ hasText: "Dennis Prowse" })).toHaveCount(1);
   await expect(signs.filter({ hasText: "{who}" })).toHaveCount(0);
 });

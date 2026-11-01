@@ -52,16 +52,16 @@ first. Swap a seed with a friend and you both get the same deal.
 
 Start at `http://localhost:5173/?seed=8`.
 
-| Try this                                                       | Expect                                                                                                                                     |
-| -------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------ |
-| Go to the pub                                                  | A short dialog with the office behind it. You learn the Buzzword "strategic patience", and it appears at the top of the screen.            |
-| Then go to Meeting Room 1B                                     | The Scene offers an extra option about strategic patience. Using it gives its own result.                                                  |
-| Restart, finish the report, then go to Meeting Room 1B         | No trace of the Buzzword option or the phrase anywhere in the month.                                                                       |
-| In the meeting, agree with each person in turn across restarts | Seed 8 has Dennis holding influence in the room, so agreeing with Dennis goes well and agreeing with anyone else does not.                 |
-| Repeat the meeting on seeds 1, 6 and 2                         | The signs point elsewhere: to Priya on seed 1, Marjorie on seed 6 and Callum on seed 2. The same choice now has a different result.        |
-| Compare two official stories                                   | "As reported upstairs" and "What actually happened" change with the Notification answer, the Scene choice and how you spent other actions. |
-| Skip the meeting altogether                                    | The official story records you as present anyway.                                                                                          |
-| Restart the same seed and repeat your choices                  | The same Move and the same official story, every time.                                                                                     |
+| Try this                                                       | Expect                                                                                                                                              |
+| -------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Go to the pub                                                  | A short dialog with the office behind it. You learn the Buzzword "strategic patience", and it appears at the top of the screen.                     |
+| Then go to Meeting Room 1B                                     | The Scene offers an extra option about strategic patience. Using it gives its own result.                                                           |
+| Restart, finish the report, then go to Meeting Room 1B         | No trace of the Buzzword option or the phrase anywhere in the month.                                                                                |
+| In the meeting, agree with each person in turn across restarts | Seed 8 has Dennis holding influence, so agreeing with Dennis goes well and agreeing with anyone else does not.                                      |
+| Repeat the meeting on seeds 1, 6, 2 and 4                      | The signs point elsewhere: to Priya on seed 1, Marjorie on seed 6, Callum on seed 2 and Hugh on seed 4. The same choice now has a different result. |
+| Compare two official stories                                   | "As reported upstairs" and "What actually happened" change with the Notification answer, the Scene choice and how you spent other actions.          |
+| Skip the meeting altogether                                    | The official story records you as present anyway.                                                                                                   |
+| Restart the same seed and repeat your choices                  | The same Move and the same official story, every time.                                                                                              |
 
 ## Change the game
 
@@ -87,7 +87,9 @@ format, the page shows what is wrong instead of the game.
 
 In a Scene, `{holder}`, `{ignored}` and `{bystander}` are replaced by the names of
 the most influential, the least influential and the next most influential of those
-present, read from the dealt Power Map. `holderIs` means the same in a Scene's
+present, read from the dealt Power Map's `order`. A Scene without the whole cast can
+therefore show a holder whom the Power Map's tree does not place above everyone
+present, so the meeting has everyone in it. `holderIs` means the same in a Scene's
 results. A `when` or `requires` condition can be
 `{ "holderIs": "boss" }`, `{ "hasBuzzword": "strategic-patience" }`,
 `{ "flag": "went-to-pub" }`, `{ "not": ... }` or `{ "all": [...] }`. Options

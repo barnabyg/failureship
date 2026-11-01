@@ -148,11 +148,29 @@ describe("the real month", () => {
     expect(stories.size).toBeGreaterThan(20);
   });
 
+  it("lets the player watch every Character, whose kind the results reveal", () => {
+    const present = new Set(gameContent.scenes.flatMap((s) => s.cast));
+
+    expect(present).toEqual(new Set(gameContent.characters.map((c) => c.id)));
+  });
+
+  it("never has the meeting's holder below anyone on the true Power Map", () => {
+    const seeds = Array.from({ length: 200 }, (_, i) => i + 1);
+    for (const seed of seeds) {
+      const run = startRun({ seed, content: gameContent });
+      const { influence } = readHiddenTruth(run).powerMap;
+
+      expect(influence.map((i) => i.over)).not.toContain(holderInMeeting(seed));
+    }
+  });
+
   it("lets anyone in the meeting hold influence, depending on the deal", () => {
     const seeds = Array.from({ length: 60 }, (_, i) => i + 1);
     const holders = new Set(seeds.map(holderInMeeting));
 
-    expect(holders).toEqual(new Set(["boss", "analyst", "admin", "projects"]));
+    expect(holders).toEqual(
+      new Set(["head", "boss", "analyst", "admin", "projects"]),
+    );
   });
 
   it("gives every Character a place on one Org Chart", () => {
@@ -168,6 +186,7 @@ describe("the real month", () => {
     [1, "analyst"],
     [6, "admin"],
     [2, "projects"],
+    [4, "head"],
   ])("keeps the seed %i documented for %s", (seed, holder) => {
     expect(holderInMeeting(seed)).toBe(holder);
   });
