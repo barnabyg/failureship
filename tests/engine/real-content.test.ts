@@ -242,6 +242,27 @@ describe("the real month", () => {
     expect(JSON.stringify(told.step)).toContain("abolished");
   });
 
+  // The late-input browser test relies on this.
+  it("keeps the report's input late in month 2 on seed 1", () => {
+    const run = startRun({ seed: 1, content: gameContent });
+    fileTheReport(run);
+    let view = run.view();
+    while (view.month === 1) {
+      const next = view.choices.at(-1);
+      if (!next) throw new Error(`Stuck at ${view.step.kind}.`);
+      view = run.choose(next);
+    }
+    run.choose({
+      type: "notification",
+      notificationId: "training",
+      optionId: "skip-training",
+    });
+
+    expect(run.choose({ type: "continue" }).step).toMatchObject({
+      id: "report-input-late",
+    });
+  });
+
   // The README contrasts these two seeds in its test scenario.
   it("keeps the two contrasting deals the README describes", () => {
     const of = (seed: number) => {

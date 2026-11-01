@@ -229,11 +229,14 @@ describe("a Project in content", () => {
 
 const BOSS = gameContent.boss.character;
 
+function dealtBoss(run: Run): Kind | undefined {
+  return readHiddenTruth(run).characters.find((c) => c.id === BOSS)?.kind;
+}
+
 function seedWithBoss(kind: Kind, content: Content = gameContent): number {
-  const seed = SEEDS.find((s) => {
-    const { characters } = readHiddenTruth(startRun({ seed: s, content }));
-    return characters.find((c) => c.id === BOSS)?.kind === kind;
-  });
+  const seed = SEEDS.find(
+    (s) => dealtBoss(startRun({ seed: s, content })) === kind,
+  );
   if (seed === undefined) throw new Error(`No seed deals a ${kind} boss.`);
   return seed;
 }
@@ -244,7 +247,9 @@ function reachFloor(run: Run, report = "report"): PlayerView {
   while (view.step.kind !== "actions") {
     const { step } = view;
     if (step.kind === "notification") {
-      const wanted = step.options.find((o) => o.id === report);
+      const wanted =
+        step.options.find((o) => o.id === report) ??
+        step.options.find((o) => o.id === "chase");
       const free = step.options.find((o) => o.costLabel === "Costs nothing");
       const option = wanted ?? free ?? step.options[0];
       if (!option) throw new Error("A Notification with no options.");
@@ -254,7 +259,9 @@ function reachFloor(run: Run, report = "report"): PlayerView {
         optionId: option.id,
       });
     } else {
-      view = run.choose({ type: "continue" });
+      const next = view.choices[0];
+      if (!next) throw new Error(`Stuck at ${step.kind}.`);
+      view = run.choose(next);
     }
   }
   return view;
@@ -344,25 +351,30 @@ describe("Deliver", () => {
     );
   });
 
-  it("lets a Practitioner boss take the credit in a Move", () => {
-    const run = startRun({
-      seed: seedWithBoss("practitioner"),
-      content: gameContent,
-    });
-    reachFloor(run);
-    run.choose({ type: "action", actionId: "work" });
-    run.choose({ type: "continue" });
-    let view = run.view();
-    const seen: string[] = [];
-    while (view.step.kind !== "story") {
-      seen.push(view.step.kind === "move" ? view.step.title : "");
-      const choice = view.choices[0];
-      if (!choice) throw new Error(`Stuck at ${view.step.kind}.`);
-      view = run.choose(choice);
-    }
+  it("lets only a Practitioner boss take the credit in a Move", () => {
+    const credit = gameContent.moves.find((m) => m.id === "credit-taken");
+    const creditLanded = (kind: Kind) =>
+      SEEDS.slice(0, 60).some((seed) => {
+        const run = startRun({ seed, content: gameContent });
+        if (dealtBoss(run) !== kind) return false;
+        reachFloor(run);
+        run.choose({ type: "action", actionId: "work" });
+        run.choose({ type: "continue" });
+        let view = run.view();
+        while (view.step.kind !== "move" && view.step.kind !== "story") {
+          const meeting = view.choices.find(
+            (c) => c.type === "action" && c.actionId === "meeting",
+          );
+          const next = meeting ?? view.choices.at(-1);
+          if (!next) throw new Error(`Stuck at ${view.step.kind}.`);
+          view = run.choose(next);
+        }
+        return view.step.kind === "move" && view.step.title === credit?.title;
+      });
 
-    const landedMoves = seen.filter((t) => t !== "");
-    expect(landedMoves.length).toBe(1);
+    expect(creditLanded("practitioner")).toBe(true);
+    expect(creditLanded("believer")).toBe(false);
+    expect(creditLanded("incompetent")).toBe(false);
   });
 
   it("cools a Practitioner boss towards a player who shines too much", () => {

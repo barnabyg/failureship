@@ -29,32 +29,6 @@ const projectChange = z
   .strictObject({ real: id.optional(), reported: id.optional() })
   .optional();
 
-const notificationOption = z.strictObject({
-  id,
-  label: text,
-  cost: id.optional(),
-  dialog: id.optional(),
-  learns: z.array(id).default([]),
-  sets,
-  opinion,
-  approach: approachTag,
-  reaction: ownReaction,
-  project: projectChange,
-  result: notice.optional(),
-});
-
-/** The months something belongs to. Left out, it belongs to every month. */
-const months = z.array(z.number().int().positive()).min(1).optional();
-
-const notification = z.strictObject({
-  id,
-  months,
-  from: text,
-  subject: text,
-  body: text,
-  options: z.array(notificationOption).min(1),
-});
-
 const dialog = z.strictObject({
   id,
   title: text,
@@ -101,6 +75,48 @@ const condition: z.ZodType<Condition> = z.lazy(() =>
     z.strictObject({ all: z.array(condition).min(1) }),
   ]),
 );
+
+const notificationOption = z.strictObject({
+  id,
+  label: text,
+  cost: id.optional(),
+  dialog: id.optional(),
+  learns: z.array(id).default([]),
+  sets,
+  opinion,
+  approach: approachTag,
+  reaction: ownReaction,
+  project: projectChange,
+  result: notice.optional(),
+  /** A seeded chance that this goes the other way, into `lost`. */
+  bet: z
+    .strictObject({
+      chance: z.number().min(0).max(1),
+      lost: z.strictObject({
+        sets,
+        opinion,
+        approach: approachTag,
+        reaction: ownReaction,
+        project: projectChange,
+        result: notice,
+      }),
+    })
+    .optional(),
+});
+
+/** The months something belongs to. Left out, it belongs to every month. */
+const months = z.array(z.number().int().positive()).min(1).optional();
+
+const notification = z.strictObject({
+  id,
+  months,
+  /** The Notification waits until this holds, and goes unseen if it never does. */
+  when: condition.optional(),
+  from: text,
+  subject: text,
+  body: text,
+  options: z.array(notificationOption).min(1),
+});
 
 const sceneResult = z.strictObject({
   when: condition.optional(),
@@ -372,6 +388,17 @@ const project = z.strictObject({
   events: z
     .array(z.strictObject({ months, text, project: projectChange }))
     .default([]),
+  /** Who the report needs figures from, and how often they arrive late. */
+  input: z
+    .strictObject({
+      character: id,
+      /** The months in which they can be late. Left out, any month. */
+      months,
+      chance: perKind(z.number().min(0).max(1)),
+      /** Set for the month when they are late. */
+      sets: id,
+    })
+    .optional(),
 });
 
 const contentSchema = z.strictObject({
@@ -718,6 +745,29 @@ function findNamedKinds(
     .map((line) => `${owner} names a kind: "${line}"`);
 }
 
+/** Lateness must be a clue about someone's kind, and never settle it. */
+function findBrokenInput(content: Content): string[] {
+  const { input } = content.project;
+  if (!input) return [];
+  const problems: string[] = [];
+  if (!content.characters.some((c) => c.id === input.character)) {
+    problems.push(`The report's input names unknown "${input.character}".`);
+  }
+  const chances = Object.values(input.chance);
+  if (chances.filter((c) => c > 0).length < 2) {
+    problems.push("Late input can come from only one kind.");
+  }
+  if (new Set(chances).size === 1) {
+    problems.push("Late input gives no evidence: every kind is as likely.");
+  }
+  if (chances.includes(1)) {
+    problems.push(
+      "Late input is certain from one kind, which would settle it.",
+    );
+  }
+  return problems;
+}
+
 /** Sources must be worth weighing: never always right, and never always wrong. */
 function findBrokenSources(content: Content): string[] {
   const { methods, reliability, motives, claims, voices } = content.sources;
@@ -888,6 +938,7 @@ function findBrokenReferences(content: Content): string[] {
   problems.push(...findBrokenBossSigns(content));
   problems.push(...findBrokenApproaches(content));
   problems.push(...findBrokenSources(content));
+  problems.push(...findBrokenInput(content));
   checkStatus("The Project", content.project.start.real);
   checkStatus("The Project", content.project.start.reported);
   for (const e of content.project.events) {
@@ -1006,6 +1057,12 @@ function findBrokenReferences(content: Content): string[] {
   }
   for (const n of content.notifications) {
     checkMonths(`Notification "${n.id}"`, n.months);
+    if (n.when) {
+      checkCondition(`Notification "${n.id}"`, n.when);
+      if (dependsOnHiddenTruth(n.when, hiddenFlags)) {
+        problems.push(`Notification "${n.id}" is gated on the hidden truth.`);
+      }
+    }
     for (const [, token] of n.body.matchAll(/\{(\w+)\}/g)) {
       if (token !== "real" && token !== "reported") {
         problems.push(
@@ -1018,6 +1075,10 @@ function findBrokenReferences(content: Content): string[] {
       checkCost(owner, o.cost);
       checkApproach(owner, o);
       checkProject(owner, o.project);
+      if (o.bet) {
+        checkApproach(owner, o.bet.lost);
+        checkProject(owner, o.bet.lost.project);
+      }
       if (o.dialog !== undefined && !dialogs.has(o.dialog)) {
         problems.push(`${owner} opens unknown dialog "${o.dialog}".`);
       }

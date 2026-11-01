@@ -16,7 +16,7 @@ import {
   type DealtCharacter,
   type PowerMap,
 } from "./deal";
-import { draw, pick, pickWeighted } from "./rng";
+import { draw, drawFor, pick, pickWeighted } from "./rng";
 import { calledBy, capitalised, sayPeople } from "./say";
 import type {
   Buzzword,
@@ -248,6 +248,12 @@ function freshMonth(content: Content, month: number): MonthRecord {
 
 /** What happens as a month opens, whatever the player has done. */
 function openMonth(state: State, content: Content): void {
+  const { input } = content.project;
+  const late = state.truth.characters.find((c) => c.id === input?.character);
+  if (input && late && inMonth(input, state.month)) {
+    const value = drawFor(state.seed, "report-input", state.month);
+    if (value < input.chance[late.kind]) state.flags.push(input.sets);
+  }
   for (const event of content.project.events) {
     if (inMonth(event, state.month)) {
       moveProject(state, content, event.project);
@@ -414,14 +420,20 @@ function answerNotification(
   );
   const learned = option.learns.filter((w) => !state.buzzwords.includes(w));
   state.buzzwords.push(...learned);
-  state.flags.push(...option.sets);
-  moveProject(state, content, option.project);
-  const reaction = landWithBoss(state, content, option, option.label);
+  const lost =
+    option.bet &&
+    drawFor(state.seed, option.id, state.month) >= option.bet.chance
+      ? option.bet.lost
+      : undefined;
+  const outcome = lost ?? option;
+  state.flags.push(...outcome.sets);
+  moveProject(state, content, outcome.project);
+  const reaction = landWithBoss(state, content, outcome, option.label);
 
   if (option.dialog !== undefined) {
     state.step = { kind: "dialog", id: option.dialog, learned, reaction };
-  } else if (option.result) {
-    state.step = { kind: "notice", ...option.result, reaction };
+  } else if (outcome.result) {
+    state.step = { kind: "notice", ...outcome.result, reaction };
   } else {
     state.step = nextStep(state, world);
   }
@@ -725,7 +737,9 @@ function nextStep(state: State, { content }: World): Step {
     const answerable = notification?.options.some(
       (o) => costOf(content, o.cost) <= remaining(state, content),
     );
-    if (answerable) return { kind: "notification", id };
+    if (answerable && matches(state, content, notification?.when)) {
+      return { kind: "notification", id };
+    }
   }
   if (
     actionsThisMonth(state, content).some((a) => isAvailable(state, content, a))

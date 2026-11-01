@@ -57,6 +57,27 @@
     },
     {
       "when": {
+        "flag": "chased-input"
+      },
+      "reported": "You drove cross-team alignment on a key dependency.",
+      "happened": "You stood next to someone's desk until they sent you the figures."
+    },
+    {
+      "when": {
+        "flag": "missed-deadline"
+      },
+      "reported": "A reporting dependency has been escalated for visibility.",
+      "happened": "The figures came four minutes after midnight, and the lateness is now yours."
+    },
+    {
+      "when": {
+        "flag": "filed-without-input"
+      },
+      "reported": "You delivered your report on time, despite upstream challenges.",
+      "happened": "You made the figures up. You called them indicative."
+    },
+    {
+      "when": {
         "flag": "credit-taken"
       },
       "reported": "Your boss drove strong delivery on a key project this month.",

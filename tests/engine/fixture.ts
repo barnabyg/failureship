@@ -38,6 +38,7 @@ interface RawSceneOption {
     reaction?: { believer: string; incompetent: string; practitioner: string };
     factAt?: string;
     factNote?: string;
+    project?: { real?: string; reported?: string };
   }[];
 }
 
@@ -148,6 +149,17 @@ export function fixtureRaw() {
         text: string;
         project?: { real?: string; reported?: string };
       }[],
+      input: undefined as
+        | {
+            character: string;
+            chance: {
+              believer: number;
+              incompetent: number;
+              practitioner: number;
+            };
+            sets: string;
+          }
+        | undefined,
     },
     hiddenTruth: {
       kinds: {

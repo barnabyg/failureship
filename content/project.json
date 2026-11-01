@@ -34,5 +34,15 @@
         "real": "worse"
       }
     }
-  ]
+  ],
+  "input": {
+    "character": "projects",
+    "months": [2, 3, 4, 5, 6],
+    "chance": {
+      "believer": 0.15,
+      "incompetent": 0.5,
+      "practitioner": 0.35
+    },
+    "sets": "input-late"
+  }
 }

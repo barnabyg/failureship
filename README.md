@@ -166,6 +166,13 @@ reported. A Notification option, Scene result or action can carry
 `better` or `worse`, and `reported` can also be `real`, which is what telling the truth
 does. Nothing else moves them. A Notification's body can say `{real}` and `{reported}`.
 
+`project.json`'s `input` names who the report needs figures from, the months they can
+be late, and the `chance` of that for each kind they might be. Lateness is drawn from
+the seed and never from the player's choices, and it sets a flag for the month. It must
+be possible from at least two kinds, and certain from none, so that it never settles
+what someone is. A Notification with a `when` waits until that holds. An option with a
+`bet` has a seeded `chance` of going well, and otherwise uses what `lost` says.
+
 An approach can have `overdone`, which changes how the listed kinds take it after
 `after` uses in a run. This is how a Practitioner boss turns on someone who shines.
 
