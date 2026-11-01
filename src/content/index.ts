@@ -8,6 +8,7 @@ import dialogs from "../../content/dialogs.json";
 import floor from "../../content/floor-1.json";
 import hiddenTruth from "../../content/hidden-truth.json";
 import moves from "../../content/moves.json";
+import notebook from "../../content/notebook.json";
 import notifications from "../../content/notifications.json";
 import officialStory from "../../content/official-story.json";
 import scenes from "../../content/scenes.json";
@@ -20,6 +21,7 @@ const {
   hints,
   actionCount,
   claimTitle,
+  clueVerdicts,
   costLabel,
   freeLabel,
   results,
@@ -31,6 +33,7 @@ export const gameContent = parseContent({
   boss,
   hiddenTruth,
   sources,
+  notebook,
   characters,
   behaviours,
   scenes,
@@ -41,7 +44,15 @@ export const gameContent = parseContent({
   moves,
   officialStory,
   floor,
-  ui: { hints, actionCount, claimTitle, costLabel, freeLabel, results },
+  ui: {
+    hints,
+    actionCount,
+    claimTitle,
+    clueVerdicts,
+    costLabel,
+    freeLabel,
+    results,
+  },
 });
 
 const panelSchema = z.strictObject(
@@ -74,6 +85,15 @@ const panelSchema = z.strictObject(
       "resultsNoFact",
       "findOutSourceHeading",
       "findOutSubjectHeading",
+      "notebookHeading",
+      "notebookMarksHeading",
+      "notebookCluesHeading",
+      "notebookEmpty",
+      "notebookNoMark",
+      "resultsMarksHeading",
+      "resultsMarkRight",
+      "resultsMarkWrong",
+      "resultsCluesHeading",
       "resultsFactEventsHeading",
       "resultsClaimsHeading",
       "resultsNoClaims",

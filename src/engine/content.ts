@@ -106,7 +106,14 @@ const scene = z.strictObject({
   location: text,
   narration: z.array(text).min(1),
   cast: z.array(id).min(1),
-  signs: z.array(z.strictObject({ label: text, text })),
+  signs: z.array(
+    z.strictObject({
+      label: text,
+      text,
+      /** What the Notebook keeps of this, if anything. */
+      clue: text.optional(),
+    }),
+  ),
   options: z.array(sceneOption).min(1),
   /** Names code in `sceneScripts`, for a Scene that data cannot express. */
   script: id.optional(),
@@ -174,6 +181,8 @@ const behaviour = z.strictObject({
   id,
   /** Says {who}, so that it works for whichever Character shows it. */
   text,
+  /** What the Notebook keeps of this, if anything. Says {who} too. */
+  clue: text.optional(),
   /** How likely each kind is to show this, relative to its other behaviours. */
   likelihood: z.strictObject({
     believer: z.number().nonnegative(),
@@ -263,6 +272,25 @@ const bossSign = z.strictObject({
   }),
 });
 
+export const CLUE_VERDICTS = ["held", "wrong", "idle"] as const;
+export type ClueVerdict = (typeof CLUE_VERDICTS)[number];
+
+const notebook = z.strictObject({
+  /** Things the player did or saw that the Notebook keeps. */
+  events: z.array(
+    z.strictObject({
+      id,
+      months,
+      /** Noted when this first holds in a month. */
+      when: condition,
+      source: text,
+      text,
+      /** What the results screen says of it. */
+      verdict: z.enum(CLUE_VERDICTS),
+    }),
+  ),
+});
+
 const contentSchema = z.strictObject({
   balance: z.strictObject({
     actionsPerMonth: z.number().int().positive(),
@@ -304,6 +332,7 @@ const contentSchema = z.strictObject({
       .min(1),
   }),
   sources,
+  notebook,
   characters: z
     .array(
       z.strictObject({
@@ -345,6 +374,7 @@ const contentSchema = z.strictObject({
     actionCount: z.strictObject({ one: text, other: text }),
     /** Says {source}. */
     claimTitle: text,
+    clueVerdicts: z.strictObject({ held: text, wrong: text, idle: text }),
     costLabel: text,
     freeLabel: text,
     results: z.strictObject({ title: text, intro: text }),
@@ -444,12 +474,14 @@ function findBrokenBehaviours(content: Content): string[] {
   const nameParts = content.characters.flatMap((c) => c.name.split(" "));
   for (const b of content.behaviours) {
     const owner = `Behaviour "${b.id}"`;
-    if (!b.text.includes("{who}")) {
-      problems.push(`${owner} needs to say {who}.`);
-    }
-    for (const [, token] of b.text.matchAll(/\{(\w+)\}/g)) {
-      if (token !== "who") {
-        problems.push(`${owner} uses unknown token "{${token ?? ""}}".`);
+    for (const written of [b.text, b.clue ?? "{who}"]) {
+      if (!written.includes("{who}")) {
+        problems.push(`${owner} needs to say {who}.`);
+      }
+      for (const [, token] of written.matchAll(/\{(\w+)\}/g)) {
+        if (token !== "who") {
+          problems.push(`${owner} uses unknown token "{${token ?? ""}}".`);
+        }
       }
     }
     const words = b.text.split(/\W+/);
@@ -680,7 +712,10 @@ function findBrokenReferences(content: Content): string[] {
       problems.push(`${owner} names roles, which need three people present.`);
     }
     for (const line of s.narration) checkRoles(owner, line);
-    for (const sign of s.signs) checkRoles(owner, sign.text);
+    for (const sign of s.signs) {
+      checkRoles(owner, sign.text);
+      checkRoles(owner, sign.clue ?? "");
+    }
     for (const o of s.options) {
       const optionOwner = `${owner} option "${o.id}"`;
       const about = o.about !== undefined;
@@ -701,6 +736,14 @@ function findBrokenReferences(content: Content): string[] {
       if (o.results.at(-1)?.when !== undefined) {
         problems.push(`${optionOwner} needs a fallback result with no "when".`);
       }
+    }
+  }
+  for (const e of content.notebook.events) {
+    const owner = `Notebook event "${e.id}"`;
+    checkMonths(owner, e.months);
+    checkCondition(owner, e.when);
+    if (dependsOnHiddenTruth(e.when)) {
+      problems.push(`${owner} is gated on the hidden truth.`);
     }
   }
   for (const m of content.moves) {

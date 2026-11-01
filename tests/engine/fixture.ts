@@ -109,6 +109,15 @@ export function fixtureRaw() {
       }[],
     },
     sources: sourcesRaw(),
+    notebook: {
+      events: [] as {
+        id: string;
+        when: RawCondition;
+        source: string;
+        text: string;
+        verdict: string;
+      }[],
+    },
     hiddenTruth: {
       kinds: {
         believer: { label: "KIND-BELIEVER", weight: 1 },
@@ -176,6 +185,11 @@ export function fixtureRaw() {
       },
       actionCount: { one: "1 action", other: "{n} actions" },
       claimTitle: "{source} says",
+      clueVerdicts: {
+        held: "VERDICT-HELD",
+        wrong: "VERDICT-FALSE",
+        idle: "VERDICT-IRRELEVANT",
+      },
       costLabel: "Costs {actions}",
       freeLabel: "Costs nothing",
       results: { title: "The end", intro: "Here is who was who." },

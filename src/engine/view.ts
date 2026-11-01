@@ -1,3 +1,5 @@
+import type { Kind } from "./content";
+
 /** Everything the player can do. The view lists which of these are legal now. */
 export type Choice =
   | { type: "continue" }
@@ -104,6 +106,13 @@ export type StepView =
         fact: string | null;
       }[];
       powerMap: ChartEntry[];
+      marks: {
+        name: string;
+        mark: string | null;
+        truth: string;
+        correct: boolean;
+      }[];
+      clues: { month: number; source: string; text: string; verdict: string }[];
       /** Where a Hidden Fact changed what happened in this run. */
       factEvents: { month: number; note: string; fact: string | null }[];
       claims: {
@@ -118,6 +127,11 @@ export type StepView =
 
 /** Only what the player is entitled to see. It never holds undiscovered truth. */
 export interface PlayerView {
+  notebook: {
+    /** Never says which of these can be trusted, until the results screen. */
+    clues: { month: number; source: string; text: string }[];
+    marks: (Person & { mark: Kind | null })[];
+  };
   seed: number;
   month: number;
   totalMonths: number;

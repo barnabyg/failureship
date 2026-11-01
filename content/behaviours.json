@@ -2,51 +2,98 @@
   {
     "id": "arrives-late",
     "text": "{who} arrives eleven minutes late, carrying a laptop and an explanation.",
-    "likelihood": { "believer": 2, "incompetent": 5, "practitioner": 2 }
+    "likelihood": {
+      "believer": 2,
+      "incompetent": 5,
+      "practitioner": 2
+    },
+    "clue": "{who} arrived eleven minutes late, with an explanation."
   },
   {
     "id": "repeats-a-point",
     "text": "{who} says \"as I was saying\" before making a point that somebody else made first.",
-    "likelihood": { "believer": 1, "incompetent": 2, "practitioner": 5 }
+    "likelihood": {
+      "believer": 1,
+      "incompetent": 2,
+      "practitioner": 5
+    },
+    "clue": "{who} repeated someone else's point as though it were new."
   },
   {
     "id": "all-night-deck",
     "text": "{who} has stayed up all night on a slide deck that nobody asked for.",
-    "likelihood": { "believer": 4, "incompetent": 3, "practitioner": 1 }
+    "likelihood": {
+      "believer": 4,
+      "incompetent": 3,
+      "practitioner": 1
+    }
   },
   {
     "id": "asks-about-your-week",
     "text": "{who} stops to ask how your week has been, and seems to listen to the answer.",
-    "likelihood": { "believer": 5, "incompetent": 2, "practitioner": 4 }
+    "likelihood": {
+      "believer": 5,
+      "incompetent": 2,
+      "practitioner": 4
+    }
   },
   {
     "id": "challenges-a-figure",
     "text": "{who} challenges a figure on the slide, and turns out to be right.",
-    "likelihood": { "believer": 5, "incompetent": 0, "practitioner": 3 }
+    "likelihood": {
+      "believer": 5,
+      "incompetent": 0,
+      "practitioner": 3
+    },
+    "clue": "{who} challenged a figure, and turned out to be right."
   },
   {
     "id": "which-meeting",
     "text": "{who} asks, some way in, which meeting this is.",
-    "likelihood": { "believer": 1, "incompetent": 6, "practitioner": 1 }
+    "likelihood": {
+      "believer": 1,
+      "incompetent": 6,
+      "practitioner": 1
+    },
+    "clue": "{who} asked, some way in, which meeting it was."
   },
   {
     "id": "notes-senior-names",
     "text": "{who} writes something down whenever a senior name is mentioned, and only then.",
-    "likelihood": { "believer": 1, "incompetent": 1, "practitioner": 5 }
+    "likelihood": {
+      "believer": 1,
+      "incompetent": 1,
+      "practitioner": 5
+    },
+    "clue": "{who} wrote things down only when a senior name came up."
   },
   {
     "id": "takes-the-action",
     "text": "{who} volunteers for the action that nobody wants, and looks tired doing it.",
-    "likelihood": { "believer": 5, "incompetent": 3, "practitioner": 2 }
+    "likelihood": {
+      "believer": 5,
+      "incompetent": 3,
+      "practitioner": 2
+    },
+    "clue": "{who} volunteered for the action that nobody wanted."
   },
   {
     "id": "delay-began-elsewhere",
     "text": "{who} mentions, in passing, that the delay began in another team.",
-    "likelihood": { "believer": 1, "incompetent": 3, "practitioner": 5 }
+    "likelihood": {
+      "believer": 1,
+      "incompetent": 3,
+      "practitioner": 5
+    },
+    "clue": "{who} mentioned that the delay began in another team."
   },
   {
     "id": "says-nothing-leaves-first",
     "text": "{who} says nothing for the whole meeting, and is the first to leave.",
-    "likelihood": { "believer": 1, "incompetent": 4, "practitioner": 3 }
+    "likelihood": {
+      "believer": 1,
+      "incompetent": 4,
+      "practitioner": 3
+    }
   }
 ]

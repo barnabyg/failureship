@@ -1,0 +1,58 @@
+{
+  "events": [
+    {
+      "id": "kitchen-friday",
+      "when": {
+        "flag": "had-tea"
+      },
+      "source": "The kitchen",
+      "text": "Someone from Accounts Payable says that it is nearly Friday, and looks at you as though you should do something about it.",
+      "verdict": "idle"
+    },
+    {
+      "id": "car-park",
+      "when": {
+        "flag": "had-one-to-one"
+      },
+      "source": "A one-to-one with Priya",
+      "text": "Priya feels very strongly about the car park. Someone has been moved from a space, and it may be significant.",
+      "verdict": "idle"
+    },
+    {
+      "id": "report-unread",
+      "when": {
+        "flag": "filed-report"
+      },
+      "source": "An automatic reply",
+      "text": "Your Monthly Status Report may be read. Worth finding out by whom.",
+      "verdict": "idle"
+    },
+    {
+      "id": "pub-talk",
+      "when": {
+        "flag": "went-to-pub"
+      },
+      "source": "The Feathers",
+      "text": "Dennis says that nothing on this floor happens without someone upstairs knowing. Dennis says this after the third round.",
+      "verdict": "idle"
+    },
+    {
+      "id": "good-result",
+      "when": {
+        "flag": "backed-holder"
+      },
+      "source": "Your own observation",
+      "text": "You agreed with someone in the meeting, and things have got easier since.",
+      "verdict": "held"
+    },
+    {
+      "id": "bad-result",
+      "when": {
+        "flag": "backed-wrong-person"
+      },
+      "source": "Your own observation",
+      "text": "You agreed with someone in the meeting, and nothing whatever came of it.",
+      "verdict": "held"
+    }
+  ]
+}

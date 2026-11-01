@@ -82,6 +82,7 @@ format, the page shows what is wrong instead of the game.
 | `behaviours.json`     | What Characters can be seen doing, and how likely each kind is to do it |
 | `boss.json`           | Who your boss is, and the signs of how they treat you                   |
 | `sources.json`        | Find Out: who can be asked, how reliable each kind is, and every claim  |
+| `notebook.json`       | Events the Notebook keeps a clue of, and what each clue was worth       |
 | `characters.json`     | Names, public job titles and who reports to whom on the Org Chart       |
 | `hidden-truth.json`   | The rules of the deal: kinds, their weights, and the Hidden Facts       |
 | `balance.json`        | Actions a month, months in a run and the cost of each choice            |
@@ -113,6 +114,13 @@ An action with `"findOut": "ask"` spends an action to get a claim from a source.
 `sources.json` sets how often each kind of source tells the truth, is mistaken, is
 out of date or lies. A dealt motive shifts those weights. A claim's words never
 depend on which of these it is, so the results screen is the only place that says.
+
+The Notebook keeps every claim by itself. It keeps a sign only if that sign is
+written with a `clue`, which can sit on a behaviour or on a Scene's sign. It also
+keeps `notebook.json`'s events, each noted once in a month when its `when` holds.
+Each has a `verdict` of `held`, `wrong` or `idle`, which only the results screen
+shows. A behaviour's clue counts as `held` if its likelihood is highest for the
+kind of the person who showed it, and otherwise as `wrong`.
 
 A Hidden Fact says `{name}`, so that it reads correctly for whoever is dealt it,
 and can list `"characters"` to limit who that can be. Its `nature` is `dangerous`,

@@ -2,6 +2,7 @@ import { useEffect, useRef, useState, type ReactNode } from "react";
 import { panelText } from "../content";
 import type { ChartEntry, Choice, PlayerView, StepView } from "../engine";
 import { Chart } from "./Chart";
+import { monthLabel } from "./Notebook";
 
 interface PanelProps {
   testId: string;
@@ -138,10 +139,6 @@ function FindOutPanel({
   );
 }
 
-function monthLabel(month: number): string {
-  return panelText.resultsMonthLabel.replace("{n}", String(month));
-}
-
 function ResultsPanel({
   step,
   orgChart,
@@ -163,6 +160,25 @@ function ResultsPanel({
               </th>
               <td className="results-kind">{person.kind}</td>
               <td>{person.fact ?? panelText.resultsNoFact}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+      <h3>{panelText.resultsMarksHeading}</h3>
+      <table className="results">
+        <tbody>
+          {step.marks.map((row) => (
+            <tr key={row.name} data-testid="result-mark">
+              <th scope="row">{row.name}</th>
+              <td>{row.mark ?? panelText.notebookNoMark}</td>
+              <td>{row.truth}</td>
+              <td className="results-kind">
+                {row.mark === null
+                  ? ""
+                  : row.correct
+                    ? panelText.resultsMarkRight
+                    : panelText.resultsMarkWrong}
+              </td>
             </tr>
           ))}
         </tbody>
@@ -205,6 +221,27 @@ function ResultsPanel({
             ))}
           </tbody>
         </table>
+      )}
+      {step.clues.length > 0 && (
+        <>
+          <h3>{panelText.resultsCluesHeading}</h3>
+          <table className="results">
+            <tbody>
+              {step.clues.map((clue, index) => (
+                <tr key={index} data-testid="result-clue">
+                  <th scope="row">
+                    {clue.source}
+                    <span className="results-title">
+                      {monthLabel(clue.month)}
+                    </span>
+                  </th>
+                  <td>{clue.text}</td>
+                  <td className="results-kind">{clue.verdict}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </>
       )}
       <div className="results-charts">
         <div data-testid="results-org-chart">

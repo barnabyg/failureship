@@ -1,5 +1,13 @@
 import { makeClaim, type Claim } from "./claims";
-import type { Condition, Content, Mood, SceneData } from "./content";
+import {
+  KINDS,
+  type ClueVerdict,
+  type Condition,
+  type Content,
+  type Kind,
+  type Mood,
+  type SceneData,
+} from "./content";
 import {
   dealCharacters,
   dealMotives,
@@ -62,8 +70,16 @@ type Step =
   | { kind: "story" }
   | { kind: "results" };
 
+interface Clue {
+  month: number;
+  source: string;
+  text: string;
+  verdict: ClueVerdict;
+}
+
 /** What belongs to the month, and is wiped when the next one opens. */
 interface MonthRecord {
+  noted: string[];
   spent: number;
   visited: string[];
   unanswered: string[];
@@ -78,6 +94,9 @@ interface State extends MonthRecord {
   month: number;
   buzzwords: string[];
   claims: Claim[];
+  clues: Clue[];
+  /** Who the player suspects of what. Nothing in the rules ever reads this. */
+  marks: Map<string, Kind>;
   /** Who the player was last told has each Hidden Fact, true or not. */
   heard: { fact: string; subject: string }[];
   factEvents: { month: number; character: string; note: string }[];
@@ -90,6 +109,8 @@ export interface Run {
   view(): PlayerView;
   /** Applies a legal choice and returns the new view. Throws on any other. */
   choose(choice: Choice): PlayerView;
+  /** Sets or clears a suspicion, at no cost. Throws once the run has ended. */
+  mark(character: string, kind: Kind | null): PlayerView;
 }
 
 export class IllegalChoiceError extends Error {
@@ -129,6 +150,8 @@ export function startRun(options: {
     ...freshMonth(content, 1),
     buzzwords: [],
     claims: [],
+    clues: [],
+    marks: new Map(),
     heard: [],
     factEvents: [],
     step: { kind: "actions" },
@@ -150,6 +173,17 @@ export function startRun(options: {
         throw new IllegalChoiceError(`Choice not available now: ${wanted}`);
       }
       apply(state, world, choice);
+      noteEvents(state, content);
+      return view();
+    },
+    mark(character, kind) {
+      const known = content.characters.some((c) => c.id === character);
+      const legal = kind === null || KINDS.includes(kind);
+      if (state.step.kind === "results" || !known || !legal) {
+        throw new IllegalChoiceError(`Cannot mark ${character}.`);
+      }
+      if (kind === null) state.marks.delete(character);
+      else state.marks.set(character, kind);
       return view();
     },
   };
@@ -159,6 +193,7 @@ export function startRun(options: {
 
 function freshMonth(content: Content, month: number): MonthRecord {
   return {
+    noted: [],
     spent: 0,
     visited: [],
     unanswered: content.notifications
@@ -171,6 +206,24 @@ function freshMonth(content: Content, month: number): MonthRecord {
 
 function inMonth(item: { months?: number[] | undefined }, month: number) {
   return item.months === undefined || item.months.includes(month);
+}
+
+function noteEvents(state: State, content: Content): void {
+  for (const event of content.notebook.events) {
+    if (
+      !state.noted.includes(event.id) &&
+      inMonth(event, state.month) &&
+      matches(state, content, event.when)
+    ) {
+      state.noted.push(event.id);
+      state.clues.push({
+        month: state.month,
+        source: event.source,
+        text: event.text,
+        verdict: event.verdict,
+      });
+    }
+  }
 }
 
 /** After the official story: on to the next month, or the end of the run. */
@@ -242,12 +295,24 @@ function hearClaim(
   });
   state.rng = made.next;
   state.claims.push(made.claim);
+  state.clues.push({
+    month: state.month,
+    source: personOf(content, made.claim.source).name,
+    text: made.claim.text,
+    verdict: verdictOfClaim(content, made.claim),
+  });
   const { factId, subject } = made.claim;
   if (factId !== null) {
     state.heard = state.heard.filter((h) => h.fact !== factId);
     state.heard.push({ fact: factId, subject });
   }
   state.step = { kind: "claim", index: state.claims.length - 1 };
+}
+
+function verdictOfClaim(content: Content, claim: Claim): ClueVerdict {
+  if (claim.status !== "true") return "wrong";
+  const fact = content.hiddenTruth.facts.find((f) => f.id === claim.factId);
+  return fact?.nature === "idle" ? "idle" : "held";
 }
 
 function answerNotification(
@@ -297,7 +362,42 @@ function openScene(state: State, world: World, id: string): Step {
       shown.push({ character, behaviour: chosen.item.id });
     }
   }
+  noteScene(state, world, id, shown);
   return { kind: "scene", id, shown, treatment: treatBoss(state, world, cast) };
+}
+
+/** The Notebook keeps only the signs written with a clue. */
+function noteScene(
+  state: State,
+  world: World,
+  id: string,
+  shown: readonly ShownBehaviour[],
+): void {
+  const { content } = world;
+  const scene = sceneData(state, world, id);
+  const note = (text: string, verdict: ClueVerdict) => {
+    state.clues.push({
+      month: state.month,
+      source: scene.title,
+      text,
+      verdict,
+    });
+  };
+  for (const sign of scene.signs) {
+    if (sign.clue !== undefined) {
+      note(fillRoles(state, content, sign.clue, scene.cast), "held");
+    }
+  }
+  for (const { character, behaviour } of shown) {
+    const written = content.behaviours.find((b) => b.id === behaviour);
+    const kind = state.truth.characters.find((c) => c.id === character)?.kind;
+    if (written?.clue === undefined || kind === undefined) continue;
+    const top = Math.max(...Object.values(written.likelihood));
+    note(
+      written.clue.replaceAll("{who}", personOf(content, character).name),
+      written.likelihood[kind] === top ? "held" : "wrong",
+    );
+  }
 }
 
 function moodOf(state: State, content: Content): Mood {
@@ -643,6 +743,22 @@ function toResultsView(
         reportsTo: above ? nameOf(above.who) : null,
       };
     }),
+    marks: state.truth.characters.map((dealt) => {
+      const mark = state.marks.get(dealt.id) ?? null;
+      const { kinds } = content.hiddenTruth;
+      return {
+        name: nameOf(dealt.id),
+        mark: mark === null ? null : kinds[mark].label,
+        truth: kinds[dealt.kind].label,
+        correct: mark === dealt.kind,
+      };
+    }),
+    clues: state.clues.map(({ month, source, text, verdict }) => ({
+      month,
+      source,
+      text,
+      verdict: content.ui.clueVerdicts[verdict],
+    })),
     factEvents: state.factEvents.map(({ month, character, note }) => ({
       month,
       note,
@@ -751,6 +867,17 @@ function toView(state: State, world: World): PlayerView {
   const left = remaining(state, content);
   const actionsLabel = countActions(content, left);
   return structuredClone({
+    notebook: {
+      clues: state.clues.map(({ month, source, text }) => ({
+        month,
+        source,
+        text,
+      })),
+      marks: content.characters.map((c) => ({
+        ...personOf(content, c.id),
+        mark: state.marks.get(c.id) ?? null,
+      })),
+    },
     seed: state.seed,
     month: state.month,
     totalMonths: content.balance.monthsPerRun,

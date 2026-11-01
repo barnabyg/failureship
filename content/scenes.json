@@ -10,7 +10,8 @@
     "signs": [
       {
         "label": "Who interrupts whom",
-        "text": "{holder} talks over {ignored} twice before the first slide. {ignored} apologises both times."
+        "text": "{holder} talks over {ignored} twice before the first slide. {ignored} apologises both times.",
+        "clue": "{holder} talked over {ignored}, and {ignored} apologised."
       },
       {
         "label": "Who everyone looks at",
@@ -164,7 +165,8 @@
       },
       {
         "label": "Who goes quiet",
-        "text": "When the delay comes up, {bystander} looks at {holder}, then at the table."
+        "text": "When the delay comes up, {bystander} looks at {holder}, then at the table.",
+        "clue": "When the delay came up, {bystander} looked at {holder}, then at the table."
       }
     ],
     "options": [

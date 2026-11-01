@@ -26,6 +26,15 @@
   "resultsNoFact": "Nothing. Exactly what it looked like.",
   "findOutSourceHeading": "Whom do you ask?",
   "findOutSubjectHeading": "About whom?",
+  "notebookHeading": "Notebook",
+  "notebookMarksHeading": "What you suspect",
+  "notebookCluesHeading": "What you have picked up",
+  "notebookEmpty": "Nothing yet. The page has the company logo on it.",
+  "notebookNoMark": "No view yet",
+  "resultsMarksHeading": "What you suspected",
+  "resultsMarkRight": "Right",
+  "resultsMarkWrong": "Wrong",
+  "resultsCluesHeading": "What your Notebook was worth",
   "resultsFactEventsHeading": "What a Hidden Fact did to you",
   "resultsClaimsHeading": "What you were told",
   "resultsNoClaims": "You asked nobody anything. It was a position.",
@@ -52,6 +61,11 @@
   },
   "actionCount": { "one": "1 action", "other": "{n} actions" },
   "claimTitle": "{source} has a word with you",
+  "clueVerdicts": {
+    "held": "It held up",
+    "wrong": "False or misleading",
+    "idle": "Did not matter"
+  },
   "costLabel": "Costs {actions}",
   "freeLabel": "Costs nothing",
   "results": {
