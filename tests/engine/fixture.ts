@@ -17,6 +17,25 @@ interface RawNotification {
   options: RawOption[];
 }
 
+type RawCondition = Record<string, unknown>;
+
+interface RawSceneOption {
+  id: string;
+  label: string;
+  results: { when?: RawCondition; body: string }[];
+}
+
+interface RawScene {
+  id: string;
+  title: string;
+  location: string;
+  narration: string[];
+  cast: string[];
+  signs: { label: string; text: string }[];
+  options: RawSceneOption[];
+  script?: string;
+}
+
 /**
  * A small content set for engine tests, so that editing the game's real text
  * never breaks a rules test.
@@ -56,7 +75,14 @@ export function fixtureRaw() {
         { id: "fact-b", text: "SECRET-FACT-BRAVO" },
         { id: "fact-c", text: "SECRET-FACT-CHARLIE" },
       ],
+      cast: ["ana", "ben", "cal"],
     },
+    characters: [
+      { id: "ana", name: "Ana Abel", title: "Boss" },
+      { id: "ben", name: "Ben Bird", title: "Analyst" },
+      { id: "cal", name: "Cal Cope", title: "Clerk" },
+    ],
+    scenes: [] as RawScene[],
     notifications,
     dialogs: [
       {
@@ -81,6 +107,7 @@ export function fixtureRaw() {
         notification: "Answer the Notification.",
         dialog: "Press continue.",
         actions: "Click the floor. You have {actions} left.",
+        scene: "Watch the room, then choose.",
         notice: "Press continue.",
         story: "The month has closed.",
       },
@@ -113,6 +140,56 @@ export function room(id: string, index: number) {
     height: 1,
     colour: "#888888",
   };
+}
+
+/** A month with no Notifications and a meeting Scene on the floor. */
+export function sceneFixtureRaw() {
+  const raw = emptyMonthRaw();
+  raw.scenes.push({
+    id: "meeting",
+    title: "The meeting",
+    location: "Floor 1",
+    narration: ["Everyone sits down."],
+    cast: ["ana", "ben", "cal"],
+    signs: [
+      {
+        label: "Who interrupts whom",
+        text: "{holder} talks over {ignored}.",
+      },
+      {
+        label: "Who everyone looks at",
+        text: "Everyone glances at {holder} before answering.",
+      },
+      { label: "Who gets ignored", text: "Nobody responds to {ignored}." },
+    ],
+    options: [
+      {
+        id: "back-ana",
+        label: "Agree with Ana",
+        results: [
+          { when: { holderIs: "ana" }, body: "BACKED-RIGHT: {holder} nods." },
+          { body: "BACKED-WRONG: {holder} does not look up." },
+        ],
+      },
+      {
+        id: "stay-quiet",
+        label: "Say nothing",
+        results: [{ body: "You are minuted as present." }],
+      },
+    ],
+  });
+  return {
+    ...raw,
+    actions: [
+      { ...action("meeting"), result: undefined, scene: "meeting" },
+      ...raw.actions,
+    ],
+    floor: { rooms: [...raw.floor.rooms, room("meeting", 9)] },
+  };
+}
+
+export function sceneFixture(): Content {
+  return parseContent(sceneFixtureRaw());
 }
 
 export function fixture(): Content {

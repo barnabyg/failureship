@@ -1,11 +1,13 @@
 import actions from "../../content/actions.json";
 import balance from "../../content/balance.json";
 import buzzwords from "../../content/buzzwords.json";
+import characters from "../../content/characters.json";
 import dialogs from "../../content/dialogs.json";
 import floor from "../../content/floor-1.json";
 import hiddenTruth from "../../content/hidden-truth.json";
 import notifications from "../../content/notifications.json";
 import officialStory from "../../content/official-story.json";
+import scenes from "../../content/scenes.json";
 import ui from "../../content/ui.json";
 import { parseContent } from "../engine";
 
@@ -14,6 +16,8 @@ const { hints, actionCount, costLabel, freeLabel, ...presentation } = ui;
 export const gameContent = parseContent({
   balance,
   hiddenTruth,
+  characters,
+  scenes,
   notifications,
   dialogs,
   buzzwords,

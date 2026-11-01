@@ -1,0 +1,57 @@
+[
+  {
+    "id": "meeting",
+    "title": "Placeholder meeting",
+    "location": "Floor 1, meeting room",
+    "narration": ["Placeholder: the meeting begins."],
+    "cast": ["boss", "analyst", "admin"],
+    "signs": [
+      {
+        "label": "Who interrupts whom",
+        "text": "{holder} talks over {ignored}."
+      },
+      {
+        "label": "Who everyone looks at",
+        "text": "Everyone looks at {holder}."
+      },
+      { "label": "Who gets ignored", "text": "Nobody answers {ignored}." }
+    ],
+    "options": [
+      {
+        "id": "back-boss",
+        "label": "Placeholder: agree with the boss",
+        "results": [
+          { "when": { "holderIs": "boss" }, "body": "Placeholder: it worked." },
+          { "body": "Placeholder: {holder} did not notice." }
+        ]
+      },
+      {
+        "id": "back-analyst",
+        "label": "Placeholder: agree with the analyst",
+        "results": [
+          {
+            "when": { "holderIs": "analyst" },
+            "body": "Placeholder: it worked."
+          },
+          { "body": "Placeholder: {holder} did not notice." }
+        ]
+      },
+      {
+        "id": "back-admin",
+        "label": "Placeholder: agree with the admin",
+        "results": [
+          {
+            "when": { "holderIs": "admin" },
+            "body": "Placeholder: it worked."
+          },
+          { "body": "Placeholder: {holder} did not notice." }
+        ]
+      },
+      {
+        "id": "say-nothing",
+        "label": "Placeholder: say nothing",
+        "results": [{ "body": "Placeholder: you are minuted as present." }]
+      }
+    ]
+  }
+]

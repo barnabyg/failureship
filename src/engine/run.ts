@@ -1,4 +1,4 @@
-import type { Content } from "./content";
+import type { Condition, Content, SceneData } from "./content";
 import { pick } from "./rng";
 import type {
   Buzzword,
@@ -9,14 +9,35 @@ import type {
   StepView,
 } from "./view";
 
+export interface PowerMap {
+  holder: string;
+  ignored: string;
+  bystander: string;
+}
+
 export interface HiddenTruth {
   fact: { id: string; text: string };
+  powerMap: PowerMap;
+}
+
+/** Custom behaviour for a Scene: reshapes its data for the current truth. */
+export type SceneScript = (
+  scene: SceneData,
+  context: { powerMap: PowerMap },
+) => SceneData;
+
+type SceneScripts = Readonly<Record<string, SceneScript>>;
+
+interface World {
+  content: Content;
+  sceneScripts: SceneScripts;
 }
 
 type Step =
   | { kind: "notification"; id: string }
   | { kind: "dialog"; id: string; learned: string[] }
   | { kind: "actions" }
+  | { kind: "scene"; id: string }
   | { kind: "notice"; title: string; body: string }
   | { kind: "story" };
 
@@ -52,9 +73,22 @@ export function hiddenTruthOf(run: Run): HiddenTruth {
   return read();
 }
 
-export function startRun(options: { seed: number; content: Content }): Run {
-  const { seed, content } = options;
-  const dealt = pick(seed, content.hiddenTruth.facts);
+export function startRun(options: {
+  seed: number;
+  content: Content;
+  sceneScripts?: SceneScripts;
+}): Run {
+  const { seed, content, sceneScripts = {} } = options;
+  for (const scene of content.scenes) {
+    if (scene.script !== undefined && !(scene.script in sceneScripts)) {
+      throw new Error(
+        `Scene "${scene.id}" needs missing script "${scene.script}".`,
+      );
+    }
+  }
+  const world: World = { content, sceneScripts };
+  const fact = pick(seed, content.hiddenTruth.facts);
+  const dealt = dealPowerMap(fact.next, content.hiddenTruth.cast);
   const state: State = {
     seed,
     rng: dealt.next,
@@ -64,20 +98,20 @@ export function startRun(options: { seed: number; content: Content }): Run {
     unanswered: content.notifications.map((n) => n.id),
     buzzwords: [],
     step: { kind: "actions" },
-    truth: { fact: dealt.item },
+    truth: { fact: fact.item, powerMap: dealt.powerMap },
   };
-  state.step = nextStep(state, content);
+  state.step = nextStep(state, world);
 
-  const view = () => toView(state, content);
+  const view = () => toView(state, world);
   const run: Run = {
     view,
     choose(choice) {
-      const legal = legalChoices(state, content);
+      const legal = legalChoices(state, world);
       const wanted = JSON.stringify(choice);
       if (!legal.some((c) => JSON.stringify(c) === wanted)) {
         throw new IllegalChoiceError(`Choice not available now: ${wanted}`);
       }
-      apply(state, content, choice);
+      apply(state, world, choice);
       return view();
     },
   };
@@ -85,30 +119,60 @@ export function startRun(options: { seed: number; content: Content }): Run {
   return run;
 }
 
-function apply(state: State, content: Content, choice: Choice): void {
+function dealPowerMap(
+  rng: number,
+  cast: readonly string[],
+): { powerMap: PowerMap; next: number } {
+  const holder = pick(rng, cast);
+  const others = cast.filter((c) => c !== holder.item);
+  const ignored = pick(holder.next, others);
+  const bystander = pick(
+    ignored.next,
+    others.filter((c) => c !== ignored.item),
+  );
+  return {
+    powerMap: {
+      holder: holder.item,
+      ignored: ignored.item,
+      bystander: bystander.item,
+    },
+    next: bystander.next,
+  };
+}
+
+function apply(state: State, world: World, choice: Choice): void {
+  const { content } = world;
   switch (choice.type) {
     case "notification":
-      answerNotification(state, content, choice);
+      answerNotification(state, world, choice);
       return;
     case "action": {
       const action = content.actions.find((a) => a.id === choice.actionId);
       if (!action) throw new IllegalChoiceError(choice.actionId);
       state.spent += costOf(content, action.cost);
       state.visited.push(action.id);
-      state.step = { kind: "notice", ...action.result };
+      if (action.scene !== undefined) {
+        state.step = { kind: "scene", id: action.scene };
+      } else if (action.result) {
+        state.step = { kind: "notice", ...action.result };
+      }
       return;
     }
+    case "scene":
+      behaveInScene(state, world, choice);
+      return;
     case "continue":
-      state.step = nextStep(state, content);
+      state.step = nextStep(state, world);
       return;
   }
 }
 
 function answerNotification(
   state: State,
-  content: Content,
+  world: World,
   choice: Extract<Choice, { type: "notification" }>,
 ): void {
+  const { content } = world;
   const option = content.notifications
     .find((n) => n.id === choice.notificationId)
     ?.options.find((o) => o.id === choice.optionId);
@@ -125,12 +189,54 @@ function answerNotification(
   } else if (option.result) {
     state.step = { kind: "notice", ...option.result };
   } else {
-    state.step = nextStep(state, content);
+    state.step = nextStep(state, world);
   }
 }
 
+function behaveInScene(
+  state: State,
+  world: World,
+  choice: Extract<Choice, { type: "scene" }>,
+): void {
+  const scene = sceneData(state, world, choice.sceneId);
+  const option = scene.options.find((o) => o.id === choice.optionId);
+  const result = option?.results.find((r) => matches(state, r.when));
+  if (!result) throw new IllegalChoiceError(choice.optionId);
+  state.step = {
+    kind: "notice",
+    title: scene.title,
+    body: fillRoles(state, world.content, result.body),
+  };
+}
+
+function matches(state: State, condition: Condition | undefined): boolean {
+  return (
+    condition === undefined ||
+    condition.holderIs === state.truth.powerMap.holder
+  );
+}
+
+function sceneData(state: State, world: World, id: string): SceneData {
+  const scene = world.content.scenes.find((s) => s.id === id);
+  if (!scene) throw new Error(`Unknown Scene "${id}".`);
+  const script =
+    scene.script === undefined ? undefined : world.sceneScripts[scene.script];
+  return script ? script(scene, { powerMap: state.truth.powerMap }) : scene;
+}
+
+/** Writes the dealt Characters' names into text that names roles. */
+function fillRoles(state: State, content: Content, written: string): string {
+  const name = (id: string) =>
+    content.characters.find((c) => c.id === id)?.name ?? id;
+  const { holder, ignored, bystander } = state.truth.powerMap;
+  return written
+    .replaceAll("{holder}", name(holder))
+    .replaceAll("{ignored}", name(ignored))
+    .replaceAll("{bystander}", name(bystander));
+}
+
 /** The month's order: Notifications, then actions, then the month closes. */
-function nextStep(state: State, content: Content): Step {
+function nextStep(state: State, { content }: World): Step {
   for (const id of state.unanswered) {
     const notification = content.notifications.find((n) => n.id === id);
     const answerable = notification?.options.some(
@@ -155,7 +261,8 @@ function isAvailable(
   );
 }
 
-function legalChoices(state: State, content: Content): Choice[] {
+function legalChoices(state: State, world: World): Choice[] {
+  const { content } = world;
   const { step } = state;
   switch (step.kind) {
     case "notification":
@@ -170,6 +277,12 @@ function legalChoices(state: State, content: Content): Choice[] {
       return content.actions
         .filter((a) => isAvailable(state, content, a))
         .map((a) => ({ type: "action", actionId: a.id }));
+    case "scene":
+      return sceneData(state, world, step.id).options.map((o) => ({
+        type: "scene",
+        sceneId: step.id,
+        optionId: o.id,
+      }));
     case "dialog":
     case "notice":
       return [{ type: "continue" }];
@@ -192,7 +305,32 @@ function notificationOptions(
   }));
 }
 
-function toStepView(state: State, content: Content): StepView {
+function toSceneView(
+  state: State,
+  world: World,
+  id: string,
+): Extract<StepView, { kind: "scene" }> {
+  const { content } = world;
+  const fill = (written: string) => fillRoles(state, content, written);
+  const scene = sceneData(state, world, id);
+  return {
+    kind: "scene",
+    id: scene.id,
+    title: scene.title,
+    location: scene.location,
+    narration: scene.narration.map(fill),
+    cast: scene.cast.flatMap((c) =>
+      content.characters
+        .filter((x) => x.id === c)
+        .map((x) => ({ name: x.name, title: x.title })),
+    ),
+    signs: scene.signs.map((s) => ({ label: s.label, text: fill(s.text) })),
+    options: scene.options.map((o) => ({ id: o.id, label: fill(o.label) })),
+  };
+}
+
+function toStepView(state: State, world: World): StepView {
+  const { content } = world;
   const { step } = state;
   switch (step.kind) {
     case "notification": {
@@ -217,6 +355,8 @@ function toStepView(state: State, content: Content): StepView {
         learned: buzzwordsOf(content, step.learned),
       };
     }
+    case "scene":
+      return toSceneView(state, world, step.id);
     case "story":
       return { kind: "story", ...content.officialStory };
     case "actions":
@@ -225,7 +365,8 @@ function toStepView(state: State, content: Content): StepView {
   }
 }
 
-function toView(state: State, content: Content): PlayerView {
+function toView(state: State, world: World): PlayerView {
+  const { content } = world;
   const left = remaining(state, content);
   const actionsLabel = countActions(content, left);
   return structuredClone({
@@ -239,12 +380,12 @@ function toView(state: State, content: Content): PlayerView {
     },
     buzzwords: buzzwordsOf(content, state.buzzwords),
     hotspots: content.actions.map((a) => toHotspot(state, content, a)),
-    step: toStepView(state, content),
+    step: toStepView(state, world),
     hint: content.ui.hints[state.step.kind].replaceAll(
       "{actions}",
       actionsLabel,
     ),
-    choices: legalChoices(state, content),
+    choices: legalChoices(state, world),
   });
 }
 

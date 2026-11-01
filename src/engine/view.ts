@@ -2,7 +2,8 @@
 export type Choice =
   | { type: "continue" }
   | { type: "action"; actionId: string }
-  | { type: "notification"; notificationId: string; optionId: string };
+  | { type: "notification"; notificationId: string; optionId: string }
+  | { type: "scene"; sceneId: string; optionId: string };
 
 export interface Hotspot {
   id: string;
@@ -47,6 +48,16 @@ export type StepView =
       learned: Buzzword[];
     }
   | { kind: "actions" }
+  | {
+      kind: "scene";
+      id: string;
+      title: string;
+      location: string;
+      narration: string[];
+      cast: { name: string; title: string }[];
+      signs: { label: string; text: string }[];
+      options: { id: string; label: string }[];
+    }
   | { kind: "notice"; title: string; body: string }
   | { kind: "story"; title: string; reported: string[] };
 

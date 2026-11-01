@@ -197,6 +197,33 @@ body {
   color: var(--accent-ink);
 }
 
+.cast {
+  margin: 0 0 12px;
+  padding: 0;
+  list-style: none;
+  font-size: 0.875rem;
+}
+
+.signs {
+  margin: 0 0 16px;
+  padding: 10px 12px;
+  border-left: 4px solid var(--rule);
+  background: #e7e3d6;
+}
+
+.signs div + div {
+  margin-top: 8px;
+}
+
+.signs dt {
+  color: var(--muted);
+  font-size: 0.75rem;
+}
+
+.signs dd {
+  margin: 0;
+}
+
 .options {
   display: flex;
   flex-direction: column;

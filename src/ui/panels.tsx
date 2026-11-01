@@ -121,6 +121,48 @@ export function StepPanel({
           </div>
         </Panel>
       );
+    case "scene":
+      return (
+        <Panel testId="panel-scene" eyebrow={step.location} title={step.title}>
+          {step.narration.map((line) => (
+            <p key={line}>{line}</p>
+          ))}
+          <ul className="cast">
+            {step.cast.map((person) => (
+              <li key={person.name}>
+                <strong>{person.name}</strong>, {person.title}
+              </li>
+            ))}
+          </ul>
+          <dl className="signs">
+            {step.signs.map((sign) => (
+              <div key={sign.label} data-testid="sign">
+                <dt>{sign.label}</dt>
+                <dd>{sign.text}</dd>
+              </div>
+            ))}
+          </dl>
+          <div className="options">
+            {step.options.map((option) => (
+              <button
+                key={option.id}
+                type="button"
+                className="option"
+                data-testid={`scene-option-${option.id}`}
+                onClick={() => {
+                  onChoose({
+                    type: "scene",
+                    sceneId: step.id,
+                    optionId: option.id,
+                  });
+                }}
+              >
+                {option.label}
+              </button>
+            ))}
+          </div>
+        </Panel>
+      );
     case "dialog":
       return (
         <Panel testId="panel-dialog" title={step.title}>

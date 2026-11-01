@@ -16,6 +16,7 @@
     "notification": "Placeholder: answer the Notification.",
     "dialog": "Placeholder: press Continue.",
     "actions": "Placeholder: click a place on the floor. You have {actions} left.",
+    "scene": "Placeholder: watch the room, then choose.",
     "notice": "Placeholder: press Continue.",
     "story": "Placeholder: the month has closed."
   },
