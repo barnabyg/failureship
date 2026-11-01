@@ -2,7 +2,7 @@
 
 This document stands alone. It records what was decided when the original game proposal was grilled and the owner's real-life Scenarios were worked through. It does not depend on any code, ticket or other file in the first repository.
 
-The original proposal is superseded wherever it disagrees with this document. **Building in phases was not discussed in the grilling.** The owner decided on it afterwards, and it is the one later addition to this record, under Sequencing.
+The original proposal is superseded wherever it disagrees with this document. **Building in phases was not discussed in the grilling.** The owner decided on it afterwards, and it is a later addition to this record, under Sequencing. The Phase 1 checkpoint later changed which floors are shown, under Scope of the first version.
 
 It was checked against all of the owner's messages in the grilling, not only the documents written afterwards.
 
@@ -135,7 +135,7 @@ Winning is reaching the penthouse and securing your payout, and how you got ther
 
 ## Scope of the first version
 
-- Floors 1–3 are playable, and the other seven are visible but locked.
+- Floors 1–3 are playable. Only the current floor is shown, with a lift indicating the route to a higher floor (changed at the Phase 1 checkpoint).
 - About 18 months at three actions each, aiming for about 25 minutes.
 - About eight Characters: your bosses, one or two Rivals, Believers and Incompetents.
 - A comic stand-in for winning at the end of Floor 3.
