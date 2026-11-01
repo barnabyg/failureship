@@ -32,7 +32,7 @@ export function toResultsView(
       };
     }),
     marks: state.truth.characters.map((dealt) => {
-      const mark = state.marks.get(dealt.id) ?? null;
+      const mark = state.marks[dealt.id] ?? null;
       const { kinds } = content.hiddenTruth;
       return {
         name: nameOf(dealt.id),

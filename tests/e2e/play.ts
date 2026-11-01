@@ -1,5 +1,15 @@
 import { expect, type Page } from "@playwright/test";
 
+/** Goes to an address as a new player would, with no saved run to come back to. */
+export async function freshRun(page: Page, address: string) {
+  if (page.url() !== "about:blank") {
+    await page.evaluate(() => {
+      window.localStorage.clear();
+    });
+  }
+  await page.goto(address);
+}
+
 /** Presses Continue, or takes a spare action, until the next month opens. */
 export async function finishMonth(page: Page) {
   const month = page.getByTestId("month");

@@ -281,7 +281,7 @@ export function toView(state: State, world: World): PlayerView {
       })),
       marks: content.characters.map((c) => ({
         ...personOf(content, c.id),
-        mark: state.marks.get(c.id) ?? null,
+        mark: state.marks[c.id] ?? null,
       })),
     },
     project: toProjectView(state, content),

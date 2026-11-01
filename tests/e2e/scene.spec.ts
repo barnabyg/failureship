@@ -1,5 +1,5 @@
 import { expect, test, type Page } from "@playwright/test";
-import { answerAnyNotification, skipTheReport } from "./play";
+import { answerAnyNotification, freshRun, skipTheReport } from "./play";
 
 async function expectToSayWhatIsNext(page: Page) {
   await expect(page.getByTestId("hint")).not.toBeEmpty();
@@ -110,7 +110,7 @@ test("the full month reads differently for different choices", async ({
   const afterPub = await page.getByTestId("story-reported").innerText();
   await expect(page.getByTestId("story-happened")).toBeVisible();
 
-  await page.goto("/?seed=1");
+  await freshRun(page, "/?seed=1");
   await answerAnyNotification(page);
   await page.getByTestId("hotspot-meeting").click();
   await expect(page.getByTestId("panel-scene")).not.toContainText(

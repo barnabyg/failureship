@@ -57,6 +57,9 @@
   "leaveBody": "You are in month {month}. Nothing about this run will be kept, which is also the company's position on it.",
   "leaveConfirm": "Abandon the run",
   "leaveCancel": "Stay in this run",
+  "saveLostTitle": "Your file could not be located",
+  "saveLostBody": "The company has changed its systems since you last logged in, and your record does not fit the new form. There is no one to appeal to. You have been re-onboarded from the start of your probation, which is standard.",
+  "saveLostConfirm": "Start again",
   "hints": {
     "notification": "Answer the Notification on the right. Each answer shows what it costs. Nothing else can happen until you do.",
     "dialog": "Read what was said, then press Continue to go back to the office.",

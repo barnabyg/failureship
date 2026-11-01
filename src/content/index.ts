@@ -133,6 +133,9 @@ const panelSchema = z.strictObject(
       "leaveBody",
       "leaveConfirm",
       "leaveCancel",
+      "saveLostTitle",
+      "saveLostBody",
+      "saveLostConfirm",
     ].map((key) => [key, z.string().min(1)]),
   ),
 );

@@ -104,7 +104,10 @@ export interface MonthRecord {
   absenceDealtWith: boolean;
 }
 
-/** What belongs to the run, and carries from month to month. */
+/**
+ * What belongs to the run, and carries from month to month. All of it is plain
+ * data, so that saving a run needs nothing written for any one mechanic.
+ */
 export interface State extends MonthRecord {
   seed: number;
   rng: number;
@@ -115,7 +118,7 @@ export interface State extends MonthRecord {
   movesLanded: string[];
   clues: Clue[];
   /** Who the player suspects of what. Nothing in the rules ever reads this. */
-  marks: Map<string, Kind>;
+  marks: Record<string, Kind>;
   /** Who the player was last told has each Hidden Fact, true or not. */
   heard: { fact: string; subject: string }[];
   factEvents: { month: number; note: string; fact: string | null }[];

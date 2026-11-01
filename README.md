@@ -74,6 +74,13 @@ At any step, **New run** deals a new seed, and typing a seed then pressing
 **Restart from seed** plays that deal from month 1. Leaving a run in progress asks
 first. Swap a seed with a friend and you both get the same deal.
 
+The run is saved in your browser at every step, so reloading the page or coming back
+later carries on exactly where you left off. An address with a different seed starts
+that deal instead, and replaces the saved run. If you have changed anything in
+`content/` since the save, or the game has moved on, you are offered a new run: a save
+only holds for the data it was dealt from. A save can be read in browser storage, hidden
+truth included, which is accepted while the game is in development.
+
 ### A test scenario: three kinds of boss
 
 This takes about twenty minutes, and it gives away these deals, so use other seeds if
@@ -170,7 +177,9 @@ at a later month. `npm run build` and `npm run play` ignore it.
   takes effect; `state.ts` and `reads.ts` are what the mechanics share; `boss.ts`,
   `demands.ts`, `find-out.ts`, `notebook.ts`, `over-head.ts`, `project.ts` and
   `scenes.ts` are mechanics of their own; `to-view.ts` builds the player view, and
-  `to-results.ts` its reveal at the end. `src/engine/content.ts` holds the content
+  `to-results.ts` its reveal at the end; `save.ts` writes and reads a run. Everything
+  in a run's `State` is plain data, so a mechanic gets saving for free. Raise
+  `SAVE_VERSION` if a mechanic changes what saved state means. `src/engine/content.ts` holds the content
   schema, and `src/engine/content-checks.ts` holds the checks: it parses data against
   the schema and checks it across files.
 - `src/tower/` draws the tower and holds no rules.
