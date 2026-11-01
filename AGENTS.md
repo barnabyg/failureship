@@ -10,8 +10,8 @@ The [README](README.md) covers playing and steering the game, and the code map. 
 
 ### Tests
 
-- `tests/engine/` tests the rules headlessly. `fixture.ts` there builds small content, and `src/engine/hidden-truth.ts` is the test-only read of the hidden truth.
-- `tests/e2e/` holds the browser tests. `play.ts` there has the helpers for playing through a month. They run against a test-only build where `?month=N` starts a run at a later month, so use it when a test only needs walking months as setup.
+- `tests/engine/` tests the rules headlessly, and a few checks on the builds and lint. `fixture.ts` there builds small content, and `src/engine/hidden-truth.ts` is the test-only read of the hidden truth.
+- `tests/e2e/` holds the browser tests. `play.ts` there has the helpers for playing through a month. Most run against a test-only build where `?month=N` starts a run at a later month, so use it when a test only needs walking months as setup.
 - `tests/tower/` tests the tower's fittings.
 
 ### Adding a game mechanic
