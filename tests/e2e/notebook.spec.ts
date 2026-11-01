@@ -22,9 +22,10 @@ test("a clue arrives, a Character is marked, and the mark is on the results scre
   await answerAnyNotification(page);
   await askAtPhotocopier(page);
   const claim = await page.getByTestId("claim-text").innerText();
-  const source = await page
-    .locator('[data-testid="panel-claim"] .eyebrow')
+  const title = await page
+    .locator('[data-testid="panel-claim"] h2')
     .innerText();
+  const source = title.replace(/ has a word with you$/, "");
 
   await openNotebook(page);
   const clue = page.getByTestId("clue").filter({ hasText: claim });

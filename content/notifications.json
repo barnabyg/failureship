@@ -1,7 +1,7 @@
 [
   {
     "id": "report-or-pub",
-    "from": "From: Dennis Prowse, Team Leader",
+    "from": "From: Your boss, Dennis Prowse",
     "subject": "RE: RE: FW: this evening",
     "body": "Your Monthly Status Report is due tonight, and nothing matters more to the people upstairs. Separately, a few of us are going to the Feathers at five. No pressure either way. I will remember which you chose.",
     "options": [
@@ -17,7 +17,7 @@
       },
       {
         "id": "pub",
-        "label": "Go to the pub with Dennis",
+        "label": "Go to the pub with your boss",
         "cost": "pub",
         "sets": ["went-to-pub"],
         "dialog": "pub",
@@ -30,7 +30,7 @@
   {
     "id": "training",
     "months": [2],
-    "from": "From: Marjorie Tull, Office Co-ordinator",
+    "from": "From: The Office Co-ordinator, Marjorie Tull",
     "subject": "ACTION REQUIRED: Speaking Up (mandatory, 45 minutes)",
     "body": "Our records show you have not completed the e-learning module Speaking Up. Any concerns about this module should be kept to yourself until you have completed it.",
     "options": [
@@ -51,7 +51,7 @@
         "opinion": 1,
         "result": {
           "title": "Speaking Up: completed",
-          "body": "It finishes while you are at lunch. Dennis mentions that Dennis does it the same way. You score 100%."
+          "body": "It finishes while you are at lunch. Your boss mentions doing it the same way. You score 100%."
         }
       }
     ]
@@ -86,9 +86,9 @@
   {
     "id": "new-tool",
     "months": [4],
-    "from": "From: Dennis Prowse, Team Leader",
+    "from": "From: Your boss, Dennis Prowse",
     "subject": "FW: This solves ALL your problems (read this!!)",
-    "body": "Dennis has read an article about a new software tool that solves all your problems, and wants it rolled out by the end of the month. Dennis has not said which problems. The article is by the company that sells it.",
+    "body": "Your boss has read an article about a new software tool that solves all your problems, and wants it rolled out by the end of the month. Your boss has not said which problems. The article is by the company that sells it.",
     "options": [
       {
         "id": "roll-out",
@@ -105,7 +105,7 @@
         "sets": ["stalled-tool"],
         "result": {
           "title": "RE: FW: This solves ALL your problems",
-          "body": "Dennis replies with a thumbs up. The word evaluated seems to have the force of a finished thing. You make a note to find out what you have evaluated."
+          "body": "Your boss replies with a thumbs up. The word evaluated seems to have the force of a finished thing. You make a note to find out what you have evaluated."
         }
       }
     ]
@@ -113,9 +113,9 @@
   {
     "id": "deck-for-upstairs",
     "months": [5],
-    "from": "From: Dennis Prowse, Team Leader",
+    "from": "From: Your boss, Dennis Prowse",
     "subject": "Slides for upstairs, by tomorrow",
-    "body": "Dennis needs three slides for the floor above, by tomorrow. Dennis stresses that content is secondary at this stage, and that the last person's slides did not move.",
+    "body": "Your boss needs three slides for the floor above, by tomorrow. Your boss stresses that content is secondary at this stage, and that the last person's slides did not move.",
     "options": [
       {
         "id": "animate",
@@ -125,7 +125,7 @@
         "opinion": 2,
         "result": {
           "title": "Slides for upstairs",
-          "body": "Each bullet point arrives from a different direction. The word Growth spins. Dennis watches it twice, in silence, and asks whether you have ever thought about moving up."
+          "body": "Each bullet point arrives from a different direction. The word Growth spins. Your boss watches it twice, in silence, and asks whether you have ever thought about moving up."
         }
       },
       {
@@ -135,7 +135,7 @@
         "opinion": -1,
         "result": {
           "title": "Slides for upstairs",
-          "body": "Dennis replies at 07:12 asking whether this is the draft."
+          "body": "Your boss replies at 07:12 asking whether this is the draft."
         }
       }
     ]

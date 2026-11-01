@@ -11,8 +11,8 @@ async function fileTheReport(page: Page) {
   await page.getByTestId("continue").click();
 }
 
-// The real-content test keeps these seeds true: Marjorie tells you on seed 22
-// about Dennis's post, and Callum really has a dangerous fact on seed 3.
+// The real-content test keeps these seeds true: the Office Co-ordinator tells you on seed 22
+// about your boss's post, and the Project Co-ordinator really has a dangerous fact on seed 3.
 test("a discovered Hidden Fact changes what a Scene offers", async ({
   page,
 }) => {
@@ -36,10 +36,10 @@ test("a discovered Hidden Fact changes what a Scene offers", async ({
   await openMeeting(page);
 
   const option = page.getByTestId("scene-option-use-abolished-post");
-  await expect(option).toContainText("Dennis Prowse");
+  await expect(option).toContainText("your boss");
   await option.click();
 
-  await expect(page.getByTestId("panel-notice")).toContainText("Dennis Prowse");
+  await expect(page.getByTestId("panel-notice")).toContainText("Your boss");
   await playToResults(page);
   await expect(page.getByTestId("result-fact-event")).toContainText(
     "abolished",
@@ -59,5 +59,7 @@ test("blundering into a dangerous Hidden Fact is explained at the end", async ({
   await expect(page.getByTestId("panel-notice")).toContainText("Thursday");
 
   await playToResults(page);
-  await expect(page.getByTestId("result-fact-event")).toContainText("Callum");
+  await expect(page.getByTestId("result-fact-event")).toContainText(
+    "the Project Co-ordinator",
+  );
 });

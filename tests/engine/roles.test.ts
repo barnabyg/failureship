@@ -1,3 +1,5 @@
+import { readFileSync } from "node:fs";
+import path from "node:path";
 import { describe, expect, it } from "vitest";
 import { gameContent } from "../../src/content";
 import { parseContent, startRun, type Content } from "../../src/engine";
@@ -154,5 +156,100 @@ describe("roles in content", () => {
     }));
 
     expect(() => parseContent(raw)).toThrow(/ana.*believer/);
+  });
+});
+
+describe("how running text refers to people", () => {
+  function calledFixtureRaw() {
+    const raw = rolesFixtureRaw();
+    const [ana, ben, cal] = raw.characters;
+    if (!ana || !ben || !cal) throw new Error("The fixture has no Characters.");
+    ana.called = "your boss";
+    ben.called = "the analyst";
+    cal.called = "the clerk";
+    const scene = raw.scenes[0];
+    if (scene) {
+      scene.signs = [
+        { label: "Interrupts", text: "{holder} talks over {ignored}." },
+        {
+          label: "Ignored",
+          text: "Later, {ignored} leaves. {ignored} is sad.",
+        },
+      ];
+    }
+    return raw;
+  }
+
+  it("uses the role, capitalised only where a sentence starts", () => {
+    const content = parseContent(calledFixtureRaw());
+    const { signs, behaviours } = openMeeting(8, content);
+
+    expect(JSON.stringify([signs, behaviours])).not.toMatch(/Ana|Ben|Cal/);
+    expect(signs[0]?.text).toMatch(
+      /^(Your boss|The analyst|The clerk) talks over (your boss|the analyst|the clerk)\.$/,
+    );
+    expect(signs[1]?.text).toMatch(
+      /^Later, (your boss|the analyst|the clerk) leaves\. (Your boss|The analyst|The clerk) is sad\.$/,
+    );
+    expect(behaviours.map((b) => b.who).sort()).toEqual([
+      "the analyst",
+      "the clerk",
+      "your boss",
+    ]);
+  });
+
+  it("keeps names on the Org Chart and in the cast", () => {
+    const content = parseContent(calledFixtureRaw());
+    const run = startRun({ seed: 1, content });
+
+    expect(run.view().orgChart.map((e) => e.name)).toContain("Ana Abel");
+    expect(openMeeting(1, content).cast.map((c) => c.name)).toContain(
+      "Ana Abel",
+    );
+  });
+
+  it("falls back on the name when no role is written", () => {
+    const { behaviours } = openMeeting(1, parseContent(rolesFixtureRaw()));
+
+    expect(behaviours.map((b) => b.who)).toEqual([
+      "Ana Abel",
+      "Ben Bird",
+      "Cal Cope",
+    ]);
+  });
+
+  it("never names a Character in the game's running text", () => {
+    const folder = path.join(import.meta.dirname, "../../content");
+    const names = gameContent.characters.flatMap((c) => c.name.split(" "));
+    const running = [
+      "actions",
+      "behaviours",
+      "boss",
+      "dialogs",
+      "moves",
+      "notebook",
+      "notifications",
+      "official-story",
+      "scenes",
+    ];
+    const strings = (value: unknown, key = ""): string[] => {
+      if (typeof value === "string") return key === "from" ? [] : [value];
+      if (Array.isArray(value)) return value.flatMap((v) => strings(v));
+      if (typeof value !== "object" || value === null) return [];
+      return Object.entries(value).flatMap(([k, v]) => strings(v, k));
+    };
+
+    for (const file of running) {
+      const written = readFileSync(path.join(folder, `${file}.json`), "utf8");
+      for (const line of strings(JSON.parse(written))) {
+        for (const name of names) expect(line, file).not.toContain(name);
+      }
+    }
+  });
+
+  it("calls every Character in the game by what they do", () => {
+    for (const { id, called } of gameContent.characters) {
+      expect(called, id).toBeDefined();
+    }
   });
 });

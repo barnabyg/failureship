@@ -112,6 +112,7 @@ export type StepView =
       powerMap: ChartEntry[];
       marks: {
         name: string;
+        title: string;
         mark: string | null;
         truth: string;
         correct: boolean;

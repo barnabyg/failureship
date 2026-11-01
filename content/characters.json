@@ -3,12 +3,14 @@
     "id": "head",
     "name": "Hugh Lamb",
     "title": "Head of Operations, your boss's boss",
+    "called": "your boss's boss",
     "role": "head-of-operations"
   },
   {
     "id": "boss",
     "name": "Dennis Prowse",
     "title": "Team Leader, your boss",
+    "called": "your boss",
     "role": "team-leader",
     "reportsTo": "head"
   },
@@ -16,6 +18,7 @@
     "id": "admin",
     "name": "Marjorie Tull",
     "title": "Office Co-ordinator",
+    "called": "the Office Co-ordinator",
     "role": "office-coordinator",
     "reportsTo": "head"
   },
@@ -23,6 +26,7 @@
     "id": "analyst",
     "name": "Priya Venn",
     "title": "Senior Analyst",
+    "called": "the Senior Analyst",
     "role": "senior-analyst",
     "reportsTo": "boss"
   },
@@ -30,6 +34,7 @@
     "id": "projects",
     "name": "Callum Reed",
     "title": "Project Co-ordinator",
+    "called": "the Project Co-ordinator",
     "role": "project-coordinator",
     "reportsTo": "boss"
   }

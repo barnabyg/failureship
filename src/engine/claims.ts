@@ -7,6 +7,7 @@ import {
 } from "./content";
 import type { DealtCharacter, PowerMap } from "./deal";
 import { pick, pickWeighted } from "./rng";
+import { calledBy, sayPeople } from "./say";
 
 /** What a source told the player. Its status stays hidden until the run ends. */
 export interface Claim {
@@ -130,8 +131,6 @@ export function makeClaim(
 
   const frame = pick(next, method.frames);
   next = frame.next;
-  const sourceName =
-    content.characters.find((c) => c.id === source.id)?.name ?? source.id;
 
   return {
     claim: {
@@ -139,9 +138,9 @@ export function makeClaim(
       source: source.id,
       subject: subject.id,
       factId: fact?.id ?? null,
-      text: frame.item
-        .replaceAll("{source}", sourceName)
-        .replaceAll("{said}", text),
+      text: sayPeople(frame.item, {
+        "{source}": calledBy(content, source.id),
+      }).replaceAll("{said}", text),
       status: status.item,
     },
     next,

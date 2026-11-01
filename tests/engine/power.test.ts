@@ -161,7 +161,7 @@ describe("a Scene under the Power Map", () => {
     }
   });
 
-  it("rejects a Scene that names roles with too few people to fill them", () => {
+  it("rejects a Scene that names parts with too few people to fill them", () => {
     const raw = sceneFixtureRaw();
     const scene = raw.scenes[0];
     if (!scene) throw new Error("The fixture has no Scene.");

@@ -12,7 +12,7 @@
         "fact": 2
       },
       "frames": [
-        "The photocopier jams, and you and {source} stand looking at it. \"Have you been here long enough to know about this?\" {source} says, meaning the machine, and then does not mean the machine. \"{said}\"",
+        "The photocopier jams, and you and {source} stand looking at it. \"Have you been here long enough to know about this?\" says {source}, meaning the machine, and then does not mean the machine. \"{said}\"",
         "{source} is copying something face down, and shifts slightly so that you cannot read it. \"While you're there,\" {source} says. \"{said}\"",
         "You ask how the week is going. {source} says fine, looks over one shoulder and carries on more quietly. \"{said}\"",
         "You mention the name, as if it had just occurred to you. {source} presses a button that does nothing. \"Funny you should say that. {said}\""

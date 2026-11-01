@@ -17,6 +17,7 @@ import {
   type PowerMap,
 } from "./deal";
 import { draw, pick, pickWeighted } from "./rng";
+import { calledBy, capitalised, sayPeople } from "./say";
 import type {
   Buzzword,
   ChartEntry,
@@ -316,7 +317,7 @@ function hearClaim(
   state.claims.push(made.claim);
   state.clues.push({
     month: state.month,
-    source: personOf(content, made.claim.source).name,
+    source: capitalised(calledBy(content, made.claim.source)),
     text: made.claim.text,
     verdict: verdictOfClaim(content, made.claim),
   });
@@ -416,7 +417,7 @@ function noteScene(
   for (const sign of scene.signs) {
     if (sign.clue !== undefined) {
       note(
-        fillRoles(state, content, sign.clue, scene.cast, misleading),
+        fillParts(state, content, sign.clue, scene.cast, misleading),
         misleading ? "wrong" : "held",
       );
     }
@@ -427,7 +428,7 @@ function noteScene(
     if (written?.clue === undefined || kind === undefined) continue;
     const top = Math.max(...Object.values(written.likelihood));
     note(
-      written.clue.replaceAll("{who}", personOf(content, character).name),
+      sayPeople(written.clue, { "{who}": calledBy(content, character) }),
       written.likelihood[kind] === top ? "held" : "wrong",
     );
   }
@@ -474,7 +475,7 @@ function behaveInScene(
       state,
       world.content,
       option?.about,
-      fillRoles(state, world.content, written, scene.cast),
+      fillParts(state, world.content, written, scene.cast),
     );
   if (result.factNote !== undefined) {
     const dealt = state.truth.characters.find(
@@ -495,7 +496,7 @@ function heardAbout(state: State, fact: string | undefined) {
   return state.heard.find((h) => h.fact === fact);
 }
 
-/** Names whoever the player was told has this Hidden Fact. */
+/** Writes in whoever the player was told has this Hidden Fact. */
 function fillSubject(
   state: State,
   content: Content,
@@ -503,14 +504,13 @@ function fillSubject(
   written: string,
 ): string {
   const heard = heardAbout(state, fact);
-  return written.replaceAll(
-    "{subject}",
-    heard ? personOf(content, heard.subject).name : "",
-  );
+  return sayPeople(written, {
+    "{subject}": heard ? calledBy(content, heard.subject) : "",
+  });
 }
 
-/** Roles are relative to who is in the room. Left out, that is everyone. */
-function rolesIn(powerMap: PowerMap, room?: readonly string[]) {
+/** Parts are relative to who is in the room. Left out, that is everyone. */
+function partsIn(powerMap: PowerMap, room?: readonly string[]) {
   const present = powerMap.order.filter((id) => room?.includes(id) ?? true);
   return {
     holder: present[0],
@@ -527,7 +527,7 @@ function matches(
 ): boolean {
   if (condition === undefined) return true;
   if ("holderIs" in condition) {
-    return condition.holderIs === rolesIn(state.truth.powerMap, room).holder;
+    return condition.holderIs === partsIn(state.truth.powerMap, room).holder;
   }
   if ("factNature" in condition) {
     const { character, nature } = condition.factNature;
@@ -569,21 +569,22 @@ function sceneData(state: State, world: World, id: string): SceneData {
   return script ? script(scene, { powerMap: state.truth.powerMap }) : scene;
 }
 
-/** Writes the dealt Characters' names into text that names roles. */
-function fillRoles(
+/** Writes the dealt Characters into text that names parts in the Power Map. */
+function fillParts(
   state: State,
   content: Content,
   written: string,
   room?: readonly string[],
   misleading = false,
 ): string {
-  const name = (id: string | undefined) =>
-    content.characters.find((c) => c.id === id)?.name ?? "";
-  const { holder, ignored, bystander } = rolesIn(state.truth.powerMap, room);
-  return written
-    .replaceAll("{holder}", name(misleading ? bystander : holder))
-    .replaceAll("{ignored}", name(ignored))
-    .replaceAll("{bystander}", name(misleading ? holder : bystander));
+  const who = (id: string | undefined) =>
+    id === undefined ? "" : calledBy(content, id);
+  const { holder, ignored, bystander } = partsIn(state.truth.powerMap, room);
+  return sayPeople(written, {
+    "{holder}": who(misleading ? bystander : holder),
+    "{ignored}": who(ignored),
+    "{bystander}": who(misleading ? holder : bystander),
+  });
 }
 
 /** The month's order: Notifications, actions, a Move, then the month closes. */
@@ -714,7 +715,7 @@ function toSceneView(
   const { content } = world;
   const scene = sceneData(state, world, id);
   const fill = (written: string) =>
-    fillRoles(state, content, written, scene.cast);
+    fillParts(state, content, written, scene.cast);
   return {
     kind: "scene",
     id: scene.id,
@@ -728,16 +729,15 @@ function toSceneView(
     ),
     signs: scene.signs.map((s) => ({
       label: s.label,
-      text: fillRoles(state, content, s.text, scene.cast, misleading),
+      text: fillParts(state, content, s.text, scene.cast, misleading),
     })),
     behaviours: shown.map(({ character, behaviour }) => {
-      const who =
-        content.characters.find((c) => c.id === character)?.name ?? character;
+      const who = calledBy(content, character);
       const written = content.behaviours.find((b) => b.id === behaviour);
       return {
         character,
         who,
-        text: (written?.text ?? "").replaceAll("{who}", who),
+        text: sayPeople(written?.text ?? "", { "{who}": who }),
       };
     }),
     treatment: content.boss.signs.find((s) => s.id === treatment)?.text ?? null,
@@ -763,7 +763,7 @@ function toStoryView(
     (e) => inMonth(e, state.month) && matches(state, content, e.when),
   );
   const fill = (written: string | undefined) =>
-    written === undefined ? [] : [fillRoles(state, content, written)];
+    written === undefined ? [] : [fillParts(state, content, written)];
   return {
     kind: "story",
     title,
@@ -807,6 +807,7 @@ function toResultsView(
       const { kinds } = content.hiddenTruth;
       return {
         name: nameOf(dealt.id),
+        title: content.characters.find((c) => c.id === dealt.id)?.title ?? "",
         mark: mark === null ? null : kinds[mark].label,
         truth: kinds[dealt.kind].label,
         correct: mark === dealt.kind,
@@ -880,7 +881,9 @@ function toStepView(state: State, world: World): StepView {
       return {
         kind: "find-out",
         title: method.title,
-        prompt: method.prompt.replaceAll("{source}", sources[0]?.name ?? ""),
+        prompt: sayPeople(method.prompt, {
+          "{source}": calledBy(content, sources[0]?.id ?? ""),
+        }),
         sources,
         subjects: content.characters.map((c) => personOf(content, c.id)),
       };
@@ -892,7 +895,9 @@ function toStepView(state: State, world: World): StepView {
       return {
         kind: "claim",
         source,
-        title: content.ui.claimTitle.replaceAll("{source}", source),
+        title: sayPeople(content.ui.claimTitle, {
+          "{source}": calledBy(content, claim.source),
+        }),
         text: claim.text,
       };
     }
@@ -903,7 +908,7 @@ function toStepView(state: State, world: World): StepView {
         kind: "move",
         from: move.from,
         title: move.title,
-        body: fillRoles(state, content, move.body),
+        body: fillParts(state, content, move.body),
       };
     }
     case "story":

@@ -25,18 +25,18 @@
     "options": [
       {
         "id": "back-head",
-        "label": "Agree warmly with Hugh",
+        "label": "Agree warmly with your boss's boss",
         "results": [
           {
             "when": {
               "holderIs": "head"
             },
-            "body": "Hugh does not look at you. The next agenda has your name on it, spelled correctly, and people start holding doors.",
+            "body": "Your boss's boss does not look at you. The next agenda has your name on it, spelled correctly, and people start holding doors.",
             "sets": ["backed-holder"],
             "opinion": -2
           },
           {
-            "body": "Hugh thanks you, using the name of someone who left in March. Several people make a note of that, and of you.",
+            "body": "Your boss's boss thanks you, using the name of someone who left in March. Several people make a note of that, and of you.",
             "sets": ["backed-wrong-person"],
             "opinion": -2
           }
@@ -44,18 +44,18 @@
       },
       {
         "id": "back-boss",
-        "label": "Agree warmly with Dennis, your boss",
+        "label": "Agree warmly with your boss",
         "results": [
           {
             "when": {
               "holderIs": "boss"
             },
-            "body": "Dennis nods at you, as one might nod at a useful chair. Afterwards Dennis uses your first name, and it is nearly correct.",
+            "body": "Your boss nods at you, as one might nod at a useful chair. Afterwards your boss uses your first name, and it is nearly correct.",
             "sets": ["backed-holder"],
             "opinion": 2
           },
           {
-            "body": "Dennis is delighted and says so. Nobody else looks up. Your agreement with your official boss has been noted by your official boss.",
+            "body": "Your boss is delighted and says so. Nobody else looks up. Your agreement with your official boss has been noted by your official boss.",
             "sets": ["backed-wrong-person"],
             "opinion": 2
           }
@@ -63,18 +63,18 @@
       },
       {
         "id": "back-analyst",
-        "label": "Agree warmly with Priya",
+        "label": "Agree warmly with the Senior Analyst",
         "results": [
           {
             "when": {
               "holderIs": "analyst"
             },
-            "body": "Priya writes your name down. It is the first time anyone here has. Two people notice, and one of them passes you a biscuit.",
+            "body": "The Senior Analyst writes your name down. It is the first time anyone here has. Two people notice, and one of them passes you a biscuit.",
             "sets": ["backed-holder"],
             "opinion": -1
           },
           {
-            "body": "Priya thanks you for your input, in the voice kept for people who have not given any. The meeting carries on, as though a window had briefly rattled.",
+            "body": "The Senior Analyst thanks you for your input, in the voice kept for people who have not given any. The meeting carries on, as though a window had briefly rattled.",
             "sets": ["backed-wrong-person"],
             "opinion": -1
           }
@@ -82,34 +82,34 @@
       },
       {
         "id": "back-admin",
-        "label": "Agree warmly with Marjorie",
+        "label": "Agree warmly with the Office Co-ordinator",
         "results": [
           {
             "when": {
               "holderIs": "admin"
             },
-            "body": "Marjorie looks at you over the top of the reading glasses for some time. The next morning your broken chair has been replaced. No ticket was raised.",
+            "body": "The Office Co-ordinator looks at you over the top of the reading glasses for some time. The next morning your broken chair has been replaced. No ticket was raised.",
             "sets": ["backed-holder"]
           },
           {
-            "body": "Marjorie smiles and asks whether you would mind taking the minutes. You are now the person who takes the minutes.",
+            "body": "The Office Co-ordinator smiles and asks whether you would mind taking the minutes. You are now the person who takes the minutes.",
             "sets": ["backed-wrong-person"]
           }
         ]
       },
       {
         "id": "back-projects",
-        "label": "Agree warmly with Callum",
+        "label": "Agree warmly with the Project Co-ordinator",
         "results": [
           {
             "when": {
               "holderIs": "projects"
             },
-            "body": "Callum makes a small note and does not look up. By Thursday a project you had never heard of has your name on the good half of it.",
+            "body": "The Project Co-ordinator makes a small note and does not look up. By Thursday a project you had never heard of has your name on the good half of it.",
             "sets": ["backed-holder"]
           },
           {
-            "body": "Callum looks surprised, then grateful, then worried for you. The agenda moves on without either of you.",
+            "body": "The Project Co-ordinator looks surprised, then grateful, then worried for you. The agenda moves on without either of you.",
             "sets": ["backed-wrong-person"]
           }
         ]
@@ -125,7 +125,7 @@
             "when": {
               "holderIs": "boss"
             },
-            "body": "Dennis looks pleased, then alarmed, then pleased to have thought of it first. By lunchtime the phrase is in the minutes, credited to the team.",
+            "body": "Your boss looks pleased, then alarmed, then pleased to have thought of it first. By lunchtime the phrase is in the minutes, credited to the team.",
             "sets": ["used-buzzword"],
             "opinion": 1
           },
@@ -155,7 +155,7 @@
     "title": "Lessons Learned Review",
     "location": "Floor 1, Meeting Room 1B",
     "narration": [
-      "A project was delivered late. The purpose of this session is not to find someone to blame, Dennis explains, and asks whose fault it was. Everyone looks at you, the most junior person present."
+      "A project was delivered late. The purpose of this session is not to find someone to blame, your boss explains, and asks whose fault it was. Everyone looks at you, the most junior person present."
     ],
     "cast": ["head", "boss", "analyst", "admin", "projects"],
     "signs": [
@@ -172,7 +172,7 @@
     "options": [
       {
         "id": "blame-callum",
-        "label": "Say that the delay began with Callum",
+        "label": "Say that the delay began with the Project Co-ordinator",
         "results": [
           {
             "when": {
@@ -181,14 +181,14 @@
                 "nature": "dangerous"
               }
             },
-            "body": "Callum says nothing. On Thursday you are invited to explain yourself to someone from a floor you have never seen. Nobody tells you what you did, only that it has been noted at a level you cannot reach.",
+            "body": "The Project Co-ordinator says nothing. On Thursday you are invited to explain yourself to someone from a floor you have never seen. Nobody tells you what you did, only that it has been noted at a level you cannot reach.",
             "sets": ["burned-by-a-fact"],
             "opinion": -2,
             "factAt": "projects",
-            "factNote": "You blamed Callum for the delay. You had not been told why that was a mistake."
+            "factNote": "You blamed the Project Co-ordinator for the delay. You had not been told why that was a mistake."
           },
           {
-            "body": "Callum goes pink and apologises to the room. It works. The minutes record a learning opportunity, and it is Callum's.",
+            "body": "The Project Co-ordinator goes pink and apologises to the room. It works. The minutes record a learning opportunity, and it is the Project Co-ordinator's.",
             "sets": ["blamed-a-colleague"],
             "opinion": 1
           }
@@ -196,7 +196,7 @@
       },
       {
         "id": "blame-priya",
-        "label": "Say that the delay began with Priya",
+        "label": "Say that the delay began with the Senior Analyst",
         "results": [
           {
             "when": {
@@ -205,14 +205,14 @@
                 "nature": "dangerous"
               }
             },
-            "body": "Priya thanks you for your candour, and writes it down. By the end of the week two people you do not know have asked to see your expenses, going back some way.",
+            "body": "The Senior Analyst thanks you for your candour, and writes it down. By the end of the week two people you do not know have asked to see your expenses, going back some way.",
             "sets": ["burned-by-a-fact"],
             "opinion": -2,
             "factAt": "analyst",
-            "factNote": "You blamed Priya for the delay. You had not been told why that was a mistake."
+            "factNote": "You blamed the Senior Analyst for the delay. You had not been told why that was a mistake."
           },
           {
-            "body": "Priya looks at you for slightly too long, then agrees that lessons can be learned. It appears to work. The minutes record a learning opportunity, and it is Priya's.",
+            "body": "The Senior Analyst looks at you for slightly too long, then agrees that lessons can be learned. It appears to work. The minutes record a learning opportunity, and it is the Senior Analyst's.",
             "sets": ["blamed-a-colleague"],
             "opinion": 1
           }
@@ -220,7 +220,7 @@
       },
       {
         "id": "blame-marjorie",
-        "label": "Say that the delay began with Marjorie",
+        "label": "Say that the delay began with the Office Co-ordinator",
         "results": [
           {
             "when": {
@@ -229,14 +229,14 @@
                 "nature": "dangerous"
               }
             },
-            "body": "Marjorie makes a note. Your pay is late this month, and nobody can find out why. You are told that the matter has been raised with the appropriate person, and that you have just met them.",
+            "body": "The Office Co-ordinator makes a note. Your pay is late this month, and nobody can find out why. You are told that the matter has been raised with the appropriate person, and that you have just met them.",
             "sets": ["burned-by-a-fact"],
             "opinion": -2,
             "factAt": "admin",
-            "factNote": "You blamed Marjorie for the delay. You had not been told why that was a mistake."
+            "factNote": "You blamed the Office Co-ordinator for the delay. You had not been told why that was a mistake."
           },
           {
-            "body": "Marjorie sighs, and takes the action. It seems to work, although your stationery order has since been queried.",
+            "body": "The Office Co-ordinator sighs, and takes the action. It seems to work, although your stationery order has since been queried.",
             "sets": ["blamed-a-colleague"],
             "opinion": 1
           }
@@ -247,7 +247,7 @@
         "label": "Say that it was your fault",
         "results": [
           {
-            "body": "There is a long, relieved silence. Dennis thanks you for your ownership. You are now the person this happened to.",
+            "body": "There is a long, relieved silence. Your boss thanks you for your ownership. You are now the person this happened to.",
             "sets": ["took-the-blame"],
             "opinion": 1
           }
@@ -321,7 +321,7 @@
             "factNote": "What you were told about {subject} was so, and you knew to use it."
           },
           {
-            "body": "{subject} asks which list. You say it does not matter. It now does, and {subject} has mentioned it to Marjorie.",
+            "body": "{subject} asks which list. You say it does not matter. It now does, and {subject} has mentioned it to the Office Co-ordinator.",
             "sets": ["misused-a-fact"],
             "opinion": -1,
             "factNote": "You acted on something you were told about {subject}. It was not so."
@@ -380,7 +380,7 @@
             "when": {
               "flag": "sat-at-front"
             },
-            "body": "The Chief Executive reads it out, delighted, and talks for eleven minutes. Afterwards three people you have never met know your name. Dennis is one of the people who has noticed.",
+            "body": "The Chief Executive reads it out, delighted, and talks for eleven minutes. Afterwards three people you have never met know your name. Your boss is one of the people who has noticed.",
             "sets": ["asked-the-question"],
             "opinion": 1
           },
@@ -392,18 +392,18 @@
       },
       {
         "id": "sit-by-head",
-        "label": "Sit next to Hugh and nod when Hugh nods",
+        "label": "Sit next to your boss's boss and nod along",
         "results": [
           {
             "when": {
               "holderIs": "head"
             },
-            "body": "Hugh glances at you when the screen freezes, and shrugs, as one shrugs to a colleague. You have not been shrugged at by this floor before.",
+            "body": "Your boss's boss glances at you when the screen freezes, and shrugs, as one shrugs to a colleague. You have not been shrugged at by this floor before.",
             "sets": ["backed-holder"],
             "opinion": -1
           },
           {
-            "body": "You nod throughout. Hugh is looking at Hugh's phone. You have nodded at a video of a stranger for forty minutes, and been seen doing it.",
+            "body": "You nod throughout. Your boss's boss is looking at a phone. You have nodded at a video of a stranger for forty minutes, and been seen doing it.",
             "sets": ["backed-wrong-person"],
             "opinion": -1
           }
@@ -411,18 +411,18 @@
       },
       {
         "id": "sit-by-boss",
-        "label": "Sit next to Dennis and laugh when Dennis laughs",
+        "label": "Sit next to your boss and laugh at the right moments",
         "results": [
           {
             "when": {
               "holderIs": "boss"
             },
-            "body": "Dennis laughs at the joke about synergy. You laugh too. By the afternoon people are asking you what Dennis thinks.",
+            "body": "Your boss laughs at the joke about synergy. You laugh too. By the afternoon people are asking you what your boss thinks.",
             "sets": ["backed-holder"],
             "opinion": 1
           },
           {
-            "body": "Dennis laughs at the joke about synergy. You laugh too. You are now, officially, one of Dennis's people. There do not seem to be others.",
+            "body": "Your boss laughs at the joke about synergy. You laugh too. You are now, officially, one of your boss's people. There do not seem to be others.",
             "sets": ["backed-wrong-person"],
             "opinion": 1
           }
@@ -430,17 +430,17 @@
       },
       {
         "id": "sit-by-priya",
-        "label": "Sit next to Priya and share Priya's notes",
+        "label": "Sit next to the Senior Analyst and share the notes",
         "results": [
           {
             "when": {
               "holderIs": "analyst"
             },
-            "body": "Priya tilts the notes so that you can read them. They say who was talking to whom. A week later you are asked to a meeting that does not appear in your calendar.",
+            "body": "The Senior Analyst tilts the notes so that you can read them. They say who was talking to whom. A week later you are asked to a meeting that does not appear in your calendar.",
             "sets": ["backed-holder"]
           },
           {
-            "body": "Priya tilts the notes away, kindly. The rest of the room has decided you and Priya are in something together, and has decided that it is nothing.",
+            "body": "The Senior Analyst tilts the notes away, kindly. The rest of the room has decided you and the Senior Analyst are in something together, and has decided that it is nothing.",
             "sets": ["backed-wrong-person"]
           }
         ]
@@ -477,7 +477,7 @@
     "title": "Budget Round",
     "location": "Floor 1, Meeting Room 1B",
     "narration": [
-      "The Chief Financial Officer has asked Floor 1 to cut its budget by thirty per cent while delivering everything in the plan. Dennis says this is an exciting conversation, and that someone junior should start it."
+      "The Chief Financial Officer has asked Floor 1 to cut its budget by thirty per cent while delivering everything in the plan. Your boss says this is an exciting conversation, and that someone junior should start it."
     ],
     "cast": ["head", "boss", "analyst", "admin", "projects"],
     "signs": [
@@ -494,7 +494,7 @@
     "options": [
       {
         "id": "cut-callum",
-        "label": "Propose cutting Callum's project",
+        "label": "Propose cutting the Project Co-ordinator's project",
         "results": [
           {
             "when": {
@@ -503,14 +503,14 @@
                 "nature": "dangerous"
               }
             },
-            "body": "Callum takes it calmly. Within days the proposal has come back to you from above, with your name on it, and a question about your own project that you cannot answer.",
+            "body": "The Project Co-ordinator takes it calmly. Within days the proposal has come back to you from above, with your name on it, and a question about your own project that you cannot answer.",
             "sets": ["burned-by-a-fact"],
             "opinion": -2,
             "factAt": "projects",
-            "factNote": "You proposed cutting Callum's project. You had not been told why that was a mistake."
+            "factNote": "You proposed cutting the Project Co-ordinator's project. You had not been told why that was a mistake."
           },
           {
-            "body": "Callum's project is reduced to a small working group, consisting of Callum. You have saved nine per cent.",
+            "body": "The Project Co-ordinator's project is reduced to a small working group, consisting of the Project Co-ordinator. You have saved nine per cent.",
             "sets": ["cut-a-colleague"],
             "opinion": 1
           }
@@ -518,7 +518,7 @@
       },
       {
         "id": "cut-marjorie",
-        "label": "Propose cutting Marjorie's office budget",
+        "label": "Propose cutting the Office Co-ordinator's office budget",
         "results": [
           {
             "when": {
@@ -527,11 +527,11 @@
                 "nature": "dangerous"
               }
             },
-            "body": "Marjorie thanks you for thinking of her. Your access card stops working on Tuesday, your expenses on Wednesday. There is an email from someone important about both.",
+            "body": "The Office Co-ordinator thanks you for thinking of the office. Your access card stops working on Tuesday, your expenses on Wednesday. There is an email from someone important about both.",
             "sets": ["burned-by-a-fact"],
             "opinion": -2,
             "factAt": "admin",
-            "factNote": "You proposed cutting Marjorie's budget. You had not been told why that was a mistake."
+            "factNote": "You proposed cutting the Office Co-ordinator's budget. You had not been told why that was a mistake."
           },
           {
             "body": "The office budget goes. So do the good biscuits, and people know who to thank. It saves almost nothing, and everyone agrees that it shows intent.",
@@ -545,7 +545,7 @@
         "label": "Propose bringing in a consultant to find the savings",
         "results": [
           {
-            "body": "Dennis is very impressed. The consultant costs more than the thirty per cent, and recommends a further consultant. It has stopped being your problem.",
+            "body": "Your boss is very impressed. The consultant costs more than the thirty per cent, and recommends a further consultant. It has stopped being your problem.",
             "sets": ["hired-consultant"],
             "opinion": 2
           }
@@ -556,7 +556,7 @@
         "label": "Offer to cut your own work",
         "results": [
           {
-            "body": "Everyone is very moved. Your work is cut. You are still expected to do it, but now without the budget, and Dennis calls this leadership.",
+            "body": "Everyone is very moved. Your work is cut. You are still expected to do it, but now without the budget, and your boss calls this leadership.",
             "sets": ["cut-own-work"],
             "opinion": -1
           }
@@ -634,7 +634,7 @@
             "factNote": "What you were told about {subject} was so, and you knew to use it."
           },
           {
-            "body": "{subject} asks which list. You say it does not matter. It now does, and {subject} has mentioned it to Marjorie.",
+            "body": "{subject} asks which list. You say it does not matter. It now does, and {subject} has mentioned it to the Office Co-ordinator.",
             "sets": ["misused-a-fact"],
             "opinion": -1,
             "factNote": "You acted on something you were told about {subject}. It was not so."
@@ -670,7 +670,7 @@
     "title": "Project Status Review",
     "location": "Floor 1, Meeting Room 1B",
     "narration": [
-      "Your project is running late, and on this morning's chart it is flagged red. Dennis has asked you to walk the room through it. There is a chart behind you, and it shows something bad that is actually happening."
+      "Your project is running late, and on this morning's chart it is flagged red. Your boss has asked you to walk the room through it. There is a chart behind you, and it shows something bad that is actually happening."
     ],
     "cast": ["head", "boss", "analyst", "admin", "projects"],
     "signs": [
@@ -690,7 +690,7 @@
         "label": "Make it amber, and add a footnote",
         "results": [
           {
-            "body": "It is amber now. The footnote says amber pending review. Dennis looks at it with something like love. The project is still late, but it is no longer red about it.",
+            "body": "It is amber now. The footnote says amber pending review. Your boss looks at it with something like love. The project is still late, but it is no longer red about it.",
             "sets": ["made-it-amber"],
             "opinion": 2
           }
@@ -709,7 +709,7 @@
       },
       {
         "id": "blame-priyas-figures",
-        "label": "Say that Priya's figures must be wrong",
+        "label": "Say that the Senior Analyst's figures must be wrong",
         "results": [
           {
             "when": {
@@ -718,14 +718,14 @@
                 "nature": "dangerous"
               }
             },
-            "body": "Priya offers to go through them with you, in front of everyone. They are not wrong. By the evening somebody senior has started going through yours.",
+            "body": "The Senior Analyst offers to go through them with you, in front of everyone. They are not wrong. By the evening somebody senior has started going through yours.",
             "sets": ["burned-by-a-fact"],
             "opinion": -2,
             "factAt": "analyst",
-            "factNote": "You said that Priya's figures were wrong. You had not been told why that was a mistake."
+            "factNote": "You said that the Senior Analyst's figures were wrong. You had not been told why that was a mistake."
           },
           {
-            "body": "Priya says nothing and goes to check. By the time the figures turn out to be right, the meeting has ended, and nobody remembers why it was red.",
+            "body": "The Senior Analyst says nothing and goes to check. By the time the figures turn out to be right, the meeting has ended, and nobody remembers why it was red.",
             "sets": ["blamed-a-colleague"],
             "opinion": 1
           }
@@ -733,18 +733,18 @@
       },
       {
         "id": "ask-hugh",
-        "label": "Ask Hugh to take a look at it personally",
+        "label": "Ask your boss's boss to take a look at it personally",
         "results": [
           {
             "when": {
               "holderIs": "head"
             },
-            "body": "Hugh takes a look. The word red does not appear in the next report, and nobody can say who took it out.",
+            "body": "Your boss's boss takes a look. The word red does not appear in the next report, and nobody can say who took it out.",
             "sets": ["backed-holder"],
             "opinion": -2
           },
           {
-            "body": "Hugh takes a look, at great length, and copies in the whole floor. You have gone over Dennis's head for nothing, and Dennis has noticed the copy line.",
+            "body": "Your boss's boss takes a look, at great length, and copies in the whole floor. You have gone over your boss's head for nothing, and your boss has noticed the copy line.",
             "sets": ["backed-wrong-person"],
             "opinion": -2
           }
@@ -752,18 +752,18 @@
       },
       {
         "id": "ask-dennis",
-        "label": "Say that Dennis has this completely under control",
+        "label": "Say that your boss has this completely under control",
         "results": [
           {
             "when": {
               "holderIs": "boss"
             },
-            "body": "Dennis accepts this graciously, and the matter is closed. You have told the room who to be afraid of, and Dennis will not forget it.",
+            "body": "Your boss accepts this graciously, and the matter is closed. You have told the room who to be afraid of, and your boss will not forget it.",
             "sets": ["backed-holder"],
             "opinion": 2
           },
           {
-            "body": "Dennis accepts this graciously. The room does not look convinced, and looks at you for having said it.",
+            "body": "Your boss accepts this graciously. The room does not look convinced, and looks at you for having said it.",
             "sets": ["backed-wrong-person"],
             "opinion": 2
           }
@@ -808,35 +808,35 @@
     "options": [
       {
         "id": "praise-hugh",
-        "label": "Say how much you have learned from Hugh",
+        "label": "Say how much you have learned from your boss's boss",
         "results": [
           {
             "when": {
               "holderIs": "head"
             },
-            "body": "Hugh nods once. Your own name comes up shortly afterwards, and passes through without being moved. You now understand how this works.",
+            "body": "Your boss's boss nods once. Your own name comes up shortly afterwards, and passes through without being moved. You now understand how this works.",
             "sets": ["backed-holder"]
           },
           {
-            "body": "Hugh looks mildly surprised, and thanks you. It is noted that you do not yet know how things are done here.",
+            "body": "Your boss's boss looks mildly surprised, and thanks you. It is noted that you do not yet know how things are done here.",
             "sets": ["backed-wrong-person"]
           }
         ]
       },
       {
         "id": "praise-dennis",
-        "label": "Say how much you have learned from Dennis",
+        "label": "Say how much you have learned from your boss",
         "results": [
           {
             "when": {
               "holderIs": "boss"
             },
-            "body": "Dennis nods once. Your own name comes up shortly afterwards, and passes through without being moved. You now understand how this works.",
+            "body": "Your boss nods once. Your own name comes up shortly afterwards, and passes through without being moved. You now understand how this works.",
             "sets": ["backed-holder"],
             "opinion": 1
           },
           {
-            "body": "Dennis is delighted, and rates you Meets, warmly, in front of everyone. It carries no weight whatever, and you can see that it does not.",
+            "body": "Your boss is delighted, and rates you Meets, warmly, in front of everyone. It carries no weight whatever, and you can see that it does not.",
             "sets": ["backed-wrong-person"],
             "opinion": 1
           }
@@ -844,51 +844,51 @@
       },
       {
         "id": "praise-priya",
-        "label": "Say how much you have learned from Priya",
+        "label": "Say how much you have learned from the Senior Analyst",
         "results": [
           {
             "when": {
               "holderIs": "analyst"
             },
-            "body": "Priya makes a mark on a sheet of paper. Your name comes up shortly afterwards, and passes through without being moved.",
+            "body": "The Senior Analyst makes a mark on a sheet of paper. Your name comes up shortly afterwards, and passes through without being moved.",
             "sets": ["backed-holder"]
           },
           {
-            "body": "Priya thanks you, in the voice kept for people who have got this wrong. The curve carries on without you.",
+            "body": "The Senior Analyst thanks you, in the voice kept for people who have got this wrong. The curve carries on without you.",
             "sets": ["backed-wrong-person"]
           }
         ]
       },
       {
         "id": "praise-marjorie",
-        "label": "Say how much you have learned from Marjorie",
+        "label": "Say how much you have learned from the Office Co-ordinator",
         "results": [
           {
             "when": {
               "holderIs": "admin"
             },
-            "body": "Marjorie takes off the reading glasses and looks at you for some time. Your name is never raised at all, which you gather is the best thing that can happen.",
+            "body": "The Office Co-ordinator takes off the reading glasses and looks at you for some time. Your name is never raised at all, which you gather is the best thing that can happen.",
             "sets": ["backed-holder"]
           },
           {
-            "body": "Several people look at you to see whether this is a joke. Marjorie is kind about it, which makes it worse.",
+            "body": "Several people look at you to see whether this is a joke. The Office Co-ordinator is kind about it, which makes it worse.",
             "sets": ["backed-wrong-person"]
           }
         ]
       },
       {
         "id": "praise-callum",
-        "label": "Say how much you have learned from Callum",
+        "label": "Say how much you have learned from the Project Co-ordinator",
         "results": [
           {
             "when": {
               "holderIs": "projects"
             },
-            "body": "Callum looks at the table, then makes a very small note. Your name comes up shortly afterwards, and passes through without being moved.",
+            "body": "The Project Co-ordinator looks at the table, then makes a very small note. Your name comes up shortly afterwards, and passes through without being moved.",
             "sets": ["backed-holder"]
           },
           {
-            "body": "Callum looks grateful, then frightened. You are told that you can drop off the call now, although it is not a call.",
+            "body": "The Project Co-ordinator looks grateful, then frightened. You are told that you can drop off the call now, although it is not a call.",
             "sets": ["backed-wrong-person"]
           }
         ]
@@ -965,7 +965,7 @@
             "factNote": "What you were told about {subject} was so, and you knew to use it."
           },
           {
-            "body": "{subject} asks which list. You say it does not matter. It now does, and {subject} has mentioned it to Marjorie.",
+            "body": "{subject} asks which list. You say it does not matter. It now does, and {subject} has mentioned it to the Office Co-ordinator.",
             "sets": ["misused-a-fact"],
             "opinion": -1,
             "factNote": "You acted on something you were told about {subject}. It was not so."

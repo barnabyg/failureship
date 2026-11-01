@@ -16,7 +16,7 @@ test("spends an action to find something out, and sees the claim", async ({
   await expect(page.locator('[data-testid^="source-"]')).toHaveCount(0);
   await expect(page.locator('[data-testid^="subject-"]')).toHaveCount(4);
   const prompt = await page.getByTestId("find-out-prompt").innerText();
-  const there = /^(\w+ \w+) is/.exec(prompt)?.[1] ?? "nobody";
+  const there = /^(.+?) is at the photocopier/.exec(prompt)?.[1] ?? "nobody";
   await page.locator('[data-testid^="subject-"]').first().click();
 
   await expect(page.getByTestId("panel-claim")).toContainText(there);

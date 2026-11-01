@@ -76,14 +76,14 @@
         ]
       },
       "reported": "You introduced a new strategic framework to the floor.",
-      "happened": "You repeated something Dennis said in a pub."
+      "happened": "You repeated something your boss said in a pub."
     },
     {
       "when": {
         "flag": "phrase-taken"
       },
-      "reported": "Dennis Prowse introduced a new strategic framework to the business.",
-      "happened": "You repeated something Dennis said in a pub, and Dennis has now said it back to everyone else."
+      "reported": "Your boss introduced a new strategic framework to the business.",
+      "happened": "You repeated something your boss said in a pub, and your boss has now said it back to everyone else."
     },
     {
       "when": {
@@ -109,21 +109,21 @@
       "when": {
         "flag": "figures-borrowed"
       },
-      "reported": "Priya Venn presented strong analysis to senior management.",
+      "reported": "The Senior Analyst presented strong analysis to senior management.",
       "happened": "It was your analysis."
     },
     {
       "when": {
         "flag": "report-chased"
       },
-      "reported": "A minor reporting delay was identified and is being managed by Dennis Prowse.",
+      "reported": "A minor reporting delay was identified and is being managed by your boss.",
       "happened": "It is being managed by asking you about it."
     },
     {
       "when": {
         "flag": "report-renamed"
       },
-      "reported": "Dennis Prowse delivered an executive summary of outstanding clarity.",
+      "reported": "Your boss delivered an executive summary of outstanding clarity.",
       "happened": "It was your report, with a new first page."
     },
     {
@@ -182,7 +182,7 @@
         "flag": "had-one-to-one"
       },
       "reported": "You invested in your professional network.",
-      "happened": "You sat at Priya's desk, and came away with nothing you could use."
+      "happened": "You sat at the Senior Analyst's desk, and came away with nothing you could use."
     },
     {
       "when": {

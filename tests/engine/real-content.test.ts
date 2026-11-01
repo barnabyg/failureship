@@ -254,8 +254,8 @@ describe("the real month", () => {
 
     expect(holderInMeeting(8)).toBe("boss");
     expect(holderInMeeting(1)).toBe("analyst");
-    expect(firstSign(8)).toMatch(/^Dennis Prowse talks over/);
-    expect(firstSign(1)).toMatch(/^Priya Venn talks over/);
+    expect(firstSign(8)).toMatch(/^Your boss talks over/);
+    expect(firstSign(1)).toMatch(/^The Senior Analyst talks over/);
     expect(of(8).projects?.nature).toBe("dangerous");
     expect(of(1).projects?.nature).toBe("useful");
     expect(of(8).analyst?.nature).toBe("useful");

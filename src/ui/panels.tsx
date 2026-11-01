@@ -105,8 +105,8 @@ function FindOutPanel({
                   setSource(person.id);
                 }}
               >
-                <span>{person.name}</span>
-                <span className="option-cost">{person.title}</span>
+                <span>{person.title}</span>
+                <span className="option-cost">{person.name}</span>
               </button>
             ))}
           </div>
@@ -134,7 +134,8 @@ function FindOutPanel({
                     });
                   }}
                 >
-                  {person.name}
+                  <span>{person.title}</span>
+                  <span className="option-cost">{person.name}</span>
                 </button>
               ))}
           </div>
@@ -160,8 +161,8 @@ function ResultsPanel({
           {step.characters.map((person) => (
             <tr key={person.name} data-testid="result-character">
               <th scope="row">
-                {person.name}
-                <span className="results-title">{person.title}</span>
+                {person.title}
+                <span className="results-title">{person.name}</span>
               </th>
               <td className="results-kind">{person.kind}</td>
               <td>{person.fact ?? panelText.resultsNoFact}</td>
@@ -174,7 +175,10 @@ function ResultsPanel({
         <tbody>
           {step.marks.map((row) => (
             <tr key={row.name} data-testid="result-mark">
-              <th scope="row">{row.name}</th>
+              <th scope="row">
+                {row.title}
+                <span className="results-title">{row.name}</span>
+              </th>
               <td>{row.mark ?? panelText.notebookNoMark}</td>
               <td>{row.truth}</td>
               <td className="results-kind">
@@ -321,7 +325,7 @@ export function StepPanel({ view, onChoose }: StepPanelProps) {
               <ul className="cast">
                 {step.cast.map((person) => (
                   <li key={person.name}>
-                    <strong>{person.name}</strong>, {person.title}
+                    <strong>{person.title}</strong>, {person.name}
                   </li>
                 ))}
               </ul>

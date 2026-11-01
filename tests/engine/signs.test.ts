@@ -54,7 +54,6 @@ function openMeeting(seed: number, content: Content) {
 
 /** How often each kind shows each behaviour, across many deals. */
 function tally(content: Content, seeds = 3000) {
-  const names = new Map(content.characters.map((c) => [c.name, c.id]));
   const counts = new Map(
     content.behaviours.map((b) => [
       b.text,
@@ -65,9 +64,9 @@ function tally(content: Content, seeds = 3000) {
   for (let seed = 1; seed <= seeds; seed++) {
     const { run, step } = openMeeting(seed, content);
     const { characters } = readHiddenTruth(run);
-    for (const { who, text } of step.behaviours) {
-      const kind = characters.find((c) => c.id === names.get(who))?.kind;
-      const count = counts.get(text.replaceAll(who, "{who}"));
+    for (const { character, who, text } of step.behaviours) {
+      const kind = characters.find((c) => c.id === character)?.kind;
+      const count = counts.get(text.replace(new RegExp(who, "gi"), "{who}"));
       if (!kind || !count) throw new Error(`Unknown sign: ${text}`);
       count[kind] += 1;
       totals[kind] += 1;

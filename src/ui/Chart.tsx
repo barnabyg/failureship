@@ -13,8 +13,8 @@ function Branch({
     <ul className="chart">
       {here.map((person) => (
         <li key={person.name}>
-          <strong>{person.name}</strong>
-          <span className="chart-title">{person.title}</span>
+          <strong>{person.title}</strong>
+          <span className="chart-title">{person.name}</span>
           <Branch entries={entries} above={person.name} />
         </li>
       ))}
