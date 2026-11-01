@@ -266,6 +266,67 @@ describe("a place where someone is already there", () => {
   });
 });
 
+describe("the conversation around a claim", () => {
+  it("embeds what was said in the words of a frame", () => {
+    const raw = findOutFixtureRaw();
+    const [method] = raw.sources.methods;
+    if (method) method.frames = ["{source} sighs. {said} The toner runs out."];
+    const run = startRun({ seed: 1, content: parseContent(raw) });
+
+    const view = askOnce(run);
+
+    if (view.step.kind !== "claim") throw new Error(view.step.kind);
+    expect(view.step.text).toMatch(
+      /^Ben Bird sighs\. .+ The toner runs out\.$/,
+    );
+  });
+
+  it("says a fact the way a person would, where one is written", () => {
+    const raw = findOutFixtureRaw();
+    raw.sources.methods[0] = {
+      id: "ask",
+      title: "Ask",
+      prompt: "Whom?",
+      sources: ["ana", "ben", "cal"],
+      someoneThere: false,
+      frames: ["{said}"],
+      topics: { kind: 0, influence: 0, fact: 1 },
+    };
+    raw.hiddenTruth.facts = raw.hiddenTruth.facts.map((f) => ({
+      ...f,
+      told: "Did you hear about {name}? TOLD-IN-PERSON",
+    }));
+    const world = parseContent(raw);
+
+    const told = Array.from({ length: 30 }, (_, i) => {
+      const view = askOnce(startRun({ seed: i + 1, content: world }));
+      return view.step.kind === "claim" ? view.step.text : "";
+      // A true claim about someone with no fact falls back to their kind.
+    }).filter((t) => !t.includes("SAID-"));
+
+    expect(told.length).toBeGreaterThan(0);
+    for (const text of told) expect(text).toContain("TOLD-IN-PERSON");
+  });
+
+  it("rejects a frame with nowhere to put what was said", () => {
+    const raw = findOutFixtureRaw();
+    const [method] = raw.sources.methods;
+    if (method) method.frames = ["{source} sighs."];
+
+    expect(() => parseContent(raw)).toThrow(/\{said\}/);
+  });
+
+  it("rejects a way of telling a fact that does not say who", () => {
+    const raw = findOutFixtureRaw();
+    raw.hiddenTruth.facts = raw.hiddenTruth.facts.map((f) => ({
+      ...f,
+      told: "Someone did something.",
+    }));
+
+    expect(() => parseContent(raw)).toThrow(/\{name\}/);
+  });
+});
+
 describe("sources in content", () => {
   it("rejects a source who is not a Character", () => {
     const raw = findOutFixtureRaw();

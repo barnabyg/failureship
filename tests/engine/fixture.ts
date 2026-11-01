@@ -210,6 +210,7 @@ export function sourcesRaw() {
         prompt: "Whom do you ask?",
         sources: ["ana", "ben", "cal"],
         someoneThere: false,
+        frames: ["{said}"],
         topics: { kind: 1, influence: 1, fact: 1 },
       },
     ],

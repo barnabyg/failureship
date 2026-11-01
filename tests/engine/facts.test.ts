@@ -25,6 +25,7 @@ function factsFixtureRaw() {
     prompt: "Whom?",
     sources: ["ana", "ben", "cal"],
     someoneThere: false,
+    frames: ["{said}"],
     topics: { kind: 0, influence: 0, fact: 1 },
   };
   raw.scenes[0]?.options.push(
@@ -289,6 +290,12 @@ describe("Hidden Facts in content", () => {
 });
 
 describe("the game's Hidden Facts", () => {
+  it("has a way of saying each one in conversation", () => {
+    for (const fact of gameContent.hiddenTruth.facts) {
+      expect(fact.told, fact.id).toContain("{name}");
+    }
+  });
+
   it("has dangerous and useful ones, with some Scene reading each", () => {
     const natures = gameContent.hiddenTruth.facts.map((f) => f.nature);
     const written = JSON.stringify(gameContent.scenes);

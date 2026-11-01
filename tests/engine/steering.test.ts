@@ -159,7 +159,7 @@ describe("the whole run", () => {
       for (const view of views) {
         expect(view.hint.trim()).not.toBe("");
         expect(JSON.stringify(view)).not.toMatch(
-          /\{(holder|ignored|bystander|subject|who|name|fact|source)\}/,
+          /\{(holder|ignored|bystander|subject|who|name|fact|source|said)\}/,
         );
       }
       expect(views.at(-1)?.step.kind).toBe("results");

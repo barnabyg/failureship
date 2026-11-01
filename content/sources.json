@@ -6,79 +6,129 @@
       "prompt": "{source} is at the photocopier, waiting for it to warm up. It will be a while, and you could ask about anyone.",
       "sources": ["head", "boss", "admin", "analyst", "projects"],
       "someoneThere": true,
-      "topics": { "kind": 5, "influence": 3, "fact": 2 }
+      "topics": {
+        "kind": 5,
+        "influence": 3,
+        "fact": 2
+      },
+      "frames": [
+        "The photocopier jams, and you and {source} stand looking at it. \"Have you been here long enough to know about this?\" {source} says, meaning the machine, and then does not mean the machine. \"{said}\"",
+        "{source} is copying something face down, and shifts slightly so that you cannot read it. \"While you're there,\" {source} says. \"{said}\"",
+        "You ask how the week is going. {source} says fine, looks over one shoulder and carries on more quietly. \"{said}\"",
+        "You mention the name, as if it had just occurred to you. {source} presses a button that does nothing. \"Funny you should say that. {said}\""
+      ]
     },
     {
       "id": "buy",
       "title": "At the loading bay",
       "prompt": "A coffee, a favour, an agreement not to mention something. Only two people on this floor sell, and they sell secrets.",
       "sources": ["admin", "projects"],
-      "topics": { "kind": 1, "influence": 1, "fact": 8 }
+      "topics": {
+        "kind": 1,
+        "influence": 1,
+        "fact": 8
+      },
+      "frames": [
+        "You hand {source} a coffee. {source} takes off the lid, looks at it for a while and seems to find it acceptable. \"{said}\"",
+        "{source} lets you stand there for some time, then takes the coffee. \"You didn't get this from me. {said}\"",
+        "\"That's a large coffee,\" says {source}, looking across the yard and not at you. \"All right. {said}\""
+      ]
     }
   ],
   "influentialCount": 2,
   "reliability": {
-    "believer": { "true": 7, "mistaken": 2, "outOfDate": 3, "false": 0 },
-    "incompetent": { "true": 3, "mistaken": 7, "outOfDate": 3, "false": 0 },
-    "practitioner": { "true": 4, "mistaken": 0, "outOfDate": 1, "false": 6 }
+    "believer": {
+      "true": 7,
+      "mistaken": 2,
+      "outOfDate": 3,
+      "false": 0
+    },
+    "incompetent": {
+      "true": 3,
+      "mistaken": 7,
+      "outOfDate": 3,
+      "false": 0
+    },
+    "practitioner": {
+      "true": 4,
+      "mistaken": 0,
+      "outOfDate": 1,
+      "false": 6
+    }
   },
   "motives": [
     {
       "id": "protecting-themselves",
       "text": "{name} was keeping out of trouble, and told you whatever would achieve that.",
-      "adjust": { "true": -1, "mistaken": 0, "outOfDate": 0, "false": 2 }
+      "adjust": {
+        "true": -1,
+        "mistaken": 0,
+        "outOfDate": 0,
+        "false": 2
+      }
     },
     {
       "id": "wants-your-seat",
       "text": "{name} had an eye on your job, and any confusion on your part was welcome.",
-      "adjust": { "true": -2, "mistaken": 0, "outOfDate": 0, "false": 3 }
+      "adjust": {
+        "true": -2,
+        "mistaken": 0,
+        "outOfDate": 0,
+        "false": 3
+      }
     },
     {
       "id": "lonely",
       "text": "{name} was glad that anyone had asked, and did not want the conversation to end.",
-      "adjust": { "true": 0, "mistaken": 2, "outOfDate": 1, "false": 0 }
+      "adjust": {
+        "true": 0,
+        "mistaken": 2,
+        "outOfDate": 1,
+        "false": 0
+      }
     },
     {
       "id": "nothing-to-gain",
       "text": "{name} wanted nothing from you, which on this floor is unusual.",
-      "adjust": { "true": 2, "mistaken": 0, "outOfDate": 0, "false": -1 }
+      "adjust": {
+        "true": 2,
+        "mistaken": 0,
+        "outOfDate": 0,
+        "false": -1
+      }
     }
   ],
   "claims": {
     "kind": {
       "believer": [
-        "{subject} actually reads the values statement. Then does what it says.",
-        "{subject} stays late because of the work. Not so as to be seen. I have checked.",
-        "With {subject}, what you see is what there is. It is very awkward for everyone."
+        "Have you seen the values statement? {subject} has. Properly, with a pen.",
+        "{subject} was here until nine on Tuesday, and nobody had even asked. I don't think it's for show. I did check.",
+        "I told {subject} the numbers were a bit off, and {subject} went and fixed them. Who does that?"
       ],
       "incompetent": [
-        "{subject} has no idea what is going on. Nobody has wanted to be the one to say so.",
-        "Between us, {subject} has been forwarding the same spreadsheet since the spring.",
-        "{subject} is lovely. Ask {subject} what the department does, though, and watch."
+        "Honestly, ask {subject} what this department does. Go on. I'd like to watch.",
+        "{subject} has been sending round the same spreadsheet since the spring. Nobody has the heart.",
+        "Lovely, {subject}. Really lovely. I wouldn't let {subject} near a budget, mind."
       ],
       "practitioner": [
-        "Do not be fooled by {subject}. Every kind word goes in a ledger somewhere.",
-        "{subject} has never once been in the room when anything went wrong. Think about how hard that is.",
-        "{subject} knows exactly what everyone here wants. Be careful what you tell {subject}."
+        "You'll have noticed {subject} is never in the room when something goes wrong. That takes planning.",
+        "{subject} has been very nice to you, hasn't {subject}? Yes. I'd keep a note of what for.",
+        "I've seen {subject} remember a birthday. It was the birthday of someone's boss."
       ]
     },
     "influence": {
       "high": [
-        "When something really gets decided, {subject} has usually decided it already.",
-        "Forget the chart. People check with {subject} first.",
-        "If {subject} says no, it does not matter who said yes."
+        "If you want something decided, you'd go to {subject}. Never mind what the chart says.",
+        "Funny, isn't it, how people stop talking when {subject} walks in.",
+        "I saw that plan before it went upstairs. {subject} had already been through it in pencil."
       ],
       "low": [
-        "{subject} is not in the conversations you think {subject} is in.",
-        "Nobody will tell you this, but {subject} has no say in anything that matters.",
-        "People nod at {subject}, then go and ask someone else."
+        "Bless {subject}. Still gets invited to things. Doesn't get told what happened at them.",
+        "People nod at {subject}, and then they go and ask someone else.",
+        "{subject} thinks that project is still {subject}'s. Nobody has worked out how to say."
       ]
     },
-    "fact": [
-      "Keep this to yourself. {fact}",
-      "You did not hear this from me. {fact}",
-      "I probably should not say. {fact}"
-    ]
+    "fact": ["{fact}"]
   },
   "verdicts": {
     "true": {

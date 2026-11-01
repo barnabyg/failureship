@@ -141,6 +141,10 @@ Each has a `verdict` of `held`, `wrong` or `idle`, which only the results screen
 shows. A behaviour's clue counts as `held` if its likelihood is highest for the
 kind of the person who showed it, and otherwise as `wrong`.
 
+A Find Out method's `frames` are the conversation around a claim: each says `{said}`
+and can say `{source}`. A Hidden Fact's `told` is how someone would say it out loud,
+and its `text` is how the results screen states it.
+
 A Hidden Fact says `{name}`, so that it reads correctly for whoever is dealt it,
 and can list `"characters"` to limit who that can be. Its `nature` is `dangerous`,
 `useful` or `idle`. A Scene result can read one with

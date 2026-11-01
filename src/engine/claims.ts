@@ -109,7 +109,7 @@ export function makeClaim(
   if (fact) {
     text = write(claims.fact).replaceAll(
       "{fact}",
-      fact.text.replaceAll("{name}", name),
+      (fact.told ?? fact.text).replaceAll("{name}", name),
     );
   } else if (topic.item === "influence") {
     const high =
@@ -128,13 +128,20 @@ export function makeClaim(
     text = write(claims.kind[said]);
   }
 
+  const frame = pick(next, method.frames);
+  next = frame.next;
+  const sourceName =
+    content.characters.find((c) => c.id === source.id)?.name ?? source.id;
+
   return {
     claim: {
       month: request.month,
       source: source.id,
       subject: subject.id,
       factId: fact?.id ?? null,
-      text,
+      text: frame.item
+        .replaceAll("{source}", sourceName)
+        .replaceAll("{said}", text),
       status: status.item,
     },
     next,

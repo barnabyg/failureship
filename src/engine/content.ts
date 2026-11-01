@@ -220,6 +220,8 @@ const sources = z.strictObject({
       prompt: text,
       /** Who can be asked this way. */
       sources: z.array(id).min(1),
+      /** The conversation around a claim. Says {said}, and can say {source}. */
+      frames: lines,
       /** One of them is already there, so the player does not choose. */
       someoneThere: z.boolean().default(false),
       /** How often a claim made this way is about each thing. */
@@ -334,6 +336,8 @@ const contentSchema = z.strictObject({
           text,
           /** Who it can be dealt to. Left out, it suits anyone. */
           characters: z.array(id).min(1).optional(),
+          /** How someone would say it. Says {name}. Left out, `text` is used. */
+          told: text.optional(),
           /** Whether it can burn the player, arm them or does neither. */
           nature: z.enum(NATURES).default("idle"),
         }),
@@ -472,7 +476,10 @@ function findBrokenDeal(
   }
   for (const fact of facts) {
     const owner = `Hidden Fact "${fact.id}"`;
-    if (!fact.text.includes("{name}")) {
+    if (
+      !fact.text.includes("{name}") ||
+      fact.told?.includes("{name}") === false
+    ) {
       problems.push(`${owner} needs to say {name}.`);
     }
     for (const [, token] of fact.text.matchAll(/\{(\w+)\}/g)) {
@@ -583,6 +590,12 @@ function findBrokenSources(content: Content): string[] {
       }
     }
     checkTokens(owner, method.prompt, method.someoneThere ? ["source"] : []);
+    for (const frame of method.frames) {
+      if (!frame.includes("{said}")) {
+        problems.push(`${owner} has a frame that needs {said}: "${frame}"`);
+      }
+      checkTokens(owner, frame, ["said", "source"]);
+    }
     if (Object.values(method.topics).every((t) => t === 0)) {
       problems.push(`${owner} has nothing to claim.`);
     }

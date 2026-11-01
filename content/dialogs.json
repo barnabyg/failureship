@@ -5,15 +5,15 @@
     "lines": [
       {
         "speaker": "Dennis",
-        "text": "The Chief Executive went on a retreat. Came back talking about strategic patience."
+        "text": "Chief Executive's back from that retreat. Goats, I think. Apparently we're not behind any more. We're exercising strategic patience."
       },
       {
         "speaker": "You",
-        "text": "What is that?"
+        "text": "Is that different from being behind?"
       },
       {
         "speaker": "Dennis",
-        "text": "It is when you are not doing anything, but on purpose. Nobody on our floor has heard it yet."
+        "text": "It's more expensive. Don't go spreading it about, nobody on our floor's heard it yet. Same again?"
       },
       {
         "text": "Dennis buys a round and claims it as stakeholder engagement. You are the stakeholder."
@@ -29,15 +29,23 @@
       },
       {
         "speaker": "Facilities",
-        "text": "They've got a new north star this year. It's on the slides."
+        "text": "Nobody's early. Mind that one, it's been reported."
       },
       {
         "speaker": "You",
-        "text": "What is it?"
+        "text": "Any idea what today's about?"
       },
       {
         "speaker": "Facilities",
-        "text": "Couldn't tell you. You're not meant to get there. You just face it."
+        "text": "New north star, they tell me. I've been asked to keep the fire exit clear of it."
+      },
+      {
+        "speaker": "You",
+        "text": "Are we getting there soon?"
+      },
+      {
+        "speaker": "Facilities",
+        "text": "You don't get there, as I understand it. You just face it."
       }
     ]
   },
@@ -47,7 +55,15 @@
     "lines": [
       {
         "speaker": "Salesperson",
-        "text": "Every department currently has its own numbers. With us, you have a single source of truth."
+        "text": "Love the lanyard. So right now finance has its numbers, you have yours, and it all ends in a meeting. Am I close?"
+      },
+      {
+        "speaker": "You",
+        "text": "Usually."
+      },
+      {
+        "speaker": "Salesperson",
+        "text": "With us, that's gone. You have a single source of truth."
       },
       {
         "speaker": "You",
@@ -55,7 +71,7 @@
       },
       {
         "speaker": "Salesperson",
-        "text": "Yours, when I'm talking to you."
+        "text": "Yours. While I'm talking to you."
       }
     ]
   }
