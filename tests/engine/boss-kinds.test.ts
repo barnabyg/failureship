@@ -416,6 +416,25 @@ describe("the Annual Calibration's verdict", () => {
     }
   });
 
+  it("is still given to a player who misses the Scene", () => {
+    const raw = kindsFixtureRaw();
+    const scene = raw.scenes[0];
+    if (scene) {
+      scene.verdict = { warm: "V-WARM", neutral: "V-NEUTRAL", cold: "V-COLD" };
+    }
+    const run = startRun({ seed: 1, content: parseContent(raw) });
+    let view = run.view();
+    while (view.step.kind !== "results") {
+      const next = view.choices.find(
+        (c) => !(c.type === "action" && c.actionId === "meeting"),
+      );
+      if (!next) throw new Error(`Stuck at ${view.step.kind}.`);
+      view = run.choose(next);
+    }
+
+    expect(view.step.boss.verdict).toBe("V-NEUTRAL");
+  });
+
   it("comes with the result of the Scene", () => {
     const raw = kindsFixtureRaw();
     const scene = raw.scenes[0];

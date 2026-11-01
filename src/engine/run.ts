@@ -1063,7 +1063,13 @@ function toBossResults(
     name,
     title,
     kind: content.hiddenTruth.kinds[bossKindOf(state, content)].label,
-    verdict: state.verdict,
+    // Missing the Scene does not spare the player: the verdict is given anyway.
+    verdict:
+      state.verdict ??
+      content.scenes.find((s) => s.verdict)?.verdict?.[
+        moodOf(state, content)
+      ] ??
+      null,
     choices: state.bossLandings.map(({ month, choice, shift }) => ({
       month,
       choice,
