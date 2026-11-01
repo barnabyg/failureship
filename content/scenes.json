@@ -32,11 +32,13 @@
               "holderIs": "head"
             },
             "body": "Your boss's boss does not look at you. The next agenda has your name on it, spelled correctly, and people start holding doors.",
+            "headOpinion": 1,
             "sets": ["backed-holder"],
             "approach": "over-head"
           },
           {
             "body": "Your boss's boss thanks you, using the name of someone who left in March. Several people make a note of that, and of you.",
+            "headOpinion": 1,
             "sets": ["backed-wrong-person"],
             "approach": "over-head"
           }
@@ -382,11 +384,13 @@
               "flag": "sat-at-front"
             },
             "body": "The Chief Executive reads it out, delighted, and talks for eleven minutes. Afterwards three people you have never met know your name. Your boss is one of the people who has noticed.",
+            "headOpinion": 1,
             "sets": ["asked-the-question"],
             "opinion": 1
           },
           {
             "body": "Your question goes into a queue with four hundred others. It is answered in writing, by a chatbot, in March.",
+            "headOpinion": 1,
             "sets": ["asked-the-question"]
           }
         ]
@@ -400,11 +404,13 @@
               "holderIs": "head"
             },
             "body": "Your boss's boss glances at you when the screen freezes, and shrugs, as one shrugs to a colleague. You have not been shrugged at by this floor before.",
+            "headOpinion": 1,
             "sets": ["backed-holder"],
             "opinion": -1
           },
           {
             "body": "You nod throughout. Your boss's boss is looking at a phone. You have nodded at a video of a stranger for forty minutes, and been seen doing it.",
+            "headOpinion": 1,
             "sets": ["backed-wrong-person"],
             "opinion": -1
           }
@@ -714,11 +720,13 @@
               "holderIs": "head"
             },
             "body": "Your boss's boss does not acknowledge it, in the way of someone who has heard it before and expects to again. The next slide is taken more quickly.",
+            "headOpinion": 1,
             "sets": ["backed-holder"],
             "approach": "over-head"
           },
           {
             "body": "Your boss's boss looks up, puzzled, and says that it is a team effort. You have gone a long way round to say nothing.",
+            "headOpinion": 1,
             "sets": ["backed-wrong-person"],
             "approach": "over-head"
           }
@@ -741,6 +749,7 @@
         "results": [
           {
             "body": "You put the figures on the screen. They go along, and slightly down. There is a pause, and someone asks whether this has been through the proper process.",
+            "headOpinion": 1,
             "sets": ["showed-figures"],
             "approach": "truth"
           }
@@ -853,6 +862,7 @@
               "holderIs": "head"
             },
             "body": "Your boss's boss takes a look. The word red does not appear in the next report, and nobody can say who took it out.",
+            "headOpinion": 1,
             "sets": ["backed-holder"],
             "approach": "over-head",
             "project": {
@@ -861,6 +871,7 @@
           },
           {
             "body": "Your boss's boss takes a look, at great length, and copies in the whole floor. You have gone over your boss's head for nothing, and your boss has noticed the copy line.",
+            "headOpinion": 1,
             "sets": ["backed-wrong-person"],
             "approach": "over-head"
           }

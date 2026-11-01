@@ -20,8 +20,20 @@ function walk(
   return { run, views };
 }
 
-/** Always answers first, and goes to whatever is in the meeting room. */
+/** Answers for nothing, so as to keep an action for the meeting room, and goes. */
 function attendsEverything(view: PlayerView, turn: number) {
+  const { step } = view;
+  const free =
+    step.kind === "notification"
+      ? step.options.find((o) => o.costLabel === "Costs nothing")
+      : undefined;
+  if (step.kind === "notification" && free) {
+    return {
+      type: "notification" as const,
+      notificationId: step.id,
+      optionId: free.id,
+    };
+  }
   const meeting = view.choices.find(
     (c) => c.type === "action" && c.actionId.startsWith("meeting"),
   );

@@ -115,6 +115,7 @@ format, the page shows what is wrong instead of the game.
 | `official-story.json` | The official story, assembled from entries according to what you did                                                 |
 | `behaviours.json`     | What Characters can be seen doing, which roles can do it, and how likely each kind is to do it                       |
 | `boss.json`           | Who your boss is, the signs of how they treat you, and what impresses each kind                                      |
+| `over-head.json`      | Going over your boss's head: the odds, the effects, the words and your boss's boss's signs                           |
 | `sources.json`        | Find Out: who can be asked, how each role talks, how reliable each kind is, and every claim                          |
 | `notebook.json`       | Events the Notebook keeps a clue of, and what each clue was worth                                                    |
 | `characters.json`     | Job titles, roles, how text refers to each person, names, and who reports to whom on the Org Chart                   |
@@ -197,6 +198,16 @@ the boss's kind: it is `forgotten`, or it is `chased`, which costs the `chasedPe
 and arrives as a Notification of its own, or nothing happens yet. `sets` names the
 flags for that month. `chased` must have an
 answer that costs nothing.
+
+`over-head.json` holds going over your boss's head, which an action with
+`"overHead": true` does. Your boss's boss has a hidden opinion of their own, which
+`signs` show whenever they are in a Scene, and which a choice can move with
+`"headOpinion": 1`. The seeded chance of it working is in `outcomes`, by their dealt
+kind and by whether they are among the `influentialCount` at the top of the Power Map. If
+it works, `effects` says how far each opinion moves, and your boss gains little if your
+boss's boss has little influence. `findsOut` is the seeded chance of your boss hearing of
+it, by your boss's kind, which grows by `perUse` with each trip, and how sharply their
+opinion then falls. `verdict` is what the results screen says your boss's boss made of you.
 
 An approach can have `overdone`, which changes how the listed kinds take it after
 `after` uses in a run. This is how a Practitioner boss turns on someone who shines.

@@ -500,6 +500,20 @@
     },
     {
       "when": {
+        "flag": "went-over-head"
+      },
+      "reported": "You built a relationship with senior leadership.",
+      "happened": "You went over your boss's head."
+    },
+    {
+      "when": {
+        "flag": "boss-found-out"
+      },
+      "reported": "You and your boss have agreed some new ways of working.",
+      "happened": "Your boss found out."
+    },
+    {
+      "when": {
         "flag": "working-group"
       },
       "reported": "You were selected to join a senior working group.",

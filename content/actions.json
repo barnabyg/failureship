@@ -66,6 +66,15 @@
     "sets": ["attended-meeting"]
   },
   {
+    "id": "over-head",
+    "label": "Your boss's boss's office",
+    "description": "You could go and tell your boss's boss what is really going on. Your boss need never know.",
+    "place": "head-office",
+    "cost": "standard",
+    "overHead": true,
+    "oncePerMonth": true
+  },
+  {
     "id": "kitchen",
     "label": "Kitchen",
     "description": "The communal kettle, and the company's most reliable communications channel.",

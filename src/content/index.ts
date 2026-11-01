@@ -12,6 +12,7 @@ import moves from "../../content/moves.json";
 import notebook from "../../content/notebook.json";
 import notifications from "../../content/notifications.json";
 import officialStory from "../../content/official-story.json";
+import overHead from "../../content/over-head.json";
 import project from "../../content/project.json";
 import scenes from "../../content/scenes.json";
 import sources from "../../content/sources.json";
@@ -34,6 +35,7 @@ const {
 export const gameContent = parseContent({
   balance,
   boss,
+  overHead,
   hiddenTruth,
   sources,
   notebook,
@@ -89,6 +91,7 @@ const panelSchema = z.strictObject(
       "signsHeading",
       "behavioursHeading",
       "treatmentHeading",
+      "headTreatmentHeading",
       "optionsHeading",
       "seedLabel",
       "orgChartHeading",
@@ -115,6 +118,7 @@ const panelSchema = z.strictObject(
       "resultsFactEventsHeading",
       "resultsBossHeading",
       "resultsBossNoChoices",
+      "resultsHeadHeading",
       "resultsClaimsHeading",
       "resultsNoClaims",
       "resultsMonthLabel",

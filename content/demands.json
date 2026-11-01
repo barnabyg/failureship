@@ -33,6 +33,7 @@
         {
           "id": "deliver",
           "label": "Cancel half of the floor's meetings",
+          "headOpinion": 1,
           "cost": "standard",
           "sets": ["delivered-demand"],
           "approach": "results",

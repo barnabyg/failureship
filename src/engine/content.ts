@@ -11,6 +11,9 @@ const sets = z.array(id).default([]);
 /** How far this moves the boss's hidden opinion of the player. */
 const opinion = z.number().int().default(0);
 
+/** How far this moves the hidden opinion of the boss's boss. */
+const headOpinion = z.number().int().default(0);
+
 /** Something written once for each kind of boss. */
 const perKind = <T extends z.ZodType>(value: T) =>
   z.strictObject({ believer: value, incompetent: value, practitioner: value });
@@ -84,6 +87,7 @@ const notificationOption = z.strictObject({
   learns: z.array(id).default([]),
   sets,
   opinion,
+  headOpinion,
   approach: approachTag,
   reaction: ownReaction,
   project: projectChange,
@@ -97,6 +101,7 @@ const notificationOption = z.strictObject({
       lost: z.strictObject({
         sets,
         opinion,
+        headOpinion,
         approach: approachTag,
         reaction: ownReaction,
         project: projectChange,
@@ -140,6 +145,7 @@ const sceneResult = z.strictObject({
   body: text,
   sets,
   opinion,
+  headOpinion,
   approach: approachTag,
   reaction: ownReaction,
   project: projectChange,
@@ -196,6 +202,8 @@ const action = z.strictObject({
   oncePerMonth: z.boolean().default(false),
   /** A Find Out action names how the player goes about it. */
   findOut: id.optional(),
+  /** This action goes over the boss's head, as `overHead` says. */
+  overHead: z.boolean().default(false),
   sets,
   approach: approachTag,
   reaction: ownReaction,
@@ -422,6 +430,52 @@ const project = z.strictObject({
     .optional(),
 });
 
+/** Going over the boss's head: what it can do, and who can find out. */
+const overHead = z.strictObject({
+  /** Whom the player goes to, whose own hidden opinion this moves. */
+  character: id,
+  /** How they treat the player in a Scene, by how their opinion stands. */
+  signs: z.array(bossSign),
+  /** How it goes, by the kind of the person gone to. */
+  outcomes: perKind(
+    z.strictObject({
+      /** The seeded chance of it working, by their place on the Power Map. */
+      works: z.strictObject({
+        influential: z.number().min(0).max(1),
+        sidelined: z.number().min(0).max(1),
+      }),
+      worked: z.strictObject({ influential: lines, sidelined: lines }),
+      failed: lines,
+    }),
+  ),
+  /** How far each opinion moves. The boss gains only by what they can make stick. */
+  effects: z.strictObject({
+    worked: z.strictObject({
+      head: z.number().int().positive(),
+      boss: z.strictObject({
+        influential: z.number().int().positive(),
+        sidelined: z.number().int().nonnegative(),
+      }),
+    }),
+    failed: z.strictObject({
+      head: z.number().int().negative(),
+      boss: z.number().int().nonpositive(),
+    }),
+  }),
+  /** Whether the boss hears of it, which goes by the boss's own kind. */
+  findsOut: z.strictObject({
+    chance: perKind(z.number().min(0).max(1)),
+    /** How much likelier each further trip makes it. */
+    perUse: z.number().min(0).max(1),
+    shift: z.number().int().negative(),
+    title: text,
+    reaction: perKind(lines),
+  }),
+  /** What the results screen says they made of the player. */
+  verdict: z.strictObject({ warm: text, neutral: text, cold: text }),
+  sets: z.strictObject({ went: id, caught: id }),
+});
+
 const contentSchema = z.strictObject({
   balance: z.strictObject({
     actionsPerMonth: z.number().int().positive(),
@@ -467,6 +521,7 @@ const contentSchema = z.strictObject({
       )
       .min(1),
   }),
+  overHead: overHead.optional(),
   sources,
   notebook,
   project,
@@ -674,6 +729,8 @@ function flagsSetByHiddenResults(content: Content): Set<string> {
       .flatMap((m) => m.sets),
     // Whether a Demand is forgotten or chased goes by the boss's kind.
     ...Object.values(content.demands?.sets ?? {}),
+    // Whether the boss finds out goes by the boss's kind too.
+    ...(content.overHead ? [content.overHead.sets.caught] : []),
   ]);
 }
 
@@ -807,10 +864,58 @@ function findBrokenBehaviours(content: Content): string[] {
 /** The boss's signs must point somewhere without ever settling it. */
 function findBrokenBossSigns(content: Content): string[] {
   const { character, signs } = content.boss;
-  const problems: string[] = [];
+  const problems = findBrokenOpinionSigns(signs);
   if (!content.characters.some((c) => c.id === character)) {
     problems.push(`The boss names unknown Character "${character}".`);
   }
+  return problems;
+}
+
+/** Going over the boss's head must be a gamble, and its words must name no kind. */
+function findBrokenOverHead(content: Content): string[] {
+  const { overHead: written } = content;
+  if (!written) return [];
+  const problems = findBrokenOpinionSigns(written.signs);
+  if (!content.characters.some((c) => c.id === written.character)) {
+    problems.push(`Over-head names unknown Character "${written.character}".`);
+  }
+  if (written.character === content.boss.character) {
+    problems.push("Going over the boss's head cannot lead to the boss.");
+  }
+  if (!content.actions.some((a) => a.overHead)) {
+    problems.push("No action goes over the boss's head.");
+  }
+  const words = [
+    ...KINDS.flatMap((kind) => {
+      const { worked, failed } = written.outcomes[kind];
+      return [
+        ...worked.influential,
+        ...worked.sidelined,
+        ...failed,
+        ...written.findsOut.reaction[kind],
+      ];
+    }),
+    ...written.signs.map((s) => s.text),
+    ...Object.values(written.verdict),
+  ];
+  problems.push(...findNamedKinds(content, "Going over the head", words));
+  for (const [kind, { works }] of Object.entries(written.outcomes)) {
+    for (const chance of Object.values(works)) {
+      if (chance === 0 || chance === 1) {
+        problems.push(`Going to a ${kind} must be able to go either way.`);
+      }
+    }
+  }
+  for (const [kind, chance] of Object.entries(written.findsOut.chance)) {
+    if (chance === 0 || chance === 1) {
+      problems.push(`A ${kind} boss must be able to find out, or not.`);
+    }
+  }
+  return problems;
+}
+
+function findBrokenOpinionSigns(signs: Content["boss"]["signs"]): string[] {
+  const problems: string[] = [];
   for (const sign of signs) {
     const owner = `Boss sign "${sign.id}"`;
     for (const [, token] of sign.text.matchAll(/\{(\w+)\}/g)) {
@@ -1106,6 +1211,7 @@ function findBrokenReferences(content: Content): string[] {
   problems.push(...findBrokenDeal(content, characters));
   problems.push(...findBrokenBehaviours(content));
   problems.push(...findBrokenBossSigns(content));
+  problems.push(...findBrokenOverHead(content));
   problems.push(...findBrokenApproaches(content));
   problems.push(...findBrokenSources(content));
   problems.push(...findBrokenInput(content));
@@ -1156,13 +1262,19 @@ function findBrokenReferences(content: Content): string[] {
     ) {
       problems.push(`Action "${a.id}" is set when its Scene never opens.`);
     }
-    const outcomes = [a.scene, a.result, a.findOut].filter(
-      (o) => o !== undefined,
-    );
+    const outcomes = [
+      a.scene,
+      a.result,
+      a.findOut,
+      a.overHead ? true : undefined,
+    ].filter((o) => o !== undefined);
     if (outcomes.length !== 1) {
       problems.push(
-        `Action "${a.id}" needs one of a Scene, a result or a Find Out.`,
+        `Action "${a.id}" needs one of a Scene, a result, a Find Out or going over the boss's head.`,
       );
+    }
+    if (a.overHead && !content.overHead) {
+      problems.push(`Action "${a.id}" needs over-head content.`);
     }
     if (
       a.findOut !== undefined &&

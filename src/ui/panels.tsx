@@ -231,6 +231,18 @@ function ResultsPanel({
           </table>
         )}
       </div>
+      {step.boss.head !== null && (
+        <div className="callout" data-testid="results-head">
+          <h3>{panelText.resultsHeadHeading}</h3>
+          <p>
+            {step.boss.head.title}, {step.boss.head.name}:{" "}
+            <strong data-testid="result-head-kind">
+              {step.boss.head.kind}
+            </strong>
+          </p>
+          <p data-testid="result-head-verdict">{step.boss.head.verdict}</p>
+        </div>
+      )}
       {step.factEvents.length > 0 && (
         <div className="callout" data-testid="results-fact-events">
           <h3>{panelText.resultsFactEventsHeading}</h3>
@@ -396,6 +408,14 @@ export function StepPanel({ view, onChoose }: StepPanelProps) {
                   <h3>{panelText.treatmentHeading}</h3>
                   <p className="signs" data-testid="treatment">
                     {step.treatment}
+                  </p>
+                </>
+              )}
+              {step.headTreatment !== null && (
+                <>
+                  <h3>{panelText.headTreatmentHeading}</h3>
+                  <p className="signs" data-testid="head-treatment">
+                    {step.headTreatment}
                   </p>
                 </>
               )}
