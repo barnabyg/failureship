@@ -13,13 +13,17 @@ function spendAction(run: Run, actionId: string) {
   run.choose({ type: "continue" });
 }
 
+/** Plays the first month, as far as its official story. */
 function playThrough(run: Run) {
-  const views = [run.view()];
-  for (;;) {
-    const next = views.at(-1)?.choices[0];
-    if (!next) return views;
-    views.push(run.choose(next));
+  let view = run.view();
+  const views = [view];
+  while (view.step.kind !== "story") {
+    const next = view.choices[0];
+    if (!next) break;
+    view = run.choose(next);
+    views.push(view);
   }
+  return views;
 }
 
 describe("a month", () => {
@@ -105,7 +109,7 @@ describe("a month", () => {
     );
   });
 
-  it("runs in order: actions, then the official story, then nothing", () => {
+  it("runs in order: actions, then the official story", () => {
     const run = startRun({ seed: 1, content: emptyMonth() });
 
     const kinds = playThrough(run).map((v) => v.step.kind);
@@ -119,7 +123,6 @@ describe("a month", () => {
       "notice",
       "story",
     ]);
-    expect(run.view().choices).toEqual([]);
   });
 
   it("gives the same outcome for the same seed and choices", () => {

@@ -53,9 +53,13 @@ export function App() {
             <dt>{panelText.floorName}</dt>
             <dd>{panelText.floorRole}</dd>
           </div>
-          <div>
+          <div data-testid="month">
             <dt>{panelText.monthHeading}</dt>
-            <dd>{panelText.monthLabel.replace("{n}", String(view.month))}</dd>
+            <dd>
+              {panelText.monthLabel
+                .replace("{n}", String(view.month))
+                .replace("{total}", String(view.totalMonths))}
+            </dd>
           </div>
           <div data-testid="actions-left">
             <dt>{panelText.actionsHeading}</dt>

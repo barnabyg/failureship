@@ -40,18 +40,24 @@ type Step =
   | { kind: "scene"; id: string }
   | { kind: "notice"; title: string; body: string }
   | { kind: "move"; id: string }
-  | { kind: "story" };
+  | { kind: "story" }
+  | { kind: "ended" };
 
-interface State {
-  seed: number;
-  rng: number;
-  month: number;
+/** What belongs to the month, and is wiped when the next one opens. */
+interface MonthRecord {
   spent: number;
   visited: string[];
   unanswered: string[];
-  buzzwords: string[];
   flags: string[];
   moveLanded: boolean;
+}
+
+/** What belongs to the run, and carries from month to month. */
+interface State extends MonthRecord {
+  seed: number;
+  rng: number;
+  month: number;
+  buzzwords: string[];
   step: Step;
   truth: HiddenTruth;
 }
@@ -96,12 +102,8 @@ export function startRun(options: {
     seed,
     rng: dealt.next,
     month: 1,
-    spent: 0,
-    visited: [],
-    unanswered: content.notifications.map((n) => n.id),
+    ...freshMonth(content, 1),
     buzzwords: [],
-    flags: [],
-    moveLanded: false,
     step: { kind: "actions" },
     truth: { fact: fact.item, powerMap: dealt.powerMap },
   };
@@ -145,6 +147,33 @@ function dealPowerMap(
   };
 }
 
+function freshMonth(content: Content, month: number): MonthRecord {
+  return {
+    spent: 0,
+    visited: [],
+    unanswered: content.notifications
+      .filter((n) => inMonth(n, month))
+      .map((n) => n.id),
+    flags: [],
+    moveLanded: false,
+  };
+}
+
+function inMonth(item: { months?: number[] | undefined }, month: number) {
+  return item.months === undefined || item.months.includes(month);
+}
+
+/** After the official story: on to the next month, or the end of the run. */
+function leaveStory(state: State, world: World): void {
+  if (state.month === world.content.balance.monthsPerRun) {
+    state.step = { kind: "ended" };
+    return;
+  }
+  state.month += 1;
+  Object.assign(state, freshMonth(world.content, state.month));
+  state.step = nextStep(state, world);
+}
+
 function apply(state: State, world: World, choice: Choice): void {
   const { content } = world;
   switch (choice.type) {
@@ -168,7 +197,8 @@ function apply(state: State, world: World, choice: Choice): void {
       behaveInScene(state, world, choice);
       return;
     case "continue":
-      state.step = nextStep(state, world);
+      if (state.step.kind === "story") leaveStory(state, world);
+      else state.step = nextStep(state, world);
       return;
   }
 }
@@ -188,11 +218,12 @@ function answerNotification(
   state.unanswered = state.unanswered.filter(
     (id) => id !== choice.notificationId,
   );
-  state.buzzwords.push(...option.learns);
+  const learned = option.learns.filter((w) => !state.buzzwords.includes(w));
+  state.buzzwords.push(...learned);
   state.flags.push(...option.sets);
 
   if (option.dialog !== undefined) {
-    state.step = { kind: "dialog", id: option.dialog, learned: option.learns };
+    state.step = { kind: "dialog", id: option.dialog, learned };
   } else if (option.result) {
     state.step = { kind: "notice", ...option.result };
   } else {
@@ -264,7 +295,9 @@ function nextStep(state: State, { content }: World): Step {
     );
     if (answerable) return { kind: "notification", id };
   }
-  if (content.actions.some((a) => isAvailable(state, content, a))) {
+  if (
+    actionsThisMonth(state, content).some((a) => isAvailable(state, content, a))
+  ) {
     return { kind: "actions" };
   }
   return landMove(state, content) ?? { kind: "story" };
@@ -274,12 +307,22 @@ function nextStep(state: State, { content }: World): Step {
 function landMove(state: State, content: Content): Step | null {
   if (state.moveLanded) return null;
   state.moveLanded = true;
-  const eligible = content.moves.filter((m) => matches(state, m.when));
+  const eligible = content.moves.filter(
+    (m) => inMonth(m, state.month) && matches(state, m.when),
+  );
   if (eligible.length === 0) return null;
   const { item, next } = pick(state.rng, eligible);
   state.rng = next;
   state.flags.push(...item.sets);
   return { kind: "move", id: item.id };
+}
+
+/** An action exists in a month only if the Scene it opens does too. */
+function actionsThisMonth(state: State, content: Content) {
+  return content.actions.filter((a) => {
+    const scene = content.scenes.find((s) => s.id === a.scene);
+    return inMonth(a, state.month) && (!scene || inMonth(scene, state.month));
+  });
 }
 
 function isAvailable(
@@ -310,7 +353,7 @@ function legalChoices(state: State, world: World): Choice[] {
           optionId: o.id,
         }));
     case "actions":
-      return content.actions
+      return actionsThisMonth(state, content)
         .filter((a) => isAvailable(state, content, a))
         .map((a) => ({ type: "action", actionId: a.id }));
     case "scene":
@@ -326,6 +369,8 @@ function legalChoices(state: State, world: World): Choice[] {
     case "move":
       return [{ type: "continue" }];
     case "story":
+      return [{ type: "continue" }];
+    case "ended":
       return [];
   }
 }
@@ -430,6 +475,8 @@ function toStepView(state: State, world: World): StepView {
     }
     case "story":
       return toStoryView(state, content);
+    case "ended":
+      return { kind: "ended", ...content.ui.ending };
     case "actions":
     case "notice":
       return step;
@@ -443,6 +490,7 @@ function toView(state: State, world: World): PlayerView {
   return structuredClone({
     seed: state.seed,
     month: state.month,
+    totalMonths: content.balance.monthsPerRun,
     actions: {
       total: content.balance.actionsPerMonth,
       spent: state.spent,
@@ -450,7 +498,9 @@ function toView(state: State, world: World): PlayerView {
       label: actionsLabel,
     },
     buzzwords: buzzwordsOf(content, state.buzzwords),
-    hotspots: content.actions.map((a) => toHotspot(state, content, a)),
+    hotspots: actionsThisMonth(state, content).map((a) =>
+      toHotspot(state, content, a),
+    ),
     step: toStepView(state, world),
     hint: content.ui.hints[state.step.kind].replaceAll(
       "{actions}",

@@ -4,7 +4,7 @@
   "floorName": "Floor 1",
   "floorRole": "Junior employee",
   "monthHeading": "Month",
-  "monthLabel": "{n}",
+  "monthLabel": "{n} of {total}",
   "actionsHeading": "Actions",
   "actionsLeft": "{actions} left",
   "buzzwordsHeading": "Buzzwords",
@@ -26,9 +26,14 @@
     "scene": "Read the room: who interrupts, who gets looked at, who gets ignored. Then choose how to behave.",
     "notice": "Read the result, then press Continue.",
     "move": "This has happened to you, and there is nothing to choose. Press Continue to close the month.",
-    "story": "The month has closed. Replay it to choose differently, or use a different seed to change who really holds influence."
+    "story": "The month has closed. Read what was reported, then press Continue.",
+    "ended": "The run is over. Replay it to choose differently, or use a different seed to change who really holds influence."
   },
   "actionCount": { "one": "1 action", "other": "{n} actions" },
   "costLabel": "Costs {actions}",
-  "freeLabel": "Costs nothing"
+  "freeLabel": "Costs nothing",
+  "ending": {
+    "title": "Your probation has been extended",
+    "body": "Six months have passed. A form says you are meeting expectations, and that the expectations are under review."
+  }
 }

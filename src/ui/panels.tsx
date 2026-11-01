@@ -43,10 +43,12 @@ function Continue({ onChoose }: { onChoose: (choice: Choice) => void }) {
 
 function StoryPanel({
   step,
+  onChoose,
   onReplay,
   onNewSeed,
 }: {
   step: Extract<StepView, { kind: "story" }>;
+  onChoose: (choice: Choice) => void;
   onReplay: () => void;
   onNewSeed: () => void;
 }) {
@@ -69,12 +71,8 @@ function StoryPanel({
         </div>
       )}
       <div className="panel-actions">
-        <button
-          type="button"
-          className="primary"
-          data-testid="replay"
-          onClick={onReplay}
-        >
+        <Continue onChoose={onChoose} />
+        <button type="button" data-testid="replay" onClick={onReplay}>
           {panelText.replayLabel}
         </button>
         <button type="button" data-testid="new-seed" onClick={onNewSeed}>
@@ -213,7 +211,18 @@ export function StepPanel({
       );
     case "story":
       return (
-        <StoryPanel step={step} onReplay={onReplay} onNewSeed={onNewSeed} />
+        <StoryPanel
+          step={step}
+          onChoose={onChoose}
+          onReplay={onReplay}
+          onNewSeed={onNewSeed}
+        />
+      );
+    case "ended":
+      return (
+        <Panel testId="panel-ended" title={step.title}>
+          <p>{step.body}</p>
+        </Panel>
       );
   }
 }

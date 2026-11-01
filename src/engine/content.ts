@@ -18,8 +18,12 @@ const notificationOption = z.strictObject({
   result: notice.optional(),
 });
 
+/** The months something belongs to. Left out, it belongs to every month. */
+const months = z.array(z.number().int().positive()).min(1).optional();
+
 const notification = z.strictObject({
   id,
+  months,
   from: text,
   subject: text,
   body: text,
@@ -67,6 +71,7 @@ const sceneOption = z.strictObject({
 
 const scene = z.strictObject({
   id,
+  months,
   title: text,
   location: text,
   narration: z.array(text).min(1),
@@ -79,6 +84,7 @@ const scene = z.strictObject({
 
 const action = z.strictObject({
   id,
+  months,
   label: text,
   description: text,
   place: id,
@@ -92,6 +98,7 @@ const action = z.strictObject({
 
 const move = z.strictObject({
   id,
+  months,
   from: text,
   title: text,
   body: text,
@@ -125,6 +132,7 @@ const room = z.strictObject({
 const contentSchema = z.strictObject({
   balance: z.strictObject({
     actionsPerMonth: z.number().int().positive(),
+    monthsPerRun: z.number().int().positive(),
     actionCosts: z.record(id, z.number().int().nonnegative()),
   }),
   hiddenTruth: z.strictObject({
@@ -155,10 +163,12 @@ const contentSchema = z.strictObject({
       notice: text,
       move: text,
       story: text,
+      ended: text,
     }),
     actionCount: z.strictObject({ one: text, other: text }),
     costLabel: text,
     freeLabel: text,
+    ending: notice,
   }),
 });
 
@@ -222,6 +232,15 @@ function findBrokenReferences(content: Content): string[] {
       }
     }
   };
+  const checkMonths = (owner: string, wanted: readonly number[] = []) => {
+    for (const month of wanted) {
+      if (month > content.balance.monthsPerRun) {
+        problems.push(
+          `${owner} is set in month ${String(month)}, past the run.`,
+        );
+      }
+    }
+  };
   const checkCost = (owner: string, cost: string | undefined) => {
     if (cost !== undefined && !(cost in content.balance.actionCosts)) {
       problems.push(`${owner} has unknown cost "${cost}".`);
@@ -233,8 +252,17 @@ function findBrokenReferences(content: Content): string[] {
       problems.push(`Action "${a.id}" is at unknown place "${a.place}".`);
     }
     checkCost(`Action "${a.id}"`, a.cost);
+    checkMonths(`Action "${a.id}"`, a.months);
     if (a.scene !== undefined && !scenes.has(a.scene)) {
       problems.push(`Action "${a.id}" opens unknown Scene "${a.scene}".`);
+    }
+    const opens = content.scenes.find((s) => s.id === a.scene);
+    if (
+      a.months &&
+      opens?.months &&
+      !a.months.some((month) => opens.months?.includes(month))
+    ) {
+      problems.push(`Action "${a.id}" is set when its Scene never opens.`);
     }
     if ((a.scene === undefined) === (a.result === undefined)) {
       problems.push(`Action "${a.id}" needs a Scene or a result, not both.`);
@@ -245,6 +273,7 @@ function findBrokenReferences(content: Content): string[] {
   }
   for (const s of content.scenes) {
     const owner = `Scene "${s.id}"`;
+    checkMonths(owner, s.months);
     for (const c of s.cast) checkCharacter(owner, c);
     for (const line of s.narration) checkRoles(owner, line);
     for (const sign of s.signs) checkRoles(owner, sign.text);
@@ -268,6 +297,7 @@ function findBrokenReferences(content: Content): string[] {
   }
   for (const m of content.moves) {
     const owner = `Move "${m.id}"`;
+    checkMonths(owner, m.months);
     checkRoles(owner, m.body);
     if (m.when) checkCondition(owner, m.when);
   }
@@ -278,6 +308,7 @@ function findBrokenReferences(content: Content): string[] {
     if (e.when) checkCondition(owner, e.when);
   }
   for (const n of content.notifications) {
+    checkMonths(`Notification "${n.id}"`, n.months);
     for (const o of n.options) {
       const owner = `Notification "${n.id}" option "${o.id}"`;
       checkCost(owner, o.cost);

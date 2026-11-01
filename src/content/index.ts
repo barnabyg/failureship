@@ -13,7 +13,8 @@ import ui from "../../content/ui.json";
 import { z } from "zod";
 import { ContentError, parseContent } from "../engine";
 
-const { hints, actionCount, costLabel, freeLabel, ...presentation } = ui;
+const { hints, actionCount, costLabel, freeLabel, ending, ...presentation } =
+  ui;
 
 export const gameContent = parseContent({
   balance,
@@ -27,7 +28,7 @@ export const gameContent = parseContent({
   moves,
   officialStory,
   floor,
-  ui: { hints, actionCount, costLabel, freeLabel },
+  ui: { hints, actionCount, costLabel, freeLabel, ending },
 });
 
 const panelSchema = z.strictObject(

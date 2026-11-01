@@ -16,6 +16,7 @@ interface RawNotification {
   subject: string;
   body: string;
   options: RawOption[];
+  months?: number[];
 }
 
 type RawCondition = Record<string, unknown>;
@@ -36,6 +37,7 @@ interface RawScene {
   signs: { label: string; text: string }[];
   options: RawSceneOption[];
   script?: string;
+  months?: number[];
 }
 
 interface RawMove {
@@ -45,6 +47,7 @@ interface RawMove {
   body: string;
   when?: RawCondition;
   sets?: string[];
+  months?: number[];
 }
 
 interface RawStoryEntry {
@@ -84,6 +87,7 @@ export function fixtureRaw() {
   return {
     balance: {
       actionsPerMonth: 3,
+      monthsPerRun: 2,
       actionCosts: { standard: 1, report: 1, pub: 1 } as Record<string, number>,
     },
     hiddenTruth: {
@@ -132,10 +136,12 @@ export function fixtureRaw() {
         notice: "Press continue.",
         move: "Something has happened to you.",
         story: "The month has closed.",
+        ended: "The run is over.",
       },
       actionCount: { one: "1 action", other: "{n} actions" },
       costLabel: "Costs {actions}",
       freeLabel: "Costs nothing",
+      ending: { title: "The end", body: "The run is over." },
     },
   };
 }

@@ -67,12 +67,14 @@ export type StepView =
       happenedHeading?: string | undefined;
       reported: string[];
       happened: string[];
-    };
+    }
+  | { kind: "ended"; title: string; body: string };
 
 /** Only what the player is entitled to see. It never holds undiscovered truth. */
 export interface PlayerView {
   seed: number;
   month: number;
+  totalMonths: number;
   actions: { total: number; spent: number; remaining: number; label: string };
   buzzwords: Buzzword[];
   hotspots: Hotspot[];

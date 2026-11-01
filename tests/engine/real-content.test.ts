@@ -7,15 +7,18 @@ import { readHiddenTruth } from "../../src/engine/hidden-truth";
 
 const SEEDS = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
 
-/** Every way through the month, as the views seen along each one. */
+/** Every way through the first month, as the views seen along each one. */
 function everyPath(seed: number): PlayerView[][] {
   const paths: PlayerView[][] = [];
   const walk = (script: Choice[]) => {
     const run = startRun({ seed, content: gameContent });
     const views = [run.view(), ...script.map((c) => run.choose(c))];
-    const choices = views.at(-1)?.choices ?? [];
-    if (choices.length === 0) paths.push(views);
-    for (const choice of choices) walk([...script, choice]);
+    const last = views.at(-1);
+    if (last?.step.kind === "story") {
+      paths.push(views);
+      return;
+    }
+    for (const choice of last?.choices ?? []) walk([...script, choice]);
   };
   walk([]);
   return paths;

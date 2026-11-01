@@ -4,8 +4,8 @@ A satirical, single-player browser game. You climb a ten-storey office tower by
 reading people. The design is in
 [failureship-grill-outcome.md](failureship-grill-outcome.md).
 
-This is the Phase 1 build: one month on a blocked-out Floor 1, ready for the
-owner to play and steer.
+This is the Phase 2 build: a run of six months on a blocked-out Floor 1, ready
+for the owner to play and steer.
 
 ## Play
 
@@ -68,14 +68,18 @@ format, the page shows what is wrong instead of the game.
 | `official-story.json` | The official story, assembled from entries according to what you did  |
 | `characters.json`     | Names and public job titles                                           |
 | `hidden-truth.json`   | Hidden Facts, and who can be dealt a role in the Power Map            |
-| `balance.json`        | Actions a month and the cost of each choice                           |
+| `balance.json`        | Actions a month, months in a run and the cost of each choice          |
 | `floor-1.json`        | The rooms on the floor: positions, sizes, colours and the lift's sign |
 
 In a Scene, `{holder}`, `{ignored}` and `{bystander}` are replaced by the names of
 the Characters dealt those roles. A `when` or `requires` condition can be
 `{ "holderIs": "boss" }`, `{ "hasBuzzword": "strategic-patience" }`,
 `{ "flag": "went-to-pub" }`, `{ "not": ... }` or `{ "all": [...] }`. Options
-gated with `requires` cannot depend on the hidden truth. Flags come from `sets`.
+gated with `requires` cannot depend on the hidden truth. Flags come from `sets`,
+and are wiped when a new month opens. Buzzwords carry over for the whole run.
+
+A Notification, action, Scene or Move can list `"months": [2, 3]` to belong only
+to those months. Without it, it belongs to every month.
 
 ## Develop
 
