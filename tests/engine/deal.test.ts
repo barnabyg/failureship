@@ -36,6 +36,20 @@ function blindToTheDeal(): Content {
   const scene = raw.scenes[0];
   if (!scene) throw new Error("The fixture has no Scene.");
   scene.signs = [{ label: "Sign", text: "The projector hums." }];
+  // Different likelihoods and the same words, so the dealt-sign path is walked
+  // and anything it adds to the view beyond its text would show up as a difference.
+  raw.behaviours = [
+    {
+      id: "sits-a",
+      text: "{who} sits down.",
+      likelihood: { believer: 1, incompetent: 2, practitioner: 3 },
+    },
+    {
+      id: "sits-b",
+      text: "{who} sits down.",
+      likelihood: { believer: 3, incompetent: 2, practitioner: 1 },
+    },
+  ];
   scene.options = [
     { id: "nod", label: "Nod", results: [{ body: "You nod." }] },
   ];
@@ -245,6 +259,7 @@ describe("the player view before the run ends", () => {
     };
 
     const first = beforeTheEnd(1);
+    expect(first.views.map((v) => v.step.kind)).toContain("scene");
     const others = [2, 3, 4, 5, 6, 7, 8].map(beforeTheEnd);
 
     expect(
