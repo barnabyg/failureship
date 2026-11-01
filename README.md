@@ -33,7 +33,8 @@ pick one. The month has the same steps each time:
 4. **The month closes** with the official story beside what actually happened.
 
 Press **Continue** on the official story to open the next month. After six months
-the run ends.
+the results screen shows who was really who: each Character's kind and Hidden
+Fact, including facts you could never have known.
 
 At any step, **New run** deals a new seed, and typing a seed then pressing
 **Restart from seed** plays that deal from month 1. Leaving a run in progress asks
@@ -71,7 +72,7 @@ format, the page shows what is wrong instead of the game.
 | `moves.json`          | Character Moves, and when each can land                               |
 | `official-story.json` | The official story, assembled from entries according to what you did  |
 | `characters.json`     | Names and public job titles                                           |
-| `hidden-truth.json`   | Hidden Facts, and who can be dealt a role in the Power Map            |
+| `hidden-truth.json`   | The rules of the deal: kinds, their weights, and the Hidden Facts     |
 | `balance.json`        | Actions a month, months in a run and the cost of each choice          |
 | `floor-1.json`        | The rooms on the floor: positions, sizes, colours and the lift's sign |
 
@@ -81,6 +82,9 @@ the Characters dealt those roles. A `when` or `requires` condition can be
 `{ "flag": "went-to-pub" }`, `{ "not": ... }` or `{ "all": [...] }`. Options
 gated with `requires` cannot depend on the hidden truth. Flags come from `sets`,
 and are wiped when a new month opens. Buzzwords carry over for the whole run.
+
+A Hidden Fact says `{name}`, so that it reads correctly for whoever is dealt it,
+and can list `"characters"` to limit who that can be.
 
 A Notification, action, Scene or Move can list `"months": [2, 3]` to belong only
 to those months. Without it, it belongs to every month.

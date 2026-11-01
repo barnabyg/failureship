@@ -91,11 +91,13 @@ describe("the meeting Scene", () => {
 
   it("does not leak the hidden truth into the player view", () => {
     const run = runWhereHolderIs("ben");
-    const { fact, powerMap } = readHiddenTruth(run);
+    const { characters, powerMap } = readHiddenTruth(run);
 
     const seen = JSON.stringify(openMeeting(run));
 
-    expect(seen).not.toContain(fact.text);
+    for (const { fact } of characters) {
+      if (fact) expect(seen).not.toContain(fact.text);
+    }
     expect(seen).not.toContain("powerMap");
     expect(seen).not.toContain("holder");
     expect(seen).not.toContain(powerMap.holder);

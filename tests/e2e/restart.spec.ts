@@ -120,6 +120,17 @@ test("the end of a run needs no confirmation to leave", async ({ page }) => {
   await expect(page.getByTestId("panel-notification")).toBeVisible();
 });
 
+test("a whole run ends on a results screen", async ({ page }) => {
+  await page.goto("/?seed=1");
+  await playToEnd(page);
+
+  await expect(page.getByTestId("panel-results")).toBeVisible();
+  await expect(page.getByTestId("result-character")).toHaveCount(5);
+  await expect(page.getByTestId("panel-results")).toContainText(
+    /Believer|Incompetent|Practitioner/,
+  );
+});
+
 test("a new run can be started from the end", async ({ page }) => {
   await page.goto("/?seed=1");
   await playToEnd(page);

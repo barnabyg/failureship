@@ -144,26 +144,29 @@ describe("a month", () => {
   });
 
   it("deals the hidden truth from the seed", () => {
-    const facts = new Set(
-      [1, 2, 3, 4, 5, 6, 7, 8].map(
-        (seed) =>
-          readHiddenTruth(startRun({ seed, content: emptyMonth() })).fact.id,
+    const deals = new Set(
+      [1, 2, 3, 4, 5, 6, 7, 8].map((seed) =>
+        JSON.stringify(
+          readHiddenTruth(startRun({ seed, content: emptyMonth() })).characters,
+        ),
       ),
     );
 
-    expect(facts.size).toBeGreaterThan(1);
+    expect(deals.size).toBeGreaterThan(1);
   });
 });
 
 describe("the player view", () => {
   it("never contains anything from the hidden truth", () => {
-    const secrets = emptyMonth().hiddenTruth.facts.map((f) => f.text);
     const run = startRun({ seed: 3, content: emptyMonth() });
+    const secrets = readHiddenTruth(run).characters.flatMap((c) =>
+      c.fact ? [c.fact.text] : [],
+    );
+    expect(secrets.length).toBeGreaterThan(0);
 
     for (const view of playThrough(run)) {
       const seen = JSON.stringify(view);
       for (const secret of secrets) expect(seen).not.toContain(secret);
     }
-    expect(secrets).toContain(readHiddenTruth(run).fact.text);
   });
 });

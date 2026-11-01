@@ -129,6 +129,14 @@ const room = z.strictObject({
   sign: z.strictObject({ title: text, detail: text }).optional(),
 });
 
+export type Kind = "believer" | "incompetent" | "practitioner";
+
+const kindRule = z.strictObject({
+  label: text,
+  /** How often this kind is dealt, relative to the others. */
+  weight: z.number().nonnegative(),
+});
+
 const contentSchema = z.strictObject({
   balance: z.strictObject({
     actionsPerMonth: z.number().int().positive(),
@@ -136,7 +144,26 @@ const contentSchema = z.strictObject({
     actionCosts: z.record(id, z.number().int().nonnegative()),
   }),
   hiddenTruth: z.strictObject({
-    facts: z.array(z.strictObject({ id, text })).min(1),
+    kinds: z.strictObject({
+      believer: kindRule,
+      incompetent: kindRule,
+      practitioner: kindRule,
+    }),
+    /** Every deal has at least this many, so there is always something to find. */
+    minPractitioners: z.number().int().positive(),
+    /** How many Characters are dealt a Hidden Fact. */
+    charactersWithFact: z.number().int().positive(),
+    facts: z
+      .array(
+        z.strictObject({
+          id,
+          /** Says {name}, so that it reads correctly for whoever is dealt it. */
+          text,
+          /** Who it can be dealt to. Left out, it suits anyone. */
+          characters: z.array(id).min(1).optional(),
+        }),
+      )
+      .min(1),
     /** Who may be dealt a role in the Power Map. Needs at least three people. */
     cast: z.array(id).min(3),
   }),
@@ -163,12 +190,12 @@ const contentSchema = z.strictObject({
       notice: text,
       move: text,
       story: text,
-      ended: text,
+      results: text,
     }),
     actionCount: z.strictObject({ one: text, other: text }),
     costLabel: text,
     freeLabel: text,
-    ending: notice,
+    results: z.strictObject({ title: text, intro: text }),
   }),
 });
 
@@ -199,6 +226,54 @@ function dependsOnHiddenTruth(condition: Condition): boolean {
   if ("not" in condition) return dependsOnHiddenTruth(condition.not);
   if ("all" in condition) return condition.all.some(dependsOnHiddenTruth);
   return false;
+}
+
+function findBrokenDeal(
+  content: Content,
+  characters: ReadonlySet<string>,
+): string[] {
+  const { kinds, minPractitioners, charactersWithFact, facts } =
+    content.hiddenTruth;
+  const cast = content.characters;
+  const problems: string[] = [];
+  if (minPractitioners > cast.length) {
+    problems.push(
+      `The deal wants ${String(minPractitioners)} Practitioners from ${String(cast.length)} Characters.`,
+    );
+  }
+  if (Object.values(kinds).every((k) => k.weight === 0)) {
+    problems.push("The deal needs a kind with a weight above zero.");
+  }
+  if (charactersWithFact * 2 <= cast.length) {
+    problems.push("The deal must give most Characters a Hidden Fact.");
+  }
+  if (charactersWithFact > cast.length) {
+    problems.push("The deal wants more Hidden Facts than Characters.");
+  }
+  for (const fact of facts) {
+    const owner = `Hidden Fact "${fact.id}"`;
+    if (!fact.text.includes("{name}")) {
+      problems.push(`${owner} needs to say {name}.`);
+    }
+    for (const [, token] of fact.text.matchAll(/\{(\w+)\}/g)) {
+      if (token !== "name") {
+        problems.push(`${owner} uses unknown token "{${token ?? ""}}".`);
+      }
+    }
+    for (const c of fact.characters ?? []) {
+      if (!characters.has(c)) {
+        problems.push(`${owner} names unknown Character "${c}".`);
+      }
+    }
+  }
+  // With this many open to everyone, dealing can never run out, in any order.
+  for (const { id: character } of cast) {
+    const open = facts.filter((f) => f.characters?.includes(character) ?? true);
+    if (open.length < charactersWithFact) {
+      problems.push(`Too few Hidden Facts can be dealt to "${character}".`);
+    }
+  }
+  return problems;
 }
 
 function findBrokenReferences(content: Content): string[] {
@@ -247,6 +322,7 @@ function findBrokenReferences(content: Content): string[] {
     }
   };
 
+  problems.push(...findBrokenDeal(content, characters));
   for (const a of content.actions) {
     if (!rooms.has(a.place)) {
       problems.push(`Action "${a.id}" is at unknown place "${a.place}".`);

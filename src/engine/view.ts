@@ -68,7 +68,17 @@ export type StepView =
       reported: string[];
       happened: string[];
     }
-  | { kind: "ended"; title: string; body: string };
+  | {
+      kind: "results";
+      title: string;
+      intro: string;
+      characters: {
+        name: string;
+        title: string;
+        kind: string;
+        fact: string | null;
+      }[];
+    };
 
 /** Only what the player is entitled to see. It never holds undiscovered truth. */
 export interface PlayerView {

@@ -68,7 +68,7 @@ export default tseslint.config(
       {
         group: ["**/engine/*"],
         message:
-          "Use the engine's public interface. Only tests may read the hidden truth in Phase 1.",
+          "Use the engine's public interface. Only tests may read the hidden truth.",
       },
     ]),
   },

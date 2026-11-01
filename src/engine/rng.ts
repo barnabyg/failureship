@@ -12,6 +12,38 @@ export function draw(state: number): Draw {
   return { value: ((t ^ (t >>> 14)) >>> 0) / 4294967296, next };
 }
 
+/** Fisher-Yates, drawing from the generator. */
+export function shuffle<T>(
+  state: number,
+  items: readonly T[],
+): { items: T[]; next: number } {
+  const shuffled = [...items];
+  let next = state;
+  for (let i = shuffled.length - 1; i > 0; i--) {
+    const drawn = draw(next);
+    next = drawn.next;
+    const j = Math.floor(drawn.value * (i + 1));
+    [shuffled[i], shuffled[j]] = [shuffled[j] as T, shuffled[i] as T];
+  }
+  return { items: shuffled, next };
+}
+
+/** Picks an item with probability in proportion to its weight. */
+export function pickWeighted<T>(
+  state: number,
+  items: readonly T[],
+  weightOf: (item: T) => number,
+): { item: T; next: number } {
+  const { value, next } = draw(state);
+  const total = items.reduce((sum, item) => sum + weightOf(item), 0);
+  let left = value * total;
+  for (const item of items) {
+    left -= weightOf(item);
+    if (left < 0) return { item, next };
+  }
+  throw new Error("Cannot pick from nothing with any weight.");
+}
+
 export function pick<T>(
   state: number,
   items: readonly T[],

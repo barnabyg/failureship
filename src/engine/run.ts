@@ -1,5 +1,6 @@
 import type { Condition, Content, SceneData } from "./content";
-import { pick } from "./rng";
+import { dealCharacters, type DealtCharacter } from "./deal";
+import { draw, pick } from "./rng";
 import type {
   Buzzword,
   Choice,
@@ -16,7 +17,7 @@ export interface PowerMap {
 }
 
 export interface HiddenTruth {
-  fact: { id: string; text: string };
+  characters: DealtCharacter[];
   powerMap: PowerMap;
 }
 
@@ -41,7 +42,7 @@ type Step =
   | { kind: "notice"; title: string; body: string }
   | { kind: "move"; id: string }
   | { kind: "story" }
-  | { kind: "ended" };
+  | { kind: "results" };
 
 /** What belongs to the month, and is wiped when the next one opens. */
 interface MonthRecord {
@@ -96,8 +97,8 @@ export function startRun(options: {
     }
   }
   const world: World = { content, sceneScripts };
-  const fact = pick(seed, content.hiddenTruth.facts);
-  const dealt = dealPowerMap(fact.next, content.hiddenTruth.cast);
+  const power = dealPowerMap(draw(seed).next, content.hiddenTruth.cast);
+  const dealt = dealCharacters(power.next, content);
   const state: State = {
     seed,
     rng: dealt.next,
@@ -105,7 +106,7 @@ export function startRun(options: {
     ...freshMonth(content, 1),
     buzzwords: [],
     step: { kind: "actions" },
-    truth: { fact: fact.item, powerMap: dealt.powerMap },
+    truth: { characters: dealt.characters, powerMap: power.powerMap },
   };
   state.step = nextStep(state, world);
 
@@ -166,7 +167,7 @@ function inMonth(item: { months?: number[] | undefined }, month: number) {
 /** After the official story: on to the next month, or the end of the run. */
 function leaveStory(state: State, world: World): void {
   if (state.month === world.content.balance.monthsPerRun) {
-    state.step = { kind: "ended" };
+    state.step = { kind: "results" };
     return;
   }
   state.month += 1;
@@ -370,7 +371,7 @@ function legalChoices(state: State, world: World): Choice[] {
       return [{ type: "continue" }];
     case "story":
       return [{ type: "continue" }];
-    case "ended":
+    case "results":
       return [];
   }
 }
@@ -435,6 +436,26 @@ function toStoryView(
   };
 }
 
+/** The reveal. It reaches the player view only here, once the run has ended. */
+function toResultsView(
+  state: State,
+  content: Content,
+): Extract<StepView, { kind: "results" }> {
+  return {
+    kind: "results",
+    ...content.ui.results,
+    characters: state.truth.characters.map((dealt) => {
+      const known = content.characters.find((c) => c.id === dealt.id);
+      return {
+        name: known?.name ?? dealt.id,
+        title: known?.title ?? "",
+        kind: content.hiddenTruth.kinds[dealt.kind].label,
+        fact: dealt.fact?.text ?? null,
+      };
+    }),
+  };
+}
+
 function toStepView(state: State, world: World): StepView {
   const { content } = world;
   const { step } = state;
@@ -475,8 +496,8 @@ function toStepView(state: State, world: World): StepView {
     }
     case "story":
       return toStoryView(state, content);
-    case "ended":
-      return { kind: "ended", ...content.ui.ending };
+    case "results":
+      return toResultsView(state, content);
     case "actions":
     case "notice":
       return step;

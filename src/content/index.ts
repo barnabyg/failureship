@@ -13,7 +13,7 @@ import ui from "../../content/ui.json";
 import { z } from "zod";
 import { ContentError, parseContent } from "../engine";
 
-const { hints, actionCount, costLabel, freeLabel, ending, ...presentation } =
+const { hints, actionCount, costLabel, freeLabel, results, ...presentation } =
   ui;
 
 export const gameContent = parseContent({
@@ -28,7 +28,7 @@ export const gameContent = parseContent({
   moves,
   officialStory,
   floor,
-  ui: { hints, actionCount, costLabel, freeLabel, ending },
+  ui: { hints, actionCount, costLabel, freeLabel, results },
 });
 
 const panelSchema = z.strictObject(
@@ -52,6 +52,8 @@ const panelSchema = z.strictObject(
       "signsHeading",
       "optionsHeading",
       "seedLabel",
+      "resultsWhoHeading",
+      "resultsNoFact",
       "seedInputLabel",
       "seedRefused",
       "restartLabel",

@@ -296,11 +296,13 @@ describe("the player view over a whole run", () => {
   it("never leaks the hidden truth at any step of any month", () => {
     for (const seed of [1, 2, 3, 4, 5]) {
       const { run, views } = playWhole(seed);
-      const { fact } = readHiddenTruth(run);
+      const facts = readHiddenTruth(run).characters.flatMap((c) =>
+        c.fact ? [c.fact.text] : [],
+      );
       expect(new Set(views.map((v) => v.month)).size).toBeGreaterThan(1);
-      for (const view of views) {
+      for (const view of views.slice(0, -1)) {
         const seen = JSON.stringify(view);
-        expect(seen).not.toContain(fact.text);
+        for (const fact of facts) expect(seen).not.toContain(fact);
         expect(seen).not.toContain("powerMap");
       }
     }

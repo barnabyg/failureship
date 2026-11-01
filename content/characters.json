@@ -1,5 +1,11 @@
 [
+  {
+    "id": "head",
+    "name": "Hugh Lamb",
+    "title": "Head of Operations, your boss's boss"
+  },
   { "id": "boss", "name": "Dennis Prowse", "title": "Team Leader, your boss" },
   { "id": "analyst", "name": "Priya Venn", "title": "Senior Analyst" },
-  { "id": "admin", "name": "Marjorie Tull", "title": "Office Co-ordinator" }
+  { "id": "admin", "name": "Marjorie Tull", "title": "Office Co-ordinator" },
+  { "id": "projects", "name": "Callum Reed", "title": "Project Co-ordinator" }
 ]

@@ -61,12 +61,16 @@ describe("the real month", () => {
   });
 
   it("never shows the hidden truth or an unfilled role on any path", () => {
-    const facts = gameContent.hiddenTruth.facts.map((f) => f.text);
     for (const seed of SEEDS.slice(0, 3)) {
+      const dealt = readHiddenTruth(startRun({ seed, content: gameContent }));
+      const facts = dealt.characters.flatMap((c) =>
+        c.fact ? [c.fact.text] : [],
+      );
       for (const views of everyPath(seed)) {
         for (const view of views) {
           const seen = JSON.stringify(view);
           for (const fact of facts) expect(seen).not.toContain(fact);
+          expect(seen).not.toMatch(/Believer|Incompetent|Practitioner/);
           expect(seen).not.toContain("powerMap");
           expect(seen).not.toMatch(/\{(holder|ignored|bystander)\}/);
         }
@@ -93,6 +97,22 @@ describe("the real month", () => {
     ]);
 
     expect(told).not.toMatch(/\{(holder|ignored|bystander)\}/);
+  });
+
+  it("reveals every Character at the end of a run", () => {
+    const run = startRun({ seed: 2, content: gameContent });
+    let view = run.view();
+    for (;;) {
+      const choice = view.choices.at(-1);
+      if (!choice) break;
+      view = run.choose(choice);
+    }
+
+    expect(view.step).toMatchObject({ kind: "results" });
+    if (view.step.kind !== "results") throw new Error(view.step.kind);
+    expect(view.step.characters).toHaveLength(5);
+    expect(view.step.characters.filter((c) => c.fact !== null)).toHaveLength(4);
+    expect(JSON.stringify(view)).not.toMatch(/\{\w+\}/);
   });
 
   it("tells many different official stories", () => {

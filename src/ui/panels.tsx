@@ -6,17 +6,22 @@ interface PanelProps {
   testId: string;
   eyebrow?: string;
   title: string;
+  wide?: boolean;
   children: ReactNode;
 }
 
 /** A panel over the tower. It takes focus, so the keyboard follows the month. */
-function Panel({ testId, eyebrow, title, children }: PanelProps) {
+function Panel({ testId, eyebrow, title, wide, children }: PanelProps) {
   const heading = useRef<HTMLHeadingElement>(null);
   useEffect(() => {
     heading.current?.focus();
   }, [title]);
   return (
-    <section className="panel" data-testid={testId} aria-label={title}>
+    <section
+      className={wide ? "panel panel-wide" : "panel"}
+      data-testid={testId}
+      aria-label={title}
+    >
       {eyebrow !== undefined && <p className="eyebrow">{eyebrow}</p>}
       <h2 ref={heading} tabIndex={-1}>
         {title}
@@ -67,6 +72,33 @@ function StoryPanel({
         </div>
       )}
       <Continue onChoose={onChoose} />
+    </Panel>
+  );
+}
+
+function ResultsPanel({
+  step,
+}: {
+  step: Extract<StepView, { kind: "results" }>;
+}) {
+  return (
+    <Panel testId="panel-results" title={step.title} wide>
+      <p>{step.intro}</p>
+      <h3>{panelText.resultsWhoHeading}</h3>
+      <table className="results">
+        <tbody>
+          {step.characters.map((person) => (
+            <tr key={person.name} data-testid="result-character">
+              <th scope="row">
+                {person.name}
+                <span className="results-title">{person.title}</span>
+              </th>
+              <td className="results-kind">{person.kind}</td>
+              <td>{person.fact ?? panelText.resultsNoFact}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
     </Panel>
   );
 }
@@ -192,11 +224,7 @@ export function StepPanel({ view, onChoose }: StepPanelProps) {
       );
     case "story":
       return <StoryPanel step={step} onChoose={onChoose} />;
-    case "ended":
-      return (
-        <Panel testId="panel-ended" title={step.title}>
-          <p>{step.body}</p>
-        </Panel>
-      );
+    case "results":
+      return <ResultsPanel step={step} />;
   }
 }

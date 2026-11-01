@@ -91,11 +91,18 @@ export function fixtureRaw() {
       actionCosts: { standard: 1, report: 1, pub: 1 } as Record<string, number>,
     },
     hiddenTruth: {
+      kinds: {
+        believer: { label: "KIND-BELIEVER", weight: 1 },
+        incompetent: { label: "KIND-INCOMPETENT", weight: 1 },
+        practitioner: { label: "KIND-PRACTITIONER", weight: 1 },
+      },
+      minPractitioners: 1,
+      charactersWithFact: 2,
       facts: [
-        { id: "fact-a", text: "SECRET-FACT-ALPHA" },
-        { id: "fact-b", text: "SECRET-FACT-BRAVO" },
-        { id: "fact-c", text: "SECRET-FACT-CHARLIE" },
-      ],
+        { id: "fact-a", text: "SECRET-ALPHA about {name}" },
+        { id: "fact-b", text: "SECRET-BRAVO about {name}" },
+        { id: "fact-c", text: "SECRET-CHARLIE about {name}" },
+      ] as { id: string; text: string; characters?: string[] }[],
       cast: ["ana", "ben", "cal"],
     },
     characters: [
@@ -136,12 +143,12 @@ export function fixtureRaw() {
         notice: "Press continue.",
         move: "Something has happened to you.",
         story: "The month has closed.",
-        ended: "The run is over.",
+        results: "The run is over.",
       },
       actionCount: { one: "1 action", other: "{n} actions" },
       costLabel: "Costs {actions}",
       freeLabel: "Costs nothing",
-      ending: { title: "The end", body: "The run is over." },
+      results: { title: "The end", intro: "Here is who was who." },
     },
   };
 }
