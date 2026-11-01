@@ -266,10 +266,12 @@ function freshMonth(content: Content, month: number): MonthRecord {
 function openMonth(state: State, content: Content): void {
   followUpDemands(state, content);
   const { input } = content.project;
-  const late = state.truth.characters.find((c) => c.id === input?.character);
-  if (input && late && inMonth(input, state.month)) {
+  const colleague = state.truth.characters.find(
+    (c) => c.id === input?.character,
+  );
+  if (input && colleague && inMonth(input, state.month)) {
     const value = drawFor(state.seed, "report-input", state.month);
-    if (value < input.chance[late.kind]) state.flags.push(input.sets);
+    if (value < input.chance[colleague.kind]) state.flags.push(input.sets);
   }
   for (const event of content.project.events) {
     if (inMonth(event, state.month)) {
@@ -375,16 +377,14 @@ function apply(state: State, world: World, choice: Choice): void {
       if (!action) throw new IllegalChoiceError(choice.actionId);
       state.spent += costOf(content, action.cost);
       state.visited.push(action.id);
-      state.flags.push(...action.sets);
-      moveProject(state, content, action.project);
-      const reaction = landWithBoss(state, content, action, action.label);
+      const reaction = applyOutcome(state, content, action, action.label);
       if (action.scene !== undefined) {
         state.step = openScene(state, world, action.scene);
       } else if (action.findOut !== undefined) {
         state.step = arriveToFindOut(state, content, action.findOut);
       } else if (action.result) {
         const results = [action.result, ...action.moreResults];
-        const result = results[(state.month - 1) % results.length];
+        const result = inTurn(results, state.month);
         state.step = { kind: "notice", ...(result ?? action.result), reaction };
       }
       return;
@@ -484,9 +484,7 @@ function answerNotification(
       ? option.bet.lost
       : undefined;
   const outcome = lost ?? option;
-  state.flags.push(...outcome.sets);
-  moveProject(state, content, outcome.project);
-  const reaction = landWithBoss(state, content, outcome, option.label);
+  const reaction = applyOutcome(state, content, outcome, option.label);
 
   if (option.dialog !== undefined) {
     state.step = { kind: "dialog", id: option.dialog, learned, reaction };
@@ -495,6 +493,26 @@ function answerNotification(
   } else {
     state.step = nextStep(state, world);
   }
+}
+
+/** Writing used in turn, so that it reads differently each month. */
+function inTurn<T>(items: readonly T[], month: number): T | undefined {
+  return items[(month - 1) % items.length];
+}
+
+/** What any choice does: sets its flags, moves the Project, lands with the boss. */
+function applyOutcome(
+  state: State,
+  content: Content,
+  outcome: Parameters<typeof landWithBoss>[2] & {
+    sets: readonly string[];
+    project?: Parameters<typeof moveProject>[2];
+  },
+  label: string,
+): string | undefined {
+  state.flags.push(...outcome.sets);
+  moveProject(state, content, outcome.project);
+  return landWithBoss(state, content, outcome, label);
 }
 
 function bossKindOf(state: State, content: Content): Kind {
@@ -537,9 +555,9 @@ function landWithBoss(
   state.bossLandings.push({ month: state.month, choice: label, shift });
   if (approach === undefined) return undefined;
   const lines = overdone?.reaction[kind];
-  if (lines) return lines[(state.month - 1) % lines.length];
+  if (lines) return inTurn(lines, state.month);
   const usual = approach.reaction[kind];
-  return choice.reaction?.[kind] ?? usual[(state.month - 1) % usual.length];
+  return choice.reaction?.[kind] ?? inTurn(usual, state.month);
 }
 
 /** Everyone present shows one behaviour, open to their role and chosen by their dealt kind. */
@@ -651,8 +669,6 @@ function behaveInScene(
     matches(state, world.content, r.when, scene.cast),
   );
   if (!result) throw new IllegalChoiceError(choice.optionId);
-  state.flags.push(...result.sets);
-  moveProject(state, world.content, result.project);
   const heard = heardAbout(state, option?.about);
   const fill = (written: string) =>
     fillSubject(
@@ -661,7 +677,7 @@ function behaveInScene(
       option?.about,
       fillParts(state, world.content, written, scene.cast),
     );
-  const reaction = landWithBoss(
+  const reaction = applyOutcome(
     state,
     world.content,
     result,
@@ -803,14 +819,14 @@ function nextStep(state: State, world: World): Step {
       return { kind: "notification", id };
     }
   }
-  const { flagged } = content.project;
-  if (flagged && state.project.flagged) {
+  const flag = content.project.flagged;
+  if (flag && state.project.flagged) {
     state.project.flagged = false;
     state.spent = Math.min(
       content.balance.actionsPerMonth,
-      state.spent + costOf(content, flagged.cost),
+      state.spent + costOf(content, flag.cost),
     );
-    return openScene(state, world, flagged.scene);
+    return openScene(state, world, flag.scene);
   }
   if (
     actionsThisMonth(state, content).some((a) => isAvailable(state, content, a))

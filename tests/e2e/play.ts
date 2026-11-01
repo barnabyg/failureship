@@ -17,9 +17,9 @@ export async function finishMonth(page: Page) {
 /** Answers the month's Notifications, filing the report and saying no to the rest. */
 export async function answerAnyNotification(page: Page) {
   const panel = page.getByTestId("panel-notification");
-  const forgotten = page.getByTestId("panel-notice");
-  await expect(panel.or(forgotten).first()).toBeVisible();
-  if (await forgotten.isVisible()) await page.getByTestId("continue").click();
+  const told = page.getByTestId("panel-notice");
+  await expect(panel.or(told).first()).toBeVisible();
+  if (await told.isVisible()) await page.getByTestId("continue").click();
   while (await panel.isVisible()) {
     const report = page.getByTestId("option-report");
     const free = panel.locator("button:enabled", { hasText: "Costs nothing" });
