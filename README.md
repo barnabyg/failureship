@@ -94,8 +94,10 @@ A Scene that data cannot express can name a `script`, which is passed to
 
 ### Checks and exceptions
 
-- Static bug analysis is the type-aware `typescript-eslint` strict rule set.
+- Static bug analysis is the type-aware `typescript-eslint` strict rule set. It
+  skips `eslint.config.js` and `scripts/`, which sit outside `tsconfig.json`.
 - Secret scanning is not a separate gate: the project holds no credentials.
+  Review this if it ever needs any.
 - The `minimatch` override in `package.json` patches GHSA-g3hv-75wg-m249 in the
   lint tooling. Remove it when `eslint` depends on a patched version itself.
 - `build.chunkSizeWarningLimit` in `vite.config.ts` is raised because Three.js

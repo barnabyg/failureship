@@ -23,6 +23,8 @@ export default tseslint.config(
     plugins: { "react-hooks": reactHooks },
     rules: reactHooks.configs.recommended.rules,
   },
+  // These two plain scripts sit outside tsconfig.json, so type-aware rules
+  // cannot run on them. Review if either grows beyond start-up plumbing.
   {
     files: ["eslint.config.js", "scripts/*.mjs"],
     ...tseslint.configs.disableTypeChecked,
@@ -47,7 +49,14 @@ export default tseslint.config(
         message: "The engine imports neither Three.js nor React.",
       },
       {
-        group: ["**/ui/**", "**/tower/**", "**/content/**"],
+        group: [
+          "../ui",
+          "../ui/*",
+          "../tower",
+          "../tower/*",
+          "../content",
+          "../content/*",
+        ],
         message: "The engine depends on nothing above it.",
       },
     ]),
@@ -57,8 +66,9 @@ export default tseslint.config(
     files: ["src/ui/**/*.{ts,tsx}", "src/tower/**/*.ts", "src/content/**/*.ts"],
     rules: restrict([
       {
-        group: ["**/engine/hidden-truth", "**/engine/hidden-truth.ts"],
-        message: "Only tests may read the hidden truth in Phase 1.",
+        group: ["**/engine/*"],
+        message:
+          "Use the engine's public interface. Only tests may read the hidden truth in Phase 1.",
       },
     ]),
   },
