@@ -99,6 +99,26 @@ export function findBrokenEvents(content: Content): string[] {
       );
     }
   }
+  // A surprise is never a big mistake by itself, even by way of what it starts.
+  const fromDisasters = new Set(
+    content.events.filter((e) => e.disaster).flatMap((e) => e.sets),
+  );
+  for (const thread of content.threads) {
+    if (
+      fromDisasters.has(thread.startedBy) &&
+      thread.outcomes.some((o) => o.bill.mistake !== undefined)
+    ) {
+      problems.push(`A disaster starts Thread "${thread.id}", a big mistake.`);
+    }
+  }
+  for (const risk of content.risks) {
+    if (
+      fromDisasters.has(risk.addedBy) &&
+      risk.onPlayer.mistake !== undefined
+    ) {
+      problems.push(`A disaster adds risk "${risk.id}", a big mistake.`);
+    }
+  }
   for (const id of fromRisks) {
     if (!ids.has(id))
       problems.push(`A risk names unknown Company Event "${id}".`);

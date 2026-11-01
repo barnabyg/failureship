@@ -215,6 +215,40 @@ describe("a disaster with no clue", () => {
     expect(views.at(-1)?.finalWarning).toBe(false);
   });
 
+  it("cannot start a Thread that is a big mistake", () => {
+    const base = raw([disaster({ sets: ["flooded"] })], {
+      mistakes: {
+        finalWarning: { title: "W", body: "B" },
+        fired: { title: "F", body: "B" },
+        firedOutright: { title: "O", body: "B" },
+        results: { title: "E", intro: "I" },
+        firedIn: "{month}",
+        finished: "L",
+      },
+      threads: [
+        {
+          id: "t",
+          startedBy: "flooded",
+          after: { min: 1, max: 1 },
+          started: "S",
+          outcomes: [
+            {
+              playedOut: "P",
+              bill: {
+                id: "b",
+                as: "notice",
+                title: "T",
+                body: "B",
+                mistake: "big",
+              },
+            },
+          ],
+        },
+      ],
+    });
+    expect(() => parseContent(base)).toThrow(/disaster starts/);
+  });
+
   it("does not repeat in a run", () => {
     const views = play(startRun({ seed: 1, content: atRate(1) }));
 
@@ -271,6 +305,66 @@ describe("a reshuffle", () => {
 
     expect(managerOf(views.at(-1), "Cal Cope")).toBe("Ben Bird");
     expect(managerOf(views.at(-1), "Ben Bird")).toBe("Ana Abel");
+  });
+
+  it("does not make a loop through who someone already answered to", () => {
+    // Ana has answered to nobody, and Ben to Ana, since before the run began.
+    const base = raw([
+      outside({
+        changed: "C",
+        reshuffle: { reports: [{ character: "ben", to: "cal" }] },
+      }),
+    ]);
+    const cal = base.characters.find((c) => c.id === "cal");
+    if (cal) cal.reportsTo = "ben";
+    const views = play(startRun({ seed: 1, content: parseContent(base) }));
+
+    expect(managerOf(views.at(-1), "Ben Bird")).toBe("Ana Abel");
+  });
+
+  it("changes who later signs point to", () => {
+    const base = raw([
+      outside({ changed: "C", reshuffle: { rises: ["cal"] } }),
+    ]);
+    const seat = {
+      ...base.actions[0],
+      id: "room",
+      scene: "room",
+      result: undefined,
+    };
+    const content = parseContent({
+      ...base,
+      actions: [seat, ...base.actions.slice(1)],
+      scenes: [
+        {
+          id: "room",
+          title: "A room",
+          location: "Here",
+          narration: ["People."],
+          cast: ["ana", "ben", "cal"],
+          signs: [{ label: "L", text: "{holder} HOLDS-THE-ROOM" }],
+          options: [{ id: "o", label: "O", results: [{ body: "B" }] }],
+        },
+      ],
+    });
+    const seed = [...Array(30).keys()].find(
+      (s) =>
+        readHiddenTruth(startRun({ seed: s, content })).powerMap.order[0] !==
+        "cal",
+    );
+    if (seed === undefined) throw new Error("No such deal.");
+    const signs = play(startRun({ seed, content })).flatMap((v) =>
+      v.step.kind === "scene"
+        ? [{ month: v.month, said: v.step.signs[0]?.text ?? "" }]
+        : [],
+    );
+
+    const before = signs.filter((s) => s.month === 1);
+    const after = signs.filter((s) => s.month >= 3);
+    expect(before.length).toBeGreaterThan(0);
+    expect(after.length).toBeGreaterThan(0);
+    for (const { said } of before) expect(said).not.toContain("Cal Cope");
+    for (const { said } of after) expect(said).toContain("Cal Cope");
   });
 
   it("changes the Power Map, which later conditions read", () => {
