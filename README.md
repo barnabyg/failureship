@@ -34,13 +34,21 @@ one. Each of the six months has the same shape and different contents:
 There are three ways to spend an action:
 
 - **Meeting Room 1B** opens that month's Scene. Everyone present behaves according
-  to their dealt kind, and no single sign settles what they are. Your boss's
-  treatment of you shows what they think of you, but only roughly.
+  to their job and their dealt kind, and no single sign settles what they are. Your
+  boss's treatment of you shows what they think of you, but only roughly.
 - **The photocopier** and **the loading bay** are Find Out. At the photocopier, someone
   is already there and you choose whom to ask about. At the loading bay, you also
   choose who to buy from. Either way you get a claim that may be true, mistaken, out of date or deliberately
   false. Asking is mostly about people. Buying is mostly about Hidden Facts.
-- **The kitchen, Priya's desk and your desk** do what they look like.
+- **The kitchen, the Senior Analyst's desk and your desk** do what they look like.
+
+People are read first as what they do: your boss, your boss's boss, the Office
+Co-ordinator. Each job is held by the same Character in every deal, and each has
+things only it can be seen doing and its own way of talking. Only someone who chairs
+meetings can overrun one, and only the Office Co-ordinator controls the minutes and
+the stationery. Each of these can still come from more than one kind. Names stay in
+support on the charts, in the cast list and the Notebook's marks, on the results
+screen, and in what sources say about people.
 
 Press **Notebook** at any step, at no cost. It keeps claims and important signs for
 you, and it never says which to trust. Mark each Character with the kind you suspect.
@@ -62,18 +70,20 @@ This takes about ten minutes, and it gives away two deals, so use other seeds if
 want to play blind. Seeds 8 and 1 differ in who runs the floor and whose secrets are
 dangerous. Start at `http://localhost:5173/?seed=8`.
 
-| Try this                                                                       | Expect                                                                                                                                                       |
-| ------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| Seed 8. In month 1 go to the pub, then Meeting Room 1B                         | You learn "strategic patience", and the Scene offers an extra option using it. The signs point to Dennis.                                                    |
-| Agree warmly with Dennis                                                       | It goes well: Dennis holds influence on this seed.                                                                                                           |
-| Open the Notebook, and mark Dennis as anything you like                        | The action count does not change, and new clues are at the top.                                                                                              |
-| Month 2. In the Lessons Learned Review, say that the delay began with Callum   | It goes badly, and you are not told why. At the end, the results screen explains: Callum has a dangerous Hidden Fact.                                        |
-| Restart from seed 1, and do the same in month 2                                | Callum takes the blame and you get away with it. Blaming Priya is what goes badly on this seed.                                                              |
-| In month 1 on seed 1, look at who the signs point to                           | They point to Priya, not Dennis. The same warm agreement with Dennis now does little for you. Signs mislead about one Scene in five, so watch more than one. |
-| Compare how your boss treats you in month 2 after agreeing with Dennis or Hugh | The sign under "How your boss is with you" is usually warmer after agreeing with Dennis. No sign is sure.                                                    |
-| Go to the loading bay, buy from Marjorie, and ask about someone                | Often a Hidden Fact. If it is one of the useful ones, a later Scene offers a new option about it, whether it is true.                                        |
-| Play to the end of any run, and read the results screen                        | Your marks against the truth, each claim's truth, and which clues were false or did not matter.                                                              |
-| Restart the same seed and repeat your choices                                  | The same signs, claims, Move and official story, every time.                                                                                                 |
+| Try this                                                                                          | Expect                                                                                                                                                           |
+| ------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Seed 8. In month 1 go to the pub, then Meeting Room 1B                                            | You learn "strategic patience", and the Scene offers an extra option using it. The signs point to your boss.                                                     |
+| Agree warmly with your boss                                                                       | It goes well: your boss holds influence on this seed.                                                                                                            |
+| Open the Notebook, and mark your boss as anything you like                                        | The action count does not change, and new clues are at the top.                                                                                                  |
+| Month 2. In the Lessons Learned Review, blame the Project Co-ordinator                            | It goes badly, and you are not told why. At the end, the results screen explains: the Project Co-ordinator has a dangerous Hidden Fact.                          |
+| Restart from seed 1, and do the same in month 2                                                   | The Project Co-ordinator takes the blame and you get away with it. Blaming the Senior Analyst is what goes badly on this seed.                                   |
+| In month 1 on seed 1, look at who the signs point to                                              | They point to the Senior Analyst, not your boss. The same warm agreement now does little for you. Signs mislead about one Scene in five, so watch more than one. |
+| Compare your boss's treatment of you in month 2 after agreeing with your boss or your boss's boss | The sign under "How your boss is with you" is usually warmer after agreeing with your boss. No sign is sure.                                                     |
+| On seed 8, file the report, then read the meeting's signs in month 1                              | Your boss overruns the meeting, and the Office Co-ordinator reads back minutes that have changed. Only those jobs can show those signs.                          |
+| Go to the photocopier in two different months                                                     | Each source sounds like their job: the Senior Analyst talks in figures, the Office Co-ordinator in minutes and stationery.                                       |
+| Go to the loading bay, buy from the Office Co-ordinator, and ask about someone                    | Often a Hidden Fact. If it is one of the useful ones, a later Scene offers a new option about it, whether it is true.                                            |
+| Play to the end of any run, and read the results screen                                           | Your marks against the truth, each claim's truth, and which clues were false or did not matter.                                                                  |
+| Restart the same seed and repeat your choices                                                     | The same signs, claims, Move and official story, every time.                                                                                                     |
 
 ## Change the game
 
@@ -91,16 +101,21 @@ format, the page shows what is wrong instead of the game.
 | `scenes.json`         | Each month's Scene: its signs, its choices and their results                                                         |
 | `moves.json`          | Character Moves, and when each can land                                                                              |
 | `official-story.json` | The official story, assembled from entries according to what you did                                                 |
-| `behaviours.json`     | What Characters can be seen doing, and how likely each kind is to do it                                              |
+| `behaviours.json`     | What Characters can be seen doing, which jobs can do it, and how likely each kind is to do it                        |
 | `boss.json`           | Who your boss is, and the signs of how they treat you                                                                |
-| `sources.json`        | Find Out: who can be asked, how reliable each kind is, and every claim                                               |
+| `sources.json`        | Find Out: who can be asked, how each job talks, how reliable each kind is, and every claim                           |
 | `notebook.json`       | Events the Notebook keeps a clue of, and what each clue was worth                                                    |
-| `characters.json`     | Names, public job titles and who reports to whom on the Org Chart                                                    |
+| `characters.json`     | Job titles, roles, how text refers to each person, names, and who reports to whom on the Org Chart                   |
 | `hidden-truth.json`   | The rules of the deal: kinds, their weights, and the Hidden Facts                                                    |
 | `balance.json`        | Actions a month, months in a run, the cost of each choice, how often signs mislead and when the boss's opinion shows |
 | `floor-1.json`        | The rooms on the floor: positions, sizes, colours and the lift's sign                                                |
 
-In a Scene, `{holder}`, `{ignored}` and `{bystander}` are replaced by the names of
+A Character's `called` is how running text refers to them, such as `your boss`, and
+it gets a capital only where a sentence starts. Write people into text that way too,
+and keep their `name` for a Notification or Move's `from` line. A test fails if a
+name turns up in the running text.
+
+In a Scene, `{holder}`, `{ignored}` and `{bystander}` are replaced by what text calls
 the most influential, the least influential and the next most influential of those
 present, read from the dealt Power Map's `order`. A Scene without the whole cast can
 therefore show a holder whom the Power Map's tree does not place above everyone
@@ -120,6 +135,11 @@ A behaviour says `{who}`, and is written for a kind of person, never a named one
 When a Scene opens, each person present shows one, chosen by their dealt kind. Its
 `likelihood` gives the weight for each kind. Every behaviour must be possible from
 at least two kinds, with different likelihoods, or the game will not start.
+
+A behaviour can list `"roles": ["team-leader"]`, and then only a Character with one of
+those roles in `characters.json` can show it. Every role must have a behaviour nobody
+else can show, and every Character must have something to show as each kind, or the
+game will not start.
 
 A choice can carry `"opinion": 1` or `-1` to move your boss's hidden opinion of you.
 The opinion has no number on screen. It shows only through `boss.json`: when the boss
@@ -142,7 +162,9 @@ shows. A behaviour's clue counts as `held` if its likelihood is highest for the
 kind of the person who showed it, and otherwise as `wrong`.
 
 A Find Out method's `frames` are the conversation around a claim: each says `{said}`
-and can say `{source}`. A Hidden Fact's `told` is how someone would say it out loud,
+and can say `{source}`. `voices` in `sources.json` give each role its own way of
+putting a claim: each line says `{said}`, and is chosen apart from whether the claim
+is true. A Hidden Fact's `told` is how someone would say it out loud,
 and its `text` is how the results screen states it.
 
 A Hidden Fact says `{name}`, so that it reads correctly for whoever is dealt it,
