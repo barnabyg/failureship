@@ -408,7 +408,11 @@ export function parseContent(raw: unknown): Content {
 }
 
 /** Showing or hiding an option on this would tell the player the truth. */
-function dependsOnHiddenTruth(condition: Condition): boolean {
+function dependsOnHiddenTruth(
+  condition: Condition,
+  hiddenFlags: ReadonlySet<string> = new Set(),
+): boolean {
+  if ("flag" in condition) return hiddenFlags.has(condition.flag);
   if (
     "holderIs" in condition ||
     "opinionIs" in condition ||
@@ -417,9 +421,25 @@ function dependsOnHiddenTruth(condition: Condition): boolean {
   ) {
     return true;
   }
-  if ("not" in condition) return dependsOnHiddenTruth(condition.not);
-  if ("all" in condition) return condition.all.some(dependsOnHiddenTruth);
+  if ("not" in condition) {
+    return dependsOnHiddenTruth(condition.not, hiddenFlags);
+  }
+  if ("all" in condition) {
+    return condition.all.some((c) => dependsOnHiddenTruth(c, hiddenFlags));
+  }
   return false;
+}
+
+/** Flags that say which way a hidden result went, so they carry the truth too. */
+function flagsSetByHiddenResults(content: Content): Set<string> {
+  const options = content.scenes.flatMap((s) => s.options);
+  return new Set(
+    options
+      .filter((o) =>
+        o.results.some((r) => r.when && dependsOnHiddenTruth(r.when)),
+      )
+      .flatMap((o) => o.results.flatMap((r) => r.sets)),
+  );
 }
 
 function findBrokenDeal(
@@ -604,6 +624,7 @@ function findBrokenReferences(content: Content): string[] {
   const buzzwords = new Set(content.buzzwords.map((b) => b.id));
   const scenes = new Set(content.scenes.map((s) => s.id));
   const characters = new Set(content.characters.map((c) => c.id));
+  const hiddenFlags = flagsSetByHiddenResults(content);
   const problems: string[] = [];
   const checkCharacter = (owner: string, character: string) => {
     if (!characters.has(character)) {
@@ -734,7 +755,7 @@ function findBrokenReferences(content: Content): string[] {
       }
       if (o.requires) {
         checkCondition(optionOwner, o.requires);
-        if (dependsOnHiddenTruth(o.requires)) {
+        if (dependsOnHiddenTruth(o.requires, hiddenFlags)) {
           problems.push(`${optionOwner} is gated on the hidden truth.`);
         }
       }
@@ -747,6 +768,7 @@ function findBrokenReferences(content: Content): string[] {
     const owner = `Notebook event "${e.id}"`;
     checkMonths(owner, e.months);
     checkCondition(owner, e.when);
+    // A hidden result's flag is fine here: the player has just seen that result.
     if (dependsOnHiddenTruth(e.when)) {
       problems.push(`${owner} is gated on the hidden truth.`);
     }

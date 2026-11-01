@@ -252,6 +252,14 @@ describe("Hidden Facts in content", () => {
     expect(() => parseContent(raw)).toThrow(/hidden truth/);
   });
 
+  it("rejects an option gated on a flag that only a hidden result sets", () => {
+    const raw = factsFixtureRaw();
+    const option = raw.scenes[0]?.options[0];
+    if (option) option.requires = { flag: "burned" };
+
+    expect(() => parseContent(raw)).toThrow(/hidden truth/);
+  });
+
   it("allows an option gated on what the player has heard", () => {
     const raw = factsFixtureRaw();
     const option = raw.scenes[0]?.options[0];
