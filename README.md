@@ -246,7 +246,7 @@ at a later month. `npm run build` and `npm run play` ignore it.
   `to-results.ts` its reveal at the end; `save.ts` writes and reads a run. Everything
   in a run's `State` is plain data, so a mechanic gets saving for free. Raise
   `SAVE_VERSION` if a mechanic changes what saved state means. `src/engine/content.ts` holds the content
-  schema, and `src/engine/content-checks.ts` holds the checks: it parses data against
+  schema, and `src/engine/content-checks.ts` and `consequence-checks.ts` hold the checks: it parses data against
   the schema and checks it across files.
 - `src/tower/` draws the tower and holds no rules.
 - `src/ui/` holds the React panels over the tower.

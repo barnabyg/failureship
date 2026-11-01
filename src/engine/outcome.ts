@@ -1,10 +1,12 @@
 import { landWithBoss } from "./boss";
+import { reshuffleCharts, type Reshuffle } from "./charts";
 import type { Content, Kind, MoveFamily, Tone } from "./content";
 import { makeMistake } from "./mistakes";
 import { moveProject, type ProjectChange } from "./project";
 import { shiftBelief } from "./reads";
 import { remember, startNews } from "./reputation";
-import { startRisks, startThreads } from "./threads";
+import { startRisks } from "./risks";
+import { startThreads } from "./threads";
 import type { State } from "./state";
 
 /** Everything a consequence can do, whether a choice or something else caused it. */
@@ -16,6 +18,8 @@ export interface Outcome {
   reaction?: Readonly<Record<Kind, string>> | undefined;
   project?: ProjectChange | undefined;
   mistake?: "big" | "catastrophic" | undefined;
+  learns?: readonly string[];
+  reshuffle?: Reshuffle | undefined;
   remembers?: readonly {
     character: string;
     about: string;
@@ -33,10 +37,8 @@ export function countMove(state: State, family: MoveFamily | undefined): void {
 }
 
 /**
- * The one place a consequence takes effect: sets its flags, keeps them on
- * the lasting record, starts any Thread or hidden risk they begin, moves the Project, keeps what
- * anyone remembers,
- * counts any big mistake and lands with both bosses. Returns the sign of how the boss took it, if it has one.
+ * The one place a consequence takes effect, whatever caused it. Returns the sign
+ * of how the boss took it, if it has one.
  */
 export function applyOutcome(
   state: State,
@@ -53,6 +55,10 @@ export function applyOutcome(
     remember(state, content, memory);
   }
   if (outcome.news) startNews(state, content, outcome.news);
+  for (const word of outcome.learns ?? []) {
+    if (!state.buzzwords.includes(word)) state.buzzwords.push(word);
+  }
+  if (outcome.reshuffle) reshuffleCharts(state, content, outcome.reshuffle);
   const head = content.overHead?.character;
   if (head !== undefined) shiftBelief(state, head, outcome.headOpinion ?? 0);
   moveProject(state, content, outcome.project);

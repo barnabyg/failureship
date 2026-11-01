@@ -1,10 +1,9 @@
-import { landBill, playThreads } from "./bills";
+import { landBill, playThreads, surfaceRisks } from "./bills";
 import { landEvent, scheduleEvents } from "./company-events";
 import { everyNotification, type Content } from "./content";
 import { dealWithAbsence, followUpDemands } from "./demands";
 import { applyOutcome } from "./outcome";
 import { spreadNews } from "./reputation";
-import { surfaceRisks } from "./risks";
 import {
   actionsThisMonth,
   beliefOf,

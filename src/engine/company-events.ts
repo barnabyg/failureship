@@ -1,5 +1,4 @@
 import type { Content } from "./content";
-import { lowerOnMap, raiseOnMap } from "./deal";
 import { applyOutcome } from "./outcome";
 import { drawFor } from "./rng";
 import type { State, Step } from "./state";
@@ -51,19 +50,6 @@ export function scheduleEvents(state: State, content: Content): void {
   if (disaster) state.eventsDue.push(disaster.id);
 }
 
-/** Moves people on the charts. A move that would make a loop does not happen. */
-function reshuffle(state: State, event: CompanyEvent): void {
-  const { reports, rises, falls } = event.reshuffle;
-  for (const { character, to } of reports) {
-    const above = (id: string | undefined): boolean =>
-      id !== undefined && (id === character || above(state.reportsTo[id]));
-    if (!above(to)) state.reportsTo[character] = to;
-  }
-  const { truth } = state;
-  for (const id of rises) truth.powerMap = raiseOnMap(truth.powerMap, id);
-  for (const id of falls) truth.powerMap = lowerOnMap(truth.powerMap, id);
-}
-
 /** A Company Event lands after the player's actions, before the month closes. */
 export function landEvent(state: State, content: Content): Step | null {
   const id = state.eventsDue.shift();
@@ -71,6 +57,5 @@ export function landEvent(state: State, content: Content): Step | null {
   if (!event) return null;
   state.eventsLanded.push({ id: event.id, month: state.month });
   applyOutcome(state, content, event, event.title);
-  reshuffle(state, event);
   return { kind: "event", id: event.id };
 }

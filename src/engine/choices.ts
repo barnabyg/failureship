@@ -78,14 +78,18 @@ function answerNotification(
     (id) => id !== choice.notificationId,
   );
   const learned = option.learns.filter((w) => !state.buzzwords.includes(w));
-  state.buzzwords.push(...learned);
   const lost =
     option.bet &&
     drawFor(state.seed, option.id, state.month) >= option.bet.chance
       ? option.bet.lost
       : undefined;
   const outcome = lost ?? option;
-  const reaction = applyOutcome(state, content, outcome, option.label);
+  const reaction = applyOutcome(
+    state,
+    content,
+    { ...outcome, learns: option.learns },
+    option.label,
+  );
 
   if (option.dialog !== undefined) {
     state.step = { kind: "dialog", id: option.dialog, learned, reaction };

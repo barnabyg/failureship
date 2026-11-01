@@ -1,3 +1,4 @@
+import { managerOf } from "./charts";
 import {
   everyBill,
   everyDemand,
@@ -180,7 +181,7 @@ function toStoryView(
 /** The formal hierarchy, the same in every deal until a Company Event moves it. */
 function toOrgChart(state: State, content: Content): ChartEntry[] {
   return content.characters.map((c) => {
-    const manager = state.reportsTo[c.id] ?? c.reportsTo;
+    const manager = managerOf(state, content, c.id);
     return {
       name: c.name,
       title: c.title,
