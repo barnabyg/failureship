@@ -170,20 +170,11 @@
     },
     {
       "when": {
-        "all": [
-          {
-            "not": {
-              "flag": "attended-meeting"
-            }
-          },
-          {
-            "not": {
-              "flag": "attended-lessons"
-            }
-          }
-        ]
+        "not": {
+          "flag": "attended-meeting"
+        }
       },
-      "reported": "You were recorded as present at the Monthly Alignment Meeting.",
+      "reported": "You were recorded as present at this month's meeting.",
       "happened": "You were not there. Nobody has mentioned it, which may or may not be a good sign."
     },
     {

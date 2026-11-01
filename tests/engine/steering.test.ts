@@ -86,6 +86,23 @@ describe("six months that do not feel like one month repeated", () => {
     expect(new Set(stories).size).toBe(6);
   });
 
+  it("names no particular month's meeting when a Scene is skipped", () => {
+    const { views } = walk(1, (view, turn) => {
+      const open = view.choices.filter(
+        (c) => !(c.type === "action" && c.actionId.startsWith("meeting")),
+      );
+      const choice = open[turn % open.length];
+      if (!choice) throw new Error("No choice.");
+      return choice;
+    });
+    const reported = views.flatMap((v) =>
+      v.step.kind === "story" ? v.step.reported : [],
+    );
+
+    expect(reported.join()).toContain("this month's meeting");
+    expect(reported.join()).not.toContain("Monthly Alignment");
+  });
+
   it("reads differently at the same place in different months", () => {
     const told = new Set<string>();
     for (const action of ["kitchen", "one-to-one", "work"]) {
