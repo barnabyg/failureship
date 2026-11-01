@@ -44,5 +44,10 @@
       "practitioner": 0.35
     },
     "sets": "input-late"
+  },
+  "flagged": {
+    "at": "red",
+    "scene": "red-project",
+    "cost": "standard"
   }
 }

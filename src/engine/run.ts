@@ -135,7 +135,13 @@ interface State extends MonthRecord {
   /** How often each approach has been used, since some can be overdone. */
   approachUses: Record<string, number>;
   verdict: string | null;
-  project: { real: string; reported: string; news: ProjectNews[] };
+  project: {
+    real: string;
+    reported: string;
+    news: ProjectNews[];
+    /** Flagged, and not yet explained. */
+    flagged: boolean;
+  };
   step: Step;
   truth: HiddenTruth;
 }
@@ -194,7 +200,7 @@ export function startRun(options: {
     bossLandings: [],
     approachUses: {},
     verdict: null,
-    project: { ...content.project.start, news: [] },
+    project: { ...content.project.start, news: [], flagged: false },
     step: { kind: "actions" },
     truth: {
       characters: motives.characters,
@@ -279,7 +285,10 @@ function moveProject(
     return to ?? from;
   };
   project.real = moved(project.real, change.real);
-  project.reported = moved(project.reported, change.reported);
+  const was = project.reported;
+  project.reported = moved(was, change.reported);
+  const at = content.project.flagged?.at;
+  if (project.reported === at && was !== at) project.flagged = true;
 }
 
 function inMonth(item: { months?: number[] | undefined }, month: number) {
@@ -731,7 +740,8 @@ function fillParts(
 }
 
 /** The month's order: Notifications, actions, a Move, then the month closes. */
-function nextStep(state: State, { content }: World): Step {
+function nextStep(state: State, world: World): Step {
+  const { content } = world;
   for (const id of state.unanswered) {
     const notification = content.notifications.find((n) => n.id === id);
     const answerable = notification?.options.some(
@@ -740,6 +750,15 @@ function nextStep(state: State, { content }: World): Step {
     if (answerable && matches(state, content, notification?.when)) {
       return { kind: "notification", id };
     }
+  }
+  const { flagged } = content.project;
+  if (flagged && state.project.flagged) {
+    state.project.flagged = false;
+    state.spent = Math.min(
+      content.balance.actionsPerMonth,
+      state.spent + costOf(content, flagged.cost),
+    );
+    return openScene(state, world, flagged.scene);
   }
   if (
     actionsThisMonth(state, content).some((a) => isAvailable(state, content, a))

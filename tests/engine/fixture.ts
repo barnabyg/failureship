@@ -149,6 +149,8 @@ export function fixtureRaw() {
         text: string;
         project?: { real?: string; reported?: string };
       }[],
+      flagged: undefined as
+        { at: string; scene: string; cost: string } | undefined,
       input: undefined as
         | {
             character: string;

@@ -24,6 +24,12 @@ export async function answerAnyNotification(page: Page) {
     await ((await report.isVisible()) ? report : free.first()).click();
     await page.getByTestId("continue").click();
   }
+  // A Project flagged red has to be explained before anything else.
+  const review = page.getByTestId("panel-scene");
+  if (await review.isVisible()) {
+    await page.locator('[data-testid^="scene-option-"]').first().click();
+    await page.getByTestId("continue").click();
+  }
 }
 
 /** Declines the month's offers and leaves the report unfiled, to keep the actions. */

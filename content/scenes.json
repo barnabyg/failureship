@@ -666,12 +666,118 @@
     ]
   },
   {
-    "id": "red-project",
+    "id": "quarterly-review",
     "months": [5],
+    "title": "Quarterly Business Review",
+    "location": "Floor 1, Meeting Room 1B",
+    "narration": [
+      "The quarter is reviewed. Each team presents what it has achieved, on a slide with an arrow going up. The arrows have been drawn before the figures, so as not to influence them."
+    ],
+    "cast": ["head", "boss", "analyst", "admin", "projects"],
+    "signs": [
+      {
+        "label": "Whose slide is skipped",
+        "text": "When it gets to {holder}'s slide, everyone agrees that they have seen it. {ignored}'s slide is gone through line by line.",
+        "clue": "At the Quarterly Review, nobody asked to see {holder}'s slide, and {ignored}'s was gone through line by line."
+      },
+      {
+        "label": "Who speaks last",
+        "text": "{bystander} starts to summarise, stops, and waits for {holder} to say something first."
+      }
+    ],
+    "options": [
+      {
+        "id": "credit-boss",
+        "label": "Say that your team's arrow is all down to your boss",
+        "results": [
+          {
+            "when": {
+              "holderIs": "boss"
+            },
+            "body": "Several people turn to look at your boss, then write something down. It appears that you have said the right name.",
+            "sets": ["backed-holder"],
+            "approach": "flatter"
+          },
+          {
+            "body": "You say it clearly, and it is minuted. Nobody else in the room seems to have thought that this was in question.",
+            "sets": ["backed-wrong-person"],
+            "approach": "flatter"
+          }
+        ]
+      },
+      {
+        "id": "credit-head",
+        "label": "Say that the arrow is all down to your boss's boss",
+        "results": [
+          {
+            "when": {
+              "holderIs": "head"
+            },
+            "body": "Your boss's boss does not acknowledge it, in the way of someone who has heard it before and expects to again. The next slide is taken more quickly.",
+            "sets": ["backed-holder"],
+            "approach": "over-head"
+          },
+          {
+            "body": "Your boss's boss looks up, puzzled, and says that it is a team effort. You have gone a long way round to say nothing.",
+            "sets": ["backed-wrong-person"],
+            "approach": "over-head"
+          }
+        ]
+      },
+      {
+        "id": "bigger-arrow",
+        "label": "Offer to make the arrow steeper for next quarter",
+        "results": [
+          {
+            "body": "You are thanked for your energy, and given the slide. It is now yours, along with everything that it says.",
+            "sets": ["offered-arrow"],
+            "approach": "theatre"
+          }
+        ]
+      },
+      {
+        "id": "show-the-figures",
+        "label": "Say that the figures do not show an arrow",
+        "results": [
+          {
+            "body": "You put the figures on the screen. They go along, and slightly down. There is a pause, and someone asks whether this has been through the proper process.",
+            "sets": ["showed-figures"],
+            "approach": "truth"
+          }
+        ]
+      },
+      {
+        "id": "single-source-quarter",
+        "label": "Say that this needs a single source of truth first",
+        "requires": {
+          "hasBuzzword": "single-source-of-truth"
+        },
+        "results": [
+          {
+            "body": "Everyone agrees, gravely. The review is adjourned until the truth has been sourced. You have saved the room an hour and a half.",
+            "sets": ["used-buzzword-late"],
+            "approach": "theatre"
+          }
+        ]
+      },
+      {
+        "id": "nod-along",
+        "label": "Nod at the arrow",
+        "results": [
+          {
+            "body": "You nod at the arrow. Other people are nodding at it too. It is, for a moment, a real team.",
+            "sets": ["nodded-at-arrow"]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "red-project",
     "title": "Project Status Review",
     "location": "Floor 1, Meeting Room 1B",
     "narration": [
-      "Your project is running late, and on this morning's chart it is flagged red. Your boss has asked you to walk the room through it. There is a chart behind you, and it shows something bad that is actually happening."
+      "Your project has been flagged red on this morning's chart, and the Project Status Review has been called for you. Your boss has asked you to walk the room through it. There is a chart behind you, and it shows something bad that is actually happening."
     ],
     "cast": ["head", "boss", "analyst", "admin", "projects"],
     "signs": [
@@ -693,7 +799,10 @@
           {
             "body": "It is amber now. The footnote says amber pending review. The project is still late, but it is no longer red about it.",
             "sets": ["made-it-amber"],
-            "approach": "theatre"
+            "approach": "theatre",
+            "project": {
+              "reported": "amber"
+            }
           }
         ]
       },
@@ -728,7 +837,10 @@
           {
             "body": "The Senior Analyst says nothing and goes to check. By the time the figures turn out to be right, the meeting has ended, and nobody remembers why it was red.",
             "sets": ["blamed-a-colleague"],
-            "approach": "blame"
+            "approach": "blame",
+            "project": {
+              "reported": "amber"
+            }
           }
         ]
       },
@@ -742,7 +854,10 @@
             },
             "body": "Your boss's boss takes a look. The word red does not appear in the next report, and nobody can say who took it out.",
             "sets": ["backed-holder"],
-            "approach": "over-head"
+            "approach": "over-head",
+            "project": {
+              "reported": "amber"
+            }
           },
           {
             "body": "Your boss's boss takes a look, at great length, and copies in the whole floor. You have gone over your boss's head for nothing, and your boss has noticed the copy line.",
@@ -761,7 +876,10 @@
             },
             "body": "Your boss accepts this graciously, and the matter is closed. You have told the room who to be afraid of, and your boss will not forget it.",
             "sets": ["backed-holder"],
-            "approach": "flatter"
+            "approach": "flatter",
+            "project": {
+              "reported": "amber"
+            }
           },
           {
             "body": "Your boss accepts this graciously. The room does not look convinced, and looks at you for having said it.",
@@ -780,7 +898,10 @@
           {
             "body": "There is a pause while everyone decides whether this is a good thing. It is agreed that the project is not late but patient.",
             "sets": ["used-buzzword-late"],
-            "approach": "theatre"
+            "approach": "theatre",
+            "project": {
+              "reported": "amber"
+            }
           }
         ]
       }

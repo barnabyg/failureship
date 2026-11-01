@@ -353,6 +353,27 @@
     },
     {
       "when": {
+        "flag": "offered-arrow"
+      },
+      "reported": "You volunteered to lead next quarter's narrative.",
+      "happened": "You have been given the slide."
+    },
+    {
+      "when": {
+        "flag": "showed-figures"
+      },
+      "reported": "A data quality issue was raised at the Quarterly Review.",
+      "happened": "You showed them the figures."
+    },
+    {
+      "when": {
+        "flag": "nodded-at-arrow"
+      },
+      "reported": "You endorsed the quarter's positive trajectory.",
+      "happened": "You nodded at an arrow."
+    },
+    {
+      "when": {
         "flag": "said-exceeds"
       },
       "reported": "You took ownership of your development.",

@@ -388,6 +388,8 @@ const project = z.strictObject({
   events: z
     .array(z.strictObject({ months, text, project: projectChange }))
     .default([]),
+  /** Reported as this, the Project is flagged, and has to be explained. */
+  flagged: z.strictObject({ at: id, scene: id, cost: id }).optional(),
   /** Who the report needs figures from, and how often they arrive late. */
   input: z
     .strictObject({
@@ -939,6 +941,27 @@ function findBrokenReferences(content: Content): string[] {
   problems.push(...findBrokenApproaches(content));
   problems.push(...findBrokenSources(content));
   problems.push(...findBrokenInput(content));
+  const { flagged } = content.project;
+  if (flagged) {
+    checkStatus("The Project's flag", flagged.at);
+    checkCost("The Project's flag", flagged.cost);
+    const review = content.scenes.find((s) => s.id === flagged.scene);
+    if (!review) {
+      problems.push(
+        `The Project's flag opens unknown Scene "${flagged.scene}".`,
+      );
+    }
+    if (review?.months) {
+      problems.push(
+        `Scene "${flagged.scene}" opens when flagged, not by month.`,
+      );
+    }
+    if (content.actions.some((a) => a.scene === flagged.scene)) {
+      problems.push(
+        `Scene "${flagged.scene}" opens when flagged, not by action.`,
+      );
+    }
+  }
   checkStatus("The Project", content.project.start.real);
   checkStatus("The Project", content.project.start.reported);
   for (const e of content.project.events) {

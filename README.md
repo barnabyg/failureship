@@ -166,6 +166,11 @@ reported. A Notification option, Scene result or action can carry
 `better` or `worse`, and `reported` can also be `real`, which is what telling the truth
 does. Nothing else moves them. A Notification's body can say `{real}` and `{reported}`.
 
+`project.json`'s `flagged` says at which reported status the Project is flagged, and
+which Scene then opens and what it costs. That Scene belongs to no month and no action:
+it opens once each time the reported status arrives at `at`, before the player's
+actions, whichever month that is.
+
 `project.json`'s `input` names who the report needs figures from, the months they can
 be late, and the `chance` of that for each kind they might be. Lateness is drawn from
 the seed and never from the player's choices, and it sets a flag for the month. It must
