@@ -107,7 +107,7 @@ export function App() {
             </dd>
           </div>
           {view.buzzwords.length > 0 && (
-            <div data-testid="buzzwords">
+            <div className="status-buzzwords" data-testid="buzzwords">
               <dt>{panelText.buzzwordsHeading}</dt>
               <dd>{view.buzzwords.map((b) => b.term).join(", ")}</dd>
             </div>

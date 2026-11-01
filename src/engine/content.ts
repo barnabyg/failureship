@@ -127,6 +127,8 @@ const action = z.strictObject({
   place: id,
   cost: id,
   result: notice.optional(),
+  /** Further results, used in turn so that a place reads differently each month. */
+  moreResults: z.array(notice).default([]),
   scene: id.optional(),
   /** A place like a meeting can be gone to only once a month. */
   oncePerMonth: z.boolean().default(false),
@@ -147,6 +149,7 @@ const move = z.strictObject({
 
 const storyEntry = z
   .strictObject({
+    months,
     when: condition.optional(),
     reported: text.optional(),
     happened: text.optional(),
@@ -757,6 +760,7 @@ function findBrokenReferences(content: Content): string[] {
     checkRoles(owner, e.reported ?? "");
     checkRoles(owner, e.happened ?? "");
     if (e.when) checkCondition(owner, e.when);
+    checkMonths(owner, e.months);
   }
   for (const n of content.notifications) {
     checkMonths(`Notification "${n.id}"`, n.months);

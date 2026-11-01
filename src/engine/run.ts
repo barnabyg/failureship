@@ -94,6 +94,8 @@ interface State extends MonthRecord {
   month: number;
   buzzwords: string[];
   claims: Claim[];
+  /** So that a Move does not land twice in a run while others remain. */
+  movesLanded: string[];
   clues: Clue[];
   /** Who the player suspects of what. Nothing in the rules ever reads this. */
   marks: Map<string, Kind>;
@@ -150,6 +152,7 @@ export function startRun(options: {
     ...freshMonth(content, 1),
     buzzwords: [],
     claims: [],
+    movesLanded: [],
     clues: [],
     marks: new Map(),
     heard: [],
@@ -254,7 +257,9 @@ function apply(state: State, world: World, choice: Choice): void {
       } else if (action.findOut !== undefined) {
         state.step = { kind: "find-out", method: action.findOut };
       } else if (action.result) {
-        state.step = { kind: "notice", ...action.result };
+        const results = [action.result, ...action.moreResults];
+        const result = results[(state.month - 1) % results.length];
+        state.step = { kind: "notice", ...(result ?? action.result) };
       }
       return;
     }
@@ -559,8 +564,10 @@ function landMove(state: State, content: Content): Step | null {
     (m) => inMonth(m, state.month) && matches(state, content, m.when),
   );
   if (eligible.length === 0) return null;
-  const { item, next } = pick(state.rng, eligible);
+  const fresh = eligible.filter((m) => !state.movesLanded.includes(m.id));
+  const { item, next } = pick(state.rng, fresh.length > 0 ? fresh : eligible);
   state.rng = next;
+  state.movesLanded.push(item.id);
   state.flags.push(...item.sets);
   return { kind: "move", id: item.id };
 }
@@ -702,7 +709,9 @@ function toStoryView(
 ): Extract<StepView, { kind: "story" }> {
   const { title, reportedHeading, happenedHeading, entries } =
     content.officialStory;
-  const told = entries.filter((e) => matches(state, content, e.when));
+  const told = entries.filter(
+    (e) => inMonth(e, state.month) && matches(state, content, e.when),
+  );
   const fill = (written: string | undefined) =>
     written === undefined ? [] : [fillRoles(state, content, written)];
   return {

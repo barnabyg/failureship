@@ -299,6 +299,6 @@ describe("the game's Hidden Facts", () => {
       s.options.filter((o) => o.about !== undefined),
     );
 
-    expect(gated.map((o) => o.about).sort()).toEqual(usefulIds.sort());
+    expect(new Set(gated.map((o) => o.about))).toEqual(new Set(usefulIds));
   });
 });

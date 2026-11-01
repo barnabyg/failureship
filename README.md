@@ -22,46 +22,57 @@ Press `Ctrl+C` in the terminal to stop it.
 
 ## What to try
 
-Every run has a seed, shown at the top right. Add `?seed=1` to the address to
-pick one. The month has the same steps each time:
+Every run has a seed, shown at the top right. Add `?seed=8` to the address to pick
+one. Each of the six months has the same shape and different contents:
 
-1. **A Notification arrives.** Answer it: finish the report or go to the pub.
-   Each costs 1 of your 3 actions.
+1. **A Notification arrives.** Answer it. The answer may cost one of your 3 actions.
 2. **Spend your remaining actions** by clicking a place on the floor or its label.
    The panel at the bottom left always says what you can do now.
 3. **A Character Move lands on you.** You do not get a choice.
 4. **The month closes** with the official story beside what actually happened.
 
-Everyone in a Scene behaves according to their dealt kind, and no single sign
-settles what they are. Watch them across the months, then check your guesses on
-the results screen.
+There are three ways to spend an action:
 
-Press **Org Chart** at any step to see the formal hierarchy, at no cost. The real
+- **Meeting Room 1B** opens that month's Scene. Everyone present behaves according
+  to their dealt kind, and no single sign settles what they are. Your boss's
+  treatment of you shows what they think of you, but only roughly.
+- **The photocopier** and **the loading bay** are Find Out. You pick a source and a
+  subject, and get a claim that may be true, mistaken, out of date or deliberately
+  false. Asking is mostly about people. Buying is mostly about Hidden Facts.
+- **The kitchen, Priya's desk and your desk** do what they look like.
+
+Press **Notebook** at any step, at no cost. It keeps claims and important signs for
+you, and it never says which to trust. Mark each Character with the kind you suspect.
+
+Press **Org Chart** at any step to see the formal hierarchy, also at no cost. The real
 one is the hidden Power Map, dealt from the seed.
 
-Press **Continue** on the official story to open the next month. After six months
-the results screen shows who was really who: each Character's kind and Hidden
-Fact, including facts you could never have known, and the Org Chart beside the
-true Power Map.
+After six months the results screen shows who was really who: each Character's kind
+and Hidden Fact, your marks against the truth, each claim and whether it was true,
+each clue and what it was worth, and the Org Chart beside the true Power Map.
 
 At any step, **New run** deals a new seed, and typing a seed then pressing
 **Restart from seed** plays that deal from month 1. Leaving a run in progress asks
 first. Swap a seed with a friend and you both get the same deal.
 
-### See each choice's different result
+### A test scenario: two contrasting deals
 
-Start at `http://localhost:5173/?seed=8`.
+This takes about ten minutes, and it gives away two deals, so use other seeds if you
+want to play blind. Seeds 8 and 5 differ in who runs the floor and whose secrets are
+dangerous. Start at `http://localhost:5173/?seed=8`.
 
-| Try this                                                       | Expect                                                                                                                                              |
-| -------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Go to the pub                                                  | A short dialog with the office behind it. You learn the Buzzword "strategic patience", and it appears at the top of the screen.                     |
-| Then go to Meeting Room 1B                                     | The Scene offers an extra option about strategic patience. Using it gives its own result.                                                           |
-| Restart, finish the report, then go to Meeting Room 1B         | No trace of the Buzzword option or the phrase anywhere in the month.                                                                                |
-| In the meeting, agree with each person in turn across restarts | Seed 8 has Dennis holding influence, so agreeing with Dennis goes well and agreeing with anyone else does not.                                      |
-| Repeat the meeting on seeds 1, 6, 2 and 4                      | The signs point elsewhere: to Priya on seed 1, Marjorie on seed 6, Callum on seed 2 and Hugh on seed 4. The same choice now has a different result. |
-| Compare two official stories                                   | "As reported upstairs" and "What actually happened" change with the Notification answer, the Scene choice and how you spent other actions.          |
-| Skip the meeting altogether                                    | The official story records you as present anyway.                                                                                                   |
-| Restart the same seed and repeat your choices                  | The same Move and the same official story, every time.                                                                                              |
+| Try this                                                                       | Expect                                                                                                                |
+| ------------------------------------------------------------------------------ | --------------------------------------------------------------------------------------------------------------------- |
+| Seed 8. In month 1 go to the pub, then Meeting Room 1B                         | You learn "strategic patience", and the Scene offers an extra option using it. The signs point to Dennis.             |
+| Agree warmly with Dennis                                                       | It goes well: Dennis holds influence on this seed.                                                                    |
+| Open the Notebook, and mark Dennis as anything you like                        | The action count does not change, and new clues are at the top.                                                       |
+| Month 2. In the Lessons Learned Review, say that the delay began with Callum   | It goes badly, and you are not told why. At the end, the results screen explains: Callum has a dangerous Hidden Fact. |
+| Restart from seed 5, and do the same in month 2                                | Callum takes the blame and you get away with it. Blaming Priya is what goes badly on this seed.                       |
+| In month 1 on seed 5, look at who the signs point to                           | They point to Hugh, not Dennis. The same warm agreement with Dennis now does nothing for you.                         |
+| Compare how your boss treats you in month 2 after agreeing with Dennis or Hugh | The sign under "How your boss is with you" is usually warmer after agreeing with Dennis. No sign is sure.             |
+| Go to the loading bay, buy from Marjorie, and ask about someone                | Often a Hidden Fact. If it is one of the useful ones, a later Scene offers a new option about it, whether it is true. |
+| Play to the end of any run, and read the results screen                        | Your marks against the truth, each claim's truth, and which clues were false or did not matter.                       |
+| Restart the same seed and repeat your choices                                  | The same signs, claims, Move and official story, every time.                                                          |
 
 ## Change the game
 
@@ -76,7 +87,7 @@ format, the page shows what is wrong instead of the game.
 | `dialogs.json`        | Short text dialogs, such as the pub                                     |
 | `buzzwords.json`      | Buzzwords and their meanings                                            |
 | `actions.json`        | What can be done on the floor, and the results                          |
-| `scenes.json`         | The meeting: its signs, its choices and their results                   |
+| `scenes.json`         | Each month's Scene: its signs, its choices and their results            |
 | `moves.json`          | Character Moves, and when each can land                                 |
 | `official-story.json` | The official story, assembled from entries according to what you did    |
 | `behaviours.json`     | What Characters can be seen doing, and how likely each kind is to do it |
@@ -134,8 +145,10 @@ Its results can check `{ "heardTrue": "lost-list" }`. An option must never appea
 or disappear on undiscovered truth, so `requires` with `holderIs`, `opinionIs`,
 `factNature` or `heardTrue` stops the game from starting. `heardFact` is fine.
 
-A Notification, action, Scene or Move can list `"months": [2, 3]` to belong only
-to those months. Without it, it belongs to every month.
+A Notification, action, Scene, Move, Notebook event or official story entry can list
+`"months": [2, 3]` to belong only to those months. Without it, it belongs to every
+month. An action can add `moreResults`, used in turn so that a place reads differently
+each month. A Move does not land twice in a run while another could.
 
 ## Develop
 

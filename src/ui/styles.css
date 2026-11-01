@@ -134,6 +134,15 @@ body {
 .status dd {
   margin: 0;
   font-weight: 600;
+  white-space: nowrap;
+}
+
+.status .status-buzzwords dd {
+  max-width: 220px;
+  font-size: 0.8125rem;
+  font-weight: 400;
+  line-height: 1.25;
+  white-space: normal;
 }
 
 .next {
@@ -291,7 +300,7 @@ body {
   color: var(--accent-ink);
 }
 
-.find-out-subject {
+.panel .find-out-subject {
   margin-top: 12px;
 }
 

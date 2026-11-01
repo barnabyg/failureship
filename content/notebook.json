@@ -53,6 +53,42 @@
       "source": "Your own observation",
       "text": "You agreed with someone in the meeting, and nothing whatever came of it.",
       "verdict": "held"
+    },
+    {
+      "id": "desk-moved",
+      "when": {
+        "flag": "desk-moved"
+      },
+      "source": "Facilities",
+      "text": "Someone decided who got the desk with the window. Facilities will not say who.",
+      "verdict": "idle"
+    },
+    {
+      "id": "rumour",
+      "when": {
+        "flag": "rumour-spread"
+      },
+      "source": "The kitchen",
+      "text": "Someone is saying that your project is in trouble. Worth finding out who started it.",
+      "verdict": "idle"
+    },
+    {
+      "id": "buzzword-landed",
+      "when": {
+        "flag": "used-buzzword-late"
+      },
+      "source": "Your own observation",
+      "text": "A phrase you overheard went down well. It may say something about the people who liked it.",
+      "verdict": "idle"
+    },
+    {
+      "id": "burned",
+      "when": {
+        "flag": "burned-by-a-fact"
+      },
+      "source": "Your own observation",
+      "text": "That went badly, and nobody will say why. There is something you were not told.",
+      "verdict": "held"
     }
   ]
 }

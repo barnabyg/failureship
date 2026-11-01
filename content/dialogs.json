@@ -7,13 +7,55 @@
         "speaker": "Dennis",
         "text": "The Chief Executive went on a retreat. Came back talking about strategic patience."
       },
-      { "speaker": "You", "text": "What is that?" },
+      {
+        "speaker": "You",
+        "text": "What is that?"
+      },
       {
         "speaker": "Dennis",
         "text": "It is when you are not doing anything, but on purpose. Nobody on our floor has heard it yet."
       },
       {
         "text": "Dennis buys a round and claims it as stakeholder engagement. You are the stakeholder."
+      }
+    ]
+  },
+  {
+    "id": "town-hall-front",
+    "title": "The front row, 09:55",
+    "lines": [
+      {
+        "text": "You get to the front early. The only other person here is from Facilities, testing the chairs."
+      },
+      {
+        "speaker": "Facilities",
+        "text": "They've got a new north star this year. It's on the slides."
+      },
+      {
+        "speaker": "You",
+        "text": "What is it?"
+      },
+      {
+        "speaker": "Facilities",
+        "text": "Couldn't tell you. You're not meant to get there. You just face it."
+      }
+    ]
+  },
+  {
+    "id": "tool-demo",
+    "title": "A demonstration, in the fourth-floor corridor",
+    "lines": [
+      {
+        "speaker": "Salesperson",
+        "text": "Every department currently has its own numbers. With us, you have a single source of truth."
+      },
+      {
+        "speaker": "You",
+        "text": "Whose numbers does it use?"
+      },
+      {
+        "speaker": "Salesperson",
+        "text": "Yours, when I'm talking to you."
       }
     ]
   }

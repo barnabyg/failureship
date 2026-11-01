@@ -223,7 +223,33 @@ describe("the real month", () => {
     expect(JSON.stringify(told.step)).toContain("abolished");
   });
 
-  // The README names these seeds in its test scenario.
+  // The README contrasts these two seeds in its test scenario.
+  it("keeps the two contrasting deals the README describes", () => {
+    const of = (seed: number) => {
+      const { characters } = readHiddenTruth(
+        startRun({ seed, content: gameContent }),
+      );
+      return Object.fromEntries(
+        characters.map((c) => {
+          const fact = gameContent.hiddenTruth.facts.find(
+            (f) => f.id === c.fact?.id,
+          );
+          return [c.id, { kind: c.kind, nature: fact?.nature ?? "none" }];
+        }),
+      );
+    };
+
+    expect(holderInMeeting(8)).toBe("boss");
+    expect(holderInMeeting(5)).toBe("head");
+    expect(of(8).projects?.nature).toBe("dangerous");
+    expect(of(5).projects?.nature).toBe("none");
+    expect(of(8).analyst?.nature).toBe("useful");
+    expect(of(5).analyst?.nature).toBe("dangerous");
+    expect(of(8).boss?.kind).toBe("incompetent");
+    expect(of(5).boss?.kind).toBe("believer");
+  });
+
+  // Each of these holds influence in the meeting on that seed.
   it.each([
     [8, "boss"],
     [1, "analyst"],

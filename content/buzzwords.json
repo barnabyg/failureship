@@ -3,5 +3,15 @@
     "id": "strategic-patience",
     "term": "strategic patience",
     "meaning": "Doing nothing, on purpose, at a senior level."
+  },
+  {
+    "id": "north-star",
+    "term": "north star",
+    "meaning": "A goal that is very far away, and which nobody expects to reach."
+  },
+  {
+    "id": "single-source-of-truth",
+    "term": "single source of truth",
+    "meaning": "The spreadsheet that belongs to whoever you are talking to."
   }
 ]

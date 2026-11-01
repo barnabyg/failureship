@@ -49,7 +49,7 @@ export function Notebook({ notebook, locked, onMark }: Props) {
         <p data-testid="notebook-empty">{panelText.notebookEmpty}</p>
       ) : (
         <ul className="notebook-clues">
-          {notebook.clues.map((clue, index) => (
+          {notebook.clues.toReversed().map((clue, index) => (
             <li key={index} data-testid="clue">
               <span className="results-title">
                 {monthLabel(clue.month)}, {clue.source}

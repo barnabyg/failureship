@@ -1,24 +1,11 @@
 import { expect, test, type Page } from "@playwright/test";
+import { playToResults as playToEnd } from "./play";
 
 async function reachSecondAction(page: Page) {
   await page.getByTestId("option-report").click();
   await page.getByTestId("continue").click();
   await page.getByTestId("hotspot-kitchen").click();
   await page.getByTestId("continue").click();
-}
-
-async function playToEnd(page: Page) {
-  for (let month = 0; month < 6; month++) {
-    await page.getByTestId("option-report").click();
-    await page.getByTestId("continue").click();
-    await page.getByTestId("hotspot-kitchen").click();
-    await page.getByTestId("continue").click();
-    await page.getByTestId("hotspot-work").click();
-    await page.getByTestId("continue").click();
-    await page.getByTestId("continue").click();
-    await expect(page.getByTestId("panel-story")).toBeVisible();
-    await page.getByTestId("continue").click();
-  }
 }
 
 test("restarts from a typed seed in the middle of a run", async ({ page }) => {

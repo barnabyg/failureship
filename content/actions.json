@@ -8,7 +8,7 @@
     "scene": "meeting",
     "oncePerMonth": true,
     "sets": ["attended-meeting"],
-    "months": [1, 3, 4, 5, 6]
+    "months": [1]
   },
   {
     "id": "meeting-lessons",
@@ -19,7 +19,51 @@
     "cost": "standard",
     "scene": "lessons-learned",
     "oncePerMonth": true,
-    "sets": ["attended-lessons"]
+    "sets": ["attended-meeting"]
+  },
+  {
+    "id": "meeting-town-hall",
+    "months": [3],
+    "label": "Meeting Room 1B",
+    "description": "The All-Colleague Town Hall, with the Chief Executive on a large screen.",
+    "place": "meeting-room",
+    "cost": "standard",
+    "scene": "town-hall",
+    "oncePerMonth": true,
+    "sets": ["attended-meeting"]
+  },
+  {
+    "id": "meeting-budget",
+    "months": [4],
+    "label": "Meeting Room 1B",
+    "description": "The Budget Round. Thirty per cent has to come from somewhere, and you are near somewhere.",
+    "place": "meeting-room",
+    "cost": "standard",
+    "scene": "budget-round",
+    "oncePerMonth": true,
+    "sets": ["attended-meeting"]
+  },
+  {
+    "id": "meeting-status",
+    "months": [5],
+    "label": "Meeting Room 1B",
+    "description": "The Project Status Review. Your project is flagged red, and you are presenting.",
+    "place": "meeting-room",
+    "cost": "standard",
+    "scene": "red-project",
+    "oncePerMonth": true,
+    "sets": ["attended-meeting"]
+  },
+  {
+    "id": "meeting-calibration",
+    "months": [6],
+    "label": "Meeting Room 1B",
+    "description": "Annual Calibration, at which nobody is compared with anybody.",
+    "place": "meeting-room",
+    "cost": "standard",
+    "scene": "calibration",
+    "oncePerMonth": true,
+    "sets": ["attended-meeting"]
   },
   {
     "id": "kitchen",
@@ -31,7 +75,29 @@
     "result": {
       "title": "Kitchen",
       "body": "You wait four minutes for the kettle beside someone from Accounts Payable. You agree that it is nearly Friday. It is Tuesday."
-    }
+    },
+    "moreResults": [
+      {
+        "title": "Kitchen",
+        "body": "A note on the fridge says that this is not your mother's kitchen. Someone has written underneath that it is. You eat a biscuit and consider who that might be."
+      },
+      {
+        "title": "Kitchen",
+        "body": "The dishwasher has been out of order since February. There is now a working group, and it meets in here, and you have just been asked to take notes."
+      },
+      {
+        "title": "Kitchen",
+        "body": "Someone has brought in a cake for a colleague's leaving do. Nobody knows who is leaving. You have a slice, and sign the card."
+      },
+      {
+        "title": "Kitchen",
+        "body": "You and a man from Facilities watch the kettle in silence. You part on good terms. It is the most honest exchange you have had this month."
+      },
+      {
+        "title": "Kitchen",
+        "body": "The mugs have been counted, and an email is on its way. You put yours back and hold it there for a moment, in case anyone is looking."
+      }
+    ]
   },
   {
     "id": "one-to-one",
@@ -43,7 +109,29 @@
     "result": {
       "title": "One-to-one",
       "body": "You ask Priya how things are going. You are told, at length, about the car park. You may now log this as a one-to-one."
-    }
+    },
+    "moreResults": [
+      {
+        "title": "One-to-one",
+        "body": "Priya asks you how you see your career developing. You begin to answer. Priya says that is really interesting, and asks you to close the door on your way out."
+      },
+      {
+        "title": "One-to-one",
+        "body": "You discuss your objectives. Neither of you has a copy. You agree that they are stretching, and you log the conversation as a success."
+      },
+      {
+        "title": "One-to-one",
+        "body": "Priya shows you a photograph of a dog. It takes you some time to work out that it is not Priya's dog, and that you were expected to know that."
+      },
+      {
+        "title": "One-to-one",
+        "body": "You are told about the car park again. There has been a development. It sounds worse than last time, and you promise to keep it to yourself."
+      },
+      {
+        "title": "One-to-one",
+        "body": "Priya says that this has been really useful, and asks what it was that you wanted. You say that it was nothing. Priya makes a note of that."
+      }
+    ]
   },
   {
     "id": "ask-around",
@@ -75,6 +163,28 @@
     "result": {
       "title": "Your desk",
       "body": "You do two hours of real work. It goes well. Nobody sees it, and it does not appear in any report."
-    }
+    },
+    "moreResults": [
+      {
+        "title": "Your desk",
+        "body": "You fix something that has been broken for a year. Nobody notices, because now it works. You will not be able to prove that it was you."
+      },
+      {
+        "title": "Your desk",
+        "body": "You answer eleven emails properly. Nine of them receive a reply asking you to take this offline."
+      },
+      {
+        "title": "Your desk",
+        "body": "You write a clear page explaining how a thing works. By Friday it has been given a new title by someone else and circulated as guidance."
+      },
+      {
+        "title": "Your desk",
+        "body": "You finish the thing that was due. You are told that the priorities changed last week, and that you should have been told."
+      },
+      {
+        "title": "Your desk",
+        "body": "A full, quiet afternoon of real work. You are startled to find that you enjoyed it, and you tell no one."
+      }
+    ]
   }
 ]
