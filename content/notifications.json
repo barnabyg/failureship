@@ -1,24 +1,27 @@
 [
   {
     "id": "report-or-pub",
-    "from": "Placeholder boss",
-    "subject": "Placeholder: this evening",
-    "body": "Placeholder: finish the Monthly Status Report, or come to the pub.",
+    "from": "From: Dennis Prowse, Team Leader",
+    "subject": "RE: RE: FW: this evening",
+    "body": "Your Monthly Status Report is due tonight, and nothing matters more to the people upstairs. Separately, a few of us are going to the Feathers at five. No pressure either way. I will remember which you chose.",
     "options": [
       {
         "id": "report",
-        "label": "Placeholder: finish the report",
+        "label": "Finish the Monthly Status Report",
         "cost": "report",
         "sets": ["filed-report"],
-        "result": { "title": "Report", "body": "Placeholder: report filed." }
+        "result": {
+          "title": "Monthly Status Report filed",
+          "body": "You file it at 23:58. An automatic reply confirms that your report has been received and may be read."
+        }
       },
       {
         "id": "pub",
-        "label": "Placeholder: go to the pub",
+        "label": "Go to the pub with Dennis",
         "cost": "pub",
         "sets": ["went-to-pub"],
         "dialog": "pub",
-        "learns": ["placeholder-word"]
+        "learns": ["strategic-patience"]
       }
     ]
   }

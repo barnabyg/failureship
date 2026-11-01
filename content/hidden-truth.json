@@ -1,7 +1,13 @@
 {
   "facts": [
-    { "id": "placeholder-fact-a", "text": "Placeholder hidden fact A." },
-    { "id": "placeholder-fact-b", "text": "Placeholder hidden fact B." }
+    {
+      "id": "thursday-bridge",
+      "text": "Marjorie Tull has played bridge with the Chief Executive every Thursday for eleven years."
+    },
+    {
+      "id": "abolished-post",
+      "text": "The post of Team Leader was abolished in a reorganisation two years ago, and nobody has told Dennis Prowse."
+    }
   ],
   "cast": ["boss", "analyst", "admin"]
 }

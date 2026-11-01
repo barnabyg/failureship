@@ -140,6 +140,7 @@ export function StepPanel({
           {step.narration.map((line) => (
             <p key={line}>{line}</p>
           ))}
+          <h3>{panelText.castHeading}</h3>
           <ul className="cast">
             {step.cast.map((person) => (
               <li key={person.name}>
@@ -147,6 +148,7 @@ export function StepPanel({
               </li>
             ))}
           </ul>
+          <h3>{panelText.signsHeading}</h3>
           <dl className="signs">
             {step.signs.map((sign) => (
               <div key={sign.label} data-testid="sign">
@@ -155,6 +157,7 @@ export function StepPanel({
               </div>
             ))}
           </dl>
+          <h3>{panelText.optionsHeading}</h3>
           <div className="options">
             {step.options.map((option) => (
               <button

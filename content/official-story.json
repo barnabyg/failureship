@@ -1,52 +1,92 @@
 {
-  "title": "Official story",
-  "reportedHeading": "Reported",
-  "happenedHeading": "What happened",
+  "title": "Floor 1 Monthly Summary",
+  "reportedHeading": "As reported upstairs",
+  "happenedHeading": "What actually happened",
   "entries": [
     {
-      "reported": "Placeholder: the month went according to plan."
+      "reported": "Floor 1 remains on track against its objectives, which are being finalised."
+    },
+    {
+      "when": { "flag": "filed-report" },
+      "reported": "The Monthly Status Report was delivered on time and in full.",
+      "happened": "You filed it at 23:58. Nobody has opened it."
+    },
+    {
+      "when": { "flag": "went-to-pub" },
+      "reported": "The team invested in senior stakeholder engagement outside core hours.",
+      "happened": "You went to the pub. The Monthly Status Report was not filed."
+    },
+    {
+      "when": { "flag": "backed-holder" },
+      "reported": "You showed mature judgement in a cross-functional forum.",
+      "happened": "You agreed with the person who actually decides things, and {holder} noticed."
+    },
+    {
+      "when": { "flag": "backed-wrong-person" },
+      "reported": "You gave visible support to the leadership team.",
+      "happened": "You agreed with the wrong person in front of the right one. {holder} did not look up."
+    },
+    {
+      "when": { "flag": "said-nothing" },
+      "reported": "You contributed to the Monthly Alignment Meeting.",
+      "happened": "You wrote key takeaways on a pad and underlined it."
     },
     {
       "when": {
-        "flag": "filed-report"
+        "all": [
+          { "flag": "used-buzzword" },
+          { "not": { "flag": "phrase-taken" } }
+        ]
       },
-      "reported": "Placeholder: the report was on time.",
-      "happened": "Placeholder: nobody read it."
+      "reported": "You introduced a new strategic framework to the floor.",
+      "happened": "You repeated something Dennis said in a pub."
     },
     {
-      "when": {
-        "flag": "went-to-pub"
-      },
-      "reported": "Placeholder: the report was delayed for stakeholder engagement.",
-      "happened": "Placeholder: you were at the pub."
+      "when": { "flag": "phrase-taken" },
+      "reported": "Dennis Prowse introduced a new strategic framework to the business.",
+      "happened": "You repeated something Dennis said in a pub, and Dennis has now said it back to everyone else."
     },
     {
-      "when": {
-        "flag": "backed-holder"
-      },
-      "reported": "Placeholder: you showed leadership.",
-      "happened": "Placeholder: you agreed with the right person."
+      "when": { "not": { "flag": "attended-meeting" } },
+      "reported": "You were recorded as present at the Monthly Alignment Meeting.",
+      "happened": "You were not there. Nobody has mentioned it, which may or may not be a good sign."
     },
     {
-      "when": {
-        "flag": "backed-wrong-person"
-      },
-      "reported": "Placeholder: you offered challenge.",
-      "happened": "Placeholder: you agreed with the wrong person."
+      "when": { "flag": "had-tea" },
+      "reported": "You strengthened cross-functional relationships.",
+      "happened": "You had a cup of tea."
     },
     {
-      "when": {
-        "flag": "said-nothing"
-      },
-      "reported": "Placeholder: you attended.",
-      "happened": "Placeholder: you said nothing."
+      "when": { "flag": "had-one-to-one" },
+      "reported": "You invested in your professional network.",
+      "happened": "You listened to a long account of a car park."
     },
     {
-      "when": {
-        "flag": "used-buzzword"
-      },
-      "reported": "Placeholder: you shaped the agenda.",
-      "happened": "Placeholder: you repeated a phrase from the pub."
+      "when": { "flag": "did-work" },
+      "happened": "You did two hours of real work. This has not been recorded anywhere."
+    },
+    {
+      "when": { "flag": "given-action" },
+      "reported": "You took ownership of a key action.",
+      "happened": "An action was left on your desk by the minutes."
+    },
+    {
+      "when": { "flag": "figures-borrowed" },
+      "reported": "Priya Venn presented strong analysis to senior management.",
+      "happened": "It was your analysis."
+    },
+    {
+      "when": { "flag": "report-chased" },
+      "reported": "A minor reporting delay was identified and is being managed by Dennis Prowse.",
+      "happened": "It is being managed by asking you about it."
+    },
+    {
+      "when": { "flag": "report-renamed" },
+      "reported": "Dennis Prowse delivered an executive summary of outstanding clarity.",
+      "happened": "It was your report, with a new first page."
+    },
+    {
+      "reported": "No risks were identified, as the risk review has been rescheduled."
     }
   ]
 }
