@@ -9,7 +9,7 @@ export default defineConfig({
     chunkSizeWarningLimit: 1000,
   },
   test: {
-    include: ["tests/engine/**/*.test.ts"],
+    include: ["tests/engine/**/*.test.ts", "tests/tower/**/*.test.ts"],
     bail: process.env.CI ? 1 : 0,
   },
 });

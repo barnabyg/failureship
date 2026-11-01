@@ -235,7 +235,7 @@ All the numbers are starting points, to be tuned through playtesting.
 - A Three.js tower: a fixed-camera cutaway with no free roaming and models built in code. The original proposal chose 2D illustration to save money, but the project has no artist, and lighting and materials can carry the rise in luxury that is the game's main visual reward.
 - React for Scenes, the Notebook and every other panel, over the top of the tower. moonBase uses plain HTML because most of its play is in the 3D view, so do not copy that choice here without that reason.
 - The rules are a headless, seeded engine that imports neither Three.js nor React, so the same seed and choices always produce the same outcome, and the tower can be replaced if it stops earning its cost.
-- 3D costs more than 2D, so the game is proved fun on a blocked-out tower before any detail is added.
+- 3D costs more than 2D, so the game is proved fun on a blocked-out tower before any detail is added. Floor 1 is the exception, under Sequencing.
 
 **Testing.**
 
@@ -248,7 +248,7 @@ All the numbers are starting points, to be tuned through playtesting.
 The original proposal's milestone sequence no longer applies. These decisions about order have been made:
 
 - The first piece of work is one playable month on a blocked-out floor.
-- The game is proved fun before any tower detail is added.
+- The game is proved fun before any tower detail is added. (changed after the Phase 2 checkpoint: the owner asked for Floor 1 to be furnished now, before the game is proved fun. Richer floors, and everything else in Phase 6, still wait.)
 - The owner runs the `to-spec` skill and then the `to-tickets` skill after a grilling.
 - Scenario collection is closed for now: "I can always revisit them when the app is in progress."
 
