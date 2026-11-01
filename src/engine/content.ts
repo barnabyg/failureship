@@ -158,6 +158,16 @@ const storyEntry = z
     message: "A story entry needs reported or happened text.",
   });
 
+export const FITTINGS = [
+  "meeting-room",
+  "kitchen",
+  "desk",
+  "cluttered-desk",
+  "photocopier",
+  "loading-bay",
+  "lift",
+] as const;
+
 const room = z.strictObject({
   id,
   x: z.number(),
@@ -166,7 +176,8 @@ const room = z.strictObject({
   depth: z.number().positive(),
   height: z.number().positive(),
   colour: z.string().regex(/^#[0-9a-fA-F]{6}$/),
-  lift: z.boolean().default(false),
+  /** What the room is furnished as. Without it, the room is a plain box. */
+  fittings: z.enum(FITTINGS).optional(),
   /** A label for a place the player can see but not act on. */
   sign: z.strictObject({ title: text, detail: text }).optional(),
 });

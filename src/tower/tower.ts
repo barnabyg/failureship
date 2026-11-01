@@ -4,9 +4,14 @@ import {
   type BufferGeometry,
   Color,
   ConeGeometry,
+  CylinderGeometry,
   DirectionalLight,
+  IcosahedronGeometry,
+  type Material,
   Mesh,
+  MeshBasicMaterial,
   MeshLambertMaterial,
+  PCFShadowMap,
   PerspectiveCamera,
   Raycaster,
   Scene,
@@ -14,6 +19,8 @@ import {
   Vector3,
   WebGLRenderer,
 } from "three";
+import { fittingsFor, type Fittings, type Part } from "./fittings";
+import { floorScenery } from "./scenery";
 
 export interface RoomModel {
   id: string;
@@ -23,8 +30,7 @@ export interface RoomModel {
   depth: number;
   height: number;
   colour: string;
-  /** Marks the lift, which rises out of the floor to show the way up. */
-  lift: boolean;
+  fittings?: Fittings | undefined;
 }
 
 export interface ScreenPoint {
@@ -32,25 +38,37 @@ export interface ScreenPoint {
   y: number;
 }
 
+type PartMesh = Mesh<BufferGeometry, MeshLambertMaterial>;
+
 const FLOOR_WIDTH = 16;
 const FLOOR_DEPTH = 8;
 const WALL_HEIGHT = 4.2;
+const NO_GLOW = "#000000";
+const LIT_GLOW = "#39465a";
+const HOVER_GLOW = "#6a7f9c";
+const DONE_DIMMING = 0.55;
 
 /**
- * A blocked-out cutaway of the current floor seen from a fixed camera. It knows
- * about rooms and clicks, and nothing about the rules of the game.
+ * A cutaway of the current floor seen from a fixed camera. It knows about rooms
+ * and clicks, and nothing about the rules of the game.
  */
 export class Tower {
   private readonly scene = new Scene();
   private readonly camera = new PerspectiveCamera(38, 1, 0.1, 200);
   private readonly raycaster = new Raycaster();
-  private readonly rooms = new Map<
-    string,
-    Mesh<BoxGeometry, MeshLambertMaterial>
-  >();
+  private readonly geometries: Record<Part["shape"], BufferGeometry> = {
+    box: new BoxGeometry(1, 1, 1),
+    cylinder: new CylinderGeometry(0.5, 0.5, 1, 20),
+    cone: new ConeGeometry(0.5, 1, 3),
+    blob: new IcosahedronGeometry(0.5, 1),
+  };
+  /** The solid boxes that clicks land on, so furniture never changes a target. */
+  private readonly clickBoxes = new Map<string, Mesh>();
+  private readonly furnishings = new Map<string, PartMesh[]>();
   private readonly tops = new Map<string, Vector3>();
   private readonly renderer: WebGLRenderer | null;
   private clickable = new Set<string>();
+  private done = new Set<string>();
   private hovered: string | null = null;
 
   constructor(
@@ -58,18 +76,21 @@ export class Tower {
     rooms: readonly RoomModel[],
     private readonly onRoomClick: (roomId: string) => void,
   ) {
-    this.buildShell();
+    this.addParts(floorScenery(FLOOR_WIDTH, FLOOR_DEPTH, WALL_HEIGHT), 0, 0);
     for (const room of rooms) this.addRoom(room);
     this.scene.background = new Color("#20262b");
-    this.scene.add(new AmbientLight("#ffffff", 1.6));
-    const sun = new DirectionalLight("#ffffff", 1.8);
-    sun.position.set(-6, 14, 10);
-    this.scene.add(sun);
+    this.scene.add(new AmbientLight("#ffffff", 1.5));
+    this.scene.add(createSun());
     this.camera.position.set(0, 8.5, 18);
     this.camera.lookAt(0, 2.8, 0);
 
     this.renderer = createRenderer();
     if (this.renderer) {
+      this.renderer.shadowMap.enabled = true;
+      this.renderer.shadowMap.type = PCFShadowMap;
+      // Nothing on the floor moves, so the shadows are only drawn once.
+      this.renderer.shadowMap.autoUpdate = false;
+      this.renderer.shadowMap.needsUpdate = true;
       container.appendChild(this.renderer.domElement);
       const canvas = this.renderer.domElement;
       canvas.addEventListener("click", this.handleClick);
@@ -82,13 +103,9 @@ export class Tower {
   /** Sets which rooms respond to the mouse, and how the rest are shown. */
   setRooms(clickable: ReadonlySet<string>, done: ReadonlySet<string>): void {
     this.clickable = new Set(clickable);
-    for (const [id, mesh] of this.rooms) {
-      const lit = clickable.has(id);
-      mesh.material.emissive.set(lit ? "#39465a" : "#000000");
-      mesh.material.color.set(mesh.userData.colour as string);
-      if (done.has(id)) mesh.material.color.multiplyScalar(0.55);
-    }
+    this.done = new Set(done);
     this.updateHover(this.hovered);
+    for (const id of this.furnishings.keys()) this.paintRoom(id);
     this.render();
   }
 
@@ -128,61 +145,73 @@ export class Tower {
     this.scene.traverse((object) => {
       if (object instanceof Mesh) {
         (object.geometry as BufferGeometry).dispose();
-        (object.material as MeshLambertMaterial).dispose();
+        (object.material as Material).dispose();
       }
     });
   }
 
-  private buildShell(): void {
-    const ground = new Mesh(
-      new BoxGeometry(FLOOR_WIDTH, 0.3, FLOOR_DEPTH),
-      new MeshLambertMaterial({ color: "#5b5f58" }),
-    );
-    ground.position.set(0, -0.15, 0);
-    this.scene.add(ground);
-    const back = new Mesh(
-      new BoxGeometry(FLOOR_WIDTH, WALL_HEIGHT, 0.2),
-      new MeshLambertMaterial({ color: "#51585e" }),
-    );
-    back.position.set(0, WALL_HEIGHT / 2, -FLOOR_DEPTH / 2);
-    this.scene.add(back);
-  }
-
-  /** Doors at floor level and an arrow above them, pointing the way up. */
-  private addLiftDetails(room: RoomModel): void {
-    const front = room.z + room.depth / 2;
-    const doorHeight = 2.4;
-    for (const side of [-1, 1]) {
-      const door = new Mesh(
-        new BoxGeometry(room.width * 0.36, doorHeight, 0.06),
-        new MeshLambertMaterial({ color: "#a9afb4" }),
-      );
-      door.position.set(
-        room.x + side * room.width * 0.19,
-        doorHeight / 2,
-        front + 0.03,
-      );
-      this.scene.add(door);
-    }
-    const arrow = new Mesh(
-      new ConeGeometry(0.34, 0.6, 3),
-      new MeshLambertMaterial({ color: "#e0b040", emissive: "#6a4e10" }),
-    );
-    arrow.position.set(room.x, doorHeight + 0.65, front + 0.2);
-    this.scene.add(arrow);
+  /** Builds parts from their data, sharing a material between identical ones. */
+  private addParts(parts: readonly Part[], x: number, z: number): PartMesh[] {
+    const materials = new Map<string, MeshLambertMaterial>();
+    return parts.map((part) => {
+      const look = `${part.colour}|${part.glow ?? ""}|${String(part.opacity)}`;
+      let material = materials.get(look);
+      if (!material) {
+        material = new MeshLambertMaterial({
+          color: part.colour,
+          emissive: part.glow ?? NO_GLOW,
+          transparent: part.opacity !== undefined,
+          opacity: part.opacity ?? 1,
+        });
+        material.userData = { colour: part.colour, glow: part.glow ?? NO_GLOW };
+        materials.set(look, material);
+      }
+      const mesh = new Mesh(this.geometries[part.shape], material);
+      mesh.scale.set(...part.size);
+      mesh.position.set(part.at[0] + x, part.at[1], part.at[2] + z);
+      const solid = part.opacity === undefined && part.glow === undefined;
+      mesh.castShadow = solid && part.size[1] > 0.03;
+      mesh.receiveShadow = part.opacity === undefined;
+      this.scene.add(mesh);
+      return mesh;
+    });
   }
 
   private addRoom(room: RoomModel): void {
-    const mesh = new Mesh(
-      new BoxGeometry(room.width, room.height, room.depth),
-      new MeshLambertMaterial({ color: room.colour }),
+    this.furnishings.set(
+      room.id,
+      this.addParts(fittingsFor(room), room.x, room.z),
     );
-    mesh.position.set(room.x, room.height / 2, room.z);
-    mesh.userData = { roomId: room.id, colour: room.colour };
-    this.scene.add(mesh);
-    this.rooms.set(room.id, mesh);
+    const clickBox = new Mesh(
+      new BoxGeometry(room.width, room.height, room.depth),
+      new MeshBasicMaterial(),
+    );
+    clickBox.position.set(room.x, room.height / 2, room.z);
+    clickBox.visible = false;
+    clickBox.userData = { roomId: room.id };
+    this.scene.add(clickBox);
+    this.clickBoxes.set(room.id, clickBox);
     this.tops.set(room.id, new Vector3(room.x, room.height, room.z));
-    if (room.lift) this.addLiftDetails(room);
+  }
+
+  /** Shows a room as clickable, hovered or done, over its parts' own colours. */
+  private paintRoom(id: string): void {
+    const glow = new Color(
+      id === this.hovered
+        ? HOVER_GLOW
+        : this.clickable.has(id)
+          ? LIT_GLOW
+          : NO_GLOW,
+    );
+    const dimming = this.done.has(id) ? DONE_DIMMING : 1;
+    for (const { material } of this.furnishings.get(id) ?? []) {
+      const { colour, glow: own } = material.userData as {
+        colour: string;
+        glow: string;
+      };
+      material.color.set(colour).multiplyScalar(dimming);
+      material.emissive.set(own).multiplyScalar(dimming).add(glow);
+    }
   }
 
   private roomAt(event: MouseEvent): string | null {
@@ -193,7 +222,9 @@ export class Tower {
       -((event.clientY - bounds.top) / bounds.height) * 2 + 1,
     );
     this.raycaster.setFromCamera(pointer, this.camera);
-    const [hit] = this.raycaster.intersectObjects([...this.rooms.values()]);
+    const [hit] = this.raycaster.intersectObjects([
+      ...this.clickBoxes.values(),
+    ]);
     const id = hit?.object.userData.roomId as string | undefined;
     return id !== undefined && this.clickable.has(id) ? id : null;
   }
@@ -214,16 +245,10 @@ export class Tower {
   };
 
   private updateHover(id: string | null): void {
-    if (this.hovered !== null) {
-      const previous = this.rooms.get(this.hovered);
-      previous?.material.emissive.set(
-        this.clickable.has(this.hovered) ? "#39465a" : "#000000",
-      );
-    }
+    const previous = this.hovered;
     this.hovered = id !== null && this.clickable.has(id) ? id : null;
-    if (this.hovered !== null) {
-      this.rooms.get(this.hovered)?.material.emissive.set("#6a7f9c");
-    }
+    if (previous !== null) this.paintRoom(previous);
+    if (this.hovered !== null) this.paintRoom(this.hovered);
     if (this.renderer) {
       this.renderer.domElement.style.cursor =
         this.hovered !== null ? "pointer" : "default";
@@ -233,6 +258,21 @@ export class Tower {
   private render(): void {
     this.renderer?.render(this.scene, this.camera);
   }
+}
+
+function createSun(): DirectionalLight {
+  const sun = new DirectionalLight("#fff6e6", 1.9);
+  sun.position.set(-6, 14, 10);
+  sun.castShadow = true;
+  sun.shadow.mapSize.set(2048, 2048);
+  sun.shadow.bias = -0.0005;
+  const reach = 14;
+  sun.shadow.camera.left = -reach;
+  sun.shadow.camera.right = reach;
+  sun.shadow.camera.top = reach;
+  sun.shadow.camera.bottom = -reach;
+  sun.shadow.camera.far = 40;
+  return sun;
 }
 
 /** Without WebGL the labels still work, so the game stays playable. */
