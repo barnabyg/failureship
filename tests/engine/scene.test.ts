@@ -227,7 +227,7 @@ describe("the meeting Scene", () => {
 
   it.each([
     [
-      "an unknown role in the text",
+      "an unknown part in the text",
       (s: Scene) => {
         s.signs = [{ label: "L", text: "{nobody}" }];
       },

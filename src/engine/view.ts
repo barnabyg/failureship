@@ -72,7 +72,10 @@ export type StepView =
       narration: string[];
       cast: { name: string; title: string }[];
       signs: { label: string; text: string }[];
-      behaviours: { who: string; text: string }[];
+      behaviours: {
+        who: string;
+        text: string;
+      }[];
       /** How the boss treats the player, if the boss is in the room. */
       treatment: string | null;
       options: { id: string; label: string }[];
@@ -84,7 +87,7 @@ export type StepView =
       sources: Person[];
       subjects: Person[];
     }
-  | { kind: "claim"; source: string; title: string; text: string }
+  | { kind: "claim"; title: string; text: string }
   | { kind: "notice"; title: string; body: string }
   | { kind: "move"; from: string; title: string; body: string }
   | {
@@ -108,6 +111,7 @@ export type StepView =
       powerMap: ChartEntry[];
       marks: {
         name: string;
+        title: string;
         mark: string | null;
         truth: string;
         correct: boolean;

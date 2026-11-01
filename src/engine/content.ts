@@ -197,6 +197,8 @@ const behaviour = z.strictObject({
   text,
   /** What the Notebook keeps of this, if anything. Says {who} too. */
   clue: text.optional(),
+  /** Only Characters with one of these roles can show this. Left out, anyone can. */
+  roles: z.array(id).min(1).optional(),
   /** How likely each kind is to show this, relative to its other behaviours. */
   likelihood: z.strictObject({
     believer: z.number().nonnegative(),
@@ -243,6 +245,8 @@ const sources = z.strictObject({
       }),
     }),
   ),
+  /** How each role talks around a claim. Says {said}. A role left out speaks plainly. */
+  voices: z.record(id, lines).default({}),
   /** How many people, from the top of the Power Map, count as influential. */
   influentialCount: z.number().int().positive(),
   /** How often each kind of source gives each sort of claim. */
@@ -363,6 +367,10 @@ const contentSchema = z.strictObject({
         id,
         name: text,
         title: text,
+        /** How running text refers to them, such as "your boss". Left out, their name. */
+        called: text.optional(),
+        /** What this Character does, which decides the behaviours open to them. */
+        role: id.optional(),
         /** Who this Character answers to on the Org Chart. */
         reportsTo: id.optional(),
       }),
@@ -514,6 +522,19 @@ function findBrokenDeal(
   return problems;
 }
 
+function rolesOf(content: Content): Set<string> {
+  return new Set(content.characters.flatMap((c) => c.role ?? []));
+}
+
+/** What this Character can be seen doing: what anyone does, and what their role does. */
+export function behavioursOpenTo(content: Content, character: string) {
+  const role = content.characters.find((c) => c.id === character)?.role;
+  return content.behaviours.filter(
+    (b) =>
+      b.roles === undefined || (role !== undefined && b.roles.includes(role)),
+  );
+}
+
 /** Signs must narrow the answer without ever settling it. */
 function findBrokenBehaviours(content: Content): string[] {
   const problems: string[] = [];
@@ -542,10 +563,32 @@ function findBrokenBehaviours(content: Content): string[] {
       problems.push(`${owner} gives no evidence: every kind is as likely.`);
     }
   }
+  const roles = rolesOf(content);
+  for (const b of content.behaviours) {
+    for (const role of b.roles ?? []) {
+      if (!roles.has(role)) {
+        problems.push(`Behaviour "${b.id}" names unknown role "${role}".`);
+      }
+    }
+  }
+  for (const role of roles) {
+    if (
+      !content.behaviours.some(
+        (b) => b.roles?.length === 1 && b.roles[0] === role,
+      )
+    ) {
+      problems.push(`Role "${role}" has no behaviour of its own.`);
+    }
+  }
   if (content.behaviours.length > 0) {
-    for (const kind of ["believer", "incompetent", "practitioner"] as const) {
-      if (content.behaviours.every((b) => b.likelihood[kind] === 0)) {
-        problems.push(`No behaviour can be shown by a ${kind}.`);
+    for (const character of content.characters) {
+      const open = behavioursOpenTo(content, character.id);
+      for (const kind of KINDS) {
+        if (open.every((b) => b.likelihood[kind] === 0)) {
+          problems.push(
+            `Character "${character.id}" has no behaviour to show as a ${kind}.`,
+          );
+        }
       }
     }
   }
@@ -584,7 +627,7 @@ function findBrokenBossSigns(content: Content): string[] {
 
 /** Sources must be worth weighing: never always right, and never always wrong. */
 function findBrokenSources(content: Content): string[] {
-  const { methods, reliability, motives, claims } = content.sources;
+  const { methods, reliability, motives, claims, voices } = content.sources;
   const problems: string[] = [];
   const checkTokens = (owner: string, written: string, tokens: string[]) => {
     for (const [, token] of written.matchAll(/\{(\w+)\}/g)) {
@@ -609,6 +652,18 @@ function findBrokenSources(content: Content): string[] {
     }
     if (Object.values(method.topics).every((t) => t === 0)) {
       problems.push(`${owner} has nothing to claim.`);
+    }
+  }
+  const roles = rolesOf(content);
+  for (const [role, spoken] of Object.entries(voices)) {
+    const owner = `The voice of "${role}"`;
+    if (!roles.has(role))
+      problems.push(`A voice names unknown role "${role}".`);
+    for (const line of spoken) {
+      if (!line.includes("{said}")) {
+        problems.push(`${owner} needs to say {said}: "${line}"`);
+      }
+      checkTokens(owner, line, ["said"]);
     }
   }
   for (const kind of KINDS) {
@@ -681,11 +736,11 @@ function findBrokenReferences(content: Content): string[] {
       );
     }
   };
-  const checkRoles = (owner: string, written: string, about = false) => {
+  const checkParts = (owner: string, written: string, about = false) => {
     for (const [, token] of written.matchAll(/\{(\w+)\}/g)) {
       if (about && token === "subject") continue;
       if (token !== "holder" && token !== "ignored" && token !== "bystander") {
-        problems.push(`${owner} uses unknown role "{${token ?? ""}}".`);
+        problems.push(`${owner} uses unknown part "{${token ?? ""}}".`);
       }
     }
   };
@@ -763,21 +818,21 @@ function findBrokenReferences(content: Content): string[] {
       s.cast.length < 3 &&
       /\{(holder|ignored|bystander)\}/.test(JSON.stringify(s))
     ) {
-      problems.push(`${owner} names roles, which need three people present.`);
+      problems.push(`${owner} names parts, which need three people present.`);
     }
-    for (const line of s.narration) checkRoles(owner, line);
+    for (const line of s.narration) checkParts(owner, line);
     for (const sign of s.signs) {
-      checkRoles(owner, sign.text);
-      checkRoles(owner, sign.clue ?? "");
+      checkParts(owner, sign.text);
+      checkParts(owner, sign.clue ?? "");
     }
     for (const o of s.options) {
       const optionOwner = `${owner} option "${o.id}"`;
       const about = o.about !== undefined;
       if (o.about !== undefined) checkFact(optionOwner, o.about);
-      checkRoles(optionOwner, o.label, about);
+      checkParts(optionOwner, o.label, about);
       for (const r of o.results) {
-        checkRoles(optionOwner, r.body, about);
-        checkRoles(optionOwner, r.factNote ?? "", about);
+        checkParts(optionOwner, r.body, about);
+        checkParts(optionOwner, r.factNote ?? "", about);
         if (r.factAt !== undefined) checkCharacter(optionOwner, r.factAt);
         if (r.when) checkCondition(optionOwner, r.when);
       }
@@ -804,13 +859,13 @@ function findBrokenReferences(content: Content): string[] {
   for (const m of content.moves) {
     const owner = `Move "${m.id}"`;
     checkMonths(owner, m.months);
-    checkRoles(owner, m.body);
+    checkParts(owner, m.body);
     if (m.when) checkCondition(owner, m.when);
   }
   for (const e of content.officialStory.entries) {
     const owner = "An official story entry";
-    checkRoles(owner, e.reported ?? "");
-    checkRoles(owner, e.happened ?? "");
+    checkParts(owner, e.reported ?? "");
+    checkParts(owner, e.happened ?? "");
     if (e.when) checkCondition(owner, e.when);
     checkMonths(owner, e.months);
   }

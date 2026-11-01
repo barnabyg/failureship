@@ -99,7 +99,7 @@ describe("Find Out", () => {
     const view = askOnce(run);
 
     if (view.step.kind !== "claim") throw new Error(view.step.kind);
-    expect(view.step.source).toBe("Ben Bird");
+    expect(view.step.title).toContain("Ben Bird");
     expect(view.step.text).toMatch(/Cal Cope|HEARD/);
     expect(view.step.text).not.toMatch(/\{\w+\}/);
     expect(view.choices).toEqual([{ type: "continue" }]);

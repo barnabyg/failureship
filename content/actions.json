@@ -14,7 +14,7 @@
     "id": "meeting-lessons",
     "months": [2],
     "label": "Meeting Room 1B",
-    "description": "A Lessons Learned Review. Nobody is to be blamed, and Dennis would like to know who.",
+    "description": "A Lessons Learned Review. Nobody is to be blamed, and your boss would like to know who.",
     "place": "meeting-room",
     "cost": "standard",
     "scene": "lessons-learned",
@@ -101,19 +101,19 @@
   },
   {
     "id": "one-to-one",
-    "label": "Priya's desk",
+    "label": "The Senior Analyst's desk",
     "description": "A one-to-one, which is a conversation that can be logged.",
-    "place": "priya-desk",
+    "place": "analyst-desk",
     "cost": "standard",
     "sets": ["had-one-to-one"],
     "result": {
       "title": "One-to-one",
-      "body": "You ask Priya how things are going. You are told, at length, about the car park. You may now log this as a one-to-one."
+      "body": "You ask the Senior Analyst how things are going. You are told, at length, about the car park. You may now log this as a one-to-one."
     },
     "moreResults": [
       {
         "title": "One-to-one",
-        "body": "Priya asks you how you see your career developing. You begin to answer. Priya says that is really interesting, and asks you to close the door on your way out."
+        "body": "The Senior Analyst asks you how you see your career developing. You begin to answer. The Senior Analyst says that is really interesting, and asks you to close the door on your way out."
       },
       {
         "title": "One-to-one",
@@ -121,7 +121,7 @@
       },
       {
         "title": "One-to-one",
-        "body": "Priya shows you a photograph of a dog. It takes you some time to work out that it is not Priya's dog, and that you were expected to know that."
+        "body": "The Senior Analyst shows you a photograph of a dog. It takes you some time to work out that it is not the Senior Analyst's dog, and that you were expected to know that."
       },
       {
         "title": "One-to-one",
@@ -129,7 +129,7 @@
       },
       {
         "title": "One-to-one",
-        "body": "Priya says that this has been really useful, and asks what it was that you wanted. You say that it was nothing. Priya makes a note of that."
+        "body": "The Senior Analyst says that this has been really useful, and asks what it was that you wanted. You say that it was nothing. The Senior Analyst makes a note of that."
       }
     ]
   },

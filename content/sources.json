@@ -12,7 +12,7 @@
         "fact": 2
       },
       "frames": [
-        "The photocopier jams, and you and {source} stand looking at it. \"Have you been here long enough to know about this?\" {source} says, meaning the machine, and then does not mean the machine. \"{said}\"",
+        "The photocopier jams, and you and {source} stand looking at it. \"Have you been here long enough to know about this?\" says {source}, meaning the machine, and then does not mean the machine. \"{said}\"",
         "{source} is copying something face down, and shifts slightly so that you cannot read it. \"While you're there,\" {source} says. \"{said}\"",
         "You ask how the week is going. {source} says fine, looks over one shoulder and carries on more quietly. \"{said}\"",
         "You mention the name, as if it had just occurred to you. {source} presses a button that does nothing. \"Funny you should say that. {said}\""
@@ -35,6 +35,33 @@
       ]
     }
   ],
+  "voices": {
+    "head-of-operations": [
+      "I don't get down to this floor often, so I'll say this once. {said}",
+      "I've seen the quarterly numbers, and I've seen the people. {said}",
+      "{said} I'd rather you heard that from me than read it in a restructure."
+    ],
+    "team-leader": [
+      "Between ourselves, and I'll deny this at your review. {said}",
+      "Look, I'm meant to be across everything on this team. {said}",
+      "{said} Let's take that offline. We are offline. You know what I mean."
+    ],
+    "office-coordinator": [
+      "I take the minutes, so I see what gets left out of them. {said}",
+      "People forget who orders the stationery, and who they have to ask for it. {said}",
+      "{said} That's not in the minutes, and it won't be."
+    ],
+    "senior-analyst": [
+      "I've run this three ways, and it comes out the same. {said}",
+      "It's not in the figures, but then most things aren't. {said}",
+      "{said} I'd put about seventy per cent on that, if you want a number."
+    ],
+    "project-coordinator": [
+      "I've got this on the tracker, in a column nobody opens. {said}",
+      "Everything here slips eventually, so you learn who it slips towards. {said}",
+      "{said} I'll add that as a risk, but I won't say whose."
+    ]
+  },
   "influentialCount": 2,
   "reliability": {
     "believer": {

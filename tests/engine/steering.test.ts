@@ -190,7 +190,7 @@ describe("the balance of the deal", () => {
     const total = Object.values(kinds).reduce((sum, k) => sum + k.weight, 0);
     const belief = new Map<string, Record<Kind, number>>();
     for (const c of gameContent.characters) {
-      belief.set(c.name, {
+      belief.set(c.id, {
         believer: Math.log(kinds.believer.weight / total),
         incompetent: Math.log(kinds.incompetent.weight / total),
         practitioner: Math.log(kinds.practitioner.weight / total),
@@ -200,15 +200,19 @@ describe("the balance of the deal", () => {
       if (view.step.kind !== "scene") continue;
       for (const { who, text } of view.step.behaviours) {
         const written = gameContent.behaviours.find(
-          (b) => b.text.replaceAll("{who}", who) === text,
+          (b) =>
+            b.text.replaceAll("{who}", who).toLowerCase() ===
+            text.toLowerCase(),
         );
-        const held = belief.get(who);
+        const shownBy = gameContent.characters.find((c) => c.called === who);
+        const held = belief.get(shownBy?.id ?? "");
         if (!written || !held) throw new Error(`Unknown sign: ${text}`);
+        const role = shownBy?.role;
+        const open = gameContent.behaviours.filter(
+          (b) => role !== undefined && (b.roles?.includes(role) ?? true),
+        );
         for (const kind of KINDS) {
-          const sum = gameContent.behaviours.reduce(
-            (all, b) => all + b.likelihood[kind],
-            0,
-          );
+          const sum = open.reduce((all, b) => all + b.likelihood[kind], 0);
           // A sign that one kind could never show still leaves room for doubt.
           held[kind] += Math.log(
             Math.max(written.likelihood[kind], 0.25) / sum,
@@ -235,11 +239,8 @@ describe("the balance of the deal", () => {
       const truth = readHiddenTruth(run).characters;
       let allRight = true;
       for (const dealt of truth) {
-        const name = gameContent.characters.find(
-          (c) => c.id === dealt.id,
-        )?.name;
-        const held = name === undefined ? undefined : belief.get(name);
-        if (!held) throw new Error("Nobody by that name.");
+        const held = belief.get(dealt.id);
+        if (!held) throw new Error("Nobody with that id.");
         const guess = KINDS.reduce((a, b) => (held[b] > held[a] ? b : a));
         counts[dealt.kind] += 1;
         people += 1;

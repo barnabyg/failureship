@@ -21,8 +21,8 @@ export function Notebook({ notebook, locked, onMark }: Props) {
         {notebook.marks.map((person) => (
           <li key={person.id}>
             <label htmlFor={`mark-${person.id}`}>
-              {person.name}
-              <span className="results-title">{person.title}</span>
+              {person.title}
+              <span className="results-title">{person.name}</span>
             </label>
             <select
               id={`mark-${person.id}`}

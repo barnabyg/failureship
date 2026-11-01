@@ -14,8 +14,8 @@
       "when": {
         "flag": "had-one-to-one"
       },
-      "source": "A one-to-one with Priya",
-      "text": "Priya feels very strongly about the car park. Someone has been moved from a space, and it may be significant.",
+      "source": "A one-to-one with the Senior Analyst",
+      "text": "The Senior Analyst feels very strongly about the car park. Someone has been moved from a space, and it may be significant.",
       "verdict": "idle"
     },
     {
@@ -33,7 +33,7 @@
         "flag": "went-to-pub"
       },
       "source": "The Feathers",
-      "text": "Dennis says that nothing on this floor happens without someone upstairs knowing. Dennis says this after the third round.",
+      "text": "Your boss says that nothing on this floor happens without someone upstairs knowing. Your boss says this after the third round.",
       "verdict": "idle"
     },
     {

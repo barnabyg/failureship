@@ -239,7 +239,7 @@ describe("the real month", () => {
       );
     };
 
-    const firstSign = (seed: number) => {
+    const meeting = (seed: number) => {
       const run = startRun({ seed, content: gameContent });
       run.choose({
         type: "notification",
@@ -249,17 +249,27 @@ describe("the real month", () => {
       run.choose({ type: "continue" });
       const view = run.choose({ type: "action", actionId: "meeting" });
       if (view.step.kind !== "scene") throw new Error(view.step.kind);
-      return view.step.signs[0]?.text;
+      return view.step;
     };
+    const firstSign = (seed: number) => meeting(seed).signs[0]?.text;
+    const meetingSigns = (seed: number) =>
+      meeting(seed).behaviours.map((b) => b.text);
 
     expect(holderInMeeting(8)).toBe("boss");
     expect(holderInMeeting(1)).toBe("analyst");
-    expect(firstSign(8)).toMatch(/^Dennis Prowse talks over/);
-    expect(firstSign(1)).toMatch(/^Priya Venn talks over/);
+    expect(firstSign(8)).toMatch(/^Your boss talks over/);
+    expect(firstSign(1)).toMatch(/^The Senior Analyst talks over/);
     expect(of(8).projects?.nature).toBe("dangerous");
     expect(of(1).projects?.nature).toBe("useful");
     expect(of(8).analyst?.nature).toBe("useful");
     expect(of(1).analyst?.nature).toBe("dangerous");
+    const signs = meetingSigns(8);
+    expect(signs).toContain(
+      "Your boss overruns the meeting by twenty minutes, then schedules another to cover what was missed.",
+    );
+    expect(signs).toContain(
+      "The Office Co-ordinator reads back last month's minutes, in which several things have changed.",
+    );
     expect(of(8).boss?.kind).toBe("incompetent");
     expect(of(1).boss?.kind).toBe("believer");
   });

@@ -38,6 +38,7 @@ A turn is one month.
 
 - **Two power structures.** The Org Chart is public. The Power Map is hidden, and uncovering it is the core of the game.
 - **Three kinds of Character.** Every Character is a Believer, an Incompetent or a Practitioner, and the kind stays hidden until you have read it. Telling a Practitioner from someone with a genuine heart of gold is a skill of the game.
+- **Roles first (added after the Phase 2 checkpoint, issue 24).** Characters are read first as what they do: your boss, your boss's boss, the Office Co-ordinator. Running text calls them that. Names stay in support on the charts, in the cast list, the Notebook's marks and the results screen, on the `from` lines of messages and the Find Out buttons, and in what sources say about people. A role is held by the same Character in every deal. Each role on Floor 1 has behaviour only it can show, and its own way of talking in Find Out. A kind still shows differently within a role, so a role narrows what you might see without saying what kind someone is.
 - **Ambiguous behaviour.** The same behaviour can come from any kind. A late colleague may be incompetent, sabotaging you, or overloaded by your own decisions.
 - **Believers change.** A Believer burned repeatedly may become a Practitioner or a whistleblower, or may leave. Other kinds do not change.
 - **Rival is a relationship, not a kind.** A Rival is any Practitioner currently competing with you for something, so today's boss can be tomorrow's Rival.
@@ -161,7 +162,7 @@ All the numbers are starting points, to be tuned through playtesting.
 
 ## Content and technology
 
-**Content.** Scenes and Threads are written by hand as data files where possible, and those that need custom behaviour can use code. This is a trial, not a settled choice: the owner was unsure and suspects some Scenes will need code. Adding Scenarios later should not need code changes where it can be avoided. Claude drafts the text in the deadpan voice and the owner edits it. Characters' signs are mostly written per kind, not per named person, so the writing works for any deal.
+**Content.** Scenes and Threads are written by hand as data files where possible, and those that need custom behaviour can use code. This is a trial, not a settled choice: the owner was unsure and suspects some Scenes will need code. Adding Scenarios later should not need code changes where it can be avoided. Claude drafts the text in the deadpan voice and the owner edits it. Characters' signs are mostly written per kind, not per named person, so the writing works for any deal. Some belong to a role as well (changed after the Phase 2 checkpoint), and each of those can still come from at least two kinds.
 
 **Technology.** The owner pointed to the moonBase project for its graphics as a reference, not a requirement, and left the choice of stack to the implementer: "If it doesn't work, don't use it."
 
@@ -232,6 +233,7 @@ Use these terms consistently in the design and the game.
 ### The organisation
 
 - **Character:** a persistent fictional person in the company whom the player deals with. Not "NPC" or "colleague".
+- **Role:** what a Character does in the company, such as Team Leader or Office Co-ordinator. It decides which behaviours they can show and how they talk. It is public and is not a kind.
 - **Believer:** a Character who wants the best outcome for the company.
 - **Incompetent:** a Character who does damage through inability, with no scheme behind it.
 - **Practitioner:** a Character who practises failureship.
