@@ -5,17 +5,23 @@ async function spendAction(page: Page, id: string) {
   await page.getByTestId("continue").click();
 }
 
+async function fileTheReport(page: Page) {
+  await page.getByTestId("option-report").click();
+  await page.getByTestId("continue").click();
+}
+
 test("plays through a month on a fixed-camera Floor 1", async ({ page }) => {
   await page.goto("/?seed=1");
 
   await expect(page.locator("canvas")).toBeVisible();
   await expect(page.getByTestId("actions-left")).toContainText("3");
+  await fileTheReport(page);
+  await expect(page.getByTestId("actions-left")).toContainText("2");
 
   await spendAction(page, "kitchen");
-  await spendAction(page, "work");
   await expect(page.getByTestId("actions-left")).toContainText("1");
 
-  await spendAction(page, "one-to-one");
+  await spendAction(page, "work");
 
   await expect(page.getByTestId("panel-story")).toBeVisible();
   await expect(page.getByTestId("hotspot-meeting")).toBeDisabled();
@@ -23,6 +29,7 @@ test("plays through a month on a fixed-camera Floor 1", async ({ page }) => {
 
 test("spends an action by clicking on the floor itself", async ({ page }) => {
   await page.goto("/?seed=1");
+  await fileTheReport(page);
 
   const label = page.getByTestId("hotspot-kitchen");
   const box = await label.boundingBox();
@@ -32,7 +39,7 @@ test("spends an action by clicking on the floor itself", async ({ page }) => {
   await page.mouse.click(box.x + box.width / 2, box.y + box.height + 24);
 
   await expect(page.getByTestId("panel-notice")).toBeVisible();
-  await expect(page.getByTestId("actions-left")).toContainText("2");
+  await expect(page.getByTestId("actions-left")).toContainText("1");
 });
 
 test("offers no way to move the camera", async ({ page }) => {

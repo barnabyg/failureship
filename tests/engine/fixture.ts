@@ -1,12 +1,55 @@
 import { parseContent, type Content } from "../../src/engine";
 
+interface RawOption {
+  id: string;
+  label: string;
+  cost?: string;
+  dialog?: string;
+  learns?: string[];
+  result?: { title: string; body: string };
+}
+
+interface RawNotification {
+  id: string;
+  from: string;
+  subject: string;
+  body: string;
+  options: RawOption[];
+}
+
 /**
  * A small content set for engine tests, so that editing the game's real text
  * never breaks a rules test.
  */
 export function fixtureRaw() {
+  const notifications: RawNotification[] = [
+    {
+      id: "invite",
+      from: "Your boss",
+      subject: "Report or pub",
+      body: "Finish the report, or come to the pub.",
+      options: [
+        {
+          id: "report",
+          label: "Finish the report",
+          cost: "report",
+          result: { title: "Report filed", body: "It has been filed." },
+        },
+        {
+          id: "pub",
+          label: "Go to the pub",
+          cost: "pub",
+          dialog: "pub",
+          learns: ["fixture-word"],
+        },
+      ],
+    },
+  ];
   return {
-    balance: { actionsPerMonth: 3, actionCosts: { standard: 1 } },
+    balance: {
+      actionsPerMonth: 3,
+      actionCosts: { standard: 1, report: 1, pub: 1 } as Record<string, number>,
+    },
     hiddenTruth: {
       facts: [
         { id: "fact-a", text: "SECRET-FACT-ALPHA" },
@@ -14,6 +57,17 @@ export function fixtureRaw() {
         { id: "fact-c", text: "SECRET-FACT-CHARLIE" },
       ],
     },
+    notifications,
+    dialogs: [
+      {
+        id: "pub",
+        title: "At the pub",
+        lines: [{ speaker: "Your boss", text: "Have you heard this one?" }],
+      },
+    ],
+    buzzwords: [
+      { id: "fixture-word", term: "FIXTURE-TERM", meaning: "Nothing at all." },
+    ],
     actions: [
       action("kettle"),
       action("desk"),
@@ -24,12 +78,15 @@ export function fixtureRaw() {
     floor: { rooms: ["kettle", "desk", "copier", "plant"].map(room) },
     ui: {
       hints: {
+        notification: "Answer the Notification.",
+        dialog: "Press continue.",
         actions: "Click the floor. You have {actions} left.",
         notice: "Press continue.",
         story: "The month has closed.",
       },
       actionCount: { one: "1 action", other: "{n} actions" },
       costLabel: "Costs {actions}",
+      freeLabel: "Costs nothing",
     },
   };
 }
@@ -60,4 +117,13 @@ export function room(id: string, index: number) {
 
 export function fixture(): Content {
   return parseContent(fixtureRaw());
+}
+
+/** A month with no Notifications, for tests about spending actions. */
+export function emptyMonthRaw() {
+  return { ...fixtureRaw(), notifications: [] };
+}
+
+export function emptyMonth(): Content {
+  return parseContent(emptyMonthRaw());
 }

@@ -6,7 +6,7 @@ import {
   type Run,
 } from "../../src/engine";
 import { readHiddenTruth } from "../../src/engine/hidden-truth";
-import { fixture, fixtureRaw } from "./fixture";
+import { emptyMonth, emptyMonthRaw } from "./fixture";
 
 function spendAction(run: Run, actionId: string) {
   run.choose({ type: "action", actionId });
@@ -24,7 +24,7 @@ function playThrough(run: Run) {
 
 describe("a month", () => {
   it("starts with three actions to spend on the floor", () => {
-    const view = startRun({ seed: 1, content: fixture() }).view();
+    const view = startRun({ seed: 1, content: emptyMonth() }).view();
 
     expect(view.step.kind).toBe("actions");
     expect(view.actions).toMatchObject({ total: 3, spent: 0, remaining: 3 });
@@ -37,7 +37,7 @@ describe("a month", () => {
   });
 
   it("takes the number of actions from balance data", () => {
-    const raw = fixtureRaw();
+    const raw = emptyMonthRaw();
     raw.balance.actionsPerMonth = 2;
     const run = startRun({ seed: 1, content: parseContent(raw) });
 
@@ -48,7 +48,7 @@ describe("a month", () => {
   });
 
   it("refuses a fourth action in the same month", () => {
-    const run = startRun({ seed: 1, content: fixture() });
+    const run = startRun({ seed: 1, content: emptyMonth() });
     spendAction(run, "kettle");
     spendAction(run, "desk");
     spendAction(run, "copier");
@@ -60,7 +60,7 @@ describe("a month", () => {
   });
 
   it("will not spend an action on a place already visited this month", () => {
-    const run = startRun({ seed: 1, content: fixture() });
+    const run = startRun({ seed: 1, content: emptyMonth() });
     spendAction(run, "kettle");
 
     expect(() => run.choose({ type: "action", actionId: "kettle" })).toThrow(
@@ -72,7 +72,7 @@ describe("a month", () => {
   });
 
   it("will not take an action while a result is waiting to be read", () => {
-    const run = startRun({ seed: 1, content: fixture() });
+    const run = startRun({ seed: 1, content: emptyMonth() });
     run.choose({ type: "action", actionId: "kettle" });
 
     expect(run.view().step.kind).toBe("notice");
@@ -82,7 +82,7 @@ describe("a month", () => {
   });
 
   it("runs in order: actions, then the official story, then nothing", () => {
-    const run = startRun({ seed: 1, content: fixture() });
+    const run = startRun({ seed: 1, content: emptyMonth() });
 
     const kinds = playThrough(run).map((v) => v.step.kind);
 
@@ -108,7 +108,7 @@ describe("a month", () => {
       { type: "continue" },
     ];
     const play = (seed: number) => {
-      const run = startRun({ seed, content: fixture() });
+      const run = startRun({ seed, content: emptyMonth() });
       const views = script.map((choice) => run.choose(choice));
       return { views, truth: readHiddenTruth(run) };
     };
@@ -120,7 +120,7 @@ describe("a month", () => {
     const facts = new Set(
       [1, 2, 3, 4, 5, 6, 7, 8].map(
         (seed) =>
-          readHiddenTruth(startRun({ seed, content: fixture() })).fact.id,
+          readHiddenTruth(startRun({ seed, content: emptyMonth() })).fact.id,
       ),
     );
 
@@ -130,8 +130,8 @@ describe("a month", () => {
 
 describe("the player view", () => {
   it("never contains anything from the hidden truth", () => {
-    const secrets = fixture().hiddenTruth.facts.map((f) => f.text);
-    const run = startRun({ seed: 3, content: fixture() });
+    const secrets = emptyMonth().hiddenTruth.facts.map((f) => f.text);
+    const run = startRun({ seed: 3, content: emptyMonth() });
 
     for (const view of playThrough(run)) {
       const seen = JSON.stringify(view);

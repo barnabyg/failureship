@@ -90,6 +90,55 @@ export function StepPanel({
   switch (step.kind) {
     case "actions":
       return null;
+    case "notification":
+      return (
+        <Panel
+          testId="panel-notification"
+          eyebrow={step.from}
+          title={step.subject}
+        >
+          <p>{step.body}</p>
+          <div className="options">
+            {step.options.map((option) => (
+              <button
+                key={option.id}
+                type="button"
+                className="option"
+                data-testid={`option-${option.id}`}
+                disabled={!option.affordable}
+                onClick={() => {
+                  onChoose({
+                    type: "notification",
+                    notificationId: step.id,
+                    optionId: option.id,
+                  });
+                }}
+              >
+                <span>{option.label}</span>
+                <span className="option-cost">{option.costLabel}</span>
+              </button>
+            ))}
+          </div>
+        </Panel>
+      );
+    case "dialog":
+      return (
+        <Panel testId="panel-dialog" title={step.title}>
+          {step.lines.map((line) => (
+            <p key={line.text}>
+              {line.speaker !== undefined && <strong>{line.speaker}: </strong>}
+              {line.text}
+            </p>
+          ))}
+          {step.learned.map((word) => (
+            <p key={word.id} className="callout" data-testid="learned">
+              <strong>{panelText.learnedLabel}: </strong>
+              {word.term}. {word.meaning}
+            </p>
+          ))}
+          <Continue onChoose={onChoose} />
+        </Panel>
+      );
     case "notice":
       return (
         <Panel testId="panel-notice" title={step.title}>

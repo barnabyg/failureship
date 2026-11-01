@@ -1,0 +1,10 @@
+[
+  {
+    "id": "pub",
+    "title": "The pub",
+    "lines": [
+      { "speaker": "Placeholder boss", "text": "Placeholder: pub talk." },
+      { "text": "Placeholder: you pick up a phrase." }
+    ]
+  }
+]

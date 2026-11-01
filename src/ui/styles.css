@@ -197,6 +197,42 @@ body {
   color: var(--accent-ink);
 }
 
+.options {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.panel button.option {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  text-align: left;
+}
+
+.panel button.option:hover:enabled,
+.panel button.option:focus-visible {
+  background: var(--accent);
+  color: var(--accent-ink);
+}
+
+.panel button.option:disabled {
+  border-style: dashed;
+  color: var(--muted);
+  cursor: default;
+}
+
+.option-cost {
+  flex: none;
+  font-size: 0.8125rem;
+}
+
+.callout {
+  padding: 8px 12px;
+  border-left: 4px solid var(--accent);
+  background: #e7e3d6;
+}
+
 .panel-actions {
   display: flex;
   flex-wrap: wrap;

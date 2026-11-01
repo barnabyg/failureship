@@ -13,10 +13,15 @@
   "replayLabel": "Replay this month",
   "newSeedLabel": "Try a different seed",
   "hints": {
+    "notification": "Placeholder: answer the Notification.",
+    "dialog": "Placeholder: press Continue.",
     "actions": "Placeholder: click a place on the floor. You have {actions} left.",
     "notice": "Placeholder: press Continue.",
     "story": "Placeholder: the month has closed."
   },
   "actionCount": { "one": "1 action", "other": "{n} actions" },
-  "costLabel": "Costs {actions}"
+  "costLabel": "Costs {actions}",
+  "freeLabel": "Costs nothing",
+  "buzzwordsHeading": "Buzzwords",
+  "learnedLabel": "Buzzword learned"
 }

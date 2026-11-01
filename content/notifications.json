@@ -1,0 +1,23 @@
+[
+  {
+    "id": "report-or-pub",
+    "from": "Placeholder boss",
+    "subject": "Placeholder: this evening",
+    "body": "Placeholder: finish the Monthly Status Report, or come to the pub.",
+    "options": [
+      {
+        "id": "report",
+        "label": "Placeholder: finish the report",
+        "cost": "report",
+        "result": { "title": "Report", "body": "Placeholder: report filed." }
+      },
+      {
+        "id": "pub",
+        "label": "Placeholder: go to the pub",
+        "cost": "pub",
+        "dialog": "pub",
+        "learns": ["placeholder-word"]
+      }
+    ]
+  }
+]

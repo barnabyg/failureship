@@ -1,6 +1,8 @@
 {
   "actionsPerMonth": 3,
   "actionCosts": {
-    "standard": 1
+    "standard": 1,
+    "report": 1,
+    "pub": 1
   }
 }

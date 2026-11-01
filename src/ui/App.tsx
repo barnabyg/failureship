@@ -59,6 +59,12 @@ export function App() {
               {panelText.actionsLeft.replace("{actions}", view.actions.label)}
             </dd>
           </div>
+          {view.buzzwords.length > 0 && (
+            <div data-testid="buzzwords">
+              <dt>{panelText.buzzwordsHeading}</dt>
+              <dd>{view.buzzwords.map((b) => b.term).join(", ")}</dd>
+            </div>
+          )}
         </dl>
       </header>
       <aside className="next" aria-live="polite">
