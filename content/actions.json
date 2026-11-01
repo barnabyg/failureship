@@ -22,14 +22,14 @@
   },
   {
     "id": "one-to-one",
-    "label": "A colleague's desk",
+    "label": "Priya's desk",
     "description": "A one-to-one, which is a conversation that can be logged.",
-    "place": "colleague-desk",
+    "place": "priya-desk",
     "cost": "standard",
     "sets": ["had-one-to-one"],
     "result": {
       "title": "One-to-one",
-      "body": "You ask how things are going. You are told, at length, about the car park. You may now log this as a one-to-one."
+      "body": "You ask Priya how things are going. You are told, at length, about the car park. You may now log this as a one-to-one."
     }
   },
   {
