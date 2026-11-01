@@ -199,6 +199,8 @@ describe("the whole run", () => {
 });
 
 describe("the balance of the deal", () => {
+  // Half the seeds move each average below by under 0.01. Their thin limit is
+  // `perfect`, at 0.36 against 0.40, and that is about the limit and not the count.
   const SEEDS = Array.from({ length: 200 }, (_, i) => i + 1);
 
   /** The kind a careful reader would guess from the signs seen in a run. */

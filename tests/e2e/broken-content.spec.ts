@@ -1,7 +1,8 @@
 import { readFileSync } from "node:fs";
 import path from "node:path";
 import { expect, test, type Locator } from "@playwright/test";
-import { createServer, type ViteDevServer } from "vite";
+import type { ViteDevServer } from "vite";
+import { startDevServer } from "./dev-server";
 
 // `npm run play` is the dev server, where the stylesheet arrives by a JavaScript
 // module that a content error stops. The production build the other specs use
@@ -19,15 +20,7 @@ let server: ViteDevServer;
 let origin: string;
 
 test.beforeAll(async () => {
-  server = await createServer({
-    root,
-    logLevel: "silent",
-    server: { port: 0, watch: null },
-  });
-  await server.listen();
-  const url = server.resolvedUrls?.local[0];
-  if (!url) throw new Error("The dev server has no local address.");
-  origin = url;
+  ({ server, origin } = await startDevServer());
 });
 
 test.afterAll(async () => {

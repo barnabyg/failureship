@@ -10,7 +10,7 @@ export default defineConfig({
   timeout: 60_000,
   // Software WebGL fights itself for the processor. With 20 threads, 3 workers
   // take as long in all as 10, but the slowest test falls from 51 s to 21 s.
-  // Half the threads is Playwright's own default, so CI is unchanged.
+  // Half the threads is Playwright's own default, so a small CI runner is unchanged.
   workers: Math.max(1, Math.min(3, Math.floor(availableParallelism() / 2))),
   maxFailures: process.env.CI ? 1 : 0,
   forbidOnly: Boolean(process.env.CI),

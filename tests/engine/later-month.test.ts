@@ -48,5 +48,5 @@ describe("what each build holds of the later-month start", () => {
     // Not toContain, which would print the whole bundle on a failure.
     expect((await bundle("e2e")).includes(marker)).toBe(true);
     expect((await bundle("production")).includes(marker)).toBe(false);
-  }, 30_000);
+  });
 });
