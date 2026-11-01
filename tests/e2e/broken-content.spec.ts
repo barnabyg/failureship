@@ -51,6 +51,43 @@ test("a broken data file says what is wrong, in words that can be read", async (
   expect(await contrastOf(message)).toBeGreaterThanOrEqual(4.5);
 });
 
+test("a data file that is not valid JSON says which and where", async ({
+  page,
+}) => {
+  // The route above fakes what the server sends, but this mistake has to reach
+  // the server. So this one reads the file with a key unquoted, and leaves it alone.
+  const notJson = await startDevServer({
+    cacheDir: "node_modules/.vite-not-json",
+    plugins: [
+      {
+        name: "unquote-a-key",
+        enforce: "pre",
+        load(id) {
+          if (!id.split("?")[0]?.endsWith("/content/ui.json")) return null;
+          return readFileSync(
+            path.join(root, "content/ui.json"),
+            "utf8",
+          ).replace('"title"', "title");
+        },
+      },
+    ],
+  });
+  await page.unroute("**/content/ui.json*");
+  try {
+    await page.goto(`${notJson.origin}?seed=1`);
+
+    const message = page.locator("#root pre");
+    await expect(message).toBeVisible();
+    await expect(message).toContainText("content/ui.json");
+    await expect(message).toContainText(/line 2/);
+    await expect(page.locator("canvas")).toHaveCount(0);
+
+    expect(await contrastOf(message)).toBeGreaterThanOrEqual(4.5);
+  } finally {
+    await notJson.server.close();
+  }
+});
+
 type Colour = [red: number, green: number, blue: number, alpha: number];
 
 /** The WCAG contrast of an element's text against what is really behind it. */
