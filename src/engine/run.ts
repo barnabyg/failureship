@@ -85,6 +85,8 @@ function dealtState(seed: number, content: Content): State {
       powerMap: power.powerMap,
       bossOpinion: 0,
       headOpinion: 0,
+      risks: [],
+      memories: [],
     },
   };
 }

@@ -152,6 +152,7 @@ format, the page shows what is wrong instead of the game.
 | `scenes.json`         | Each month's Scene: its signs, its choices and their results                                                         |
 | `moves.json`          | Character Moves, and when each can land                                                                              |
 | `threads.json`        | What comes back months later: what starts each Thread, and the Bill it sends                                         |
+| `risks.json`          | Hidden risks: what adds each, who it comes out through, and whether it can be traced to you                          |
 | `mistakes.json`       | The words of a Final Warning and of being fired                                                                      |
 | `official-story.json` | The official story, assembled from entries according to what you did                                                 |
 | `behaviours.json`     | What Characters can be seen doing, which roles can do it, and how likely each kind is to do it                       |
@@ -183,6 +184,24 @@ A Thread is how an earlier choice comes back. To add one, needing no code:
 The player hears nothing of a Thread until its Bill arrives. Results then trace it back to what
 started it.
 
+### Write a hidden risk
+
+A hidden risk is what the player's decisions have built up, with no simulation behind it. To
+add one, needing no code:
+
+1. Find or add the flag that adds it, in the `sets` of a choice. A one-off Budget is a good source.
+2. Add an entry to `content/risks.json`, with `addedBy`, how many months `after` it can come out,
+   and a `note` saying what was building up.
+3. Give it a `route`: the Character it comes out through, the `chance` they act by their kind, and
+   their `motive`.
+4. Say what makes it `traced` to the player. Reading a flag with `did` lets the player change that,
+   as clearing the shared drive in month 6 does.
+5. Write `onPlayer` and `onSomeoneElse`, which are Bills, and the words for how it ended.
+   `"mistake": "big"` on `onPlayer` makes a landed risk a big mistake.
+
+The same risk can land on the player, land on someone else, or never come out at all. The player
+sees none of it until it does, and the results screen lists the lot.
+
 ## Develop
 
 `npm run verify` runs every check: formatting, lint, types, engine tests, browser
@@ -199,8 +218,8 @@ at a later month. `npm run build` and `npm run play` ignore it.
   `month.ts` holds the month's order; `outcome.ts` is the one place any consequence
   takes effect; `state.ts` and `reads.ts` are what the mechanics share; `boss.ts`,
   `demands.ts`, `find-out.ts`, `notebook.ts`, `over-head.ts`, `project.ts` and
-  `scenes.ts` are mechanics of their own, as are `mistakes.ts`, and `threads.ts` with
-  `bills.ts`; `to-view.ts` builds the player view, and
+  `scenes.ts` are mechanics of their own, as are `mistakes.ts`, `risks.ts`, and `threads.ts`
+  with `bills.ts`; `to-view.ts` builds the player view, and
   `to-results.ts` its reveal at the end; `save.ts` writes and reads a run. Everything
   in a run's `State` is plain data, so a mechanic gets saving for free. Raise
   `SAVE_VERSION` if a mechanic changes what saved state means. `src/engine/content.ts` holds the content

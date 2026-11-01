@@ -58,6 +58,11 @@ const choiceMistake = z.enum(["big", "catastrophic"]).optional();
 /** What the player is told before choosing something catastrophic. */
 const stakes = text.optional();
 
+/** What a Character keeps of this, which later conditions can read. */
+const remembers = z
+  .array(z.strictObject({ character: id, about: id, text }))
+  .default([]);
+
 const dialog = z.strictObject({
   id,
   title: text,
@@ -84,6 +89,7 @@ export type Condition =
   | { hasBuzzword: string }
   | { flag: string }
   | { did: string }
+  | { remembers: { character: string; about: string } }
   | { not: Condition }
   | { all: Condition[] };
 
@@ -102,6 +108,9 @@ const condition: z.ZodType<Condition> = z.lazy(() =>
     z.strictObject({ hasBuzzword: id }),
     z.strictObject({ flag: id }),
     z.strictObject({ did: id }),
+    z.strictObject({
+      remembers: z.strictObject({ character: id, about: id }),
+    }),
     z.strictObject({ not: condition }),
     z.strictObject({ all: z.array(condition).min(1) }),
   ]),
@@ -121,6 +130,7 @@ const notificationOption = z.strictObject({
   reaction: ownReaction,
   project: projectChange,
   mistake: choiceMistake,
+  remembers,
   stakes,
   result: notice.optional(),
   /** Leaves a Demand open, as a bet that the boss forgets it. */
@@ -137,6 +147,7 @@ const notificationOption = z.strictObject({
         reaction: ownReaction,
         project: projectChange,
         mistake: choiceMistake,
+        remembers,
         result: notice,
       }),
     })
@@ -176,6 +187,7 @@ const bill = z.strictObject({
   headOpinion,
   project: projectChange,
   mistake: bigMistake,
+  remembers,
 });
 
 export type Bill = z.infer<typeof bill>;
@@ -207,6 +219,41 @@ const thread = z.strictObject({
     .min(1),
 });
 
+/**
+ * Something the player's decisions built up. A written item with a source, a route
+ * out and a way of being traced, with no simulation behind it.
+ */
+const risk = z.strictObject({
+  id,
+  /** The flag that adds it, the first time anything sets it. */
+  addedBy: id,
+  /** How many months later it can come out, which is seeded. */
+  after: z.strictObject({
+    min: z.number().int().positive(),
+    max: z.number().int().positive(),
+  }),
+  /** What the results screen says was building up. */
+  note: text,
+  route: z.strictObject({
+    /** Who it comes out through. */
+    character: id,
+    /** The seeded chance they act on it, by their dealt kind. */
+    chance: perKind(z.number().min(0).max(1)),
+    /** Why they would, for the results screen. */
+    motive: text,
+    /** What they need to be able to act. Left out, they can. */
+    means: condition.optional(),
+  }),
+  /** Whether it can be traced to the player, as it comes out. */
+  traced: condition,
+  onPlayer: bill,
+  /** What happens if it cannot be traced. Left out, nothing does. */
+  onSomeoneElse: bill.optional(),
+  landedOnYou: text,
+  landedElsewhere: text,
+  neverCameOut: text,
+});
+
 const chasedDemand = z.strictObject({
   from: text,
   subject: text,
@@ -232,6 +279,7 @@ const sceneResult = z.strictObject({
   reaction: ownReaction,
   project: projectChange,
   mistake: choiceMistake,
+  remembers,
   /** Says on the results screen that a Hidden Fact caused this. */
   factNote: text.optional(),
   /** Whose Hidden Fact it was, unless the option is `about` one. */
@@ -718,6 +766,7 @@ export const contentSchema = z.strictObject({
   actions: z.array(action).min(1),
   moves: z.array(move),
   threads: z.array(thread).default([]),
+  risks: z.array(risk).default([]),
   officialStory: z.strictObject({
     title: text,
     reportedHeading: text.optional(),
@@ -787,7 +836,12 @@ export function everyDemand(content: Content) {
 
 /** Every Bill written, whatever sends it. */
 export function everyBill(content: Content): Bill[] {
-  return content.threads.flatMap((t) => t.outcomes.map((o) => o.bill));
+  return [
+    ...content.threads.flatMap((t) => t.outcomes.map((o) => o.bill)),
+    ...content.risks.flatMap((r) =>
+      r.onSomeoneElse ? [r.onPlayer, r.onSomeoneElse] : [r.onPlayer],
+    ),
+  ];
 }
 
 /** Every Notification there is, including Demands, chasers and Bills. */

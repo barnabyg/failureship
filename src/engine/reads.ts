@@ -102,6 +102,12 @@ export function matches(
     return state.buzzwords.includes(condition.hasBuzzword);
   }
   if ("flag" in condition) return state.flags.includes(condition.flag);
+  if ("remembers" in condition) {
+    const { character, about } = condition.remembers;
+    return state.truth.memories.some(
+      (m) => m.character === character && m.about === about,
+    );
+  }
   if ("did" in condition) {
     return state.deeds.some((deed) => deed.flag === condition.did);
   }

@@ -19,6 +19,16 @@ export interface HiddenTruth {
   bossOpinion: number;
   /** The same of the boss's boss, whom the player can also try to impress. */
   headOpinion: number;
+  /** What the player's decisions have built up. Never shown until the end. */
+  risks: {
+    id: string;
+    month: number;
+    due: number;
+    /** When it came out, and whether it could be traced to the player. */
+    cameOut: { month: number; onPlayer: boolean } | null;
+  }[];
+  /** What each Character has kept of what the player did. */
+  memories: { character: string; about: string; text: string; month: number }[];
 }
 
 /** Custom behaviour for a Scene: reshapes its data for the current truth. */

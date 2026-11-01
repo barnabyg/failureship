@@ -52,6 +52,28 @@ function findBrokenBills(content: Content): string[] {
   return problems;
 }
 
+/** A risk has to come from something, and go through someone who is there. */
+export function findBrokenRisks(content: Content): string[] {
+  const problems: string[] = [];
+  const flags = flagsThatCanBeSet(content);
+  const ids = new Set<string>();
+  for (const risk of content.risks) {
+    const owner = `Risk "${risk.id}"`;
+    if (ids.has(risk.id)) problems.push(`${owner} is written twice.`);
+    ids.add(risk.id);
+    if (!flags.has(risk.addedBy)) {
+      problems.push(`${owner} comes from "${risk.addedBy}", set by nothing.`);
+    }
+    if (risk.after.min > risk.after.max) {
+      problems.push(`${owner} comes out after a shorter wait than it starts.`);
+    }
+    if (!content.characters.some((c) => c.id === risk.route.character)) {
+      problems.push(`${owner} goes through unknown "${risk.route.character}".`);
+    }
+  }
+  return problems;
+}
+
 /** A Thread has to start from something the player can do, and be able to end. */
 export function findBrokenThreads(content: Content): string[] {
   const problems = findBrokenBills(content);

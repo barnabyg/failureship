@@ -16,6 +16,7 @@ import notifications from "../../content/notifications.json";
 import officialStory from "../../content/official-story.json";
 import overHead from "../../content/over-head.json";
 import project from "../../content/project.json";
+import risks from "../../content/risks.json";
 import scenes from "../../content/scenes.json";
 import sources from "../../content/sources.json";
 import threads from "../../content/threads.json";
@@ -55,6 +56,7 @@ export const gameContent = parseContent({
   actions,
   moves,
   threads,
+  risks,
   officialStory,
   floor,
   ui: {
@@ -112,6 +114,7 @@ const panelSchema = z.strictObject(
       "finalWarningLabel",
       "resultsMistakesHeading",
       "resultsThreadsHeading",
+      "resultsRisksHeading",
       "resultsWhoHeading",
       "resultsNoFact",
       "findOutSourceHeading",

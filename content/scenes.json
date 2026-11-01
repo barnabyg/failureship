@@ -708,6 +708,17 @@
             "factNote": "You acted on something you were told about {subject}. It was not so."
           }
         ]
+      },
+      {
+        "id": "cut-security",
+        "family": "deflect",
+        "label": "Take it out of security. Nobody has ever thanked security for anything",
+        "results": [
+          {
+            "body": "The line goes through without a question. Your name goes on the form, because a form needs one. Someone asks whether the door logs still get reviewed, and everybody agrees that this is a good question.",
+            "sets": ["cut-security"]
+          }
+        ]
       }
     ]
   },

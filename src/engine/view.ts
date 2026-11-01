@@ -125,6 +125,14 @@ export type StepView =
         playedIn: number;
         playedOut: string;
       }[];
+      /** What was building up, including what never came out. */
+      risks: {
+        addedIn: number;
+        note: string;
+        motive: string;
+        cameOutIn: number | null;
+        fate: string;
+      }[];
       /** The big mistakes the player made, in order. */
       mistakes: { month: number; choice: string }[];
       characters: {

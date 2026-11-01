@@ -2,6 +2,7 @@ import { landBill, playThreads } from "./bills";
 import { everyNotification, type Content } from "./content";
 import { dealWithAbsence, followUpDemands } from "./demands";
 import { applyOutcome } from "./outcome";
+import { surfaceRisks } from "./risks";
 import {
   actionsThisMonth,
   costOf,
@@ -34,6 +35,7 @@ export function freshMonth(content: Content, month: number): MonthRecord {
 export function openMonth(state: State, content: Content): void {
   followUpDemands(state, content);
   playThreads(state, content);
+  surfaceRisks(state, content);
   const { input } = content.project;
   const colleague = state.truth.characters.find(
     (c) => c.id === input?.character,

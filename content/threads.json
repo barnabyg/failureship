@@ -3,11 +3,16 @@
     "id": "desk-no-window",
     "startedBy": "moved-a-colleague",
     "chance": 0.9,
-    "after": { "min": 2, "max": 3 },
+    "after": {
+      "min": 2,
+      "max": 3
+    },
     "started": "You moved a colleague to the desk with no window, so that you could say who sat where.",
     "outcomes": [
       {
-        "when": { "did": "did-training" },
+        "when": {
+          "did": "did-training"
+        },
         "playedOut": "The colleague by the printer turned out to sit on the Health and Safety committee. They came looking for something to hold against you, and you had sat through your one training module properly. It cost you only a form.",
         "bill": {
           "id": "safety-committee-form",
@@ -59,7 +64,10 @@
     "id": "blame-taken",
     "startedBy": "took-the-blame",
     "chance": 0.8,
-    "after": { "min": 3, "max": 4 },
+    "after": {
+      "min": 3,
+      "max": 4
+    },
     "started": "In the Lessons Learned Review, you took the blame for something, and the minutes recorded it.",
     "outcomes": [
       {
@@ -72,7 +80,9 @@
           "body": "The figures your project has been waiting for since the spring are on your desk. There is no note. The Senior Analyst was in the review where you took the blame, and walks past without looking up, which you are starting to recognise as a form of respect.",
           "sets": ["blame-repaid"],
           "opinion": 1,
-          "project": { "real": "better" }
+          "project": {
+            "real": "better"
+          }
         }
       }
     ]
@@ -81,11 +91,16 @@
     "id": "green-report",
     "startedBy": "lied-in-report",
     "chance": 0.7,
-    "after": { "min": 2, "max": 4 },
+    "after": {
+      "min": 2,
+      "max": 4
+    },
     "started": "You made your project green in the Monthly Status Report, when it was not.",
     "outcomes": [
       {
-        "when": { "bossIs": "believer" },
+        "when": {
+          "bossIs": "believer"
+        },
         "playedOut": "Someone from Finance set your green report beside the real figures, and took the two of them to your boss, who believed in reports. It went on your file as a big mistake.",
         "bill": {
           "id": "green-report-believed",
@@ -95,7 +110,9 @@
           "body": "Someone in Finance, whom you have never met, has been reading old Monthly Status Reports for pleasure. They have laid one of your green ones beside the figures, and sent both to your boss, with no comment. Your boss has read them both, properly.",
           "sets": ["green-report-found"],
           "mistake": "big",
-          "project": { "reported": "real" }
+          "project": {
+            "reported": "real"
+          }
         }
       },
       {
@@ -108,6 +125,59 @@
           "body": "Someone in Finance, whom you have never met, has been reading old Monthly Status Reports for pleasure. They have laid one of your green ones beside the figures, and sent both to your boss. Your boss replies to all, thanking Finance for its engagement. You are not to do it again, or at least not in writing.",
           "sets": ["green-report-found"],
           "opinion": -1
+        }
+      }
+    ]
+  },
+  {
+    "id": "bonus-remembered",
+    "startedBy": "bonus-pot-decided",
+    "chance": 0.85,
+    "after": {
+      "min": 1,
+      "max": 2
+    },
+    "started": "You decided who got the bonus pot, and the people who did not get it could count.",
+    "outcomes": [
+      {
+        "when": {
+          "remembers": {
+            "character": "projects",
+            "about": "passed-over"
+          }
+        },
+        "playedOut": "The Project Co-ordinator remembered who had got the bonus pot, and your figures began to arrive late, with apologies.",
+        "bill": {
+          "id": "bonus-resented",
+          "as": "move",
+          "from": "From: The Project Co-ordinator, Callum Reed",
+          "title": "Apologies for the delay",
+          "body": "The Project Co-ordinator is very sorry that your figures are late. They have been very busy doing the work. They mention this twice, and look at your new chair while they do.",
+          "sets": ["bonus-resented"],
+          "opinion": -1,
+          "project": {
+            "real": "worse"
+          }
+        }
+      },
+      {
+        "when": {
+          "remembers": {
+            "character": "projects",
+            "about": "paid-for-the-work"
+          }
+        },
+        "playedOut": "The Project Co-ordinator remembered who had shared out the bonus pot, and why, and stayed late on your project without being asked.",
+        "bill": {
+          "id": "bonus-repaid",
+          "as": "move",
+          "from": "From: The Project Co-ordinator, Callum Reed",
+          "title": "Done, by the way",
+          "body": "The Project Co-ordinator has stayed late and sorted out the part of your project that nobody wanted. The email is one line long. Nobody on this floor has ever sent you a one-line email that was good news.",
+          "sets": ["bonus-repaid"],
+          "project": {
+            "real": "better"
+          }
         }
       }
     ]

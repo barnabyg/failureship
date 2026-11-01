@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { findBrokenThreads } from "./consequence-checks";
+import { findBrokenRisks, findBrokenThreads } from "./consequence-checks";
 import {
   CLAIM_STATUSES,
   DEMAND_ANSWERS,
@@ -42,6 +42,7 @@ function dependsOnHiddenTruth(
   if ("flag" in condition) return hiddenFlags.has(condition.flag);
   if ("did" in condition) return hiddenFlags.has(condition.did);
   if (
+    "remembers" in condition ||
     "holderIs" in condition ||
     "bossIs" in condition ||
     "factNature" in condition ||
@@ -532,6 +533,9 @@ function findBrokenReferences(content: Content): string[] {
     if ("factNature" in condition) {
       checkCharacter(owner, condition.factNature.character);
     }
+    if ("remembers" in condition) {
+      checkCharacter(owner, condition.remembers.character);
+    }
     if ("heardFact" in condition) checkFact(owner, condition.heardFact);
     if ("heardTrue" in condition) checkFact(owner, condition.heardTrue);
     if ("not" in condition) checkCondition(owner, condition.not);
@@ -616,11 +620,22 @@ function findBrokenReferences(content: Content): string[] {
   problems.push(...findBrokenDemands(content));
   problems.push(...findBrokenMistakes(content));
   problems.push(...findBrokenThreads(content));
+  problems.push(...findBrokenRisks(content));
+  for (const risk of content.risks) {
+    const owner = `Risk "${risk.id}"`;
+    checkCondition(owner, risk.traced);
+    if (risk.route.means) checkCondition(owner, risk.route.means);
+  }
+  for (const b of everyBill(content)) {
+    for (const memory of b.remembers) {
+      checkCharacter(`Bill "${b.id}"`, memory.character);
+    }
+    checkProject(`Bill "${b.id}"`, b.project);
+  }
   for (const thread of content.threads) {
     for (const outcome of thread.outcomes) {
       const owner = `Thread "${thread.id}"`;
       if (outcome.when) checkCondition(owner, outcome.when);
-      checkProject(owner, outcome.bill.project);
     }
   }
   const { flagged } = content.project;
@@ -732,6 +747,9 @@ function findBrokenReferences(content: Content): string[] {
         if (r.when) checkCondition(optionOwner, r.when);
         checkApproach(optionOwner, r);
         checkProject(optionOwner, r.project);
+        for (const memory of r.remembers) {
+          checkCharacter(optionOwner, memory.character);
+        }
       }
       if (o.requires) {
         checkCondition(optionOwner, o.requires);
@@ -786,6 +804,9 @@ function findBrokenReferences(content: Content): string[] {
       checkCost(owner, o.cost);
       checkApproach(owner, o);
       checkProject(owner, o.project);
+      for (const memory of [...o.remembers, ...(o.bet?.lost.remembers ?? [])]) {
+        checkCharacter(owner, memory.character);
+      }
       if (o.bet) {
         checkApproach(owner, o.bet.lost);
         checkProject(owner, o.bet.lost.project);

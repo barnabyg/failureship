@@ -18,6 +18,23 @@ export function toResultsView(
       : content.ui.results),
     ending: toEnding(state, content),
     mistakes: state.mistakes,
+    risks: state.truth.risks.flatMap((risk) => {
+      const written = content.risks.find((r) => r.id === risk.id);
+      if (!written) return [];
+      const { cameOut } = risk;
+      const landed = cameOut?.onPlayer
+        ? written.landedOnYou
+        : written.landedElsewhere;
+      return [
+        {
+          addedIn: risk.month,
+          note: written.note,
+          motive: written.route.motive,
+          cameOutIn: cameOut?.month ?? null,
+          fate: cameOut ? landed : written.neverCameOut,
+        },
+      ];
+    }),
     threads: state.threads.flatMap((started) => {
       const written = content.threads.find((t) => t.id === started.id);
       return started.played && written

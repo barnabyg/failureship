@@ -93,10 +93,14 @@ describe("nine months that do not feel like one month repeated", () => {
   });
 
   it("lands a different Move every month", () => {
+    // A Bill can land as a Move as well, beside the month's own.
+    const written = new Set(gameContent.moves.map((m) => m.title));
     for (const seed of [1, 2, 3, 4, 5]) {
       const { views } = walk(seed, lastsTheRun);
       const moves = views.flatMap((v) =>
-        v.step.kind === "move" ? [v.step.title] : [],
+        v.step.kind === "move" && written.has(v.step.title)
+          ? [v.step.title]
+          : [],
       );
 
       expect(new Set(moves).size).toBe(moves.length);

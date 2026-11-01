@@ -41,7 +41,9 @@ test("the desk with no window comes back as a Bill in a later month", async ({
 
   await playToResults(page);
 
-  await expect(page.getByTestId("result-thread")).toContainText(
-    "desk with no window",
-  );
+  await expect(
+    page
+      .getByTestId("result-thread")
+      .filter({ hasText: "desk with no window" }),
+  ).toBeVisible();
 });

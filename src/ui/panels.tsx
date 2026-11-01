@@ -210,6 +210,20 @@ function ResultsPanel({
           ))}
         </div>
       )}
+      {step.risks.length > 0 && (
+        <div className="callout" data-testid="results-risks">
+          <h3>{panelText.resultsRisksHeading}</h3>
+          {step.risks.map((row, index) => (
+            <p key={index} data-testid="result-risk">
+              <strong>{monthLabel(row.addedIn)}. </strong>
+              {row.note} {row.fate}
+              {row.cameOutIn !== null && (
+                <span className="results-title">{row.motive}</span>
+              )}
+            </p>
+          ))}
+        </div>
+      )}
       <h3>{panelText.resultsWhoHeading}</h3>
       <table className="results">
         <tbody>

@@ -15,6 +15,7 @@ A `when` or `requires` holds one of these:
 | ---------------------------------------------------------------------- | --------------------------------------------------------------------------------------- | ---------------------- |
 | `{ "flag": "went-to-pub" }`                                            | A flag is set this month                                                                | Only if the flag does  |
 | `{ "did": "moved-a-colleague" }`                                       | A flag has been set in any month of the run                                             | Only if the flag does  |
+| `{ "remembers": { "character": "projects", "about": "passed-over" } }` | That Character keeps a memory written with that `about`                                 | Yes                    |
 | `{ "hasBuzzword": "strategic-patience" }`                              | The player has learnt the Buzzword                                                      | No                     |
 | `{ "heardFact": "lost-list" }`                                         | The player has been told that Hidden Fact about someone, true or not                    | No                     |
 | `{ "heardTrue": "lost-list" }`                                         | What the player was told about that Hidden Fact is true                                 | Yes                    |
@@ -203,6 +204,10 @@ The month's Notifications, their choices and their results.
   says.
 - An option's `sets`, `opinion`, `approach`, `family` and `project` work as for any choice.
 
+An option's outcome or a Scene result can carry `"remembers"`, a list of what a Character
+keeps of this, each with their `character`, an `about` that the `remembers` condition reads, and
+`text`. A Budget comes back this way: a later Thread's outcome reads who remembers what.
+
 A Budget is a one-off decision and never a running balance, so it needs nothing of its own:
 the Budget Round is a Scene, and the bonus pot and the underspend are Notifications here,
 with `months`, `approach` and `project` like any other choice. Nothing tracks money between
@@ -250,6 +255,24 @@ reported status arrives at `at`, before the player's actions, whichever month th
 `chance` of that for each kind they might be. Lateness is drawn from the seed and never from
 the player's choices, and it sets a flag for the month. It must be possible from at least two
 kinds, and certain from none, so that it never settles what someone is.
+
+## `risks.json`
+
+The short list of hidden risks the player's decisions build up. There is no running balance and
+no company simulation: a risk is a written item with a source, a route out and a way of being
+traced. The player never sees the list during play. How to write one is in
+[Write a hidden risk](../README.md#write-a-hidden-risk) in the README.
+
+- `addedBy` is a flag. The first time anything sets it, the risk is added.
+- `after` gives the `min` and `max` months until it can come out, which are seeded.
+- `route` is who it comes out through: their `character`, the seeded `chance` that they act,
+  by the kind they were dealt, their `motive`, for the results screen, and optionally their
+  `means`, a condition they need. It gets one chance. If that fails, it never comes out.
+- `traced` is read as it comes out. If it holds, `onPlayer` is sent. If not, `onSomeoneElse`
+  is, if it is written, and otherwise nothing happens. Either is a Bill, as in
+  [`threads.json`](#threadsjson), so a risk that lands can be `"mistake": "big"`.
+- `note` says what was building up, and `landedOnYou`, `landedElsewhere` and `neverCameOut` say
+  what became of it. The results screen lists every risk that was added.
 
 ## `scenes.json`
 
