@@ -6,7 +6,7 @@ function priorityRaw() {
   const raw = emptyMonthRaw();
   raw.actions = raw.actions.map((a) =>
     a.id === "kettle" ? { ...a, sets: ["skipped"] } : a,
-  ) as typeof raw.actions;
+  );
   raw.moves = [
     { id: "a", from: "A", title: "MOVE-A", body: "A." },
     { id: "b", from: "B", title: "MOVE-B", body: "B." },
