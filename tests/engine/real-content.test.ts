@@ -349,6 +349,38 @@ describe("the real month", () => {
     expect(of(1).boss?.kind).toBe("believer");
   });
 
+  // The README's test scenario relies on these.
+  it.each([
+    [1, "believer"],
+    [8, "incompetent"],
+    [16, "practitioner"],
+  ])("keeps seed %i dealing a boss who is a %s", (seed, kind) => {
+    const { characters } = readHiddenTruth(
+      startRun({ seed, content: gameContent }),
+    );
+
+    expect(characters.find((c) => c.id === "boss")?.kind).toBe(kind);
+  });
+
+  it.each([
+    [4, 3, 5, "actions"],
+    [13, 3, 1, "actions"],
+    [16, -3, -6, "notice"],
+  ])(
+    "keeps what going over the boss's head does on seed %i",
+    (seed, head, boss, then) => {
+      const run = startRun({ seed, content: gameContent });
+      fileTheReport(run);
+      const before = readHiddenTruth(run);
+      run.choose({ type: "action", actionId: "over-head" });
+      const after = readHiddenTruth(run);
+
+      expect(after.headOpinion - before.headOpinion).toBe(head);
+      expect(after.bossOpinion - before.bossOpinion).toBe(boss);
+      expect(run.choose({ type: "continue" }).step.kind).toBe(then);
+    },
+  );
+
   // Each of these holds influence in the meeting on that seed.
   it.each([
     [8, "boss"],

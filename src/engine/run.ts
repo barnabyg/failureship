@@ -739,11 +739,13 @@ function noteScene(
 }
 
 function moodOf(state: State, content: Content): Mood {
-  return moodAt(state.truth.bossOpinion, content);
+  return moodAt(state.truth.bossOpinion, content.balance.opinion);
 }
 
-function moodAt(opinion: number, content: Content): Mood {
-  const { warmAt, coldAt } = content.balance.opinion;
+function moodAt(
+  opinion: number,
+  { warmAt, coldAt }: { warmAt: number; coldAt: number },
+): Mood {
   if (opinion >= warmAt) return "warm";
   return opinion <= coldAt ? "cold" : "neutral";
 }
@@ -759,7 +761,7 @@ function treatHead(
 ): string | null {
   const written = content.overHead;
   if (!written || !cast.includes(written.character)) return null;
-  const mood = moodAt(state.truth.headOpinion, content);
+  const mood = moodAt(state.truth.headOpinion, written.opinion);
   const value = drawFor(state.seed, "head-sign", state.month);
   const chosen = pickWeighted(
     Math.floor(value * 2 ** 32),
@@ -976,6 +978,8 @@ function dealWithAbsence(state: State, content: Content): Step | null {
     a.sets.includes(missed.attended),
   );
   if (!hadMeeting || state.flags.includes(missed.attended)) return null;
+  // With no action left to go, it was not a decision, and it must not spiral.
+  if (state.visited.length === 0) return null;
   const unused = missed.actions.filter(
     (a) => !state.actionsGiven.includes(a.id),
   );
@@ -1291,7 +1295,7 @@ function toHeadResults(
     name,
     title,
     kind: content.hiddenTruth.kinds[dealt.kind].label,
-    verdict: written.verdict[moodAt(state.truth.headOpinion, content)],
+    verdict: written.verdict[moodAt(state.truth.headOpinion, written.opinion)],
   };
 }
 

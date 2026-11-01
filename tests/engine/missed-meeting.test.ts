@@ -229,6 +229,37 @@ describe("a meeting you do not go to", () => {
     expect(outcomes).toEqual(new Set(["open", "closed"]));
   });
 
+  it("gives no Demand if no action was left to go with", () => {
+    const run = startRun({ seed: 3, content: gameContent });
+    const costly = (view: PlayerView): Choice => {
+      const { step } = view;
+      if (step.kind !== "notification") {
+        const next = view.choices[0];
+        if (!next) throw new Error(`Stuck at ${step.kind}.`);
+        return next;
+      }
+      const option =
+        step.options.find(
+          (o) => o.affordable && o.costLabel !== "Costs nothing",
+        ) ?? step.options[0];
+      return {
+        type: "notification",
+        notificationId: step.id,
+        optionId: option?.id ?? "",
+      };
+    };
+    let view = run.view();
+    while (view.month === 1) view = run.choose(costly(view));
+    let reachedFloor = false;
+    while (view.month === 2) {
+      reachedFloor ||= view.step.kind === "actions";
+      view = run.choose(costly(view));
+    }
+
+    expect(reachedFloor).toBe(false);
+    expect(view.openDemands).toEqual([]);
+  });
+
   it("refuses too few written actions for a run", () => {
     const raw = {
       ...structuredClone(gameContent),

@@ -38,7 +38,6 @@
         "id": "do-training",
         "family": "deliver",
         "label": "Sit through the module properly",
-        "cost": "standard",
         "sets": ["did-training"],
         "result": {
           "title": "Speaking Up: completed",
@@ -104,7 +103,6 @@
         "id": "animate",
         "family": "impress",
         "label": "Stay late and make everything fly in",
-        "cost": "standard",
         "sets": ["animated-deck"],
         "result": {
           "title": "Slides for upstairs",
@@ -332,7 +330,6 @@
         "id": "real-dates",
         "family": "deliver",
         "label": "Work out when it will really be done",
-        "cost": "standard",
         "sets": ["real-schedule"],
         "approach": "truth",
         "result": {
@@ -437,7 +434,6 @@
         "id": "make-the-deal",
         "family": "trade",
         "label": "Agree to mention them, if they tell you what they know",
-        "cost": "standard",
         "sets": ["made-a-deal"],
         "approach": "favour",
         "result": {

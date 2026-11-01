@@ -1,5 +1,6 @@
 {
   "character": "head",
+  "opinion": { "warmAt": 2, "coldAt": -2 },
   "signs": [
     {
       "id": "head-knows-your-name",

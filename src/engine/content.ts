@@ -453,6 +453,11 @@ const overHead = z.strictObject({
   character: id,
   /** How they treat the player in a Scene, by how their opinion stands. */
   signs: z.array(bossSign),
+  /** The hidden opinion at which that changes. It moves less often than the boss's. */
+  opinion: z.strictObject({
+    warmAt: z.number().int().positive(),
+    coldAt: z.number().int().negative(),
+  }),
   /** How it goes, by the kind of the person gone to. */
   outcomes: perKind(
     z.strictObject({
