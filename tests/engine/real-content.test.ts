@@ -1,7 +1,7 @@
 import { readdirSync, readFileSync } from "node:fs";
 import path from "node:path";
 import { describe, expect, it } from "vitest";
-import { gameContent } from "../../src/content";
+import { gameContent, parsePanelText, panelText } from "../../src/content";
 import { startRun, type Choice, type PlayerView } from "../../src/engine";
 import { readHiddenTruth } from "../../src/engine/hidden-truth";
 
@@ -27,6 +27,12 @@ function isHolderSeed(seed: number, holder: string) {
 }
 
 describe("the real month", () => {
+  it("refuses panel text with a word missing", () => {
+    const missingTitle = { ...panelText, title: undefined };
+
+    expect(() => parsePanelText(missingTitle)).toThrow(/title/);
+  });
+
   it("has no placeholder text in any data file", () => {
     const folder = path.join(import.meta.dirname, "../../content");
     for (const file of readdirSync(folder)) {

@@ -154,7 +154,6 @@ export function action(id: string) {
 export function room(id: string, index: number) {
   return {
     id,
-    label: id,
     x: index * 3,
     z: 0,
     width: 2,

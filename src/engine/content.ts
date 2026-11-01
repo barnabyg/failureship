@@ -109,7 +109,6 @@ const storyEntry = z
 
 const room = z.strictObject({
   id,
-  label: text,
   x: z.number(),
   z: z.number(),
   width: z.number().positive(),
