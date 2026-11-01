@@ -214,6 +214,7 @@ describe("a useful Hidden Fact", () => {
 
     if (view.step.kind !== "notice") throw new Error(view.step.kind);
     expect(view.step.body).toMatch(/^PAID-OFF/);
+    expect(resultsOf(playOut(run)).factEvents[0]?.fact).toMatch(/USEFUL-FACT/);
   });
 
   it("offers the option on a false claim too, which then falls flat", () => {
@@ -230,6 +231,7 @@ describe("a useful Hidden Fact", () => {
     expect(view.step.body).toMatch(/^FELL-FLAT/);
     const { factEvents } = resultsOf(playOut(run));
     expect(factEvents[0]?.note).toMatch(/never so/);
+    expect(factEvents[0]?.fact).toBeNull();
   });
 });
 

@@ -103,7 +103,7 @@ interface State extends MonthRecord {
   marks: Map<string, Kind>;
   /** Who the player was last told has each Hidden Fact, true or not. */
   heard: { fact: string; subject: string }[];
-  factEvents: { month: number; character: string; note: string }[];
+  factEvents: { month: number; note: string; fact: string | null }[];
   step: Step;
   truth: HiddenTruth;
 }
@@ -469,10 +469,15 @@ function behaveInScene(
       heard ? personOf(world.content, heard.subject).name : "",
     );
   if (result.factNote !== undefined) {
+    const dealt = state.truth.characters.find(
+      (c) => c.id === (result.factAt ?? heard?.subject),
+    )?.fact;
+    // Acting on a false claim says nothing about the fact they really have.
+    const relevant = option?.about === undefined || dealt?.id === option.about;
     state.factEvents.push({
       month: state.month,
-      character: result.factAt ?? heard?.subject ?? "",
       note: fill(result.factNote),
+      fact: relevant ? (dealt?.text ?? null) : null,
     });
   }
   state.step = { kind: "notice", title: scene.title, body: fill(result.body) };
@@ -794,13 +799,7 @@ function toResultsView(
       text,
       verdict: content.ui.clueVerdicts[verdict],
     })),
-    factEvents: state.factEvents.map(({ month, character, note }) => ({
-      month,
-      note,
-      fact:
-        state.truth.characters.find((c) => c.id === character)?.fact?.text ??
-        null,
-    })),
+    factEvents: state.factEvents,
     claims: state.claims.map((claim) => {
       const { label, note } = content.sources.verdicts[claim.status];
       const said = state.truth.characters.find((c) => c.id === claim.source);
