@@ -1,5 +1,6 @@
 import actions from "../../content/actions.json";
 import balance from "../../content/balance.json";
+import behaviours from "../../content/behaviours.json";
 import buzzwords from "../../content/buzzwords.json";
 import characters from "../../content/characters.json";
 import dialogs from "../../content/dialogs.json";
@@ -13,12 +14,14 @@ import ui from "../../content/ui.json";
 import { z } from "zod";
 import { ContentError, parseContent } from "../engine";
 
-const { hints, actionCount, costLabel, freeLabel, ...presentation } = ui;
+const { hints, actionCount, costLabel, freeLabel, results, ...presentation } =
+  ui;
 
 export const gameContent = parseContent({
   balance,
   hiddenTruth,
   characters,
+  behaviours,
   scenes,
   notifications,
   dialogs,
@@ -27,7 +30,7 @@ export const gameContent = parseContent({
   moves,
   officialStory,
   floor,
-  ui: { hints, actionCount, costLabel, freeLabel },
+  ui: { hints, actionCount, costLabel, freeLabel, results },
 });
 
 const panelSchema = z.strictObject(
@@ -49,10 +52,22 @@ const panelSchema = z.strictObject(
       "whatNext",
       "castHeading",
       "signsHeading",
+      "behavioursHeading",
       "optionsHeading",
       "seedLabel",
-      "replayLabel",
-      "newSeedLabel",
+      "orgChartHeading",
+      "powerMapHeading",
+      "closeLabel",
+      "resultsWhoHeading",
+      "resultsNoFact",
+      "seedInputLabel",
+      "seedRefused",
+      "restartLabel",
+      "newRunLabel",
+      "leaveTitle",
+      "leaveBody",
+      "leaveConfirm",
+      "leaveCancel",
     ].map((key) => [key, z.string().min(1)]),
   ),
 );

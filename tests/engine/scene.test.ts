@@ -19,7 +19,7 @@ const NAMES: Record<string, string> = {
 function runWhereHolderIs(holder: string, content: Content = sceneFixture()) {
   for (let seed = 1; seed < 200; seed++) {
     const run = startRun({ seed, content });
-    if (readHiddenTruth(run).powerMap.holder === holder) return run;
+    if (readHiddenTruth(run).powerMap.order[0] === holder) return run;
   }
   throw new Error(`No seed makes ${holder} the holder.`);
 }
@@ -67,7 +67,7 @@ describe("the meeting Scene", () => {
     "shows signs that match the hidden truth when %s holds influence",
     (holder) => {
       const run = runWhereHolderIs(holder);
-      const { powerMap } = readHiddenTruth(run);
+      const ignored = readHiddenTruth(run).powerMap.order.at(-1) ?? "";
       const name = (id: string) => NAMES[id] ?? id;
 
       const { signs } = sceneOf(openMeeting(run));
@@ -75,7 +75,7 @@ describe("the meeting Scene", () => {
       expect(signs).toEqual([
         {
           label: "Who interrupts whom",
-          text: `${name(holder)} talks over ${name(powerMap.ignored)}.`,
+          text: `${name(holder)} talks over ${name(ignored)}.`,
         },
         {
           label: "Who everyone looks at",
@@ -83,7 +83,7 @@ describe("the meeting Scene", () => {
         },
         {
           label: "Who gets ignored",
-          text: `Nobody responds to ${name(powerMap.ignored)}.`,
+          text: `Nobody responds to ${name(ignored)}.`,
         },
       ]);
     },
@@ -91,14 +91,16 @@ describe("the meeting Scene", () => {
 
   it("does not leak the hidden truth into the player view", () => {
     const run = runWhereHolderIs("ben");
-    const { fact, powerMap } = readHiddenTruth(run);
+    const { characters, powerMap } = readHiddenTruth(run);
 
     const seen = JSON.stringify(openMeeting(run));
 
-    expect(seen).not.toContain(fact.text);
+    for (const { fact } of characters) {
+      if (fact) expect(seen).not.toContain(fact.text);
+    }
     expect(seen).not.toContain("powerMap");
     expect(seen).not.toContain("holder");
-    expect(seen).not.toContain(powerMap.holder);
+    expect(seen).not.toContain(powerMap.order[0]);
     expect(seen).not.toContain("BACKED-RIGHT");
     expect(seen).not.toContain("BACKED-WRONG");
   });
@@ -191,7 +193,10 @@ describe("the meeting Scene", () => {
       ...data,
       signs: [
         ...data.signs,
-        { label: "Whisper", text: `Someone mentions ${powerMap.holder}.` },
+        {
+          label: "Whisper",
+          text: `Someone mentions ${powerMap.order[0] ?? ""}.`,
+        },
       ],
     });
     const run = startRun({
@@ -199,7 +204,7 @@ describe("the meeting Scene", () => {
       content: parseContent(raw),
       sceneScripts: { whisper },
     });
-    const { holder } = readHiddenTruth(run).powerMap;
+    const holder = readHiddenTruth(run).powerMap.order[0] ?? "";
 
     expect(sceneOf(openMeeting(run)).signs.at(-1)?.text).toBe(
       `Someone mentions ${holder}.`,

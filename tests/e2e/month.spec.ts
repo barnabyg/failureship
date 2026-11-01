@@ -30,6 +30,43 @@ test("plays through a month on a fixed-camera Floor 1", async ({ page }) => {
   await expect(page.getByTestId("hotspot-meeting")).toBeDisabled();
 });
 
+test("plays from month 1 into month 2", async ({ page }) => {
+  await page.goto("/?seed=1");
+  await expect(page.getByTestId("month")).toContainText("1 of 6");
+  await fileTheReport(page);
+  await spendAction(page, "kitchen");
+  await spendAction(page, "work");
+  await page.getByTestId("continue").click();
+  await expect(page.getByTestId("panel-story")).toBeVisible();
+  await expect(page.getByTestId("month")).toContainText("1 of 6");
+
+  await page.getByTestId("continue").click();
+
+  await expect(page.getByTestId("month")).toContainText("2 of 6");
+  await expect(page.getByTestId("actions-left")).toContainText("3");
+  await expect(page.getByTestId("panel-notification")).toBeVisible();
+});
+
+test("opens and closes the Org Chart at no cost in actions", async ({
+  page,
+}) => {
+  await page.goto("/?seed=1");
+  await fileTheReport(page);
+  await expect(page.getByTestId("actions-left")).toContainText("2");
+
+  await page.getByTestId("open-org-chart").click();
+
+  const chart = page.getByTestId("org-chart");
+  await expect(chart).toContainText("Hugh Lamb");
+  await expect(chart).toContainText("Callum Reed");
+  await page.getByTestId("close-org-chart").click();
+
+  await expect(chart).toHaveCount(0);
+  await expect(page.getByTestId("actions-left")).toContainText("2");
+  await page.getByTestId("hotspot-kitchen").click();
+  await expect(page.getByTestId("panel-notice")).toBeVisible();
+});
+
 test("spends an action by clicking on the floor itself", async ({ page }) => {
   await page.goto("/?seed=1");
   await fileTheReport(page);

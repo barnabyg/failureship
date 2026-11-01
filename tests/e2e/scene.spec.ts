@@ -30,6 +30,27 @@ test("opens the meeting Scene from the tower and makes a choice", async ({
   await expect(page.getByTestId("hotspot-kitchen")).toBeEnabled();
 });
 
+test("the Scene leaves the hint readable at 1280x800", async ({ page }) => {
+  await reachMeeting(page, "pub");
+
+  const panel = await page.getByTestId("panel-scene").boundingBox();
+  const hint = await page.locator(".next").boundingBox();
+  if (!panel || !hint) throw new Error("Nothing to measure.");
+
+  expect(hint.x + hint.width).toBeLessThanOrEqual(panel.x);
+});
+
+test("the meeting shows a dealt sign for each person present", async ({
+  page,
+}) => {
+  await reachMeeting(page, "report");
+
+  const signs = page.getByTestId("behaviour");
+  await expect(signs).toHaveCount(5);
+  await expect(signs.filter({ hasText: "Dennis Prowse" })).toHaveCount(1);
+  await expect(signs.filter({ hasText: "{who}" })).toHaveCount(0);
+});
+
 test("the same choice lands differently when someone else holds influence", async ({
   page,
 }) => {
@@ -69,8 +90,7 @@ test("the full month reads differently for different choices", async ({
   const afterPub = await page.getByTestId("story-reported").innerText();
   await expect(page.getByTestId("story-happened")).toBeVisible();
 
-  await page.getByTestId("replay").click();
-  await expect(page).toHaveURL(/seed=1/);
+  await page.goto("/?seed=1");
   await page.getByTestId("option-report").click();
   await page.getByTestId("continue").click();
   await page.getByTestId("hotspot-meeting").click();
@@ -118,22 +138,4 @@ test("every Scene choice is visible without scrolling at 1280x800", async ({
     (el) => el.scrollHeight > el.clientHeight,
   );
   expect(scrolls).toBe(false);
-});
-
-test("a different seed starts the month again with a new seed", async ({
-  page,
-}) => {
-  await page.goto("/?seed=1");
-  await page.getByTestId("option-report").click();
-  await page.getByTestId("continue").click();
-  await page.getByTestId("hotspot-kitchen").click();
-  await page.getByTestId("continue").click();
-  await page.getByTestId("hotspot-work").click();
-  await page.getByTestId("continue").click();
-  await page.getByTestId("continue").click();
-
-  await page.getByTestId("new-seed").click();
-
-  await expect(page.getByTestId("panel-notification")).toBeVisible();
-  await expect(page.getByTestId("seed")).not.toHaveText("1");
 });

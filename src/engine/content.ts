@@ -18,8 +18,12 @@ const notificationOption = z.strictObject({
   result: notice.optional(),
 });
 
+/** The months something belongs to. Left out, it belongs to every month. */
+const months = z.array(z.number().int().positive()).min(1).optional();
+
 const notification = z.strictObject({
   id,
+  months,
   from: text,
   subject: text,
   body: text,
@@ -67,6 +71,7 @@ const sceneOption = z.strictObject({
 
 const scene = z.strictObject({
   id,
+  months,
   title: text,
   location: text,
   narration: z.array(text).min(1),
@@ -79,6 +84,7 @@ const scene = z.strictObject({
 
 const action = z.strictObject({
   id,
+  months,
   label: text,
   description: text,
   place: id,
@@ -92,6 +98,7 @@ const action = z.strictObject({
 
 const move = z.strictObject({
   id,
+  months,
   from: text,
   title: text,
   body: text,
@@ -122,17 +129,66 @@ const room = z.strictObject({
   sign: z.strictObject({ title: text, detail: text }).optional(),
 });
 
+export type Kind = "believer" | "incompetent" | "practitioner";
+
+const kindRule = z.strictObject({
+  label: text,
+  /** How often this kind is dealt, relative to the others. */
+  weight: z.number().nonnegative(),
+});
+
+const behaviour = z.strictObject({
+  id,
+  /** Says {who}, so that it works for whichever Character shows it. */
+  text,
+  /** How likely each kind is to show this, relative to its other behaviours. */
+  likelihood: z.strictObject({
+    believer: z.number().nonnegative(),
+    incompetent: z.number().nonnegative(),
+    practitioner: z.number().nonnegative(),
+  }),
+});
+
 const contentSchema = z.strictObject({
   balance: z.strictObject({
     actionsPerMonth: z.number().int().positive(),
+    monthsPerRun: z.number().int().positive(),
     actionCosts: z.record(id, z.number().int().nonnegative()),
   }),
   hiddenTruth: z.strictObject({
-    facts: z.array(z.strictObject({ id, text })).min(1),
-    /** Who may be dealt a role in the Power Map. Needs at least three people. */
-    cast: z.array(id).min(3),
+    kinds: z.strictObject({
+      believer: kindRule,
+      incompetent: kindRule,
+      practitioner: kindRule,
+    }),
+    /** Every deal has at least this many, so there is always something to find. */
+    minPractitioners: z.number().int().positive(),
+    /** How many Characters are dealt a Hidden Fact. */
+    charactersWithFact: z.number().int().positive(),
+    facts: z
+      .array(
+        z.strictObject({
+          id,
+          /** Says {name}, so that it reads correctly for whoever is dealt it. */
+          text,
+          /** Who it can be dealt to. Left out, it suits anyone. */
+          characters: z.array(id).min(1).optional(),
+        }),
+      )
+      .min(1),
   }),
-  characters: z.array(z.strictObject({ id, name: text, title: text })),
+  characters: z
+    .array(
+      z.strictObject({
+        id,
+        name: text,
+        title: text,
+        /** Who this Character answers to on the Org Chart. */
+        reportsTo: id.optional(),
+      }),
+    )
+    .min(3),
+  behaviours: z.array(behaviour),
   scenes: z.array(scene),
   notifications: z.array(notification),
   dialogs: z.array(dialog),
@@ -155,10 +211,12 @@ const contentSchema = z.strictObject({
       notice: text,
       move: text,
       story: text,
+      results: text,
     }),
     actionCount: z.strictObject({ one: text, other: text }),
     costLabel: text,
     freeLabel: text,
+    results: z.strictObject({ title: text, intro: text }),
   }),
 });
 
@@ -189,6 +247,93 @@ function dependsOnHiddenTruth(condition: Condition): boolean {
   if ("not" in condition) return dependsOnHiddenTruth(condition.not);
   if ("all" in condition) return condition.all.some(dependsOnHiddenTruth);
   return false;
+}
+
+function findBrokenDeal(
+  content: Content,
+  characters: ReadonlySet<string>,
+): string[] {
+  const { kinds, minPractitioners, charactersWithFact, facts } =
+    content.hiddenTruth;
+  const everyone = content.characters;
+  const problems: string[] = [];
+  if (new Set(everyone.map((c) => c.name)).size < everyone.length) {
+    problems.push("Two Characters share a name, which the charts cannot show.");
+  }
+  if (minPractitioners > everyone.length) {
+    problems.push(
+      `The deal wants ${String(minPractitioners)} Practitioners from ${String(everyone.length)} Characters.`,
+    );
+  }
+  if (Object.values(kinds).every((k) => k.weight === 0)) {
+    problems.push("The deal needs a kind with a weight above zero.");
+  }
+  if (charactersWithFact * 2 <= everyone.length) {
+    problems.push("The deal must give most Characters a Hidden Fact.");
+  }
+  if (charactersWithFact > everyone.length) {
+    problems.push("The deal wants more Hidden Facts than Characters.");
+  }
+  for (const fact of facts) {
+    const owner = `Hidden Fact "${fact.id}"`;
+    if (!fact.text.includes("{name}")) {
+      problems.push(`${owner} needs to say {name}.`);
+    }
+    for (const [, token] of fact.text.matchAll(/\{(\w+)\}/g)) {
+      if (token !== "name") {
+        problems.push(`${owner} uses unknown token "{${token ?? ""}}".`);
+      }
+    }
+    for (const c of fact.characters ?? []) {
+      if (!characters.has(c)) {
+        problems.push(`${owner} names unknown Character "${c}".`);
+      }
+    }
+  }
+  // With this many open to everyone, dealing can never run out, in any order.
+  for (const { id: character } of everyone) {
+    const open = facts.filter((f) => f.characters?.includes(character) ?? true);
+    if (open.length < charactersWithFact) {
+      problems.push(`Too few Hidden Facts can be dealt to "${character}".`);
+    }
+  }
+  return problems;
+}
+
+/** Signs must narrow the answer without ever settling it. */
+function findBrokenBehaviours(content: Content): string[] {
+  const problems: string[] = [];
+  const nameParts = content.characters.flatMap((c) => c.name.split(" "));
+  for (const b of content.behaviours) {
+    const owner = `Behaviour "${b.id}"`;
+    if (!b.text.includes("{who}")) {
+      problems.push(`${owner} needs to say {who}.`);
+    }
+    for (const [, token] of b.text.matchAll(/\{(\w+)\}/g)) {
+      if (token !== "who") {
+        problems.push(`${owner} uses unknown token "{${token ?? ""}}".`);
+      }
+    }
+    const words = b.text.split(/\W+/);
+    if (nameParts.some((part) => words.includes(part))) {
+      problems.push(`${owner} names a Character, not a kind of person.`);
+    }
+    const likelihoods = Object.values(b.likelihood);
+    if (likelihoods.filter((l) => l > 0).length < 2) {
+      problems.push(`${owner} can come from only one kind.`);
+    }
+    if (new Set(likelihoods).size === 1) {
+      problems.push(`${owner} gives no evidence: every kind is as likely.`);
+    }
+  }
+  if (content.behaviours.length > 0) {
+    for (const kind of ["believer", "incompetent", "practitioner"] as const) {
+      if (content.behaviours.every((b) => b.likelihood[kind] === 0)) {
+        problems.push(`No behaviour can be shown by a ${kind}.`);
+      }
+    }
+  }
+  return problems;
 }
 
 function findBrokenReferences(content: Content): string[] {
@@ -222,30 +367,69 @@ function findBrokenReferences(content: Content): string[] {
       }
     }
   };
+  const checkMonths = (owner: string, wanted: readonly number[] = []) => {
+    for (const month of wanted) {
+      if (month > content.balance.monthsPerRun) {
+        problems.push(
+          `${owner} is set in month ${String(month)}, past the run.`,
+        );
+      }
+    }
+  };
   const checkCost = (owner: string, cost: string | undefined) => {
     if (cost !== undefined && !(cost in content.balance.actionCosts)) {
       problems.push(`${owner} has unknown cost "${cost}".`);
     }
   };
 
+  problems.push(...findBrokenDeal(content, characters));
+  problems.push(...findBrokenBehaviours(content));
   for (const a of content.actions) {
     if (!rooms.has(a.place)) {
       problems.push(`Action "${a.id}" is at unknown place "${a.place}".`);
     }
     checkCost(`Action "${a.id}"`, a.cost);
+    checkMonths(`Action "${a.id}"`, a.months);
     if (a.scene !== undefined && !scenes.has(a.scene)) {
       problems.push(`Action "${a.id}" opens unknown Scene "${a.scene}".`);
+    }
+    const opens = content.scenes.find((s) => s.id === a.scene);
+    if (
+      a.months &&
+      opens?.months &&
+      !a.months.some((month) => opens.months?.includes(month))
+    ) {
+      problems.push(`Action "${a.id}" is set when its Scene never opens.`);
     }
     if ((a.scene === undefined) === (a.result === undefined)) {
       problems.push(`Action "${a.id}" needs a Scene or a result, not both.`);
     }
   }
-  for (const c of content.hiddenTruth.cast) {
-    checkCharacter("The hidden truth's cast", c);
+  for (const c of content.characters) {
+    const owner = `Character "${c.id}"`;
+    if (c.reportsTo !== undefined) checkCharacter(owner, c.reportsTo);
+    const seen = new Set([c.id]);
+    let above = content.characters.find((m) => m.id === c.reportsTo);
+    while (above) {
+      if (seen.has(above.id)) {
+        problems.push(`${owner} is in a loop on the Org Chart.`);
+        break;
+      }
+      seen.add(above.id);
+      const manager = above.reportsTo;
+      above = content.characters.find((m) => m.id === manager);
+    }
   }
   for (const s of content.scenes) {
     const owner = `Scene "${s.id}"`;
+    checkMonths(owner, s.months);
     for (const c of s.cast) checkCharacter(owner, c);
+    if (
+      s.cast.length < 3 &&
+      /\{(holder|ignored|bystander)\}/.test(JSON.stringify(s))
+    ) {
+      problems.push(`${owner} names roles, which need three people present.`);
+    }
     for (const line of s.narration) checkRoles(owner, line);
     for (const sign of s.signs) checkRoles(owner, sign.text);
     for (const o of s.options) {
@@ -268,6 +452,7 @@ function findBrokenReferences(content: Content): string[] {
   }
   for (const m of content.moves) {
     const owner = `Move "${m.id}"`;
+    checkMonths(owner, m.months);
     checkRoles(owner, m.body);
     if (m.when) checkCondition(owner, m.when);
   }
@@ -278,6 +463,7 @@ function findBrokenReferences(content: Content): string[] {
     if (e.when) checkCondition(owner, e.when);
   }
   for (const n of content.notifications) {
+    checkMonths(`Notification "${n.id}"`, n.months);
     for (const o of n.options) {
       const owner = `Notification "${n.id}" option "${o.id}"`;
       checkCost(owner, o.cost);

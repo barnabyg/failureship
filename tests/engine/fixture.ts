@@ -16,6 +16,7 @@ interface RawNotification {
   subject: string;
   body: string;
   options: RawOption[];
+  months?: number[];
 }
 
 type RawCondition = Record<string, unknown>;
@@ -36,6 +37,7 @@ interface RawScene {
   signs: { label: string; text: string }[];
   options: RawSceneOption[];
   script?: string;
+  months?: number[];
 }
 
 interface RawMove {
@@ -45,6 +47,7 @@ interface RawMove {
   body: string;
   when?: RawCondition;
   sets?: string[];
+  months?: number[];
 }
 
 interface RawStoryEntry {
@@ -84,21 +87,37 @@ export function fixtureRaw() {
   return {
     balance: {
       actionsPerMonth: 3,
+      monthsPerRun: 2,
       actionCosts: { standard: 1, report: 1, pub: 1 } as Record<string, number>,
     },
     hiddenTruth: {
+      kinds: {
+        believer: { label: "KIND-BELIEVER", weight: 1 },
+        incompetent: { label: "KIND-INCOMPETENT", weight: 1 },
+        practitioner: { label: "KIND-PRACTITIONER", weight: 1 },
+      },
+      minPractitioners: 1,
+      charactersWithFact: 2,
       facts: [
-        { id: "fact-a", text: "SECRET-FACT-ALPHA" },
-        { id: "fact-b", text: "SECRET-FACT-BRAVO" },
-        { id: "fact-c", text: "SECRET-FACT-CHARLIE" },
-      ],
-      cast: ["ana", "ben", "cal"],
+        { id: "fact-a", text: "SECRET-ALPHA about {name}" },
+        { id: "fact-b", text: "SECRET-BRAVO about {name}" },
+        { id: "fact-c", text: "SECRET-CHARLIE about {name}" },
+      ] as { id: string; text: string; characters?: string[] }[],
     },
     characters: [
       { id: "ana", name: "Ana Abel", title: "Boss" },
-      { id: "ben", name: "Ben Bird", title: "Analyst" },
-      { id: "cal", name: "Cal Cope", title: "Clerk" },
-    ],
+      { id: "ben", name: "Ben Bird", title: "Analyst", reportsTo: "ana" },
+      { id: "cal", name: "Cal Cope", title: "Clerk", reportsTo: "ana" },
+    ] as { id: string; name: string; title: string; reportsTo?: string }[],
+    behaviours: [] as {
+      id: string;
+      text: string;
+      likelihood: {
+        believer: number;
+        incompetent: number;
+        practitioner: number;
+      };
+    }[],
     scenes: [] as RawScene[],
     notifications,
     dialogs: [
@@ -132,10 +151,12 @@ export function fixtureRaw() {
         notice: "Press continue.",
         move: "Something has happened to you.",
         story: "The month has closed.",
+        results: "The run is over.",
       },
       actionCount: { one: "1 action", other: "{n} actions" },
       costLabel: "Costs {actions}",
       freeLabel: "Costs nothing",
+      results: { title: "The end", intro: "Here is who was who." },
     },
   };
 }

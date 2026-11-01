@@ -1,13 +1,48 @@
 {
+  "kinds": {
+    "believer": { "label": "Believer", "weight": 3 },
+    "incompetent": { "label": "Incompetent", "weight": 3 },
+    "practitioner": { "label": "Practitioner", "weight": 2 }
+  },
+  "minPractitioners": 1,
+  "charactersWithFact": 4,
   "facts": [
     {
       "id": "thursday-bridge",
-      "text": "Marjorie Tull has played bridge with the Chief Executive every Thursday for eleven years."
+      "text": "{name} has played bridge with the Chief Executive every Thursday for eleven years."
     },
     {
       "id": "abolished-post",
-      "text": "The post of Team Leader was abolished in a reorganisation two years ago, and nobody has told Dennis Prowse."
+      "text": "The post of Team Leader was abolished in a reorganisation two years ago, and nobody has told {name}.",
+      "characters": ["boss"]
+    },
+    {
+      "id": "values-statement",
+      "text": "{name} wrote the company's values statement at a kitchen table, in one afternoon, for a bet."
+    },
+    {
+      "id": "payroll-password",
+      "text": "{name} is the only person alive who knows the password to the system that pays everyone."
+    },
+    {
+      "id": "audit-engagement",
+      "text": "{name} was engaged for six years to the Head of Internal Audit. It ended badly, and the audit is still open."
+    },
+    {
+      "id": "dated-record",
+      "text": "{name} has kept a dated record of every promise made on this floor since 2014, and has made copies."
+    },
+    {
+      "id": "reports-to-finance",
+      "text": "{name} reports privately to the Chief Financial Officer on what really happens at this level."
+    },
+    {
+      "id": "lost-list",
+      "text": "{name} has been on the redundancy list for two years. The list has been lost, and nobody dares to ask for it."
+    },
+    {
+      "id": "competitor-offer",
+      "text": "{name} has a signed offer from the company's largest competitor, and is staying on to see how this ends."
     }
-  ],
-  "cast": ["boss", "analyst", "admin"]
+  ]
 }

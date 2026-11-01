@@ -4,7 +4,7 @@
   "floorName": "Floor 1",
   "floorRole": "Junior employee",
   "monthHeading": "Month",
-  "monthLabel": "{n}",
+  "monthLabel": "{n} of {total}",
   "actionsHeading": "Actions",
   "actionsLeft": "{actions} left",
   "buzzwordsHeading": "Buzzwords",
@@ -15,20 +15,37 @@
   "whatNext": "What you can do now",
   "castHeading": "In the room",
   "signsHeading": "What you notice",
+  "behavioursHeading": "How people behave this month",
   "optionsHeading": "How do you behave?",
   "seedLabel": "Seed",
-  "replayLabel": "Replay this month",
-  "newSeedLabel": "Replay with a different seed",
+  "orgChartHeading": "Org Chart",
+  "powerMapHeading": "Power Map",
+  "closeLabel": "Close",
+  "resultsWhoHeading": "Who was really who",
+  "resultsNoFact": "Nothing. Exactly what it looked like.",
+  "seedInputLabel": "Type a seed",
+  "seedRefused": "\"{seed}\" cannot be used as a seed. A seed is a whole number, from 0 to 4294967295.",
+  "restartLabel": "Restart from seed",
+  "newRunLabel": "New run",
+  "leaveTitle": "Abandon this run?",
+  "leaveBody": "You are in month {month}. Nothing about this run will be kept, which is also the company's position on it.",
+  "leaveConfirm": "Abandon the run",
+  "leaveCancel": "Stay in this run",
   "hints": {
     "notification": "Answer the Notification on the right. Each answer shows what it costs. Nothing else can happen until you do.",
     "dialog": "Read what was said, then press Continue to go back to the office.",
     "actions": "Click a highlighted place on the floor, or its label, to go there. You have {actions} left. When they are gone, the month closes.",
-    "scene": "Read the room: who interrupts, who gets looked at, who gets ignored. Then choose how to behave.",
+    "scene": "Read the room: who interrupts, who gets looked at, who gets ignored. No single sign settles what anyone is, so watch over the months. Then choose how to behave.",
     "notice": "Read the result, then press Continue.",
     "move": "This has happened to you, and there is nothing to choose. Press Continue to close the month.",
-    "story": "The month has closed. Replay it to choose differently, or use a different seed to change who really holds influence."
+    "story": "The month has closed. Read what was reported, then press Continue.",
+    "results": "The run is over. Type its seed to play the same deal again, or start a new run."
   },
   "actionCount": { "one": "1 action", "other": "{n} actions" },
   "costLabel": "Costs {actions}",
-  "freeLabel": "Costs nothing"
+  "freeLabel": "Costs nothing",
+  "results": {
+    "title": "Your probation has been extended",
+    "intro": "Your review period is over. A form says you are meeting expectations, and that the expectations are under review. Here is what the form leaves out."
+  }
 }

@@ -1,7 +1,14 @@
 import type { Condition, Content, SceneData } from "./content";
-import { pick } from "./rng";
+import {
+  dealCharacters,
+  dealPowerMap,
+  type DealtCharacter,
+  type PowerMap,
+} from "./deal";
+import { pick, pickWeighted } from "./rng";
 import type {
   Buzzword,
+  ChartEntry,
   Choice,
   Hotspot,
   NotificationOption,
@@ -9,14 +16,8 @@ import type {
   StepView,
 } from "./view";
 
-export interface PowerMap {
-  holder: string;
-  ignored: string;
-  bystander: string;
-}
-
 export interface HiddenTruth {
-  fact: { id: string; text: string };
+  characters: DealtCharacter[];
   powerMap: PowerMap;
 }
 
@@ -33,25 +34,37 @@ interface World {
   sceneScripts: SceneScripts;
 }
 
+/** Which behaviour a Character was seen showing when a Scene opened. */
+interface ShownBehaviour {
+  character: string;
+  behaviour: string;
+}
+
 type Step =
   | { kind: "notification"; id: string }
   | { kind: "dialog"; id: string; learned: string[] }
   | { kind: "actions" }
-  | { kind: "scene"; id: string }
+  | { kind: "scene"; id: string; shown: ShownBehaviour[] }
   | { kind: "notice"; title: string; body: string }
   | { kind: "move"; id: string }
-  | { kind: "story" };
+  | { kind: "story" }
+  | { kind: "results" };
 
-interface State {
-  seed: number;
-  rng: number;
-  month: number;
+/** What belongs to the month, and is wiped when the next one opens. */
+interface MonthRecord {
   spent: number;
   visited: string[];
   unanswered: string[];
-  buzzwords: string[];
   flags: string[];
   moveLanded: boolean;
+}
+
+/** What belongs to the run, and carries from month to month. */
+interface State extends MonthRecord {
+  seed: number;
+  rng: number;
+  month: number;
+  buzzwords: string[];
   step: Step;
   truth: HiddenTruth;
 }
@@ -90,20 +103,16 @@ export function startRun(options: {
     }
   }
   const world: World = { content, sceneScripts };
-  const fact = pick(seed, content.hiddenTruth.facts);
-  const dealt = dealPowerMap(fact.next, content.hiddenTruth.cast);
+  const dealt = dealCharacters(seed, content);
+  const power = dealPowerMap(dealt.next, content);
   const state: State = {
     seed,
-    rng: dealt.next,
+    rng: power.next,
     month: 1,
-    spent: 0,
-    visited: [],
-    unanswered: content.notifications.map((n) => n.id),
+    ...freshMonth(content, 1),
     buzzwords: [],
-    flags: [],
-    moveLanded: false,
     step: { kind: "actions" },
-    truth: { fact: fact.item, powerMap: dealt.powerMap },
+    truth: { characters: dealt.characters, powerMap: power.powerMap },
   };
   state.step = nextStep(state, world);
 
@@ -124,25 +133,31 @@ export function startRun(options: {
   return run;
 }
 
-function dealPowerMap(
-  rng: number,
-  cast: readonly string[],
-): { powerMap: PowerMap; next: number } {
-  const holder = pick(rng, cast);
-  const others = cast.filter((c) => c !== holder.item);
-  const ignored = pick(holder.next, others);
-  const bystander = pick(
-    ignored.next,
-    others.filter((c) => c !== ignored.item),
-  );
+function freshMonth(content: Content, month: number): MonthRecord {
   return {
-    powerMap: {
-      holder: holder.item,
-      ignored: ignored.item,
-      bystander: bystander.item,
-    },
-    next: bystander.next,
+    spent: 0,
+    visited: [],
+    unanswered: content.notifications
+      .filter((n) => inMonth(n, month))
+      .map((n) => n.id),
+    flags: [],
+    moveLanded: false,
   };
+}
+
+function inMonth(item: { months?: number[] | undefined }, month: number) {
+  return item.months === undefined || item.months.includes(month);
+}
+
+/** After the official story: on to the next month, or the end of the run. */
+function leaveStory(state: State, world: World): void {
+  if (state.month === world.content.balance.monthsPerRun) {
+    state.step = { kind: "results" };
+    return;
+  }
+  state.month += 1;
+  Object.assign(state, freshMonth(world.content, state.month));
+  state.step = nextStep(state, world);
 }
 
 function apply(state: State, world: World, choice: Choice): void {
@@ -158,7 +173,7 @@ function apply(state: State, world: World, choice: Choice): void {
       state.visited.push(action.id);
       state.flags.push(...action.sets);
       if (action.scene !== undefined) {
-        state.step = { kind: "scene", id: action.scene };
+        state.step = openScene(state, world, action.scene);
       } else if (action.result) {
         state.step = { kind: "notice", ...action.result };
       }
@@ -168,7 +183,8 @@ function apply(state: State, world: World, choice: Choice): void {
       behaveInScene(state, world, choice);
       return;
     case "continue":
-      state.step = nextStep(state, world);
+      if (state.step.kind === "story") leaveStory(state, world);
+      else state.step = nextStep(state, world);
       return;
   }
 }
@@ -188,16 +204,37 @@ function answerNotification(
   state.unanswered = state.unanswered.filter(
     (id) => id !== choice.notificationId,
   );
-  state.buzzwords.push(...option.learns);
+  const learned = option.learns.filter((w) => !state.buzzwords.includes(w));
+  state.buzzwords.push(...learned);
   state.flags.push(...option.sets);
 
   if (option.dialog !== undefined) {
-    state.step = { kind: "dialog", id: option.dialog, learned: option.learns };
+    state.step = { kind: "dialog", id: option.dialog, learned };
   } else if (option.result) {
     state.step = { kind: "notice", ...option.result };
   } else {
     state.step = nextStep(state, world);
   }
+}
+
+/** Everyone present shows one behaviour, chosen by their dealt kind. */
+function openScene(state: State, world: World, id: string): Step {
+  const { behaviours } = world.content;
+  const shown: ShownBehaviour[] = [];
+  if (behaviours.length > 0) {
+    for (const character of sceneData(state, world, id).cast) {
+      const kind = state.truth.characters.find((c) => c.id === character)?.kind;
+      if (kind === undefined) continue;
+      const chosen = pickWeighted(
+        state.rng,
+        behaviours,
+        (b) => b.likelihood[kind],
+      );
+      state.rng = chosen.next;
+      shown.push({ character, behaviour: chosen.item.id });
+    }
+  }
+  return { kind: "scene", id, shown };
 }
 
 function behaveInScene(
@@ -209,27 +246,43 @@ function behaveInScene(
   const option = offeredOptions(state, scene).find(
     (o) => o.id === choice.optionId,
   );
-  const result = option?.results.find((r) => matches(state, r.when));
+  const result = option?.results.find((r) =>
+    matches(state, r.when, scene.cast),
+  );
   if (!result) throw new IllegalChoiceError(choice.optionId);
   state.flags.push(...result.sets);
   state.step = {
     kind: "notice",
     title: scene.title,
-    body: fillRoles(state, world.content, result.body),
+    body: fillRoles(state, world.content, result.body, scene.cast),
   };
 }
 
-function matches(state: State, condition: Condition | undefined): boolean {
+/** Roles are relative to who is in the room. Left out, that is everyone. */
+function rolesIn(powerMap: PowerMap, room?: readonly string[]) {
+  const present = powerMap.order.filter((id) => room?.includes(id) ?? true);
+  return {
+    holder: present[0],
+    bystander: present[1],
+    ignored: present.at(-1),
+  };
+}
+
+function matches(
+  state: State,
+  condition: Condition | undefined,
+  room?: readonly string[],
+): boolean {
   if (condition === undefined) return true;
   if ("holderIs" in condition) {
-    return condition.holderIs === state.truth.powerMap.holder;
+    return condition.holderIs === rolesIn(state.truth.powerMap, room).holder;
   }
   if ("hasBuzzword" in condition) {
     return state.buzzwords.includes(condition.hasBuzzword);
   }
   if ("flag" in condition) return state.flags.includes(condition.flag);
-  if ("not" in condition) return !matches(state, condition.not);
-  return condition.all.every((inner) => matches(state, inner));
+  if ("not" in condition) return !matches(state, condition.not, room);
+  return condition.all.every((inner) => matches(state, inner, room));
 }
 
 function offeredOptions(state: State, scene: SceneData) {
@@ -245,10 +298,15 @@ function sceneData(state: State, world: World, id: string): SceneData {
 }
 
 /** Writes the dealt Characters' names into text that names roles. */
-function fillRoles(state: State, content: Content, written: string): string {
-  const name = (id: string) =>
-    content.characters.find((c) => c.id === id)?.name ?? id;
-  const { holder, ignored, bystander } = state.truth.powerMap;
+function fillRoles(
+  state: State,
+  content: Content,
+  written: string,
+  room?: readonly string[],
+): string {
+  const name = (id: string | undefined) =>
+    content.characters.find((c) => c.id === id)?.name ?? "";
+  const { holder, ignored, bystander } = rolesIn(state.truth.powerMap, room);
   return written
     .replaceAll("{holder}", name(holder))
     .replaceAll("{ignored}", name(ignored))
@@ -264,7 +322,9 @@ function nextStep(state: State, { content }: World): Step {
     );
     if (answerable) return { kind: "notification", id };
   }
-  if (content.actions.some((a) => isAvailable(state, content, a))) {
+  if (
+    actionsThisMonth(state, content).some((a) => isAvailable(state, content, a))
+  ) {
     return { kind: "actions" };
   }
   return landMove(state, content) ?? { kind: "story" };
@@ -274,12 +334,22 @@ function nextStep(state: State, { content }: World): Step {
 function landMove(state: State, content: Content): Step | null {
   if (state.moveLanded) return null;
   state.moveLanded = true;
-  const eligible = content.moves.filter((m) => matches(state, m.when));
+  const eligible = content.moves.filter(
+    (m) => inMonth(m, state.month) && matches(state, m.when),
+  );
   if (eligible.length === 0) return null;
   const { item, next } = pick(state.rng, eligible);
   state.rng = next;
   state.flags.push(...item.sets);
   return { kind: "move", id: item.id };
+}
+
+/** An action exists in a month only if the Scene it opens does too. */
+function actionsThisMonth(state: State, content: Content) {
+  return content.actions.filter((a) => {
+    const scene = content.scenes.find((s) => s.id === a.scene);
+    return inMonth(a, state.month) && (!scene || inMonth(scene, state.month));
+  });
 }
 
 function isAvailable(
@@ -310,7 +380,7 @@ function legalChoices(state: State, world: World): Choice[] {
           optionId: o.id,
         }));
     case "actions":
-      return content.actions
+      return actionsThisMonth(state, content)
         .filter((a) => isAvailable(state, content, a))
         .map((a) => ({ type: "action", actionId: a.id }));
     case "scene":
@@ -326,6 +396,8 @@ function legalChoices(state: State, world: World): Choice[] {
     case "move":
       return [{ type: "continue" }];
     case "story":
+      return [{ type: "continue" }];
+    case "results":
       return [];
   }
 }
@@ -347,11 +419,12 @@ function notificationOptions(
 function toSceneView(
   state: State,
   world: World,
-  id: string,
+  { id, shown }: Extract<Step, { kind: "scene" }>,
 ): Extract<StepView, { kind: "scene" }> {
   const { content } = world;
-  const fill = (written: string) => fillRoles(state, content, written);
   const scene = sceneData(state, world, id);
+  const fill = (written: string) =>
+    fillRoles(state, content, written, scene.cast);
   return {
     kind: "scene",
     id: scene.id,
@@ -364,6 +437,12 @@ function toSceneView(
         .map((x) => ({ name: x.name, title: x.title })),
     ),
     signs: scene.signs.map((s) => ({ label: s.label, text: fill(s.text) })),
+    behaviours: shown.map(({ character, behaviour }) => {
+      const who =
+        content.characters.find((c) => c.id === character)?.name ?? character;
+      const written = content.behaviours.find((b) => b.id === behaviour);
+      return { who, text: (written?.text ?? "").replaceAll("{who}", who) };
+    }),
     options: offeredOptions(state, scene).map((o) => ({
       id: o.id,
       label: fill(o.label),
@@ -388,6 +467,47 @@ function toStoryView(
     reported: told.flatMap((e) => fill(e.reported)),
     happened: told.flatMap((e) => fill(e.happened)),
   };
+}
+
+/** The reveal. It reaches the player view only here, once the run has ended. */
+function toResultsView(
+  state: State,
+  content: Content,
+): Extract<StepView, { kind: "results" }> {
+  const nameOf = (id: string) =>
+    content.characters.find((c) => c.id === id)?.name ?? id;
+  const { order, influence } = state.truth.powerMap;
+  return {
+    kind: "results",
+    ...content.ui.results,
+    characters: state.truth.characters.map((dealt) => {
+      const known = content.characters.find((c) => c.id === dealt.id);
+      return {
+        name: known?.name ?? dealt.id,
+        title: known?.title ?? "",
+        kind: content.hiddenTruth.kinds[dealt.kind].label,
+        fact: dealt.fact?.text ?? null,
+      };
+    }),
+    powerMap: order.map((id) => {
+      const above = influence.find((i) => i.over === id);
+      return {
+        name: nameOf(id),
+        title: content.characters.find((c) => c.id === id)?.title ?? "",
+        reportsTo: above ? nameOf(above.who) : null,
+      };
+    }),
+  };
+}
+
+/** The formal hierarchy, the same in every deal. */
+function toOrgChart(content: Content): ChartEntry[] {
+  return content.characters.map((c) => ({
+    name: c.name,
+    title: c.title,
+    reportsTo:
+      content.characters.find((m) => m.id === c.reportsTo)?.name ?? null,
+  }));
 }
 
 function toStepView(state: State, world: World): StepView {
@@ -417,7 +537,7 @@ function toStepView(state: State, world: World): StepView {
       };
     }
     case "scene":
-      return toSceneView(state, world, step.id);
+      return toSceneView(state, world, step);
     case "move": {
       const move = content.moves.find((m) => m.id === step.id);
       if (!move) throw new Error(`Unknown Move "${step.id}".`);
@@ -430,6 +550,8 @@ function toStepView(state: State, world: World): StepView {
     }
     case "story":
       return toStoryView(state, content);
+    case "results":
+      return toResultsView(state, content);
     case "actions":
     case "notice":
       return step;
@@ -443,6 +565,7 @@ function toView(state: State, world: World): PlayerView {
   return structuredClone({
     seed: state.seed,
     month: state.month,
+    totalMonths: content.balance.monthsPerRun,
     actions: {
       total: content.balance.actionsPerMonth,
       spent: state.spent,
@@ -450,7 +573,10 @@ function toView(state: State, world: World): PlayerView {
       label: actionsLabel,
     },
     buzzwords: buzzwordsOf(content, state.buzzwords),
-    hotspots: content.actions.map((a) => toHotspot(state, content, a)),
+    orgChart: toOrgChart(content),
+    hotspots: actionsThisMonth(state, content).map((a) =>
+      toHotspot(state, content, a),
+    ),
     step: toStepView(state, world),
     hint: content.ui.hints[state.step.kind].replaceAll(
       "{actions}",

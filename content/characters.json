@@ -1,5 +1,31 @@
 [
-  { "id": "boss", "name": "Dennis Prowse", "title": "Team Leader, your boss" },
-  { "id": "analyst", "name": "Priya Venn", "title": "Senior Analyst" },
-  { "id": "admin", "name": "Marjorie Tull", "title": "Office Co-ordinator" }
+  {
+    "id": "head",
+    "name": "Hugh Lamb",
+    "title": "Head of Operations, your boss's boss"
+  },
+  {
+    "id": "boss",
+    "name": "Dennis Prowse",
+    "title": "Team Leader, your boss",
+    "reportsTo": "head"
+  },
+  {
+    "id": "admin",
+    "name": "Marjorie Tull",
+    "title": "Office Co-ordinator",
+    "reportsTo": "head"
+  },
+  {
+    "id": "analyst",
+    "name": "Priya Venn",
+    "title": "Senior Analyst",
+    "reportsTo": "boss"
+  },
+  {
+    "id": "projects",
+    "name": "Callum Reed",
+    "title": "Project Co-ordinator",
+    "reportsTo": "boss"
+  }
 ]

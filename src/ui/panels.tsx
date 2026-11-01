@@ -1,22 +1,28 @@
 import { useEffect, useRef, type ReactNode } from "react";
 import { panelText } from "../content";
-import type { Choice, PlayerView, StepView } from "../engine";
+import type { ChartEntry, Choice, PlayerView, StepView } from "../engine";
+import { Chart } from "./Chart";
 
 interface PanelProps {
   testId: string;
   eyebrow?: string;
   title: string;
+  wide?: boolean;
   children: ReactNode;
 }
 
 /** A panel over the tower. It takes focus, so the keyboard follows the month. */
-function Panel({ testId, eyebrow, title, children }: PanelProps) {
+function Panel({ testId, eyebrow, title, wide, children }: PanelProps) {
   const heading = useRef<HTMLHeadingElement>(null);
   useEffect(() => {
     heading.current?.focus();
   }, [title]);
   return (
-    <section className="panel" data-testid={testId} aria-label={title}>
+    <section
+      className={wide ? "panel panel-wide" : "panel"}
+      data-testid={testId}
+      aria-label={title}
+    >
       {eyebrow !== undefined && <p className="eyebrow">{eyebrow}</p>}
       <h2 ref={heading} tabIndex={-1}>
         {title}
@@ -43,12 +49,10 @@ function Continue({ onChoose }: { onChoose: (choice: Choice) => void }) {
 
 function StoryPanel({
   step,
-  onReplay,
-  onNewSeed,
+  onChoose,
 }: {
   step: Extract<StepView, { kind: "story" }>;
-  onReplay: () => void;
-  onNewSeed: () => void;
+  onChoose: (choice: Choice) => void;
 }) {
   return (
     <Panel testId="panel-story" title={step.title}>
@@ -68,18 +72,45 @@ function StoryPanel({
           ))}
         </div>
       )}
-      <div className="panel-actions">
-        <button
-          type="button"
-          className="primary"
-          data-testid="replay"
-          onClick={onReplay}
-        >
-          {panelText.replayLabel}
-        </button>
-        <button type="button" data-testid="new-seed" onClick={onNewSeed}>
-          {panelText.newSeedLabel}
-        </button>
+      <Continue onChoose={onChoose} />
+    </Panel>
+  );
+}
+
+function ResultsPanel({
+  step,
+  orgChart,
+}: {
+  step: Extract<StepView, { kind: "results" }>;
+  orgChart: readonly ChartEntry[];
+}) {
+  return (
+    <Panel testId="panel-results" title={step.title} wide>
+      <p>{step.intro}</p>
+      <h3>{panelText.resultsWhoHeading}</h3>
+      <table className="results">
+        <tbody>
+          {step.characters.map((person) => (
+            <tr key={person.name} data-testid="result-character">
+              <th scope="row">
+                {person.name}
+                <span className="results-title">{person.title}</span>
+              </th>
+              <td className="results-kind">{person.kind}</td>
+              <td>{person.fact ?? panelText.resultsNoFact}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+      <div className="results-charts">
+        <div data-testid="results-org-chart">
+          <h3>{panelText.orgChartHeading}</h3>
+          <Chart entries={orgChart} />
+        </div>
+        <div data-testid="results-power-map">
+          <h3>{panelText.powerMapHeading}</h3>
+          <Chart entries={step.powerMap} />
+        </div>
       </div>
     </Panel>
   );
@@ -88,17 +119,10 @@ function StoryPanel({
 interface StepPanelProps {
   view: PlayerView;
   onChoose: (choice: Choice) => void;
-  onReplay: () => void;
-  onNewSeed: () => void;
 }
 
 /** The panel for the current step of the month, if it needs one. */
-export function StepPanel({
-  view,
-  onChoose,
-  onReplay,
-  onNewSeed,
-}: StepPanelProps) {
+export function StepPanel({ view, onChoose }: StepPanelProps) {
   const { step } = view;
   switch (step.kind) {
     case "actions":
@@ -136,46 +160,69 @@ export function StepPanel({
       );
     case "scene":
       return (
-        <Panel testId="panel-scene" eyebrow={step.location} title={step.title}>
-          {step.narration.map((line) => (
-            <p key={line}>{line}</p>
-          ))}
-          <h3>{panelText.castHeading}</h3>
-          <ul className="cast">
-            {step.cast.map((person) => (
-              <li key={person.name}>
-                <strong>{person.name}</strong>, {person.title}
-              </li>
-            ))}
-          </ul>
-          <h3>{panelText.signsHeading}</h3>
-          <dl className="signs">
-            {step.signs.map((sign) => (
-              <div key={sign.label} data-testid="sign">
-                <dt>{sign.label}</dt>
-                <dd>{sign.text}</dd>
+        <Panel
+          testId="panel-scene"
+          eyebrow={step.location}
+          title={step.title}
+          wide
+        >
+          <div className="scene-columns">
+            <div>
+              {step.narration.map((line) => (
+                <p key={line}>{line}</p>
+              ))}
+              <h3>{panelText.castHeading}</h3>
+              <ul className="cast">
+                {step.cast.map((person) => (
+                  <li key={person.name}>
+                    <strong>{person.name}</strong>, {person.title}
+                  </li>
+                ))}
+              </ul>
+              <h3>{panelText.signsHeading}</h3>
+              <dl className="signs">
+                {step.signs.map((sign) => (
+                  <div key={sign.label} data-testid="sign">
+                    <dt>{sign.label}</dt>
+                    <dd>{sign.text}</dd>
+                  </div>
+                ))}
+              </dl>
+              {step.behaviours.length > 0 && (
+                <>
+                  <h3>{panelText.behavioursHeading}</h3>
+                  <ul className="signs behaviours">
+                    {step.behaviours.map((shown) => (
+                      <li key={shown.who} data-testid="behaviour">
+                        {shown.text}
+                      </li>
+                    ))}
+                  </ul>
+                </>
+              )}
+            </div>
+            <div>
+              <h3>{panelText.optionsHeading}</h3>
+              <div className="options">
+                {step.options.map((option) => (
+                  <button
+                    key={option.id}
+                    type="button"
+                    className="option"
+                    data-testid={`scene-option-${option.id}`}
+                    onClick={() => {
+                      onChoose({
+                        type: "scene",
+                        sceneId: step.id,
+                        optionId: option.id,
+                      });
+                    }}
+                  >
+                    {option.label}
+                  </button>
+                ))}
               </div>
-            ))}
-          </dl>
-          <h3>{panelText.optionsHeading}</h3>
-          <div className="options">
-            {step.options.map((option) => (
-              <button
-                key={option.id}
-                type="button"
-                className="option"
-                data-testid={`scene-option-${option.id}`}
-                onClick={() => {
-                  onChoose({
-                    type: "scene",
-                    sceneId: step.id,
-                    optionId: option.id,
-                  });
-                }}
-              >
-                {option.label}
-              </button>
-            ))}
+            </div>
           </div>
         </Panel>
       );
@@ -212,8 +259,8 @@ export function StepPanel({
         </Panel>
       );
     case "story":
-      return (
-        <StoryPanel step={step} onReplay={onReplay} onNewSeed={onNewSeed} />
-      );
+      return <StoryPanel step={step} onChoose={onChoose} />;
+    case "results":
+      return <ResultsPanel step={step} orgChart={view.orgChart} />;
   }
 }

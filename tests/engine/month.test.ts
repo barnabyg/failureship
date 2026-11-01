@@ -13,13 +13,17 @@ function spendAction(run: Run, actionId: string) {
   run.choose({ type: "continue" });
 }
 
+/** Plays the first month, as far as its official story. */
 function playThrough(run: Run) {
-  const views = [run.view()];
-  for (;;) {
-    const next = views.at(-1)?.choices[0];
-    if (!next) return views;
-    views.push(run.choose(next));
+  let view = run.view();
+  const views = [view];
+  while (view.step.kind !== "story") {
+    const next = view.choices[0];
+    if (!next) break;
+    view = run.choose(next);
+    views.push(view);
   }
+  return views;
 }
 
 describe("a month", () => {
@@ -105,7 +109,7 @@ describe("a month", () => {
     );
   });
 
-  it("runs in order: actions, then the official story, then nothing", () => {
+  it("runs in order: actions, then the official story", () => {
     const run = startRun({ seed: 1, content: emptyMonth() });
 
     const kinds = playThrough(run).map((v) => v.step.kind);
@@ -119,7 +123,6 @@ describe("a month", () => {
       "notice",
       "story",
     ]);
-    expect(run.view().choices).toEqual([]);
   });
 
   it("gives the same outcome for the same seed and choices", () => {
@@ -141,26 +144,29 @@ describe("a month", () => {
   });
 
   it("deals the hidden truth from the seed", () => {
-    const facts = new Set(
-      [1, 2, 3, 4, 5, 6, 7, 8].map(
-        (seed) =>
-          readHiddenTruth(startRun({ seed, content: emptyMonth() })).fact.id,
+    const deals = new Set(
+      [1, 2, 3, 4, 5, 6, 7, 8].map((seed) =>
+        JSON.stringify(
+          readHiddenTruth(startRun({ seed, content: emptyMonth() })).characters,
+        ),
       ),
     );
 
-    expect(facts.size).toBeGreaterThan(1);
+    expect(deals.size).toBeGreaterThan(1);
   });
 });
 
 describe("the player view", () => {
   it("never contains anything from the hidden truth", () => {
-    const secrets = emptyMonth().hiddenTruth.facts.map((f) => f.text);
     const run = startRun({ seed: 3, content: emptyMonth() });
+    const secrets = readHiddenTruth(run).characters.flatMap((c) =>
+      c.fact ? [c.fact.text] : [],
+    );
+    expect(secrets.length).toBeGreaterThan(0);
 
     for (const view of playThrough(run)) {
       const seen = JSON.stringify(view);
       for (const secret of secrets) expect(seen).not.toContain(secret);
     }
-    expect(secrets).toContain(readHiddenTruth(run).fact.text);
   });
 });

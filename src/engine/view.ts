@@ -32,6 +32,13 @@ export interface DialogLine {
   text: string;
 }
 
+/** One person in a hierarchy, and the name of the person above them. */
+export interface ChartEntry {
+  name: string;
+  title: string;
+  reportsTo: string | null;
+}
+
 export type StepView =
   | {
       kind: "notification";
@@ -56,6 +63,7 @@ export type StepView =
       narration: string[];
       cast: { name: string; title: string }[];
       signs: { label: string; text: string }[];
+      behaviours: { who: string; text: string }[];
       options: { id: string; label: string }[];
     }
   | { kind: "notice"; title: string; body: string }
@@ -67,14 +75,28 @@ export type StepView =
       happenedHeading?: string | undefined;
       reported: string[];
       happened: string[];
+    }
+  | {
+      kind: "results";
+      title: string;
+      intro: string;
+      characters: {
+        name: string;
+        title: string;
+        kind: string;
+        fact: string | null;
+      }[];
+      powerMap: ChartEntry[];
     };
 
 /** Only what the player is entitled to see. It never holds undiscovered truth. */
 export interface PlayerView {
   seed: number;
   month: number;
+  totalMonths: number;
   actions: { total: number; spent: number; remaining: number; label: string };
   buzzwords: Buzzword[];
+  orgChart: ChartEntry[];
   hotspots: Hotspot[];
   step: StepView;
   hint: string;
