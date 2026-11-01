@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { findBrokenThreads } from "./consequence-checks";
 import {
   CLAIM_STATUSES,
   DEMAND_ANSWERS,
@@ -6,6 +7,7 @@ import {
   MOODS,
   behavioursOpenTo,
   contentSchema,
+  everyBill,
   everyDemand,
   everyNotification,
   type Condition,
@@ -38,6 +40,7 @@ function dependsOnHiddenTruth(
   hiddenFlags: ReadonlySet<string> = new Set(),
 ): boolean {
   if ("flag" in condition) return hiddenFlags.has(condition.flag);
+  if ("did" in condition) return hiddenFlags.has(condition.did);
   if (
     "holderIs" in condition ||
     "bossIs" in condition ||
@@ -67,6 +70,11 @@ function flagsSetByHiddenResults(content: Content): Set<string> {
     ...content.moves
       .filter((m) => m.when && dependsOnHiddenTruth(m.when))
       .flatMap((m) => m.sets),
+    // Whether and how a Bill arrives is drawn, and can read the truth.
+    ...everyBill(content).flatMap((b) => [
+      ...b.sets,
+      ...b.options.flatMap((o) => o.sets),
+    ]),
     // Whether a Demand is forgotten or chased goes by the boss's kind.
     ...Object.values(content.demands?.sets ?? {}),
     // Whether the boss finds out goes by the boss's kind too.
@@ -488,6 +496,7 @@ function findBrokenMistakes(content: Content): string[] {
   const anyMistake =
     options.some((o) => o.outcomes.some((x) => x.mistake !== undefined)) ||
     content.moves.some((m) => m.mistake !== undefined) ||
+    everyBill(content).some((b) => b.mistake !== undefined) ||
     content.actions.some((a) => a.mistake !== undefined);
   if (anyMistake && !content.mistakes) {
     problems.push("A big mistake is written, but no words for one.");
@@ -606,6 +615,14 @@ function findBrokenReferences(content: Content): string[] {
   problems.push(...findBrokenInput(content));
   problems.push(...findBrokenDemands(content));
   problems.push(...findBrokenMistakes(content));
+  problems.push(...findBrokenThreads(content));
+  for (const thread of content.threads) {
+    for (const outcome of thread.outcomes) {
+      const owner = `Thread "${thread.id}"`;
+      if (outcome.when) checkCondition(owner, outcome.when);
+      checkProject(owner, outcome.bill.project);
+    }
+  }
   const { flagged } = content.project;
   if (flagged) {
     checkStatus("The Project's flag", flagged.at);

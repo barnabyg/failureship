@@ -114,7 +114,7 @@ describe("nine months that do not feel like one month repeated", () => {
   });
 
   it("gives you an action at any meeting you do not go to", () => {
-    const { views } = walk(2, (view, turn) => {
+    const { views } = walk(3, (view, turn) => {
       const open = view.choices.filter(
         (c) => !(c.type === "action" && c.actionId.startsWith("meeting")),
       );

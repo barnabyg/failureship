@@ -1,4 +1,9 @@
-import { everyDemand, everyNotification, type Content } from "./content";
+import {
+  everyBill,
+  everyDemand,
+  everyNotification,
+  type Content,
+} from "./content";
 import {
   actionsThisMonth,
   costOf,
@@ -229,11 +234,13 @@ function toStepView(state: State, world: World): StepView {
       };
     }
     case "move": {
-      const move = content.moves.find((m) => m.id === step.id);
+      const move = [...content.moves, ...everyBill(content)].find(
+        (m) => m.id === step.id,
+      );
       if (!move) throw new Error(`Unknown Move "${step.id}".`);
       return {
         kind: "move",
-        from: move.from,
+        from: move.from ?? "",
         title: move.title,
         body: fillParts(state, content, move.body),
       };

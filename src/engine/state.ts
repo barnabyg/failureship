@@ -149,6 +149,18 @@ export interface State extends MonthRecord {
     /** Flagged, and not yet explained. */
     flagged: boolean;
   };
+  /** Every flag ever set, which unlike `flags` lasts the whole run. */
+  deeds: { flag: string; month: number }[];
+  /** The Threads started so far. Nothing of these is shown until one plays out. */
+  threads: {
+    id: string;
+    month: number;
+    /** The month it comes back in. Null if it never will. */
+    due: number | null;
+    played: { month: number; text: string } | null;
+  }[];
+  /** Bills waiting to land this month as Character Moves. */
+  billsDue: string[];
   /** Told to the player, and shown from then on. */
   finalWarning: boolean;
   /** The month the player was fired in, which ends the run. */

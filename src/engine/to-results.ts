@@ -18,6 +18,19 @@ export function toResultsView(
       : content.ui.results),
     ending: toEnding(state, content),
     mistakes: state.mistakes,
+    threads: state.threads.flatMap((started) => {
+      const written = content.threads.find((t) => t.id === started.id);
+      return started.played && written
+        ? [
+            {
+              startedIn: started.month,
+              started: written.started,
+              playedIn: started.played.month,
+              playedOut: started.played.text,
+            },
+          ]
+        : [];
+    }),
     characters: state.truth.characters.map((dealt) => {
       const known = content.characters.find((c) => c.id === dealt.id);
       return {

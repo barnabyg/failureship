@@ -118,6 +118,13 @@ export type StepView =
       intro: string;
       /** How the run ended. */
       ending: { fired: boolean; text: string | null };
+      /** Each Thread that played out, traced back to what started it. */
+      threads: {
+        startedIn: number;
+        started: string;
+        playedIn: number;
+        playedOut: string;
+      }[];
       /** The big mistakes the player made, in order. */
       mistakes: { month: number; choice: string }[];
       characters: {

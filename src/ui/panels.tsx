@@ -193,6 +193,23 @@ function ResultsPanel({
           </ul>
         </>
       )}
+      {step.threads.length > 0 && (
+        <div className="callout" data-testid="results-threads">
+          <h3>{panelText.resultsThreadsHeading}</h3>
+          {step.threads.map((row, index) => (
+            <div key={index} data-testid="result-thread">
+              <p>
+                <strong>{monthLabel(row.startedIn)}. </strong>
+                {row.started}
+              </p>
+              <p>
+                <strong>{monthLabel(row.playedIn)}. </strong>
+                {row.playedOut}
+              </p>
+            </div>
+          ))}
+        </div>
+      )}
       <h3>{panelText.resultsWhoHeading}</h3>
       <table className="results">
         <tbody>

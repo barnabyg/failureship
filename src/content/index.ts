@@ -18,6 +18,7 @@ import overHead from "../../content/over-head.json";
 import project from "../../content/project.json";
 import scenes from "../../content/scenes.json";
 import sources from "../../content/sources.json";
+import threads from "../../content/threads.json";
 import ui from "../../content/ui.json";
 import { z } from "zod";
 import { ContentError, parseContent } from "../engine";
@@ -53,6 +54,7 @@ export const gameContent = parseContent({
   buzzwords,
   actions,
   moves,
+  threads,
   officialStory,
   floor,
   ui: {
@@ -109,6 +111,7 @@ const panelSchema = z.strictObject(
       "standingHeading",
       "finalWarningLabel",
       "resultsMistakesHeading",
+      "resultsThreadsHeading",
       "resultsWhoHeading",
       "resultsNoFact",
       "findOutSourceHeading",

@@ -1,3 +1,4 @@
+import { landBill, playThreads } from "./bills";
 import { everyNotification, type Content } from "./content";
 import { dealWithAbsence, followUpDemands } from "./demands";
 import { applyOutcome } from "./outcome";
@@ -32,6 +33,7 @@ export function freshMonth(content: Content, month: number): MonthRecord {
 /** What happens as a month opens, whatever the player has done. */
 export function openMonth(state: State, content: Content): void {
   followUpDemands(state, content);
+  playThreads(state, content);
   const { input } = content.project;
   const colleague = state.truth.characters.find(
     (c) => c.id === input?.character,
@@ -98,6 +100,7 @@ export function nextStep(state: State, world: World): Step {
   }
   return (
     dealWithAbsence(state, content) ??
+    landBill(state, content) ??
     landMove(state, content) ?? { kind: "story" }
   );
 }

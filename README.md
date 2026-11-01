@@ -124,7 +124,8 @@ went down. Then try these:
 | Seed 13, the same                                                                                 | It works, but your boss's boss turns out to have little influence, and not much comes of it.                                                                       |
 | Seed 16, the same                                                                                 | It goes badly, and then **Your boss knows**. Watch how your boss treats you afterwards.                                                                            |
 | Any seed, month 6, then month 8                                                                   | The bonus pot and the underspend. Each is a one-off, with no balance anywhere. Choose who gets the money, and compare a Believer's reaction with a Practitioner's. |
-| Any seed, months 6 to 8                                                                           | The new metric, the Recruitment Panel, the desk with no window and the Listening Session. Nothing says which family of Move each of these is.                      |
+| Any seed, months 4 to 8                                                                           | The desk with no window, the new metric, the Recruitment Panel and the Listening Session. Nothing says which family of Move each of these is.                      |
+| Seed 2. In month 4, move the Project Co-ordinator to the desk with no window                      | Nothing, for now. Two or three months later the Health and Safety committee writes. The results screen traces it back to the desk.                                 |
 | Play to Annual Calibration in month 9, and to the results screen                                  | Your boss gives a verdict that depends on how you have done. The results screen shows both bosses' kinds, how your choices landed and how you played, by family.   |
 | Restart the same seed and repeat your choices                                                     | The same signs, claims, Move and official story, every time.                                                                                                       |
 
@@ -150,6 +151,7 @@ format, the page shows what is wrong instead of the game.
 | `actions.json`        | What can be done on the floor, and the results                                                                       |
 | `scenes.json`         | Each month's Scene: its signs, its choices and their results                                                         |
 | `moves.json`          | Character Moves, and when each can land                                                                              |
+| `threads.json`        | What comes back months later: what starts each Thread, and the Bill it sends                                         |
 | `mistakes.json`       | The words of a Final Warning and of being fired                                                                      |
 | `official-story.json` | The official story, assembled from entries according to what you did                                                 |
 | `behaviours.json`     | What Characters can be seen doing, which roles can do it, and how likely each kind is to do it                       |
@@ -165,6 +167,21 @@ format, the page shows what is wrong instead of the game.
 
 Each file's fields, and the conditions they can use, are in the
 [content format reference](docs/content-format.md).
+
+### Write a Thread
+
+A Thread is how an earlier choice comes back. To add one, needing no code:
+
+1. Find or add the flag that starts it, in the `sets` of a choice. Not every Move should
+   have a Thread, and a Bill is better if it arrives through someone else.
+2. Add an entry to `content/threads.json`, with `startedBy`, a `chance` that it comes back,
+   how many months `after` it does, and the `started` words for the results screen.
+3. Write its `outcomes`, each with a `bill`, which is what reaches the player, and `playedOut`
+   words. The first whose `when` holds is used, and a later one can be written as the fallback.
+   A Bill can be good news, and `"mistake": "big"` makes it a big mistake.
+
+The player hears nothing of a Thread until its Bill arrives. Results then trace it back to what
+started it.
 
 ## Develop
 
@@ -182,7 +199,8 @@ at a later month. `npm run build` and `npm run play` ignore it.
   `month.ts` holds the month's order; `outcome.ts` is the one place any consequence
   takes effect; `state.ts` and `reads.ts` are what the mechanics share; `boss.ts`,
   `demands.ts`, `find-out.ts`, `notebook.ts`, `over-head.ts`, `project.ts` and
-  `scenes.ts` are mechanics of their own; `to-view.ts` builds the player view, and
+  `scenes.ts` are mechanics of their own, as are `mistakes.ts`, and `threads.ts` with
+  `bills.ts`; `to-view.ts` builds the player view, and
   `to-results.ts` its reveal at the end; `save.ts` writes and reads a run. Everything
   in a run's `State` is plain data, so a mechanic gets saving for free. Raise
   `SAVE_VERSION` if a mechanic changes what saved state means. `src/engine/content.ts` holds the content

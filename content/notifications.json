@@ -352,7 +352,7 @@
   },
   {
     "id": "desk-moves",
-    "months": [7],
+    "months": [4],
     "from": "From: Facilities",
     "subject": "Workplace Refresh: please confirm your team's desks",
     "body": "Following the Workplace Refresh, your team has one desk by the window, and one with no window, beside the printer. You have been asked to say who sits where. Nobody at Facilities wishes to know why.",
@@ -381,7 +381,7 @@
             "opinion": -2,
             "result": {
               "title": "The printer",
-              "body": "It turns out that the Senior Analyst sits on the Health and Safety committee. An email about the safe distance from printers is copied to your boss, with a diagram, and your name is on the diagram."
+              "body": "The Senior Analyst does not carry anything anywhere. An email about the safe distance from printers is copied to your boss, with a diagram, and your name is on the diagram."
             }
           }
         },
@@ -425,7 +425,7 @@
   },
   {
     "id": "word-for-a-word",
-    "months": [8],
+    "months": [7],
     "from": "From: The Office Co-ordinator, Marjorie Tull",
     "subject": "A quick word, if you have a moment",
     "body": "The Office Co-ordinator has been here for twenty-six years, and has noticed that this has never led to anything. They wonder whether you might mention them to your boss. They also mention, in passing, that they know where several things are kept.",

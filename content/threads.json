@@ -1,0 +1,115 @@
+[
+  {
+    "id": "desk-no-window",
+    "startedBy": "moved-a-colleague",
+    "chance": 0.9,
+    "after": { "min": 2, "max": 3 },
+    "started": "You moved a colleague to the desk with no window, so that you could say who sat where.",
+    "outcomes": [
+      {
+        "when": { "did": "did-training" },
+        "playedOut": "The colleague by the printer turned out to sit on the Health and Safety committee. They came looking for something to hold against you, and you had sat through your one training module properly. It cost you only a form.",
+        "bill": {
+          "id": "safety-committee-form",
+          "as": "notice",
+          "title": "FW: Health and Safety Committee",
+          "body": "It turns out that the colleague you moved beside the printer sits on the Health and Safety committee. The committee has reviewed your training record, and can find nothing wrong with it. It has asked you to fill in a form confirming this, in triplicate, by the printer.",
+          "sets": ["safety-committee-called"]
+        }
+      },
+      {
+        "playedOut": "The colleague by the printer turned out to sit on the Health and Safety committee. Months after the desk, they called you out for never putting your team through safety training.",
+        "bill": {
+          "id": "safety-committee-call",
+          "as": "notification",
+          "from": "From: The Health and Safety Committee",
+          "title": "Your team's safety training is overdue",
+          "body": "It turns out that the colleague you moved beside the printer sits on the Health and Safety committee. They have looked up your team, and nobody on it has done any safety training. Neither have you. The committee has copied your boss, and would like to know what you propose.",
+          "sets": ["safety-committee-called"],
+          "opinion": -1,
+          "options": [
+            {
+              "id": "book-the-training",
+              "family": "deliver",
+              "label": "Book the whole team in, and go first",
+              "cost": "standard",
+              "sets": ["booked-safety-training"],
+              "result": {
+                "title": "Fire Marshal Awareness",
+                "body": "You spend a morning learning which way the doors open. The committee marks the action as closed, and the colleague by the printer looks across at you, and does not need to say anything."
+              }
+            },
+            {
+              "id": "say-it-was-scheduled",
+              "family": "fabricate",
+              "label": "Reply that it was already scheduled, and attach a schedule",
+              "sets": ["invented-safety-training"],
+              "opinion": -1,
+              "result": {
+                "title": "The schedule",
+                "body": "You make the schedule that afternoon. The committee thanks you, and points out that the date you chose was a Sunday. It has noted this as well."
+              }
+            }
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "id": "blame-taken",
+    "startedBy": "took-the-blame",
+    "chance": 0.8,
+    "after": { "min": 3, "max": 4 },
+    "started": "In the Lessons Learned Review, you took the blame for something, and the minutes recorded it.",
+    "outcomes": [
+      {
+        "playedOut": "Someone in that review remembered who had taken the blame. When your project next needed something, it arrived, and nobody asked for a form.",
+        "bill": {
+          "id": "blame-remembered",
+          "as": "move",
+          "from": "From: The Senior Analyst, Priya Venn",
+          "title": "Something for your project",
+          "body": "The figures your project has been waiting for since the spring are on your desk. There is no note. The Senior Analyst was in the review where you took the blame, and walks past without looking up, which you are starting to recognise as a form of respect.",
+          "sets": ["blame-repaid"],
+          "opinion": 1,
+          "project": { "real": "better" }
+        }
+      }
+    ]
+  },
+  {
+    "id": "green-report",
+    "startedBy": "lied-in-report",
+    "chance": 0.7,
+    "after": { "min": 2, "max": 4 },
+    "started": "You made your project green in the Monthly Status Report, when it was not.",
+    "outcomes": [
+      {
+        "when": { "bossIs": "believer" },
+        "playedOut": "Someone from Finance set your green report beside the real figures, and took the two of them to your boss, who believed in reports. It went on your file as a big mistake.",
+        "bill": {
+          "id": "green-report-believed",
+          "as": "move",
+          "from": "From: Finance, copied to your boss",
+          "title": "A small discrepancy",
+          "body": "Someone in Finance, whom you have never met, has been reading old Monthly Status Reports for pleasure. They have laid one of your green ones beside the figures, and sent both to your boss, with no comment. Your boss has read them both, properly.",
+          "sets": ["green-report-found"],
+          "mistake": "big",
+          "project": { "reported": "real" }
+        }
+      },
+      {
+        "playedOut": "Someone from Finance set your green report beside the real figures. It went nowhere much: your boss had signed the same report, and preferred it left alone.",
+        "bill": {
+          "id": "green-report-buried",
+          "as": "move",
+          "from": "From: Finance, copied to your boss",
+          "title": "A small discrepancy",
+          "body": "Someone in Finance, whom you have never met, has been reading old Monthly Status Reports for pleasure. They have laid one of your green ones beside the figures, and sent both to your boss. Your boss replies to all, thanking Finance for its engagement. You are not to do it again, or at least not in writing.",
+          "sets": ["green-report-found"],
+          "opinion": -1
+        }
+      }
+    ]
+  }
+]

@@ -102,6 +102,9 @@ export function matches(
     return state.buzzwords.includes(condition.hasBuzzword);
   }
   if ("flag" in condition) return state.flags.includes(condition.flag);
+  if ("did" in condition) {
+    return state.deeds.some((deed) => deed.flag === condition.did);
+  }
   if ("not" in condition) return !matches(state, content, condition.not, room);
   return condition.all.every((inner) => matches(state, content, inner, room));
 }

@@ -83,6 +83,7 @@ export type Condition =
   | { heardTrue: string }
   | { hasBuzzword: string }
   | { flag: string }
+  | { did: string }
   | { not: Condition }
   | { all: Condition[] };
 
@@ -100,6 +101,7 @@ const condition: z.ZodType<Condition> = z.lazy(() =>
     z.strictObject({ heardTrue: id }),
     z.strictObject({ hasBuzzword: id }),
     z.strictObject({ flag: id }),
+    z.strictObject({ did: id }),
     z.strictObject({ not: condition }),
     z.strictObject({ all: z.array(condition).min(1) }),
   ]),
@@ -153,6 +155,56 @@ const notification = z.strictObject({
   subject: text,
   body: text,
   options: z.array(notificationOption).min(1),
+});
+
+/**
+ * What comes back on the player, usually through someone else. It can do anything
+ * another outcome can, and a Thread or a hidden risk can send one.
+ */
+const bill = z.strictObject({
+  id,
+  /** How it arrives: told at once, as a Notification, or where Moves land. */
+  as: z.enum(["notice", "notification", "move"]),
+  /** Who it comes through. A notice needs nobody. */
+  from: text.optional(),
+  title: text,
+  body: text,
+  /** The answers, for one that arrives as a Notification. */
+  options: z.array(notificationOption).default([]),
+  sets,
+  opinion,
+  headOpinion,
+  project: projectChange,
+  mistake: bigMistake,
+});
+
+export type Bill = z.infer<typeof bill>;
+
+/** A chain of play, from something the player did to where it comes back. */
+const thread = z.strictObject({
+  id,
+  /** The flag that starts it, the first time anything sets it. */
+  startedBy: id,
+  /** The seeded chance that it ever comes back. */
+  chance: z.number().min(0).max(1).default(1),
+  /** How many months later it can come back, which is seeded too. */
+  after: z.strictObject({
+    min: z.number().int().positive(),
+    max: z.number().int().positive(),
+  }),
+  /** What the results screen says started it. */
+  started: text,
+  /** The first that holds plays out. If none does, it comes to nothing. */
+  outcomes: z
+    .array(
+      z.strictObject({
+        when: condition.optional(),
+        /** What the results screen says came of it. */
+        playedOut: text,
+        bill,
+      }),
+    )
+    .min(1),
 });
 
 const chasedDemand = z.strictObject({
@@ -665,6 +717,7 @@ export const contentSchema = z.strictObject({
   buzzwords: z.array(buzzword),
   actions: z.array(action).min(1),
   moves: z.array(move),
+  threads: z.array(thread).default([]),
   officialStory: z.strictObject({
     title: text,
     reportedHeading: text.optional(),
@@ -732,11 +785,28 @@ export function everyDemand(content: Content) {
   return [...items, ...given];
 }
 
-/** Every Notification there is, including Demands and their chasers. */
+/** Every Bill written, whatever sends it. */
+export function everyBill(content: Content): Bill[] {
+  return content.threads.flatMap((t) => t.outcomes.map((o) => o.bill));
+}
+
+/** Every Notification there is, including Demands, chasers and Bills. */
 export function everyNotification(content: Content) {
   const items = everyDemand(content);
+  const bills = everyBill(content)
+    .filter((b) => b.as === "notification")
+    .map((b) => ({
+      id: b.id,
+      months: undefined,
+      when: undefined,
+      from: b.from ?? "",
+      subject: b.title,
+      body: b.body,
+      options: b.options,
+    }));
   return [
     ...content.notifications,
+    ...bills,
     ...items,
     ...items.map(({ id: demandId, chased }) => ({
       ...chased,
