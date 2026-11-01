@@ -123,6 +123,16 @@ describe("a save that cannot be used", () => {
         s.state = 7;
       }),
     );
+    refuses(
+      edited((s) => {
+        s.state = null;
+      }),
+    );
+    refuses(
+      edited((s) => {
+        (s.state as { truth: unknown }).truth = null;
+      }),
+    );
   });
 
   it("refuses a step that the content does not have", () => {

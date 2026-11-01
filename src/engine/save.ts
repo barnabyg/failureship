@@ -53,10 +53,12 @@ export function readSave(text: string, content: Content, fresh: State): State {
     throw new UnusableSaveError("A save does not fit the content.");
   }
   const { state } = saved;
+  const isObject = (value: unknown): value is object =>
+    typeof value === "object" && value !== null;
   if (
-    typeof state !== "object" ||
+    !isObject(state) ||
     !sameKeys(state, fresh) ||
-    typeof state.truth !== "object" ||
+    !isObject(state.truth) ||
     !sameKeys(state.truth, fresh.truth)
   ) {
     throw new UnusableSaveError("A save does not fit this engine.");
