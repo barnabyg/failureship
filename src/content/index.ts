@@ -55,6 +55,13 @@ export const gameContent = parseContent({
   },
 });
 
+/** The names of the kinds, for marking suspicions. Nothing about who is which. */
+export const kindLabels = {
+  believer: gameContent.hiddenTruth.kinds.believer.label,
+  incompetent: gameContent.hiddenTruth.kinds.incompetent.label,
+  practitioner: gameContent.hiddenTruth.kinds.practitioner.label,
+};
+
 const panelSchema = z.strictObject(
   Object.fromEntries(
     [

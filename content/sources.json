@@ -15,6 +15,7 @@
       "topics": { "kind": 1, "influence": 1, "fact": 8 }
     }
   ],
+  "influentialCount": 2,
   "reliability": {
     "believer": { "true": 7, "mistaken": 2, "outOfDate": 3, "false": 0 },
     "incompetent": { "true": 3, "mistaken": 7, "outOfDate": 3, "false": 0 },

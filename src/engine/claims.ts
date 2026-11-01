@@ -2,6 +2,7 @@ import {
   CLAIM_STATUSES,
   KINDS,
   type ClaimStatus,
+  type ClueVerdict,
   type Content,
 } from "./content";
 import type { DealtCharacter, PowerMap } from "./deal";
@@ -51,6 +52,13 @@ function factsNotOf(content: Content, subject: DealtCharacter) {
     (f) =>
       f.id !== subject.fact?.id && (f.characters?.includes(subject.id) ?? true),
   );
+}
+
+/** What the results screen says this claim was worth. */
+export function verdictOfClaim(content: Content, claim: Claim): ClueVerdict {
+  if (claim.status !== "true") return "wrong";
+  const fact = content.hiddenTruth.facts.find((f) => f.id === claim.factId);
+  return fact?.nature === "idle" ? "idle" : "held";
 }
 
 export function makeClaim(
@@ -104,7 +112,8 @@ export function makeClaim(
       fact.text.replaceAll("{name}", name),
     );
   } else if (topic.item === "influence") {
-    const high = powerMap.order.indexOf(subject.id) < 2;
+    const high =
+      powerMap.order.indexOf(subject.id) < content.sources.influentialCount;
     text = write(claims.influence[high === isTrue ? "high" : "low"]);
   } else {
     let said = subject.kind;

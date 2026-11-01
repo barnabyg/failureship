@@ -220,14 +220,6 @@ describe("the boss's signs in content", () => {
     expect(() => parseContent(raw)).toThrow(/cold/);
   });
 
-  it("rejects an option gated on the boss's hidden opinion", () => {
-    const raw = bossFixtureRaw();
-    const option = raw.scenes[0]?.options[0];
-    if (option) option.requires = { opinionIs: "warm" };
-
-    expect(() => parseContent(raw)).toThrow(/hidden truth/);
-  });
-
   it("has a game whose choices move the boss in both directions", () => {
     const shifts = [
       ...gameContent.notifications.flatMap((n) =>

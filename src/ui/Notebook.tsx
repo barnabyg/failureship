@@ -1,4 +1,4 @@
-import { gameContent, panelText } from "../content";
+import { kindLabels, panelText } from "../content";
 import { KINDS, type Kind, type PlayerView } from "../engine";
 
 export function monthLabel(month: number): string {
@@ -37,7 +37,7 @@ export function Notebook({ notebook, locked, onMark }: Props) {
               <option value="">{panelText.notebookNoMark}</option>
               {KINDS.map((kind) => (
                 <option key={kind} value={kind}>
-                  {gameContent.hiddenTruth.kinds[kind].label}
+                  {kindLabels[kind]}
                 </option>
               ))}
             </select>

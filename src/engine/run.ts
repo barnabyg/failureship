@@ -1,4 +1,4 @@
-import { makeClaim, type Claim } from "./claims";
+import { makeClaim, verdictOfClaim, type Claim } from "./claims";
 import {
   KINDS,
   type ClueVerdict,
@@ -316,12 +316,6 @@ function hearClaim(
   state.step = { kind: "claim", index: state.claims.length - 1 };
 }
 
-function verdictOfClaim(content: Content, claim: Claim): ClueVerdict {
-  if (claim.status !== "true") return "wrong";
-  const fact = content.hiddenTruth.facts.find((f) => f.id === claim.factId);
-  return fact?.nature === "idle" ? "idle" : "held";
-}
-
 function answerNotification(
   state: State,
   world: World,
@@ -464,9 +458,11 @@ function behaveInScene(
   state.truth.bossOpinion += result.opinion;
   const heard = heardAbout(state, option?.about);
   const fill = (written: string) =>
-    fillRoles(state, world.content, written, scene.cast).replaceAll(
-      "{subject}",
-      heard ? personOf(world.content, heard.subject).name : "",
+    fillSubject(
+      state,
+      world.content,
+      option?.about,
+      fillRoles(state, world.content, written, scene.cast),
     );
   if (result.factNote !== undefined) {
     const dealt = state.truth.characters.find(
@@ -485,6 +481,20 @@ function behaveInScene(
 
 function heardAbout(state: State, fact: string | undefined) {
   return state.heard.find((h) => h.fact === fact);
+}
+
+/** Names whoever the player was told has this Hidden Fact. */
+function fillSubject(
+  state: State,
+  content: Content,
+  fact: string | undefined,
+  written: string,
+): string {
+  const heard = heardAbout(state, fact);
+  return written.replaceAll(
+    "{subject}",
+    heard ? personOf(content, heard.subject).name : "",
+  );
 }
 
 /** Roles are relative to who is in the room. Left out, that is everyone. */
@@ -522,9 +532,6 @@ function matches(
     const heard = heardAbout(state, condition.heardTrue);
     const dealt = state.truth.characters.find((c) => c.id === heard?.subject);
     return dealt?.fact?.id === condition.heardTrue;
-  }
-  if ("opinionIs" in condition) {
-    return condition.opinionIs === moodOf(state, content);
   }
   if ("hasBuzzword" in condition) {
     return state.buzzwords.includes(condition.hasBuzzword);
@@ -716,16 +723,10 @@ function toSceneView(
       return { who, text: (written?.text ?? "").replaceAll("{who}", who) };
     }),
     treatment: content.boss.signs.find((s) => s.id === treatment)?.text ?? null,
-    options: offeredOptions(state, content, scene).map((o) => {
-      const heard = heardAbout(state, o.about);
-      return {
-        id: o.id,
-        label: fill(o.label).replaceAll(
-          "{subject}",
-          heard ? personOf(content, heard.subject).name : "",
-        ),
-      };
-    }),
+    options: offeredOptions(state, content, scene).map((o) => ({
+      id: o.id,
+      label: fillSubject(state, content, o.about, fill(o.label)),
+    })),
   };
 }
 

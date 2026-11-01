@@ -80,24 +80,24 @@ All the text and numbers are in `content/`, and editing them needs no code
 change. The running game reloads when you save a file. If an edit breaks the
 format, the page shows what is wrong instead of the game.
 
-| File                  | What it holds                                                           |
-| --------------------- | ----------------------------------------------------------------------- |
-| `ui.json`             | Headings, buttons and the "What you can do now" hints                   |
-| `notifications.json`  | The month's Notifications, their choices and their results              |
-| `dialogs.json`        | Short text dialogs, such as the pub                                     |
-| `buzzwords.json`      | Buzzwords and their meanings                                            |
-| `actions.json`        | What can be done on the floor, and the results                          |
-| `scenes.json`         | Each month's Scene: its signs, its choices and their results            |
-| `moves.json`          | Character Moves, and when each can land                                 |
-| `official-story.json` | The official story, assembled from entries according to what you did    |
-| `behaviours.json`     | What Characters can be seen doing, and how likely each kind is to do it |
-| `boss.json`           | Who your boss is, and the signs of how they treat you                   |
-| `sources.json`        | Find Out: who can be asked, how reliable each kind is, and every claim  |
-| `notebook.json`       | Events the Notebook keeps a clue of, and what each clue was worth       |
-| `characters.json`     | Names, public job titles and who reports to whom on the Org Chart       |
-| `hidden-truth.json`   | The rules of the deal: kinds, their weights, and the Hidden Facts       |
-| `balance.json`        | Actions a month, months in a run and the cost of each choice            |
-| `floor-1.json`        | The rooms on the floor: positions, sizes, colours and the lift's sign   |
+| File                  | What it holds                                                                                                        |
+| --------------------- | -------------------------------------------------------------------------------------------------------------------- |
+| `ui.json`             | Headings, buttons and the "What you can do now" hints                                                                |
+| `notifications.json`  | The month's Notifications, their choices and their results                                                           |
+| `dialogs.json`        | Short text dialogs, such as the pub                                                                                  |
+| `buzzwords.json`      | Buzzwords and their meanings                                                                                         |
+| `actions.json`        | What can be done on the floor, and the results                                                                       |
+| `scenes.json`         | Each month's Scene: its signs, its choices and their results                                                         |
+| `moves.json`          | Character Moves, and when each can land                                                                              |
+| `official-story.json` | The official story, assembled from entries according to what you did                                                 |
+| `behaviours.json`     | What Characters can be seen doing, and how likely each kind is to do it                                              |
+| `boss.json`           | Who your boss is, and the signs of how they treat you                                                                |
+| `sources.json`        | Find Out: who can be asked, how reliable each kind is, and every claim                                               |
+| `notebook.json`       | Events the Notebook keeps a clue of, and what each clue was worth                                                    |
+| `characters.json`     | Names, public job titles and who reports to whom on the Org Chart                                                    |
+| `hidden-truth.json`   | The rules of the deal: kinds, their weights, and the Hidden Facts                                                    |
+| `balance.json`        | Actions a month, months in a run, the cost of each choice, how often signs mislead and when the boss's opinion shows |
+| `floor-1.json`        | The rooms on the floor: positions, sizes, colours and the lift's sign                                                |
 
 In a Scene, `{holder}`, `{ignored}` and `{bystander}` are replaced by the names of
 the most influential, the least influential and the next most influential of those
@@ -106,7 +106,8 @@ therefore show a holder whom the Power Map's tree does not place above everyone
 present, so the meeting has everyone in it. `holderIs` means the same in a Scene's
 results. A `when` or `requires` condition can be
 `{ "holderIs": "boss" }`, `{ "hasBuzzword": "strategic-patience" }`,
-`{ "flag": "went-to-pub" }`, `{ "not": ... }` or `{ "all": [...] }`. Options
+`{ "flag": "went-to-pub" }`, `{ "heardFact": "lost-list" }`, `{ "not": ... }` or `{ "all": [...] }`,
+and a Scene result's `when` can also use `factNature` and `heardTrue`, described below. Options
 gated with `requires` cannot depend on the hidden truth. Flags come from `sets`,
 and are wiped when a new month opens. Buzzwords carry over for the whole run.
 
@@ -141,12 +142,13 @@ A Hidden Fact says `{name}`, so that it reads correctly for whoever is dealt it,
 and can list `"characters"` to limit who that can be. Its `nature` is `dangerous`,
 `useful` or `idle`. A Scene result can read one with
 `{ "factNature": { "character": "projects", "nature": "dangerous" } }`, and a
-result with `factNote` is listed on the results screen beside the fact itself.
+result with `factNote` is listed on the results screen beside the fact itself. `factAt`
+names whose fact it was, unless the option is `about` one.
 
 A Scene option with `"about": "lost-list"` appears once the player has been told
 that fact about someone, true or not, and can say `{subject}` for that person.
 Its results can check `{ "heardTrue": "lost-list" }`. An option must never appear
-or disappear on undiscovered truth, so `requires` with `holderIs`, `opinionIs`,
+or disappear on undiscovered truth, so `requires` with `holderIs`,
 `factNature` or `heardTrue` stops the game from starting. `heardFact` is fine.
 
 A Notification, action, Scene, Move, Notebook event or official story entry can list

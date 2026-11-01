@@ -1,5 +1,5 @@
 import { expect, test, type Page } from "@playwright/test";
-import { playToResults as playToEnd } from "./play";
+import { playToResults } from "./play";
 
 async function reachSecondAction(page: Page) {
   await page.getByTestId("option-report").click();
@@ -105,7 +105,7 @@ test("an address with a seed that cannot be used says so", async ({ page }) => {
 
 test("the end of a run needs no confirmation to leave", async ({ page }) => {
   await page.goto("/?seed=1");
-  await playToEnd(page);
+  await playToResults(page);
 
   await page.getByTestId("seed-input").fill("5");
   await page.getByTestId("restart-seed").click();
@@ -117,7 +117,7 @@ test("the end of a run needs no confirmation to leave", async ({ page }) => {
 
 test("a whole run ends on a results screen", async ({ page }) => {
   await page.goto("/?seed=1");
-  await playToEnd(page);
+  await playToResults(page);
 
   await expect(page.getByTestId("panel-results")).toBeVisible();
   await expect(page.getByTestId("result-character")).toHaveCount(5);
@@ -134,7 +134,7 @@ test("a whole run ends on a results screen", async ({ page }) => {
 
 test("a new run can be started from the end", async ({ page }) => {
   await page.goto("/?seed=1");
-  await playToEnd(page);
+  await playToResults(page);
 
   await page.getByTestId("new-run").click();
 

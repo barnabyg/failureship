@@ -55,7 +55,6 @@ export type Condition =
   | { heardTrue: string }
   | { hasBuzzword: string }
   | { flag: string }
-  | { opinionIs: Mood }
   | { not: Condition }
   | { all: Condition[] };
 
@@ -72,7 +71,6 @@ const condition: z.ZodType<Condition> = z.lazy(() =>
     z.strictObject({ heardTrue: id }),
     z.strictObject({ hasBuzzword: id }),
     z.strictObject({ flag: id }),
-    z.strictObject({ opinionIs: z.enum(MOODS) }),
     z.strictObject({ not: condition }),
     z.strictObject({ all: z.array(condition).min(1) }),
   ]),
@@ -228,6 +226,8 @@ const sources = z.strictObject({
       }),
     }),
   ),
+  /** How many people, from the top of the Power Map, count as influential. */
+  influentialCount: z.number().int().positive(),
   /** How often each kind of source gives each sort of claim. */
   reliability: z.strictObject({
     believer: statusWeights(z.number().nonnegative()),
@@ -415,7 +415,6 @@ function dependsOnHiddenTruth(
   if ("flag" in condition) return hiddenFlags.has(condition.flag);
   if (
     "holderIs" in condition ||
-    "opinionIs" in condition ||
     "factNature" in condition ||
     "heardTrue" in condition
   ) {
@@ -565,7 +564,7 @@ function findBrokenBossSigns(content: Content): string[] {
 function findBrokenSources(content: Content): string[] {
   const { methods, reliability, motives, claims } = content.sources;
   const problems: string[] = [];
-  const allowed = (owner: string, written: string, tokens: string[]) => {
+  const checkTokens = (owner: string, written: string, tokens: string[]) => {
     for (const [, token] of written.matchAll(/\{(\w+)\}/g)) {
       if (!tokens.includes(token ?? "")) {
         problems.push(`${owner} uses unknown token "{${token ?? ""}}".`);
@@ -596,7 +595,7 @@ function findBrokenSources(content: Content): string[] {
     }
   }
   for (const motive of motives) {
-    allowed(`Motive "${motive.id}"`, motive.text, ["name"]);
+    checkTokens(`Motive "${motive.id}"`, motive.text, ["name"]);
   }
   const pools = [
     ...KINDS.flatMap((k) => claims.kind[k]),
@@ -607,13 +606,13 @@ function findBrokenSources(content: Content): string[] {
     if (!line.includes("{subject}")) {
       problems.push(`A claim needs to say {subject}: "${line}"`);
     }
-    allowed("A claim", line, ["subject"]);
+    checkTokens("A claim", line, ["subject"]);
   }
   for (const line of claims.fact) {
     if (!line.includes("{fact}")) {
       problems.push(`A claim about a fact needs to say {fact}: "${line}"`);
     }
-    allowed("A claim", line, ["fact"]);
+    checkTokens("A claim", line, ["fact"]);
   }
   return problems;
 }

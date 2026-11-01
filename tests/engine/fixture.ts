@@ -211,6 +211,7 @@ export function sourcesRaw() {
         topics: { kind: 1, influence: 1, fact: 1 },
       },
     ],
+    influentialCount: 2,
     reliability: {
       believer: { true: 8, mistaken: 2, outOfDate: 2, false: 0 },
       incompetent: { true: 2, mistaken: 8, outOfDate: 2, false: 0 },
