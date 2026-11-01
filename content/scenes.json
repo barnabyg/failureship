@@ -32,7 +32,7 @@
             "sets": ["backed-holder"]
           },
           {
-            "body": "Dennis is delighted and says so, while looking at {holder}, who has not looked up. Your agreement with your official boss has been noted by your official boss.",
+            "body": "Dennis is delighted and says so. Nobody else looks up. Your agreement with your official boss has been noted by your official boss.",
             "sets": ["backed-wrong-person"]
           }
         ]
@@ -47,7 +47,7 @@
             "sets": ["backed-holder"]
           },
           {
-            "body": "Priya thanks you for your input, in the voice kept for people who have not given any. {holder} carries on, as though a window had briefly rattled.",
+            "body": "Priya thanks you for your input, in the voice kept for people who have not given any. The meeting carries on, as though a window had briefly rattled.",
             "sets": ["backed-wrong-person"]
           }
         ]
@@ -62,7 +62,7 @@
             "sets": ["backed-holder"]
           },
           {
-            "body": "Marjorie smiles and asks whether you would mind taking the minutes. {holder} has already moved on. You are now the person who takes the minutes.",
+            "body": "Marjorie smiles and asks whether you would mind taking the minutes. You are now the person who takes the minutes.",
             "sets": ["backed-wrong-person"]
           }
         ]
@@ -78,7 +78,7 @@
             "sets": ["used-buzzword"]
           },
           {
-            "body": "There is a silence, of the respectful kind. {holder} asks you to say more. You say the same thing again, more slowly. You have been asked to lead a working group on it.",
+            "body": "There is a silence, of the respectful kind. You are asked to say more. You say the same thing again, more slowly. You have been asked to lead a working group on it.",
             "sets": ["used-buzzword"]
           }
         ]

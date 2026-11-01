@@ -19,12 +19,12 @@
     {
       "when": { "flag": "backed-holder" },
       "reported": "You showed mature judgement in a cross-functional forum.",
-      "happened": "You agreed with the person who actually decides things, and {holder} noticed."
+      "happened": "You agreed with someone, and it seems to have helped. Nobody will say why."
     },
     {
       "when": { "flag": "backed-wrong-person" },
       "reported": "You gave visible support to the leadership team.",
-      "happened": "You agreed with the wrong person in front of the right one. {holder} did not look up."
+      "happened": "You agreed with someone, and it does not seem to have helped. Nobody will say why."
     },
     {
       "when": { "flag": "said-nothing" },

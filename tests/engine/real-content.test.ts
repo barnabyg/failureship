@@ -82,6 +82,16 @@ describe("the real month", () => {
     }
   });
 
+  it("leaves the Power Map to be read from the signs alone", () => {
+    const told = JSON.stringify([
+      gameContent.officialStory,
+      gameContent.moves,
+      gameContent.scenes.map((s) => [s.narration, s.options]),
+    ]);
+
+    expect(told).not.toMatch(/\{(holder|ignored|bystander)\}/);
+  });
+
   it("tells many different official stories", () => {
     const stories = new Set(
       everyPath(1).map((views) => JSON.stringify(views.at(-1)?.step)),
