@@ -15,10 +15,10 @@ const upToDate =
 
 if (!upToDate) {
   console.log("Installing dependencies. This happens once.");
-  const install = spawnSync("npm", ["ci", "--no-audit", "--no-fund"], {
+  const install = spawnSync("npm ci --no-audit --no-fund", {
     cwd: root,
     stdio: "inherit",
-    shell: process.platform === "win32",
+    shell: true,
   });
   if (install.status !== 0) process.exit(install.status ?? 1);
 }
