@@ -4,6 +4,7 @@ import {
   finishMonth,
   openMeeting,
   playToResults,
+  freshRun,
 } from "./play";
 
 async function fileTheReport(page: Page) {
@@ -24,7 +25,7 @@ test("a discovered Hidden Fact changes what a Scene offers", async ({
     page.getByTestId("scene-option-use-abolished-post-calibration"),
   ).toHaveCount(0);
 
-  await page.goto("/?seed=74&month=8");
+  await freshRun(page, "/?seed=74&month=8");
   await fileTheReport(page);
   await page.getByTestId("hotspot-inside-info").click();
   await page.getByTestId("source-admin").click();

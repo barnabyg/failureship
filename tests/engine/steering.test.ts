@@ -42,6 +42,11 @@ function attendsEverything(view: PlayerView, turn: number) {
   return choice;
 }
 
+/** The same, but lasts the whole run: the first thing said in a meeting is safe. */
+function lastsTheRun(view: PlayerView, turn: number) {
+  return attendsEverything(view, view.step.kind === "scene" ? 0 : turn);
+}
+
 function resultsOf(view: PlayerView | undefined) {
   if (view?.step.kind !== "results") throw new Error(view?.step.kind);
   return view.step;
@@ -77,7 +82,7 @@ describe("nine months that do not feel like one month repeated", () => {
   });
 
   it("opens a different Scene in each month of a real run", () => {
-    const { views } = walk(1, attendsEverything);
+    const { views } = walk(1, lastsTheRun);
     const titles = views.flatMap((v) =>
       v.step.kind === "scene" && v.step.id !== "red-project"
         ? [v.step.title]
@@ -88,10 +93,14 @@ describe("nine months that do not feel like one month repeated", () => {
   });
 
   it("lands a different Move every month", () => {
+    // A Bill can land as a Move as well, beside the month's own.
+    const written = new Set(gameContent.moves.map((m) => m.title));
     for (const seed of [1, 2, 3, 4, 5]) {
-      const { views } = walk(seed, attendsEverything);
+      const { views } = walk(seed, lastsTheRun);
       const moves = views.flatMap((v) =>
-        v.step.kind === "move" ? [v.step.title] : [],
+        v.step.kind === "move" && written.has(v.step.title)
+          ? [v.step.title]
+          : [],
       );
 
       expect(new Set(moves).size).toBe(moves.length);
@@ -100,7 +109,7 @@ describe("nine months that do not feel like one month repeated", () => {
   });
 
   it("tells a different official story every month", () => {
-    const { views } = walk(1, attendsEverything);
+    const { views } = walk(1, lastsTheRun);
     const stories = views.flatMap((v) =>
       v.step.kind === "story" ? [JSON.stringify(v.step.reported)] : [],
     );
@@ -109,11 +118,22 @@ describe("nine months that do not feel like one month repeated", () => {
   });
 
   it("gives you an action at any meeting you do not go to", () => {
-    const { views } = walk(2, (view, turn) => {
-      const open = view.choices.filter(
+    const { views } = walk(3, (view) => {
+      const { step } = view;
+      const free =
+        step.kind === "notification"
+          ? step.options.find((o) => o.costLabel === "Costs nothing")
+          : undefined;
+      if (step.kind === "notification" && free) {
+        return {
+          type: "notification" as const,
+          notificationId: step.id,
+          optionId: free.id,
+        };
+      }
+      const choice = view.choices.find(
         (c) => !(c.type === "action" && c.actionId.startsWith("meeting")),
       );
-      const choice = open[turn % open.length];
       if (!choice) throw new Error("No choice.");
       return choice;
     });

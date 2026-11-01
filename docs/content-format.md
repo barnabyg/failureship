@@ -14,6 +14,9 @@ A `when` or `requires` holds one of these:
 | Condition                                                              | Holds when                                                                              | Reads the hidden truth |
 | ---------------------------------------------------------------------- | --------------------------------------------------------------------------------------- | ---------------------- |
 | `{ "flag": "went-to-pub" }`                                            | A flag is set this month                                                                | Only if the flag does  |
+| `{ "did": "moved-a-colleague" }`                                       | A flag has been set in any month of the run                                             | Only if the flag does  |
+| `{ "remembers": { "character": "projects", "about": "passed-over" } }` | That Character keeps a memory written with that `about`                                 | Yes                    |
+| `{ "believes": { "character": "admin", "mood": "cold" } }`             | How that Character's belief about the player stands: `warm`, `neutral` or `cold`        | Yes                    |
 | `{ "hasBuzzword": "strategic-patience" }`                              | The player has learnt the Buzzword                                                      | No                     |
 | `{ "heardFact": "lost-list" }`                                         | The player has been told that Hidden Fact about someone, true or not                    | No                     |
 | `{ "heardTrue": "lost-list" }`                                         | What the player was told about that Hidden Fact is true                                 | Yes                    |
@@ -41,8 +44,8 @@ hidden: a Scene result or a Move whose `when` reads the truth, a Demand being
 forgotten or chased, or your boss finding out about going over their head. A
 Notebook event can still read such a flag, because the player has just seen that result.
 
-Flags come from `sets`, and are wiped when a new month opens. Buzzwords carry over for
-the whole run.
+Flags come from `sets`, and are wiped when a new month opens, though `did` can still read
+them for the rest of the run. Buzzwords carry over for the whole run.
 
 ## `months`, in several files
 
@@ -66,6 +69,8 @@ What can be done on the floor, and the results.
 
 Actions a month, months in a run and the cost of each choice.
 
+- `disasterChance` is how often a month brings a disaster with no clue, as in
+  [`events.json`](#eventsjson).
 - `signsMisleadChance` is how often a Scene's signs swap `{holder}` with `{bystander}`,
   so that one Scene never settles who holds influence. A Scene's results still go by the
   truth.
@@ -142,6 +147,30 @@ of them, and goes on like any other Demand.
 
 Short text dialogs, such as the pub. A choice's `dialog` opens one.
 
+## `events.json`
+
+Company Events: things that happen to the company as a whole. They land after the player's
+actions and before the month closes, ahead of the month's Character Move. How to write one is in
+[Write a Company Event](../README.md#write-a-company-event) in the README.
+
+Each has `from`, `title`, `body`, and `story`, the official story's own `reported` and optional
+`happened` words for it. It can carry `sets` and `project`. It has no `mistake`, so a surprise is
+never a big mistake by itself. A risk that lands can still be one, through its own Bill.
+
+Each has exactly one way to land, or it is refused:
+
+- A hidden risk's `event` names it, and it lands in the month the risk comes out.
+- `schedule` comes from outside: the `months` it can land in, a seeded `chance` in each until it
+  does, and an optional `clue` for the Notebook, `before` months earlier.
+- `"disaster": true` arrives with no clue. Each month, `disasterChance` in `balance.json` is the
+  chance of one, and a run does not repeat one.
+
+`reshuffle` changes the charts. `reports` moves a Character on the Org Chart, so `character` now
+reports `to` someone else, and a move that would make a loop does not happen. `rises` sends someone
+to the top of the Power Map, and `falls` to the bottom, which changes later signs. Your boss and your
+boss's boss cannot be moved in `reports`, since nothing creates a vacancy yet. An event that moves
+anyone needs `changed`, which the results screen shows beside the charts.
+
 ## `families.json`
 
 What the results screen calls each family of Moves, and what it says of them.
@@ -163,6 +192,21 @@ A Hidden Fact says `{name}`, so that it reads correctly for whoever is dealt it,
 `"characters"` to limit who that can be. Its `nature` is `dangerous`, `useful` or `idle`. Its
 `told` is how someone would say it out loud, and its `text` is how the results screen states
 it.
+
+## `mistakes.json`
+
+The words of a Final Warning and of being fired, and what the results screen says of them.
+
+A choice's outcome, a Move or a Bill can say `"mistake": "big"`. Nothing else is needed for
+it to count. The first puts the player on a Final Warning, which they are told about and can
+see from then on. The second gets them fired, which ends the run at the results screen. There
+is no meter behind this.
+
+A Notification option's outcome or a Scene result can instead say `"mistake": "catastrophic"`,
+which gets the player fired outright. It is fair only if they are warned, so the option must
+carry `stakes`, words shown on the choice before it is made. Stakes with nothing catastrophic
+behind them, or the reverse, are refused. An action cannot be catastrophic, and can be a big
+mistake only if it has a `result`.
 
 ## `moves.json`
 
@@ -186,6 +230,12 @@ The month's Notifications, their choices and their results.
 - An option with a `bet` has a seeded `chance` of going well, and otherwise uses what `lost`
   says.
 - An option's `sets`, `opinion`, `approach`, `family` and `project` work as for any choice.
+
+An option's outcome or a Scene result can carry `"remembers"`, a list of what a Character
+keeps of this, each with their `character`, an `about` that the `remembers` condition reads, and
+`text`, and optionally a `tone`, which moves what they believe of the player, as in
+[`reputation.json`](#reputationjson). A Budget comes back this way: a later Thread's outcome
+reads who remembers what.
 
 A Budget is a one-off decision and never a running balance, so it needs nothing of its own:
 the Budget Round is a Scene, and the bonus pot and the underspend are Notifications here,
@@ -235,6 +285,46 @@ reported status arrives at `at`, before the player's actions, whichever month th
 the player's choices, and it sets a flag for the month. It must be possible from at least two
 kinds, and certain from none, so that it never settles what someone is.
 
+## `reputation.json`
+
+There is no single reputation score. Each Character has their own belief about the player, and
+that belief is what your boss's and your boss's boss's opinions are too, so there is one idea of
+what someone thinks of you. It has no number on screen. It shows through signs, and through
+anything written with the `believes` condition.
+
+A choice's outcome, a Bill or a Scene result can carry `news`: an `about` that the `remembers`
+condition reads, a `tone` of `good` or `bad`, the `text` that the results screen shows, and `at`,
+whom it was done in front of, or to. They know at once. Only true deeds start news, for now.
+
+- `travel` sets how far and how fast it goes. As each month opens, it moves `hopsPerMonth` steps
+  along the ties of the Power Map, no more than `maxHops` from where it started. `passOnChance` is
+  the seeded chance of each person telling each person tied to them, and `shift` is how far it then
+  moves their belief. So the same deed reaches different people on different deals.
+- `opinion` says when the belief of anyone but your bosses shows. Your bosses have their own, in
+  [`balance.json`](#balancejson) and [`over-head.json`](#over-headjson).
+- `signs` show how everyone else present in a Scene is with the player. Each says `{who}`, and
+  must be possible from at least two of `warm`, `neutral` and `cold`, so that no sign settles it.
+- `believes` and `how` are the results screen's words. `how.heardFrom` says `{who}`.
+
+## `risks.json`
+
+The short list of hidden risks the player's decisions build up. There is no running balance and
+no company simulation: a risk is a written item with a source, a route out and a way of being
+traced. The player never sees the list during play. How to write one is in
+[Write a hidden risk](../README.md#write-a-hidden-risk) in the README.
+
+- `addedBy` is a flag. The first time anything sets it, the risk is added.
+- `after` gives the `min` and `max` months until it can come out, which are seeded.
+- `route` is who it comes out through: their `character`, the seeded `chance` that they act,
+  by the kind they were dealt, their `motive`, for the results screen, and optionally their
+  `means`, a condition they need. It gets one chance. If that fails, it never comes out.
+- `traced` is read as it comes out. If it holds, `onPlayer` is sent. If not, `onSomeoneElse`
+  is, if it is written, and otherwise nothing happens. Either is a Bill, as in
+  [`threads.json`](#threadsjson), so a risk that lands can be `"mistake": "big"`.
+- `event` names a Company Event, from [`events.json`](#eventsjson), that lands as it comes out.
+- `note` says what was building up, and `landedOnYou`, `landedElsewhere` and `neverCameOut` say
+  what became of it. The results screen lists every risk that was added.
+
 ## `scenes.json`
 
 Each month's Scene: its signs, its choices and their results.
@@ -272,6 +362,31 @@ lies. A dealt motive shifts those weights. A claim's words never depend on which
 so the results screen is the only place that says.
 
 `influentialCount` is how many people, from the top of the Power Map, count as influential.
+
+## `threads.json`
+
+A Thread runs from something the player did to the point, months later, where it pays off or
+backfires. Adding one needs no code. How to write one is in
+[Write a Thread](../README.md#write-a-thread) in the README.
+
+- `startedBy` is a flag. The first time anything sets it, the Thread starts.
+- `chance` is the seeded chance that it ever comes back, and `after` gives the `min` and `max`
+  months it then waits. A Thread due past the end of the run never plays out.
+- `started` is what the results screen says started it.
+- `outcomes` are tried in order as the month it is due opens, and the first whose `when` holds
+  plays out. If none holds, it comes to nothing. Each has `playedOut`, for the results screen,
+  and a `bill`.
+
+A `bill` has a unique `id`, a `title` and a `body`, and `as` says how it arrives:
+
+- `"notice"` tells the player as the month opens.
+- `"notification"` arrives as a Notification, and needs `from` and `options`, at least one of
+  them free. The options are written as in [`notifications.json`](#notificationsjson).
+- `"move"` lands where Character Moves do, beside the month's own, and needs `from`.
+
+It can carry `sets`, `opinion`, `headOpinion`, `project` and `"mistake": "big"`, and these
+take effect when it arrives, or, as a Move, when it lands. Its flags can be read by the official
+story, and they count as hidden, so no option can depend on them.
 
 ## `ui.json`
 

@@ -28,6 +28,8 @@ export interface NotificationOption {
   label: string;
   costLabel: string;
   affordable: boolean;
+  /** What is at stake, if this could end things on the spot. */
+  stakes?: string | undefined;
 }
 
 export interface DialogLine {
@@ -82,7 +84,9 @@ export type StepView =
       treatment: string | null;
       /** The same of the boss's boss, if they are in the room. */
       headTreatment: string | null;
-      options: { id: string; label: string }[];
+      /** How anyone else present is with the player. Signs, and no more. */
+      regard: { who: string; text: string }[];
+      options: { id: string; label: string; stakes?: string | undefined }[];
     }
   | {
       kind: "find-out";
@@ -102,6 +106,7 @@ export type StepView =
       verdict?: string | undefined;
     }
   | { kind: "move"; from: string; title: string; body: string }
+  | { kind: "event"; from: string; title: string; body: string }
   | {
       kind: "story";
       title: string;
@@ -114,6 +119,34 @@ export type StepView =
       kind: "results";
       title: string;
       intro: string;
+      /** How the run ended. */
+      ending: { fired: boolean; text: string | null };
+      /** Each Thread that played out, traced back to what started it. */
+      threads: {
+        startedIn: number;
+        started: string;
+        playedIn: number;
+        playedOut: string;
+      }[];
+      /** What each Character ended up believing, and how it reached them. */
+      beliefs: {
+        name: string;
+        title: string;
+        believes: string;
+        reached: { month: number; text: string; how: string }[];
+      }[];
+      /** What moved the charts during the run. */
+      changes: { month: number; title: string; changed: string }[];
+      /** What was building up, including what never came out. */
+      risks: {
+        addedIn: number;
+        note: string;
+        motive: string;
+        cameOutIn: number | null;
+        fate: string;
+      }[];
+      /** The big mistakes the player made, in order. */
+      mistakes: { month: number; choice: string }[];
       characters: {
         name: string;
         title: string;
@@ -177,6 +210,8 @@ export interface PlayerView {
   };
   /** Demands the player stalled and has not yet heard the last of. */
   openDemands: { month: number; subject: string }[];
+  /** Whether one more big mistake gets the player fired. */
+  finalWarning: boolean;
   seed: number;
   month: number;
   totalMonths: number;

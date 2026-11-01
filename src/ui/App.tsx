@@ -2,7 +2,9 @@ import { useCallback, useEffect, useState } from "react";
 import { gameContent, panelText } from "../content";
 import {
   parseSeed,
+  resumeRun,
   startRun,
+  UnusableSaveError,
   type Choice,
   type PlayerView,
   type Run,
@@ -13,6 +15,7 @@ import { Modal } from "./Modal";
 import { Notebook, monthLabel } from "./Notebook";
 import { StepPanel } from "./panels";
 import { RunControls } from "./RunControls";
+import { readSavedRun, writeSavedRun } from "./saved-run";
 import { TowerStage } from "./TowerStage";
 
 function refusedMessage(typed: string): string {
@@ -28,12 +31,36 @@ function begin(seed: number): { run: Run; view: PlayerView } {
   return { run, view: run.view() };
 }
 
-/** The first run: the address's seed, or a new one and a message saying why. */
+/** The saved run, unless the address asks for another deal. */
+function resumeSaved(seed: number | null): {
+  game: { run: Run; view: PlayerView } | null;
+  saveLost: boolean;
+} {
+  const save = readSavedRun();
+  if (save === null) return { game: null, saveLost: false };
+  try {
+    const run = resumeRun({ save, content: gameContent });
+    const view = run.view();
+    return {
+      game: seed === null || seed === view.seed ? { run, view } : null,
+      saveLost: false,
+    };
+  } catch (error) {
+    if (!(error instanceof UnusableSaveError)) throw error;
+    return { game: null, saveLost: true };
+  }
+}
+
+/**
+ * The first run: the saved one, the address's seed, or a new one and a message
+ * saying why. A different seed in the address is a new deal, and replaces the save.
+ */
 function beginFromAddress() {
   const address = new URLSearchParams(window.location.search);
   const written = address.get("seed");
   const seed = written === null ? null : parseSeed(written);
-  const game = begin(seed ?? randomSeed());
+  const saved = resumeSaved(seed);
+  const game = saved.game ?? begin(seed ?? randomSeed());
   // Only Playwright's build has this mode. Every other build drops this branch,
   // and later-month.ts with it, which tests/engine/later-month.test.ts checks.
   if (import.meta.env.MODE === "e2e") {
@@ -41,6 +68,7 @@ function beginFromAddress() {
   }
   return {
     game,
+    saveLost: saved.saveLost,
     refused: written !== null && seed === null ? refusedMessage(written) : null,
   };
 }
@@ -116,6 +144,7 @@ export function App() {
   const [first] = useState(beginFromAddress);
   const [{ run, view }, setGame] = useState(first.game);
   const [message, setMessage] = useState(first.refused);
+  const [saveLost, setSaveLost] = useState(first.saveLost);
   const [leavingFor, setLeavingFor] = useState<number | null>(null);
   const [orgChartOpen, setOrgChartOpen] = useState(false);
   const [notebookOpen, setNotebookOpen] = useState(false);
@@ -127,6 +156,11 @@ export function App() {
     url.searchParams.set("seed", String(view.seed));
     window.history.replaceState(null, "", url);
   }, [view.seed]);
+
+  // Every step, without the player doing anything, so that a reload re-rolls nothing.
+  useEffect(() => {
+    writeSavedRun(run.save());
+  }, [run, view]);
 
   const choose = useCallback(
     (choice: Choice) => {
@@ -176,6 +210,12 @@ export function App() {
               {panelText.actionsLeft.replace("{actions}", view.actions.label)}
             </dd>
           </div>
+          {view.finalWarning && (
+            <div className="status-warning" data-testid="final-warning">
+              <dt>{panelText.standingHeading}</dt>
+              <dd>{panelText.finalWarningLabel}</dd>
+            </div>
+          )}
           {view.buzzwords.length > 0 && (
             <div className="status-buzzwords" data-testid="buzzwords">
               <dt>{panelText.buzzwordsHeading}</dt>
@@ -327,6 +367,27 @@ export function App() {
             }}
           >
             {panelText.closeLabel}
+          </button>
+        </Modal>
+      )}
+      {saveLost && (
+        <Modal
+          testId="save-lost"
+          title={panelText.saveLostTitle}
+          onClose={() => {
+            setSaveLost(false);
+          }}
+        >
+          <p>{panelText.saveLostBody}</p>
+          <button
+            type="button"
+            className="primary"
+            data-testid="save-lost-start-again"
+            onClick={() => {
+              setSaveLost(false);
+            }}
+          >
+            {panelText.saveLostConfirm}
           </button>
         </Modal>
       )}

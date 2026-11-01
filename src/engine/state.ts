@@ -5,13 +5,54 @@ import type {
   Kind,
   MoveFamily,
   SceneData,
+  Tone,
 } from "./content";
 import type { DealtCharacter, PowerMap } from "./deal";
 
-export interface HiddenTruth {
+export class IllegalChoiceError extends Error {
+  override name = "IllegalChoiceError";
+}
+
+/** What has reached one Character, and how. */
+export interface Memory {
+  character: string;
+  about: string;
+  text: string;
+  month: number;
+  tone?: Tone | undefined;
+  /** Who told them. Null if they were there. */
+  via: string | null;
+  /** How far it had come along the Power Map. */
+  hops: number;
+  /** Which piece of news it was, if it was any that can travel. */
+  news: number | null;
+}
+
+export interface TruthOfRun {
   characters: DealtCharacter[];
   powerMap: PowerMap;
-  /** Moved by the player's choices. Shown only through how the boss behaves. */
+  /**
+   * What each Character believes of the player, which is the one idea of what
+   * someone thinks of you. Moved by what reaches them. Shown only through signs.
+   */
+  beliefs: Record<string, number>;
+  /** Everything that can travel, from where it started. */
+  news: { about: string; tone: Tone; text: string; month: number }[];
+  /** What the player's decisions have built up. Never shown until the end. */
+  risks: {
+    id: string;
+    month: number;
+    due: number;
+    /** When it came out, and whether it could be traced to the player. */
+    cameOut: { month: number; onPlayer: boolean } | null;
+  }[];
+  /** What each Character has kept of what the player did. */
+  memories: Memory[];
+}
+
+/** The true state of a run, as tests read it. */
+export interface HiddenTruth extends TruthOfRun {
+  /** What the boss believes of the player. */
   bossOpinion: number;
   /** The same of the boss's boss, whom the player can also try to impress. */
   headOpinion: number;
@@ -51,6 +92,8 @@ export type Step =
       shown: ShownBehaviour[];
       treatment: string | null;
       headTreatment: string | null;
+      /** How anyone else present is with the player. */
+      regard: { character: string; sign: string }[];
       /** Whether this Scene's signs point at the wrong person. */
       misleading: boolean;
     }
@@ -65,6 +108,7 @@ export type Step =
       verdict?: string | undefined;
     }
   | { kind: "move"; id: string }
+  | { kind: "event"; id: string }
   | { kind: "story" }
   | { kind: "results" };
 
@@ -100,7 +144,10 @@ export interface MonthRecord {
   absenceDealtWith: boolean;
 }
 
-/** What belongs to the run, and carries from month to month. */
+/**
+ * What belongs to the run, and carries from month to month. All of it is plain
+ * data, so that saving a run needs nothing written for any one mechanic.
+ */
 export interface State extends MonthRecord {
   seed: number;
   rng: number;
@@ -111,7 +158,7 @@ export interface State extends MonthRecord {
   movesLanded: string[];
   clues: Clue[];
   /** Who the player suspects of what. Nothing in the rules ever reads this. */
-  marks: Map<string, Kind>;
+  marks: Record<string, Kind>;
   /** Who the player was last told has each Hidden Fact, true or not. */
   heard: { fact: string; subject: string }[];
   factEvents: { month: number; note: string; fact: string | null }[];
@@ -142,6 +189,29 @@ export interface State extends MonthRecord {
     /** Flagged, and not yet explained. */
     flagged: boolean;
   };
+  /** Every flag ever set, which unlike `flags` lasts the whole run. */
+  deeds: { flag: string; month: number }[];
+  /** The Threads started so far. Nothing of these is shown until one plays out. */
+  threads: {
+    id: string;
+    month: number;
+    /** The month it comes back in. Null if it never will. */
+    due: number | null;
+    played: { month: number; text: string } | null;
+  }[];
+  /** Bills waiting to land this month as Character Moves. */
+  billsDue: string[];
+  /** Who has been moved on the Org Chart, and who to. */
+  reportsTo: Record<string, string>;
+  /** Company Events waiting to land this month. */
+  eventsDue: string[];
+  eventsLanded: { id: string; month: number }[];
+  /** Told to the player, and shown from then on. */
+  finalWarning: boolean;
+  /** The month the player was fired in, which ends the run. */
+  firedIn: number | null;
+  /** The big mistakes so far, for the results screen. */
+  mistakes: { month: number; choice: string }[];
   step: Step;
-  truth: HiddenTruth;
+  truth: TruthOfRun;
 }

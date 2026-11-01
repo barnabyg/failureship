@@ -1,5 +1,5 @@
 import { expect, test, type Page } from "@playwright/test";
-import { finishMonth } from "./play";
+import { finishMonth, freshRun } from "./play";
 
 async function openProject(page: Page) {
   await page.getByTestId("open-project").click();
@@ -29,7 +29,7 @@ test("lying in the report sets the reported status apart from the real one", asy
   await expect(page.getByTestId("project-reported")).toHaveText("Amber");
   await closeProject(page);
 
-  await page.goto("/?seed=1");
+  await freshRun(page, "/?seed=1");
   await reachTheReport(page);
   await page.getByTestId("option-lie").click();
 

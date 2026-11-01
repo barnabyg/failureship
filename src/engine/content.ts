@@ -46,6 +46,45 @@ const projectChange = z
   .strictObject({ real: id.optional(), reported: id.optional() })
   .optional();
 
+/**
+ * Whether this is a big mistake. A first is a Final Warning, and a second gets the
+ * player fired. Anything that can happen to the player can be one of these.
+ */
+const bigMistake = z.literal("big").optional();
+
+/** A choice can also be catastrophic, which gets the player fired outright. */
+const choiceMistake = z.enum(["big", "catastrophic"]).optional();
+
+/** What the player is told before choosing something catastrophic. */
+const stakes = text.optional();
+
+export const TONES = ["good", "bad"] as const;
+export type Tone = (typeof TONES)[number];
+
+/** What a Character keeps of this, which later conditions can read. */
+const remembers = z
+  .array(
+    z.strictObject({
+      character: id,
+      about: id,
+      text,
+      /** Whether it moves what they believe of the player, and which way. */
+      tone: z.enum(TONES).optional(),
+    }),
+  )
+  .default([]);
+
+/** A deed that can travel, from those it was done in front of, or to. */
+const news = z
+  .strictObject({
+    about: id,
+    tone: z.enum(TONES),
+    /** What the results screen says reached them. */
+    text,
+    at: z.array(id).min(1),
+  })
+  .optional();
+
 const dialog = z.strictObject({
   id,
   title: text,
@@ -71,6 +110,9 @@ export type Condition =
   | { heardTrue: string }
   | { hasBuzzword: string }
   | { flag: string }
+  | { did: string }
+  | { remembers: { character: string; about: string } }
+  | { believes: { character: string; mood: Mood } }
   | { not: Condition }
   | { all: Condition[] };
 
@@ -88,6 +130,13 @@ const condition: z.ZodType<Condition> = z.lazy(() =>
     z.strictObject({ heardTrue: id }),
     z.strictObject({ hasBuzzword: id }),
     z.strictObject({ flag: id }),
+    z.strictObject({ did: id }),
+    z.strictObject({
+      remembers: z.strictObject({ character: id, about: id }),
+    }),
+    z.strictObject({
+      believes: z.strictObject({ character: id, mood: z.enum(MOODS) }),
+    }),
     z.strictObject({ not: condition }),
     z.strictObject({ all: z.array(condition).min(1) }),
   ]),
@@ -106,6 +155,10 @@ const notificationOption = z.strictObject({
   approach: approachTag,
   reaction: ownReaction,
   project: projectChange,
+  mistake: choiceMistake,
+  remembers,
+  news,
+  stakes,
   result: notice.optional(),
   /** Leaves a Demand open, as a bet that the boss forgets it. */
   stalls: z.boolean().default(false),
@@ -120,6 +173,9 @@ const notificationOption = z.strictObject({
         approach: approachTag,
         reaction: ownReaction,
         project: projectChange,
+        mistake: choiceMistake,
+        remembers,
+        news,
         result: notice,
       }),
     })
@@ -138,6 +194,138 @@ const notification = z.strictObject({
   subject: text,
   body: text,
   options: z.array(notificationOption).min(1),
+});
+
+/**
+ * What comes back on the player, usually through someone else. It can do anything
+ * another outcome can, and a Thread or a hidden risk can send one.
+ */
+const bill = z.strictObject({
+  id,
+  /** How it arrives: told at once, as a Notification, or where Moves land. */
+  as: z.enum(["notice", "notification", "move"]),
+  /** Who it comes through. A notice needs nobody. */
+  from: text.optional(),
+  title: text,
+  body: text,
+  /** The answers, for one that arrives as a Notification. */
+  options: z.array(notificationOption).default([]),
+  sets,
+  opinion,
+  headOpinion,
+  project: projectChange,
+  mistake: bigMistake,
+  remembers,
+  news,
+});
+
+export type Bill = z.infer<typeof bill>;
+
+/** A chain of play, from something the player did to where it comes back. */
+const thread = z.strictObject({
+  id,
+  /** The flag that starts it, the first time anything sets it. */
+  startedBy: id,
+  /** The seeded chance that it ever comes back. */
+  chance: z.number().min(0).max(1).default(1),
+  /** How many months later it can come back, which is seeded too. */
+  after: z.strictObject({
+    min: z.number().int().positive(),
+    max: z.number().int().positive(),
+  }),
+  /** What the results screen says started it. */
+  started: text,
+  /** The first that holds plays out. If none does, it comes to nothing. */
+  outcomes: z
+    .array(
+      z.strictObject({
+        when: condition.optional(),
+        /** What the results screen says came of it. */
+        playedOut: text,
+        bill,
+      }),
+    )
+    .min(1),
+});
+
+/**
+ * Something the player's decisions built up. A written item with a source, a route
+ * out and a way of being traced, with no simulation behind it.
+ */
+const risk = z.strictObject({
+  id,
+  /** The flag that adds it, the first time anything sets it. */
+  addedBy: id,
+  /** How many months later it can come out, which is seeded. */
+  after: z.strictObject({
+    min: z.number().int().positive(),
+    max: z.number().int().positive(),
+  }),
+  /** What the results screen says was building up. */
+  note: text,
+  route: z.strictObject({
+    /** Who it comes out through. */
+    character: id,
+    /** The seeded chance they act on it, by their dealt kind. */
+    chance: perKind(z.number().min(0).max(1)),
+    /** Why they would, for the results screen. */
+    motive: text,
+    /** What they need to be able to act. Left out, they can. */
+    means: condition.optional(),
+  }),
+  /** Whether it can be traced to the player, as it comes out. */
+  traced: condition,
+  onPlayer: bill,
+  /** A Company Event that lands as it comes out, as well as anything below. */
+  event: id.optional(),
+  /** What happens if it cannot be traced. Left out, nothing does. */
+  onSomeoneElse: bill.optional(),
+  landedOnYou: text,
+  landedElsewhere: text,
+  neverCameOut: text,
+});
+
+/**
+ * Something that happens to the company as a whole. A risk can name one, or it has
+ * a `schedule`, or it is a `disaster`, which arrives with no clue. It has no way of
+ * being a big mistake, so a surprise is never unfair by itself.
+ */
+const companyEvent = z.strictObject({
+  id,
+  from: text,
+  title: text,
+  body: text,
+  /** What the results screen says it changed on the charts. */
+  changed: text.optional(),
+  /** From outside: the months it can land in, and a clue before it does. */
+  schedule: z
+    .strictObject({
+      months: z.array(z.number().int().positive()).min(1),
+      /** The seeded chance in each of those months, until it lands. */
+      chance: z.number().min(0).max(1),
+      clue: z
+        .strictObject({
+          before: z.number().int().positive(),
+          source: text,
+          text,
+        })
+        .optional(),
+    })
+    .optional(),
+  /** Drawn at `balance.disasterChance`, with no clue. */
+  disaster: z.boolean().default(false),
+  /** Who moves on the Org Chart, and who rises or falls on the Power Map. */
+  reshuffle: z
+    .strictObject({
+      reports: z.array(z.strictObject({ character: id, to: id })).default([]),
+      rises: z.array(id).default([]),
+      falls: z.array(id).default([]),
+    })
+    .default({ reports: [], rises: [], falls: [] }),
+  /** The official story's own way of reporting it. */
+  story: z.strictObject({ reported: text, happened: text.optional() }),
+  sets,
+  project: projectChange,
 });
 
 const chasedDemand = z.strictObject({
@@ -164,6 +352,9 @@ const sceneResult = z.strictObject({
   approach: approachTag,
   reaction: ownReaction,
   project: projectChange,
+  mistake: choiceMistake,
+  remembers,
+  news,
   /** Says on the results screen that a Hidden Fact caused this. */
   factNote: text.optional(),
   /** Whose Hidden Fact it was, unless the option is `about` one. */
@@ -178,6 +369,7 @@ const sceneOption = z.strictObject({
   about: id.optional(),
   /** The option appears only when this holds. */
   requires: condition.optional(),
+  stakes,
   results: z.array(sceneResult).min(1),
 });
 
@@ -225,6 +417,7 @@ const action = z.strictObject({
   approach: approachTag,
   reaction: ownReaction,
   project: projectChange,
+  mistake: bigMistake,
 });
 
 const move = z.strictObject({
@@ -237,6 +430,7 @@ const move = z.strictObject({
   /** Lands ahead of other Moves whenever its condition holds. */
   priority: z.boolean().default(false),
   sets,
+  mistake: bigMistake,
 });
 
 const storyEntry = z
@@ -498,6 +692,46 @@ const overHead = z.strictObject({
   sets: z.strictObject({ went: id, caught: id }),
 });
 
+/** The words of a Final Warning and of being fired. */
+const mistakes = z.strictObject({
+  finalWarning: notice,
+  /** After a second big mistake. */
+  fired: notice,
+  /** After a catastrophic one. */
+  firedOutright: notice,
+  /** The results screen's title and opening, for a run that ended this way. */
+  results: z.strictObject({ title: text, intro: text }),
+  /** How the results screen says the run ended. This one says {month}. */
+  firedIn: text,
+  finished: text,
+});
+
+/** What Characters believe of the player, and how that reaches them. */
+const reputation = z.strictObject({
+  /** How far and how fast news goes along the Power Map's ties. */
+  travel: z.strictObject({
+    hopsPerMonth: z.number().int().positive(),
+    maxHops: z.number().int().nonnegative(),
+    /** The seeded chance of each person passing it on to each person tied to them. */
+    passOnChance: z.number().min(0).max(1),
+    shift: z.strictObject({
+      good: z.number().int().positive(),
+      bad: z.number().int().negative(),
+    }),
+  }),
+  /** The hidden belief at which the signs change. */
+  opinion: z.strictObject({
+    warmAt: z.number().int().positive(),
+    coldAt: z.number().int().negative(),
+  }),
+  /** How someone other than the bosses is with the player. Says {who}. */
+  signs: z.array(bossSign).min(1),
+  /** What the results screen says each ended up believing. */
+  believes: z.strictObject({ warm: text, neutral: text, cold: text }),
+  /** How something reached them. The second says {who}. */
+  how: z.strictObject({ direct: text, heardFrom: text }),
+});
+
 export const contentSchema = z.strictObject({
   balance: z.strictObject({
     actionsPerMonth: z.number().int().positive(),
@@ -505,6 +739,8 @@ export const contentSchema = z.strictObject({
     actionCosts: z.record(id, z.number().int().nonnegative()),
     /** How often a Scene's signs swap who holds influence with the next person. */
     signsMisleadChance: z.number().min(0).max(1),
+    /** How often a month brings a disaster with no clue. */
+    disasterChance: z.number().min(0).max(1).default(0),
     /** The hidden opinion at which the boss's treatment changes. */
     opinion: z.strictObject({
       warmAt: z.number().int().positive(),
@@ -546,6 +782,8 @@ export const contentSchema = z.strictObject({
       .min(1),
   }),
   overHead: overHead.optional(),
+  mistakes: mistakes.optional(),
+  reputation: reputation.optional(),
   /** What the results screen calls each family of Moves. */
   families: z
     .strictObject(
@@ -631,6 +869,9 @@ export const contentSchema = z.strictObject({
   buzzwords: z.array(buzzword),
   actions: z.array(action).min(1),
   moves: z.array(move),
+  threads: z.array(thread).default([]),
+  risks: z.array(risk).default([]),
+  events: z.array(companyEvent).default([]),
   officialStory: z.strictObject({
     title: text,
     reportedHeading: text.optional(),
@@ -648,6 +889,7 @@ export const contentSchema = z.strictObject({
       claim: text,
       notice: text,
       move: text,
+      event: text,
       story: text,
       results: text,
     }),
@@ -698,11 +940,33 @@ export function everyDemand(content: Content) {
   return [...items, ...given];
 }
 
-/** Every Notification there is, including Demands and their chasers. */
+/** Every Bill written, whatever sends it. */
+export function everyBill(content: Content): Bill[] {
+  return [
+    ...content.threads.flatMap((t) => t.outcomes.map((o) => o.bill)),
+    ...content.risks.flatMap((r) =>
+      r.onSomeoneElse ? [r.onPlayer, r.onSomeoneElse] : [r.onPlayer],
+    ),
+  ];
+}
+
+/** Every Notification there is, including Demands, chasers and Bills. */
 export function everyNotification(content: Content) {
   const items = everyDemand(content);
+  const bills = everyBill(content)
+    .filter((b) => b.as === "notification")
+    .map((b) => ({
+      id: b.id,
+      months: undefined,
+      when: undefined,
+      from: b.from ?? "",
+      subject: b.title,
+      body: b.body,
+      options: b.options,
+    }));
   return [
     ...content.notifications,
+    ...bills,
     ...items,
     ...items.map(({ id: demandId, chased }) => ({
       ...chased,

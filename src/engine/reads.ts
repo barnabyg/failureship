@@ -2,6 +2,7 @@ import type { Condition, Content, Kind, Mood, SceneData } from "./content";
 import type { PowerMap } from "./deal";
 import { calledBy, sayPeople } from "./say";
 import type { State, World } from "./state";
+import type { Person } from "./view";
 
 export function inMonth(
   item: { months?: number[] | undefined },
@@ -29,8 +30,37 @@ export function bossKindOf(state: State, content: Content): Kind {
   return dealt.kind;
 }
 
+export function beliefOf(state: State, character: string): number {
+  return state.truth.beliefs[character] ?? 0;
+}
+
+export function shiftBelief(
+  state: State,
+  character: string,
+  shift: number,
+): void {
+  state.truth.beliefs[character] = beliefOf(state, character) + shift;
+}
+
 export function moodOf(state: State, content: Content): Mood {
-  return moodAt(state.truth.bossOpinion, content.balance.opinion);
+  return moodAt(
+    beliefOf(state, content.boss.character),
+    content.balance.opinion,
+  );
+}
+
+/** How someone's belief stands. Each boss has their own point at which it shows. */
+export function moodOfCharacter(
+  state: State,
+  content: Content,
+  character: string,
+): Mood {
+  if (character === content.boss.character) return moodOf(state, content);
+  const scale =
+    character === content.overHead?.character
+      ? content.overHead.opinion
+      : (content.reputation?.opinion ?? content.balance.opinion);
+  return moodAt(beliefOf(state, character), scale);
 }
 
 export function moodAt(
@@ -101,6 +131,19 @@ export function matches(
     return state.buzzwords.includes(condition.hasBuzzword);
   }
   if ("flag" in condition) return state.flags.includes(condition.flag);
+  if ("believes" in condition) {
+    const { character, mood } = condition.believes;
+    return moodOfCharacter(state, content, character) === mood;
+  }
+  if ("remembers" in condition) {
+    const { character, about } = condition.remembers;
+    return state.truth.memories.some(
+      (m) => m.character === character && m.about === about,
+    );
+  }
+  if ("did" in condition) {
+    return state.deeds.some((deed) => deed.flag === condition.did);
+  }
   if ("not" in condition) return !matches(state, content, condition.not, room);
   return condition.all.every((inner) => matches(state, content, inner, room));
 }
@@ -175,4 +218,9 @@ export function remaining(state: State, content: Content): number {
 
 export function costOf(content: Content, key: string | undefined): number {
   return key === undefined ? 0 : (content.balance.actionCosts[key] ?? 0);
+}
+
+export function personOf(content: Content, id: string): Person {
+  const known = content.characters.find((c) => c.id === id);
+  return { id, name: known?.name ?? id, title: known?.title ?? "" };
 }

@@ -783,6 +783,20 @@
       },
       "reported": "You led a resilience day for your team.",
       "happened": "You spent it on a hotel that your boss is fond of."
+    },
+    {
+      "when": {
+        "flag": "safety-committee-called"
+      },
+      "reported": "You engaged constructively with the Health and Safety committee.",
+      "happened": "The Health and Safety committee came for you, about a desk."
+    },
+    {
+      "when": {
+        "flag": "green-report-found"
+      },
+      "reported": "A reporting discrepancy was identified, and has been recorded as a learning.",
+      "happened": "Someone finally read one of your reports."
     }
   ]
 }

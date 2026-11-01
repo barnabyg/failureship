@@ -4,11 +4,12 @@ import {
   finishMonth,
   openMeeting,
   playToResults,
+  freshRun,
 } from "./play";
 
 /** One choice in month 1's meeting, then how the boss is with you in month 2. */
 async function treatmentAfter(page: Page, seed: number, option: string) {
-  await page.goto(`/?seed=${String(seed)}`);
+  await freshRun(page, `/?seed=${String(seed)}`);
   await answerAnyNotification(page);
   await openMeeting(page);
   await page.getByTestId(`scene-option-${option}`).click();

@@ -1,5 +1,5 @@
-import { landWithBoss } from "./boss";
 import { chasedIdOf, everyDemand, type Content } from "./content";
+import { applyOutcome } from "./outcome";
 import { actionsThisMonth, bossKindOf } from "./reads";
 import { drawFor } from "./rng";
 import type { State, Step } from "./state";
@@ -30,15 +30,19 @@ export function followUpDemands(state: State, content: Content): void {
     if (value < forgets) {
       state.openDemands = state.openDemands.filter((d) => d !== open);
       state.noticesDue.push(item.forgotten);
-      state.flags.push(demands.sets.forgotten);
+      applyOutcome(
+        state,
+        content,
+        { sets: [demands.sets.forgotten] },
+        item.forgotten.title,
+      );
     } else if (value < forgets + chases) {
       open.chased = true;
       state.unanswered.unshift(chasedIdOf(open.id));
-      state.flags.push(demands.sets.chased);
-      landWithBoss(
+      applyOutcome(
         state,
         content,
-        { opinion: demands.chasedPenalty[kind] },
+        { sets: [demands.sets.chased], opinion: demands.chasedPenalty[kind] },
         item.chased.subject,
       );
     }
@@ -69,11 +73,10 @@ export function dealWithAbsence(state: State, content: Content): Step | null {
     chased: false,
     due: true,
   });
-  state.flags.push(...missed.sets);
-  const reaction = landWithBoss(
+  const reaction = applyOutcome(
     state,
     content,
-    { approach: missed.approach },
+    { sets: missed.sets, approach: missed.approach },
     action.title,
   );
   return { kind: "notice", title: action.title, body: action.body, reaction };

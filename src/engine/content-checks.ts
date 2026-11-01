@@ -1,11 +1,17 @@
 import { z } from "zod";
 import {
+  findBrokenEvents,
+  findBrokenRisks,
+  findBrokenThreads,
+} from "./consequence-checks";
+import {
   CLAIM_STATUSES,
   DEMAND_ANSWERS,
   KINDS,
   MOODS,
   behavioursOpenTo,
   contentSchema,
+  everyBill,
   everyDemand,
   everyNotification,
   type Condition,
@@ -38,7 +44,10 @@ function dependsOnHiddenTruth(
   hiddenFlags: ReadonlySet<string> = new Set(),
 ): boolean {
   if ("flag" in condition) return hiddenFlags.has(condition.flag);
+  if ("did" in condition) return hiddenFlags.has(condition.did);
   if (
+    "believes" in condition ||
+    "remembers" in condition ||
     "holderIs" in condition ||
     "bossIs" in condition ||
     "factNature" in condition ||
@@ -67,6 +76,13 @@ function flagsSetByHiddenResults(content: Content): Set<string> {
     ...content.moves
       .filter((m) => m.when && dependsOnHiddenTruth(m.when))
       .flatMap((m) => m.sets),
+    // Whether and how a Bill arrives is drawn, and can read the truth.
+    ...everyBill(content).flatMap((b) => [
+      ...b.sets,
+      ...b.options.flatMap((o) => o.sets),
+    ]),
+    // Whether a Company Event lands is drawn too.
+    ...content.events.flatMap((e) => e.sets),
     // Whether a Demand is forgotten or chased goes by the boss's kind.
     ...Object.values(content.demands?.sets ?? {}),
     // Whether the boss finds out goes by the boss's kind too.
@@ -457,6 +473,91 @@ function findBrokenSources(content: Content): string[] {
   return problems;
 }
 
+/** A catastrophe has to be fair: words for it, and a warning before the choice. */
+function findBrokenMistakes(content: Content): string[] {
+  const problems: string[] = [];
+  const options = [
+    ...everyNotification(content).flatMap((n) =>
+      n.options.map((o) => ({
+        owner: `Notification "${n.id}" option "${o.id}"`,
+        stakes: o.stakes,
+        outcomes: [o, ...(o.bet ? [o.bet.lost] : [])],
+      })),
+    ),
+    ...content.scenes.flatMap((s) =>
+      s.options.map((o) => ({
+        owner: `Scene "${s.id}" option "${o.id}"`,
+        stakes: o.stakes,
+        outcomes: o.results,
+      })),
+    ),
+  ];
+  for (const { owner, stakes, outcomes } of options) {
+    const catastrophic = outcomes.some((o) => o.mistake === "catastrophic");
+    if (catastrophic && stakes === undefined) {
+      problems.push(`${owner} is catastrophic, with no stakes to signal it.`);
+    }
+    if (!catastrophic && stakes !== undefined) {
+      problems.push(`${owner} signals stakes it does not have.`);
+    }
+  }
+  const anyMistake =
+    options.some((o) => o.outcomes.some((x) => x.mistake !== undefined)) ||
+    content.moves.some((m) => m.mistake !== undefined) ||
+    everyBill(content).some((b) => b.mistake !== undefined) ||
+    content.actions.some((a) => a.mistake !== undefined);
+  if (anyMistake && !content.mistakes) {
+    problems.push("A big mistake is written, but no words for one.");
+  }
+  for (const a of content.actions) {
+    if (a.mistake !== undefined && a.result === undefined) {
+      problems.push(`Action "${a.id}" is a big mistake, so needs a result.`);
+    }
+  }
+  return problems;
+}
+
+/** No sign may settle what someone believes, and news must start from someone. */
+function findBrokenReputation(
+  content: Content,
+  characters: ReadonlySet<string>,
+): string[] {
+  const written = content.reputation;
+  const problems = written
+    ? findBrokenOpinionSigns(
+        written.signs.map((s) => ({
+          ...s,
+          text: s.text.replaceAll("{who}", ""),
+        })),
+        "Reputation sign",
+      )
+    : [];
+  for (const sign of written?.signs ?? []) {
+    if (!sign.text.includes("{who}")) {
+      problems.push(`Reputation sign "${sign.id}" needs to say {who}.`);
+    }
+  }
+  const outcomes = [
+    ...content.scenes.flatMap((s) => s.options.flatMap((o) => o.results)),
+    ...everyNotification(content).flatMap((n) =>
+      n.options.flatMap((o) => [o, ...(o.bet ? [o.bet.lost] : [])]),
+    ),
+    ...everyBill(content),
+  ];
+  for (const outcome of outcomes) {
+    if (!outcome.news) continue;
+    if (!written) {
+      problems.push("News is written, but no reputation for it to reach.");
+    }
+    for (const character of outcome.news.at) {
+      if (!characters.has(character)) {
+        problems.push(`News names unknown Character "${character}".`);
+      }
+    }
+  }
+  return problems;
+}
+
 function findBrokenReferences(content: Content): string[] {
   const rooms = new Set(content.floor.rooms.map((r) => r.id));
   const dialogs = new Set(content.dialogs.map((d) => d.id));
@@ -479,6 +580,12 @@ function findBrokenReferences(content: Content): string[] {
     if ("holderIs" in condition) checkCharacter(owner, condition.holderIs);
     if ("factNature" in condition) {
       checkCharacter(owner, condition.factNature.character);
+    }
+    if ("remembers" in condition) {
+      checkCharacter(owner, condition.remembers.character);
+    }
+    if ("believes" in condition) {
+      checkCharacter(owner, condition.believes.character);
     }
     if ("heardFact" in condition) checkFact(owner, condition.heardFact);
     if ("heardTrue" in condition) checkFact(owner, condition.heardTrue);
@@ -562,6 +669,31 @@ function findBrokenReferences(content: Content): string[] {
   problems.push(...findBrokenSources(content));
   problems.push(...findBrokenInput(content));
   problems.push(...findBrokenDemands(content));
+  problems.push(...findBrokenMistakes(content));
+  problems.push(...findBrokenThreads(content));
+  problems.push(...findBrokenRisks(content));
+  problems.push(...findBrokenEvents(content));
+  problems.push(...findBrokenReputation(content, characters));
+  for (const event of content.events) {
+    checkProject(`Company Event "${event.id}"`, event.project);
+  }
+  for (const risk of content.risks) {
+    const owner = `Risk "${risk.id}"`;
+    checkCondition(owner, risk.traced);
+    if (risk.route.means) checkCondition(owner, risk.route.means);
+  }
+  for (const b of everyBill(content)) {
+    for (const memory of b.remembers) {
+      checkCharacter(`Bill "${b.id}"`, memory.character);
+    }
+    checkProject(`Bill "${b.id}"`, b.project);
+  }
+  for (const thread of content.threads) {
+    for (const outcome of thread.outcomes) {
+      const owner = `Thread "${thread.id}"`;
+      if (outcome.when) checkCondition(owner, outcome.when);
+    }
+  }
   const { flagged } = content.project;
   if (flagged) {
     checkStatus("The Project's flag", flagged.at);
@@ -671,6 +803,9 @@ function findBrokenReferences(content: Content): string[] {
         if (r.when) checkCondition(optionOwner, r.when);
         checkApproach(optionOwner, r);
         checkProject(optionOwner, r.project);
+        for (const memory of r.remembers) {
+          checkCharacter(optionOwner, memory.character);
+        }
       }
       if (o.requires) {
         checkCondition(optionOwner, o.requires);
@@ -725,6 +860,9 @@ function findBrokenReferences(content: Content): string[] {
       checkCost(owner, o.cost);
       checkApproach(owner, o);
       checkProject(owner, o.project);
+      for (const memory of [...o.remembers, ...(o.bet?.lost.remembers ?? [])]) {
+        checkCharacter(owner, memory.character);
+      }
       if (o.bet) {
         checkApproach(owner, o.bet.lost);
         checkProject(owner, o.bet.lost.project);

@@ -194,12 +194,19 @@
             "sets": ["burned-by-a-fact"],
             "opinion": -2,
             "factAt": "projects",
-            "factNote": "You blamed the Project Co-ordinator for the delay. You had not been told why that was a mistake."
+            "factNote": "You blamed the Project Co-ordinator for the delay. You had not been told why that was a mistake.",
+            "mistake": "big"
           },
           {
             "body": "The Project Co-ordinator goes pink and apologises to the room. It works. The minutes record a learning opportunity, and it is the Project Co-ordinator's.",
             "sets": ["blamed-a-colleague"],
-            "approach": "blame"
+            "approach": "blame",
+            "news": {
+              "about": "blamed-in-the-review",
+              "tone": "bad",
+              "text": "You blamed the Project Co-ordinator in the Lessons Learned Review, in front of everyone.",
+              "at": ["projects"]
+            }
           }
         ]
       },
@@ -219,12 +226,19 @@
             "sets": ["burned-by-a-fact"],
             "opinion": -2,
             "factAt": "analyst",
-            "factNote": "You blamed the Senior Analyst for the delay. You had not been told why that was a mistake."
+            "factNote": "You blamed the Senior Analyst for the delay. You had not been told why that was a mistake.",
+            "mistake": "big"
           },
           {
             "body": "The Senior Analyst looks at you for slightly too long, then agrees that lessons can be learned. It appears to work. The minutes record a learning opportunity, and it is the Senior Analyst's.",
             "sets": ["blamed-a-colleague"],
-            "approach": "blame"
+            "approach": "blame",
+            "news": {
+              "about": "blamed-in-the-review",
+              "tone": "bad",
+              "text": "You blamed the Senior Analyst in the Lessons Learned Review, in front of everyone.",
+              "at": ["analyst"]
+            }
           }
         ]
       },
@@ -244,12 +258,19 @@
             "sets": ["burned-by-a-fact"],
             "opinion": -2,
             "factAt": "admin",
-            "factNote": "You blamed the Office Co-ordinator for the delay. You had not been told why that was a mistake."
+            "factNote": "You blamed the Office Co-ordinator for the delay. You had not been told why that was a mistake.",
+            "mistake": "big"
           },
           {
             "body": "The Office Co-ordinator sighs, and takes the action. It seems to work, although your stationery order has since been queried.",
             "sets": ["blamed-a-colleague"],
-            "approach": "blame"
+            "approach": "blame",
+            "news": {
+              "about": "blamed-in-the-review",
+              "tone": "bad",
+              "text": "You blamed the Office Co-ordinator in the Lessons Learned Review, in front of everyone.",
+              "at": ["admin"]
+            }
           }
         ]
       },
@@ -261,7 +282,13 @@
           {
             "body": "There is a long, relieved silence. You are now the person this happened to.",
             "sets": ["took-the-blame"],
-            "approach": "ownership"
+            "approach": "ownership",
+            "news": {
+              "about": "took-the-blame",
+              "tone": "good",
+              "text": "You took the blame in the Lessons Learned Review, when you need not have.",
+              "at": ["projects", "analyst"]
+            }
           }
         ]
       },
@@ -520,6 +547,18 @@
     ],
     "options": [
       {
+        "id": "hire-consultant",
+        "family": "impress",
+        "label": "Propose bringing in a consultant to find the savings",
+        "results": [
+          {
+            "body": "The consultant costs more than the thirty per cent, and recommends a further consultant. It has stopped being your problem.",
+            "sets": ["hired-consultant"],
+            "approach": "theatre"
+          }
+        ]
+      },
+      {
         "id": "cut-callum",
         "family": "attack",
         "label": "Propose cutting the Project Co-ordinator's project",
@@ -535,11 +574,14 @@
             "sets": ["burned-by-a-fact"],
             "opinion": -2,
             "factAt": "projects",
-            "factNote": "You proposed cutting the Project Co-ordinator's project. You had not been told why that was a mistake."
+            "factNote": "You proposed cutting the Project Co-ordinator's project. You had not been told why that was a mistake.",
+            "mistake": "big"
           },
           {
             "body": "The Project Co-ordinator's project is reduced to a small working group, consisting of the Project Co-ordinator. You have saved nine per cent.",
-            "project": { "real": "worse" },
+            "project": {
+              "real": "worse"
+            },
             "sets": ["cut-a-colleague"],
             "approach": "blame"
           }
@@ -561,24 +603,13 @@
             "sets": ["burned-by-a-fact"],
             "opinion": -2,
             "factAt": "admin",
-            "factNote": "You proposed cutting the Office Co-ordinator's budget. You had not been told why that was a mistake."
+            "factNote": "You proposed cutting the Office Co-ordinator's budget. You had not been told why that was a mistake.",
+            "mistake": "big"
           },
           {
             "body": "The office budget goes. So do the good biscuits, and people know who to thank. It saves almost nothing, and everyone agrees that it shows intent.",
             "sets": ["cut-a-colleague"],
             "approach": "blame"
-          }
-        ]
-      },
-      {
-        "id": "hire-consultant",
-        "family": "impress",
-        "label": "Propose bringing in a consultant to find the savings",
-        "results": [
-          {
-            "body": "The consultant costs more than the thirty per cent, and recommends a further consultant. It has stopped being your problem.",
-            "sets": ["hired-consultant"],
-            "approach": "theatre"
           }
         ]
       },
@@ -589,7 +620,9 @@
         "results": [
           {
             "body": "Everyone is very moved. Your work is cut. You are still expected to do it, but now without the budget.",
-            "project": { "real": "worse" },
+            "project": {
+              "real": "worse"
+            },
             "sets": ["cut-own-work"],
             "approach": "ownership"
           }
@@ -697,6 +730,17 @@
             "body": "{subject} says they are doing rather well, and sends you the market report. You have fifty pages to read and nothing to show for it.",
             "sets": ["misused-a-fact"],
             "factNote": "You acted on something you were told about {subject}. It was not so."
+          }
+        ]
+      },
+      {
+        "id": "cut-security",
+        "family": "deflect",
+        "label": "Take it out of security. Nobody has ever thanked security for anything",
+        "results": [
+          {
+            "body": "The line goes through without a question. Your name goes on the form, because a form needs one. Someone asks whether the door logs still get reviewed, and everybody agrees that this is a good question.",
+            "sets": ["cut-security"]
           }
         ]
       }
@@ -880,7 +924,8 @@
             "sets": ["burned-by-a-fact"],
             "opinion": -2,
             "factAt": "analyst",
-            "factNote": "You said that the Senior Analyst's figures were wrong. You had not been told why that was a mistake."
+            "factNote": "You said that the Senior Analyst's figures were wrong. You had not been told why that was a mistake.",
+            "mistake": "big"
           },
           {
             "body": "The Senior Analyst says nothing and goes to check. By the time the figures turn out to be right, the meeting has ended, and nobody remembers why it was red.",
@@ -1246,7 +1291,8 @@
             "sets": ["burned-by-a-fact"],
             "opinion": -2,
             "factAt": "analyst",
-            "factNote": "You asked the Senior Analyst a tricky question. You had not been told why that was a mistake."
+            "factNote": "You asked the Senior Analyst a tricky question. You had not been told why that was a mistake.",
+            "mistake": "big"
           },
           {
             "body": "The Senior Analyst has to look it up. The room waits. You say that it is no problem at all, and that you were only curious, and everyone writes that down.",
@@ -1308,7 +1354,13 @@
           {
             "body": "Your friend gets the job, and takes you for a drink, and asks what the job is. You now have someone on the floor who owes you, and who cannot do anything.",
             "sets": ["hired-a-friend"],
-            "approach": "cronyism"
+            "approach": "cronyism",
+            "news": {
+              "about": "hired-a-friend",
+              "tone": "bad",
+              "text": "You hired an old friend at the Recruitment Panel.",
+              "at": ["admin"]
+            }
           }
         ]
       },
@@ -1320,7 +1372,13 @@
           {
             "body": "You go through the evidence, and they are appointed. They are very good. Everyone has already started to wonder what they are after.",
             "sets": ["hired-the-best"],
-            "approach": "results"
+            "approach": "results",
+            "news": {
+              "about": "hired-the-best",
+              "tone": "good",
+              "text": "You argued for the best person at the Recruitment Panel, and got them.",
+              "at": ["analyst"]
+            }
           }
         ]
       },
@@ -1352,7 +1410,8 @@
             "sets": ["burned-by-a-fact"],
             "opinion": -2,
             "factAt": "projects",
-            "factNote": "You raised a concern against the Project Co-ordinator's candidate. You had not been told why that was a mistake."
+            "factNote": "You raised a concern against the Project Co-ordinator's candidate. You had not been told why that was a mistake.",
+            "mistake": "big"
           },
           {
             "body": "You do not say what the concern is. You say that you would just want to be sure. The candidate is thanked for their time, and the Project Co-ordinator thanks you for yours.",
@@ -1385,6 +1444,18 @@
     ],
     "options": [
       {
+        "id": "raise-the-project",
+        "family": "deliver",
+        "label": "Say what is actually wrong with your own project",
+        "results": [
+          {
+            "body": "You say it. It takes two minutes. The person from Human Resources thanks you for bringing your whole self to the session, and asks whether you would like to speak to someone.",
+            "sets": ["raised-the-project"],
+            "approach": "truth"
+          }
+        ]
+      },
+      {
         "id": "report-the-analyst",
         "family": "attack",
         "label": "Report your concerns about the Senior Analyst's expenses",
@@ -1400,12 +1471,19 @@
             "sets": ["burned-by-a-fact"],
             "opinion": -2,
             "factAt": "analyst",
-            "factNote": "You reported the Senior Analyst. You had not been told why that was a mistake."
+            "factNote": "You reported the Senior Analyst. You had not been told why that was a mistake.",
+            "mistake": "big"
           },
           {
             "body": "You are thanked for your courage. The Senior Analyst has a brief, informal conversation, and comes back from it and sits down without looking at anyone. It is not known who said what, and everybody knows.",
             "sets": ["reported-a-colleague"],
-            "approach": "blame"
+            "approach": "blame",
+            "news": {
+              "about": "reported-someone",
+              "tone": "bad",
+              "text": "You reported the Senior Analyst's expenses at the Listening Session.",
+              "at": ["analyst"]
+            }
           }
         ]
       },
@@ -1425,24 +1503,19 @@
             "sets": ["burned-by-a-fact"],
             "opinion": -2,
             "factAt": "projects",
-            "factNote": "You started a rumour about the Project Co-ordinator. You had not been told why that was a mistake."
+            "factNote": "You started a rumour about the Project Co-ordinator. You had not been told why that was a mistake.",
+            "mistake": "big"
           },
           {
             "body": "By the time you reach your desk it has come back to you, with details. The Project Co-ordinator's project is in serious trouble, and people are being very kind about it.",
             "sets": ["started-a-rumour"],
-            "approach": "blame"
-          }
-        ]
-      },
-      {
-        "id": "raise-the-project",
-        "family": "deliver",
-        "label": "Say what is actually wrong with your own project",
-        "results": [
-          {
-            "body": "You say it. It takes two minutes. The person from Human Resources thanks you for bringing your whole self to the session, and asks whether you would like to speak to someone.",
-            "sets": ["raised-the-project"],
-            "approach": "truth"
+            "approach": "blame",
+            "news": {
+              "about": "started-a-rumour",
+              "tone": "bad",
+              "text": "You started a rumour about the Project Co-ordinator's project, by the biscuits.",
+              "at": ["projects"]
+            }
           }
         ]
       },
@@ -1455,6 +1528,19 @@
             "body": "It is recorded. You are asked whether you would be willing to say that on a poster. You find that you are.",
             "sets": ["felt-safe"],
             "approach": "theatre"
+          }
+        ]
+      },
+      {
+        "id": "tell-them-everything",
+        "family": "attack",
+        "label": "Take the microphone, and say what you think of each of them, by name",
+        "stakes": "It is being recorded. People have been walked out of the building for much less.",
+        "results": [
+          {
+            "body": "You are thorough. You use the word 'frankly' eleven times. The Listening Session is the first in the company's history to have listened, and the recording reaches the floor above before you have sat down.",
+            "sets": ["told-them-everything"],
+            "mistake": "catastrophic"
           }
         ]
       },

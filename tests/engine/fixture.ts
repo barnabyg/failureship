@@ -238,6 +238,7 @@ export function fixtureRaw() {
         claim: "This is what you were told.",
         notice: "Press continue.",
         move: "Something has happened to you.",
+        event: "Something has happened to the company.",
         story: "The month has closed.",
         results: "The run is over.",
       },

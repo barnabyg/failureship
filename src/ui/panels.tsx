@@ -58,6 +58,16 @@ function Reaction({ text }: { text: string | undefined }) {
   );
 }
 
+/** Said before a choice that could end the run on the spot. */
+function Stakes({ text }: { text: string | undefined }) {
+  if (text === undefined) return null;
+  return (
+    <span className="option-stakes" data-testid="stakes">
+      {text}
+    </span>
+  );
+}
+
 function StoryPanel({
   step,
   onChoose,
@@ -165,6 +175,55 @@ function ResultsPanel({
   return (
     <Panel testId="panel-results" title={step.title} wide>
       <p>{step.intro}</p>
+      {step.ending.text !== null && (
+        <p className="callout" data-testid="results-ending">
+          {step.ending.text}
+        </p>
+      )}
+      {step.mistakes.length > 0 && (
+        <>
+          <h3>{panelText.resultsMistakesHeading}</h3>
+          <ul>
+            {step.mistakes.map((row, index) => (
+              <li key={index} data-testid="result-mistake">
+                <strong>{monthLabel(row.month)}. </strong>
+                {row.choice}
+              </li>
+            ))}
+          </ul>
+        </>
+      )}
+      {step.threads.length > 0 && (
+        <div className="callout" data-testid="results-threads">
+          <h3>{panelText.resultsThreadsHeading}</h3>
+          {step.threads.map((row, index) => (
+            <div key={index} data-testid="result-thread">
+              <p>
+                <strong>{monthLabel(row.startedIn)}. </strong>
+                {row.started}
+              </p>
+              <p>
+                <strong>{monthLabel(row.playedIn)}. </strong>
+                {row.playedOut}
+              </p>
+            </div>
+          ))}
+        </div>
+      )}
+      {step.risks.length > 0 && (
+        <div className="callout" data-testid="results-risks">
+          <h3>{panelText.resultsRisksHeading}</h3>
+          {step.risks.map((row, index) => (
+            <p key={index} data-testid="result-risk">
+              <strong>{monthLabel(row.addedIn)}. </strong>
+              {row.note} {row.fate}
+              {row.cameOutIn !== null && (
+                <span className="results-title">{row.motive}</span>
+              )}
+            </p>
+          ))}
+        </div>
+      )}
       <h3>{panelText.resultsWhoHeading}</h3>
       <table className="results">
         <tbody>
@@ -329,6 +388,45 @@ function ResultsPanel({
           <Chart entries={step.powerMap} />
         </div>
       </div>
+      {step.beliefs.length > 0 && (
+        <>
+          <h3>{panelText.resultsBeliefsHeading}</h3>
+          <table className="results">
+            <tbody>
+              {step.beliefs.map((person) => (
+                <tr key={person.name} data-testid="result-belief">
+                  <th scope="row">
+                    {person.title}
+                    <span className="results-title">{person.name}</span>
+                  </th>
+                  <td className="results-kind">{person.believes}</td>
+                  <td>
+                    {person.reached.length === 0
+                      ? panelText.resultsHeardNothing
+                      : person.reached.map((row, index) => (
+                          <p key={index} data-testid="result-reached">
+                            <strong>{monthLabel(row.month)}. </strong>
+                            {row.text} {row.how}
+                          </p>
+                        ))}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </>
+      )}
+      {step.changes.length > 0 && (
+        <div className="callout" data-testid="results-changes">
+          <h3>{panelText.resultsChangesHeading}</h3>
+          {step.changes.map((row, index) => (
+            <p key={index} data-testid="result-change">
+              <strong>{monthLabel(row.month)}. </strong>
+              {row.changed}
+            </p>
+          ))}
+        </div>
+      )}
     </Panel>
   );
 }
@@ -370,6 +468,7 @@ export function StepPanel({ view, onChoose }: StepPanelProps) {
               >
                 <span>{option.label}</span>
                 <span className="option-cost">{option.costLabel}</span>
+                <Stakes text={option.stakes} />
               </button>
             ))}
           </div>
@@ -405,12 +504,17 @@ export function StepPanel({ view, onChoose }: StepPanelProps) {
                   </div>
                 ))}
               </dl>
-              {step.behaviours.length > 0 && (
+              {step.behaviours.length + step.regard.length > 0 && (
                 <>
                   <h3>{panelText.behavioursHeading}</h3>
                   <ul className="signs behaviours">
                     {step.behaviours.map((shown) => (
                       <li key={shown.who} data-testid="behaviour">
+                        {shown.text}
+                      </li>
+                    ))}
+                    {step.regard.map((shown) => (
+                      <li key={`regard-${shown.who}`} data-testid="regard">
                         {shown.text}
                       </li>
                     ))}
@@ -452,6 +556,7 @@ export function StepPanel({ view, onChoose }: StepPanelProps) {
                     }}
                   >
                     {option.label}
+                    <Stakes text={option.stakes} />
                   </button>
                 ))}
               </div>
@@ -505,6 +610,13 @@ export function StepPanel({ view, onChoose }: StepPanelProps) {
     case "move":
       return (
         <Panel testId="panel-move" eyebrow={step.from} title={step.title}>
+          <p>{step.body}</p>
+          <Continue onChoose={onChoose} />
+        </Panel>
+      );
+    case "event":
+      return (
+        <Panel testId="panel-event" eyebrow={step.from} title={step.title}>
           <p>{step.body}</p>
           <Continue onChoose={onChoose} />
         </Panel>

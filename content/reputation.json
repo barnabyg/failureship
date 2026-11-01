@@ -1,0 +1,80 @@
+{
+  "travel": {
+    "hopsPerMonth": 1,
+    "maxHops": 2,
+    "passOnChance": 0.7,
+    "shift": {
+      "good": 1,
+      "bad": -1
+    }
+  },
+  "opinion": {
+    "warmAt": 1,
+    "coldAt": -1
+  },
+  "signs": [
+    {
+      "id": "saves-a-seat",
+      "text": "{who} moves a folder off the chair beside them when you come in.",
+      "likelihood": {
+        "warm": 6,
+        "neutral": 1,
+        "cold": 0
+      }
+    },
+    {
+      "id": "asks-your-view",
+      "text": "{who} glances across at you before they answer, to see how you are taking it.",
+      "likelihood": {
+        "warm": 5,
+        "neutral": 2,
+        "cold": 1
+      }
+    },
+    {
+      "id": "nods-hello",
+      "text": "{who} nods when you come in, then goes back to their screen.",
+      "likelihood": {
+        "warm": 2,
+        "neutral": 6,
+        "cold": 2
+      }
+    },
+    {
+      "id": "reads-their-pad",
+      "text": "{who} is reading their own notepad, closely, as they do with everyone.",
+      "likelihood": {
+        "warm": 1,
+        "neutral": 6,
+        "cold": 3
+      }
+    },
+    {
+      "id": "stops-talking",
+      "text": "{who} stops talking as you come in, and starts again about something else.",
+      "likelihood": {
+        "warm": 0,
+        "neutral": 1,
+        "cold": 6
+      }
+    },
+    {
+      "id": "copies-someone-else",
+      "text": "{who} thanks the room for coming, by name, and misses you out.",
+      "likelihood": {
+        "warm": 0,
+        "neutral": 1,
+        "cold": 5
+      }
+    }
+  ],
+  "believes": {
+    "warm": "Thought well of you",
+    "neutral": "Had no particular view",
+    "cold": "Thought badly of you"
+  },
+  "how": {
+    "direct": "They were there.",
+    "heardFrom": "They heard it from {who}."
+  }
+}

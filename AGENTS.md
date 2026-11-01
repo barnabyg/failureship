@@ -19,8 +19,8 @@ The [README](README.md) covers playing and steering the game, and the code map. 
 A new mechanic is rarely a data-only change. It usually touches:
 
 1. `content/*.json`, for its data and words.
-2. `src/engine/content.ts` for the schema, and `src/engine/content-checks.ts` for its checks across files.
-3. `src/engine/run.ts`, or a mechanic's own module beside it, for the rules.
+2. `src/engine/content.ts` for the schema, and `src/engine/content-checks.ts` or `consequence-checks.ts` for its checks across files.
+3. A mechanic's own module in `src/engine/` for the rules. A consequence takes effect through `applyOutcome` in `outcome.ts`, and `month.ts` holds the month's order.
 4. `src/engine/view.ts` and `src/engine/to-view.ts`, for what the player sees.
 5. `src/ui/panels.tsx`, for showing it.
 6. Tests in `tests/engine/` and `tests/e2e/`, and `docs/content-format.md`.

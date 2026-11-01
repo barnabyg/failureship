@@ -7,5 +7,6 @@
     "pub": 1
   },
   "signsMisleadChance": 0.2,
+  "disasterChance": 0.1,
   "opinion": { "warmAt": 5, "coldAt": -5, "keeps": 0.5 }
 }

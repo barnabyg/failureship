@@ -1,18 +1,8 @@
 import type { Content, Kind } from "./content";
-import { bossKindOf, inTurn, moodOf } from "./reads";
+import { bossKindOf, inTurn, moodOf, shiftBelief } from "./reads";
+import { remember } from "./reputation";
 import { pickWeighted } from "./rng";
 import type { State, World } from "./state";
-
-/** Moves the boss's opinion, and keeps that for the results screen. */
-export function shiftBossOpinion(
-  state: State,
-  shift: number,
-  choice: string,
-): void {
-  if (shift === 0) return;
-  state.truth.bossOpinion += shift;
-  state.bossLandings.push({ month: state.month, choice, shift });
-}
 
 /**
  * Moves the boss's opinion by what the choice says, and by how this kind of
@@ -41,9 +31,16 @@ export function landWithBoss(
   const shift =
     (choice.opinion ?? 0) +
     (overdone?.shift[kind] ?? approach?.shift[kind] ?? 0);
-  state.truth.bossOpinion += shift;
+  shiftBelief(state, content.boss.character, shift);
   if (approach === undefined && shift === 0) return undefined;
   state.bossLandings.push({ month: state.month, choice: label, shift });
+  if (shift !== 0) {
+    remember(state, content, {
+      character: content.boss.character,
+      about: "impression",
+      text: label,
+    });
+  }
   if (approach === undefined) return undefined;
   const lines = overdone?.reaction[kind];
   if (lines) return inTurn(lines, state.month);

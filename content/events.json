@@ -1,0 +1,125 @@
+[
+  {
+    "id": "breach",
+    "from": "From: IT Services, to all staff",
+    "title": "A security incident",
+    "body": "Someone has been reading the company's records from a car park in another country. IT Services stresses that no customer data was affected, and then, an hour later, that some was. Everyone is to change their password to something they will remember, and not to write it down.",
+    "changed": "The breach put the Senior Analyst in charge of the review, which gave them a say in everything.",
+    "reshuffle": {
+      "rises": ["analyst"]
+    },
+    "story": {
+      "reported": "The company's security posture was validated by a real-world exercise.",
+      "happened": "Someone read everything, from a car park. Nobody can say how long for."
+    },
+    "sets": ["breach-happened"]
+  },
+  {
+    "id": "reorganisation",
+    "from": "From: Hugh Lamb, Head of Operations",
+    "title": "Simplifying how we work",
+    "body": "Following a review, some reporting lines are being simplified. The Senior Analyst now reports directly to your boss's boss, which simplifies things for the Senior Analyst. Your boss remains your boss. A new chart is available, and the old chart has been recalled.",
+    "changed": "A reorganisation moved the Senior Analyst out from under your boss, and up.",
+    "schedule": {
+      "months": [3, 4],
+      "chance": 0.3,
+      "clue": {
+        "before": 1,
+        "source": "By the photocopier",
+        "text": "Someone has left a draft org chart on the photocopier, with arrows on it in pencil."
+      }
+    },
+    "reshuffle": {
+      "reports": [
+        {
+          "character": "analyst",
+          "to": "head"
+        }
+      ],
+      "rises": ["analyst"]
+    },
+    "story": {
+      "reported": "The organisation was simplified, and is now more agile.",
+      "happened": "The chart changed. Nothing else did, except who you can complain to."
+    },
+    "sets": ["reorganised"]
+  },
+  {
+    "id": "takeover-bid",
+    "from": "From: The Board, to all staff",
+    "title": "An exciting approach",
+    "body": "A company nobody has heard of has made an offer for the company. The Board wishes to reassure everyone that nothing will change, and that everyone should update their CVs for an unrelated reason. The Project Co-ordinator has been moved under your boss's boss, to help with the numbers.",
+    "changed": "The takeover bid sent the Project Co-ordinator upstairs to help with the numbers, and took your boss down a peg.",
+    "schedule": {
+      "months": [6, 7],
+      "chance": 0.3,
+      "clue": {
+        "before": 1,
+        "source": "In the lift",
+        "text": "Two people in very good suits were in the lift, counting the floors and writing them down."
+      }
+    },
+    "reshuffle": {
+      "reports": [
+        {
+          "character": "projects",
+          "to": "head"
+        }
+      ],
+      "falls": ["boss"]
+    },
+    "story": {
+      "reported": "The company attracted significant external interest, which is a tribute to its people.",
+      "happened": "Someone tried to buy the company, and looked at the floor you work on, and laughed."
+    },
+    "sets": ["takeover-bid"]
+  },
+  {
+    "id": "server-room-flood",
+    "disaster": true,
+    "from": "From: Facilities, to all staff",
+    "title": "Water in the server room",
+    "body": "A pipe that was not on any plan has emptied itself into the server room. Nobody could have known about it, and Facilities has a form saying so. Everything since Tuesday has gone, including, by coincidence, the good things.",
+    "story": {
+      "reported": "The company completed an unscheduled review of its data.",
+      "happened": "A pipe burst, and took everyone's work with it. It was nobody's fault, for once."
+    },
+    "project": {
+      "real": "worse"
+    },
+    "sets": ["server-room-flooded"]
+  },
+  {
+    "id": "chief-executive-gone",
+    "disaster": true,
+    "from": "From: The Board, to all staff",
+    "title": "A leadership transition",
+    "body": "You learn from the news that the Chief Executive has left, to spend more time with a yacht. An interim has been appointed, and has asked the Office Co-ordinator to report to your boss, for reasons the interim has not been in the building long enough to explain.",
+    "changed": "A new interim Chief Executive moved the Office Co-ordinator under your boss, for no reason anyone could give.",
+    "reshuffle": {
+      "reports": [
+        {
+          "character": "admin",
+          "to": "boss"
+        }
+      ]
+    },
+    "story": {
+      "reported": "The company welcomed a new phase of leadership.",
+      "happened": "The Chief Executive left in a hurry. Nobody on your floor had ever met them, so it changed nothing, and everything."
+    },
+    "sets": ["chief-executive-gone"]
+  },
+  {
+    "id": "regulator-letter",
+    "disaster": true,
+    "from": "From: Legal, to all staff",
+    "title": "Please do not delete anything",
+    "body": "A regulator has written about something that happened before any of you worked here. Nobody may delete anything until further notice. Everybody has now thought of something they wish they had deleted last week.",
+    "story": {
+      "reported": "The company is working openly with its regulators.",
+      "happened": "A letter arrived about something older than everyone. Everyone looked guilty anyway."
+    },
+    "sets": ["regulator-wrote"]
+  }
+]

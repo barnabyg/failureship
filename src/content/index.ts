@@ -6,17 +6,22 @@ import buzzwords from "../../content/buzzwords.json";
 import characters from "../../content/characters.json";
 import demands from "../../content/demands.json";
 import dialogs from "../../content/dialogs.json";
+import events from "../../content/events.json";
 import families from "../../content/families.json";
 import floor from "../../content/floor-1.json";
 import hiddenTruth from "../../content/hidden-truth.json";
+import mistakes from "../../content/mistakes.json";
 import moves from "../../content/moves.json";
 import notebook from "../../content/notebook.json";
 import notifications from "../../content/notifications.json";
 import officialStory from "../../content/official-story.json";
 import overHead from "../../content/over-head.json";
 import project from "../../content/project.json";
+import reputation from "../../content/reputation.json";
+import risks from "../../content/risks.json";
 import scenes from "../../content/scenes.json";
 import sources from "../../content/sources.json";
+import threads from "../../content/threads.json";
 import ui from "../../content/ui.json";
 import { z } from "zod";
 import { ContentError, parseContent } from "../engine";
@@ -37,6 +42,8 @@ export const gameContent = parseContent({
   balance,
   boss,
   overHead,
+  mistakes,
+  reputation,
   families,
   hiddenTruth,
   sources,
@@ -51,6 +58,9 @@ export const gameContent = parseContent({
   buzzwords,
   actions,
   moves,
+  threads,
+  risks,
+  events,
   officialStory,
   floor,
   ui: {
@@ -104,6 +114,14 @@ const panelSchema = z.strictObject(
       "openDemandsHeading",
       "powerMapHeading",
       "closeLabel",
+      "standingHeading",
+      "finalWarningLabel",
+      "resultsMistakesHeading",
+      "resultsThreadsHeading",
+      "resultsRisksHeading",
+      "resultsChangesHeading",
+      "resultsBeliefsHeading",
+      "resultsHeardNothing",
       "resultsWhoHeading",
       "resultsNoFact",
       "findOutSourceHeading",
@@ -133,6 +151,9 @@ const panelSchema = z.strictObject(
       "leaveBody",
       "leaveConfirm",
       "leaveCancel",
+      "saveLostTitle",
+      "saveLostBody",
+      "saveLostConfirm",
     ].map((key) => [key, z.string().min(1)]),
   ),
 );

@@ -1,12 +1,12 @@
+import { managerOf } from "./charts";
 import {
-  MOVE_FAMILIES,
+  everyBill,
   everyDemand,
   everyNotification,
   type Content,
 } from "./content";
 import {
   actionsThisMonth,
-  bossKindOf,
   costOf,
   fillParts,
   fillSubject,
@@ -15,21 +15,20 @@ import {
   isDone,
   matches,
   methodOf,
-  moodAt,
-  moodOf,
   offeredOptions,
+  personOf,
   remaining,
   sceneData,
 } from "./reads";
 import { calledBy, sayPeople } from "./say";
 import type { State, Step, World } from "./state";
+import { toResultsView } from "./to-results";
 import type {
   Buzzword,
   ChartEntry,
   Choice,
   Hotspot,
   NotificationOption,
-  Person,
   PlayerView,
   StepView,
 } from "./view";
@@ -74,6 +73,7 @@ export function legalChoices(state: State, world: World): Choice[] {
     case "dialog":
     case "notice":
     case "move":
+    case "event":
       return [{ type: "continue" }];
     case "story":
       return [{ type: "continue" }];
@@ -93,6 +93,7 @@ function notificationOptions(
     label: o.label,
     costLabel: costLabel(content, o.cost),
     affordable: costOf(content, o.cost) <= remaining(state, content),
+    stakes: o.stakes,
   }));
 }
 
@@ -104,6 +105,7 @@ function toSceneView(
     shown,
     treatment,
     headTreatment,
+    regard,
     misleading,
   }: Extract<Step, { kind: "scene" }>,
 ): Extract<StepView, { kind: "scene" }> {
@@ -137,16 +139,17 @@ function toSceneView(
     treatment: content.boss.signs.find((s) => s.id === treatment)?.text ?? null,
     headTreatment:
       content.overHead?.signs.find((s) => s.id === headTreatment)?.text ?? null,
+    regard: regard.map(({ character, sign }) => {
+      const written = content.reputation?.signs.find((s) => s.id === sign);
+      const who = calledBy(content, character);
+      return { who, text: sayPeople(written?.text ?? "", { "{who}": who }) };
+    }),
     options: offeredOptions(state, content, scene).map((o) => ({
       id: o.id,
       label: fillSubject(state, content, o.about, fill(o.label)),
+      stakes: o.stakes,
     })),
   };
-}
-
-function personOf(content: Content, id: string): Person {
-  const known = content.characters.find((c) => c.id === id);
-  return { id, name: known?.name ?? id, title: known?.title ?? "" };
 }
 
 function toStoryView(
@@ -160,143 +163,31 @@ function toStoryView(
   );
   const fill = (written: string | undefined) =>
     written === undefined ? [] : [fillParts(state, content, written)];
+  // Each Company Event of the month, in the story's own words for it.
+  const events = state.eventsLanded
+    .filter((landed) => landed.month === state.month)
+    .flatMap(({ id }) => content.events.filter((e) => e.id === id))
+    .map((e) => e.story);
   return {
     kind: "story",
     title,
     reportedHeading,
     happenedHeading,
-    reported: told.flatMap((e) => fill(e.reported)),
-    happened: told.flatMap((e) => fill(e.happened)),
+    reported: [...events, ...told].flatMap((e) => fill(e.reported)),
+    happened: [...events, ...told].flatMap((e) => fill(e.happened)),
   };
 }
 
-/** The reveal. It reaches the player view only here, once the run has ended. */
-function toResultsView(
-  state: State,
-  content: Content,
-): Extract<StepView, { kind: "results" }> {
-  const nameOf = (id: string) =>
-    content.characters.find((c) => c.id === id)?.name ?? id;
-  const { order, influence } = state.truth.powerMap;
-  return {
-    kind: "results",
-    ...content.ui.results,
-    characters: state.truth.characters.map((dealt) => {
-      const known = content.characters.find((c) => c.id === dealt.id);
-      return {
-        name: known?.name ?? dealt.id,
-        title: known?.title ?? "",
-        kind: content.hiddenTruth.kinds[dealt.kind].label,
-        fact: dealt.fact?.text ?? null,
-      };
-    }),
-    powerMap: order.map((id) => {
-      const above = influence.find((i) => i.over === id);
-      return {
-        name: nameOf(id),
-        title: content.characters.find((c) => c.id === id)?.title ?? "",
-        reportsTo: above ? nameOf(above.who) : null,
-      };
-    }),
-    marks: state.truth.characters.map((dealt) => {
-      const mark = state.marks.get(dealt.id) ?? null;
-      const { kinds } = content.hiddenTruth;
-      return {
-        name: nameOf(dealt.id),
-        title: personOf(content, dealt.id).title,
-        mark: mark === null ? null : kinds[mark].label,
-        truth: kinds[dealt.kind].label,
-        correct: mark === dealt.kind,
-      };
-    }),
-    clues: state.clues.map(({ month, source, text, verdict }) => ({
-      month,
-      source,
-      text,
-      verdict: content.ui.clueVerdicts[verdict],
-    })),
-    factEvents: state.factEvents,
-    boss: toBossResults(state, content),
-    played: MOVE_FAMILIES.flatMap((id) => {
-      const written = content.families?.[id];
-      return written
-        ? [
-            {
-              family: written.label,
-              note: written.note,
-              count: state.played[id] ?? 0,
-            },
-          ]
-        : [];
-    }),
-    claims: state.claims.map((claim) => {
-      const { label, note } = content.sources.verdicts[claim.status];
-      const said = state.truth.characters.find((c) => c.id === claim.source);
-      const motive = content.sources.motives.find((m) => m.id === said?.motive);
-      const source = nameOf(claim.source);
-      return {
-        month: claim.month,
-        source,
-        text: claim.text,
-        verdict: label,
-        note,
-        motive: (motive?.text ?? "").replaceAll("{name}", source),
-      };
-    }),
-  };
-}
-
-function toBossResults(
-  state: State,
-  content: Content,
-): Extract<StepView, { kind: "results" }>["boss"] {
-  const { warmer, cooler, unmoved } = content.ui.bossLanded;
-  const { name, title } = personOf(content, content.boss.character);
-  return {
-    name,
-    title,
-    kind: content.hiddenTruth.kinds[bossKindOf(state, content)].label,
-    // Missing the Scene does not spare the player: the verdict is given anyway.
-    verdict:
-      state.verdict ??
-      content.scenes.find((s) => s.verdict)?.verdict?.[
-        moodOf(state, content)
-      ] ??
-      null,
-    choices: state.bossLandings.map(({ month, choice, shift }) => ({
-      month,
-      choice,
-      landed: shift > 0 ? warmer : shift < 0 ? cooler : unmoved,
-    })),
-    head: toHeadResults(state, content),
-  };
-}
-
-/** What the boss's boss really made of the player. It says no number. */
-function toHeadResults(
-  state: State,
-  content: Content,
-): Extract<StepView, { kind: "results" }>["boss"]["head"] {
-  const written = content.overHead;
-  const dealt = state.truth.characters.find((c) => c.id === written?.character);
-  if (!written || !dealt) return null;
-  const { name, title } = personOf(content, dealt.id);
-  return {
-    name,
-    title,
-    kind: content.hiddenTruth.kinds[dealt.kind].label,
-    verdict: written.verdict[moodAt(state.truth.headOpinion, written.opinion)],
-  };
-}
-
-/** The formal hierarchy, the same in every deal. */
-function toOrgChart(content: Content): ChartEntry[] {
-  return content.characters.map((c) => ({
-    name: c.name,
-    title: c.title,
-    reportsTo:
-      content.characters.find((m) => m.id === c.reportsTo)?.name ?? null,
-  }));
+/** The formal hierarchy, the same in every deal until a Company Event moves it. */
+function toOrgChart(state: State, content: Content): ChartEntry[] {
+  return content.characters.map((c) => {
+    const manager = managerOf(state, content, c.id);
+    return {
+      name: c.name,
+      title: c.title,
+      reportsTo: content.characters.find((m) => m.id === manager)?.name ?? null,
+    };
+  });
 }
 
 function toStepView(state: State, world: World): StepView {
@@ -358,13 +249,25 @@ function toStepView(state: State, world: World): StepView {
       };
     }
     case "move": {
-      const move = content.moves.find((m) => m.id === step.id);
+      const move = [...content.moves, ...everyBill(content)].find(
+        (m) => m.id === step.id,
+      );
       if (!move) throw new Error(`Unknown Move "${step.id}".`);
       return {
         kind: "move",
-        from: move.from,
+        from: move.from ?? "",
         title: move.title,
         body: fillParts(state, content, move.body),
+      };
+    }
+    case "event": {
+      const event = content.events.find((e) => e.id === step.id);
+      if (!event) throw new Error(`Unknown Company Event "${step.id}".`);
+      return {
+        kind: "event",
+        from: event.from,
+        title: event.title,
+        body: event.body,
       };
     }
     case "story":
@@ -412,7 +315,7 @@ export function toView(state: State, world: World): PlayerView {
       })),
       marks: content.characters.map((c) => ({
         ...personOf(content, c.id),
-        mark: state.marks.get(c.id) ?? null,
+        mark: state.marks[c.id] ?? null,
       })),
     },
     project: toProjectView(state, content),
@@ -420,6 +323,7 @@ export function toView(state: State, world: World): PlayerView {
       const item = everyDemand(content).find((d) => d.id === id);
       return item ? [{ month, subject: item.subject }] : [];
     }),
+    finalWarning: state.finalWarning,
     seed: state.seed,
     month: state.month,
     totalMonths: content.balance.monthsPerRun,
@@ -430,7 +334,7 @@ export function toView(state: State, world: World): PlayerView {
       label: actionsLabel,
     },
     buzzwords: buzzwordsOf(content, state.buzzwords),
-    orgChart: toOrgChart(content),
+    orgChart: toOrgChart(state, content),
     hotspots: actionsThisMonth(state, content).map((a) =>
       toHotspot(state, content, a),
     ),

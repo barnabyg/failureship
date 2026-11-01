@@ -352,7 +352,7 @@
   },
   {
     "id": "desk-moves",
-    "months": [7],
+    "months": [4],
     "from": "From: Facilities",
     "subject": "Workplace Refresh: please confirm your team's desks",
     "body": "Following the Workplace Refresh, your team has one desk by the window, and one with no window, beside the printer. You have been asked to say who sits where. Nobody at Facilities wishes to know why.",
@@ -381,13 +381,19 @@
             "opinion": -2,
             "result": {
               "title": "The printer",
-              "body": "It turns out that the Senior Analyst sits on the Health and Safety committee. An email about the safe distance from printers is copied to your boss, with a diagram, and your name is on the diagram."
+              "body": "The Senior Analyst does not carry anything anywhere. An email about the safe distance from printers is copied to your boss, with a diagram, and your name is on the diagram."
             }
           }
         },
         "result": {
           "title": "The printer",
           "body": "The Senior Analyst carries everything across in one trip, without a word, and sets up facing you. The printer starts up. It will not stop for some time."
+        },
+        "news": {
+          "about": "moved-to-the-printer",
+          "tone": "bad",
+          "text": "You moved the Senior Analyst to the desk with no window.",
+          "at": ["analyst"]
         }
       },
       {
@@ -410,6 +416,12 @@
         "result": {
           "title": "The printer",
           "body": "The Project Co-ordinator takes it calmly, and asks whether this is about the figures. You say no. It is now about the figures."
+        },
+        "news": {
+          "about": "moved-to-the-printer",
+          "tone": "bad",
+          "text": "You moved the Project Co-ordinator to the desk with no window.",
+          "at": ["projects"]
         }
       },
       {
@@ -425,7 +437,7 @@
   },
   {
     "id": "word-for-a-word",
-    "months": [8],
+    "months": [7],
     "from": "From: The Office Co-ordinator, Marjorie Tull",
     "subject": "A quick word, if you have a moment",
     "body": "The Office Co-ordinator has been here for twenty-six years, and has noticed that this has never led to anything. They wonder whether you might mention them to your boss. They also mention, in passing, that they know where several things are kept.",
@@ -453,6 +465,34 @@
     ]
   },
   {
+    "id": "shared-drive",
+    "months": [7],
+    "from": "From: IT Services",
+    "subject": "The shared drive is 98% full",
+    "body": "Everyone is asked to remove anything they no longer need from the shared drive by Friday. IT Services would like it known that it does not look at what gets removed, and that it could not if it wanted to.",
+    "options": [
+      {
+        "id": "clear-your-files",
+        "family": "deflect",
+        "label": "Clear out everything with your name on it, to be helpful",
+        "sets": ["covered-tracks"],
+        "result": {
+          "title": "Housekeeping",
+          "body": "It takes an afternoon. IT Services sends you a certificate for your contribution to storage. There is now very little on the shared drive to say that you have ever done anything, which you decide is fine."
+        }
+      },
+      {
+        "id": "leave-your-files",
+        "label": "Leave it. Someone else will",
+        "sets": ["left-your-files"],
+        "result": {
+          "title": "Housekeeping",
+          "body": "Someone else does. It is not clear who, or what they removed, and on Monday the shared drive is 99% full."
+        }
+      }
+    ]
+  },
+  {
     "id": "bonus-pot",
     "months": [6],
     "from": "From: Your boss, Dennis Prowse",
@@ -463,7 +503,7 @@
         "id": "bonus-allies",
         "family": "trade",
         "label": "Give it to the people who can do something for you",
-        "sets": ["bonus-to-allies"],
+        "sets": ["bonus-to-allies", "bonus-pot-decided"],
         "approach": "cronyism",
         "reaction": {
           "believer": "Your boss reads the list, and asks you to take them through what each person did to earn it. You take them through it. It does not take long.",
@@ -473,14 +513,22 @@
         "result": {
           "title": "The bonus pot",
           "body": "The bonuses go out on Friday. Three people are suddenly very glad to see you, and the two who did the work have been told that it was a difficult year."
-        }
+        },
+        "remembers": [
+          {
+            "character": "projects",
+            "about": "passed-over",
+            "text": "You gave the bonus pot to others, and they did the work.",
+            "tone": "bad"
+          }
+        ]
       },
       {
         "id": "bonus-workers",
         "family": "deliver",
         "label": "Give it to the people who did the work, and write down why",
         "cost": "standard",
-        "sets": ["bonus-to-workers"],
+        "sets": ["bonus-to-workers", "bonus-pot-decided"],
         "approach": "results",
         "project": {
           "real": "better"
@@ -488,13 +536,21 @@
         "result": {
           "title": "The bonus pot",
           "body": "It takes you an evening to write down who did what. The Project Co-ordinator reads the letter twice, and something on your project gets done that afternoon that nobody had asked for."
-        }
+        },
+        "remembers": [
+          {
+            "character": "projects",
+            "about": "paid-for-the-work",
+            "text": "You gave them a share of the bonus pot, and wrote down why.",
+            "tone": "good"
+          }
+        ]
       },
       {
         "id": "bonus-boss",
         "family": "impress",
         "label": "Suggest that it should go to your boss, for leadership",
-        "sets": ["bonus-to-boss"],
+        "sets": ["bonus-to-boss", "bonus-pot-decided"],
         "approach": "flatter",
         "reaction": {
           "believer": "Your boss says no, and sounds appalled, and asks you to think again about who did the work on this floor.",
@@ -504,13 +560,21 @@
         "result": {
           "title": "The bonus pot",
           "body": "You put it in writing, with the word leadership in it three times. The floor learns where the bonus went at about the same moment it learns whose idea that was."
-        }
+        },
+        "remembers": [
+          {
+            "character": "projects",
+            "about": "passed-over",
+            "text": "You gave the bonus pot to others, and they did the work.",
+            "tone": "bad"
+          }
+        ]
       },
       {
         "id": "bonus-split",
         "family": "deflect",
         "label": "Split it equally between everybody",
-        "sets": ["bonus-split"],
+        "sets": ["bonus-split", "bonus-pot-decided"],
         "approach": "plain-report",
         "reaction": {
           "believer": "Your boss says that it is fair, and that fair is not the same as right, and asks whether you thought about the difference.",

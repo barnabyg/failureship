@@ -1,0 +1,133 @@
+[
+  {
+    "id": "security-skimped",
+    "addedBy": "cut-security",
+    "after": {
+      "min": 2,
+      "max": 4
+    },
+    "note": "You took the money out of the security budget in the Budget Round. Your name is on the form.",
+    "route": {
+      "character": "analyst",
+      "chance": {
+        "believer": 0.9,
+        "incompetent": 0.3,
+        "practitioner": 0.6
+      },
+      "motive": "The Senior Analyst had noticed that nobody now reviews the door logs, and wanted that to be someone else's fault.",
+      "means": {
+        "did": "cut-security"
+      }
+    },
+    "traced": {
+      "not": {
+        "did": "covered-tracks"
+      }
+    },
+    "onPlayer": {
+      "id": "security-landed",
+      "as": "move",
+      "from": "From: The Senior Analyst, Priya Venn, copied to Internal Audit",
+      "title": "A question about the door logs",
+      "body": "The Senior Analyst has asked Internal Audit who stopped the review of the door logs. Internal Audit has found a form, and on the form is your name. They would like a word, and they have booked a room with no windows for it.",
+      "sets": ["security-traced"],
+      "mistake": "big"
+    },
+    "onSomeoneElse": {
+      "id": "security-elsewhere",
+      "as": "move",
+      "from": "From: The Senior Analyst, Priya Venn, copied to Internal Audit",
+      "title": "A question about the door logs",
+      "body": "The Senior Analyst has asked Internal Audit who stopped the review of the door logs. The shared drive no longer has a form on it. Internal Audit has settled on someone in Facilities, who has left. You are asked to sign the report, as a witness.",
+      "sets": ["security-untraced"]
+    },
+    "landedOnYou": "It came out, and the form led straight to you.",
+    "landedElsewhere": "It came out, and with the form gone, someone in Facilities took it for you.",
+    "neverCameOut": "It never came out. The door logs are still not being reviewed.",
+    "event": "breach"
+  },
+  {
+    "id": "metric-gamed",
+    "addedBy": "gamed-metric",
+    "after": {
+      "min": 1,
+      "max": 2
+    },
+    "note": "You worked out how to game the new metric, and then you did.",
+    "route": {
+      "character": "projects",
+      "chance": {
+        "believer": 0.8,
+        "incompetent": 0.2,
+        "practitioner": 0.5
+      },
+      "motive": "The Project Co-ordinator's own numbers looked worse beside yours, and they wanted to know why."
+    },
+    "traced": {
+      "not": {
+        "did": "covered-tracks"
+      }
+    },
+    "onPlayer": {
+      "id": "metric-landed",
+      "as": "notice",
+      "title": "How your numbers are made",
+      "body": "The Project Co-ordinator has asked your boss, in the corridor and at some volume, how your numbers are made. Your boss does not know. Your boss would now like to.",
+      "sets": ["metric-traced"],
+      "opinion": -2
+    },
+    "onSomeoneElse": {
+      "id": "metric-elsewhere",
+      "as": "notice",
+      "title": "How the numbers are made",
+      "body": "The Project Co-ordinator has asked your boss how the floor's numbers are made. With nothing in the shared drive to go on, the question has been passed to a working group, which will report after the metric has been replaced.",
+      "sets": ["metric-untraced"]
+    },
+    "landedOnYou": "It came out, and your numbers were the ones that could be checked.",
+    "landedElsewhere": "It came out, and with the old files gone, it went to a working group.",
+    "neverCameOut": "It never came out. The metric still says what you taught it to say."
+  },
+  {
+    "id": "demand-faked",
+    "addedBy": "faked-demand",
+    "after": {
+      "min": 2,
+      "max": 3
+    },
+    "note": "You told your boss's boss that a Demand had been met, when it had not.",
+    "route": {
+      "character": "admin",
+      "chance": {
+        "believer": 0.9,
+        "incompetent": 0.4,
+        "practitioner": 0.7
+      },
+      "motive": "The Office Co-ordinator keeps the minutes, and the minutes did not agree with you."
+    },
+    "traced": {
+      "not": {
+        "did": "covered-tracks"
+      }
+    },
+    "onPlayer": {
+      "id": "demand-landed",
+      "as": "move",
+      "from": "From: The Office Co-ordinator, Marjorie Tull",
+      "title": "A correction to the minutes",
+      "body": "The Office Co-ordinator has issued a correction to the minutes, to the whole floor. It says that the action you reported as done was not done, and it attaches your email saying that it was. There is no comment. The Office Co-ordinator has never needed one.",
+      "sets": ["demand-traced"],
+      "mistake": "big"
+    },
+    "onSomeoneElse": {
+      "id": "demand-elsewhere",
+      "as": "move",
+      "from": "From: The Office Co-ordinator, Marjorie Tull",
+      "title": "A correction to the minutes",
+      "body": "The Office Co-ordinator has issued a correction to the minutes. It says that an action reported as done was not done, by a person who cannot now be established. The shared drive has been unusually tidy.",
+      "sets": ["demand-untraced"]
+    },
+    "landedOnYou": "It came out in the minutes, with your email attached.",
+    "landedElsewhere": "It came out in the minutes, with nobody's name on it, because you had tidied up.",
+    "neverCameOut": "It never came out. As far as the minutes know, it was done."
+  }
+]
