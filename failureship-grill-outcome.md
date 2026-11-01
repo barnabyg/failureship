@@ -2,7 +2,7 @@
 
 This document stands alone. It records what was decided when the original game proposal was grilled and the owner's real-life Scenarios were worked through. It does not depend on any code, ticket or other file in the first repository.
 
-The original proposal is superseded wherever it disagrees with this document. **Building in phases was not discussed in the grilling.** The few decisions about order are under Sequencing, and the rest is open.
+The original proposal is superseded wherever it disagrees with this document. **Building in phases was not discussed in the grilling.** The owner decided on it afterwards, and it is the one later addition to this record, under Sequencing.
 
 It was checked against all of the owner's messages in the grilling, not only the documents written afterwards.
 
@@ -183,9 +183,27 @@ All the numbers are starting points, to be tuned through playtesting.
 - The owner runs the `to-spec` skill and then the `to-tickets` skill after a grilling.
 - Scenario collection is closed for now: "I can always revisit them when the app is in progress."
 
+### Phases
+
+The owner decided this after the grilling. The project is built in phases, and the point of each phase is to give the owner an opportunity to steer the game and make sure it is what they intended.
+
+- Each phase delivers a playable outcome and ends with the owner playing it and steering. The next phase does not start until the owner says so.
+- Only the current phase is firm. Steering may change, reorder or remove later phases.
+- There is no separate Phase 0, because Phase 1 is already a thin slice through the whole stack.
+
+The current plan is below. Its contents and order were proposed by Claude when the phases were added to the spec (GitHub issue 1 on barnabyg/failureship), which holds the detail.
+
+| Phase                    | Playable outcome                                                                                        |
+| ------------------------ | ------------------------------------------------------------------------------------------------------- |
+| 1. One month             | One month on a blocked-out Floor 1, from Notifications to the official story                            |
+| 2. Reading people        | About six months with Characters dealt from a seed, ending in a results screen showing who was who      |
+| 3. The boss and the work | A longer Floor 1 run with boss kinds, Moves, the Monthly Status Report, Projects, Demands and Budgets   |
+| 4. Consequences          | Earlier choices come back through Threads and hidden risks, you can be fired, and runs save             |
+| 5. The climb             | The whole first-version run, up to the comic stand-in for winning at the top of Floor 3, still blocked out |
+| 6. The tower             | The same game in a finished-looking tower, only if Phase 5 has proved the game fun                      |
+
 ## Open questions
 
-- **Phases:** whether to work in phases, and what each one contains.
 - **Balance:** three actions a month, run length, how often disasters arrive with no clue.
 - **Gauges:** which ones exist besides Teflon, and whether a career-style number stays. The owner said to keep "the visible number", but which Gauges to have was never revisited.
 
