@@ -165,9 +165,12 @@ at a later month. `npm run build` and `npm run play` ignore it.
 - `src/content/` loads it at start-up, through the checks in `src/engine/`, and
   checks the panel text itself.
 - `src/engine/` holds the rules: headless, seeded, and free of Three.js and React.
-  `run.ts` coordinates a run; `state.ts` and `reads.ts` are what its mechanics
-  share; `boss.ts`, `demands.ts` and `over-head.ts` are mechanics of their own;
-  `to-view.ts` builds the player view. `src/engine/content.ts` holds the content
+  `run.ts` is the interface to a run; `choices.ts` carries out each choice;
+  `month.ts` holds the month's order; `outcome.ts` is the one place any consequence
+  takes effect; `state.ts` and `reads.ts` are what the mechanics share; `boss.ts`,
+  `demands.ts`, `find-out.ts`, `notebook.ts`, `over-head.ts`, `project.ts` and
+  `scenes.ts` are mechanics of their own; `to-view.ts` builds the player view, and
+  `to-results.ts` its reveal at the end. `src/engine/content.ts` holds the content
   schema, and `src/engine/content-checks.ts` holds the checks: it parses data against
   the schema and checks it across files.
 - `src/tower/` draws the tower and holds no rules.

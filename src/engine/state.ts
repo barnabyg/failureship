@@ -8,6 +8,10 @@ import type {
 } from "./content";
 import type { DealtCharacter, PowerMap } from "./deal";
 
+export class IllegalChoiceError extends Error {
+  override name = "IllegalChoiceError";
+}
+
 export interface HiddenTruth {
   characters: DealtCharacter[];
   powerMap: PowerMap;

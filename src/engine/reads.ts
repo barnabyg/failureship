@@ -2,6 +2,7 @@ import type { Condition, Content, Kind, Mood, SceneData } from "./content";
 import type { PowerMap } from "./deal";
 import { calledBy, sayPeople } from "./say";
 import type { State, World } from "./state";
+import type { Person } from "./view";
 
 export function inMonth(
   item: { months?: number[] | undefined },
@@ -175,4 +176,9 @@ export function remaining(state: State, content: Content): number {
 
 export function costOf(content: Content, key: string | undefined): number {
   return key === undefined ? 0 : (content.balance.actionCosts[key] ?? 0);
+}
+
+export function personOf(content: Content, id: string): Person {
+  const known = content.characters.find((c) => c.id === id);
+  return { id, name: known?.name ?? id, title: known?.title ?? "" };
 }

@@ -3,17 +3,6 @@ import { bossKindOf, inTurn, moodOf } from "./reads";
 import { pickWeighted } from "./rng";
 import type { State, World } from "./state";
 
-/** Moves the boss's opinion, and keeps that for the results screen. */
-export function shiftBossOpinion(
-  state: State,
-  shift: number,
-  choice: string,
-): void {
-  if (shift === 0) return;
-  state.truth.bossOpinion += shift;
-  state.bossLandings.push({ month: state.month, choice, shift });
-}
-
 /**
  * Moves the boss's opinion by what the choice says, and by how this kind of
  * boss takes its approach. Returns the sign of that, if it has one.

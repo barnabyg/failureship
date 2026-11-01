@@ -1,0 +1,123 @@
+import { MOVE_FAMILIES, type Content } from "./content";
+import { bossKindOf, moodAt, moodOf, personOf } from "./reads";
+import type { State } from "./state";
+import type { StepView } from "./view";
+
+/** The reveal. It reaches the player view only here, once the run has ended. */
+export function toResultsView(
+  state: State,
+  content: Content,
+): Extract<StepView, { kind: "results" }> {
+  const nameOf = (id: string) =>
+    content.characters.find((c) => c.id === id)?.name ?? id;
+  const { order, influence } = state.truth.powerMap;
+  return {
+    kind: "results",
+    ...content.ui.results,
+    characters: state.truth.characters.map((dealt) => {
+      const known = content.characters.find((c) => c.id === dealt.id);
+      return {
+        name: known?.name ?? dealt.id,
+        title: known?.title ?? "",
+        kind: content.hiddenTruth.kinds[dealt.kind].label,
+        fact: dealt.fact?.text ?? null,
+      };
+    }),
+    powerMap: order.map((id) => {
+      const above = influence.find((i) => i.over === id);
+      return {
+        name: nameOf(id),
+        title: content.characters.find((c) => c.id === id)?.title ?? "",
+        reportsTo: above ? nameOf(above.who) : null,
+      };
+    }),
+    marks: state.truth.characters.map((dealt) => {
+      const mark = state.marks.get(dealt.id) ?? null;
+      const { kinds } = content.hiddenTruth;
+      return {
+        name: nameOf(dealt.id),
+        title: personOf(content, dealt.id).title,
+        mark: mark === null ? null : kinds[mark].label,
+        truth: kinds[dealt.kind].label,
+        correct: mark === dealt.kind,
+      };
+    }),
+    clues: state.clues.map(({ month, source, text, verdict }) => ({
+      month,
+      source,
+      text,
+      verdict: content.ui.clueVerdicts[verdict],
+    })),
+    factEvents: state.factEvents,
+    boss: toBossResults(state, content),
+    played: MOVE_FAMILIES.flatMap((id) => {
+      const written = content.families?.[id];
+      return written
+        ? [
+            {
+              family: written.label,
+              note: written.note,
+              count: state.played[id] ?? 0,
+            },
+          ]
+        : [];
+    }),
+    claims: state.claims.map((claim) => {
+      const { label, note } = content.sources.verdicts[claim.status];
+      const said = state.truth.characters.find((c) => c.id === claim.source);
+      const motive = content.sources.motives.find((m) => m.id === said?.motive);
+      const source = nameOf(claim.source);
+      return {
+        month: claim.month,
+        source,
+        text: claim.text,
+        verdict: label,
+        note,
+        motive: (motive?.text ?? "").replaceAll("{name}", source),
+      };
+    }),
+  };
+}
+
+function toBossResults(
+  state: State,
+  content: Content,
+): Extract<StepView, { kind: "results" }>["boss"] {
+  const { warmer, cooler, unmoved } = content.ui.bossLanded;
+  const { name, title } = personOf(content, content.boss.character);
+  return {
+    name,
+    title,
+    kind: content.hiddenTruth.kinds[bossKindOf(state, content)].label,
+    // Missing the Scene does not spare the player: the verdict is given anyway.
+    verdict:
+      state.verdict ??
+      content.scenes.find((s) => s.verdict)?.verdict?.[
+        moodOf(state, content)
+      ] ??
+      null,
+    choices: state.bossLandings.map(({ month, choice, shift }) => ({
+      month,
+      choice,
+      landed: shift > 0 ? warmer : shift < 0 ? cooler : unmoved,
+    })),
+    head: toHeadResults(state, content),
+  };
+}
+
+/** What the boss's boss really made of the player. It says no number. */
+function toHeadResults(
+  state: State,
+  content: Content,
+): Extract<StepView, { kind: "results" }>["boss"]["head"] {
+  const written = content.overHead;
+  const dealt = state.truth.characters.find((c) => c.id === written?.character);
+  if (!written || !dealt) return null;
+  const { name, title } = personOf(content, dealt.id);
+  return {
+    name,
+    title,
+    kind: content.hiddenTruth.kinds[dealt.kind].label,
+    verdict: written.verdict[moodAt(state.truth.headOpinion, written.opinion)],
+  };
+}
