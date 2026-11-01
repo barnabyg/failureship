@@ -21,7 +21,8 @@
         "cost": "pub",
         "sets": ["went-to-pub"],
         "dialog": "pub",
-        "learns": ["strategic-patience"]
+        "learns": ["strategic-patience"],
+        "opinion": 1
       }
     ]
   }

@@ -80,6 +80,7 @@ format, the page shows what is wrong instead of the game.
 | `moves.json`          | Character Moves, and when each can land                                 |
 | `official-story.json` | The official story, assembled from entries according to what you did    |
 | `behaviours.json`     | What Characters can be seen doing, and how likely each kind is to do it |
+| `boss.json`           | Who your boss is, and the signs of how they treat you                   |
 | `characters.json`     | Names, public job titles and who reports to whom on the Org Chart       |
 | `hidden-truth.json`   | The rules of the deal: kinds, their weights, and the Hidden Facts       |
 | `balance.json`        | Actions a month, months in a run and the cost of each choice            |
@@ -100,6 +101,12 @@ A behaviour says `{who}`, and is written for a kind of person, never a named one
 When a Scene opens, each person present shows one, chosen by their dealt kind. Its
 `likelihood` gives the weight for each kind. Every behaviour must be possible from
 at least two kinds, with different likelihoods, or the game will not start.
+
+A choice can carry `"opinion": 1` or `-1` to move your boss's hidden opinion of you.
+The opinion has no number on screen. It shows only through `boss.json`: when the boss
+is in a Scene, one sign is picked using the `likelihood` for how the opinion stands,
+which `balance.json` sets with `warmAt` and `coldAt`. Every sign must be possible from
+at least two of `warm`, `neutral` and `cold`, so that no sign settles it.
 
 A Hidden Fact says `{name}`, so that it reads correctly for whoever is dealt it,
 and can list `"characters"` to limit who that can be.

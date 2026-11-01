@@ -64,6 +64,8 @@ export type StepView =
       cast: { name: string; title: string }[];
       signs: { label: string; text: string }[];
       behaviours: { who: string; text: string }[];
+      /** How the boss treats the player, if the boss is in the room. */
+      treatment: string | null;
       options: { id: string; label: string }[];
     }
   | { kind: "notice"; title: string; body: string }

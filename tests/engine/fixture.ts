@@ -7,6 +7,7 @@ interface RawOption {
   dialog?: string;
   learns?: string[];
   sets?: string[];
+  opinion?: number;
   result?: { title: string; body: string };
 }
 
@@ -25,7 +26,12 @@ interface RawSceneOption {
   id: string;
   label: string;
   requires?: RawCondition;
-  results: { when?: RawCondition; body: string; sets?: string[] }[];
+  results: {
+    when?: RawCondition;
+    body: string;
+    sets?: string[];
+    opinion?: number;
+  }[];
 }
 
 interface RawScene {
@@ -89,6 +95,15 @@ export function fixtureRaw() {
       actionsPerMonth: 3,
       monthsPerRun: 2,
       actionCosts: { standard: 1, report: 1, pub: 1 } as Record<string, number>,
+      opinion: { warmAt: 1, coldAt: -1 },
+    },
+    boss: {
+      character: "ana",
+      signs: [] as {
+        id: string;
+        text: string;
+        likelihood: { warm: number; neutral: number; cold: number };
+      }[],
     },
     hiddenTruth: {
       kinds: {

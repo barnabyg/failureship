@@ -202,6 +202,14 @@ export function StepPanel({ view, onChoose }: StepPanelProps) {
               )}
             </div>
             <div>
+              {step.treatment !== null && (
+                <>
+                  <h3>{panelText.treatmentHeading}</h3>
+                  <p className="signs" data-testid="treatment">
+                    {step.treatment}
+                  </p>
+                </>
+              )}
               <h3>{panelText.optionsHeading}</h3>
               <div className="options">
                 {step.options.map((option) => (

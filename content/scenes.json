@@ -27,13 +27,17 @@
         "label": "Agree warmly with Hugh",
         "results": [
           {
-            "when": { "holderIs": "head" },
+            "when": {
+              "holderIs": "head"
+            },
             "body": "Hugh does not look at you. The next agenda has your name on it, spelled correctly, and people start holding doors.",
-            "sets": ["backed-holder"]
+            "sets": ["backed-holder"],
+            "opinion": -2
           },
           {
             "body": "Hugh thanks you, using the name of someone who left in March. Several people make a note of that, and of you.",
-            "sets": ["backed-wrong-person"]
+            "sets": ["backed-wrong-person"],
+            "opinion": -2
           }
         ]
       },
@@ -42,13 +46,17 @@
         "label": "Agree warmly with Dennis, your boss",
         "results": [
           {
-            "when": { "holderIs": "boss" },
+            "when": {
+              "holderIs": "boss"
+            },
             "body": "Dennis nods at you, as one might nod at a useful chair. Afterwards Dennis uses your first name, and it is nearly correct.",
-            "sets": ["backed-holder"]
+            "sets": ["backed-holder"],
+            "opinion": 2
           },
           {
             "body": "Dennis is delighted and says so. Nobody else looks up. Your agreement with your official boss has been noted by your official boss.",
-            "sets": ["backed-wrong-person"]
+            "sets": ["backed-wrong-person"],
+            "opinion": 2
           }
         ]
       },
@@ -57,13 +65,17 @@
         "label": "Agree warmly with Priya",
         "results": [
           {
-            "when": { "holderIs": "analyst" },
+            "when": {
+              "holderIs": "analyst"
+            },
             "body": "Priya writes your name down. It is the first time anyone here has. Two people notice, and one of them passes you a biscuit.",
-            "sets": ["backed-holder"]
+            "sets": ["backed-holder"],
+            "opinion": -1
           },
           {
             "body": "Priya thanks you for your input, in the voice kept for people who have not given any. The meeting carries on, as though a window had briefly rattled.",
-            "sets": ["backed-wrong-person"]
+            "sets": ["backed-wrong-person"],
+            "opinion": -1
           }
         ]
       },
@@ -72,7 +84,9 @@
         "label": "Agree warmly with Marjorie",
         "results": [
           {
-            "when": { "holderIs": "admin" },
+            "when": {
+              "holderIs": "admin"
+            },
             "body": "Marjorie looks at you over the top of the reading glasses for some time. The next morning your broken chair has been replaced. No ticket was raised.",
             "sets": ["backed-holder"]
           },
@@ -87,7 +101,9 @@
         "label": "Agree warmly with Callum",
         "results": [
           {
-            "when": { "holderIs": "projects" },
+            "when": {
+              "holderIs": "projects"
+            },
             "body": "Callum makes a small note and does not look up. By Thursday a project you had never heard of has your name on the good half of it.",
             "sets": ["backed-holder"]
           },
@@ -100,16 +116,22 @@
       {
         "id": "use-buzzword",
         "label": "Suggest that what this calls for is strategic patience",
-        "requires": { "hasBuzzword": "strategic-patience" },
+        "requires": {
+          "hasBuzzword": "strategic-patience"
+        },
         "results": [
           {
-            "when": { "holderIs": "boss" },
+            "when": {
+              "holderIs": "boss"
+            },
             "body": "Dennis looks pleased, then alarmed, then pleased to have thought of it first. By lunchtime the phrase is in the minutes, credited to the team.",
-            "sets": ["used-buzzword"]
+            "sets": ["used-buzzword"],
+            "opinion": 1
           },
           {
             "body": "There is a silence, of the respectful kind. You are asked to say more. You say the same thing again, more slowly. You have been asked to lead a working group on it.",
-            "sets": ["used-buzzword"]
+            "sets": ["used-buzzword"],
+            "opinion": 1
           }
         ]
       },

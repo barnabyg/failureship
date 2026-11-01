@@ -1,4 +1,4 @@
-import type { Condition, Content, SceneData } from "./content";
+import type { Condition, Content, Mood, SceneData } from "./content";
 import {
   dealCharacters,
   dealPowerMap,
@@ -19,6 +19,8 @@ import type {
 export interface HiddenTruth {
   characters: DealtCharacter[];
   powerMap: PowerMap;
+  /** Moved by the player's choices. Shown only through how the boss behaves. */
+  bossOpinion: number;
 }
 
 /** Custom behaviour for a Scene: reshapes its data for the current truth. */
@@ -44,7 +46,12 @@ type Step =
   | { kind: "notification"; id: string }
   | { kind: "dialog"; id: string; learned: string[] }
   | { kind: "actions" }
-  | { kind: "scene"; id: string; shown: ShownBehaviour[] }
+  | {
+      kind: "scene";
+      id: string;
+      shown: ShownBehaviour[];
+      treatment: string | null;
+    }
   | { kind: "notice"; title: string; body: string }
   | { kind: "move"; id: string }
   | { kind: "story" }
@@ -112,7 +119,11 @@ export function startRun(options: {
     ...freshMonth(content, 1),
     buzzwords: [],
     step: { kind: "actions" },
-    truth: { characters: dealt.characters, powerMap: power.powerMap },
+    truth: {
+      characters: dealt.characters,
+      powerMap: power.powerMap,
+      bossOpinion: 0,
+    },
   };
   state.step = nextStep(state, world);
 
@@ -207,6 +218,7 @@ function answerNotification(
   const learned = option.learns.filter((w) => !state.buzzwords.includes(w));
   state.buzzwords.push(...learned);
   state.flags.push(...option.sets);
+  state.truth.bossOpinion += option.opinion;
 
   if (option.dialog !== undefined) {
     state.step = { kind: "dialog", id: option.dialog, learned };
@@ -221,8 +233,9 @@ function answerNotification(
 function openScene(state: State, world: World, id: string): Step {
   const { behaviours } = world.content;
   const shown: ShownBehaviour[] = [];
+  const { cast } = sceneData(state, world, id);
   if (behaviours.length > 0) {
-    for (const character of sceneData(state, world, id).cast) {
+    for (const character of cast) {
       const kind = state.truth.characters.find((c) => c.id === character)?.kind;
       if (kind === undefined) continue;
       const chosen = pickWeighted(
@@ -234,7 +247,27 @@ function openScene(state: State, world: World, id: string): Step {
       shown.push({ character, behaviour: chosen.item.id });
     }
   }
-  return { kind: "scene", id, shown };
+  return { kind: "scene", id, shown, treatment: treatBoss(state, world, cast) };
+}
+
+function moodOf(state: State, content: Content): Mood {
+  const { warmAt, coldAt } = content.balance.opinion;
+  if (state.truth.bossOpinion >= warmAt) return "warm";
+  return state.truth.bossOpinion <= coldAt ? "cold" : "neutral";
+}
+
+/** If the boss is present, one sign of how they treat the player. */
+function treatBoss(
+  state: State,
+  { content }: World,
+  cast: readonly string[],
+): string | null {
+  const { character, signs } = content.boss;
+  if (signs.length === 0 || !cast.includes(character)) return null;
+  const mood = moodOf(state, content);
+  const chosen = pickWeighted(state.rng, signs, (s) => s.likelihood[mood]);
+  state.rng = chosen.next;
+  return chosen.item.id;
 }
 
 function behaveInScene(
@@ -243,14 +276,15 @@ function behaveInScene(
   choice: Extract<Choice, { type: "scene" }>,
 ): void {
   const scene = sceneData(state, world, choice.sceneId);
-  const option = offeredOptions(state, scene).find(
+  const option = offeredOptions(state, world.content, scene).find(
     (o) => o.id === choice.optionId,
   );
   const result = option?.results.find((r) =>
-    matches(state, r.when, scene.cast),
+    matches(state, world.content, r.when, scene.cast),
   );
   if (!result) throw new IllegalChoiceError(choice.optionId);
   state.flags.push(...result.sets);
+  state.truth.bossOpinion += result.opinion;
   state.step = {
     kind: "notice",
     title: scene.title,
@@ -270,6 +304,7 @@ function rolesIn(powerMap: PowerMap, room?: readonly string[]) {
 
 function matches(
   state: State,
+  content: Content,
   condition: Condition | undefined,
   room?: readonly string[],
 ): boolean {
@@ -277,16 +312,19 @@ function matches(
   if ("holderIs" in condition) {
     return condition.holderIs === rolesIn(state.truth.powerMap, room).holder;
   }
+  if ("opinionIs" in condition) {
+    return condition.opinionIs === moodOf(state, content);
+  }
   if ("hasBuzzword" in condition) {
     return state.buzzwords.includes(condition.hasBuzzword);
   }
   if ("flag" in condition) return state.flags.includes(condition.flag);
-  if ("not" in condition) return !matches(state, condition.not, room);
-  return condition.all.every((inner) => matches(state, inner, room));
+  if ("not" in condition) return !matches(state, content, condition.not, room);
+  return condition.all.every((inner) => matches(state, content, inner, room));
 }
 
-function offeredOptions(state: State, scene: SceneData) {
-  return scene.options.filter((o) => matches(state, o.requires));
+function offeredOptions(state: State, content: Content, scene: SceneData) {
+  return scene.options.filter((o) => matches(state, content, o.requires));
 }
 
 function sceneData(state: State, world: World, id: string): SceneData {
@@ -335,7 +373,7 @@ function landMove(state: State, content: Content): Step | null {
   if (state.moveLanded) return null;
   state.moveLanded = true;
   const eligible = content.moves.filter(
-    (m) => inMonth(m, state.month) && matches(state, m.when),
+    (m) => inMonth(m, state.month) && matches(state, content, m.when),
   );
   if (eligible.length === 0) return null;
   const { item, next } = pick(state.rng, eligible);
@@ -384,13 +422,15 @@ function legalChoices(state: State, world: World): Choice[] {
         .filter((a) => isAvailable(state, content, a))
         .map((a) => ({ type: "action", actionId: a.id }));
     case "scene":
-      return offeredOptions(state, sceneData(state, world, step.id)).map(
-        (o) => ({
-          type: "scene",
-          sceneId: step.id,
-          optionId: o.id,
-        }),
-      );
+      return offeredOptions(
+        state,
+        content,
+        sceneData(state, world, step.id),
+      ).map((o) => ({
+        type: "scene",
+        sceneId: step.id,
+        optionId: o.id,
+      }));
     case "dialog":
     case "notice":
     case "move":
@@ -419,7 +459,7 @@ function notificationOptions(
 function toSceneView(
   state: State,
   world: World,
-  { id, shown }: Extract<Step, { kind: "scene" }>,
+  { id, shown, treatment }: Extract<Step, { kind: "scene" }>,
 ): Extract<StepView, { kind: "scene" }> {
   const { content } = world;
   const scene = sceneData(state, world, id);
@@ -443,7 +483,8 @@ function toSceneView(
       const written = content.behaviours.find((b) => b.id === behaviour);
       return { who, text: (written?.text ?? "").replaceAll("{who}", who) };
     }),
-    options: offeredOptions(state, scene).map((o) => ({
+    treatment: content.boss.signs.find((s) => s.id === treatment)?.text ?? null,
+    options: offeredOptions(state, content, scene).map((o) => ({
       id: o.id,
       label: fill(o.label),
     })),
@@ -456,7 +497,7 @@ function toStoryView(
 ): Extract<StepView, { kind: "story" }> {
   const { title, reportedHeading, happenedHeading, entries } =
     content.officialStory;
-  const told = entries.filter((e) => matches(state, e.when));
+  const told = entries.filter((e) => matches(state, content, e.when));
   const fill = (written: string | undefined) =>
     written === undefined ? [] : [fillRoles(state, content, written)];
   return {

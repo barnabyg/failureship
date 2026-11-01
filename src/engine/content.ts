@@ -8,6 +8,9 @@ const notice = z.strictObject({ title: text, body: text });
 /** Flags record what the player did, for later conditions to read. */
 const sets = z.array(id).default([]);
 
+/** How far this moves the boss's hidden opinion of the player. */
+const opinion = z.number().int().default(0);
+
 const notificationOption = z.strictObject({
   id,
   label: text,
@@ -15,6 +18,7 @@ const notificationOption = z.strictObject({
   dialog: id.optional(),
   learns: z.array(id).default([]),
   sets,
+  opinion,
   result: notice.optional(),
 });
 
@@ -38,10 +42,14 @@ const dialog = z.strictObject({
 
 const buzzword = z.strictObject({ id, term: text, meaning: text });
 
+export const MOODS = ["warm", "neutral", "cold"] as const;
+export type Mood = (typeof MOODS)[number];
+
 export type Condition =
   | { holderIs: string }
   | { hasBuzzword: string }
   | { flag: string }
+  | { opinionIs: Mood }
   | { not: Condition }
   | { all: Condition[] };
 
@@ -50,6 +58,7 @@ const condition: z.ZodType<Condition> = z.lazy(() =>
     z.strictObject({ holderIs: id }),
     z.strictObject({ hasBuzzword: id }),
     z.strictObject({ flag: id }),
+    z.strictObject({ opinionIs: z.enum(MOODS) }),
     z.strictObject({ not: condition }),
     z.strictObject({ all: z.array(condition).min(1) }),
   ]),
@@ -59,6 +68,7 @@ const sceneResult = z.strictObject({
   when: condition.optional(),
   body: text,
   sets,
+  opinion,
 });
 
 const sceneOption = z.strictObject({
@@ -149,11 +159,32 @@ const behaviour = z.strictObject({
   }),
 });
 
+const bossSign = z.strictObject({
+  id,
+  text,
+  /** How likely each opinion is to show this, relative to its other signs. */
+  likelihood: z.strictObject({
+    warm: z.number().nonnegative(),
+    neutral: z.number().nonnegative(),
+    cold: z.number().nonnegative(),
+  }),
+});
+
 const contentSchema = z.strictObject({
   balance: z.strictObject({
     actionsPerMonth: z.number().int().positive(),
     monthsPerRun: z.number().int().positive(),
     actionCosts: z.record(id, z.number().int().nonnegative()),
+    /** The hidden opinion at which the boss's treatment changes. */
+    opinion: z.strictObject({
+      warmAt: z.number().int().positive(),
+      coldAt: z.number().int().negative(),
+    }),
+  }),
+  boss: z.strictObject({
+    /** Whose opinion of the player is tracked. */
+    character: id,
+    signs: z.array(bossSign),
   }),
   hiddenTruth: z.strictObject({
     kinds: z.strictObject({
@@ -243,7 +274,7 @@ export function parseContent(raw: unknown): Content {
 
 /** Showing or hiding an option on this would tell the player the truth. */
 function dependsOnHiddenTruth(condition: Condition): boolean {
-  if ("holderIs" in condition) return true;
+  if ("holderIs" in condition || "opinionIs" in condition) return true;
   if ("not" in condition) return dependsOnHiddenTruth(condition.not);
   if ("all" in condition) return condition.all.some(dependsOnHiddenTruth);
   return false;
@@ -336,6 +367,36 @@ function findBrokenBehaviours(content: Content): string[] {
   return problems;
 }
 
+/** The boss's signs must point somewhere without ever settling it. */
+function findBrokenBossSigns(content: Content): string[] {
+  const { character, signs } = content.boss;
+  const problems: string[] = [];
+  if (!content.characters.some((c) => c.id === character)) {
+    problems.push(`The boss names unknown Character "${character}".`);
+  }
+  for (const sign of signs) {
+    const owner = `Boss sign "${sign.id}"`;
+    for (const [, token] of sign.text.matchAll(/\{(\w+)\}/g)) {
+      problems.push(`${owner} uses unknown token "{${token ?? ""}}".`);
+    }
+    const likelihoods = Object.values(sign.likelihood);
+    if (likelihoods.filter((l) => l > 0).length < 2) {
+      problems.push(`${owner} can come from only one opinion.`);
+    }
+    if (new Set(likelihoods).size === 1) {
+      problems.push(`${owner} gives no evidence: every opinion is as likely.`);
+    }
+  }
+  if (signs.length > 0) {
+    for (const mood of MOODS) {
+      if (signs.every((s) => s.likelihood[mood] === 0)) {
+        problems.push(`No boss sign can show a ${mood} opinion.`);
+      }
+    }
+  }
+  return problems;
+}
+
 function findBrokenReferences(content: Content): string[] {
   const rooms = new Set(content.floor.rooms.map((r) => r.id));
   const dialogs = new Set(content.dialogs.map((d) => d.id));
@@ -384,6 +445,7 @@ function findBrokenReferences(content: Content): string[] {
 
   problems.push(...findBrokenDeal(content, characters));
   problems.push(...findBrokenBehaviours(content));
+  problems.push(...findBrokenBossSigns(content));
   for (const a of content.actions) {
     if (!rooms.has(a.place)) {
       problems.push(`Action "${a.id}" is at unknown place "${a.place}".`);
