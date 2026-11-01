@@ -1,11 +1,11 @@
 {
   "actionsPerMonth": 3,
-  "monthsPerRun": 6,
+  "monthsPerRun": 9,
   "actionCosts": {
     "standard": 1,
     "report": 1,
     "pub": 1
   },
   "signsMisleadChance": 0.2,
-  "opinion": { "warmAt": 2, "coldAt": -2 }
+  "opinion": { "warmAt": 5, "coldAt": -5, "keeps": 0.5 }
 }

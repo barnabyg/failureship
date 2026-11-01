@@ -80,6 +80,8 @@ export type StepView =
       }[];
       /** How the boss treats the player, if the boss is in the room. */
       treatment: string | null;
+      /** The same of the boss's boss, if they are in the room. */
+      headTreatment: string | null;
       options: { id: string; label: string }[];
     }
   | {
@@ -136,7 +138,16 @@ export type StepView =
         kind: string;
         verdict: string | null;
         choices: { month: number; choice: string; landed: string }[];
+        /** Your boss's boss's true kind, and what they really made of you. */
+        head: {
+          name: string;
+          title: string;
+          kind: string;
+          verdict: string;
+        } | null;
       };
+      /** How the player played, by family of Move. */
+      played: { family: string; note: string; count: number }[];
       claims: {
         month: number;
         source: string;

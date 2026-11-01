@@ -20,7 +20,7 @@ async function treatmentAfter(page: Page, seed: number, option: string) {
 
 test("the boss treats you differently after a choice", async ({ page }) => {
   const changed: number[] = [];
-  for (const seed of [1, 2, 3, 4, 5]) {
+  for (const seed of [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]) {
     const pleased = await treatmentAfter(page, seed, "back-boss");
     const snubbed = await treatmentAfter(page, seed, "back-head");
     if (pleased !== snubbed) changed.push(seed);

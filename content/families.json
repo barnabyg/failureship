@@ -1,0 +1,30 @@
+{
+  "impress": {
+    "label": "Impress",
+    "note": "Things done so that somebody would see them being done."
+  },
+  "fabricate": {
+    "label": "Fabricate",
+    "note": "Things that are now true, in the sense of being written down."
+  },
+  "trade": {
+    "label": "Trade",
+    "note": "Things given to people who might one day be useful."
+  },
+  "find-out": {
+    "label": "Find Out",
+    "note": "Time spent learning things that may not be so."
+  },
+  "deflect": {
+    "label": "Deflect",
+    "note": "Things that were about to be yours, and then were not."
+  },
+  "attack": {
+    "label": "Attack",
+    "note": "Things done to colleagues, supportively."
+  },
+  "deliver": {
+    "label": "Deliver",
+    "note": "Actual work. It is on file that this was done, somewhere."
+  }
+}

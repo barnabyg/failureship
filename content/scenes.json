@@ -25,6 +25,7 @@
     "options": [
       {
         "id": "back-head",
+        "family": "impress",
         "label": "Agree warmly with your boss's boss",
         "results": [
           {
@@ -32,11 +33,13 @@
               "holderIs": "head"
             },
             "body": "Your boss's boss does not look at you. The next agenda has your name on it, spelled correctly, and people start holding doors.",
+            "headOpinion": 1,
             "sets": ["backed-holder"],
             "approach": "over-head"
           },
           {
             "body": "Your boss's boss thanks you, using the name of someone who left in March. Several people make a note of that, and of you.",
+            "headOpinion": 1,
             "sets": ["backed-wrong-person"],
             "approach": "over-head"
           }
@@ -44,6 +47,7 @@
       },
       {
         "id": "back-boss",
+        "family": "impress",
         "label": "Agree warmly with your boss",
         "results": [
           {
@@ -63,6 +67,7 @@
       },
       {
         "id": "back-analyst",
+        "family": "impress",
         "label": "Agree warmly with the Senior Analyst",
         "results": [
           {
@@ -82,6 +87,7 @@
       },
       {
         "id": "back-admin",
+        "family": "impress",
         "label": "Agree warmly with the Office Co-ordinator",
         "results": [
           {
@@ -99,6 +105,7 @@
       },
       {
         "id": "back-projects",
+        "family": "impress",
         "label": "Agree warmly with the Project Co-ordinator",
         "results": [
           {
@@ -116,6 +123,7 @@
       },
       {
         "id": "use-buzzword",
+        "family": "impress",
         "label": "Suggest that what this calls for is strategic patience",
         "requires": {
           "hasBuzzword": "strategic-patience"
@@ -172,6 +180,7 @@
     "options": [
       {
         "id": "blame-callum",
+        "family": "deflect",
         "label": "Say that the delay began with the Project Co-ordinator",
         "results": [
           {
@@ -196,6 +205,7 @@
       },
       {
         "id": "blame-priya",
+        "family": "deflect",
         "label": "Say that the delay began with the Senior Analyst",
         "results": [
           {
@@ -220,6 +230,7 @@
       },
       {
         "id": "blame-marjorie",
+        "family": "deflect",
         "label": "Say that the delay began with the Office Co-ordinator",
         "results": [
           {
@@ -244,6 +255,7 @@
       },
       {
         "id": "take-the-blame",
+        "family": "deliver",
         "label": "Say that it was your fault",
         "results": [
           {
@@ -255,6 +267,7 @@
       },
       {
         "id": "blame-supplier",
+        "family": "deflect",
         "label": "Say that it was the supplier",
         "results": [
           {
@@ -266,6 +279,7 @@
       },
       {
         "id": "use-abolished-post",
+        "family": "attack",
         "about": "abolished-post",
         "label": "Mention to {subject}, quietly, the reorganisation of two years ago",
         "results": [
@@ -288,6 +302,7 @@
       },
       {
         "id": "use-values-statement",
+        "family": "attack",
         "about": "values-statement",
         "label": "Quote the values statement at {subject}, with a small smile",
         "results": [
@@ -309,6 +324,7 @@
       },
       {
         "id": "use-lost-list",
+        "family": "attack",
         "about": "lost-list",
         "label": "Tell {subject} that you could help look for a certain list",
         "results": [
@@ -331,6 +347,7 @@
       },
       {
         "id": "use-competitor-offer",
+        "family": "attack",
         "about": "competitor-offer",
         "label": "Ask {subject} how things are looking at the competition",
         "results": [
@@ -375,6 +392,7 @@
     "options": [
       {
         "id": "ask-proudest",
+        "family": "impress",
         "label": "Type a question: which of your decisions are you most proud of?",
         "results": [
           {
@@ -382,17 +400,20 @@
               "flag": "sat-at-front"
             },
             "body": "The Chief Executive reads it out, delighted, and talks for eleven minutes. Afterwards three people you have never met know your name. Your boss is one of the people who has noticed.",
+            "headOpinion": 1,
             "sets": ["asked-the-question"],
             "opinion": 1
           },
           {
             "body": "Your question goes into a queue with four hundred others. It is answered in writing, by a chatbot, in March.",
+            "headOpinion": 1,
             "sets": ["asked-the-question"]
           }
         ]
       },
       {
         "id": "sit-by-head",
+        "family": "impress",
         "label": "Sit next to your boss's boss and nod along",
         "results": [
           {
@@ -400,11 +421,13 @@
               "holderIs": "head"
             },
             "body": "Your boss's boss glances at you when the screen freezes, and shrugs, as one shrugs to a colleague. You have not been shrugged at by this floor before.",
+            "headOpinion": 1,
             "sets": ["backed-holder"],
             "opinion": -1
           },
           {
             "body": "You nod throughout. Your boss's boss is looking at a phone. You have nodded at a video of a stranger for forty minutes, and been seen doing it.",
+            "headOpinion": 1,
             "sets": ["backed-wrong-person"],
             "opinion": -1
           }
@@ -412,6 +435,7 @@
       },
       {
         "id": "sit-by-boss",
+        "family": "impress",
         "label": "Sit next to your boss and laugh at the right moments",
         "results": [
           {
@@ -431,6 +455,7 @@
       },
       {
         "id": "sit-by-priya",
+        "family": "impress",
         "label": "Sit next to the Senior Analyst and share the notes",
         "results": [
           {
@@ -448,6 +473,7 @@
       },
       {
         "id": "north-star-town-hall",
+        "family": "impress",
         "label": "Remark to the room that it is good to have a north star",
         "requires": {
           "hasBuzzword": "north-star"
@@ -495,6 +521,7 @@
     "options": [
       {
         "id": "cut-callum",
+        "family": "attack",
         "label": "Propose cutting the Project Co-ordinator's project",
         "results": [
           {
@@ -512,6 +539,7 @@
           },
           {
             "body": "The Project Co-ordinator's project is reduced to a small working group, consisting of the Project Co-ordinator. You have saved nine per cent.",
+            "project": { "real": "worse" },
             "sets": ["cut-a-colleague"],
             "approach": "blame"
           }
@@ -519,6 +547,7 @@
       },
       {
         "id": "cut-marjorie",
+        "family": "attack",
         "label": "Propose cutting the Office Co-ordinator's office budget",
         "results": [
           {
@@ -543,6 +572,7 @@
       },
       {
         "id": "hire-consultant",
+        "family": "impress",
         "label": "Propose bringing in a consultant to find the savings",
         "results": [
           {
@@ -554,10 +584,12 @@
       },
       {
         "id": "cut-yourself",
+        "family": "deliver",
         "label": "Offer to cut your own work",
         "results": [
           {
             "body": "Everyone is very moved. Your work is cut. You are still expected to do it, but now without the budget.",
+            "project": { "real": "worse" },
             "sets": ["cut-own-work"],
             "approach": "ownership"
           }
@@ -565,6 +597,7 @@
       },
       {
         "id": "single-source-budget",
+        "family": "deflect",
         "label": "Say that this needs a single source of truth first",
         "requires": {
           "hasBuzzword": "single-source-of-truth"
@@ -579,6 +612,7 @@
       },
       {
         "id": "use-abolished-post-budget",
+        "family": "attack",
         "about": "abolished-post",
         "label": "Mention to {subject}, quietly, the reorganisation of two years ago",
         "results": [
@@ -601,6 +635,7 @@
       },
       {
         "id": "use-values-statement-budget",
+        "family": "attack",
         "about": "values-statement",
         "label": "Quote the values statement at {subject}, with a small smile",
         "results": [
@@ -622,6 +657,7 @@
       },
       {
         "id": "use-lost-list-budget",
+        "family": "attack",
         "about": "lost-list",
         "label": "Tell {subject} that you could help look for a certain list",
         "results": [
@@ -644,6 +680,7 @@
       },
       {
         "id": "use-competitor-offer-budget",
+        "family": "attack",
         "about": "competitor-offer",
         "label": "Ask {subject} how things are looking at the competition",
         "results": [
@@ -688,6 +725,7 @@
     "options": [
       {
         "id": "credit-boss",
+        "family": "impress",
         "label": "Say that your team's arrow is all down to your boss",
         "results": [
           {
@@ -707,6 +745,7 @@
       },
       {
         "id": "credit-head",
+        "family": "impress",
         "label": "Say that the arrow is all down to your boss's boss",
         "results": [
           {
@@ -714,11 +753,13 @@
               "holderIs": "head"
             },
             "body": "Your boss's boss does not acknowledge it, in the way of someone who has heard it before and expects to again. The next slide is taken more quickly.",
+            "headOpinion": 1,
             "sets": ["backed-holder"],
             "approach": "over-head"
           },
           {
             "body": "Your boss's boss looks up, puzzled, and says that it is a team effort. You have gone a long way round to say nothing.",
+            "headOpinion": 1,
             "sets": ["backed-wrong-person"],
             "approach": "over-head"
           }
@@ -726,6 +767,7 @@
       },
       {
         "id": "bigger-arrow",
+        "family": "fabricate",
         "label": "Offer to make the arrow steeper for next quarter",
         "results": [
           {
@@ -737,10 +779,12 @@
       },
       {
         "id": "show-the-figures",
+        "family": "deliver",
         "label": "Say that the figures do not show an arrow",
         "results": [
           {
             "body": "You put the figures on the screen. They go along, and slightly down. There is a pause, and someone asks whether this has been through the proper process.",
+            "headOpinion": 1,
             "sets": ["showed-figures"],
             "approach": "truth"
           }
@@ -748,6 +792,7 @@
       },
       {
         "id": "single-source-quarter",
+        "family": "deflect",
         "label": "Say that this needs a single source of truth first",
         "requires": {
           "hasBuzzword": "single-source-of-truth"
@@ -794,6 +839,7 @@
     "options": [
       {
         "id": "make-it-amber",
+        "family": "fabricate",
         "label": "Make it amber, and add a footnote",
         "results": [
           {
@@ -808,6 +854,7 @@
       },
       {
         "id": "tell-the-truth",
+        "family": "deliver",
         "label": "Tell them the chart is right",
         "results": [
           {
@@ -819,6 +866,7 @@
       },
       {
         "id": "blame-priyas-figures",
+        "family": "deflect",
         "label": "Say that the Senior Analyst's figures must be wrong",
         "results": [
           {
@@ -846,6 +894,7 @@
       },
       {
         "id": "ask-hugh",
+        "family": "deflect",
         "label": "Ask your boss's boss to take a look at it personally",
         "results": [
           {
@@ -853,6 +902,7 @@
               "holderIs": "head"
             },
             "body": "Your boss's boss takes a look. The word red does not appear in the next report, and nobody can say who took it out.",
+            "headOpinion": 1,
             "sets": ["backed-holder"],
             "approach": "over-head",
             "project": {
@@ -861,6 +911,7 @@
           },
           {
             "body": "Your boss's boss takes a look, at great length, and copies in the whole floor. You have gone over your boss's head for nothing, and your boss has noticed the copy line.",
+            "headOpinion": 1,
             "sets": ["backed-wrong-person"],
             "approach": "over-head"
           }
@@ -868,6 +919,7 @@
       },
       {
         "id": "ask-dennis",
+        "family": "deflect",
         "label": "Say that your boss has this completely under control",
         "results": [
           {
@@ -890,6 +942,7 @@
       },
       {
         "id": "patience-red",
+        "family": "deflect",
         "label": "Suggest that what this calls for is strategic patience",
         "requires": {
           "hasBuzzword": "strategic-patience"
@@ -909,7 +962,7 @@
   },
   {
     "id": "calibration",
-    "months": [6],
+    "months": [9],
     "title": "Annual Calibration",
     "location": "Floor 1, Meeting Room 1B",
     "narration": [
@@ -930,6 +983,7 @@
     "options": [
       {
         "id": "praise-hugh",
+        "family": "impress",
         "label": "Say how much you have learned from your boss's boss",
         "results": [
           {
@@ -947,6 +1001,7 @@
       },
       {
         "id": "praise-dennis",
+        "family": "impress",
         "label": "Say how much you have learned from your boss",
         "results": [
           {
@@ -966,6 +1021,7 @@
       },
       {
         "id": "praise-priya",
+        "family": "impress",
         "label": "Say how much you have learned from the Senior Analyst",
         "results": [
           {
@@ -983,6 +1039,7 @@
       },
       {
         "id": "praise-marjorie",
+        "family": "impress",
         "label": "Say how much you have learned from the Office Co-ordinator",
         "results": [
           {
@@ -1000,6 +1057,7 @@
       },
       {
         "id": "praise-callum",
+        "family": "impress",
         "label": "Say how much you have learned from the Project Co-ordinator",
         "results": [
           {
@@ -1017,6 +1075,7 @@
       },
       {
         "id": "north-star-calibration",
+        "family": "impress",
         "label": "Say that everyone should be measured against the north star",
         "requires": {
           "hasBuzzword": "north-star"
@@ -1031,6 +1090,7 @@
       },
       {
         "id": "use-abolished-post-calibration",
+        "family": "attack",
         "about": "abolished-post",
         "label": "Mention to {subject}, quietly, the reorganisation of two years ago",
         "results": [
@@ -1053,6 +1113,7 @@
       },
       {
         "id": "use-values-statement-calibration",
+        "family": "attack",
         "about": "values-statement",
         "label": "Quote the values statement at {subject}, with a small smile",
         "results": [
@@ -1074,6 +1135,7 @@
       },
       {
         "id": "use-lost-list-calibration",
+        "family": "attack",
         "about": "lost-list",
         "label": "Tell {subject} that you could help look for a certain list",
         "results": [
@@ -1096,6 +1158,7 @@
       },
       {
         "id": "use-competitor-offer-calibration",
+        "family": "attack",
         "about": "competitor-offer",
         "label": "Ask {subject} how things are looking at the competition",
         "results": [
@@ -1121,5 +1184,290 @@
       "neutral": "Afterwards your boss says that it has been a year, and that you were in it. You are rated Meets. Your boss holds the door for you, or possibly for the person behind you.",
       "cold": "Afterwards your boss says that the panel felt you had been on a journey, and that everyone is keen to see where you get off. You are rated Meets, with a note. Your boss signs the note, and spells your name with care, for the file."
     }
+  },
+  {
+    "id": "metric-review",
+    "months": [6],
+    "title": "The New Metric",
+    "location": "Floor 1, Meeting Room 1B",
+    "narration": [
+      "Your boss has introduced a new metric, the Stakeholder Delight Index. It will be reported monthly, and it goes up when a form is filled in. The first results are being shown today. Nobody has said who fills in the form."
+    ],
+    "cast": ["head", "boss", "analyst", "admin", "projects"],
+    "signs": [
+      {
+        "label": "Whose number is not discussed",
+        "text": "Everyone's score goes up on the screen. {holder}'s is passed over with a nod, and {ignored}'s is left up there for some time.",
+        "clue": "At the metric review, {holder}'s number was passed over, and {ignored}'s was left on the screen."
+      },
+      {
+        "label": "Who decides what it means",
+        "text": "{bystander} starts to say what the number shows, sees {holder}'s expression, and says what it shows instead."
+      }
+    ],
+    "options": [
+      {
+        "id": "game-the-metric",
+        "family": "fabricate",
+        "label": "Fill in the form yourself, on behalf of several stakeholders",
+        "results": [
+          {
+            "body": "Your Delight goes to ninety-four. Three stakeholders have now expressed delight, and one of them is a meeting room. You are asked to share your approach with the team.",
+            "sets": ["gamed-metric"],
+            "approach": "theatre"
+          }
+        ]
+      },
+      {
+        "id": "report-the-metric",
+        "family": "deliver",
+        "label": "Report the number you actually got",
+        "results": [
+          {
+            "body": "Your Delight is eleven. You say that this seems about right. There is a silence, and then someone asks whether eleven is out of eleven.",
+            "sets": ["reported-real-metric"],
+            "approach": "truth"
+          }
+        ]
+      },
+      {
+        "id": "tricky-question-analyst",
+        "family": "attack",
+        "label": "Ask the Senior Analyst, kindly, how their number was arrived at",
+        "results": [
+          {
+            "when": {
+              "factNature": {
+                "character": "analyst",
+                "nature": "dangerous"
+              }
+            },
+            "body": "The Senior Analyst answers at once, and thanks you, and looks at you for slightly too long. By the afternoon someone from upstairs has asked how your own number was arrived at.",
+            "sets": ["burned-by-a-fact"],
+            "opinion": -2,
+            "factAt": "analyst",
+            "factNote": "You asked the Senior Analyst a tricky question. You had not been told why that was a mistake."
+          },
+          {
+            "body": "The Senior Analyst has to look it up. The room waits. You say that it is no problem at all, and that you were only curious, and everyone writes that down.",
+            "sets": ["asked-tricky-question"],
+            "approach": "blame"
+          }
+        ]
+      },
+      {
+        "id": "praise-the-metric",
+        "family": "impress",
+        "label": "Say that this metric has really changed how you think",
+        "results": [
+          {
+            "body": "You say it with a straight face. Your boss says that this is exactly the sort of thing the metric was meant to do, though neither of you says what that is.",
+            "sets": ["praised-metric"],
+            "approach": "flatter"
+          }
+        ]
+      },
+      {
+        "id": "look-at-the-screen",
+        "label": "Look at the screen until it is over",
+        "results": [
+          {
+            "body": "It is over in forty minutes. You have been delighted, on the form, by somebody.",
+            "sets": ["said-nothing-metric"]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "hiring-panel",
+    "months": [7],
+    "title": "Recruitment Panel",
+    "location": "Floor 1, Meeting Room 1B",
+    "narration": [
+      "The floor has a vacancy for an analyst, and you are on the panel, for balance. There are three candidates. One is excellent, one was recommended, and one is an old friend of yours who has asked you not to mention how you know each other."
+    ],
+    "cast": ["head", "boss", "analyst", "admin", "projects"],
+    "signs": [
+      {
+        "label": "Whose candidate it is",
+        "text": "The panel goes round the table. Everyone looks at {holder} before giving a view, and {ignored} is thanked before finishing theirs.",
+        "clue": "On the Recruitment Panel, everyone looked at {holder} before giving a view, and {ignored} was thanked before finishing."
+      },
+      {
+        "label": "Who has already decided",
+        "text": "{bystander} has filled in the scoring sheet in pen. {holder} has not filled in anything, and does not look as if that will matter."
+      }
+    ],
+    "options": [
+      {
+        "id": "hire-a-friend",
+        "family": "trade",
+        "label": "Make the case for your old friend",
+        "results": [
+          {
+            "body": "Your friend gets the job, and takes you for a drink, and asks what the job is. You now have someone on the floor who owes you, and who cannot do anything.",
+            "sets": ["hired-a-friend"],
+            "approach": "cronyism"
+          }
+        ]
+      },
+      {
+        "id": "hire-the-best",
+        "family": "deliver",
+        "label": "Argue for the excellent candidate",
+        "results": [
+          {
+            "body": "You go through the evidence, and they are appointed. They are very good. Everyone has already started to wonder what they are after.",
+            "sets": ["hired-the-best"],
+            "approach": "results"
+          }
+        ]
+      },
+      {
+        "id": "go-with-the-recommendation",
+        "family": "impress",
+        "label": "Say how impressed you were by whoever was recommended",
+        "results": [
+          {
+            "body": "You had not read the application. It does not come up. Your remarks are recorded as the view of the panel, which turns out to be the view of the person who made the recommendation.",
+            "sets": ["backed-the-recommended"],
+            "approach": "flatter"
+          }
+        ]
+      },
+      {
+        "id": "sink-the-projects-candidate",
+        "family": "attack",
+        "label": "Raise a concern about the Project Co-ordinator's preferred candidate",
+        "results": [
+          {
+            "when": {
+              "factNature": {
+                "character": "projects",
+                "nature": "dangerous"
+              }
+            },
+            "body": "It seems to go well. Then you are asked, by someone from Human Resources you have never seen, to put your concern in writing, and to say how you came by it.",
+            "sets": ["burned-by-a-fact"],
+            "opinion": -2,
+            "factAt": "projects",
+            "factNote": "You raised a concern against the Project Co-ordinator's candidate. You had not been told why that was a mistake."
+          },
+          {
+            "body": "You do not say what the concern is. You say that you would just want to be sure. The candidate is thanked for their time, and the Project Co-ordinator thanks you for yours.",
+            "sets": ["sank-a-candidate"],
+            "approach": "blame"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "speak-up-session",
+    "months": [8],
+    "title": "Speak Up Listening Session",
+    "location": "Floor 1, Meeting Room 1B",
+    "narration": [
+      "Human Resources is holding a Listening Session, in which anyone may raise anything in complete confidence, in this room, in front of everybody. There are biscuits. Someone from Human Resources is writing down who takes one."
+    ],
+    "cast": ["head", "boss", "analyst", "admin", "projects"],
+    "signs": [
+      {
+        "label": "Who is safe to mention",
+        "text": "Several concerns are raised about the floor in general. Nobody's sentence ends anywhere near {holder}, and two of them end at {ignored}.",
+        "clue": "At the Listening Session, no concern came near {holder}, and two ended at {ignored}."
+      },
+      {
+        "label": "Who is really listening",
+        "text": "The person from Human Resources writes down what {bystander} says, and then looks at {holder} to see whether to keep it."
+      }
+    ],
+    "options": [
+      {
+        "id": "report-the-analyst",
+        "family": "attack",
+        "label": "Report your concerns about the Senior Analyst's expenses",
+        "results": [
+          {
+            "when": {
+              "factNature": {
+                "character": "analyst",
+                "nature": "dangerous"
+              }
+            },
+            "body": "You are thanked for your courage. A week later you are being asked about your own expenses, by name, going back to a sandwich in March.",
+            "sets": ["burned-by-a-fact"],
+            "opinion": -2,
+            "factAt": "analyst",
+            "factNote": "You reported the Senior Analyst. You had not been told why that was a mistake."
+          },
+          {
+            "body": "You are thanked for your courage. The Senior Analyst has a brief, informal conversation, and comes back from it and sits down without looking at anyone. It is not known who said what, and everybody knows.",
+            "sets": ["reported-a-colleague"],
+            "approach": "blame"
+          }
+        ]
+      },
+      {
+        "id": "start-a-rumour",
+        "family": "attack",
+        "label": "Mention, by the biscuits, that the Project Co-ordinator's project is in trouble",
+        "results": [
+          {
+            "when": {
+              "factNature": {
+                "character": "projects",
+                "nature": "dangerous"
+              }
+            },
+            "body": "It gets round quickly. It gets round, in fact, to someone who knows where it started. You are sent a calendar invitation with no subject, and your boss is on it.",
+            "sets": ["burned-by-a-fact"],
+            "opinion": -2,
+            "factAt": "projects",
+            "factNote": "You started a rumour about the Project Co-ordinator. You had not been told why that was a mistake."
+          },
+          {
+            "body": "By the time you reach your desk it has come back to you, with details. The Project Co-ordinator's project is in serious trouble, and people are being very kind about it.",
+            "sets": ["started-a-rumour"],
+            "approach": "blame"
+          }
+        ]
+      },
+      {
+        "id": "raise-the-project",
+        "family": "deliver",
+        "label": "Say what is actually wrong with your own project",
+        "results": [
+          {
+            "body": "You say it. It takes two minutes. The person from Human Resources thanks you for bringing your whole self to the session, and asks whether you would like to speak to someone.",
+            "sets": ["raised-the-project"],
+            "approach": "truth"
+          }
+        ]
+      },
+      {
+        "id": "feel-safe",
+        "family": "impress",
+        "label": "Say that you feel safe, and that you would like that recorded",
+        "results": [
+          {
+            "body": "It is recorded. You are asked whether you would be willing to say that on a poster. You find that you are.",
+            "sets": ["felt-safe"],
+            "approach": "theatre"
+          }
+        ]
+      },
+      {
+        "id": "take-a-biscuit",
+        "label": "Take a biscuit, and say nothing",
+        "results": [
+          {
+            "body": "It is a good biscuit. It has been noted.",
+            "sets": ["took-a-biscuit"]
+          }
+        ]
+      }
+    ]
   }
 ]

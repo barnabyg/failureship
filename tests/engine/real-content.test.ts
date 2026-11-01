@@ -264,6 +264,15 @@ describe("the real month", () => {
       optionId: "push-back",
     });
 
+    // Month 1's meeting was missed, so its action comes before the report.
+    const given = run.choose({ type: "continue" }).step;
+    if (given.kind !== "notification") throw new Error(given.kind);
+    run.choose({
+      type: "notification",
+      notificationId: given.id,
+      optionId: "push-back",
+    });
+
     expect(run.choose({ type: "continue" }).step).toMatchObject({
       id: "report-input-late",
     });
@@ -334,11 +343,43 @@ describe("the real month", () => {
       "Your boss overruns the meeting by twenty minutes, then schedules another to cover what was missed.",
     );
     expect(signs).toContain(
-      "The Office Co-ordinator reads back last month's minutes, in which several things have changed.",
+      "The Project Co-ordinator marks a late task as complete, and opens a new one with the same name.",
     );
     expect(of(8).boss?.kind).toBe("incompetent");
     expect(of(1).boss?.kind).toBe("believer");
   });
+
+  // The README's test scenario relies on these.
+  it.each([
+    [1, "believer"],
+    [8, "incompetent"],
+    [16, "practitioner"],
+  ])("keeps seed %i dealing a boss who is a %s", (seed, kind) => {
+    const { characters } = readHiddenTruth(
+      startRun({ seed, content: gameContent }),
+    );
+
+    expect(characters.find((c) => c.id === "boss")?.kind).toBe(kind);
+  });
+
+  it.each([
+    [4, 3, 5, "actions"],
+    [13, 3, 1, "actions"],
+    [16, -3, -6, "notice"],
+  ])(
+    "keeps what going over the boss's head does on seed %i",
+    (seed, head, boss, then) => {
+      const run = startRun({ seed, content: gameContent });
+      fileTheReport(run);
+      const before = readHiddenTruth(run);
+      run.choose({ type: "action", actionId: "over-head" });
+      const after = readHiddenTruth(run);
+
+      expect(after.headOpinion - before.headOpinion).toBe(head);
+      expect(after.bossOpinion - before.bossOpinion).toBe(boss);
+      expect(run.choose({ type: "continue" }).step.kind).toBe(then);
+    },
+  );
 
   // Each of these holds influence in the meeting on that seed.
   it.each([

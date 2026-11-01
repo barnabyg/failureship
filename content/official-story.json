@@ -24,7 +24,7 @@
       "reported": "Your delivery is green overall, on the agreed definition of green."
     },
     {
-      "months": [6],
+      "months": [9],
       "reported": "You close the review period meeting expectations, which are under review."
     },
     {
@@ -479,6 +479,41 @@
     },
     {
       "when": {
+        "flag": "tricky-question"
+      },
+      "reported": "You welcomed robust challenge from a colleague.",
+      "happened": "Someone asked about a number, in front of people, and smiled."
+    },
+    {
+      "when": {
+        "flag": "offsite-ask"
+      },
+      "reported": "You supported the board's offsite at short notice.",
+      "happened": "You wrote two hours of slides, for nobody."
+    },
+    {
+      "when": {
+        "flag": "reported-on"
+      },
+      "reported": "You had a supportive conversation with Human Resources.",
+      "happened": "Someone reported you. Nobody will say for what."
+    },
+    {
+      "when": {
+        "flag": "went-over-head"
+      },
+      "reported": "You built a relationship with senior leadership.",
+      "happened": "You went over your boss's head."
+    },
+    {
+      "when": {
+        "flag": "boss-found-out"
+      },
+      "reported": "You and your boss have agreed some new ways of working.",
+      "happened": "Your boss found out."
+    },
+    {
+      "when": {
         "flag": "working-group"
       },
       "reported": "You were selected to join a senior working group.",
@@ -505,8 +540,249 @@
       "reported": "All red risks are now amber."
     },
     {
-      "months": [6],
+      "months": [9],
       "reported": "The risk review has been rescheduled to next year, when the risks will be clearer."
+    },
+    {
+      "months": [6],
+      "reported": "You are making measurable progress against the new metric."
+    },
+    {
+      "months": [7],
+      "reported": "You supported the floor's growth, and its culture of fairness."
+    },
+    {
+      "months": [8],
+      "reported": "You contributed to a safe and open environment for colleagues."
+    },
+    {
+      "months": [6],
+      "reported": "The risk register has been reformatted, and now has fewer rows."
+    },
+    {
+      "months": [7],
+      "reported": "A new risk was raised, and has been given to someone on leave."
+    },
+    {
+      "months": [8],
+      "reported": "Risks are stable. The person monitoring them has left."
+    },
+    {
+      "when": {
+        "flag": "gamed-metric"
+      },
+      "reported": "You achieved a record score on the Stakeholder Delight Index.",
+      "happened": "You filled in the form yourself, as several people."
+    },
+    {
+      "when": {
+        "flag": "reported-real-metric"
+      },
+      "reported": "A data quality question arose around your score.",
+      "happened": "You told them the number."
+    },
+    {
+      "when": {
+        "flag": "asked-tricky-question"
+      },
+      "reported": "You showed real curiosity about a colleague's analysis.",
+      "happened": "You asked someone a question they could not answer, in front of everyone."
+    },
+    {
+      "when": {
+        "flag": "praised-metric"
+      },
+      "reported": "You championed the new metric across the floor.",
+      "happened": "You said it had changed how you think."
+    },
+    {
+      "when": {
+        "flag": "said-nothing-metric"
+      },
+      "reported": "You attended the first results of the new metric.",
+      "happened": "You looked at the screen until it was over."
+    },
+    {
+      "when": {
+        "flag": "made-up-schedule"
+      },
+      "reported": "You delivered a clear and confident schedule to senior leadership.",
+      "happened": "You made up the dates."
+    },
+    {
+      "when": {
+        "flag": "real-schedule"
+      },
+      "reported": "A schedule risk was surfaced on your project.",
+      "happened": "You worked out when it would really be done."
+    },
+    {
+      "when": {
+        "flag": "asked-for-dates"
+      },
+      "reported": "You aligned your project's schedule with your boss's expectations.",
+      "happened": "You asked your boss which dates they would like."
+    },
+    {
+      "when": {
+        "flag": "hired-a-friend"
+      },
+      "reported": "You attracted experienced talent to the floor.",
+      "happened": "You hired your friend, who has asked what the job is."
+    },
+    {
+      "when": {
+        "flag": "hired-the-best"
+      },
+      "reported": "A candidate was appointed following due process.",
+      "happened": "You got the best person appointed. People are wondering why."
+    },
+    {
+      "when": {
+        "flag": "backed-the-recommended"
+      },
+      "reported": "You gave a considered view on the Recruitment Panel.",
+      "happened": "You agreed with a recommendation, and you had not read the application."
+    },
+    {
+      "when": {
+        "flag": "sank-a-candidate"
+      },
+      "reported": "You brought appropriate rigour to the hiring process.",
+      "happened": "You said you would just want to be sure, about nothing."
+    },
+    {
+      "when": {
+        "flag": "gave-window"
+      },
+      "reported": "You optimised your team's use of natural light.",
+      "happened": "You gave someone a window, and they will not forget it."
+    },
+    {
+      "when": {
+        "flag": "moved-a-colleague"
+      },
+      "reported": "You supported a colleague's relocation as part of the Workplace Refresh.",
+      "happened": "You moved someone to the desk with no window."
+    },
+    {
+      "when": {
+        "flag": "desk-move-noticed"
+      },
+      "reported": "Your team's seating arrangements have been reviewed for compliance.",
+      "happened": "That desk move has come back with a diagram."
+    },
+    {
+      "when": {
+        "flag": "left-the-desks"
+      },
+      "reported": "You took a measured approach to the Workplace Refresh.",
+      "happened": "You moved nobody, and it will now be done to you."
+    },
+    {
+      "when": {
+        "flag": "made-a-deal"
+      },
+      "reported": "You invested in a long-standing colleague's development.",
+      "happened": "You did a deal. Neither of you can deliver your side of it."
+    },
+    {
+      "when": {
+        "flag": "turned-down-a-deal"
+      },
+      "reported": "You maintained appropriate professional boundaries.",
+      "happened": "You said no to someone who controls the stationery."
+    },
+    {
+      "when": {
+        "flag": "reported-a-colleague"
+      },
+      "reported": "A colleague's expenses were reviewed in line with policy.",
+      "happened": "You reported someone, in complete confidence, in front of everybody."
+    },
+    {
+      "when": {
+        "flag": "started-a-rumour"
+      },
+      "reported": "Colleagues showed concern for a project in difficulty.",
+      "happened": "You started that."
+    },
+    {
+      "when": {
+        "flag": "raised-the-project"
+      },
+      "reported": "You brought your whole self to the Listening Session.",
+      "happened": "You told them what was wrong, and were offered someone to speak to."
+    },
+    {
+      "when": {
+        "flag": "felt-safe"
+      },
+      "reported": "You are to appear on a poster about feeling safe.",
+      "happened": "You said that you felt safe, and asked for that to be recorded."
+    },
+    {
+      "when": {
+        "flag": "took-a-biscuit"
+      },
+      "reported": "You participated in the Listening Session.",
+      "happened": "You took a biscuit. It has been noted."
+    },
+    {
+      "when": {
+        "flag": "bonus-to-allies"
+      },
+      "reported": "Bonuses were allocated to reflect your team's key contributors.",
+      "happened": "You paid the people who can help you."
+    },
+    {
+      "when": {
+        "flag": "bonus-to-workers"
+      },
+      "reported": "Bonuses were allocated following a thorough assessment.",
+      "happened": "You paid the people who did the work, and wrote down why."
+    },
+    {
+      "when": {
+        "flag": "bonus-to-boss"
+      },
+      "reported": "Your boss was recognised for outstanding leadership.",
+      "happened": "You suggested that. It was your idea, and everybody knows."
+    },
+    {
+      "when": {
+        "flag": "bonus-split"
+      },
+      "reported": "Bonuses were distributed in line with the company's values.",
+      "happened": "You split it equally, and it bought everyone a modest lunch."
+    },
+    {
+      "when": {
+        "flag": "bought-chairs"
+      },
+      "reported": "You invested in your team's physical wellbeing.",
+      "happened": "There are forty chairs in the corridor."
+    },
+    {
+      "when": {
+        "flag": "fixed-with-underspend"
+      },
+      "reported": "A minor licensing matter was regularised.",
+      "happened": "You spent it on what the project needed. Nobody will know."
+    },
+    {
+      "when": {
+        "flag": "returned-underspend"
+      },
+      "reported": "A budget variance was identified and is being investigated.",
+      "happened": "You gave the money back. Finance has no code for it."
+    },
+    {
+      "when": {
+        "flag": "booked-away-day"
+      },
+      "reported": "You led a resilience day for your team.",
+      "happened": "You spent it on a hotel that your boss is fond of."
     }
   ]
 }

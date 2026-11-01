@@ -291,7 +291,7 @@ describe("the Monthly Status Report in the game", () => {
       view = run.choose(choice);
     }
 
-    expect(seen).toEqual([1, 2, 3, 4, 5, 6]);
+    expect(seen).toEqual([1, 2, 3, 4, 5, 6, 7, 8, 9]);
   });
 
   it("costs what the balance data says to file", () => {

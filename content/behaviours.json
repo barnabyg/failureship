@@ -50,7 +50,7 @@
     "text": "{who} asks, some way in, which meeting this is.",
     "likelihood": {
       "believer": 2,
-      "incompetent": 7,
+      "incompetent": 6,
       "practitioner": 2
     },
     "clue": "{who} asked, some way in, which meeting it was."
@@ -99,7 +99,7 @@
     "text": "{who} asks for the minutes to be corrected, on a point of fact that embarrasses nobody but {who}.",
     "clue": "{who} had the minutes corrected, against their own interest.",
     "likelihood": {
-      "believer": 7,
+      "believer": 6,
       "incompetent": 2,
       "practitioner": 2
     }
@@ -110,7 +110,7 @@
     "clue": "{who} shared the wrong thing on screen.",
     "likelihood": {
       "believer": 2,
-      "incompetent": 7,
+      "incompetent": 6,
       "practitioner": 2
     }
   },
@@ -121,7 +121,7 @@
     "likelihood": {
       "believer": 2,
       "incompetent": 2,
-      "practitioner": 7
+      "practitioner": 6
     }
   },
   {
@@ -149,8 +149,8 @@
     "roles": ["head-of-operations"],
     "likelihood": {
       "believer": 4,
-      "incompetent": 8,
-      "practitioner": 12
+      "incompetent": 7,
+      "practitioner": 7
     }
   },
   {
@@ -159,7 +159,7 @@
     "clue": "{who} asked for the real figures, and read them.",
     "roles": ["head-of-operations"],
     "likelihood": {
-      "believer": 14,
+      "believer": 7,
       "incompetent": 2,
       "practitioner": 5
     }
@@ -170,7 +170,7 @@
     "roles": ["head-of-operations"],
     "likelihood": {
       "believer": 2,
-      "incompetent": 14,
+      "incompetent": 7,
       "practitioner": 4
     }
   },
@@ -181,7 +181,7 @@
     "roles": ["team-leader"],
     "likelihood": {
       "believer": 6,
-      "incompetent": 14,
+      "incompetent": 7,
       "practitioner": 4
     }
   },
@@ -193,7 +193,7 @@
     "likelihood": {
       "believer": 3,
       "incompetent": 3,
-      "practitioner": 14
+      "practitioner": 7
     }
   },
   {
@@ -201,9 +201,9 @@
     "text": "{who} stops the meeting to make sure the quietest person in the room has been heard.",
     "roles": ["team-leader"],
     "likelihood": {
-      "believer": 14,
+      "believer": 7,
       "incompetent": 3,
-      "practitioner": 7
+      "practitioner": 6
     }
   },
   {
@@ -214,7 +214,7 @@
     "likelihood": {
       "believer": 2,
       "incompetent": 6,
-      "practitioner": 14
+      "practitioner": 7
     }
   },
   {
@@ -222,7 +222,7 @@
     "text": "{who} has noticed you are out of pens, and leaves a box on your desk with no form to fill in.",
     "roles": ["office-coordinator"],
     "likelihood": {
-      "believer": 14,
+      "believer": 7,
       "incompetent": 2,
       "practitioner": 6
     }
@@ -234,7 +234,7 @@
     "roles": ["office-coordinator"],
     "likelihood": {
       "believer": 2,
-      "incompetent": 14,
+      "incompetent": 7,
       "practitioner": 3
     }
   },
@@ -246,7 +246,7 @@
     "likelihood": {
       "believer": 4,
       "incompetent": 4,
-      "practitioner": 13
+      "practitioner": 7
     }
   },
   {
@@ -255,7 +255,7 @@
     "clue": "{who} corrected the figures, in front of the people it embarrassed.",
     "roles": ["senior-analyst"],
     "likelihood": {
-      "believer": 14,
+      "believer": 7,
       "incompetent": 3,
       "practitioner": 3
     }
@@ -266,8 +266,8 @@
     "roles": ["senior-analyst"],
     "likelihood": {
       "believer": 1,
-      "incompetent": 13,
-      "practitioner": 7
+      "incompetent": 7,
+      "practitioner": 6
     }
   },
   {
@@ -276,9 +276,9 @@
     "clue": "{who} keeps a tracker that disagrees with the slide.",
     "roles": ["project-coordinator"],
     "likelihood": {
-      "believer": 12,
+      "believer": 7,
       "incompetent": 3,
-      "practitioner": 8
+      "practitioner": 7
     }
   },
   {
@@ -289,7 +289,7 @@
     "likelihood": {
       "believer": 1,
       "incompetent": 4,
-      "practitioner": 14
+      "practitioner": 7
     }
   },
   {
@@ -298,7 +298,7 @@
     "roles": ["project-coordinator"],
     "likelihood": {
       "believer": 3,
-      "incompetent": 14,
+      "incompetent": 7,
       "practitioner": 2
     }
   }

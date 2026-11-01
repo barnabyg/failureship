@@ -1,11 +1,11 @@
 import { expect, test, type Page } from "@playwright/test";
-import { answerAnyNotification, finishMonth } from "./play";
+import { answerAnyNotification, attendAndFinishMonth } from "./play";
 
 // The real-content test keeps the report's input late in month 2 on seed 1.
 async function reachLateInput(page: Page) {
   await page.goto("/?seed=1");
   await answerAnyNotification(page);
-  await finishMonth(page);
+  await attendAndFinishMonth(page);
   await page.getByTestId("option-skip-training").click();
   await page.getByTestId("continue").click();
   await page.getByTestId("option-push-back").click();

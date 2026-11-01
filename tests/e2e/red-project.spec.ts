@@ -1,5 +1,10 @@
 import { expect, test, type Page } from "@playwright/test";
-import { answerAnyNotification, finishMonth, skipTheReport } from "./play";
+import {
+  answerAnyNotification,
+  attendAndFinishMonth,
+  finishMonth,
+  skipTheReport,
+} from "./play";
 
 /** Two skipped reports turn the Project from green to red. Seed 4 has no late input. */
 async function turnProjectRed(page: Page) {
@@ -7,7 +12,7 @@ async function turnProjectRed(page: Page) {
   await page.getByTestId("option-decline").click();
   await page.getByTestId("continue").click();
   await skipTheReport(page);
-  await finishMonth(page);
+  await attendAndFinishMonth(page);
   await page.getByTestId("option-skip-training").click();
   await page.getByTestId("continue").click();
   await page.getByTestId("option-push-back").click();
@@ -29,7 +34,7 @@ test("a Project flagged red has to be explained, and explaining can change it", 
 
   const scene = page.getByTestId("panel-scene");
   await expect(scene.locator("h2")).toHaveText("Project Status Review");
-  await expect(page.getByTestId("month")).toContainText("2 of 6");
+  await expect(page.getByTestId("month")).toContainText("2 of 9");
   expect(await reportedStatus(page)).toBe("Red");
 
   await page.getByTestId("scene-option-make-it-amber").click();
@@ -66,7 +71,7 @@ test("a Project that never goes red still has a meeting in month 5", async ({
     await finishFreeMonth(page);
   }
 
-  await expect(page.getByTestId("month")).toContainText("5 of 6");
+  await expect(page.getByTestId("month")).toContainText("5 of 9");
   await answerAnyNotification(page);
   await page.getByTestId("hotspot-meeting-quarterly").click();
 

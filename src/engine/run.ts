@@ -1,20 +1,24 @@
 import { makeClaim, verdictOfClaim, type Claim } from "./claims";
 import {
   KINDS,
+  MOVE_FAMILIES,
   behavioursOpenTo,
   chasedIdOf,
+  everyDemand,
   everyNotification,
   type ClueVerdict,
   type Condition,
   type Content,
   type Kind,
   type Mood,
+  type MoveFamily,
   type SceneData,
 } from "./content";
 import {
   dealCharacters,
   dealMotives,
   dealPowerMap,
+  isInfluential,
   type DealtCharacter,
   type PowerMap,
 } from "./deal";
@@ -36,6 +40,8 @@ export interface HiddenTruth {
   powerMap: PowerMap;
   /** Moved by the player's choices. Shown only through how the boss behaves. */
   bossOpinion: number;
+  /** The same of the boss's boss, whom the player can also try to impress. */
+  headOpinion: number;
 }
 
 /** Custom behaviour for a Scene: reshapes its data for the current truth. */
@@ -71,6 +77,7 @@ type Step =
       id: string;
       shown: ShownBehaviour[];
       treatment: string | null;
+      headTreatment: string | null;
       /** Whether this Scene's signs point at the wrong person. */
       misleading: boolean;
     }
@@ -116,6 +123,8 @@ interface MonthRecord {
   unanswered: string[];
   flags: string[];
   moveLanded: boolean;
+  /** Whether the month has dealt with the player missing its meeting. */
+  absenceDealtWith: boolean;
 }
 
 /** What belongs to the run, and carries from month to month. */
@@ -138,7 +147,19 @@ interface State extends MonthRecord {
   approachUses: Record<string, number>;
   verdict: string | null;
   /** Demands the player stalled, which stay open until forgotten or answered. */
-  openDemands: { id: string; month: number; chased: boolean }[];
+  openDemands: {
+    id: string;
+    month: number;
+    chased: boolean;
+    /** Given at a missed meeting, and yet to arrive as a Notification. */
+    due?: boolean;
+  }[];
+  /** How many Moves of each family the player has made. Never shown in play. */
+  played: Partial<Record<MoveFamily, number>>;
+  /** How often the player has gone over the boss's head. */
+  overHeadUses: number;
+  /** The missed meetings' actions given so far, each of them once in a run. */
+  actionsGiven: string[];
   /** What the player is told before anything else, as a month opens. */
   noticesDue: { title: string; body: string }[];
   project: {
@@ -207,6 +228,9 @@ export function startRun(options: {
     approachUses: {},
     verdict: null,
     openDemands: [],
+    played: {},
+    overHeadUses: 0,
+    actionsGiven: [],
     noticesDue: [],
     project: { ...content.project.start, news: [], flagged: false },
     step: { kind: "actions" },
@@ -214,6 +238,7 @@ export function startRun(options: {
       characters: motives.characters,
       powerMap: power.powerMap,
       bossOpinion: 0,
+      headOpinion: 0,
     },
   };
   openMonth(state, content);
@@ -259,6 +284,7 @@ function freshMonth(content: Content, month: number): MonthRecord {
       .map((n) => n.id),
     flags: [],
     moveLanded: false,
+    absenceDealtWith: false,
   };
 }
 
@@ -288,8 +314,21 @@ function followUpDemands(state: State, content: Content): void {
   const kind = bossKindOf(state, content);
   const { forgets, chases } = demands.odds[kind];
   for (const open of [...state.openDemands]) {
-    const item = demands.items.find((d) => d.id === open.id);
+    const item = everyDemand(content).find((d) => d.id === open.id);
     if (!item || open.chased) continue;
+    if (open.due) {
+      open.due = false;
+      // After what belongs to this month, and ahead of what recurs.
+      const recurring = state.unanswered.findIndex((id) =>
+        content.notifications.some((n) => n.id === id && !n.months),
+      );
+      state.unanswered.splice(
+        recurring < 0 ? state.unanswered.length : recurring,
+        0,
+        open.id,
+      );
+      continue;
+    }
     const value = drawFor(state.seed, `demand:${open.id}`, state.month);
     if (value < forgets) {
       state.openDemands = state.openDemands.filter((d) => d !== open);
@@ -361,6 +400,10 @@ function leaveStory(state: State, world: World): void {
     return;
   }
   state.month += 1;
+  // What the boss thinks is mostly about lately, so it stays worth reading.
+  state.truth.bossOpinion = Math.trunc(
+    state.truth.bossOpinion * world.content.balance.opinion.keeps,
+  );
   Object.assign(state, freshMonth(world.content, state.month));
   openMonth(state, world.content);
   state.step = nextStep(state, world);
@@ -377,11 +420,14 @@ function apply(state: State, world: World, choice: Choice): void {
       if (!action) throw new IllegalChoiceError(choice.actionId);
       state.spent += costOf(content, action.cost);
       state.visited.push(action.id);
+      countMove(state, action.family);
       const reaction = applyOutcome(state, content, action, action.label);
       if (action.scene !== undefined) {
         state.step = openScene(state, world, action.scene);
       } else if (action.findOut !== undefined) {
         state.step = arriveToFindOut(state, content, action.findOut);
+      } else if (action.overHead) {
+        state.step = goOverHead(state, content, action.label);
       } else if (action.result) {
         const results = [action.result, ...action.moreResults];
         const result = inTurn(results, state.month);
@@ -400,6 +446,60 @@ function apply(state: State, world: World, choice: Choice): void {
       else state.step = nextStep(state, world);
       return;
   }
+}
+
+/** A gamble on who the boss's boss really is, and on the boss not hearing of it. */
+function goOverHead(state: State, content: Content, label: string): Step {
+  const written = content.overHead;
+  if (!written) throw new Error("Nothing is written for going over the head.");
+  state.overHeadUses += 1;
+  state.flags.push(written.sets.went);
+  const dealt = state.truth.characters.find((c) => c.id === written.character);
+  if (!dealt) throw new Error("The boss's boss was not dealt.");
+  const standing = isInfluential(state.truth.powerMap, content, dealt.id)
+    ? "influential"
+    : "sidelined";
+  const outcome = written.outcomes[dealt.kind];
+  const worked =
+    drawFor(state.seed, "over-head-works", state.month) <
+    outcome.works[standing];
+  const { effects } = written;
+  state.truth.headOpinion += worked ? effects.worked.head : effects.failed.head;
+  const gained = worked ? effects.worked.boss[standing] : effects.failed.boss;
+  const bossKind = bossKindOf(state, content);
+  const { findsOut } = written;
+  const caught =
+    drawFor(state.seed, "over-head-found", state.month) <
+    findsOut.chance[bossKind] + findsOut.perUse * (state.overHeadUses - 1);
+  // A boss who has found out is not helped along by being told to listen to you.
+  if (!caught) shiftBossOpinion(state, gained, label);
+  if (caught) {
+    state.flags.push(written.sets.caught);
+    shiftBossOpinion(state, findsOut.shift, findsOut.title);
+    state.noticesDue.push({
+      title: findsOut.title,
+      body:
+        inTurn(findsOut.reaction[bossKind], state.overHeadUses) ??
+        findsOut.title,
+    });
+  }
+  const lines = worked ? outcome.worked[standing] : outcome.failed;
+  return {
+    kind: "notice",
+    title: label,
+    body: inTurn(lines, state.overHeadUses) ?? label,
+  };
+}
+
+function countMove(state: State, family: MoveFamily | undefined): void {
+  if (family) state.played[family] = (state.played[family] ?? 0) + 1;
+}
+
+/** Moves the boss's opinion, and keeps that for the results screen. */
+function shiftBossOpinion(state: State, shift: number, choice: string): void {
+  if (shift === 0) return;
+  state.truth.bossOpinion += shift;
+  state.bossLandings.push({ month: state.month, choice, shift });
 }
 
 function methodOf(content: Content, id: string) {
@@ -461,6 +561,11 @@ function answerNotification(
     .find((n) => n.id === choice.notificationId)
     ?.options.find((o) => o.id === choice.optionId);
   if (!option) throw new IllegalChoiceError(choice.optionId);
+  state.openDemands = state.openDemands.filter(
+    (d) =>
+      d.id !== choice.notificationId &&
+      chasedIdOf(d.id) !== choice.notificationId,
+  );
   if (option.stalls) {
     state.openDemands.push({
       id: choice.notificationId,
@@ -468,10 +573,8 @@ function answerNotification(
       chased: false,
     });
   }
-  state.openDemands = state.openDemands.filter(
-    (d) => chasedIdOf(d.id) !== choice.notificationId,
-  );
 
+  countMove(state, option.family);
   state.spent += costOf(content, option.cost);
   state.unanswered = state.unanswered.filter(
     (id) => id !== choice.notificationId,
@@ -506,11 +609,13 @@ function applyOutcome(
   content: Content,
   outcome: Parameters<typeof landWithBoss>[2] & {
     sets: readonly string[];
+    headOpinion?: number;
     project?: Parameters<typeof moveProject>[2];
   },
   label: string,
 ): string | undefined {
   state.flags.push(...outcome.sets);
+  state.truth.headOpinion += outcome.headOpinion ?? 0;
   moveProject(state, content, outcome.project);
   return landWithBoss(state, content, outcome, label);
 }
@@ -585,6 +690,7 @@ function openScene(state: State, world: World, id: string): Step {
     id,
     shown,
     treatment: treatBoss(state, world, cast),
+    headTreatment: treatHead(state, content, cast),
     misleading,
   };
 }
@@ -637,9 +743,36 @@ function noteScene(
 }
 
 function moodOf(state: State, content: Content): Mood {
-  const { warmAt, coldAt } = content.balance.opinion;
-  if (state.truth.bossOpinion >= warmAt) return "warm";
-  return state.truth.bossOpinion <= coldAt ? "cold" : "neutral";
+  return moodAt(state.truth.bossOpinion, content.balance.opinion);
+}
+
+function moodAt(
+  opinion: number,
+  { warmAt, coldAt }: { warmAt: number; coldAt: number },
+): Mood {
+  if (opinion >= warmAt) return "warm";
+  return opinion <= coldAt ? "cold" : "neutral";
+}
+
+/**
+ * If the boss's boss is present, one sign of how they treat the player. It has a
+ * draw of its own, so that it leaves everything else in the Scene alone.
+ */
+function treatHead(
+  state: State,
+  content: Content,
+  cast: readonly string[],
+): string | null {
+  const written = content.overHead;
+  if (!written || !cast.includes(written.character)) return null;
+  const mood = moodAt(state.truth.headOpinion, written.opinion);
+  const value = drawFor(state.seed, "head-sign", state.month);
+  const chosen = pickWeighted(
+    Math.floor(value * 2 ** 32),
+    written.signs,
+    (s) => s.likelihood[mood],
+  );
+  return chosen.item.id;
 }
 
 /** If the boss is present, one sign of how they treat the player. */
@@ -669,6 +802,7 @@ function behaveInScene(
     matches(state, world.content, r.when, scene.cast),
   );
   if (!result) throw new IllegalChoiceError(choice.optionId);
+  countMove(state, option?.family);
   const heard = heardAbout(state, option?.about);
   const fill = (written: string) =>
     fillSubject(
@@ -833,7 +967,44 @@ function nextStep(state: State, world: World): Step {
   ) {
     return { kind: "actions" };
   }
-  return landMove(state, content) ?? { kind: "story" };
+  return (
+    dealWithAbsence(state, content) ??
+    landMove(state, content) ?? { kind: "story" }
+  );
+}
+
+/** A meeting the player missed gives them an action, and the boss notices. */
+function dealWithAbsence(state: State, content: Content): Step | null {
+  const missed = content.demands?.missed;
+  if (!missed || state.absenceDealtWith) return null;
+  state.absenceDealtWith = true;
+  const hadMeeting = actionsThisMonth(state, content).some((a) =>
+    a.sets.includes(missed.attended),
+  );
+  if (!hadMeeting || state.flags.includes(missed.attended)) return null;
+  // With no action left to go, it was not a decision, and it must not spiral.
+  if (state.visited.length === 0) return null;
+  const unused = missed.actions.filter(
+    (a) => !state.actionsGiven.includes(a.id),
+  );
+  const index = drawFor(state.seed, "minutes", state.month) * unused.length;
+  const action = unused[Math.floor(index)];
+  if (!action) return null;
+  state.actionsGiven.push(action.id);
+  state.openDemands.push({
+    id: action.id,
+    month: state.month,
+    chased: false,
+    due: true,
+  });
+  state.flags.push(...missed.sets);
+  const reaction = landWithBoss(
+    state,
+    content,
+    { approach: missed.approach },
+    action.title,
+  );
+  return { kind: "notice", title: action.title, body: action.body, reaction };
 }
 
 /** Picks the month's Character Move from those whose conditions hold. */
@@ -942,7 +1113,13 @@ function notificationOptions(
 function toSceneView(
   state: State,
   world: World,
-  { id, shown, treatment, misleading }: Extract<Step, { kind: "scene" }>,
+  {
+    id,
+    shown,
+    treatment,
+    headTreatment,
+    misleading,
+  }: Extract<Step, { kind: "scene" }>,
 ): Extract<StepView, { kind: "scene" }> {
   const { content } = world;
   const scene = sceneData(state, world, id);
@@ -972,6 +1149,8 @@ function toSceneView(
       };
     }),
     treatment: content.boss.signs.find((s) => s.id === treatment)?.text ?? null,
+    headTreatment:
+      content.overHead?.signs.find((s) => s.id === headTreatment)?.text ?? null,
     options: offeredOptions(state, content, scene).map((o) => ({
       id: o.id,
       label: fillSubject(state, content, o.about, fill(o.label)),
@@ -1052,6 +1231,18 @@ function toResultsView(
     })),
     factEvents: state.factEvents,
     boss: toBossResults(state, content),
+    played: MOVE_FAMILIES.flatMap((id) => {
+      const written = content.families?.[id];
+      return written
+        ? [
+            {
+              family: written.label,
+              note: written.note,
+              count: state.played[id] ?? 0,
+            },
+          ]
+        : [];
+    }),
     claims: state.claims.map((claim) => {
       const { label, note } = content.sources.verdicts[claim.status];
       const said = state.truth.characters.find((c) => c.id === claim.source);
@@ -1091,6 +1282,24 @@ function toBossResults(
       choice,
       landed: shift > 0 ? warmer : shift < 0 ? cooler : unmoved,
     })),
+    head: toHeadResults(state, content),
+  };
+}
+
+/** What the boss's boss really made of the player. It says no number. */
+function toHeadResults(
+  state: State,
+  content: Content,
+): Extract<StepView, { kind: "results" }>["boss"]["head"] {
+  const written = content.overHead;
+  const dealt = state.truth.characters.find((c) => c.id === written?.character);
+  if (!written || !dealt) return null;
+  const { name, title } = personOf(content, dealt.id);
+  return {
+    name,
+    title,
+    kind: content.hiddenTruth.kinds[dealt.kind].label,
+    verdict: written.verdict[moodAt(state.truth.headOpinion, written.opinion)],
   };
 }
 
@@ -1222,7 +1431,7 @@ function toView(state: State, world: World): PlayerView {
     },
     project: toProjectView(state, content),
     openDemands: state.openDemands.flatMap(({ id, month }) => {
-      const item = content.demands?.items.find((d) => d.id === id);
+      const item = everyDemand(content).find((d) => d.id === id);
       return item ? [{ month, subject: item.subject }] : [];
     }),
     seed: state.seed,

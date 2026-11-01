@@ -46,6 +46,13 @@ export async function openMeeting(page: Page) {
   await expect(page.getByTestId("panel-scene")).toBeVisible();
 }
 
+/** Goes to the meeting, so that nothing follows from missing it, and ends the month. */
+export async function attendAndFinishMonth(page: Page) {
+  await openMeeting(page);
+  await page.locator('[data-testid^="scene-option-"]').first().click();
+  await finishMonth(page);
+}
+
 /** Plays out whatever is left of the run, without doing anything in particular. */
 export async function playToResults(page: Page) {
   const results = page.getByTestId("panel-results");

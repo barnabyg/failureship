@@ -1,0 +1,122 @@
+{
+  "character": "head",
+  "opinion": { "warmAt": 2, "coldAt": -2 },
+  "signs": [
+    {
+      "id": "head-knows-your-name",
+      "text": "Your boss's boss nods to you across the room, by name, and asks how your project is going. It is the right project.",
+      "likelihood": { "warm": 6, "neutral": 1, "cold": 0 }
+    },
+    {
+      "id": "head-holds-the-lift",
+      "text": "Your boss's boss holds the lift for you afterwards, and asks what you would do differently around here. It sounds like a real question.",
+      "likelihood": { "warm": 5, "neutral": 1, "cold": 0 }
+    },
+    {
+      "id": "head-glances",
+      "text": "Your boss's boss glances down the table, and it passes over you at the same speed as over the water jug.",
+      "likelihood": { "warm": 1, "neutral": 6, "cold": 2 }
+    },
+    {
+      "id": "head-reads-badge",
+      "text": "Your boss's boss reads your badge, says that it is good to finally meet you, and says it warmly. You have met four times.",
+      "likelihood": { "warm": 1, "neutral": 5, "cold": 2 }
+    },
+    {
+      "id": "head-looks-through",
+      "text": "You say good morning to your boss's boss. Your boss's boss says it to the person behind you.",
+      "likelihood": { "warm": 0, "neutral": 2, "cold": 6 }
+    },
+    {
+      "id": "head-asks-your-boss",
+      "text": "Your boss's boss asks your boss a question about you, while you are sitting there, and uses the word \"still\".",
+      "likelihood": { "warm": 0, "neutral": 1, "cold": 6 }
+    }
+  ],
+  "outcomes": {
+    "believer": {
+      "works": { "influential": 0.8, "sidelined": 0.6 },
+      "worked": {
+        "influential": [
+          "Your boss's boss hears you out, asks two good questions, and writes something down. By the end of the week your project has been talked about upstairs, and your boss has been told to give you more room.",
+          "Your boss's boss thanks you for saying it plainly, and rings someone while you are still in the room. Things move. People are suddenly very pleased to have always agreed with you."
+        ],
+        "sidelined": [
+          "Your boss's boss hears you out, and thanks you, and means it, and says that they will raise it. They raise it. It is the kind of thing they raise, and it is minuted.",
+          "Your boss's boss agrees with every word, and is visibly moved. You notice, on the way out, how few people have been coming in here."
+        ]
+      },
+      "failed": [
+        "Your boss's boss listens, and then asks whether you have spoken to your boss first. You have not. Your boss's boss looks disappointed, in you, and is too honest to hide it.",
+        "Your boss's boss says that they would rather hear this from your boss, and that this is how things are meant to work. They seem to believe that. You are shown out kindly."
+      ]
+    },
+    "incompetent": {
+      "works": { "influential": 0.65, "sidelined": 0.45 },
+      "worked": {
+        "influential": [
+          "Your boss's boss does not follow all of it, but likes the way you said it, and repeats two of your phrases at the next board. Your boss has now been told to listen to you, by someone who could not say why.",
+          "Your boss's boss asks you to send over a slide. You send one. It is shown to people. You seem to have become a person whom people mention."
+        ],
+        "sidelined": [
+          "Your boss's boss says that this is exactly the sort of thing they have been saying, and asks you to remind them what it was. Nothing comes of it, warmly.",
+          "Your boss's boss says that they will take it to the top. They take it to a meeting about the top, which they are not in."
+        ]
+      },
+      "failed": [
+        "Your boss's boss nods throughout, then asks you whether you are from Facilities, and whether this is about the blinds. You agree that it was about the blinds.",
+        "Your boss's boss loses the thread early, and blames you for it. By the end you are being asked to explain what you do here, and you are not sure that you got it right."
+      ]
+    },
+    "practitioner": {
+      "works": { "influential": 0.45, "sidelined": 0.35 },
+      "worked": {
+        "influential": [
+          "Your boss's boss listens with great stillness, then says that it is good to know who is paying attention. Within days your boss is being unusually careful around you, and nobody says why.",
+          "Your boss's boss asks one question, about who else knows. You say nobody. Your boss's boss smiles, and you are now, it seems, someone's. It helps."
+        ],
+        "sidelined": [
+          "Your boss's boss says that they will remember this, and that it is good to know who is paying attention. There is less behind that than they would like you to think.",
+          "Your boss's boss makes you feel that something has been agreed, and that you are now protected. A week later you have still not been able to find out by what."
+        ]
+      },
+      "failed": [
+        "Your boss's boss thanks you warmly, and offers you a biscuit. You find out later that what you said was repeated, with your name on it, to the person you said it about.",
+        "Your boss's boss writes it all down in a small book. Your boss's boss does not ask for anything further, then or later, and looks at you in meetings as if at a thing already used."
+      ]
+    }
+  },
+  "effects": {
+    "worked": {
+      "head": 3,
+      "boss": { "influential": 5, "sidelined": 1 }
+    },
+    "failed": { "head": -3, "boss": 0 }
+  },
+  "findsOut": {
+    "chance": { "believer": 0.2, "incompetent": 0.1, "practitioner": 0.4 },
+    "perUse": 0.25,
+    "shift": -6,
+    "title": "Your boss knows",
+    "reaction": {
+      "believer": [
+        "Your boss knows where you were. Your boss comes over and says so, quietly, and says that the door was always open. It was. Your boss goes back to their desk and does not look up for the rest of the day.",
+        "Your boss has heard. There is no scene. You are asked to go through things in writing from now on, so that everyone is clear, and your boss will not meet your eye."
+      ],
+      "incompetent": [
+        "Your boss has heard, from someone in the lift, and it has been a shock. There is an all-staff email about the chain of command. Everyone knows who it is about, including, eventually, your boss.",
+        "Your boss has heard, and calls you in, and cannot quite say what the problem is, at some length. You are now required to copy your boss in on everything, including this."
+      ],
+      "practitioner": [
+        "Your boss knows. Your boss mentions it only to say how much your initiative is appreciated. Your next three pieces of work go upstairs under your boss's name, with a note about your attention to detail.",
+        "Your boss knows. Nothing is said. You are simply no longer told about things, and the meeting invitations stop, one at a time, as if they had been on a timer."
+      ]
+    }
+  },
+  "verdict": {
+    "warm": "Your boss's boss had noticed you. There is a line in a private note that says \"this one\", and nothing else, and it was meant kindly.",
+    "neutral": "Your boss's boss could not have picked you out of a line-up, and on the whole that has done you no harm.",
+    "cold": "Your boss's boss had noticed you. There is a line in a private note that says \"this one\", and nothing else, and it was not meant kindly."
+  },
+  "sets": { "went": "went-over-head", "caught": "boss-found-out" }
+}

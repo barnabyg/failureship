@@ -180,6 +180,22 @@ function ResultsPanel({
           ))}
         </tbody>
       </table>
+      {step.played.length > 0 && (
+        <>
+          <h3>{panelText.resultsPlayedHeading}</h3>
+          <table className="results">
+            <tbody>
+              {step.played.map((row) => (
+                <tr key={row.family} data-testid="result-family">
+                  <th scope="row">{row.family}</th>
+                  <td className="results-kind">{row.count}</td>
+                  <td>{row.note}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </>
+      )}
       <h3>{panelText.resultsMarksHeading}</h3>
       <table className="results">
         <tbody>
@@ -231,6 +247,18 @@ function ResultsPanel({
           </table>
         )}
       </div>
+      {step.boss.head !== null && (
+        <div className="callout" data-testid="results-head">
+          <h3>{panelText.resultsHeadHeading}</h3>
+          <p>
+            {step.boss.head.title}, {step.boss.head.name}:{" "}
+            <strong data-testid="result-head-kind">
+              {step.boss.head.kind}
+            </strong>
+          </p>
+          <p data-testid="result-head-verdict">{step.boss.head.verdict}</p>
+        </div>
+      )}
       {step.factEvents.length > 0 && (
         <div className="callout" data-testid="results-fact-events">
           <h3>{panelText.resultsFactEventsHeading}</h3>
@@ -396,6 +424,14 @@ export function StepPanel({ view, onChoose }: StepPanelProps) {
                   <h3>{panelText.treatmentHeading}</h3>
                   <p className="signs" data-testid="treatment">
                     {step.treatment}
+                  </p>
+                </>
+              )}
+              {step.headTreatment !== null && (
+                <>
+                  <h3>{panelText.headTreatmentHeading}</h3>
+                  <p className="signs" data-testid="head-treatment">
+                    {step.headTreatment}
                   </p>
                 </>
               )}

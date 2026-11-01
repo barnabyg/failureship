@@ -31,6 +31,13 @@
       }
     },
     {
+      "months": [7],
+      "text": "The new system was switched on by mistake, over a weekend, and some of it works. Nobody has been told which part.",
+      "project": {
+        "real": "better"
+      }
+    },
+    {
       "months": [5],
       "text": "The old system has been switched off a month early, to save money. Nobody has told the new one.",
       "project": {
@@ -40,7 +47,7 @@
   ],
   "input": {
     "character": "projects",
-    "months": [2, 3, 4, 5, 6],
+    "months": [2, 4, 6, 8],
     "chance": {
       "believer": 0.15,
       "incompetent": 0.5,

@@ -1,4 +1,4 @@
-export { ContentError, KINDS, parseContent } from "./content";
+export { ContentError, KINDS, MOVE_FAMILIES, parseContent } from "./content";
 export type { Content, Kind, Room, SceneData } from "./content";
 export { IllegalChoiceError, startRun } from "./run";
 export { parseSeed } from "./seed";
