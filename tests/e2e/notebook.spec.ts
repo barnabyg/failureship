@@ -40,8 +40,10 @@ test("a clue arrives, and a Character is marked", async ({ page }) => {
   await expect(page.getByTestId("mark-boss")).toHaveValue("practitioner");
 });
 
-test("a mark is on the results screen, with the clues", async ({ page }) => {
-  await page.goto("/?seed=1&month=9");
+test("a mark lasts into the next month, and is on the results screen", async ({
+  page,
+}) => {
+  await page.goto("/?seed=1&month=8");
   await openNotebook(page);
   await page.getByTestId("mark-boss").selectOption("practitioner");
   await closeNotebook(page);
