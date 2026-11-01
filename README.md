@@ -4,8 +4,9 @@ A satirical, single-player browser game. You climb a ten-storey office tower by
 reading people. The design is in
 [failureship-grill-outcome.md](failureship-grill-outcome.md).
 
-This is the Phase 2 build: a run of six months on a furnished Floor 1, ready
-for the owner to play and steer.
+This is the Phase 3 build: a run of six months on a furnished Floor 1, with kinds
+of boss, a Project, the Monthly Status Report and Demands, ready for the owner to
+play and steer.
 
 ## Play
 
@@ -132,7 +133,8 @@ present, so the meeting has everyone in it. `holderIs` means the same in a Scene
 results. A `when` or `requires` condition can be
 `{ "holderIs": "boss" }`, `{ "hasBuzzword": "strategic-patience" }`,
 `{ "flag": "went-to-pub" }`, `{ "heardFact": "lost-list" }`, `{ "not": ... }` or `{ "all": [...] }`,
-and a Scene result's `when` can also use `factNature` and `heardTrue`, described below. Options
+and a Scene result's `when` can also use `factNature` and `heardTrue`, described below. A
+Scene result or a Move's `when` can also use `{ "bossIs": "practitioner" }`. Options
 gated with `requires` cannot depend on the hidden truth. Flags come from `sets`,
 and are wiped when a new month opens. Buzzwords carry over for the whole run.
 
@@ -190,7 +192,8 @@ must offer `deliver`, `push-back`, `hand-off`, `fake` and `stall`. An answer tha
 colleague names them by role. `"stalls": true` on `stall` leaves the Demand open, and the
 player can see it under **Your project**. Each later month, a seeded draw uses `odds` for
 the boss's kind: it is `forgotten`, or it is `chased`, which costs the `chasedPenalty`
-and arrives as a Notification of its own, or nothing happens yet. `chased` must have an
+and arrives as a Notification of its own, or nothing happens yet. `sets` names the
+flags for that month. `chased` must have an
 answer that costs nothing.
 
 An approach can have `overdone`, which changes how the listed kinds take it after
