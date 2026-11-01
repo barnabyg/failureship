@@ -260,5 +260,5 @@ A Scene that data cannot express can name a `script`, which is passed to
 - The `minimatch` override in `package.json` patches GHSA-g3hv-75wg-m249 in the
   lint tooling. Remove it when `eslint` depends on a patched version itself.
 - `build.chunkSizeWarningLimit` in `vite.config.ts` is raised because Three.js
-  is most of the single bundle. Review it if hosting is ever added.
+  and the game's text make up the single bundle. Review it if hosting is ever added.
 - `.prettierignore` leaves the owner's design records and agent docs unformatted.

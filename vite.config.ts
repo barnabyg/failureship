@@ -4,9 +4,9 @@ import { defineConfig } from "vitest/config";
 export default defineConfig({
   plugins: [react()],
   build: {
-    // Three.js alone is most of the bundle and the game has one screen, so a
+    // Three.js and the game's text are the bundle, and it has one screen, so a
     // single chunk is fine. Review if hosting is ever added.
-    chunkSizeWarningLimit: 1000,
+    chunkSizeWarningLimit: 1200,
   },
   test: {
     include: ["tests/engine/**/*.test.ts", "tests/tower/**/*.test.ts"],
