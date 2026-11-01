@@ -101,6 +101,14 @@ test("a seed that cannot be used is refused and the run carries on", async ({
   await expect(page.getByTestId("actions-left")).toContainText("1");
 });
 
+test("an address with no seed gets the seed on screen", async ({ page }) => {
+  await page.goto("/");
+
+  const seed = await page.getByTestId("seed").innerText();
+
+  await expect(page).toHaveURL(new RegExp(`seed=${seed}$`));
+});
+
 test("an address with a seed that cannot be used says so", async ({ page }) => {
   await page.goto("/?seed=banana");
 

@@ -1,4 +1,4 @@
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { gameContent, panelText } from "../content";
 import {
   parseSeed,
@@ -22,9 +22,6 @@ function randomSeed(): number {
 }
 
 function begin(seed: number): { run: Run; view: PlayerView } {
-  const url = new URL(window.location.href);
-  url.searchParams.set("seed", String(seed));
-  window.history.replaceState(null, "", url);
   const run = startRun({ seed, content: gameContent });
   return { run, view: run.view() };
 }
@@ -51,6 +48,13 @@ export function App() {
   const [message, setMessage] = useState(first.refused);
   const [leavingFor, setLeavingFor] = useState<number | null>(null);
   const [orgChartOpen, setOrgChartOpen] = useState(false);
+
+  // In an effect, because React may run a state initialiser twice in development.
+  useEffect(() => {
+    const url = new URL(window.location.href);
+    url.searchParams.set("seed", String(view.seed));
+    window.history.replaceState(null, "", url);
+  }, [view.seed]);
 
   const choose = useCallback(
     (choice: Choice) => {
