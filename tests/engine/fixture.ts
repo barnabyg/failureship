@@ -138,10 +138,18 @@ export function fixtureRaw() {
       { id: "ana", name: "Ana Abel", title: "Boss" },
       { id: "ben", name: "Ben Bird", title: "Analyst", reportsTo: "ana" },
       { id: "cal", name: "Cal Cope", title: "Clerk", reportsTo: "ana" },
-    ] as { id: string; name: string; title: string; reportsTo?: string }[],
+    ] as {
+      id: string;
+      name: string;
+      title: string;
+      reportsTo?: string;
+      role?: string;
+      called?: string;
+    }[],
     behaviours: [] as {
       id: string;
       text: string;
+      roles?: string[];
       likelihood: {
         believer: number;
         incompetent: number;

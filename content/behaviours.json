@@ -141,5 +141,165 @@
       "incompetent": 6,
       "practitioner": 2
     }
+  },
+  {
+    "id": "reopens-a-decision",
+    "text": "{who} reopens a decision that was settled last month, and asks who settled it.",
+    "clue": "{who} reopened a settled decision, and asked who had settled it.",
+    "roles": ["head-of-operations"],
+    "likelihood": {
+      "believer": 4,
+      "incompetent": 8,
+      "practitioner": 12
+    }
+  },
+  {
+    "id": "reads-the-real-figures",
+    "text": "{who} asks to see the real figures instead of the slide, and reads all of them.",
+    "clue": "{who} asked for the real figures, and read them.",
+    "roles": ["head-of-operations"],
+    "likelihood": {
+      "believer": 14,
+      "incompetent": 2,
+      "practitioner": 5
+    }
+  },
+  {
+    "id": "signs-off-the-plan",
+    "text": "{who} signs off the plan, then asks what it is a plan for.",
+    "roles": ["head-of-operations"],
+    "likelihood": {
+      "believer": 2,
+      "incompetent": 14,
+      "practitioner": 4
+    }
+  },
+  {
+    "id": "overruns-the-meeting",
+    "text": "{who} overruns the meeting by twenty minutes, then schedules another to cover what was missed.",
+    "clue": "{who} overran the meeting, and scheduled another to cover it.",
+    "roles": ["team-leader"],
+    "likelihood": {
+      "believer": 6,
+      "incompetent": 14,
+      "practitioner": 4
+    }
+  },
+  {
+    "id": "closes-on-time",
+    "text": "{who} closes the meeting exactly on time, having left out the item about the delay.",
+    "clue": "{who} closed the meeting on time, without reaching the delay.",
+    "roles": ["team-leader"],
+    "likelihood": {
+      "believer": 3,
+      "incompetent": 3,
+      "practitioner": 14
+    }
+  },
+  {
+    "id": "hears-the-quietest",
+    "text": "{who} stops the meeting to make sure the quietest person in the room has been heard.",
+    "roles": ["team-leader"],
+    "likelihood": {
+      "believer": 14,
+      "incompetent": 3,
+      "practitioner": 7
+    }
+  },
+  {
+    "id": "minutes-have-changed",
+    "text": "{who} reads back last month's minutes, in which several things have changed.",
+    "clue": "{who} read back last month's minutes, and several things had changed.",
+    "roles": ["office-coordinator"],
+    "likelihood": {
+      "believer": 2,
+      "incompetent": 6,
+      "practitioner": 14
+    }
+  },
+  {
+    "id": "box-of-pens",
+    "text": "{who} has noticed you are out of pens, and leaves a box on your desk with no form to fill in.",
+    "roles": ["office-coordinator"],
+    "likelihood": {
+      "believer": 14,
+      "incompetent": 2,
+      "practitioner": 6
+    }
+  },
+  {
+    "id": "wrong-minutes",
+    "text": "{who} circulates the minutes of a different meeting, and asks everyone to confirm them.",
+    "clue": "{who} circulated the minutes of a different meeting.",
+    "roles": ["office-coordinator"],
+    "likelihood": {
+      "believer": 2,
+      "incompetent": 14,
+      "practitioner": 3
+    }
+  },
+  {
+    "id": "tiny-footnote",
+    "text": "{who} adds a footnote to the slide, in a size that only {who} can read.",
+    "clue": "{who} added a very small footnote to the slide.",
+    "roles": ["senior-analyst"],
+    "likelihood": {
+      "believer": 4,
+      "incompetent": 4,
+      "practitioner": 13
+    }
+  },
+  {
+    "id": "reworks-the-figures",
+    "text": "{who} reworks the figures during the meeting, and sends the correction to everyone, including the people it embarrasses.",
+    "clue": "{who} corrected the figures, in front of the people it embarrassed.",
+    "roles": ["senior-analyst"],
+    "likelihood": {
+      "believer": 14,
+      "incompetent": 3,
+      "practitioner": 3
+    }
+  },
+  {
+    "id": "moving-axis",
+    "text": "{who} presents a chart whose axis starts at a different number on each slide, and nobody can say whether that was on purpose.",
+    "roles": ["senior-analyst"],
+    "likelihood": {
+      "believer": 1,
+      "incompetent": 13,
+      "practitioner": 7
+    }
+  },
+  {
+    "id": "tracker-disagrees",
+    "text": "{who} keeps a tracker that disagrees with the slide, and mentions it when asked.",
+    "clue": "{who} keeps a tracker that disagrees with the slide.",
+    "roles": ["project-coordinator"],
+    "likelihood": {
+      "believer": 12,
+      "incompetent": 3,
+      "practitioner": 8
+    }
+  },
+  {
+    "id": "closes-a-late-task",
+    "text": "{who} marks a late task as complete, and opens a new one with the same name.",
+    "clue": "{who} closed a late task, and opened a new one with the same name.",
+    "roles": ["project-coordinator"],
+    "likelihood": {
+      "believer": 1,
+      "incompetent": 4,
+      "practitioner": 14
+    }
+  },
+  {
+    "id": "cannot-find-the-project",
+    "text": "{who} cannot find the project on the tracker, and adds it during the meeting.",
+    "roles": ["project-coordinator"],
+    "likelihood": {
+      "believer": 3,
+      "incompetent": 14,
+      "practitioner": 2
+    }
   }
 ]

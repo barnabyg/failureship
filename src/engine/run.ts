@@ -1,6 +1,7 @@
 import { makeClaim, verdictOfClaim, type Claim } from "./claims";
 import {
   KINDS,
+  behavioursOpenTo,
   type ClueVerdict,
   type Condition,
   type Content,
@@ -356,19 +357,19 @@ function answerNotification(
   }
 }
 
-/** Everyone present shows one behaviour, chosen by their dealt kind. */
+/** Everyone present shows one behaviour, open to their role and chosen by their dealt kind. */
 function openScene(state: State, world: World, id: string): Step {
-  const { behaviours } = world.content;
+  const { content } = world;
   const shown: ShownBehaviour[] = [];
   const { cast } = sceneData(state, world, id);
   const misleading = drawMisleading(state, world.content);
-  if (behaviours.length > 0) {
+  if (content.behaviours.length > 0) {
     for (const character of cast) {
       const kind = state.truth.characters.find((c) => c.id === character)?.kind;
       if (kind === undefined) continue;
       const chosen = pickWeighted(
         state.rng,
-        behaviours,
+        behavioursOpenTo(content, character),
         (b) => b.likelihood[kind],
       );
       state.rng = chosen.next;
@@ -733,7 +734,11 @@ function toSceneView(
       const who =
         content.characters.find((c) => c.id === character)?.name ?? character;
       const written = content.behaviours.find((b) => b.id === behaviour);
-      return { who, text: (written?.text ?? "").replaceAll("{who}", who) };
+      return {
+        character,
+        who,
+        text: (written?.text ?? "").replaceAll("{who}", who),
+      };
     }),
     treatment: content.boss.signs.find((s) => s.id === treatment)?.text ?? null,
     options: offeredOptions(state, content, scene).map((o) => ({

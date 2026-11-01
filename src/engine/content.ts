@@ -197,6 +197,8 @@ const behaviour = z.strictObject({
   text,
   /** What the Notebook keeps of this, if anything. Says {who} too. */
   clue: text.optional(),
+  /** Only Characters with one of these roles can show this. Left out, anyone can. */
+  roles: z.array(id).min(1).optional(),
   /** How likely each kind is to show this, relative to its other behaviours. */
   likelihood: z.strictObject({
     believer: z.number().nonnegative(),
@@ -363,6 +365,8 @@ const contentSchema = z.strictObject({
         id,
         name: text,
         title: text,
+        /** What this Character does, which decides the behaviours open to them. */
+        role: id.optional(),
         /** Who this Character answers to on the Org Chart. */
         reportsTo: id.optional(),
       }),
@@ -514,6 +518,15 @@ function findBrokenDeal(
   return problems;
 }
 
+/** What this Character can be seen doing: what anyone does, and what their role does. */
+export function behavioursOpenTo(content: Content, character: string) {
+  const role = content.characters.find((c) => c.id === character)?.role;
+  return content.behaviours.filter(
+    (b) =>
+      b.roles === undefined || (role !== undefined && b.roles.includes(role)),
+  );
+}
+
 /** Signs must narrow the answer without ever settling it. */
 function findBrokenBehaviours(content: Content): string[] {
   const problems: string[] = [];
@@ -542,10 +555,28 @@ function findBrokenBehaviours(content: Content): string[] {
       problems.push(`${owner} gives no evidence: every kind is as likely.`);
     }
   }
+  const roles = new Set(content.characters.flatMap((c) => c.role ?? []));
+  for (const b of content.behaviours) {
+    for (const role of b.roles ?? []) {
+      if (!roles.has(role)) {
+        problems.push(`Behaviour "${b.id}" names unknown role "${role}".`);
+      }
+    }
+  }
+  for (const role of roles) {
+    if (!content.behaviours.some((b) => b.roles?.join() === role)) {
+      problems.push(`Role "${role}" has no behaviour of its own.`);
+    }
+  }
   if (content.behaviours.length > 0) {
-    for (const kind of ["believer", "incompetent", "practitioner"] as const) {
-      if (content.behaviours.every((b) => b.likelihood[kind] === 0)) {
-        problems.push(`No behaviour can be shown by a ${kind}.`);
+    for (const character of content.characters) {
+      const open = behavioursOpenTo(content, character.id);
+      for (const kind of KINDS) {
+        if (open.every((b) => b.likelihood[kind] === 0)) {
+          problems.push(
+            `Character "${character.id}" has no behaviour to show as a ${kind}.`,
+          );
+        }
       }
     }
   }
