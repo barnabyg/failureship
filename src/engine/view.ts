@@ -73,7 +73,6 @@ export type StepView =
       cast: { name: string; title: string }[];
       signs: { label: string; text: string }[];
       behaviours: {
-        character: string;
         who: string;
         text: string;
       }[];
@@ -88,7 +87,7 @@ export type StepView =
       sources: Person[];
       subjects: Person[];
     }
-  | { kind: "claim"; source: string; title: string; text: string }
+  | { kind: "claim"; title: string; text: string }
   | { kind: "notice"; title: string; body: string }
   | { kind: "move"; from: string; title: string; body: string }
   | {

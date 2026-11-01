@@ -198,17 +198,16 @@ describe("the balance of the deal", () => {
     }
     for (const view of views) {
       if (view.step.kind !== "scene") continue;
-      for (const { character, who, text } of view.step.behaviours) {
+      for (const { who, text } of view.step.behaviours) {
         const written = gameContent.behaviours.find(
           (b) =>
             b.text.replaceAll("{who}", who).toLowerCase() ===
             text.toLowerCase(),
         );
-        const held = belief.get(character);
+        const shownBy = gameContent.characters.find((c) => c.called === who);
+        const held = belief.get(shownBy?.id ?? "");
         if (!written || !held) throw new Error(`Unknown sign: ${text}`);
-        const role = gameContent.characters.find(
-          (c) => c.id === character,
-        )?.role;
+        const role = shownBy?.role;
         const open = gameContent.behaviours.filter(
           (b) => role !== undefined && (b.roles?.includes(role) ?? true),
         );

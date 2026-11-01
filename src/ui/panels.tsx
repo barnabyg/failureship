@@ -388,7 +388,7 @@ export function StepPanel({ view, onChoose }: StepPanelProps) {
       return <FindOutPanel step={step} onChoose={onChoose} />;
     case "claim":
       return (
-        <Panel testId="panel-claim" eyebrow={step.source} title={step.title}>
+        <Panel testId="panel-claim" title={step.title}>
           <p className="callout" data-testid="claim-text">
             {step.text}
           </p>

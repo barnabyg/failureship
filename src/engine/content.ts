@@ -522,6 +522,10 @@ function findBrokenDeal(
   return problems;
 }
 
+function rolesOf(content: Content): Set<string> {
+  return new Set(content.characters.flatMap((c) => c.role ?? []));
+}
+
 /** What this Character can be seen doing: what anyone does, and what their role does. */
 export function behavioursOpenTo(content: Content, character: string) {
   const role = content.characters.find((c) => c.id === character)?.role;
@@ -559,7 +563,7 @@ function findBrokenBehaviours(content: Content): string[] {
       problems.push(`${owner} gives no evidence: every kind is as likely.`);
     }
   }
-  const roles = new Set(content.characters.flatMap((c) => c.role ?? []));
+  const roles = rolesOf(content);
   for (const b of content.behaviours) {
     for (const role of b.roles ?? []) {
       if (!roles.has(role)) {
@@ -568,7 +572,11 @@ function findBrokenBehaviours(content: Content): string[] {
     }
   }
   for (const role of roles) {
-    if (!content.behaviours.some((b) => b.roles?.join() === role)) {
+    if (
+      !content.behaviours.some(
+        (b) => b.roles?.length === 1 && b.roles[0] === role,
+      )
+    ) {
       problems.push(`Role "${role}" has no behaviour of its own.`);
     }
   }
@@ -646,7 +654,7 @@ function findBrokenSources(content: Content): string[] {
       problems.push(`${owner} has nothing to claim.`);
     }
   }
-  const roles = new Set(content.characters.flatMap((c) => c.role ?? []));
+  const roles = rolesOf(content);
   for (const [role, spoken] of Object.entries(voices)) {
     const owner = `The voice of "${role}"`;
     if (!roles.has(role))

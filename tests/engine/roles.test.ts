@@ -1,5 +1,3 @@
-import { readFileSync } from "node:fs";
-import path from "node:path";
 import { describe, expect, it } from "vitest";
 import { gameContent } from "../../src/content";
 import { parseContent, startRun, type Content } from "../../src/engine";
@@ -49,9 +47,9 @@ describe("behaviour that belongs to a role", () => {
   it("is shown only by a Character with that role", () => {
     const content = parseContent(rolesFixtureRaw());
     const allowed = new Map([
-      ["OVERRUNS", "ana"],
-      ["EDITS-MINUTES", "ben"],
-      ["FILES", "cal"],
+      ["OVERRUNS", "Ana Abel"],
+      ["EDITS-MINUTES", "Ben Bird"],
+      ["FILES", "Cal Cope"],
     ]);
     const seen = new Set<string>();
 
@@ -60,7 +58,7 @@ describe("behaviour that belongs to a role", () => {
         const [word] = /[A-Z-]{3,}/.exec(shown.text) ?? [""];
         seen.add(word);
         const owner = allowed.get(word);
-        if (owner !== undefined) expect(shown.character).toBe(owner);
+        if (owner !== undefined) expect(shown.who).toBe(owner);
       }
     }
 
@@ -68,7 +66,7 @@ describe("behaviour that belongs to a role", () => {
   });
 
   it("is never shown out of role with the game's own content", () => {
-    const role = new Map(gameContent.characters.map((c) => [c.id, c.role]));
+    const role = new Map(gameContent.characters.map((c) => [c.called, c.role]));
     let shownInRole = 0;
 
     for (let seed = 1; seed <= 400; seed++) {
@@ -83,14 +81,16 @@ describe("behaviour that belongs to a role", () => {
         view = run.choose(next);
       }
       for (const shown of view.step.behaviours) {
-        const roles = gameContent.behaviours.find(
+        const written = gameContent.behaviours.find(
           (b) =>
             b.text.replaceAll("{who}", shown.who).toLowerCase() ===
             shown.text.toLowerCase(),
-        )?.roles;
+        );
+        if (!written) throw new Error(`Unknown sign: ${shown.text}`);
+        const { roles } = written;
         if (roles === undefined) continue;
         shownInRole += 1;
-        expect(roles).toContain(role.get(shown.character));
+        expect(roles).toContain(role.get(shown.who));
       }
     }
 
@@ -180,7 +180,7 @@ describe("how running text refers to people", () => {
     return raw;
   }
 
-  it("uses the role, capitalised only where a sentence starts", () => {
+  it("says what they are called, with a capital only where a sentence starts", () => {
     const content = parseContent(calledFixtureRaw());
     const { signs, behaviours } = openMeeting(8, content);
 
@@ -208,7 +208,7 @@ describe("how running text refers to people", () => {
     );
   });
 
-  it("falls back on the name when no role is written", () => {
+  it("falls back on the name when nothing else is written", () => {
     const { behaviours } = openMeeting(1, parseContent(rolesFixtureRaw()));
 
     expect(behaviours.map((b) => b.who)).toEqual([
@@ -219,19 +219,22 @@ describe("how running text refers to people", () => {
   });
 
   it("never names a Character in the game's running text", () => {
-    const folder = path.join(import.meta.dirname, "../../content");
     const names = gameContent.characters.flatMap((c) => c.name.split(" "));
-    const running = [
-      "actions",
-      "behaviours",
-      "boss",
-      "dialogs",
-      "moves",
-      "notebook",
-      "notifications",
-      "official-story",
-      "scenes",
-    ];
+    const { sources } = gameContent;
+    const running = {
+      actions: gameContent.actions,
+      behaviours: gameContent.behaviours,
+      boss: gameContent.boss,
+      dialogs: gameContent.dialogs,
+      moves: gameContent.moves,
+      notebook: gameContent.notebook,
+      notifications: gameContent.notifications,
+      officialStory: gameContent.officialStory,
+      scenes: gameContent.scenes,
+      ui: gameContent.ui,
+      findOut: sources.methods,
+      voices: sources.voices,
+    };
     const strings = (value: unknown, key = ""): string[] => {
       if (typeof value === "string") return key === "from" ? [] : [value];
       if (Array.isArray(value)) return value.flatMap((v) => strings(v));
@@ -239,10 +242,9 @@ describe("how running text refers to people", () => {
       return Object.entries(value).flatMap(([k, v]) => strings(v, k));
     };
 
-    for (const file of running) {
-      const written = readFileSync(path.join(folder, `${file}.json`), "utf8");
-      for (const line of strings(JSON.parse(written))) {
-        for (const name of names) expect(line, file).not.toContain(name);
+    for (const [part, written] of Object.entries(running)) {
+      for (const line of strings(written)) {
+        for (const name of names) expect(line, part).not.toContain(name);
       }
     }
   });

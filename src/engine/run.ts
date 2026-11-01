@@ -735,7 +735,6 @@ function toSceneView(
       const who = calledBy(content, character);
       const written = content.behaviours.find((b) => b.id === behaviour);
       return {
-        character,
         who,
         text: sayPeople(written?.text ?? "", { "{who}": who }),
       };
@@ -807,7 +806,7 @@ function toResultsView(
       const { kinds } = content.hiddenTruth;
       return {
         name: nameOf(dealt.id),
-        title: content.characters.find((c) => c.id === dealt.id)?.title ?? "",
+        title: personOf(content, dealt.id).title,
         mark: mark === null ? null : kinds[mark].label,
         truth: kinds[dealt.kind].label,
         correct: mark === dealt.kind,
@@ -891,10 +890,8 @@ function toStepView(state: State, world: World): StepView {
     case "claim": {
       const claim = state.claims[step.index];
       if (!claim) throw new Error(`Unknown claim ${String(step.index)}.`);
-      const source = personOf(content, claim.source).name;
       return {
         kind: "claim",
-        source,
         title: sayPeople(content.ui.claimTitle, {
           "{source}": calledBy(content, claim.source),
         }),

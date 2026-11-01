@@ -34,7 +34,7 @@ one. Each of the six months has the same shape and different contents:
 There are three ways to spend an action:
 
 - **Meeting Room 1B** opens that month's Scene. Everyone present behaves according
-  to their job and their dealt kind, and no single sign settles what they are. Your
+  to their role and their dealt kind, and no single sign settles what they are. Your
   boss's treatment of you shows what they think of you, but only roughly.
 - **The photocopier** and **the loading bay** are Find Out. At the photocopier, someone
   is already there and you choose whom to ask about. At the loading bay, you also
@@ -43,12 +43,13 @@ There are three ways to spend an action:
 - **The kitchen, the Senior Analyst's desk and your desk** do what they look like.
 
 People are read first as what they do: your boss, your boss's boss, the Office
-Co-ordinator. Each job is held by the same Character in every deal, and each has
+Co-ordinator. Each role is held by the same Character in every deal, and each has
 things only it can be seen doing and its own way of talking. Only someone who chairs
 meetings can overrun one, and only the Office Co-ordinator controls the minutes and
 the stationery. Each of these can still come from more than one kind. Names stay in
 support on the charts, in the cast list and the Notebook's marks, on the results
-screen, and in what sources say about people.
+screen, on the `from` lines of messages and the Find Out buttons, and in what sources
+say about people.
 
 Press **Notebook** at any step, at no cost. It keeps claims and important signs for
 you, and it never says which to trust. Mark each Character with the kind you suspect.
@@ -79,8 +80,8 @@ dangerous. Start at `http://localhost:5173/?seed=8`.
 | Restart from seed 1, and do the same in month 2                                                   | The Project Co-ordinator takes the blame and you get away with it. Blaming the Senior Analyst is what goes badly on this seed.                                   |
 | In month 1 on seed 1, look at who the signs point to                                              | They point to the Senior Analyst, not your boss. The same warm agreement now does little for you. Signs mislead about one Scene in five, so watch more than one. |
 | Compare your boss's treatment of you in month 2 after agreeing with your boss or your boss's boss | The sign under "How your boss is with you" is usually warmer after agreeing with your boss. No sign is sure.                                                     |
-| On seed 8, file the report, then read the meeting's signs in month 1                              | Your boss overruns the meeting, and the Office Co-ordinator reads back minutes that have changed. Only those jobs can show those signs.                          |
-| Go to the photocopier in two different months                                                     | Each source sounds like their job: the Senior Analyst talks in figures, the Office Co-ordinator in minutes and stationery.                                       |
+| On seed 8, file the report, then read the meeting's signs in month 1                              | Your boss overruns the meeting, and the Office Co-ordinator reads back minutes that have changed. Only those roles can show those signs.                         |
+| Go to the photocopier in two different months                                                     | Each source sounds like their role: the Senior Analyst talks in figures, the Office Co-ordinator in minutes and stationery.                                      |
 | Go to the loading bay, buy from the Office Co-ordinator, and ask about someone                    | Often a Hidden Fact. If it is one of the useful ones, a later Scene offers a new option about it, whether it is true.                                            |
 | Play to the end of any run, and read the results screen                                           | Your marks against the truth, each claim's truth, and which clues were false or did not matter.                                                                  |
 | Restart the same seed and repeat your choices                                                     | The same signs, claims, Move and official story, every time.                                                                                                     |
@@ -101,9 +102,9 @@ format, the page shows what is wrong instead of the game.
 | `scenes.json`         | Each month's Scene: its signs, its choices and their results                                                         |
 | `moves.json`          | Character Moves, and when each can land                                                                              |
 | `official-story.json` | The official story, assembled from entries according to what you did                                                 |
-| `behaviours.json`     | What Characters can be seen doing, which jobs can do it, and how likely each kind is to do it                        |
+| `behaviours.json`     | What Characters can be seen doing, which roles can do it, and how likely each kind is to do it                       |
 | `boss.json`           | Who your boss is, and the signs of how they treat you                                                                |
-| `sources.json`        | Find Out: who can be asked, how each job talks, how reliable each kind is, and every claim                           |
+| `sources.json`        | Find Out: who can be asked, how each role talks, how reliable each kind is, and every claim                          |
 | `notebook.json`       | Events the Notebook keeps a clue of, and what each clue was worth                                                    |
 | `characters.json`     | Job titles, roles, how text refers to each person, names, and who reports to whom on the Org Chart                   |
 | `hidden-truth.json`   | The rules of the deal: kinds, their weights, and the Hidden Facts                                                    |

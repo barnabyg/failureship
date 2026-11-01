@@ -64,8 +64,11 @@ function tally(content: Content, seeds = 3000) {
   for (let seed = 1; seed <= seeds; seed++) {
     const { run, step } = openMeeting(seed, content);
     const { characters } = readHiddenTruth(run);
-    for (const { character, who, text } of step.behaviours) {
-      const kind = characters.find((c) => c.id === character)?.kind;
+    for (const { who, text } of step.behaviours) {
+      const known = content.characters.find(
+        (c) => (c.called ?? c.name) === who,
+      );
+      const kind = characters.find((c) => c.id === known?.id)?.kind;
       const count = counts.get(text.replace(new RegExp(who, "gi"), "{who}"));
       if (!kind || !count) throw new Error(`Unknown sign: ${text}`);
       count[kind] += 1;
