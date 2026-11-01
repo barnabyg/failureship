@@ -1,0 +1,40 @@
+[
+  {
+    "id": "minutes-action",
+    "from": "From: Marjorie Tull, Office Co-ordinator",
+    "title": "The minutes have been circulated",
+    "body": "The minutes of this month's meeting record an action against your name. Nobody remembers agreeing it, including the person who wrote it down. It is due on Friday.",
+    "sets": ["given-action"]
+  },
+  {
+    "id": "figures-borrowed",
+    "from": "From: Priya Venn, Senior Analyst",
+    "title": "Your figures have been presented",
+    "body": "Priya has shown your figures to the floor above, with one small improvement: Priya's name is now in the corner where yours was. An email thanks the team for its support.",
+    "sets": ["figures-borrowed"]
+  },
+  {
+    "id": "report-chased",
+    "from": "From: Dennis Prowse, Team Leader",
+    "title": "FW: Monthly Status Report OVERDUE",
+    "body": "Dennis has forwarded you a chaser about the report you did not file while you were at the pub with Dennis. The whole message reads: Thoughts?",
+    "when": { "flag": "went-to-pub" },
+    "sets": ["report-chased"]
+  },
+  {
+    "id": "report-renamed",
+    "from": "From: Dennis Prowse, Team Leader",
+    "title": "Thanks for your input",
+    "body": "Your Monthly Status Report has gone upstairs under Dennis's name, as an executive summary of your Monthly Status Report. The summary is your report.",
+    "when": { "flag": "filed-report" },
+    "sets": ["report-renamed"]
+  },
+  {
+    "id": "phrase-taken",
+    "from": "Overheard in the lift",
+    "title": "You hear your phrase on the way up",
+    "body": "Dennis is explaining strategic patience to someone from the fifth floor, and is doing so as its author. You are holding the door.",
+    "when": { "flag": "used-buzzword" },
+    "sets": ["phrase-taken"]
+  }
+]

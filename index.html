@@ -1,0 +1,23 @@
+<!doctype html>
+<html lang="en-GB">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Failureship</title>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script>
+      // A mistake in a data file stops the game at start-up. Say so on the page.
+      window.addEventListener("error", (event) => {
+        const root = document.getElementById("root");
+        if (!root || root.hasChildNodes()) return;
+        const message = document.createElement("pre");
+        message.style.cssText = "padding:16px;color:#fff;white-space:pre-wrap";
+        message.textContent = String(event.error ?? event.message);
+        root.appendChild(message);
+      });
+    </script>
+    <script type="module" src="/src/ui/main.tsx"></script>
+  </body>
+</html>

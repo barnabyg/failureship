@@ -1,0 +1,98 @@
+[
+  {
+    "id": "meeting",
+    "title": "Monthly Alignment Meeting",
+    "location": "Floor 1, Meeting Room 1B",
+    "narration": [
+      "Item one on the agenda is the agenda. The projector shows a slide titled Where We Are. Nobody can say."
+    ],
+    "cast": ["boss", "analyst", "admin"],
+    "signs": [
+      {
+        "label": "Who interrupts whom",
+        "text": "{holder} talks over {ignored} twice before the first slide. {ignored} apologises both times."
+      },
+      {
+        "label": "Who everyone looks at",
+        "text": "When a question is asked, {bystander} and {ignored} both glance at {holder} before answering."
+      },
+      {
+        "label": "Who gets ignored",
+        "text": "{ignored} makes a suggestion. Four minutes later {bystander} makes the same one, to general approval."
+      }
+    ],
+    "options": [
+      {
+        "id": "back-boss",
+        "label": "Agree warmly with Dennis, your boss",
+        "results": [
+          {
+            "when": { "holderIs": "boss" },
+            "body": "Dennis nods at you, as one might nod at a useful chair. Afterwards Dennis uses your first name, and it is nearly correct.",
+            "sets": ["backed-holder"]
+          },
+          {
+            "body": "Dennis is delighted and says so. Nobody else looks up. Your agreement with your official boss has been noted by your official boss.",
+            "sets": ["backed-wrong-person"]
+          }
+        ]
+      },
+      {
+        "id": "back-analyst",
+        "label": "Agree warmly with Priya",
+        "results": [
+          {
+            "when": { "holderIs": "analyst" },
+            "body": "Priya writes your name down. It is the first time anyone here has. Two people notice, and one of them passes you a biscuit.",
+            "sets": ["backed-holder"]
+          },
+          {
+            "body": "Priya thanks you for your input, in the voice kept for people who have not given any. The meeting carries on, as though a window had briefly rattled.",
+            "sets": ["backed-wrong-person"]
+          }
+        ]
+      },
+      {
+        "id": "back-admin",
+        "label": "Agree warmly with Marjorie",
+        "results": [
+          {
+            "when": { "holderIs": "admin" },
+            "body": "Marjorie looks at you over the top of the reading glasses for some time. The next morning your broken chair has been replaced. No ticket was raised.",
+            "sets": ["backed-holder"]
+          },
+          {
+            "body": "Marjorie smiles and asks whether you would mind taking the minutes. You are now the person who takes the minutes.",
+            "sets": ["backed-wrong-person"]
+          }
+        ]
+      },
+      {
+        "id": "use-buzzword",
+        "label": "Suggest that what this calls for is strategic patience",
+        "requires": { "hasBuzzword": "strategic-patience" },
+        "results": [
+          {
+            "when": { "holderIs": "boss" },
+            "body": "Dennis looks pleased, then alarmed, then pleased to have thought of it first. By lunchtime the phrase is in the minutes, credited to the team.",
+            "sets": ["used-buzzword"]
+          },
+          {
+            "body": "There is a silence, of the respectful kind. You are asked to say more. You say the same thing again, more slowly. You have been asked to lead a working group on it.",
+            "sets": ["used-buzzword"]
+          }
+        ]
+      },
+      {
+        "id": "say-nothing",
+        "label": "Say nothing and write something down",
+        "results": [
+          {
+            "body": "You write key takeaways on your pad and underline it. Nobody asks you anything. You are recorded as present, which is the highest rating available at your grade.",
+            "sets": ["said-nothing"]
+          }
+        ]
+      }
+    ]
+  }
+]

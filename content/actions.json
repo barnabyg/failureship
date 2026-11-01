@@ -1,0 +1,48 @@
+[
+  {
+    "id": "meeting",
+    "label": "Meeting Room 1B",
+    "description": "The Monthly Alignment Meeting. Attendance is optional, in the sense that absence is noticed.",
+    "place": "meeting-room",
+    "cost": "standard",
+    "scene": "meeting",
+    "oncePerMonth": true,
+    "sets": ["attended-meeting"]
+  },
+  {
+    "id": "kitchen",
+    "label": "Kitchen",
+    "description": "The communal kettle, and the company's most reliable communications channel.",
+    "place": "kitchen",
+    "cost": "standard",
+    "sets": ["had-tea"],
+    "result": {
+      "title": "Kitchen",
+      "body": "You wait four minutes for the kettle beside someone from Accounts Payable. You agree that it is nearly Friday. It is Tuesday."
+    }
+  },
+  {
+    "id": "one-to-one",
+    "label": "Priya's desk",
+    "description": "A one-to-one, which is a conversation that can be logged.",
+    "place": "priya-desk",
+    "cost": "standard",
+    "sets": ["had-one-to-one"],
+    "result": {
+      "title": "One-to-one",
+      "body": "You ask Priya how things are going. You are told, at length, about the car park. You may now log this as a one-to-one."
+    }
+  },
+  {
+    "id": "work",
+    "label": "Your desk",
+    "description": "Doing your actual job. It remains an option.",
+    "place": "your-desk",
+    "cost": "standard",
+    "sets": ["did-work"],
+    "result": {
+      "title": "Your desk",
+      "body": "You do two hours of real work. It goes well. Nobody sees it, and it does not appear in any report."
+    }
+  }
+]
