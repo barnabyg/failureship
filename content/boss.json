@@ -4,47 +4,261 @@
     {
       "id": "first-name",
       "text": "Your boss uses your first name when you come in, and it is the right one.",
-      "likelihood": { "warm": 6, "neutral": 2, "cold": 0 }
+      "likelihood": {
+        "warm": 6,
+        "neutral": 2,
+        "cold": 0
+      }
     },
     {
       "id": "asks-your-view",
       "text": "Your boss turns to you in front of everyone and asks what you think. Your boss listens to all of it.",
-      "likelihood": { "warm": 6, "neutral": 1, "cold": 0 }
+      "likelihood": {
+        "warm": 6,
+        "neutral": 1,
+        "cold": 0
+      }
     },
     {
       "id": "saved-a-seat",
       "text": "Your boss moves a folder off the chair next to the one at the head of the table. It might be for you. It might be that the folder was finished.",
-      "likelihood": { "warm": 5, "neutral": 2, "cold": 1 }
+      "likelihood": {
+        "warm": 5,
+        "neutral": 2,
+        "cold": 1
+      }
     },
     {
       "id": "nods-vaguely",
       "text": "Your boss nods in your direction when you sit down. It could be a greeting. It could be the slide.",
-      "likelihood": { "warm": 2, "neutral": 6, "cold": 2 }
+      "likelihood": {
+        "warm": 2,
+        "neutral": 6,
+        "cold": 2
+      }
     },
     {
       "id": "copies-you-in",
       "text": "Your boss says that you will be copied in. Nobody says on what.",
-      "likelihood": { "warm": 2, "neutral": 6, "cold": 3 }
+      "likelihood": {
+        "warm": 2,
+        "neutral": 6,
+        "cold": 3
+      }
     },
     {
       "id": "cheerful-to-the-room",
       "text": "Your boss is cheerful with the whole room. You are in the room.",
-      "likelihood": { "warm": 3, "neutral": 5, "cold": 3 }
+      "likelihood": {
+        "warm": 3,
+        "neutral": 5,
+        "cold": 3
+      }
     },
     {
       "id": "calls-you-our-colleague",
       "text": "Your boss refers to you as \"our colleague here\". It may be that the name has slipped your boss's mind.",
-      "likelihood": { "warm": 0, "neutral": 2, "cold": 6 }
+      "likelihood": {
+        "warm": 0,
+        "neutral": 2,
+        "cold": 6
+      }
     },
     {
       "id": "talks-over-you",
       "text": "You begin a sentence. Your boss finishes it, differently, and moves to the next slide.",
-      "likelihood": { "warm": 1, "neutral": 2, "cold": 6 }
+      "likelihood": {
+        "warm": 1,
+        "neutral": 2,
+        "cold": 6
+      }
     },
     {
       "id": "checks-with-someone-else",
       "text": "Your boss asks you a question, then checks the answer with someone else while you are still giving it.",
-      "likelihood": { "warm": 0, "neutral": 1, "cold": 6 }
+      "likelihood": {
+        "warm": 0,
+        "neutral": 1,
+        "cold": 6
+      }
+    }
+  ],
+  "approaches": [
+    {
+      "id": "flatter",
+      "shift": {
+        "believer": -1,
+        "incompetent": 2,
+        "practitioner": 2
+      },
+      "reaction": {
+        "believer": [
+          "Your boss looks faintly embarrassed, and asks whether you had a view of your own.",
+          "Your boss thanks you, and asks what you actually think. There is a pause in which you could have said."
+        ],
+        "incompetent": [
+          "Your boss glows, and tells the room that this is exactly the sort of thing your boss has been saying.",
+          "Your boss repeats what you said about your boss, to someone who was standing next to you when you said it."
+        ],
+        "practitioner": [
+          "Your boss gives you a small nod, as one gives a tip, and remembers it.",
+          "Your boss says nothing, and a week later your name is on a list you wanted to be on."
+        ]
+      }
+    },
+    {
+      "id": "theatre",
+      "shift": {
+        "believer": -2,
+        "incompetent": 2,
+        "practitioner": 1
+      },
+      "reaction": {
+        "believer": [
+          "Your boss waits until it is over, then asks what it means in practice. You can see that a real answer was hoped for.",
+          "Your boss writes something down, then crosses it out, and looks a little tired."
+        ],
+        "incompetent": [
+          "Your boss is visibly thrilled, and asks you to send it over, and to say it again more slowly.",
+          "Your boss says that this is the kind of confidence the floor needs. Your boss has not understood it, and likes it better for that."
+        ],
+        "practitioner": [
+          "Your boss recognises the workmanship, and asks whether it could be made to say that it was your boss's idea.",
+          "Your boss smiles at the right moment, for the room, and makes a note of what you are capable of."
+        ]
+      }
+    },
+    {
+      "id": "results",
+      "shift": {
+        "believer": 2,
+        "incompetent": -1,
+        "practitioner": 1
+      },
+      "reaction": {
+        "believer": [
+          "Your boss reads it properly, and stops at your desk to say that it was good work. It takes you a moment to work out what is happening.",
+          "Your boss asks you how you did it, and listens to the answer."
+        ],
+        "incompetent": [
+          "Your boss asks whether there is a version with fewer words in it, and more of a story.",
+          "Your boss says thanks, and asks when you will be doing something with more visibility."
+        ],
+        "practitioner": [
+          "Your boss takes it upstairs that afternoon. Your name has come off it on the way.",
+          "Your boss thanks you, and shows it to the floor above as a thing that your boss's team has done."
+        ]
+      }
+    },
+    {
+      "id": "truth",
+      "shift": {
+        "believer": 3,
+        "incompetent": -2,
+        "practitioner": -2
+      },
+      "reaction": {
+        "believer": [
+          "Your boss looks at the chart for some time, then says thank you, and means it. Your boss asks what you would need to fix it.",
+          "Your boss closes the door and asks you to go through it again. Nobody has closed that door to listen before."
+        ],
+        "incompetent": [
+          "Your boss looks at the chart as one looks at a wasp, and asks whether it could be presented in a more positive colour.",
+          "Your boss asks who else has seen this, then says that it has come as a complete surprise, to the room."
+        ],
+        "practitioner": [
+          "Your boss looks at you, not the chart, and thanks you for your candour. You have never been thanked so quietly.",
+          "Your boss asks who else has seen this, and writes the answer down, with your name above it."
+        ]
+      }
+    },
+    {
+      "id": "favour",
+      "shift": {
+        "believer": 0,
+        "incompetent": 1,
+        "practitioner": 2
+      },
+      "reaction": {
+        "believer": [
+          "Your boss seems pleased to see you, and asks when you will be getting back to your project.",
+          "Your boss thanks you, and insists on paying separately."
+        ],
+        "incompetent": [
+          "Your boss is delighted to have you there, and tells you the one about the fax machine again.",
+          "Your boss says that you are good value, and asks what it is that you do."
+        ],
+        "practitioner": [
+          "Your boss looks at you for slightly longer than usual, and buys you the next one. Something has been entered in a ledger.",
+          "Your boss says that this will not be forgotten, in the tone of someone who forgets nothing."
+        ]
+      }
+    },
+    {
+      "id": "over-head",
+      "shift": {
+        "believer": -1,
+        "incompetent": -2,
+        "practitioner": -3
+      },
+      "reaction": {
+        "believer": [
+          "Your boss asks, mildly, whether there was a reason you did not come to your boss first. It is a real question, and you have no answer.",
+          "Your boss looks hurt, and tries not to, and is not good at it."
+        ],
+        "incompetent": [
+          "Your boss is flustered, and asks several people what you said, and whether it was about your boss.",
+          "Your boss starts copying you in on everything, in case that was the problem."
+        ],
+        "practitioner": [
+          "Your boss says nothing at all, and smiles when you next meet. You would rather have been shouted at.",
+          "Your boss congratulates you on your initiative, in writing, and keeps a copy."
+        ]
+      }
+    },
+    {
+      "id": "blame",
+      "shift": {
+        "believer": -2,
+        "incompetent": 1,
+        "practitioner": 1
+      },
+      "reaction": {
+        "believer": [
+          "Your boss asks whether anyone has checked that, and looks at you while asking.",
+          "Your boss frowns, and says that this is not what the session is for. Your boss seems to believe that."
+        ],
+        "incompetent": [
+          "Your boss writes it down with visible relief. It was not your boss's fault, then.",
+          "Your boss nods along and says that this is what your boss had suspected all along."
+        ],
+        "practitioner": [
+          "Your boss gives you a look of mild professional recognition, and moves on.",
+          "Your boss notes how quickly you found someone, and how cleanly."
+        ]
+      }
+    },
+    {
+      "id": "ownership",
+      "shift": {
+        "believer": 1,
+        "incompetent": 0,
+        "practitioner": 2
+      },
+      "reaction": {
+        "believer": [
+          "Your boss stops you afterwards to say that it was decent of you, and asks what really happened.",
+          "Your boss seems troubled by it, and asks if you are all right."
+        ],
+        "incompetent": [
+          "Your boss looks relieved, without being sure why, and moves to the next slide.",
+          "Your boss thanks you for your ownership, a word your boss heard on Tuesday."
+        ],
+        "practitioner": [
+          "Your boss thanks you warmly for your ownership, in front of everyone, and makes sure that it is minuted.",
+          "Your boss looks at you with new interest, as one looks at somewhere to put things."
+        ]
+      }
     }
   ]
 }

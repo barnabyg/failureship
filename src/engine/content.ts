@@ -11,6 +11,16 @@ const sets = z.array(id).default([]);
 /** How far this moves the boss's hidden opinion of the player. */
 const opinion = z.number().int().default(0);
 
+/** Something written once for each kind of boss. */
+const perKind = <T extends z.ZodType>(value: T) =>
+  z.strictObject({ believer: value, incompetent: value, practitioner: value });
+
+/** How the choice comes across, which `boss.approaches` reads by the boss's kind. */
+const approachTag = id.optional();
+
+/** This choice's own words for how the boss takes it, in place of the approach's. */
+const ownReaction = perKind(text).optional();
+
 const notificationOption = z.strictObject({
   id,
   label: text,
@@ -19,6 +29,8 @@ const notificationOption = z.strictObject({
   learns: z.array(id).default([]),
   sets,
   opinion,
+  approach: approachTag,
+  reaction: ownReaction,
   result: notice.optional(),
 });
 
@@ -42,6 +54,9 @@ const dialog = z.strictObject({
 
 const buzzword = z.strictObject({ id, term: text, meaning: text });
 
+export const KINDS = ["believer", "incompetent", "practitioner"] as const;
+export type Kind = (typeof KINDS)[number];
+
 export const MOODS = ["warm", "neutral", "cold"] as const;
 export type Mood = (typeof MOODS)[number];
 
@@ -50,6 +65,7 @@ export type Nature = (typeof NATURES)[number];
 
 export type Condition =
   | { holderIs: string }
+  | { bossIs: Kind }
   | { factNature: { character: string; nature: Nature } }
   | { heardFact: string }
   | { heardTrue: string }
@@ -61,6 +77,7 @@ export type Condition =
 const condition: z.ZodType<Condition> = z.lazy(() =>
   z.union([
     z.strictObject({ holderIs: id }),
+    z.strictObject({ bossIs: z.enum(KINDS) }),
     z.strictObject({
       factNature: z.strictObject({
         character: id,
@@ -81,6 +98,8 @@ const sceneResult = z.strictObject({
   body: text,
   sets,
   opinion,
+  approach: approachTag,
+  reaction: ownReaction,
   /** Says on the results screen that a Hidden Fact caused this. */
   factNote: text.optional(),
   /** Whose Hidden Fact it was, unless the option is `about` one. */
@@ -115,6 +134,8 @@ const scene = z.strictObject({
   options: z.array(sceneOption).min(1),
   /** Names code in `sceneScripts`, for a Scene that data cannot express. */
   script: id.optional(),
+  /** What the boss finally says of the player, by how the opinion stands. */
+  verdict: z.strictObject({ warm: text, neutral: text, cold: text }).optional(),
 });
 
 const action = z.strictObject({
@@ -133,6 +154,8 @@ const action = z.strictObject({
   /** A Find Out action names how the player goes about it. */
   findOut: id.optional(),
   sets,
+  approach: approachTag,
+  reaction: ownReaction,
 });
 
 const move = z.strictObject({
@@ -181,9 +204,6 @@ const room = z.strictObject({
   /** A label for a place the player can see but not act on. */
   sign: z.strictObject({ title: text, detail: text }).optional(),
 });
-
-export const KINDS = ["believer", "incompetent", "practitioner"] as const;
-export type Kind = (typeof KINDS)[number];
 
 const kindRule = z.strictObject({
   label: text,
@@ -285,6 +305,14 @@ const sources = z.strictObject({
   }),
 });
 
+/** A way of coming across, and how each kind of boss takes it. */
+const bossApproach = z.strictObject({
+  id,
+  shift: perKind(z.number().int()),
+  /** How each kind shows it, used in turn so that it reads differently each month. */
+  reaction: perKind(lines),
+});
+
 const bossSign = z.strictObject({
   id,
   text,
@@ -332,6 +360,7 @@ const contentSchema = z.strictObject({
     /** Whose opinion of the player is tracked. */
     character: id,
     signs: z.array(bossSign),
+    approaches: z.array(bossApproach).default([]),
   }),
   hiddenTruth: z.strictObject({
     kinds: z.strictObject({
@@ -409,6 +438,8 @@ const contentSchema = z.strictObject({
     clueVerdicts: z.strictObject({ held: text, wrong: text, idle: text }),
     costLabel: text,
     freeLabel: text,
+    /** How the results screen says a choice landed with the boss. */
+    bossLanded: z.strictObject({ warmer: text, cooler: text, unmoved: text }),
     results: z.strictObject({ title: text, intro: text }),
   }),
 });
@@ -416,6 +447,7 @@ const contentSchema = z.strictObject({
 export type Content = z.infer<typeof contentSchema>;
 export type Room = Content["floor"]["rooms"][number];
 export type SceneData = Content["scenes"][number];
+type SceneResult = SceneData["options"][number]["results"][number];
 
 /** Thrown when a data file breaks the content format, naming what is wrong. */
 export class ContentError extends Error {
@@ -442,6 +474,7 @@ function dependsOnHiddenTruth(
   if ("flag" in condition) return hiddenFlags.has(condition.flag);
   if (
     "holderIs" in condition ||
+    "bossIs" in condition ||
     "factNature" in condition ||
     "heardTrue" in condition
   ) {
@@ -625,6 +658,34 @@ function findBrokenBossSigns(content: Content): string[] {
   return problems;
 }
 
+/** An approach must split the kinds, and its words must never name one. */
+function findBrokenApproaches(content: Content): string[] {
+  const problems: string[] = [];
+  for (const approach of content.boss.approaches) {
+    const owner = `Approach "${approach.id}"`;
+    if (new Set(Object.values(approach.shift)).size === 1) {
+      problems.push(`${owner} is taken the same way by every kind.`);
+    }
+    const written = Object.values(approach.reaction).flat();
+    problems.push(...findNamedKinds(content, owner, written));
+  }
+  return problems;
+}
+
+/** The player reads a kind from signs, so no reaction may say it out loud. */
+function findNamedKinds(
+  content: Content,
+  owner: string,
+  written: readonly string[],
+): string[] {
+  const labels = Object.values(content.hiddenTruth.kinds).map((k) =>
+    k.label.toLowerCase(),
+  );
+  return written
+    .filter((line) => labels.some((l) => line.toLowerCase().includes(l)))
+    .map((line) => `${owner} names a kind: "${line}"`);
+}
+
 /** Sources must be worth weighing: never always right, and never always wrong. */
 function findBrokenSources(content: Content): string[] {
   const { methods, reliability, motives, claims, voices } = content.sources;
@@ -753,6 +814,23 @@ function findBrokenReferences(content: Content): string[] {
       }
     }
   };
+  const checkApproach = (
+    owner: string,
+    { approach, reaction }: Pick<SceneResult, "approach" | "reaction">,
+  ) => {
+    if (
+      approach !== undefined &&
+      !content.boss.approaches.some((a) => a.id === approach)
+    ) {
+      problems.push(`${owner} uses unknown approach "${approach}".`);
+    }
+    if (reaction) {
+      if (approach === undefined) {
+        problems.push(`${owner} has a reaction with no approach to move it.`);
+      }
+      problems.push(...findNamedKinds(content, owner, Object.values(reaction)));
+    }
+  };
   const checkCost = (owner: string, cost: string | undefined) => {
     if (cost !== undefined && !(cost in content.balance.actionCosts)) {
       problems.push(`${owner} has unknown cost "${cost}".`);
@@ -762,8 +840,10 @@ function findBrokenReferences(content: Content): string[] {
   problems.push(...findBrokenDeal(content, characters));
   problems.push(...findBrokenBehaviours(content));
   problems.push(...findBrokenBossSigns(content));
+  problems.push(...findBrokenApproaches(content));
   problems.push(...findBrokenSources(content));
   for (const a of content.actions) {
+    checkApproach(`Action "${a.id}"`, a);
     if (!rooms.has(a.place)) {
       problems.push(`Action "${a.id}" is at unknown place "${a.place}".`);
     }
@@ -835,6 +915,7 @@ function findBrokenReferences(content: Content): string[] {
         checkParts(optionOwner, r.factNote ?? "", about);
         if (r.factAt !== undefined) checkCharacter(optionOwner, r.factAt);
         if (r.when) checkCondition(optionOwner, r.when);
+        checkApproach(optionOwner, r);
       }
       if (o.requires) {
         checkCondition(optionOwner, o.requires);
@@ -874,6 +955,7 @@ function findBrokenReferences(content: Content): string[] {
     for (const o of n.options) {
       const owner = `Notification "${n.id}" option "${o.id}"`;
       checkCost(owner, o.cost);
+      checkApproach(owner, o);
       if (o.dialog !== undefined && !dialogs.has(o.dialog)) {
         problems.push(`${owner} opens unknown dialog "${o.dialog}".`);
       }

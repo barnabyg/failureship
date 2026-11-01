@@ -62,6 +62,8 @@ export type StepView =
       title: string;
       lines: DialogLine[];
       learned: Buzzword[];
+      /** How the boss took it. Signs only: it never says the boss's kind. */
+      reaction?: string | undefined;
     }
   | { kind: "actions" }
   | {
@@ -88,7 +90,15 @@ export type StepView =
       subjects: Person[];
     }
   | { kind: "claim"; title: string; text: string }
-  | { kind: "notice"; title: string; body: string }
+  | {
+      kind: "notice";
+      title: string;
+      body: string;
+      /** How the boss took it. Signs only: it never says the boss's kind. */
+      reaction?: string | undefined;
+      /** What the boss finally says of the player. */
+      verdict?: string | undefined;
+    }
   | { kind: "move"; from: string; title: string; body: string }
   | {
       kind: "story";
@@ -119,6 +129,14 @@ export type StepView =
       clues: { month: number; source: string; text: string; verdict: string }[];
       /** Where a Hidden Fact changed what happened in this run. */
       factEvents: { month: number; note: string; fact: string | null }[];
+      /** Your boss's true kind, and how each choice came across to them. */
+      boss: {
+        name: string;
+        title: string;
+        kind: string;
+        verdict: string | null;
+        choices: { month: number; choice: string; landed: string }[];
+      };
       claims: {
         month: number;
         source: string;

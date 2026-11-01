@@ -57,7 +57,12 @@ interface ShownBehaviour {
 
 type Step =
   | { kind: "notification"; id: string }
-  | { kind: "dialog"; id: string; learned: string[] }
+  | {
+      kind: "dialog";
+      id: string;
+      learned: string[];
+      reaction?: string | undefined;
+    }
   | { kind: "actions" }
   | {
       kind: "scene";
@@ -69,7 +74,14 @@ type Step =
     }
   | { kind: "find-out"; method: string; sources: string[] }
   | { kind: "claim"; index: number }
-  | { kind: "notice"; title: string; body: string }
+  | {
+      kind: "notice";
+      title: string;
+      body: string;
+      /** How the boss took it. Signs only: it never says the boss's kind. */
+      reaction?: string | undefined;
+      verdict?: string | undefined;
+    }
   | { kind: "move"; id: string }
   | { kind: "story" }
   | { kind: "results" };
@@ -79,6 +91,13 @@ interface Clue {
   source: string;
   text: string;
   verdict: ClueVerdict;
+}
+
+/** How one choice came across to the boss, for the results screen. */
+interface BossLanding {
+  month: number;
+  choice: string;
+  shift: number;
 }
 
 /** What belongs to the month, and is wiped when the next one opens. */
@@ -106,6 +125,8 @@ interface State extends MonthRecord {
   /** Who the player was last told has each Hidden Fact, true or not. */
   heard: { fact: string; subject: string }[];
   factEvents: { month: number; note: string; fact: string | null }[];
+  bossLandings: BossLanding[];
+  verdict: string | null;
   step: Step;
   truth: HiddenTruth;
 }
@@ -161,6 +182,8 @@ export function startRun(options: {
     marks: new Map(),
     heard: [],
     factEvents: [],
+    bossLandings: [],
+    verdict: null,
     step: { kind: "actions" },
     truth: {
       characters: motives.characters,
@@ -256,6 +279,7 @@ function apply(state: State, world: World, choice: Choice): void {
       state.spent += costOf(content, action.cost);
       state.visited.push(action.id);
       state.flags.push(...action.sets);
+      const reaction = landWithBoss(state, content, action, action.label);
       if (action.scene !== undefined) {
         state.step = openScene(state, world, action.scene);
       } else if (action.findOut !== undefined) {
@@ -263,7 +287,7 @@ function apply(state: State, world: World, choice: Choice): void {
       } else if (action.result) {
         const results = [action.result, ...action.moreResults];
         const result = results[(state.month - 1) % results.length];
-        state.step = { kind: "notice", ...(result ?? action.result) };
+        state.step = { kind: "notice", ...(result ?? action.result), reaction };
       }
       return;
     }
@@ -347,15 +371,50 @@ function answerNotification(
   const learned = option.learns.filter((w) => !state.buzzwords.includes(w));
   state.buzzwords.push(...learned);
   state.flags.push(...option.sets);
-  state.truth.bossOpinion += option.opinion;
+  const reaction = landWithBoss(state, content, option, option.label);
 
   if (option.dialog !== undefined) {
-    state.step = { kind: "dialog", id: option.dialog, learned };
+    state.step = { kind: "dialog", id: option.dialog, learned, reaction };
   } else if (option.result) {
-    state.step = { kind: "notice", ...option.result };
+    state.step = { kind: "notice", ...option.result, reaction };
   } else {
     state.step = nextStep(state, world);
   }
+}
+
+function bossKindOf(state: State, content: Content): Kind {
+  const dealt = state.truth.characters.find(
+    (c) => c.id === content.boss.character,
+  );
+  if (!dealt) throw new Error("The boss was not dealt.");
+  return dealt.kind;
+}
+
+/**
+ * Moves the boss's opinion by what the choice says, and by how this kind of
+ * boss takes its approach. Returns the sign of that, if it has one.
+ */
+function landWithBoss(
+  state: State,
+  content: Content,
+  choice: {
+    opinion?: number;
+    approach?: string | undefined;
+    reaction?: Readonly<Record<Kind, string>> | undefined;
+  },
+  label: string,
+): string | undefined {
+  const kind = bossKindOf(state, content);
+  const approach = content.boss.approaches.find(
+    (a) => a.id === choice.approach,
+  );
+  const shift = (choice.opinion ?? 0) + (approach?.shift[kind] ?? 0);
+  state.truth.bossOpinion += shift;
+  if (approach === undefined && shift === 0) return undefined;
+  state.bossLandings.push({ month: state.month, choice: label, shift });
+  if (approach === undefined) return undefined;
+  const lines = approach.reaction[kind];
+  return choice.reaction?.[kind] ?? lines[(state.month - 1) % lines.length];
 }
 
 /** Everyone present shows one behaviour, open to their role and chosen by their dealt kind. */
@@ -468,7 +527,6 @@ function behaveInScene(
   );
   if (!result) throw new IllegalChoiceError(choice.optionId);
   state.flags.push(...result.sets);
-  state.truth.bossOpinion += result.opinion;
   const heard = heardAbout(state, option?.about);
   const fill = (written: string) =>
     fillSubject(
@@ -477,6 +535,14 @@ function behaveInScene(
       option?.about,
       fillParts(state, world.content, written, scene.cast),
     );
+  const reaction = landWithBoss(
+    state,
+    world.content,
+    result,
+    fill(option?.label ?? ""),
+  );
+  const verdict = scene.verdict?.[moodOf(state, world.content)];
+  if (verdict !== undefined) state.verdict = verdict;
   if (result.factNote !== undefined) {
     const dealt = state.truth.characters.find(
       (c) => c.id === (result.factAt ?? heard?.subject),
@@ -489,7 +555,13 @@ function behaveInScene(
       fact: relevant ? (dealt?.text ?? null) : null,
     });
   }
-  state.step = { kind: "notice", title: scene.title, body: fill(result.body) };
+  state.step = {
+    kind: "notice",
+    title: scene.title,
+    body: fill(result.body),
+    reaction,
+    verdict,
+  };
 }
 
 function heardAbout(state: State, fact: string | undefined) {
@@ -528,6 +600,9 @@ function matches(
   if (condition === undefined) return true;
   if ("holderIs" in condition) {
     return condition.holderIs === partsIn(state.truth.powerMap, room).holder;
+  }
+  if ("bossIs" in condition) {
+    return bossKindOf(state, content) === condition.bossIs;
   }
   if ("factNature" in condition) {
     const { character, nature } = condition.factNature;
@@ -819,6 +894,7 @@ function toResultsView(
       verdict: content.ui.clueVerdicts[verdict],
     })),
     factEvents: state.factEvents,
+    boss: toBossResults(state, content),
     claims: state.claims.map((claim) => {
       const { label, note } = content.sources.verdicts[claim.status];
       const said = state.truth.characters.find((c) => c.id === claim.source);
@@ -833,6 +909,25 @@ function toResultsView(
         motive: (motive?.text ?? "").replaceAll("{name}", source),
       };
     }),
+  };
+}
+
+function toBossResults(
+  state: State,
+  content: Content,
+): Extract<StepView, { kind: "results" }>["boss"] {
+  const { warmer, cooler, unmoved } = content.ui.bossLanded;
+  const { name, title } = personOf(content, content.boss.character);
+  return {
+    name,
+    title,
+    kind: content.hiddenTruth.kinds[bossKindOf(state, content)].label,
+    verdict: state.verdict,
+    choices: state.bossLandings.map(({ month, choice, shift }) => ({
+      month,
+      choice,
+      landed: shift > 0 ? warmer : shift < 0 ? cooler : unmoved,
+    })),
   };
 }
 
@@ -870,6 +965,7 @@ function toStepView(state: State, world: World): StepView {
         title: dialog.title,
         lines: dialog.lines,
         learned: buzzwordsOf(content, step.learned),
+        reaction: step.reaction,
       };
     }
     case "scene":

@@ -22,7 +22,7 @@
         "sets": ["went-to-pub"],
         "dialog": "pub",
         "learns": ["strategic-patience"],
-        "opinion": 1
+        "approach": "favour"
       }
     ],
     "months": [1]
@@ -42,16 +42,22 @@
         "result": {
           "title": "Speaking Up: completed",
           "body": "You score 100%. The certificate says that you feel safe to raise concerns. There is a box for concerns about the certificate, and it is not working."
-        }
+        },
+        "approach": "results"
       },
       {
         "id": "skip-training",
         "label": "Leave it running in another window",
         "sets": ["skipped-training"],
-        "opinion": 1,
         "result": {
           "title": "Speaking Up: completed",
-          "body": "It finishes while you are at lunch. Your boss mentions doing it the same way. You score 100%."
+          "body": "It finishes while you are at lunch. You score 100%."
+        },
+        "approach": "theatre",
+        "reaction": {
+          "believer": "Your boss mentions, in passing, that the module takes forty-five minutes, and that the log says you did it in nine. Your boss does not ask anything further, and goes on not asking it for some time.",
+          "incompetent": "Your boss mentions doing it the same way, and asks you how to make the window stay open.",
+          "practitioner": "Your boss mentions doing it the same way, and that it would be a pity if the logs were ever read."
         }
       }
     ]
@@ -69,7 +75,8 @@
         "cost": "standard",
         "sets": ["sat-at-front"],
         "dialog": "town-hall-front",
-        "learns": ["north-star"]
+        "learns": ["north-star"],
+        "approach": "theatre"
       },
       {
         "id": "back-row",
@@ -95,9 +102,9 @@
         "label": "Go to the demonstration and roll it out",
         "cost": "standard",
         "sets": ["rolled-out-tool"],
-        "opinion": 1,
         "dialog": "tool-demo",
-        "learns": ["single-source-of-truth"]
+        "learns": ["single-source-of-truth"],
+        "approach": "results"
       },
       {
         "id": "say-evaluated",
@@ -122,20 +129,30 @@
         "label": "Stay late and make everything fly in",
         "cost": "standard",
         "sets": ["animated-deck"],
-        "opinion": 2,
         "result": {
           "title": "Slides for upstairs",
-          "body": "Each bullet point arrives from a different direction. The word Growth spins. Your boss watches it twice, in silence, and asks whether you have ever thought about moving up."
+          "body": "Each bullet point arrives from a different direction. The word Growth spins."
+        },
+        "approach": "theatre",
+        "reaction": {
+          "believer": "Your boss watches it to the end, and asks which of the slides says what is happening. None of them does. Your boss asks you to try again, gently, which is worse.",
+          "incompetent": "Your boss watches it twice, in silence, and asks whether you have ever thought about moving up.",
+          "practitioner": "Your boss takes the file without comment. It goes upstairs that evening with a different name in the corner, and you are told that it went well."
         }
       },
       {
         "id": "plain",
         "label": "Send three plain slides that say what is happening",
         "sets": ["plain-deck"],
-        "opinion": -1,
         "result": {
           "title": "Slides for upstairs",
-          "body": "Your boss replies at 07:12 asking whether this is the draft."
+          "body": "Three slides. Each of them says what is happening. It takes you twenty minutes."
+        },
+        "approach": "truth",
+        "reaction": {
+          "believer": "Your boss reads all three, then rings you to ask about the second. It is a real question. You have not been asked one here before.",
+          "incompetent": "Your boss replies at 07:12 asking whether this is the draft.",
+          "practitioner": "Your boss replies at 07:12: let's not put this in writing. The slides are not mentioned again, and neither, for a while, are you."
         }
       }
     ]
@@ -155,7 +172,8 @@
         "result": {
           "title": "Self-Assessment submitted",
           "body": "You use the word impact eleven times. An automatic reply thanks you for your honesty, which it has rated Meets."
-        }
+        },
+        "approach": "theatre"
       },
       {
         "id": "meets",

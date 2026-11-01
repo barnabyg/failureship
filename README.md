@@ -103,7 +103,7 @@ format, the page shows what is wrong instead of the game.
 | `moves.json`          | Character Moves, and when each can land                                                                              |
 | `official-story.json` | The official story, assembled from entries according to what you did                                                 |
 | `behaviours.json`     | What Characters can be seen doing, which roles can do it, and how likely each kind is to do it                       |
-| `boss.json`           | Who your boss is, and the signs of how they treat you                                                                |
+| `boss.json`           | Who your boss is, the signs of how they treat you, and what impresses each kind                                      |
 | `sources.json`        | Find Out: who can be asked, how each role talks, how reliable each kind is, and every claim                          |
 | `notebook.json`       | Events the Notebook keeps a clue of, and what each clue was worth                                                    |
 | `characters.json`     | Job titles, roles, how text refers to each person, names, and who reports to whom on the Org Chart                   |
@@ -147,6 +147,15 @@ The opinion has no number on screen. It shows only through `boss.json`: when the
 is in a Scene, one sign is picked using the `likelihood` for how the opinion stands,
 which `balance.json` sets with `warmAt` and `coldAt`. Every sign must be possible from
 at least two of `warm`, `neutral` and `cold`, so that no sign settles it.
+
+A choice can also carry `"approach": "theatre"`. `boss.json` lists each approach, how
+far it moves the opinion of each kind of boss, and how each kind shows it, so the same
+choice can warm one boss and chill another. The player reads that from `reaction`
+lines and never from a label: a line naming a kind, or an approach that every kind
+takes alike, stops the game from starting. A choice can write its own `reaction` for
+each kind. A result's `when` can read `{ "bossIs": "believer" }`, but an option's
+`requires` cannot, because options never appear or disappear on the boss's kind. A
+Scene with a `verdict` adds what the boss finally says, by how the opinion stands.
 
 An action with `"findOut": "ask"` spends an action to get a claim from a source.
 A method with `"someoneThere": true` deals one of its `sources` to be there, and its

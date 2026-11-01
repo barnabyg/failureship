@@ -32,6 +32,8 @@ interface RawSceneOption {
     body: string;
     sets?: string[];
     opinion?: number;
+    approach?: string;
+    reaction?: { believer: string; incompetent: string; practitioner: string };
     factAt?: string;
     factNote?: string;
   }[];
@@ -47,6 +49,7 @@ interface RawScene {
   options: RawSceneOption[];
   script?: string;
   months?: number[];
+  verdict?: { warm: string; neutral: string; cold: string };
 }
 
 interface RawMove {
@@ -108,6 +111,15 @@ export function fixtureRaw() {
         id: string;
         text: string;
         likelihood: { warm: number; neutral: number; cold: number };
+      }[],
+      approaches: [] as {
+        id: string;
+        shift: { believer: number; incompetent: number; practitioner: number };
+        reaction: {
+          believer: string[];
+          incompetent: string[];
+          practitioner: string[];
+        };
       }[],
     },
     sources: sourcesRaw(),
@@ -202,6 +214,11 @@ export function fixtureRaw() {
       },
       costLabel: "Costs {actions}",
       freeLabel: "Costs nothing",
+      bossLanded: {
+        warmer: "LANDED-WARMER",
+        cooler: "LANDED-COOLER",
+        unmoved: "LANDED-UNMOVED",
+      },
       results: { title: "The end", intro: "Here is who was who." },
     },
   };

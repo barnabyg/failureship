@@ -24,6 +24,7 @@ const {
   clueVerdicts,
   costLabel,
   freeLabel,
+  bossLanded,
   results,
   ...presentation
 } = ui;
@@ -51,6 +52,7 @@ export const gameContent = parseContent({
     clueVerdicts,
     costLabel,
     freeLabel,
+    bossLanded,
     results,
   },
 });
@@ -102,6 +104,8 @@ const panelSchema = z.strictObject(
       "resultsMarkWrong",
       "resultsCluesHeading",
       "resultsFactEventsHeading",
+      "resultsBossHeading",
+      "resultsBossNoChoices",
       "resultsClaimsHeading",
       "resultsNoClaims",
       "resultsMonthLabel",

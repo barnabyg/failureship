@@ -36,6 +36,8 @@
   "resultsMarkWrong": "Wrong",
   "resultsCluesHeading": "What your Notebook was worth",
   "resultsFactEventsHeading": "What a Hidden Fact did to you",
+  "resultsBossHeading": "Your boss, and what your choices did for them",
+  "resultsBossNoChoices": "You did nothing your boss noticed. It was a position.",
   "resultsClaimsHeading": "What you were told",
   "resultsNoClaims": "You asked nobody anything. It was a position.",
   "resultsMonthLabel": "Month {n}",
@@ -68,6 +70,11 @@
   },
   "costLabel": "Costs {actions}",
   "freeLabel": "Costs nothing",
+  "bossLanded": {
+    "warmer": "Went down well",
+    "cooler": "Cost you",
+    "unmoved": "Passed without comment"
+  },
   "results": {
     "title": "Your probation has been extended",
     "intro": "Your review period is over. A form says you are meeting expectations, and that the expectations are under review. Here is what the form leaves out."
