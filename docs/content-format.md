@@ -11,17 +11,17 @@ the game does not start and the page shows what is wrong.
 
 A `when` or `requires` holds one of these:
 
-| Condition                                                              | Holds when                                                           | Reads the hidden truth |
-| ---------------------------------------------------------------------- | -------------------------------------------------------------------- | ---------------------- |
-| `{ "flag": "went-to-pub" }`                                            | A flag is set this month                                             | Only if the flag does  |
-| `{ "hasBuzzword": "strategic-patience" }`                              | The player has learnt the Buzzword                                   | No                     |
-| `{ "heardFact": "lost-list" }`                                         | The player has been told that Hidden Fact about someone, true or not | No                     |
-| `{ "heardTrue": "lost-list" }`                                         | What the player was told about that Hidden Fact is true              | Yes                    |
-| `{ "holderIs": "boss" }`                                               | That Character is the most influential of those present              | Yes                    |
-| `{ "bossIs": "practitioner" }`                                         | The boss is of that kind                                             | Yes                    |
-| `{ "factNature": { "character": "projects", "nature": "dangerous" } }` | That Character's Hidden Fact has that `nature`                       | Yes                    |
-| `{ "not": ... }`                                                       | The condition inside does not hold                                   | If the inner one does  |
-| `{ "all": [...] }`                                                     | Every condition inside holds                                         | If any inner one does  |
+| Condition                                                              | Holds when                                                                              | Reads the hidden truth |
+| ---------------------------------------------------------------------- | --------------------------------------------------------------------------------------- | ---------------------- |
+| `{ "flag": "went-to-pub" }`                                            | A flag is set this month                                                                | Only if the flag does  |
+| `{ "hasBuzzword": "strategic-patience" }`                              | The player has learnt the Buzzword                                                      | No                     |
+| `{ "heardFact": "lost-list" }`                                         | The player has been told that Hidden Fact about someone, true or not                    | No                     |
+| `{ "heardTrue": "lost-list" }`                                         | What the player was told about that Hidden Fact is true                                 | Yes                    |
+| `{ "holderIs": "boss" }`                                               | That Character is the most influential of those present, or of everyone outside a Scene | Yes                    |
+| `{ "bossIs": "practitioner" }`                                         | The boss is of that kind                                                                | Yes                    |
+| `{ "factNature": { "character": "projects", "nature": "dangerous" } }` | That Character's Hidden Fact has that `nature`                                          | Yes                    |
+| `{ "not": ... }`                                                       | The condition inside does not hold                                                      | If the inner one does  |
+| `{ "all": [...] }`                                                     | Every condition inside holds                                                            | If any inner one does  |
 
 Where each can be used:
 
@@ -38,8 +38,8 @@ Anything else is refused. An option must never appear or disappear on undiscover
 truth, and that includes the boss's kind, so a condition that would show the truth
 this way stops the game from starting. This also goes for a flag set by something
 hidden: a Scene result or a Move whose `when` reads the truth, a Demand being
-forgotten or chased, or your boss finding out about going over their head. Only a
-Notebook event can read such a flag, because the player has just seen that result.
+forgotten or chased, or your boss finding out about going over their head. A
+Notebook event can still read such a flag, because the player has just seen that result.
 
 Flags come from `sets`, and are wiped when a new month opens. Buzzwords carry over for
 the whole run.
