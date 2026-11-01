@@ -306,6 +306,10 @@ tests, dependency audit and build. The browser tests need Chromium once:
 - `content/` holds the game's data and text.
 - `src/content/` loads and checks it at start-up.
 - `src/engine/` holds the rules: headless, seeded, and free of Three.js and React.
+  `run.ts` coordinates a run; `state.ts` and `reads.ts` are what its mechanics
+  share; `boss.ts`, `demands.ts` and `over-head.ts` are mechanics of their own;
+  `to-view.ts` builds the player view. `content.ts` is the schema, and
+  `content-checks.ts` parses data against it and checks it across files.
 - `src/tower/` draws the tower and holds no rules.
 - `src/ui/` holds the React panels over the tower.
 
