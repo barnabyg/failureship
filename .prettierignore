@@ -3,6 +3,7 @@
 
 # Generated output.
 dist/
+dist-e2e/
 playwright-report/
 test-results/
 package-lock.json

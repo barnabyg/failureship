@@ -1,14 +1,9 @@
 import { expect, test } from "@playwright/test";
-import { answerAnyNotification, attendAndFinishMonth } from "./play";
 
 test("decides who gets the bonus pot, and sees how it lands", async ({
   page,
 }) => {
-  await page.goto("/?seed=2");
-  for (let month = 1; month <= 5; month++) {
-    await answerAnyNotification(page);
-    await attendAndFinishMonth(page);
-  }
+  await page.goto("/?seed=2&month=6");
   await expect(page.getByTestId("month")).toContainText("6 of 9");
 
   await page.getByTestId("option-invent-dates").click();

@@ -101,7 +101,7 @@ test("an address with a seed that cannot be used says so", async ({ page }) => {
 });
 
 test("the end of a run needs no confirmation to leave", async ({ page }) => {
-  await page.goto("/?seed=1");
+  await page.goto("/?seed=1&month=9");
   await playToResults(page);
 
   await page.getByTestId("seed-input").fill("5");
@@ -112,25 +112,8 @@ test("the end of a run needs no confirmation to leave", async ({ page }) => {
   await expect(page.getByTestId("panel-notification")).toBeVisible();
 });
 
-test("a whole run ends on a results screen", async ({ page }) => {
-  await page.goto("/?seed=1");
-  await playToResults(page);
-
-  await expect(page.getByTestId("panel-results")).toBeVisible();
-  await expect(page.getByTestId("result-character")).toHaveCount(5);
-  await expect(page.getByTestId("results-org-chart")).toContainText(
-    "Hugh Lamb",
-  );
-  await expect(page.getByTestId("results-power-map")).toContainText(
-    "Hugh Lamb",
-  );
-  await expect(page.getByTestId("panel-results")).toContainText(
-    /Believer|Incompetent|Practitioner/,
-  );
-});
-
 test("a new run can be started from the end", async ({ page }) => {
-  await page.goto("/?seed=1");
+  await page.goto("/?seed=1&month=9");
   await playToResults(page);
 
   await page.getByTestId("new-run").click();

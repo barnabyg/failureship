@@ -16,9 +16,7 @@ async function closeNotebook(page: Page) {
   await expect(page.getByTestId("notebook")).toHaveCount(0);
 }
 
-test("a clue arrives, a Character is marked, and the mark is on the results screen", async ({
-  page,
-}) => {
+test("a clue arrives, and a Character is marked", async ({ page }) => {
   await page.goto("/?seed=1");
   await openNotebook(page);
   await expect(page.getByTestId("clue")).toHaveCount(0);
@@ -38,8 +36,16 @@ test("a clue arrives, a Character is marked, and the mark is on the results scre
   await expect(clue).toContainText("Month 1");
   await page.getByTestId("mark-boss").selectOption("practitioner");
   await closeNotebook(page);
+  await openNotebook(page);
+  await expect(page.getByTestId("mark-boss")).toHaveValue("practitioner");
+});
 
-  await page.getByTestId("continue").click();
+test("a mark is on the results screen, with the clues", async ({ page }) => {
+  await page.goto("/?seed=1&month=9");
+  await openNotebook(page);
+  await page.getByTestId("mark-boss").selectOption("practitioner");
+  await closeNotebook(page);
+
   await playToResults(page);
 
   const row = page.getByTestId("result-mark").filter({ hasText: "Dennis" });
@@ -116,7 +122,7 @@ test("escape closes the Notebook, and a mark survives closing it", async ({
 test("the Notebook can be read but not changed once the run is over", async ({
   page,
 }) => {
-  await page.goto("/?seed=1");
+  await page.goto("/?seed=1&month=9");
   await playToResults(page);
 
   await openNotebook(page);

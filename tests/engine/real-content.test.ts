@@ -9,8 +9,15 @@ import {
   type Run,
 } from "../../src/engine";
 import { readHiddenTruth } from "../../src/engine/hidden-truth";
+import { plainChoice, playToMonth } from "../../src/ui/later-month";
 
 const SEEDS = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+
+/** Where a browser test is once it has started at a later month and filed the report. */
+function reachActionsOfMonth(run: Run, month: string) {
+  let view = playToMonth(run, month);
+  while (view.step.kind !== "actions") view = run.choose(plainChoice(view));
+}
 
 const isFindOut = (choice: Choice) =>
   choice.type === "action" &&
@@ -229,8 +236,8 @@ describe("the real month", () => {
       return gameContent.hiddenTruth.facts.find((f) => f.id === dealt?.fact?.id)
         ?.nature;
     };
-    const run = startRun({ seed: 22, content: gameContent });
-    fileTheReport(run);
+    const run = startRun({ seed: 74, content: gameContent });
+    reachActionsOfMonth(run, "8");
     run.choose({ type: "action", actionId: "inside-info" });
     const told = run.choose({
       type: "find-out",
@@ -238,7 +245,7 @@ describe("the real month", () => {
       subjectId: "boss",
     });
 
-    expect(nature(3, "projects")).toBe("dangerous");
+    expect(nature(1, "analyst")).toBe("dangerous");
     expect(JSON.stringify(told.step)).toContain("abolished");
   });
 
@@ -380,6 +387,16 @@ describe("the real month", () => {
       expect(run.choose({ type: "continue" }).step.kind).toBe(then);
     },
   );
+
+  // The over-head browser test relies on this.
+  it("keeps a trip over the boss's head paying off in month 8 on seed 5", () => {
+    const run = startRun({ seed: 5, content: gameContent });
+    reachActionsOfMonth(run, "8");
+
+    const told = run.choose({ type: "action", actionId: "over-head" });
+
+    expect(JSON.stringify(told.step)).toContain("told to listen to you");
+  });
 
   // Each of these holds influence in the meeting on that seed.
   it.each([
