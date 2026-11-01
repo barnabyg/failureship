@@ -68,6 +68,24 @@ describe("the end of the month", () => {
     expect(view?.choices).toEqual([{ type: "continue" }]);
   });
 
+  it("runs the whole month in the defined order", () => {
+    const kinds = play(1, [...month(pub, "use-word"), next]).map(
+      (v) => v.step.kind,
+    );
+
+    expect(kinds).toEqual([
+      "notification",
+      "dialog",
+      "actions",
+      "scene",
+      "notice",
+      "actions",
+      "notice",
+      "move",
+      "story",
+    ]);
+  });
+
   it("will not land a Move while actions remain", () => {
     const views = play(1, [report, next, kettle, next]);
 
