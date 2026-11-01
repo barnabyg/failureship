@@ -189,3 +189,6 @@ A Scene that data cannot express can name a `script`, which is passed to
 - `build.chunkSizeWarningLimit` in `vite.config.ts` is raised because Three.js
   and the game's text make up the single bundle. Review it if hosting is ever added.
 - `.prettierignore` leaves the owner's design records and agent docs unformatted.
+- `.prettierignore` and `eslint.config.js` skip `.claude/worktrees/`, and
+  `.prettierignore` skips `.claude/settings.local.json`: both are untracked and local to
+  one machine. Review this if anything in them comes to be tracked.

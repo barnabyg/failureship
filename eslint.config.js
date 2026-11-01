@@ -13,7 +13,8 @@ export default tseslint.config(
       "dist-e2e/",
       "playwright-report/",
       "test-results/",
-      ".claude/",
+      // Other checkouts of this repository, with their own tsconfig.json.
+      ".claude/worktrees/",
     ],
   },
   js.configs.recommended,
