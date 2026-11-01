@@ -196,6 +196,33 @@ describe("the real month", () => {
     expect(orgChart.filter((e) => e.reportsTo === null)).toHaveLength(1);
   });
 
+  // The browser tests rely on these two deals.
+  it("keeps the deals that the Hidden Fact browser tests use", () => {
+    const nature = (seed: number, character: string) => {
+      const dealt = readHiddenTruth(
+        startRun({ seed, content: gameContent }),
+      ).characters.find((c) => c.id === character);
+      return gameContent.hiddenTruth.facts.find((f) => f.id === dealt?.fact?.id)
+        ?.nature;
+    };
+    const run = startRun({ seed: 22, content: gameContent });
+    run.choose({
+      type: "notification",
+      notificationId: "report-or-pub",
+      optionId: "report",
+    });
+    run.choose({ type: "continue" });
+    run.choose({ type: "action", actionId: "inside-info" });
+    const told = run.choose({
+      type: "find-out",
+      sourceId: "admin",
+      subjectId: "boss",
+    });
+
+    expect(nature(3, "projects")).toBe("dangerous");
+    expect(JSON.stringify(told.step)).toContain("abolished");
+  });
+
   // The README names these seeds in its test scenario.
   it.each([
     [8, "boss"],

@@ -74,6 +74,7 @@ const panelSchema = z.strictObject(
       "resultsNoFact",
       "findOutSourceHeading",
       "findOutSubjectHeading",
+      "resultsFactEventsHeading",
       "resultsClaimsHeading",
       "resultsNoClaims",
       "resultsMonthLabel",

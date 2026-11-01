@@ -78,6 +78,9 @@ interface State extends MonthRecord {
   month: number;
   buzzwords: string[];
   claims: Claim[];
+  /** Who the player was last told has each Hidden Fact, true or not. */
+  heard: { fact: string; subject: string }[];
+  factEvents: { month: number; character: string; note: string }[];
   step: Step;
   truth: HiddenTruth;
 }
@@ -126,6 +129,8 @@ export function startRun(options: {
     ...freshMonth(content, 1),
     buzzwords: [],
     claims: [],
+    heard: [],
+    factEvents: [],
     step: { kind: "actions" },
     truth: {
       characters: motives.characters,
@@ -237,6 +242,11 @@ function hearClaim(
   });
   state.rng = made.next;
   state.claims.push(made.claim);
+  const { factId, subject } = made.claim;
+  if (factId !== null) {
+    state.heard = state.heard.filter((h) => h.fact !== factId);
+    state.heard.push({ fact: factId, subject });
+  }
   state.step = { kind: "claim", index: state.claims.length - 1 };
 }
 
@@ -325,11 +335,24 @@ function behaveInScene(
   if (!result) throw new IllegalChoiceError(choice.optionId);
   state.flags.push(...result.sets);
   state.truth.bossOpinion += result.opinion;
-  state.step = {
-    kind: "notice",
-    title: scene.title,
-    body: fillRoles(state, world.content, result.body, scene.cast),
-  };
+  const heard = heardAbout(state, option?.about);
+  const fill = (written: string) =>
+    fillRoles(state, world.content, written, scene.cast).replaceAll(
+      "{subject}",
+      heard ? personOf(world.content, heard.subject).name : "",
+    );
+  if (result.factNote !== undefined) {
+    state.factEvents.push({
+      month: state.month,
+      character: result.factAt ?? heard?.subject ?? "",
+      note: fill(result.factNote),
+    });
+  }
+  state.step = { kind: "notice", title: scene.title, body: fill(result.body) };
+}
+
+function heardAbout(state: State, fact: string | undefined) {
+  return state.heard.find((h) => h.fact === fact);
 }
 
 /** Roles are relative to who is in the room. Left out, that is everyone. */
@@ -352,6 +375,22 @@ function matches(
   if ("holderIs" in condition) {
     return condition.holderIs === rolesIn(state.truth.powerMap, room).holder;
   }
+  if ("factNature" in condition) {
+    const { character, nature } = condition.factNature;
+    const dealt = state.truth.characters.find((c) => c.id === character);
+    const fact = content.hiddenTruth.facts.find(
+      (f) => f.id === dealt?.fact?.id,
+    );
+    return fact?.nature === nature;
+  }
+  if ("heardFact" in condition) {
+    return heardAbout(state, condition.heardFact) !== undefined;
+  }
+  if ("heardTrue" in condition) {
+    const heard = heardAbout(state, condition.heardTrue);
+    const dealt = state.truth.characters.find((c) => c.id === heard?.subject);
+    return dealt?.fact?.id === condition.heardTrue;
+  }
   if ("opinionIs" in condition) {
     return condition.opinionIs === moodOf(state, content);
   }
@@ -364,7 +403,11 @@ function matches(
 }
 
 function offeredOptions(state: State, content: Content, scene: SceneData) {
-  return scene.options.filter((o) => matches(state, content, o.requires));
+  return scene.options.filter(
+    (o) =>
+      (o.about === undefined || heardAbout(state, o.about) !== undefined) &&
+      matches(state, content, o.requires),
+  );
 }
 
 function sceneData(state: State, world: World, id: string): SceneData {
@@ -535,10 +578,16 @@ function toSceneView(
       return { who, text: (written?.text ?? "").replaceAll("{who}", who) };
     }),
     treatment: content.boss.signs.find((s) => s.id === treatment)?.text ?? null,
-    options: offeredOptions(state, content, scene).map((o) => ({
-      id: o.id,
-      label: fill(o.label),
-    })),
+    options: offeredOptions(state, content, scene).map((o) => {
+      const heard = heardAbout(state, o.about);
+      return {
+        id: o.id,
+        label: fill(o.label).replaceAll(
+          "{subject}",
+          heard ? personOf(content, heard.subject).name : "",
+        ),
+      };
+    }),
   };
 }
 
@@ -594,6 +643,13 @@ function toResultsView(
         reportsTo: above ? nameOf(above.who) : null,
       };
     }),
+    factEvents: state.factEvents.map(({ month, character, note }) => ({
+      month,
+      note,
+      fact:
+        state.truth.characters.find((c) => c.id === character)?.fact?.text ??
+        null,
+    })),
     claims: state.claims.map((claim) => {
       const { label, note } = content.sources.verdicts[claim.status];
       const said = state.truth.characters.find((c) => c.id === claim.source);

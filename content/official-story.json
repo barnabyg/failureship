@@ -7,83 +7,170 @@
       "reported": "Floor 1 remains on track against its objectives, which are being finalised."
     },
     {
-      "when": { "flag": "filed-report" },
+      "when": {
+        "flag": "filed-report"
+      },
       "reported": "The Monthly Status Report was delivered on time and in full.",
       "happened": "You filed it at 23:58. Nobody has opened it."
     },
     {
-      "when": { "flag": "went-to-pub" },
+      "when": {
+        "flag": "went-to-pub"
+      },
       "reported": "The team invested in senior stakeholder engagement outside core hours.",
       "happened": "You went to the pub. The Monthly Status Report was not filed."
     },
     {
-      "when": { "flag": "backed-holder" },
+      "when": {
+        "flag": "backed-holder"
+      },
       "reported": "You showed mature judgement in a cross-functional forum.",
       "happened": "You agreed with someone, and it seems to have helped. Nobody will say why."
     },
     {
-      "when": { "flag": "backed-wrong-person" },
+      "when": {
+        "flag": "backed-wrong-person"
+      },
       "reported": "You gave visible support to the leadership team.",
       "happened": "You agreed with someone, and it does not seem to have helped. Nobody will say why."
     },
     {
-      "when": { "flag": "said-nothing" },
+      "when": {
+        "flag": "said-nothing"
+      },
       "reported": "You contributed to the Monthly Alignment Meeting.",
       "happened": "You wrote key takeaways on a pad and underlined it."
     },
     {
       "when": {
         "all": [
-          { "flag": "used-buzzword" },
-          { "not": { "flag": "phrase-taken" } }
+          {
+            "flag": "used-buzzword"
+          },
+          {
+            "not": {
+              "flag": "phrase-taken"
+            }
+          }
         ]
       },
       "reported": "You introduced a new strategic framework to the floor.",
       "happened": "You repeated something Dennis said in a pub."
     },
     {
-      "when": { "flag": "phrase-taken" },
+      "when": {
+        "flag": "phrase-taken"
+      },
       "reported": "Dennis Prowse introduced a new strategic framework to the business.",
       "happened": "You repeated something Dennis said in a pub, and Dennis has now said it back to everyone else."
     },
     {
-      "when": { "not": { "flag": "attended-meeting" } },
-      "reported": "You were recorded as present at the Monthly Alignment Meeting.",
-      "happened": "You were not there. Nobody has mentioned it, which may or may not be a good sign."
-    },
-    {
-      "when": { "flag": "had-tea" },
+      "when": {
+        "flag": "had-tea"
+      },
       "reported": "You strengthened cross-functional relationships.",
       "happened": "You had a cup of tea."
     },
     {
-      "when": { "flag": "had-one-to-one" },
+      "when": {
+        "flag": "had-one-to-one"
+      },
       "reported": "You invested in your professional network.",
       "happened": "You listened to a long account of a car park."
     },
     {
-      "when": { "flag": "did-work" },
+      "when": {
+        "flag": "did-work"
+      },
       "happened": "You did two hours of real work. This has not been recorded anywhere."
     },
     {
-      "when": { "flag": "given-action" },
+      "when": {
+        "flag": "given-action"
+      },
       "reported": "You took ownership of a key action.",
       "happened": "An action was left on your desk by the minutes."
     },
     {
-      "when": { "flag": "figures-borrowed" },
+      "when": {
+        "flag": "figures-borrowed"
+      },
       "reported": "Priya Venn presented strong analysis to senior management.",
       "happened": "It was your analysis."
     },
     {
-      "when": { "flag": "report-chased" },
+      "when": {
+        "flag": "report-chased"
+      },
       "reported": "A minor reporting delay was identified and is being managed by Dennis Prowse.",
       "happened": "It is being managed by asking you about it."
     },
     {
-      "when": { "flag": "report-renamed" },
+      "when": {
+        "flag": "report-renamed"
+      },
       "reported": "Dennis Prowse delivered an executive summary of outstanding clarity.",
       "happened": "It was your report, with a new first page."
+    },
+    {
+      "when": {
+        "flag": "burned-by-a-fact"
+      },
+      "reported": "A colleague's concerns about your conduct have been passed to the appropriate level.",
+      "happened": "You blamed the wrong person. Nobody will tell you why they were the wrong person."
+    },
+    {
+      "when": {
+        "flag": "blamed-a-colleague"
+      },
+      "reported": "A colleague has been supported through a learning opportunity.",
+      "happened": "You blamed someone in front of everyone, and it worked."
+    },
+    {
+      "when": {
+        "flag": "took-the-blame"
+      },
+      "reported": "You demonstrated ownership of a historic delivery issue.",
+      "happened": "It was not your fault. It is now."
+    },
+    {
+      "when": {
+        "flag": "blamed-the-supplier"
+      },
+      "reported": "Root cause was traced to an external dependency.",
+      "happened": "You blamed someone who was not there. So did everyone else."
+    },
+    {
+      "when": {
+        "flag": "used-a-fact"
+      },
+      "reported": "You built a strong working relationship with a key colleague.",
+      "happened": "You let someone know what you know about them."
+    },
+    {
+      "when": {
+        "flag": "misused-a-fact"
+      },
+      "reported": "You raised a matter of interest with a colleague.",
+      "happened": "You repeated gossip to someone's face, and it was wrong."
+    },
+    {
+      "when": {
+        "all": [
+          {
+            "not": {
+              "flag": "attended-meeting"
+            }
+          },
+          {
+            "not": {
+              "flag": "attended-lessons"
+            }
+          }
+        ]
+      },
+      "reported": "You were recorded as present at the Monthly Alignment Meeting.",
+      "happened": "You were not there. Nobody has mentioned it, which may or may not be a good sign."
     },
     {
       "reported": "No risks were identified, as the risk review has been rescheduled."

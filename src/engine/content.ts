@@ -45,8 +45,14 @@ const buzzword = z.strictObject({ id, term: text, meaning: text });
 export const MOODS = ["warm", "neutral", "cold"] as const;
 export type Mood = (typeof MOODS)[number];
 
+export const NATURES = ["dangerous", "useful", "idle"] as const;
+export type Nature = (typeof NATURES)[number];
+
 export type Condition =
   | { holderIs: string }
+  | { factNature: { character: string; nature: Nature } }
+  | { heardFact: string }
+  | { heardTrue: string }
   | { hasBuzzword: string }
   | { flag: string }
   | { opinionIs: Mood }
@@ -56,6 +62,14 @@ export type Condition =
 const condition: z.ZodType<Condition> = z.lazy(() =>
   z.union([
     z.strictObject({ holderIs: id }),
+    z.strictObject({
+      factNature: z.strictObject({
+        character: id,
+        nature: z.enum(NATURES),
+      }),
+    }),
+    z.strictObject({ heardFact: id }),
+    z.strictObject({ heardTrue: id }),
     z.strictObject({ hasBuzzword: id }),
     z.strictObject({ flag: id }),
     z.strictObject({ opinionIs: z.enum(MOODS) }),
@@ -69,11 +83,17 @@ const sceneResult = z.strictObject({
   body: text,
   sets,
   opinion,
+  /** Says on the results screen that a Hidden Fact caused this. */
+  factNote: text.optional(),
+  /** Whose Hidden Fact it was, unless the option is `about` one. */
+  factAt: id.optional(),
 });
 
 const sceneOption = z.strictObject({
   id,
   label: text,
+  /** The option appears once the player has heard this Hidden Fact of someone. */
+  about: id.optional(),
   /** The option appears only when this holds. */
   requires: condition.optional(),
   results: z.array(sceneResult).min(1),
@@ -277,6 +297,8 @@ const contentSchema = z.strictObject({
           text,
           /** Who it can be dealt to. Left out, it suits anyone. */
           characters: z.array(id).min(1).optional(),
+          /** Whether it can burn the player, arm them or does neither. */
+          nature: z.enum(NATURES).default("idle"),
         }),
       )
       .min(1),
@@ -352,7 +374,14 @@ export function parseContent(raw: unknown): Content {
 
 /** Showing or hiding an option on this would tell the player the truth. */
 function dependsOnHiddenTruth(condition: Condition): boolean {
-  if ("holderIs" in condition || "opinionIs" in condition) return true;
+  if (
+    "holderIs" in condition ||
+    "opinionIs" in condition ||
+    "factNature" in condition ||
+    "heardTrue" in condition
+  ) {
+    return true;
+  }
   if ("not" in condition) return dependsOnHiddenTruth(condition.not);
   if ("all" in condition) return condition.all.some(dependsOnHiddenTruth);
   return false;
@@ -544,8 +573,18 @@ function findBrokenReferences(content: Content): string[] {
       problems.push(`${owner} names unknown Character "${character}".`);
     }
   };
+  const checkFact = (owner: string, fact: string) => {
+    if (!content.hiddenTruth.facts.some((f) => f.id === fact)) {
+      problems.push(`${owner} names unknown Hidden Fact "${fact}".`);
+    }
+  };
   const checkCondition = (owner: string, condition: Condition) => {
     if ("holderIs" in condition) checkCharacter(owner, condition.holderIs);
+    if ("factNature" in condition) {
+      checkCharacter(owner, condition.factNature.character);
+    }
+    if ("heardFact" in condition) checkFact(owner, condition.heardFact);
+    if ("heardTrue" in condition) checkFact(owner, condition.heardTrue);
     if ("not" in condition) checkCondition(owner, condition.not);
     if ("all" in condition) {
       for (const inner of condition.all) checkCondition(owner, inner);
@@ -556,8 +595,9 @@ function findBrokenReferences(content: Content): string[] {
       );
     }
   };
-  const checkRoles = (owner: string, written: string) => {
+  const checkRoles = (owner: string, written: string, about = false) => {
     for (const [, token] of written.matchAll(/\{(\w+)\}/g)) {
+      if (about && token === "subject") continue;
       if (token !== "holder" && token !== "ignored" && token !== "bystander") {
         problems.push(`${owner} uses unknown role "{${token ?? ""}}".`);
       }
@@ -643,9 +683,13 @@ function findBrokenReferences(content: Content): string[] {
     for (const sign of s.signs) checkRoles(owner, sign.text);
     for (const o of s.options) {
       const optionOwner = `${owner} option "${o.id}"`;
-      checkRoles(optionOwner, o.label);
+      const about = o.about !== undefined;
+      if (o.about !== undefined) checkFact(optionOwner, o.about);
+      checkRoles(optionOwner, o.label, about);
       for (const r of o.results) {
-        checkRoles(optionOwner, r.body);
+        checkRoles(optionOwner, r.body, about);
+        checkRoles(optionOwner, r.factNote ?? "", about);
+        if (r.factAt !== undefined) checkCharacter(optionOwner, r.factAt);
         if (r.when) checkCondition(optionOwner, r.when);
       }
       if (o.requires) {

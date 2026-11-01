@@ -25,12 +25,15 @@ type RawCondition = Record<string, unknown>;
 interface RawSceneOption {
   id: string;
   label: string;
+  about?: string;
   requires?: RawCondition;
   results: {
     when?: RawCondition;
     body: string;
     sets?: string[];
     opinion?: number;
+    factAt?: string;
+    factNote?: string;
   }[];
 }
 

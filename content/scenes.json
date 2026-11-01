@@ -145,6 +145,208 @@
           }
         ]
       }
+    ],
+    "months": [1, 3, 4, 5, 6]
+  },
+  {
+    "id": "lessons-learned",
+    "months": [2],
+    "title": "Lessons Learned Review",
+    "location": "Floor 1, Meeting Room 1B",
+    "narration": [
+      "A project was delivered late. The purpose of this session is not to find someone to blame, Dennis explains, and asks whose fault it was. Everyone looks at you, the most junior person present."
+    ],
+    "cast": ["head", "boss", "analyst", "admin", "projects"],
+    "signs": [
+      {
+        "label": "Who has prepared",
+        "text": "{holder} has brought no notes, and nobody has asked why. {ignored} has brought a timeline, and nobody has asked to see it."
+      },
+      {
+        "label": "Who goes quiet",
+        "text": "When the delay comes up, {bystander} looks at {holder}, then at the table."
+      }
+    ],
+    "options": [
+      {
+        "id": "blame-callum",
+        "label": "Say that the delay began with Callum",
+        "results": [
+          {
+            "when": {
+              "factNature": {
+                "character": "projects",
+                "nature": "dangerous"
+              }
+            },
+            "body": "Callum says nothing. On Thursday you are invited to explain yourself to someone from a floor you have never seen. Nobody tells you what you did, only that it has been noted at a level you cannot reach.",
+            "sets": ["burned-by-a-fact"],
+            "opinion": -2,
+            "factAt": "projects",
+            "factNote": "You blamed Callum for the delay. You had not been told why that was a mistake."
+          },
+          {
+            "body": "Callum goes pink and apologises to the room. It works. The minutes record a learning opportunity, and it is Callum's.",
+            "sets": ["blamed-a-colleague"],
+            "opinion": 1
+          }
+        ]
+      },
+      {
+        "id": "blame-priya",
+        "label": "Say that the delay began with Priya",
+        "results": [
+          {
+            "when": {
+              "factNature": {
+                "character": "analyst",
+                "nature": "dangerous"
+              }
+            },
+            "body": "Priya thanks you for your candour, and writes it down. By the end of the week two people you do not know have asked to see your expenses, going back some way.",
+            "sets": ["burned-by-a-fact"],
+            "opinion": -2,
+            "factAt": "analyst",
+            "factNote": "You blamed Priya for the delay. You had not been told why that was a mistake."
+          },
+          {
+            "body": "Priya looks at you for slightly too long, then agrees that lessons can be learned. It appears to work. The minutes record a learning opportunity, and it is Priya's.",
+            "sets": ["blamed-a-colleague"],
+            "opinion": 1
+          }
+        ]
+      },
+      {
+        "id": "blame-marjorie",
+        "label": "Say that the delay began with Marjorie",
+        "results": [
+          {
+            "when": {
+              "factNature": {
+                "character": "admin",
+                "nature": "dangerous"
+              }
+            },
+            "body": "Marjorie makes a note. Your pay is late this month, and nobody can find out why. You are told that the matter has been raised with the appropriate person, and that you have just met them.",
+            "sets": ["burned-by-a-fact"],
+            "opinion": -2,
+            "factAt": "admin",
+            "factNote": "You blamed Marjorie for the delay. You had not been told why that was a mistake."
+          },
+          {
+            "body": "Marjorie sighs, and takes the action. It seems to work, although your stationery order has since been queried.",
+            "sets": ["blamed-a-colleague"],
+            "opinion": 1
+          }
+        ]
+      },
+      {
+        "id": "take-the-blame",
+        "label": "Say that it was your fault",
+        "results": [
+          {
+            "body": "There is a long, relieved silence. Dennis thanks you for your ownership. You are now the person this happened to.",
+            "sets": ["took-the-blame"],
+            "opinion": 1
+          }
+        ]
+      },
+      {
+        "id": "blame-supplier",
+        "label": "Say that it was the supplier",
+        "results": [
+          {
+            "body": "Everyone agrees at once. The supplier is not present and has no idea. Nothing is learned, which is noted as a lesson.",
+            "sets": ["blamed-the-supplier"]
+          }
+        ]
+      },
+      {
+        "id": "use-abolished-post",
+        "about": "abolished-post",
+        "label": "Mention to {subject}, quietly, the reorganisation of two years ago",
+        "results": [
+          {
+            "when": {
+              "heardTrue": "abolished-post"
+            },
+            "body": "{subject} stops halfway through a sentence. Afterwards {subject} walks you to the lift, for the first time, and asks after your family, whom {subject} has never heard of. Nothing further is said about the delay.",
+            "sets": ["used-a-fact"],
+            "opinion": 3,
+            "factNote": "What you were told about {subject} was so, and you knew to use it."
+          },
+          {
+            "body": "{subject} has no idea what you mean, and asks you to send it over in writing. You now have an action.",
+            "sets": ["misused-a-fact"],
+            "opinion": -1,
+            "factNote": "You acted on something you were told about {subject}. It was not so."
+          }
+        ]
+      },
+      {
+        "id": "use-values-statement",
+        "about": "values-statement",
+        "label": "Quote the values statement at {subject}, with a small smile",
+        "results": [
+          {
+            "when": {
+              "heardTrue": "values-statement"
+            },
+            "body": "{subject} looks at you, then laughs for the first time on record. The following week you are asked to join something with a name. The delay is not raised again.",
+            "sets": ["used-a-fact"],
+            "opinion": 1,
+            "factNote": "What you were told about {subject} was so, and you knew to use it."
+          },
+          {
+            "body": "{subject} nods gravely and says those values mean a great deal. You have made a sincere impression on someone you were trying to make laugh.",
+            "sets": ["misused-a-fact"],
+            "factNote": "You acted on something you were told about {subject}. It was not so."
+          }
+        ]
+      },
+      {
+        "id": "use-lost-list",
+        "about": "lost-list",
+        "label": "Tell {subject} that you could help look for a certain list",
+        "results": [
+          {
+            "when": {
+              "heardTrue": "lost-list"
+            },
+            "body": "{subject} goes very still, then asks you for a word outside. From now on {subject} speaks well of you, to everyone, with a slight tremor.",
+            "sets": ["used-a-fact"],
+            "opinion": 1,
+            "factNote": "What you were told about {subject} was so, and you knew to use it."
+          },
+          {
+            "body": "{subject} asks which list. You say it does not matter. It now does, and {subject} has mentioned it to Marjorie.",
+            "sets": ["misused-a-fact"],
+            "opinion": -1,
+            "factNote": "You acted on something you were told about {subject}. It was not so."
+          }
+        ]
+      },
+      {
+        "id": "use-competitor-offer",
+        "about": "competitor-offer",
+        "label": "Ask {subject} how things are looking at the competition",
+        "results": [
+          {
+            "when": {
+              "heardTrue": "competitor-offer"
+            },
+            "body": "{subject} closes the laptop and looks at you properly for the first time. After the meeting {subject} offers you some advice, which is good, and asks you for your silence, which is free.",
+            "sets": ["used-a-fact"],
+            "opinion": 1,
+            "factNote": "What you were told about {subject} was so, and you knew to use it."
+          },
+          {
+            "body": "{subject} says they are doing rather well, and sends you the market report. You have fifty pages to read and nothing to show for it.",
+            "sets": ["misused-a-fact"],
+            "factNote": "You acted on something you were told about {subject}. It was not so."
+          }
+        ]
+      }
     ]
   }
 ]

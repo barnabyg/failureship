@@ -104,6 +104,8 @@ export type StepView =
         fact: string | null;
       }[];
       powerMap: ChartEntry[];
+      /** Where a Hidden Fact changed what happened in this run. */
+      factEvents: { month: number; note: string; fact: string | null }[];
       claims: {
         month: number;
         source: string;

@@ -1,48 +1,66 @@
 {
   "kinds": {
-    "believer": { "label": "Believer", "weight": 3 },
-    "incompetent": { "label": "Incompetent", "weight": 3 },
-    "practitioner": { "label": "Practitioner", "weight": 2 }
+    "believer": {
+      "label": "Believer",
+      "weight": 3
+    },
+    "incompetent": {
+      "label": "Incompetent",
+      "weight": 3
+    },
+    "practitioner": {
+      "label": "Practitioner",
+      "weight": 2
+    }
   },
   "minPractitioners": 1,
   "charactersWithFact": 4,
   "facts": [
     {
       "id": "thursday-bridge",
-      "text": "{name} has played bridge with the Chief Executive every Thursday for eleven years."
+      "text": "{name} has played bridge with the Chief Executive every Thursday for eleven years.",
+      "nature": "dangerous"
     },
     {
       "id": "abolished-post",
       "text": "The post of Team Leader was abolished in a reorganisation two years ago, and nobody has told {name}.",
-      "characters": ["boss"]
+      "characters": ["boss"],
+      "nature": "useful"
     },
     {
       "id": "values-statement",
-      "text": "{name} wrote the company's values statement at a kitchen table, in one afternoon, for a bet."
+      "text": "{name} wrote the company's values statement at a kitchen table, in one afternoon, for a bet.",
+      "nature": "useful"
     },
     {
       "id": "payroll-password",
-      "text": "{name} is the only person alive who knows the password to the system that pays everyone."
+      "text": "{name} is the only person alive who knows the password to the system that pays everyone.",
+      "nature": "dangerous"
     },
     {
       "id": "audit-engagement",
-      "text": "{name} was engaged for six years to the Head of Internal Audit. It ended badly, and the audit is still open."
+      "text": "{name} was engaged for six years to the Head of Internal Audit. It ended badly, and the audit is still open.",
+      "nature": "dangerous"
     },
     {
       "id": "dated-record",
-      "text": "{name} has kept a dated record of every promise made on this floor since 2014, and has made copies."
+      "text": "{name} has kept a dated record of every promise made on this floor since 2014, and has made copies.",
+      "nature": "dangerous"
     },
     {
       "id": "reports-to-finance",
-      "text": "{name} reports privately to the Chief Financial Officer on what really happens at this level."
+      "text": "{name} reports privately to the Chief Financial Officer on what really happens at this level.",
+      "nature": "dangerous"
     },
     {
       "id": "lost-list",
-      "text": "{name} has been on the redundancy list for two years. The list has been lost, and nobody dares to ask for it."
+      "text": "{name} has been on the redundancy list for two years. The list has been lost, and nobody dares to ask for it.",
+      "nature": "useful"
     },
     {
       "id": "competitor-offer",
-      "text": "{name} has a signed offer from the company's largest competitor, and is staying on to see how this ends."
+      "text": "{name} has a signed offer from the company's largest competitor, and is staying on to see how this ends.",
+      "nature": "useful"
     }
   ]
 }

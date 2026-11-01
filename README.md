@@ -115,7 +115,16 @@ out of date or lies. A dealt motive shifts those weights. A claim's words never
 depend on which of these it is, so the results screen is the only place that says.
 
 A Hidden Fact says `{name}`, so that it reads correctly for whoever is dealt it,
-and can list `"characters"` to limit who that can be.
+and can list `"characters"` to limit who that can be. Its `nature` is `dangerous`,
+`useful` or `idle`. A Scene result can read one with
+`{ "factNature": { "character": "projects", "nature": "dangerous" } }`, and a
+result with `factNote` is listed on the results screen beside the fact itself.
+
+A Scene option with `"about": "lost-list"` appears once the player has been told
+that fact about someone, true or not, and can say `{subject}` for that person.
+Its results can check `{ "heardTrue": "lost-list" }`. An option must never appear
+or disappear on undiscovered truth, so `requires` with `holderIs`, `opinionIs`,
+`factNature` or `heardTrue` stops the game from starting. `heardFact` is fine.
 
 A Notification, action, Scene or Move can list `"months": [2, 3]` to belong only
 to those months. Without it, it belongs to every month.

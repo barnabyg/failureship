@@ -167,6 +167,18 @@ function ResultsPanel({
           ))}
         </tbody>
       </table>
+      {step.factEvents.length > 0 && (
+        <div className="callout" data-testid="results-fact-events">
+          <h3>{panelText.resultsFactEventsHeading}</h3>
+          {step.factEvents.map((event, index) => (
+            <p key={index} data-testid="result-fact-event">
+              <strong>{monthLabel(event.month)}. </strong>
+              {event.note}
+              {event.fact !== null && ` ${event.fact}`}
+            </p>
+          ))}
+        </div>
+      )}
       <h3>{panelText.resultsClaimsHeading}</h3>
       {step.claims.length === 0 ? (
         <p data-testid="results-no-claims">{panelText.resultsNoClaims}</p>
