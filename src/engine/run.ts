@@ -600,7 +600,9 @@ function landMove(state: State, content: Content): Step | null {
   );
   if (eligible.length === 0) return null;
   const fresh = eligible.filter((m) => !state.movesLanded.includes(m.id));
-  const { item, next } = pick(state.rng, fresh.length > 0 ? fresh : eligible);
+  const urgent = fresh.filter((m) => m.priority);
+  const pool = urgent.length > 0 ? urgent : fresh;
+  const { item, next } = pick(state.rng, pool.length > 0 ? pool : eligible);
   state.rng = next;
   state.movesLanded.push(item.id);
   state.flags.push(...item.sets);

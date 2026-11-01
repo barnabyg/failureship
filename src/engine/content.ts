@@ -142,6 +142,8 @@ const move = z.strictObject({
   title: text,
   body: text,
   when: condition.optional(),
+  /** Lands ahead of other Moves whenever its condition holds. */
+  priority: z.boolean().default(false),
   sets,
 });
 

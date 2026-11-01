@@ -3,7 +3,39 @@
     "id": "minutes-action",
     "from": "From: Marjorie Tull, Office Co-ordinator",
     "title": "The minutes have been circulated",
-    "body": "The minutes of this month's meeting record an action against your name. Nobody remembers agreeing it, including the person who wrote it down. It is due on Friday.",
+    "body": "You did not go to this month's meeting. The minutes have gone round anyway, and they record an action against your name. Nobody remembers agreeing it, including the person who wrote it down. It is due on Friday.",
+    "when": {
+      "not": {
+        "flag": "attended-meeting"
+      }
+    },
+    "priority": true,
+    "sets": ["given-action"]
+  },
+  {
+    "id": "minutes-owner",
+    "from": "From: Marjorie Tull, Office Co-ordinator",
+    "title": "Thanks for picking this up",
+    "body": "In your absence, the meeting agreed that you were best placed to take this forward. The minutes do not say what this is. Someone who was there thinks it may be to do with the fire doors. It is due on Friday.",
+    "when": {
+      "not": {
+        "flag": "attended-meeting"
+      }
+    },
+    "priority": true,
+    "sets": ["given-action"]
+  },
+  {
+    "id": "minutes-apologies",
+    "from": "From: Marjorie Tull, Office Co-ordinator",
+    "title": "Apologies for absence",
+    "body": "You are listed under Apologies for Absence, and also three times under Actions. Two of them are yours because you were not there to say otherwise. The third is to find out why you were not there.",
+    "when": {
+      "not": {
+        "flag": "attended-meeting"
+      }
+    },
+    "priority": true,
     "sets": ["given-action"]
   },
   {

@@ -88,6 +88,35 @@ describe("six months that do not feel like one month repeated", () => {
     expect(new Set(stories).size).toBe(6);
   });
 
+  it("gives you an action at any meeting you do not go to", () => {
+    const { views } = walk(2, (view, turn) => {
+      const open = view.choices.filter(
+        (c) => !(c.type === "action" && c.actionId.startsWith("meeting")),
+      );
+      const choice = open[turn % open.length];
+      if (!choice) throw new Error("No choice.");
+      return choice;
+    });
+    const moves = views.flatMap((v) =>
+      v.step.kind === "move" ? [v.step.title] : [],
+    );
+
+    expect(new Set(moves.slice(0, 3))).toEqual(
+      new Set([
+        "The minutes have been circulated",
+        "Thanks for picking this up",
+        "Apologies for absence",
+      ]),
+    );
+  });
+
+  it("never gives you those actions when you do go", () => {
+    const { views } = walk(2, attendsEverything);
+    const told = JSON.stringify(views.map((v) => v.step));
+
+    expect(told).not.toContain("Apologies for absence");
+  });
+
   it("names no particular month's meeting when a Scene is skipped", () => {
     const { views } = walk(1, (view, turn) => {
       const open = view.choices.filter(

@@ -55,6 +55,7 @@ interface RawMove {
   title: string;
   body: string;
   when?: RawCondition;
+  priority?: boolean;
   sets?: string[];
   months?: number[];
 }

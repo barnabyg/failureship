@@ -103,7 +103,7 @@
         "flag": "given-action"
       },
       "reported": "You took ownership of a key action.",
-      "happened": "An action was left on your desk by the minutes."
+      "happened": "You were not at the meeting, and it gave you an action anyway."
     },
     {
       "when": {
