@@ -331,21 +331,30 @@ describe("what the player sees", () => {
   });
 
   it("never reveals the Power Map through what someone believes", () => {
-    // Two deals where the news reaches different people must read the same but
-    // for the signs, and each sign is possible whatever they have heard.
-    const content = withScene();
-    const { signs } = content.reputation ?? { signs: [] };
+    // The same deal, with news that stops dead and news that goes everywhere.
+    const reading = (maxHops: number, seed: number) =>
+      scenesOf(startRun({ seed, content: withScene({ maxHops }) }), "do-it")
+        .filter((v) => v.step.kind !== "results")
+        .map((v) =>
+          v.step.kind === "scene"
+            ? { ...v, step: { ...v.step, regard: [] } }
+            : v,
+        );
+
+    for (let seed = 0; seed < 20; seed++) {
+      // Only the signs themselves differ, and they name no tie to anyone.
+      expect(reading(5, seed)).toEqual(reading(0, seed));
+    }
+  });
+
+  it("gives no sign that only one state of belief could show", () => {
+    const { signs } = withScene().reputation ?? { signs: [] };
 
     expect(signs.length).toBeGreaterThan(0);
-    const views = scenesOf(startRun({ seed: 3, content }), "do-it");
-    for (const view of views) {
-      if (view.step.kind !== "scene") continue;
-      for (const { text } of view.step.regard) {
-        const names = content.characters.map((c) => c.name);
-        const named = names.filter((name) => text.includes(name));
-        // A sign names only the person showing it, and no tie to anyone else.
-        expect(named.length).toBeLessThanOrEqual(1);
-      }
+    for (const { likelihood } of signs) {
+      expect(
+        Object.values(likelihood).filter((l) => l > 0).length,
+      ).toBeGreaterThanOrEqual(2);
     }
   });
 
@@ -364,6 +373,25 @@ describe("what the player sees", () => {
       expect(shown.some((r) => r.how.startsWith("HEARD-FROM"))).toBe(true);
       expect(memory.hops).toBe(1);
     }
+  });
+});
+
+describe("what moved a boss's belief", () => {
+  it("always says what reached them", () => {
+    const base = raw({ maxHops: 0 });
+    const deed = base.notifications[0]?.options[1];
+    if (deed) deed.opinion = 9;
+    const content = parseContent(base);
+
+    const { beliefs } = resultsOf(
+      play(startRun({ seed: 1, content }), "leave-it"),
+    );
+
+    const boss = beliefs.find((b) => b.name === "Ana Abel");
+    expect(boss?.believes).toBe("THINKS-WELL");
+    expect(boss?.reached).toEqual([
+      { month: 1, text: "Leave it", how: "WAS-THERE" },
+    ]);
   });
 });
 

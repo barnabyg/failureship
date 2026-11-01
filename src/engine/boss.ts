@@ -1,5 +1,6 @@
 import type { Content, Kind } from "./content";
 import { bossKindOf, inTurn, moodOf, shiftBelief } from "./reads";
+import { remember } from "./reputation";
 import { pickWeighted } from "./rng";
 import type { State, World } from "./state";
 
@@ -33,6 +34,13 @@ export function landWithBoss(
   shiftBelief(state, content.boss.character, shift);
   if (approach === undefined && shift === 0) return undefined;
   state.bossLandings.push({ month: state.month, choice: label, shift });
+  if (shift !== 0) {
+    remember(state, content, {
+      character: content.boss.character,
+      about: "impression",
+      text: label,
+    });
+  }
   if (approach === undefined) return undefined;
   const lines = overdone?.reaction[kind];
   if (lines) return inTurn(lines, state.month);

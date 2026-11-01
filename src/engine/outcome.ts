@@ -60,7 +60,14 @@ export function applyOutcome(
   }
   if (outcome.reshuffle) reshuffleCharts(state, content, outcome.reshuffle);
   const head = content.overHead?.character;
-  if (head !== undefined) shiftBelief(state, head, outcome.headOpinion ?? 0);
+  if (head !== undefined && outcome.headOpinion) {
+    shiftBelief(state, head, outcome.headOpinion);
+    remember(state, content, {
+      character: head,
+      about: "impression",
+      text: label,
+    });
+  }
   moveProject(state, content, outcome.project);
   if (outcome.mistake) makeMistake(state, content, outcome.mistake, label);
   return landWithBoss(state, content, outcome, label);
