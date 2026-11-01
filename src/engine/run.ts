@@ -18,6 +18,7 @@ import {
   dealCharacters,
   dealMotives,
   dealPowerMap,
+  isInfluential,
   type DealtCharacter,
   type PowerMap,
 } from "./deal";
@@ -399,6 +400,10 @@ function leaveStory(state: State, world: World): void {
     return;
   }
   state.month += 1;
+  // What the boss thinks is mostly about lately, so it stays worth reading.
+  state.truth.bossOpinion = Math.trunc(
+    state.truth.bossOpinion * world.content.balance.opinion.keeps,
+  );
   Object.assign(state, freshMonth(world.content, state.month));
   openMonth(state, world.content);
   state.step = nextStep(state, world);
@@ -451,11 +456,9 @@ function goOverHead(state: State, content: Content, label: string): Step {
   state.flags.push(written.sets.went);
   const dealt = state.truth.characters.find((c) => c.id === written.character);
   if (!dealt) throw new Error("The boss's boss was not dealt.");
-  const standing =
-    state.truth.powerMap.order.indexOf(dealt.id) <
-    content.sources.influentialCount
-      ? "influential"
-      : "sidelined";
+  const standing = isInfluential(state.truth.powerMap, content, dealt.id)
+    ? "influential"
+    : "sidelined";
   const outcome = written.outcomes[dealt.kind];
   const worked =
     drawFor(state.seed, "over-head-works", state.month) <
@@ -468,10 +471,11 @@ function goOverHead(state: State, content: Content, label: string): Step {
   const caught =
     drawFor(state.seed, "over-head-found", state.month) <
     findsOut.chance[bossKind] + findsOut.perUse * (state.overHeadUses - 1);
-  land(state, gained, label);
+  // A boss who has found out is not helped along by being told to listen to you.
+  if (!caught) shiftBossOpinion(state, gained, label);
   if (caught) {
     state.flags.push(written.sets.caught);
-    land(state, findsOut.shift, findsOut.title);
+    shiftBossOpinion(state, findsOut.shift, findsOut.title);
     state.noticesDue.push({
       title: findsOut.title,
       body:
@@ -492,7 +496,7 @@ function countMove(state: State, family: MoveFamily | undefined): void {
 }
 
 /** Moves the boss's opinion, and keeps that for the results screen. */
-function land(state: State, shift: number, choice: string): void {
+function shiftBossOpinion(state: State, shift: number, choice: string): void {
   if (shift === 0) return;
   state.truth.bossOpinion += shift;
   state.bossLandings.push({ month: state.month, choice, shift });

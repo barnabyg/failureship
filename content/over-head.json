@@ -35,7 +35,7 @@
   ],
   "outcomes": {
     "believer": {
-      "works": { "influential": 0.65, "sidelined": 0.6 },
+      "works": { "influential": 0.8, "sidelined": 0.6 },
       "worked": {
         "influential": [
           "Your boss's boss hears you out, asks two good questions, and writes something down. By the end of the week your project has been talked about upstairs, and your boss has been told to give you more room.",
@@ -52,7 +52,7 @@
       ]
     },
     "incompetent": {
-      "works": { "influential": 0.5, "sidelined": 0.4 },
+      "works": { "influential": 0.65, "sidelined": 0.45 },
       "worked": {
         "influential": [
           "Your boss's boss does not follow all of it, but likes the way you said it, and repeats two of your phrases at the next board. Your boss has now been told to listen to you, by someone who could not say why.",
@@ -69,7 +69,7 @@
       ]
     },
     "practitioner": {
-      "works": { "influential": 0.35, "sidelined": 0.3 },
+      "works": { "influential": 0.45, "sidelined": 0.35 },
       "worked": {
         "influential": [
           "Your boss's boss listens with great stillness, then says that it is good to know who is paying attention. Within days your boss is being unusually careful around you, and nobody says why.",
@@ -94,8 +94,8 @@
     "failed": { "head": -3, "boss": 0 }
   },
   "findsOut": {
-    "chance": { "believer": 0.3, "incompetent": 0.2, "practitioner": 0.55 },
-    "perUse": 0.2,
+    "chance": { "believer": 0.2, "incompetent": 0.1, "practitioner": 0.4 },
+    "perUse": 0.25,
     "shift": -6,
     "title": "Your boss knows",
     "reaction": {

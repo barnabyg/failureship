@@ -225,6 +225,18 @@ describe("how running text refers to people", () => {
       actions: gameContent.actions,
       behaviours: gameContent.behaviours,
       boss: gameContent.boss,
+      overHead: gameContent.overHead,
+      missed: {
+        forgotten: gameContent.demands?.missed?.forgotten,
+        options: gameContent.demands?.missed?.options,
+        body: gameContent.demands?.missed?.chased.body,
+        actions: gameContent.demands?.missed?.actions.map((a) => [
+          a.title,
+          a.body,
+          a.subject,
+          a.ask,
+        ]),
+      },
       dialogs: gameContent.dialogs,
       moves: gameContent.moves,
       notebook: gameContent.notebook,

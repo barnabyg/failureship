@@ -117,8 +117,9 @@ went down. Then try these:
 | Restart the same seed and repeat your choices                                                     | The same signs, claims, Move and official story, every time.                                                                                                       |
 
 A month always leaves you something to decide. Every Notification has an answer that
-costs nothing, and no month asks for more than one costly answer beside the report.
-A meeting you had no action left for leaves no Demand behind.
+costs nothing. Beside the report, a month's own Notifications ask for at most one costly
+answer, though late figures or an action from a missed meeting can add another. A meeting
+you had no action left for leaves no Demand behind.
 
 ## Change the game
 
@@ -184,7 +185,8 @@ game will not start.
 A choice can carry `"opinion": 1` or `-1` to move your boss's hidden opinion of you.
 The opinion has no number on screen. It shows only through `boss.json`: when the boss
 is in a Scene, one sign is picked using the `likelihood` for how the opinion stands,
-which `balance.json` sets with `warmAt` and `coldAt`. Every sign must be possible from
+which `balance.json` sets with `warmAt` and `coldAt`. Its `keeps` says how much of the
+opinion carries into each new month, so that it is mostly about lately. Every sign must be possible from
 at least two of `warm`, `neutral` and `cold`, so that no sign settles it.
 
 A choice can also carry `"approach": "theatre"`. `boss.json` lists each approach, how
@@ -318,6 +320,8 @@ A Scene that data cannot express can name a `script`, which is passed to
   Review this if it ever needs any.
 - The `minimatch` override in `package.json` patches GHSA-g3hv-75wg-m249 in the
   lint tooling. Remove it when `eslint` depends on a patched version itself.
+- `test.testTimeout` in `vite.config.ts` is raised because some engine tests play
+  hundreds of whole runs. Review it if the suite gets much faster or slower.
 - `build.chunkSizeWarningLimit` in `vite.config.ts` is raised because Three.js
   and the game's text make up the single bundle. Review it if hosting is ever added.
 - `.prettierignore` leaves the owner's design records and agent docs unformatted.

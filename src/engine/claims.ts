@@ -5,7 +5,7 @@ import {
   type ClueVerdict,
   type Content,
 } from "./content";
-import type { DealtCharacter, PowerMap } from "./deal";
+import { isInfluential, type DealtCharacter, type PowerMap } from "./deal";
 import { pick, pickWeighted } from "./rng";
 import { calledBy, sayPeople } from "./say";
 
@@ -113,8 +113,7 @@ export function makeClaim(
       (fact.told ?? fact.text).replaceAll("{name}", name),
     );
   } else if (topic.item === "influence") {
-    const high =
-      powerMap.order.indexOf(subject.id) < content.sources.influentialCount;
+    const high = isInfluential(powerMap, content, subject.id);
     text = write(claims.influence[high === isTrue ? "high" : "low"]);
   } else {
     let said = subject.kind;

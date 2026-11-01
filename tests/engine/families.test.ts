@@ -124,46 +124,26 @@ describe("the Move families", () => {
   });
 
   it("counts each choice once, under its own family", () => {
-    const run = startRun({ seed: 1, content: gameContent });
-    run.choose({
-      type: "notification",
-      notificationId: "pub-invite",
-      optionId: "decline",
-    });
-    run.choose({ type: "continue" });
-    run.choose({
-      type: "notification",
-      notificationId: "monthly-report",
-      optionId: "lie",
-    });
-    run.choose({ type: "continue" });
-    run.choose({ type: "action", actionId: "work" });
-    run.choose({ type: "continue" });
+    const run = startRun({ seed: 7, content: gameContent });
+    const made = new Map<string, number>();
     let view = run.view();
+    let turn = 0;
     while (view.choices.length > 0) {
-      const { step } = view;
-      const free =
-        step.kind === "notification"
-          ? step.options.find((o) => o.id === "meets" || o.id === "excuse")
-          : undefined;
-      const next: Choice | undefined =
-        step.kind === "notification" && free
-          ? {
-              type: "notification",
-              notificationId: step.id,
-              optionId: free.id,
-            }
-          : view.choices.find((c) => familyOf(c) === undefined);
-      view = run.choose(next ?? (view.choices[0] as Choice));
+      const next = view.choices[turn++ % view.choices.length];
+      if (!next) throw new Error(`Stuck at ${view.step.kind}.`);
+      const family = familyOf(next);
+      if (family) made.set(family, (made.get(family) ?? 0) + 1);
+      view = run.choose(next);
     }
     if (view.step.kind !== "results") throw new Error(view.step.kind);
-    const count = (label: string) =>
-      view.step.kind === "results"
-        ? view.step.played.find((p) => p.family === label)?.count
-        : undefined;
+    const { families } = gameContent;
 
-    expect(count("Fabricate")).toBeGreaterThanOrEqual(1);
-    expect(count("Deliver")).toBeGreaterThanOrEqual(1);
+    for (const id of MOVE_FAMILIES) {
+      const row = view.step.played.find(
+        (p) => p.family === families?.[id].label,
+      );
+      expect(row?.count, id).toBe(made.get(id) ?? 0);
+    }
   });
 });
 

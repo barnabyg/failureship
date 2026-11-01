@@ -20,6 +20,15 @@ export interface PowerMap {
   influence: { who: string; over: string }[];
 }
 
+/** Whether someone is among the few at the top of the Power Map. */
+export function isInfluential(
+  powerMap: PowerMap,
+  content: Content,
+  id: string,
+): boolean {
+  return powerMap.order.indexOf(id) < content.sources.influentialCount;
+}
+
 /** Each person, in a dealt order, comes under someone dealt before them. */
 export function dealPowerMap(
   rng: number,

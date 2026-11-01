@@ -4,13 +4,14 @@ import { answerAnyNotification, openMeeting, playToResults } from "./play";
 test("goes over your boss's head, and reads the outcome and the reveal", async ({
   page,
 }) => {
-  await page.goto("/?seed=1");
+  await page.goto("/?seed=4");
   await answerAnyNotification(page);
 
   await page.getByTestId("hotspot-over-head").click();
 
   const told = page.getByTestId("panel-notice");
-  await expect(told).toContainText("Your boss's boss");
+  // The real-content test keeps this seed's trip paying off.
+  await expect(told).toContainText("told to listen to you");
   await expect(told).not.toContainText(/Believer|Incompetent|Practitioner/);
   await page.getByTestId("continue").click();
   await expect(page.getByTestId("hotspot-over-head")).toBeDisabled();

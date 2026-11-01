@@ -509,6 +509,8 @@ const contentSchema = z.strictObject({
     opinion: z.strictObject({
       warmAt: z.number().int().positive(),
       coldAt: z.number().int().negative(),
+      /** How much of the opinion carries into each new month. */
+      keeps: z.number().min(0).max(1).default(1),
     }),
   }),
   boss: z.strictObject({
@@ -682,16 +684,17 @@ export function chasedIdOf(demandId: string): string {
 /** Every Demand there is: those of a month, and those a missed meeting gives. */
 export function everyDemand(content: Content) {
   const { items = [], missed } = content.demands ?? {};
-  const given = (missed?.actions ?? []).map((action) => ({
+  if (!missed) return items;
+  const given = missed.actions.map((action) => ({
     id: action.id,
     months: undefined,
     when: undefined,
     from: action.from,
     subject: action.subject,
     body: action.ask,
-    options: missed?.options ?? [],
-    forgotten: missed?.forgotten ?? { title: "", body: "" },
-    chased: missed?.chased ?? { from: "", subject: "", body: "", options: [] },
+    options: missed.options,
+    forgotten: missed.forgotten,
+    chased: missed.chased,
   }));
   return [...items, ...given];
 }
@@ -900,18 +903,18 @@ function findBrokenBehaviours(content: Content): string[] {
 /** The boss's signs must point somewhere without ever settling it. */
 function findBrokenBossSigns(content: Content): string[] {
   const { character, signs } = content.boss;
-  const problems = findBrokenOpinionSigns(signs);
+  const problems = findBrokenOpinionSigns(signs, "Boss sign");
   if (!content.characters.some((c) => c.id === character)) {
     problems.push(`The boss names unknown Character "${character}".`);
   }
   return problems;
 }
 
-/** Going over the boss's head must be a gamble, and its words must name no kind. */
+/** A first trip over the boss's head must be a gamble, and no words may name a kind. */
 function findBrokenOverHead(content: Content): string[] {
   const { overHead: written } = content;
   if (!written) return [];
-  const problems = findBrokenOpinionSigns(written.signs);
+  const problems = findBrokenOpinionSigns(written.signs, "Over-head sign");
   if (!content.characters.some((c) => c.id === written.character)) {
     problems.push(`Over-head names unknown Character "${written.character}".`);
   }
@@ -950,10 +953,13 @@ function findBrokenOverHead(content: Content): string[] {
   return problems;
 }
 
-function findBrokenOpinionSigns(signs: Content["boss"]["signs"]): string[] {
+function findBrokenOpinionSigns(
+  signs: Content["boss"]["signs"],
+  label: string,
+): string[] {
   const problems: string[] = [];
   for (const sign of signs) {
-    const owner = `Boss sign "${sign.id}"`;
+    const owner = `${label} "${sign.id}"`;
     for (const [, token] of sign.text.matchAll(/\{(\w+)\}/g)) {
       problems.push(`${owner} uses unknown token "{${token ?? ""}}".`);
     }
@@ -1055,7 +1061,11 @@ function findBrokenDemands(content: Content): string[] {
     if (!content.boss.approaches.some((a) => a.id === missed.approach)) {
       problems.push(`A missed meeting uses unknown "${missed.approach}".`);
     }
-    const written = missed.actions.flatMap((a) => [a.title, a.body, a.ask]);
+    const written = [
+      ...missed.actions.flatMap((a) => [a.title, a.body, a.ask]),
+      missed.forgotten.body,
+      missed.chased.body,
+    ];
     problems.push(...findNamedKinds(content, "A missed meeting", written));
   }
   for (const item of everyDemand(content)) {
@@ -1247,6 +1257,14 @@ function findBrokenReferences(content: Content): string[] {
   problems.push(...findBrokenDeal(content, characters));
   problems.push(...findBrokenBehaviours(content));
   problems.push(...findBrokenBossSigns(content));
+  const tagged = [
+    ...content.actions,
+    ...everyNotification(content).flatMap((n) => n.options),
+    ...content.scenes.flatMap((sc) => sc.options),
+  ].some((choice) => choice.family !== undefined);
+  if (tagged && !content.families) {
+    problems.push("Choices name a family, but no families are written.");
+  }
   problems.push(...findBrokenOverHead(content));
   problems.push(...findBrokenApproaches(content));
   problems.push(...findBrokenSources(content));

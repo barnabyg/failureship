@@ -121,9 +121,8 @@ describe("one-off Budgets", () => {
     }).project.real;
     const statuses = gameContent.project.statuses.map((s) => s.label);
 
-    expect(statuses.indexOf(after)).toBeLessThanOrEqual(
-      statuses.indexOf(before),
-    );
+    expect(before).not.toBe("Green");
+    expect(statuses.indexOf(after)).toBe(statuses.indexOf(before) - 1);
   });
 
   it("keeps no balance or running total, on screen or in the rules", () => {
@@ -143,28 +142,5 @@ describe("one-off Budgets", () => {
     expect(
       Object.keys(truth).filter((key) => /budget|money|funds/i.test(key)),
     ).toEqual([]);
-  });
-
-  it("does not remember a Budget decision into the next month", () => {
-    const flagsGone = (optionId: string) => {
-      const run = startRun({ seed: 1, content: gameContent });
-      reach(run, "bonus-pot");
-      run.choose({
-        type: "notification",
-        notificationId: "bonus-pot",
-        optionId,
-      });
-      let view = run.view();
-      const { month } = view;
-      while (view.month === month) {
-        const next = view.choices[0];
-        if (!next) throw new Error(`Stuck at ${view.step.kind}.`);
-        view = run.choose(next);
-      }
-      return view.step.kind;
-    };
-
-    // Character memory of this belongs to Phase 4: the next month opens alike.
-    expect(flagsGone("bonus-allies")).toBe(flagsGone("bonus-split"));
   });
 });

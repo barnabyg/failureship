@@ -106,7 +106,7 @@ describe("going over your boss's head", () => {
 
   it("costs more than any ordinary choice when your boss finds out", () => {
     const { worst } = ordinaryExtremes();
-    const caught = attempts.filter((a) => a.caught && a.headShift <= 0);
+    const caught = attempts.filter((a) => a.caught);
 
     expect(caught.length).toBeGreaterThan(0);
     for (const a of caught) expect(a.bossShift).toBeLessThan(worst);
@@ -145,6 +145,17 @@ describe("going over your boss's head", () => {
     };
 
     expect(rate("practitioner")).toBeGreaterThan(rate("incompetent"));
+  });
+
+  it("is worth trying once, taken across many deals", () => {
+    const shifts = attempts.map((a) => a.bossShift);
+    const mean = shifts.reduce((sum, n) => sum + n, 0) / shifts.length;
+    const { best } = ordinaryExtremes();
+
+    expect(mean).toBeGreaterThan(-1);
+    expect(
+      shifts.filter((n) => n > best).length / shifts.length,
+    ).toBeGreaterThan(0.15);
   });
 
   it("is the same every time on the same seed", () => {

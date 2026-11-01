@@ -127,14 +127,41 @@ describe("a meeting you do not go to", () => {
   });
 
   it("saves the action that the meeting would have cost", () => {
-    const spentAtMeeting = (attend: boolean) => {
+    const leftAfterFirstFloorChoice = (attend: boolean) => {
       const run = startRun({ seed: 3, content: gameContent });
-      const places = playMonth(run, attend).flatMap((v) => v.hotspots);
-      return places.some((h) => h.id === "meeting" && h.state === "done");
+      let view = run.view();
+      while (view.step.kind !== "actions") {
+        const { step } = view;
+        const free =
+          step.kind === "notification"
+            ? step.options.find((o) => o.costLabel === "Costs nothing")
+            : undefined;
+        const next: Choice | undefined =
+          step.kind === "notification" && free
+            ? {
+                type: "notification",
+                notificationId: step.id,
+                optionId: free.id,
+              }
+            : view.choices[0];
+        if (!next) throw new Error(`Stuck at ${step.kind}.`);
+        view = run.choose(next);
+      }
+      const visits = attend ? ["meeting", "kitchen"] : ["kitchen"];
+      for (const actionId of visits) {
+        view = run.choose({ type: "action", actionId });
+        const next = view.choices[0];
+        if (!next) throw new Error(`Stuck at ${view.step.kind}.`);
+        view = run.choose(next);
+        if (view.step.kind === "notice")
+          view = run.choose({ type: "continue" });
+      }
+      return view.actions.remaining;
     };
 
-    expect(spentAtMeeting(true)).toBe(true);
-    expect(spentAtMeeting(false)).toBe(false);
+    expect(leftAfterFirstFloorChoice(false)).toBe(
+      leftAfterFirstFloorChoice(true) + 1,
+    );
   });
 
   it("moves the boss's opinion by their kind, with no number shown", () => {

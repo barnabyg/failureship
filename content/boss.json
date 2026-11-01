@@ -111,7 +111,7 @@
       "shift": {
         "believer": -2,
         "incompetent": 2,
-        "practitioner": 1
+        "practitioner": 0
       },
       "reaction": {
         "believer": [

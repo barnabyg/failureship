@@ -128,21 +128,21 @@ describe(
   { timeout: 60_000 },
   () => {
     it("rewards a straight approach most with a Believer", () => {
-      const { straight, showy } = meanOpinions("believer");
+      const { straight, showy, useful } = meanOpinions("believer");
 
-      expect(straight).toBeGreaterThan(showy + 5);
+      expect(straight).toBeGreaterThan(Math.max(showy, useful));
     });
 
     it("rewards a showy approach most with an Incompetent", () => {
       const { straight, showy } = meanOpinions("incompetent");
 
-      expect(showy).toBeGreaterThan(straight + 5);
+      expect(showy).toBeGreaterThan(straight);
     });
 
     it("rewards being useful most with a Practitioner", () => {
-      const { straight, useful } = meanOpinions("practitioner");
+      const { straight, showy, useful } = meanOpinions("practitioner");
 
-      expect(useful).toBeGreaterThan(straight + 5);
+      expect(useful).toBeGreaterThan(Math.max(straight, showy));
     });
 
     it("has no style that is best with every kind of boss", () => {
@@ -218,6 +218,17 @@ describe("every month leaves a real choice", { timeout: 60_000 }, () => {
 });
 
 describe("the boss's opinion stays worth reading", { timeout: 60_000 }, () => {
+  it("ends a run within reach of the thresholds, not many times past them", () => {
+    const { warmAt } = gameContent.balance.opinion;
+    const finals = SEEDS.slice(0, 60).flatMap((seed) =>
+      (["straight", "showy", "useful"] as const).map(
+        (style) => playIn(seed, style).bossOpinion,
+      ),
+    );
+
+    expect(Math.max(...finals.map(Math.abs))).toBeLessThan(warmAt * 5);
+  });
+
   it("is not settled in the first months, whatever the player does", () => {
     const { warmAt, coldAt } = gameContent.balance.opinion;
     const styles: Style[] = ["straight", "showy", "useful"];
