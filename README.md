@@ -21,6 +21,8 @@ This installs anything missing the first time, starts the game and opens it in
 your browser. If the browser does not open, go to the address the command prints.
 Press `Ctrl+C` in the terminal to stop it.
 
+On Windows, you can double-click `run.bat` in the root of the repository instead.
+
 ## What to try
 
 Every run has a seed, shown at the top right. Add `?seed=8` to the address to pick
