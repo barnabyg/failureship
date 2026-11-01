@@ -1479,7 +1479,7 @@
             "sets": ["reported-a-colleague"],
             "approach": "blame",
             "news": {
-              "about": "reported-a-colleague",
+              "about": "reported-someone",
               "tone": "bad",
               "text": "You reported the Senior Analyst's expenses at the Listening Session.",
               "at": ["analyst"]

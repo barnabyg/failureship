@@ -217,7 +217,7 @@ add one, needing no code:
 3. Give it a `route`: the Character it comes out through, the `chance` they act by their kind, and
    their `motive`.
 4. Say what makes it `traced` to the player. Reading a flag with `did` lets the player change that,
-   as clearing the shared drive in month 6 does.
+   as clearing the shared drive in month 7 does.
 5. Write `onPlayer` and `onSomeoneElse`, which are Bills, and the words for how it ended.
    `"mistake": "big"` on `onPlayer` makes a landed risk a big mistake.
 
@@ -237,7 +237,7 @@ at a later month. `npm run build` and `npm run play` ignore it.
   checks the panel text itself.
 - `src/engine/` holds the rules: headless, seeded, and free of Three.js and React.
   `run.ts` is the interface to a run; `choices.ts` carries out each choice;
-  `month.ts` holds the month's order; `outcome.ts` is the one place any consequence
+  `month.ts` holds the month's order; `charts.ts` moves people on the charts; `outcome.ts` is the one place any consequence
   takes effect; `state.ts` and `reads.ts` are what the mechanics share; `boss.ts`,
   `demands.ts`, `find-out.ts`, `notebook.ts`, `over-head.ts`, `project.ts` and
   `scenes.ts` are mechanics of their own, as are `company-events.ts`, `mistakes.ts`, `reputation.ts`,
