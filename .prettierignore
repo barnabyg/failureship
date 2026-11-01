@@ -1,0 +1,11 @@
+# Generated output.
+dist/
+playwright-report/
+test-results/
+package-lock.json
+# Design records and agent docs are maintained by the owner outside the code
+# toolchain and are not rewritten by it. Review if they start being generated.
+Failureship_Game_Proposal.md
+failureship-grill-outcome.md
+AGENTS.md
+docs/agents/

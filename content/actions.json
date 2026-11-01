@@ -1,0 +1,34 @@
+[
+  {
+    "id": "meeting",
+    "label": "Meeting room",
+    "description": "Placeholder: a meeting.",
+    "place": "meeting-room",
+    "cost": "standard",
+    "result": { "title": "Meeting room", "body": "Placeholder: you attended." }
+  },
+  {
+    "id": "kitchen",
+    "label": "Kitchen",
+    "description": "Placeholder: the kettle.",
+    "place": "kitchen",
+    "cost": "standard",
+    "result": { "title": "Kitchen", "body": "Placeholder: you made tea." }
+  },
+  {
+    "id": "one-to-one",
+    "label": "A colleague's desk",
+    "description": "Placeholder: a chat.",
+    "place": "colleague-desk",
+    "cost": "standard",
+    "result": { "title": "Desk", "body": "Placeholder: you had a chat." }
+  },
+  {
+    "id": "work",
+    "label": "Your desk",
+    "description": "Placeholder: some work.",
+    "place": "your-desk",
+    "cost": "standard",
+    "result": { "title": "Your desk", "body": "Placeholder: you did work." }
+  }
+]

@@ -1,0 +1,6 @@
+{
+  "facts": [
+    { "id": "placeholder-fact-a", "text": "Placeholder hidden fact A." },
+    { "id": "placeholder-fact-b", "text": "Placeholder hidden fact B." }
+  ]
+}

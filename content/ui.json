@@ -1,0 +1,22 @@
+{
+  "title": "Failureship",
+  "tagline": "Placeholder tagline.",
+  "floorName": "Floor 1",
+  "monthLabel": "Month {n}",
+  "actionsLeft": "{actions} left",
+  "continueLabel": "Continue",
+  "doneLabel": "Done this month",
+  "unavailableLabel": "Not now",
+  "whatNext": "What next",
+  "seedLabel": "Seed",
+  "actionsHeading": "Actions",
+  "replayLabel": "Replay this month",
+  "newSeedLabel": "Try a different seed",
+  "hints": {
+    "actions": "Placeholder: click a place on the floor. You have {actions} left.",
+    "notice": "Placeholder: press Continue.",
+    "story": "Placeholder: the month has closed."
+  },
+  "actionCount": { "one": "1 action", "other": "{n} actions" },
+  "costLabel": "Costs {actions}"
+}
