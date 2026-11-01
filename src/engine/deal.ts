@@ -66,13 +66,13 @@ function dealKinds(rng: number, ids: readonly string[], content: Content) {
       dealt.set(id, "practitioner");
       return;
     }
-    const pick = pickWeighted(
+    const kind = pickWeighted(
       next,
       ["believer", "incompetent", "practitioner"] as const,
-      (kind) => kinds[kind].weight,
+      (k) => kinds[k].weight,
     );
-    dealt.set(id, pick.item);
-    next = pick.next;
+    dealt.set(id, kind.item);
+    next = kind.next;
   });
   return { dealt, next };
 }
@@ -87,13 +87,13 @@ function dealFacts(rng: number, ids: readonly string[], content: Content) {
     const open = facts.filter(
       (f) => !used.has(f.id) && (f.characters?.includes(id) ?? true),
     );
-    const pick = pickWeighted(next, open, () => 1);
-    used.add(pick.item.id);
+    const fact = pick(next, open);
+    used.add(fact.item.id);
     dealt.set(id, {
-      id: pick.item.id,
-      text: pick.item.text.replaceAll("{name}", nameOf(content, id)),
+      id: fact.item.id,
+      text: fact.item.text.replaceAll("{name}", nameOf(content, id)),
     });
-    next = pick.next;
+    next = fact.next;
   }
   return { dealt, next };
 }

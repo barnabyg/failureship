@@ -55,6 +55,13 @@ describe("the Org Chart", () => {
       /zed/,
     ],
     [
+      "two Characters with the same name",
+      (raw: Raw) => {
+        (raw.characters[1] as { name: string }).name = "Ana Abel";
+      },
+      /share a name/,
+    ],
+    [
       "a loop in the hierarchy",
       (raw: Raw) => {
         (raw.characters[0] as { reportsTo?: string }).reportsTo = "ben";

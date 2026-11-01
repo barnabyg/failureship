@@ -255,20 +255,23 @@ function findBrokenDeal(
 ): string[] {
   const { kinds, minPractitioners, charactersWithFact, facts } =
     content.hiddenTruth;
-  const cast = content.characters;
+  const everyone = content.characters;
   const problems: string[] = [];
-  if (minPractitioners > cast.length) {
+  if (new Set(everyone.map((c) => c.name)).size < everyone.length) {
+    problems.push("Two Characters share a name, which the charts cannot show.");
+  }
+  if (minPractitioners > everyone.length) {
     problems.push(
-      `The deal wants ${String(minPractitioners)} Practitioners from ${String(cast.length)} Characters.`,
+      `The deal wants ${String(minPractitioners)} Practitioners from ${String(everyone.length)} Characters.`,
     );
   }
   if (Object.values(kinds).every((k) => k.weight === 0)) {
     problems.push("The deal needs a kind with a weight above zero.");
   }
-  if (charactersWithFact * 2 <= cast.length) {
+  if (charactersWithFact * 2 <= everyone.length) {
     problems.push("The deal must give most Characters a Hidden Fact.");
   }
-  if (charactersWithFact > cast.length) {
+  if (charactersWithFact > everyone.length) {
     problems.push("The deal wants more Hidden Facts than Characters.");
   }
   for (const fact of facts) {
@@ -288,7 +291,7 @@ function findBrokenDeal(
     }
   }
   // With this many open to everyone, dealing can never run out, in any order.
-  for (const { id: character } of cast) {
+  for (const { id: character } of everyone) {
     const open = facts.filter((f) => f.characters?.includes(character) ?? true);
     if (open.length < charactersWithFact) {
       problems.push(`Too few Hidden Facts can be dealt to "${character}".`);
