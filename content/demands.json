@@ -18,6 +18,10 @@
     "incompetent": -2,
     "practitioner": -3
   },
+  "sets": {
+    "forgotten": "demand-forgotten",
+    "chased": "demand-chased"
+  },
   "items": [
     {
       "id": "fewer-meetings",

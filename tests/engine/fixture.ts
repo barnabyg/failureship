@@ -123,6 +123,11 @@ export function fixtureRaw() {
           incompetent: string[];
           practitioner: string[];
         };
+        overdone?: {
+          after: number;
+          shift: Partial<Record<string, number>>;
+          reaction: Partial<Record<string, string[]>>;
+        };
       }[],
     },
     sources: sourcesRaw(),

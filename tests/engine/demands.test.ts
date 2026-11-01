@@ -54,6 +54,7 @@ function demandFixtureRaw() {
         practitioner: { forgets: 0.3, chases: 0.3 },
       },
       chasedPenalty: { believer: -2, incompetent: -2, practitioner: -2 },
+      sets: { forgotten: "FORGOT-FLAG", chased: "CHASED-FLAG" },
       items: [
         {
           id: "tool",
@@ -303,6 +304,54 @@ describe("Demands in content", () => {
     }
 
     expect(() => parseContent(raw)).toThrow(/costs nothing/);
+  });
+
+  it.each(["FORGOT-FLAG", "CHASED-FLAG"])(
+    "refuses an option gated on the flag %s, which follows the boss's kind",
+    (flag) => {
+      const raw = demandFixtureRaw();
+      raw.scenes.push({
+        id: "gated",
+        title: "Gated",
+        location: "Floor 1",
+        narration: ["Gated."],
+        cast: ["ana", "ben", "cal"],
+        signs: [],
+        options: [
+          {
+            id: "gated",
+            label: "Gated",
+            requires: { flag },
+            results: [{ body: "Gated." }],
+          },
+        ],
+      });
+
+      expect(() => parseContent(raw)).toThrow(/gated on the hidden truth/);
+    },
+  );
+
+  it("sets the flags the data names when a stalled Demand is resolved", () => {
+    const content = parseContent(demandFixtureRaw());
+    const seed = SEEDS.find((s) => afterStalling(s, content) === "chased");
+    if (seed === undefined) throw new Error("Nothing was ever chased.");
+    const raw = demandFixtureRaw();
+    raw.officialStory.entries = [
+      { when: { flag: "CHASED-FLAG" }, reported: "STORY-CHASED" },
+      { reported: "STORY-ANY" },
+    ];
+    const run = startRun({ seed, content: parseContent(raw) });
+    run.choose(answer("stall"));
+    run.choose({ type: "continue" });
+    let view = run.view();
+    while (view.step.kind !== "notification") view = nextMonth(run);
+    while (view.step.kind !== "story") {
+      const next = view.choices[0];
+      if (!next) throw new Error(`Stuck at ${view.step.kind}.`);
+      view = run.choose(next);
+    }
+
+    expect(JSON.stringify(view.step)).toContain("STORY-CHASED");
   });
 
   it("refuses a boss who could never forget, or never chase", () => {

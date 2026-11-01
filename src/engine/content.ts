@@ -477,6 +477,8 @@ const contentSchema = z.strictObject({
       ),
       /** What being chased costs with each kind, before any answer is given. */
       chasedPenalty: perKind(z.number().int().nonpositive()),
+      /** Set for the month when a stalled Demand is forgotten or chased. */
+      sets: z.strictObject({ forgotten: id, chased: id }),
       items: z.array(demand),
     })
     .optional(),
@@ -607,16 +609,21 @@ function dependsOnHiddenTruth(
   return false;
 }
 
-/** Flags that say which way a hidden result went, so they carry the truth too. */
+/** Flags that say which way something hidden went, so they carry the truth too. */
 function flagsSetByHiddenResults(content: Content): Set<string> {
   const options = content.scenes.flatMap((s) => s.options);
-  return new Set(
-    options
+  return new Set([
+    ...options
       .filter((o) =>
         o.results.some((r) => r.when && dependsOnHiddenTruth(r.when)),
       )
       .flatMap((o) => o.results.flatMap((r) => r.sets)),
-  );
+    ...content.moves
+      .filter((m) => m.when && dependsOnHiddenTruth(m.when))
+      .flatMap((m) => m.sets),
+    // Whether a Demand is forgotten or chased goes by the boss's kind.
+    ...Object.values(content.demands?.sets ?? {}),
+  ]);
 }
 
 function findBrokenDeal(
@@ -784,7 +791,12 @@ function findBrokenApproaches(content: Content): string[] {
     if (new Set(Object.values(approach.shift)).size === 1) {
       problems.push(`${owner} is taken the same way by every kind.`);
     }
-    const written = Object.values(approach.reaction).flat();
+    const written = [
+      ...Object.values(approach.reaction).flat(),
+      ...Object.values(approach.overdone?.reaction ?? {}).flatMap(
+        (l) => l ?? [],
+      ),
+    ];
     problems.push(...findNamedKinds(content, owner, written));
   }
   return problems;

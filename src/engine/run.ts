@@ -292,11 +292,11 @@ function followUpDemands(state: State, content: Content): void {
     if (value < forgets) {
       state.openDemands = state.openDemands.filter((d) => d !== open);
       state.noticesDue.push(item.forgotten);
-      state.flags.push("demand-forgotten");
+      state.flags.push(demands.sets.forgotten);
     } else if (value < forgets + chases) {
       open.chased = true;
       state.unanswered.unshift(chasedIdOf(open.id));
-      state.flags.push("demand-chased");
+      state.flags.push(demands.sets.chased);
       landWithBoss(
         state,
         content,

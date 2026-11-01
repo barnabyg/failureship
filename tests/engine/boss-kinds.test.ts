@@ -170,6 +170,40 @@ describe("the boss's approaches in content", () => {
     expect(() => parseContent(raw)).toThrow(/gated on the hidden truth/);
   });
 
+  it("refuses an option gated on a flag from a Move that reads the kind", () => {
+    const raw = kindsFixtureRaw();
+    raw.moves.push({
+      id: "tell",
+      from: "Ana Abel",
+      title: "Tell",
+      body: "Told.",
+      when: { bossIs: "practitioner" },
+      sets: ["boss-practises"],
+    });
+    raw.scenes[0]?.options.push({
+      id: "gated",
+      label: "Gated",
+      requires: { flag: "boss-practises" },
+      results: [{ body: "Gated." }],
+    });
+
+    expect(() => parseContent(raw)).toThrow(/gated on the hidden truth/);
+  });
+
+  it("refuses an overdone reaction that says the kind out loud", () => {
+    const raw = kindsFixtureRaw();
+    const approach = raw.boss.approaches[0];
+    if (approach) {
+      approach.overdone = {
+        after: 1,
+        shift: {},
+        reaction: { believer: ["Such a KIND-BELIEVER."] },
+      };
+    }
+
+    expect(() => parseContent(raw)).toThrow(/names a kind/);
+  });
+
   it("refuses a choice that names an unknown approach", () => {
     const raw = kindsFixtureRaw();
     const result = raw.scenes[0]?.options.at(-1)?.results[0];
