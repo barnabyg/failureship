@@ -22,7 +22,7 @@ Press `Ctrl+C` in the terminal to stop it.
 
 ## What to try
 
-Every run has a seed, shown at the bottom right. Add `?seed=1` to the address to
+Every run has a seed, shown at the top right. Add `?seed=1` to the address to
 pick one. The month has the same steps each time:
 
 1. **A Notification arrives.** Answer it: finish the report or go to the pub.
