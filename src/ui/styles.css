@@ -354,15 +354,24 @@ body {
   gap: 16px;
 }
 
-.scene-columns .signs {
+/* Fonts differ by platform, so a Scene needs room to spare at 1280x800. */
+.scene-columns {
+  display: grid;
+  grid-template-columns: 1fr 250px;
+  gap: 20px;
+  align-items: start;
   font-size: 0.875rem;
   line-height: 1.35;
 }
 
-.scene-columns {
-  display: grid;
-  grid-template-columns: 1fr 300px;
-  gap: 20px;
+.scene-columns .options {
+  gap: 4px;
+}
+
+.scene-columns p,
+.scene-columns .signs,
+.scene-columns .cast {
+  margin-bottom: 8px;
 }
 
 @media (max-width: 800px) {
