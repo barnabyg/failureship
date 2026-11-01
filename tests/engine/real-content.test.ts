@@ -239,14 +239,29 @@ describe("the real month", () => {
       );
     };
 
+    const firstSign = (seed: number) => {
+      const run = startRun({ seed, content: gameContent });
+      run.choose({
+        type: "notification",
+        notificationId: "report-or-pub",
+        optionId: "report",
+      });
+      run.choose({ type: "continue" });
+      const view = run.choose({ type: "action", actionId: "meeting" });
+      if (view.step.kind !== "scene") throw new Error(view.step.kind);
+      return view.step.signs[0]?.text;
+    };
+
     expect(holderInMeeting(8)).toBe("boss");
-    expect(holderInMeeting(5)).toBe("head");
+    expect(holderInMeeting(1)).toBe("analyst");
+    expect(firstSign(8)).toMatch(/^Dennis Prowse talks over/);
+    expect(firstSign(1)).toMatch(/^Priya Venn talks over/);
     expect(of(8).projects?.nature).toBe("dangerous");
-    expect(of(5).projects?.nature).toBe("none");
+    expect(of(1).projects?.nature).toBe("useful");
     expect(of(8).analyst?.nature).toBe("useful");
-    expect(of(5).analyst?.nature).toBe("dangerous");
+    expect(of(1).analyst?.nature).toBe("dangerous");
     expect(of(8).boss?.kind).toBe("incompetent");
-    expect(of(5).boss?.kind).toBe("believer");
+    expect(of(1).boss?.kind).toBe("believer");
   });
 
   // Each of these holds influence in the meeting on that seed.

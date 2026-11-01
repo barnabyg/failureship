@@ -15,7 +15,7 @@ import {
   type DealtCharacter,
   type PowerMap,
 } from "./deal";
-import { pick, pickWeighted } from "./rng";
+import { draw, pick, pickWeighted } from "./rng";
 import type {
   Buzzword,
   ChartEntry,
@@ -62,6 +62,8 @@ type Step =
       id: string;
       shown: ShownBehaviour[];
       treatment: string | null;
+      /** Whether this Scene's signs point at the wrong person. */
+      misleading: boolean;
     }
   | { kind: "find-out"; method: string }
   | { kind: "claim"; index: number }
@@ -354,6 +356,7 @@ function openScene(state: State, world: World, id: string): Step {
   const { behaviours } = world.content;
   const shown: ShownBehaviour[] = [];
   const { cast } = sceneData(state, world, id);
+  const misleading = drawMisleading(state, world.content);
   if (behaviours.length > 0) {
     for (const character of cast) {
       const kind = state.truth.characters.find((c) => c.id === character)?.kind;
@@ -367,8 +370,23 @@ function openScene(state: State, world: World, id: string): Step {
       shown.push({ character, behaviour: chosen.item.id });
     }
   }
-  noteScene(state, world, id, shown);
-  return { kind: "scene", id, shown, treatment: treatBoss(state, world, cast) };
+  noteScene(state, world, id, shown, misleading);
+  return {
+    kind: "scene",
+    id,
+    shown,
+    treatment: treatBoss(state, world, cast),
+    misleading,
+  };
+}
+
+/** Sometimes a room gives the wrong impression, so no one Scene settles it. */
+function drawMisleading(state: State, content: Content): boolean {
+  const chance = content.balance.signsMisleadChance;
+  if (chance === 0) return false;
+  const { value, next } = draw(state.rng);
+  state.rng = next;
+  return value < chance;
 }
 
 /** The Notebook keeps only the signs written with a clue. */
@@ -377,6 +395,7 @@ function noteScene(
   world: World,
   id: string,
   shown: readonly ShownBehaviour[],
+  misleading: boolean,
 ): void {
   const { content } = world;
   const scene = sceneData(state, world, id);
@@ -390,7 +409,10 @@ function noteScene(
   };
   for (const sign of scene.signs) {
     if (sign.clue !== undefined) {
-      note(fillRoles(state, content, sign.clue, scene.cast), "held");
+      note(
+        fillRoles(state, content, sign.clue, scene.cast, misleading),
+        misleading ? "wrong" : "held",
+      );
     }
   }
   for (const { character, behaviour } of shown) {
@@ -529,14 +551,15 @@ function fillRoles(
   content: Content,
   written: string,
   room?: readonly string[],
+  misleading = false,
 ): string {
   const name = (id: string | undefined) =>
     content.characters.find((c) => c.id === id)?.name ?? "";
   const { holder, ignored, bystander } = rolesIn(state.truth.powerMap, room);
   return written
-    .replaceAll("{holder}", name(holder))
+    .replaceAll("{holder}", name(misleading ? bystander : holder))
     .replaceAll("{ignored}", name(ignored))
-    .replaceAll("{bystander}", name(bystander));
+    .replaceAll("{bystander}", name(misleading ? holder : bystander));
 }
 
 /** The month's order: Notifications, actions, a Move, then the month closes. */
@@ -660,7 +683,7 @@ function notificationOptions(
 function toSceneView(
   state: State,
   world: World,
-  { id, shown, treatment }: Extract<Step, { kind: "scene" }>,
+  { id, shown, treatment, misleading }: Extract<Step, { kind: "scene" }>,
 ): Extract<StepView, { kind: "scene" }> {
   const { content } = world;
   const scene = sceneData(state, world, id);
@@ -677,7 +700,10 @@ function toSceneView(
         .filter((x) => x.id === c)
         .map((x) => ({ name: x.name, title: x.title })),
     ),
-    signs: scene.signs.map((s) => ({ label: s.label, text: fill(s.text) })),
+    signs: scene.signs.map((s) => ({
+      label: s.label,
+      text: fillRoles(state, content, s.text, scene.cast, misleading),
+    })),
     behaviours: shown.map(({ character, behaviour }) => {
       const who =
         content.characters.find((c) => c.id === character)?.name ?? character;

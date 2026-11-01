@@ -98,6 +98,7 @@ export function fixtureRaw() {
       actionsPerMonth: 3,
       monthsPerRun: 2,
       actionCosts: { standard: 1, report: 1, pub: 1 } as Record<string, number>,
+      signsMisleadChance: 0,
       opinion: { warmAt: 1, coldAt: -1 },
     },
     boss: {

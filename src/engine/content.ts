@@ -299,6 +299,8 @@ const contentSchema = z.strictObject({
     actionsPerMonth: z.number().int().positive(),
     monthsPerRun: z.number().int().positive(),
     actionCosts: z.record(id, z.number().int().nonnegative()),
+    /** How often a Scene's signs swap who holds influence with the next person. */
+    signsMisleadChance: z.number().min(0).max(1),
     /** The hidden opinion at which the boss's treatment changes. */
     opinion: z.strictObject({
       warmAt: z.number().int().positive(),

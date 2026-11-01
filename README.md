@@ -58,21 +58,21 @@ first. Swap a seed with a friend and you both get the same deal.
 ### A test scenario: two contrasting deals
 
 This takes about ten minutes, and it gives away two deals, so use other seeds if you
-want to play blind. Seeds 8 and 5 differ in who runs the floor and whose secrets are
+want to play blind. Seeds 8 and 1 differ in who runs the floor and whose secrets are
 dangerous. Start at `http://localhost:5173/?seed=8`.
 
-| Try this                                                                       | Expect                                                                                                                |
-| ------------------------------------------------------------------------------ | --------------------------------------------------------------------------------------------------------------------- |
-| Seed 8. In month 1 go to the pub, then Meeting Room 1B                         | You learn "strategic patience", and the Scene offers an extra option using it. The signs point to Dennis.             |
-| Agree warmly with Dennis                                                       | It goes well: Dennis holds influence on this seed.                                                                    |
-| Open the Notebook, and mark Dennis as anything you like                        | The action count does not change, and new clues are at the top.                                                       |
-| Month 2. In the Lessons Learned Review, say that the delay began with Callum   | It goes badly, and you are not told why. At the end, the results screen explains: Callum has a dangerous Hidden Fact. |
-| Restart from seed 5, and do the same in month 2                                | Callum takes the blame and you get away with it. Blaming Priya is what goes badly on this seed.                       |
-| In month 1 on seed 5, look at who the signs point to                           | They point to Hugh, not Dennis. The same warm agreement with Dennis now does nothing for you.                         |
-| Compare how your boss treats you in month 2 after agreeing with Dennis or Hugh | The sign under "How your boss is with you" is usually warmer after agreeing with Dennis. No sign is sure.             |
-| Go to the loading bay, buy from Marjorie, and ask about someone                | Often a Hidden Fact. If it is one of the useful ones, a later Scene offers a new option about it, whether it is true. |
-| Play to the end of any run, and read the results screen                        | Your marks against the truth, each claim's truth, and which clues were false or did not matter.                       |
-| Restart the same seed and repeat your choices                                  | The same signs, claims, Move and official story, every time.                                                          |
+| Try this                                                                       | Expect                                                                                                                                                       |
+| ------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| Seed 8. In month 1 go to the pub, then Meeting Room 1B                         | You learn "strategic patience", and the Scene offers an extra option using it. The signs point to Dennis.                                                    |
+| Agree warmly with Dennis                                                       | It goes well: Dennis holds influence on this seed.                                                                                                           |
+| Open the Notebook, and mark Dennis as anything you like                        | The action count does not change, and new clues are at the top.                                                                                              |
+| Month 2. In the Lessons Learned Review, say that the delay began with Callum   | It goes badly, and you are not told why. At the end, the results screen explains: Callum has a dangerous Hidden Fact.                                        |
+| Restart from seed 1, and do the same in month 2                                | Callum takes the blame and you get away with it. Blaming Priya is what goes badly on this seed.                                                              |
+| In month 1 on seed 1, look at who the signs point to                           | They point to Priya, not Dennis. The same warm agreement with Dennis now does little for you. Signs mislead about one Scene in five, so watch more than one. |
+| Compare how your boss treats you in month 2 after agreeing with Dennis or Hugh | The sign under "How your boss is with you" is usually warmer after agreeing with Dennis. No sign is sure.                                                    |
+| Go to the loading bay, buy from Marjorie, and ask about someone                | Often a Hidden Fact. If it is one of the useful ones, a later Scene offers a new option about it, whether it is true.                                        |
+| Play to the end of any run, and read the results screen                        | Your marks against the truth, each claim's truth, and which clues were false or did not matter.                                                              |
+| Restart the same seed and repeat your choices                                  | The same signs, claims, Move and official story, every time.                                                                                                 |
 
 ## Change the game
 
@@ -109,6 +109,10 @@ results. A `when` or `requires` condition can be
 `{ "flag": "went-to-pub" }`, `{ "not": ... }` or `{ "all": [...] }`. Options
 gated with `requires` cannot depend on the hidden truth. Flags come from `sets`,
 and are wiped when a new month opens. Buzzwords carry over for the whole run.
+
+In `balance.json`, `signsMisleadChance` is how often a Scene's signs swap `{holder}`
+with `{bystander}`, so that one Scene never settles who holds influence. A Scene's
+results still go by the truth.
 
 A behaviour says `{who}`, and is written for a kind of person, never a named one.
 When a Scene opens, each person present shows one, chosen by their dealt kind. Its
