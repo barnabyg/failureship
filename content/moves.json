@@ -3,7 +3,39 @@
     "id": "minutes-action",
     "from": "From: Marjorie Tull, Office Co-ordinator",
     "title": "The minutes have been circulated",
-    "body": "The minutes of this month's meeting record an action against your name. Nobody remembers agreeing it, including the person who wrote it down. It is due on Friday.",
+    "body": "You did not go to this month's meeting. The minutes have gone round anyway, and they record an action against your name. Nobody remembers agreeing it, including the person who wrote it down. It is due on Friday.",
+    "when": {
+      "not": {
+        "flag": "attended-meeting"
+      }
+    },
+    "priority": true,
+    "sets": ["given-action"]
+  },
+  {
+    "id": "minutes-owner",
+    "from": "From: Marjorie Tull, Office Co-ordinator",
+    "title": "Thanks for picking this up",
+    "body": "In your absence, the meeting agreed that you were best placed to take this forward. The minutes do not say what this is. Someone who was there thinks it may be to do with the fire doors. It is due on Friday.",
+    "when": {
+      "not": {
+        "flag": "attended-meeting"
+      }
+    },
+    "priority": true,
+    "sets": ["given-action"]
+  },
+  {
+    "id": "minutes-apologies",
+    "from": "From: Marjorie Tull, Office Co-ordinator",
+    "title": "Apologies for absence",
+    "body": "You are listed under Apologies for Absence, and also three times under Actions. Two of them are yours because you were not there to say otherwise. The third is to find out why you were not there.",
+    "when": {
+      "not": {
+        "flag": "attended-meeting"
+      }
+    },
+    "priority": true,
     "sets": ["given-action"]
   },
   {
@@ -18,7 +50,9 @@
     "from": "From: Dennis Prowse, Team Leader",
     "title": "FW: Monthly Status Report OVERDUE",
     "body": "Dennis has forwarded you a chaser about the report you did not file while you were at the pub with Dennis. The whole message reads: Thoughts?",
-    "when": { "flag": "went-to-pub" },
+    "when": {
+      "flag": "went-to-pub"
+    },
     "sets": ["report-chased"]
   },
   {
@@ -26,7 +60,9 @@
     "from": "From: Dennis Prowse, Team Leader",
     "title": "Thanks for your input",
     "body": "Your Monthly Status Report has gone upstairs under Dennis's name, as an executive summary of your Monthly Status Report. The summary is your report.",
-    "when": { "flag": "filed-report" },
+    "when": {
+      "flag": "filed-report"
+    },
     "sets": ["report-renamed"]
   },
   {
@@ -34,7 +70,51 @@
     "from": "Overheard in the lift",
     "title": "You hear your phrase on the way up",
     "body": "Dennis is explaining strategic patience to someone from the fifth floor, and is doing so as its author. You are holding the door.",
-    "when": { "flag": "used-buzzword" },
+    "when": {
+      "flag": "used-buzzword"
+    },
     "sets": ["phrase-taken"]
+  },
+  {
+    "id": "desk-moved",
+    "from": "From: Facilities",
+    "title": "Your desk has been moved",
+    "body": "As part of the Workplace Refresh, your desk is now next to the printer, and has no window. Somebody has been given the one with the window, and nobody will say who decided.",
+    "sets": ["desk-moved"]
+  },
+  {
+    "id": "rumour",
+    "from": "Overheard in the kitchen",
+    "title": "Your project is apparently in trouble",
+    "body": "Someone from another team asks kindly how you are coping. You did not know that you were coping with anything. It seems to be widely known that your project is in trouble.",
+    "sets": ["rumour-spread"]
+  },
+  {
+    "id": "information-late",
+    "from": "From: Callum Reed, Project Co-ordinator",
+    "title": "RE: The figures you needed by Tuesday",
+    "body": "Callum has sent you the figures you needed. It is Wednesday. Callum's message adds that they are sorry for the delay, and that the whole team has been copied in, along with your deadline.",
+    "sets": ["information-late"]
+  },
+  {
+    "id": "meeting-moved",
+    "from": "From: Marjorie Tull, Office Co-ordinator",
+    "title": "Invitation updated",
+    "body": "A meeting you were preparing for has moved to yesterday. The minutes are attached. You were present, and you agreed to several things.",
+    "sets": ["meeting-moved"]
+  },
+  {
+    "id": "laptop-promise",
+    "from": "From: Priya Venn, Senior Analyst",
+    "title": "Those laptops",
+    "body": "Priya has told several people that you promised the team new laptops. You did not. You have now been asked when they will arrive, by someone who does not believe you.",
+    "sets": ["laptop-promise"]
+  },
+  {
+    "id": "working-group",
+    "from": "From: Hugh Lamb, Head of Operations",
+    "title": "A small favour",
+    "body": "Hugh has put you on a working group about working groups, on the basis of a conversation you do not remember. It meets on Fridays, and it has no end date.",
+    "sets": ["working-group"]
   }
 ]

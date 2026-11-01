@@ -7,6 +7,12 @@ import { readHiddenTruth } from "../../src/engine/hidden-truth";
 
 const SEEDS = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
 
+const isFindOut = (choice: Choice) =>
+  choice.type === "action" &&
+  gameContent.actions.some(
+    (a) => a.id === choice.actionId && a.findOut !== undefined,
+  );
+
 /** Every way through the first month, as the views seen along each one. */
 function everyPath(seed: number): PlayerView[][] {
   const paths: PlayerView[][] = [];
@@ -18,7 +24,12 @@ function everyPath(seed: number): PlayerView[][] {
       paths.push(views);
       return;
     }
-    for (const choice of last?.choices ?? []) walk([...script, choice]);
+    // Every source and subject would multiply the paths and show nothing new.
+    const choices =
+      last?.step.kind === "find-out"
+        ? last.choices.slice(0, 1)
+        : (last?.choices ?? []);
+    for (const choice of choices) walk([...script, choice]);
   };
   walk([]);
   return paths;
@@ -70,7 +81,11 @@ describe("the real month", () => {
       const facts = dealt.characters.flatMap((c) =>
         c.fact ? [c.fact.text] : [],
       );
-      for (const views of everyPath(seed)) {
+      // A claim can pass on a real fact, so asking is checked separately.
+      const unasked = everyPath(seed).filter(
+        (views) => !views.some((v) => v.step.kind === "find-out"),
+      );
+      for (const views of unasked) {
         for (const view of views) {
           const seen = JSON.stringify(view);
           for (const fact of facts) expect(seen).not.toContain(fact);
@@ -117,7 +132,8 @@ describe("the real month", () => {
           if (fact) expect(seen).not.toContain(fact.text);
         }
         walk = (walk * 31 + 7) % 1009;
-        const choice = view.choices[walk % view.choices.length];
+        const open = view.choices.filter((c) => !isFindOut(c));
+        const choice = open[walk % open.length];
         if (!choice) throw new Error(`Stuck at ${view.step.kind}.`);
         view = run.choose(choice);
       }
@@ -180,7 +196,75 @@ describe("the real month", () => {
     expect(orgChart.filter((e) => e.reportsTo === null)).toHaveLength(1);
   });
 
-  // The README names these seeds in its test scenario.
+  // The browser tests rely on these two deals.
+  it("keeps the deals that the Hidden Fact browser tests use", () => {
+    const nature = (seed: number, character: string) => {
+      const dealt = readHiddenTruth(
+        startRun({ seed, content: gameContent }),
+      ).characters.find((c) => c.id === character);
+      return gameContent.hiddenTruth.facts.find((f) => f.id === dealt?.fact?.id)
+        ?.nature;
+    };
+    const run = startRun({ seed: 22, content: gameContent });
+    run.choose({
+      type: "notification",
+      notificationId: "report-or-pub",
+      optionId: "report",
+    });
+    run.choose({ type: "continue" });
+    run.choose({ type: "action", actionId: "inside-info" });
+    const told = run.choose({
+      type: "find-out",
+      sourceId: "admin",
+      subjectId: "boss",
+    });
+
+    expect(nature(3, "projects")).toBe("dangerous");
+    expect(JSON.stringify(told.step)).toContain("abolished");
+  });
+
+  // The README contrasts these two seeds in its test scenario.
+  it("keeps the two contrasting deals the README describes", () => {
+    const of = (seed: number) => {
+      const { characters } = readHiddenTruth(
+        startRun({ seed, content: gameContent }),
+      );
+      return Object.fromEntries(
+        characters.map((c) => {
+          const fact = gameContent.hiddenTruth.facts.find(
+            (f) => f.id === c.fact?.id,
+          );
+          return [c.id, { kind: c.kind, nature: fact?.nature ?? "none" }];
+        }),
+      );
+    };
+
+    const firstSign = (seed: number) => {
+      const run = startRun({ seed, content: gameContent });
+      run.choose({
+        type: "notification",
+        notificationId: "report-or-pub",
+        optionId: "report",
+      });
+      run.choose({ type: "continue" });
+      const view = run.choose({ type: "action", actionId: "meeting" });
+      if (view.step.kind !== "scene") throw new Error(view.step.kind);
+      return view.step.signs[0]?.text;
+    };
+
+    expect(holderInMeeting(8)).toBe("boss");
+    expect(holderInMeeting(1)).toBe("analyst");
+    expect(firstSign(8)).toMatch(/^Dennis Prowse talks over/);
+    expect(firstSign(1)).toMatch(/^Priya Venn talks over/);
+    expect(of(8).projects?.nature).toBe("dangerous");
+    expect(of(1).projects?.nature).toBe("useful");
+    expect(of(8).analyst?.nature).toBe("useful");
+    expect(of(1).analyst?.nature).toBe("dangerous");
+    expect(of(8).boss?.kind).toBe("incompetent");
+    expect(of(1).boss?.kind).toBe("believer");
+  });
+
+  // Each of these holds influence in the meeting on that seed.
   it.each([
     [8, "boss"],
     [1, "analyst"],

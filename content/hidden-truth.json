@@ -1,48 +1,75 @@
 {
   "kinds": {
-    "believer": { "label": "Believer", "weight": 3 },
-    "incompetent": { "label": "Incompetent", "weight": 3 },
-    "practitioner": { "label": "Practitioner", "weight": 2 }
+    "believer": {
+      "label": "Believer",
+      "weight": 3
+    },
+    "incompetent": {
+      "label": "Incompetent",
+      "weight": 3
+    },
+    "practitioner": {
+      "label": "Practitioner",
+      "weight": 2
+    }
   },
   "minPractitioners": 1,
   "charactersWithFact": 4,
   "facts": [
     {
       "id": "thursday-bridge",
-      "text": "{name} has played bridge with the Chief Executive every Thursday for eleven years."
+      "text": "{name} has played bridge with the Chief Executive every Thursday for eleven years.",
+      "nature": "dangerous",
+      "told": "You'll have seen {name} leaving early on Thursdays. Bridge, with the Chief Executive. Eleven years, every week. So I'd watch what I said, that's all."
     },
     {
       "id": "abolished-post",
       "text": "The post of Team Leader was abolished in a reorganisation two years ago, and nobody has told {name}.",
-      "characters": ["boss"]
+      "characters": ["boss"],
+      "nature": "useful",
+      "told": "They abolished the Team Leader post, you know, two years ago in the reorganisation. Nobody has told {name}. I don't think anyone knows how."
     },
     {
       "id": "values-statement",
-      "text": "{name} wrote the company's values statement at a kitchen table, in one afternoon, for a bet."
+      "text": "{name} wrote the company's values statement at a kitchen table, in one afternoon, for a bet.",
+      "nature": "useful",
+      "told": "You know the values statement? {name} wrote that. At a kitchen table, in one afternoon, for a bet. Integrity was the bit that won it."
     },
     {
       "id": "payroll-password",
-      "text": "{name} is the only person alive who knows the password to the system that pays everyone."
+      "text": "{name} is the only person alive who knows the password to the system that pays everyone.",
+      "nature": "dangerous",
+      "told": "If {name} ever goes under a bus, none of us gets paid. {name} is the only one left with the password to the pay system."
     },
     {
       "id": "audit-engagement",
-      "text": "{name} was engaged for six years to the Head of Internal Audit. It ended badly, and the audit is still open."
+      "text": "{name} was engaged for six years to the Head of Internal Audit. It ended badly, and the audit is still open.",
+      "nature": "dangerous",
+      "told": "{name} was engaged to the Head of Internal Audit for six years. It ended badly, and the audit's still open. Make of that what you like."
     },
     {
       "id": "dated-record",
-      "text": "{name} has kept a dated record of every promise made on this floor since 2014, and has made copies."
+      "text": "{name} has kept a dated record of every promise made on this floor since 2014, and has made copies.",
+      "nature": "dangerous",
+      "told": "{name} writes it all down, you know. Every promise made on this floor since 2014, with dates. And there are copies."
     },
     {
       "id": "reports-to-finance",
-      "text": "{name} reports privately to the Chief Financial Officer on what really happens at this level."
+      "text": "{name} reports privately to the Chief Financial Officer on what really happens at this level.",
+      "nature": "dangerous",
+      "told": "I'd be careful around {name}. There's a private line to the Chief Financial Officer, about what really goes on down here."
     },
     {
       "id": "lost-list",
-      "text": "{name} has been on the redundancy list for two years. The list has been lost, and nobody dares to ask for it."
+      "text": "{name} has been on the redundancy list for two years. The list has been lost, and nobody dares to ask for it.",
+      "nature": "useful",
+      "told": "{name} has been on the redundancy list for two years. Then someone lost the list, and nobody dares ask for it back."
     },
     {
       "id": "competitor-offer",
-      "text": "{name} has a signed offer from the company's largest competitor, and is staying on to see how this ends."
+      "text": "{name} has a signed offer from the company's largest competitor, and is staying on to see how this ends.",
+      "nature": "useful",
+      "told": "{name} has a signed offer from the competition, sitting in a drawer. Only staying to see how this ends."
     }
   ]
 }

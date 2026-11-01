@@ -9,6 +9,7 @@ import {
 } from "../engine";
 import { Chart } from "./Chart";
 import { Modal } from "./Modal";
+import { Notebook } from "./Notebook";
 import { StepPanel } from "./panels";
 import { RunControls } from "./RunControls";
 import { TowerStage } from "./TowerStage";
@@ -48,6 +49,7 @@ export function App() {
   const [message, setMessage] = useState(first.refused);
   const [leavingFor, setLeavingFor] = useState<number | null>(null);
   const [orgChartOpen, setOrgChartOpen] = useState(false);
+  const [notebookOpen, setNotebookOpen] = useState(false);
 
   // In an effect, because React may run a state initialiser twice in development.
   useEffect(() => {
@@ -91,8 +93,8 @@ export function App() {
         </div>
         <dl>
           <div>
-            <dt>{panelText.floorName}</dt>
-            <dd>{panelText.floorRole}</dd>
+            <dt>{panelText.jobHeading}</dt>
+            <dd data-testid="job-title">{panelText.jobTitle}</dd>
           </div>
           <div data-testid="month">
             <dt>{panelText.monthHeading}</dt>
@@ -105,7 +107,7 @@ export function App() {
             </dd>
           </div>
           {view.buzzwords.length > 0 && (
-            <div data-testid="buzzwords">
+            <div className="status-buzzwords" data-testid="buzzwords">
               <dt>{panelText.buzzwordsHeading}</dt>
               <dd>{view.buzzwords.map((b) => b.term).join(", ")}</dd>
             </div>
@@ -129,6 +131,15 @@ export function App() {
             }}
           >
             {panelText.orgChartHeading}
+          </button>
+          <button
+            type="button"
+            data-testid="open-notebook"
+            onClick={() => {
+              setNotebookOpen(true);
+            }}
+          >
+            {panelText.notebookHeading} ({view.notebook.clues.length})
           </button>
         </RunControls>
       </header>
@@ -156,6 +167,33 @@ export function App() {
             data-testid="close-org-chart"
             onClick={() => {
               setOrgChartOpen(false);
+            }}
+          >
+            {panelText.closeLabel}
+          </button>
+        </Modal>
+      )}
+      {notebookOpen && (
+        <Modal
+          testId="notebook"
+          title={panelText.notebookHeading}
+          wide
+          onClose={() => {
+            setNotebookOpen(false);
+          }}
+        >
+          <Notebook
+            notebook={view.notebook}
+            locked={view.choices.length === 0}
+            onMark={(character, kind) => {
+              setGame({ run, view: run.mark(character, kind) });
+            }}
+          />
+          <button
+            type="button"
+            data-testid="close-notebook"
+            onClick={() => {
+              setNotebookOpen(false);
             }}
           >
             {panelText.closeLabel}

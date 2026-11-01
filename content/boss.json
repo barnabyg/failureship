@@ -1,0 +1,50 @@
+{
+  "character": "boss",
+  "signs": [
+    {
+      "id": "first-name",
+      "text": "Dennis uses your first name when you come in, and it is the right one.",
+      "likelihood": { "warm": 6, "neutral": 2, "cold": 0 }
+    },
+    {
+      "id": "asks-your-view",
+      "text": "Dennis turns to you in front of everyone and asks what you think. Dennis listens to all of it.",
+      "likelihood": { "warm": 6, "neutral": 1, "cold": 0 }
+    },
+    {
+      "id": "saved-a-seat",
+      "text": "Dennis moves a folder off the chair next to his. It might be for you. It might be that the folder was finished.",
+      "likelihood": { "warm": 5, "neutral": 2, "cold": 1 }
+    },
+    {
+      "id": "nods-vaguely",
+      "text": "Dennis nods in your direction when you sit down. It could be a greeting. It could be the slide.",
+      "likelihood": { "warm": 2, "neutral": 6, "cold": 2 }
+    },
+    {
+      "id": "copies-you-in",
+      "text": "Dennis says that you will be copied in. Nobody says on what.",
+      "likelihood": { "warm": 2, "neutral": 6, "cold": 3 }
+    },
+    {
+      "id": "cheerful-to-the-room",
+      "text": "Dennis is cheerful with the whole room. You are in the room.",
+      "likelihood": { "warm": 3, "neutral": 5, "cold": 3 }
+    },
+    {
+      "id": "calls-you-our-colleague",
+      "text": "Dennis refers to you as \"our colleague here\". It may be that the name has slipped Dennis's mind.",
+      "likelihood": { "warm": 0, "neutral": 2, "cold": 6 }
+    },
+    {
+      "id": "talks-over-you",
+      "text": "You begin a sentence. Dennis finishes it, differently, and moves to the next slide.",
+      "likelihood": { "warm": 1, "neutral": 2, "cold": 6 }
+    },
+    {
+      "id": "checks-with-someone-else",
+      "text": "Dennis asks you a question, then checks the answer with someone else while you are still giving it.",
+      "likelihood": { "warm": 0, "neutral": 1, "cold": 6 }
+    }
+  ]
+}

@@ -5,6 +5,8 @@ export interface DealtCharacter {
   id: string;
   kind: Kind;
   fact: { id: string; text: string } | null;
+  /** What they want, which colours what they tell the player. */
+  motive: string;
 }
 
 /**
@@ -50,9 +52,25 @@ export function dealCharacters(
       id,
       kind: kinds.dealt.get(id) ?? "believer",
       fact: facts.dealt.get(id) ?? null,
+      motive: "",
     })),
     next: facts.next,
   };
+}
+
+/** Dealt last, so that adding motives leaves the rest of a seed's deal alone. */
+export function dealMotives(
+  rng: number,
+  characters: readonly DealtCharacter[],
+  content: Content,
+): { characters: DealtCharacter[]; next: number } {
+  let next = rng;
+  const dealt = characters.map((character) => {
+    const motive = pick(next, content.sources.motives);
+    next = motive.next;
+    return { ...character, motive: motive.item.id };
+  });
+  return { characters: dealt, next };
 }
 
 /** The first seats go to Practitioners, so there is always something to find. */

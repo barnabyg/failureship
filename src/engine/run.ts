@@ -1,17 +1,28 @@
-import type { Condition, Content, SceneData } from "./content";
+import { makeClaim, verdictOfClaim, type Claim } from "./claims";
+import {
+  KINDS,
+  type ClueVerdict,
+  type Condition,
+  type Content,
+  type Kind,
+  type Mood,
+  type SceneData,
+} from "./content";
 import {
   dealCharacters,
+  dealMotives,
   dealPowerMap,
   type DealtCharacter,
   type PowerMap,
 } from "./deal";
-import { pick, pickWeighted } from "./rng";
+import { draw, pick, pickWeighted } from "./rng";
 import type {
   Buzzword,
   ChartEntry,
   Choice,
   Hotspot,
   NotificationOption,
+  Person,
   PlayerView,
   StepView,
 } from "./view";
@@ -19,6 +30,8 @@ import type {
 export interface HiddenTruth {
   characters: DealtCharacter[];
   powerMap: PowerMap;
+  /** Moved by the player's choices. Shown only through how the boss behaves. */
+  bossOpinion: number;
 }
 
 /** Custom behaviour for a Scene: reshapes its data for the current truth. */
@@ -44,14 +57,31 @@ type Step =
   | { kind: "notification"; id: string }
   | { kind: "dialog"; id: string; learned: string[] }
   | { kind: "actions" }
-  | { kind: "scene"; id: string; shown: ShownBehaviour[] }
+  | {
+      kind: "scene";
+      id: string;
+      shown: ShownBehaviour[];
+      treatment: string | null;
+      /** Whether this Scene's signs point at the wrong person. */
+      misleading: boolean;
+    }
+  | { kind: "find-out"; method: string; sources: string[] }
+  | { kind: "claim"; index: number }
   | { kind: "notice"; title: string; body: string }
   | { kind: "move"; id: string }
   | { kind: "story" }
   | { kind: "results" };
 
+interface Clue {
+  month: number;
+  source: string;
+  text: string;
+  verdict: ClueVerdict;
+}
+
 /** What belongs to the month, and is wiped when the next one opens. */
 interface MonthRecord {
+  noted: string[];
   spent: number;
   visited: string[];
   unanswered: string[];
@@ -65,6 +95,15 @@ interface State extends MonthRecord {
   rng: number;
   month: number;
   buzzwords: string[];
+  claims: Claim[];
+  /** So that a Move does not land twice in a run while others remain. */
+  movesLanded: string[];
+  clues: Clue[];
+  /** Who the player suspects of what. Nothing in the rules ever reads this. */
+  marks: Map<string, Kind>;
+  /** Who the player was last told has each Hidden Fact, true or not. */
+  heard: { fact: string; subject: string }[];
+  factEvents: { month: number; note: string; fact: string | null }[];
   step: Step;
   truth: HiddenTruth;
 }
@@ -74,6 +113,8 @@ export interface Run {
   view(): PlayerView;
   /** Applies a legal choice and returns the new view. Throws on any other. */
   choose(choice: Choice): PlayerView;
+  /** Sets or clears a suspicion, at no cost. Throws once the run has ended. */
+  mark(character: string, kind: Kind | null): PlayerView;
 }
 
 export class IllegalChoiceError extends Error {
@@ -105,14 +146,25 @@ export function startRun(options: {
   const world: World = { content, sceneScripts };
   const dealt = dealCharacters(seed, content);
   const power = dealPowerMap(dealt.next, content);
+  const motives = dealMotives(power.next, dealt.characters, content);
   const state: State = {
     seed,
-    rng: power.next,
+    rng: motives.next,
     month: 1,
     ...freshMonth(content, 1),
     buzzwords: [],
+    claims: [],
+    movesLanded: [],
+    clues: [],
+    marks: new Map(),
+    heard: [],
+    factEvents: [],
     step: { kind: "actions" },
-    truth: { characters: dealt.characters, powerMap: power.powerMap },
+    truth: {
+      characters: motives.characters,
+      powerMap: power.powerMap,
+      bossOpinion: 0,
+    },
   };
   state.step = nextStep(state, world);
 
@@ -126,6 +178,17 @@ export function startRun(options: {
         throw new IllegalChoiceError(`Choice not available now: ${wanted}`);
       }
       apply(state, world, choice);
+      noteEvents(state, content);
+      return view();
+    },
+    mark(character, kind) {
+      const known = content.characters.some((c) => c.id === character);
+      const legal = kind === null || KINDS.includes(kind);
+      if (state.step.kind === "results" || !known || !legal) {
+        throw new IllegalChoiceError(`Cannot mark ${character}.`);
+      }
+      if (kind === null) state.marks.delete(character);
+      else state.marks.set(character, kind);
       return view();
     },
   };
@@ -135,6 +198,7 @@ export function startRun(options: {
 
 function freshMonth(content: Content, month: number): MonthRecord {
   return {
+    noted: [],
     spent: 0,
     visited: [],
     unanswered: content.notifications
@@ -147,6 +211,24 @@ function freshMonth(content: Content, month: number): MonthRecord {
 
 function inMonth(item: { months?: number[] | undefined }, month: number) {
   return item.months === undefined || item.months.includes(month);
+}
+
+function noteEvents(state: State, content: Content): void {
+  for (const event of content.notebook.events) {
+    if (
+      !state.noted.includes(event.id) &&
+      inMonth(event, state.month) &&
+      matches(state, content, event.when)
+    ) {
+      state.noted.push(event.id);
+      state.clues.push({
+        month: state.month,
+        source: event.source,
+        text: event.text,
+        verdict: event.verdict,
+      });
+    }
+  }
 }
 
 /** After the official story: on to the next month, or the end of the run. */
@@ -174,11 +256,18 @@ function apply(state: State, world: World, choice: Choice): void {
       state.flags.push(...action.sets);
       if (action.scene !== undefined) {
         state.step = openScene(state, world, action.scene);
+      } else if (action.findOut !== undefined) {
+        state.step = arriveToFindOut(state, content, action.findOut);
       } else if (action.result) {
-        state.step = { kind: "notice", ...action.result };
+        const results = [action.result, ...action.moreResults];
+        const result = results[(state.month - 1) % results.length];
+        state.step = { kind: "notice", ...(result ?? action.result) };
       }
       return;
     }
+    case "find-out":
+      hearClaim(state, world, choice);
+      return;
     case "scene":
       behaveInScene(state, world, choice);
       return;
@@ -187,6 +276,55 @@ function apply(state: State, world: World, choice: Choice): void {
       else state.step = nextStep(state, world);
       return;
   }
+}
+
+function methodOf(content: Content, id: string) {
+  const method = content.sources.methods.find((m) => m.id === id);
+  if (!method) throw new Error(`Unknown Find Out "${id}".`);
+  return method;
+}
+
+/** Who is there to ask: whoever happens to be there, or a choice of them. */
+function arriveToFindOut(state: State, content: Content, id: string): Step {
+  const method = methodOf(content, id);
+  if (!method.someoneThere) {
+    return { kind: "find-out", method: id, sources: method.sources };
+  }
+  const there = pick(state.rng, method.sources);
+  state.rng = there.next;
+  return { kind: "find-out", method: id, sources: [there.item] };
+}
+
+function hearClaim(
+  state: State,
+  { content }: World,
+  choice: Extract<Choice, { type: "find-out" }>,
+): void {
+  if (state.step.kind !== "find-out") {
+    throw new IllegalChoiceError(choice.sourceId);
+  }
+  const made = makeClaim(state.rng, content, {
+    month: state.month,
+    method: methodOf(content, state.step.method),
+    source: choice.sourceId,
+    subject: choice.subjectId,
+    characters: state.truth.characters,
+    powerMap: state.truth.powerMap,
+  });
+  state.rng = made.next;
+  state.claims.push(made.claim);
+  state.clues.push({
+    month: state.month,
+    source: personOf(content, made.claim.source).name,
+    text: made.claim.text,
+    verdict: verdictOfClaim(content, made.claim),
+  });
+  const { factId, subject } = made.claim;
+  if (factId !== null) {
+    state.heard = state.heard.filter((h) => h.fact !== factId);
+    state.heard.push({ fact: factId, subject });
+  }
+  state.step = { kind: "claim", index: state.claims.length - 1 };
 }
 
 function answerNotification(
@@ -207,6 +345,7 @@ function answerNotification(
   const learned = option.learns.filter((w) => !state.buzzwords.includes(w));
   state.buzzwords.push(...learned);
   state.flags.push(...option.sets);
+  state.truth.bossOpinion += option.opinion;
 
   if (option.dialog !== undefined) {
     state.step = { kind: "dialog", id: option.dialog, learned };
@@ -221,8 +360,10 @@ function answerNotification(
 function openScene(state: State, world: World, id: string): Step {
   const { behaviours } = world.content;
   const shown: ShownBehaviour[] = [];
+  const { cast } = sceneData(state, world, id);
+  const misleading = drawMisleading(state, world.content);
   if (behaviours.length > 0) {
-    for (const character of sceneData(state, world, id).cast) {
+    for (const character of cast) {
       const kind = state.truth.characters.find((c) => c.id === character)?.kind;
       if (kind === undefined) continue;
       const chosen = pickWeighted(
@@ -234,7 +375,81 @@ function openScene(state: State, world: World, id: string): Step {
       shown.push({ character, behaviour: chosen.item.id });
     }
   }
-  return { kind: "scene", id, shown };
+  noteScene(state, world, id, shown, misleading);
+  return {
+    kind: "scene",
+    id,
+    shown,
+    treatment: treatBoss(state, world, cast),
+    misleading,
+  };
+}
+
+/** Sometimes a room gives the wrong impression, so no one Scene settles it. */
+function drawMisleading(state: State, content: Content): boolean {
+  const chance = content.balance.signsMisleadChance;
+  if (chance === 0) return false;
+  const { value, next } = draw(state.rng);
+  state.rng = next;
+  return value < chance;
+}
+
+/** The Notebook keeps only the signs written with a clue. */
+function noteScene(
+  state: State,
+  world: World,
+  id: string,
+  shown: readonly ShownBehaviour[],
+  misleading: boolean,
+): void {
+  const { content } = world;
+  const scene = sceneData(state, world, id);
+  const note = (text: string, verdict: ClueVerdict) => {
+    state.clues.push({
+      month: state.month,
+      source: scene.title,
+      text,
+      verdict,
+    });
+  };
+  for (const sign of scene.signs) {
+    if (sign.clue !== undefined) {
+      note(
+        fillRoles(state, content, sign.clue, scene.cast, misleading),
+        misleading ? "wrong" : "held",
+      );
+    }
+  }
+  for (const { character, behaviour } of shown) {
+    const written = content.behaviours.find((b) => b.id === behaviour);
+    const kind = state.truth.characters.find((c) => c.id === character)?.kind;
+    if (written?.clue === undefined || kind === undefined) continue;
+    const top = Math.max(...Object.values(written.likelihood));
+    note(
+      written.clue.replaceAll("{who}", personOf(content, character).name),
+      written.likelihood[kind] === top ? "held" : "wrong",
+    );
+  }
+}
+
+function moodOf(state: State, content: Content): Mood {
+  const { warmAt, coldAt } = content.balance.opinion;
+  if (state.truth.bossOpinion >= warmAt) return "warm";
+  return state.truth.bossOpinion <= coldAt ? "cold" : "neutral";
+}
+
+/** If the boss is present, one sign of how they treat the player. */
+function treatBoss(
+  state: State,
+  { content }: World,
+  cast: readonly string[],
+): string | null {
+  const { character, signs } = content.boss;
+  if (signs.length === 0 || !cast.includes(character)) return null;
+  const mood = moodOf(state, content);
+  const chosen = pickWeighted(state.rng, signs, (s) => s.likelihood[mood]);
+  state.rng = chosen.next;
+  return chosen.item.id;
 }
 
 function behaveInScene(
@@ -243,19 +458,54 @@ function behaveInScene(
   choice: Extract<Choice, { type: "scene" }>,
 ): void {
   const scene = sceneData(state, world, choice.sceneId);
-  const option = offeredOptions(state, scene).find(
+  const option = offeredOptions(state, world.content, scene).find(
     (o) => o.id === choice.optionId,
   );
   const result = option?.results.find((r) =>
-    matches(state, r.when, scene.cast),
+    matches(state, world.content, r.when, scene.cast),
   );
   if (!result) throw new IllegalChoiceError(choice.optionId);
   state.flags.push(...result.sets);
-  state.step = {
-    kind: "notice",
-    title: scene.title,
-    body: fillRoles(state, world.content, result.body, scene.cast),
-  };
+  state.truth.bossOpinion += result.opinion;
+  const heard = heardAbout(state, option?.about);
+  const fill = (written: string) =>
+    fillSubject(
+      state,
+      world.content,
+      option?.about,
+      fillRoles(state, world.content, written, scene.cast),
+    );
+  if (result.factNote !== undefined) {
+    const dealt = state.truth.characters.find(
+      (c) => c.id === (result.factAt ?? heard?.subject),
+    )?.fact;
+    // Acting on a false claim says nothing about the fact they really have.
+    const relevant = option?.about === undefined || dealt?.id === option.about;
+    state.factEvents.push({
+      month: state.month,
+      note: fill(result.factNote),
+      fact: relevant ? (dealt?.text ?? null) : null,
+    });
+  }
+  state.step = { kind: "notice", title: scene.title, body: fill(result.body) };
+}
+
+function heardAbout(state: State, fact: string | undefined) {
+  return state.heard.find((h) => h.fact === fact);
+}
+
+/** Names whoever the player was told has this Hidden Fact. */
+function fillSubject(
+  state: State,
+  content: Content,
+  fact: string | undefined,
+  written: string,
+): string {
+  const heard = heardAbout(state, fact);
+  return written.replaceAll(
+    "{subject}",
+    heard ? personOf(content, heard.subject).name : "",
+  );
 }
 
 /** Roles are relative to who is in the room. Left out, that is everyone. */
@@ -270,6 +520,7 @@ function rolesIn(powerMap: PowerMap, room?: readonly string[]) {
 
 function matches(
   state: State,
+  content: Content,
   condition: Condition | undefined,
   room?: readonly string[],
 ): boolean {
@@ -277,16 +528,36 @@ function matches(
   if ("holderIs" in condition) {
     return condition.holderIs === rolesIn(state.truth.powerMap, room).holder;
   }
+  if ("factNature" in condition) {
+    const { character, nature } = condition.factNature;
+    const dealt = state.truth.characters.find((c) => c.id === character);
+    const fact = content.hiddenTruth.facts.find(
+      (f) => f.id === dealt?.fact?.id,
+    );
+    return fact?.nature === nature;
+  }
+  if ("heardFact" in condition) {
+    return heardAbout(state, condition.heardFact) !== undefined;
+  }
+  if ("heardTrue" in condition) {
+    const heard = heardAbout(state, condition.heardTrue);
+    const dealt = state.truth.characters.find((c) => c.id === heard?.subject);
+    return dealt?.fact?.id === condition.heardTrue;
+  }
   if ("hasBuzzword" in condition) {
     return state.buzzwords.includes(condition.hasBuzzword);
   }
   if ("flag" in condition) return state.flags.includes(condition.flag);
-  if ("not" in condition) return !matches(state, condition.not, room);
-  return condition.all.every((inner) => matches(state, inner, room));
+  if ("not" in condition) return !matches(state, content, condition.not, room);
+  return condition.all.every((inner) => matches(state, content, inner, room));
 }
 
-function offeredOptions(state: State, scene: SceneData) {
-  return scene.options.filter((o) => matches(state, o.requires));
+function offeredOptions(state: State, content: Content, scene: SceneData) {
+  return scene.options.filter(
+    (o) =>
+      (o.about === undefined || heardAbout(state, o.about) !== undefined) &&
+      matches(state, content, o.requires),
+  );
 }
 
 function sceneData(state: State, world: World, id: string): SceneData {
@@ -303,14 +574,15 @@ function fillRoles(
   content: Content,
   written: string,
   room?: readonly string[],
+  misleading = false,
 ): string {
   const name = (id: string | undefined) =>
     content.characters.find((c) => c.id === id)?.name ?? "";
   const { holder, ignored, bystander } = rolesIn(state.truth.powerMap, room);
   return written
-    .replaceAll("{holder}", name(holder))
+    .replaceAll("{holder}", name(misleading ? bystander : holder))
     .replaceAll("{ignored}", name(ignored))
-    .replaceAll("{bystander}", name(bystander));
+    .replaceAll("{bystander}", name(misleading ? holder : bystander));
 }
 
 /** The month's order: Notifications, actions, a Move, then the month closes. */
@@ -335,11 +607,15 @@ function landMove(state: State, content: Content): Step | null {
   if (state.moveLanded) return null;
   state.moveLanded = true;
   const eligible = content.moves.filter(
-    (m) => inMonth(m, state.month) && matches(state, m.when),
+    (m) => inMonth(m, state.month) && matches(state, content, m.when),
   );
   if (eligible.length === 0) return null;
-  const { item, next } = pick(state.rng, eligible);
+  const fresh = eligible.filter((m) => !state.movesLanded.includes(m.id));
+  const urgent = fresh.filter((m) => m.priority);
+  const pool = urgent.length > 0 ? urgent : fresh;
+  const { item, next } = pick(state.rng, pool.length > 0 ? pool : eligible);
   state.rng = next;
+  state.movesLanded.push(item.id);
   state.flags.push(...item.sets);
   return { kind: "move", id: item.id };
 }
@@ -384,13 +660,26 @@ function legalChoices(state: State, world: World): Choice[] {
         .filter((a) => isAvailable(state, content, a))
         .map((a) => ({ type: "action", actionId: a.id }));
     case "scene":
-      return offeredOptions(state, sceneData(state, world, step.id)).map(
-        (o) => ({
-          type: "scene",
-          sceneId: step.id,
-          optionId: o.id,
-        }),
+      return offeredOptions(
+        state,
+        content,
+        sceneData(state, world, step.id),
+      ).map((o) => ({
+        type: "scene",
+        sceneId: step.id,
+        optionId: o.id,
+      }));
+    case "find-out":
+      return step.sources.flatMap((sourceId) =>
+        content.characters
+          .filter((c) => c.id !== sourceId)
+          .map((c) => ({
+            type: "find-out" as const,
+            sourceId,
+            subjectId: c.id,
+          })),
       );
+    case "claim":
     case "dialog":
     case "notice":
     case "move":
@@ -419,7 +708,7 @@ function notificationOptions(
 function toSceneView(
   state: State,
   world: World,
-  { id, shown }: Extract<Step, { kind: "scene" }>,
+  { id, shown, treatment, misleading }: Extract<Step, { kind: "scene" }>,
 ): Extract<StepView, { kind: "scene" }> {
   const { content } = world;
   const scene = sceneData(state, world, id);
@@ -436,18 +725,27 @@ function toSceneView(
         .filter((x) => x.id === c)
         .map((x) => ({ name: x.name, title: x.title })),
     ),
-    signs: scene.signs.map((s) => ({ label: s.label, text: fill(s.text) })),
+    signs: scene.signs.map((s) => ({
+      label: s.label,
+      text: fillRoles(state, content, s.text, scene.cast, misleading),
+    })),
     behaviours: shown.map(({ character, behaviour }) => {
       const who =
         content.characters.find((c) => c.id === character)?.name ?? character;
       const written = content.behaviours.find((b) => b.id === behaviour);
       return { who, text: (written?.text ?? "").replaceAll("{who}", who) };
     }),
-    options: offeredOptions(state, scene).map((o) => ({
+    treatment: content.boss.signs.find((s) => s.id === treatment)?.text ?? null,
+    options: offeredOptions(state, content, scene).map((o) => ({
       id: o.id,
-      label: fill(o.label),
+      label: fillSubject(state, content, o.about, fill(o.label)),
     })),
   };
+}
+
+function personOf(content: Content, id: string): Person {
+  const known = content.characters.find((c) => c.id === id);
+  return { id, name: known?.name ?? id, title: known?.title ?? "" };
 }
 
 function toStoryView(
@@ -456,7 +754,9 @@ function toStoryView(
 ): Extract<StepView, { kind: "story" }> {
   const { title, reportedHeading, happenedHeading, entries } =
     content.officialStory;
-  const told = entries.filter((e) => matches(state, e.when));
+  const told = entries.filter(
+    (e) => inMonth(e, state.month) && matches(state, content, e.when),
+  );
   const fill = (written: string | undefined) =>
     written === undefined ? [] : [fillRoles(state, content, written)];
   return {
@@ -495,6 +795,37 @@ function toResultsView(
         name: nameOf(id),
         title: content.characters.find((c) => c.id === id)?.title ?? "",
         reportsTo: above ? nameOf(above.who) : null,
+      };
+    }),
+    marks: state.truth.characters.map((dealt) => {
+      const mark = state.marks.get(dealt.id) ?? null;
+      const { kinds } = content.hiddenTruth;
+      return {
+        name: nameOf(dealt.id),
+        mark: mark === null ? null : kinds[mark].label,
+        truth: kinds[dealt.kind].label,
+        correct: mark === dealt.kind,
+      };
+    }),
+    clues: state.clues.map(({ month, source, text, verdict }) => ({
+      month,
+      source,
+      text,
+      verdict: content.ui.clueVerdicts[verdict],
+    })),
+    factEvents: state.factEvents,
+    claims: state.claims.map((claim) => {
+      const { label, note } = content.sources.verdicts[claim.status];
+      const said = state.truth.characters.find((c) => c.id === claim.source);
+      const motive = content.sources.motives.find((m) => m.id === said?.motive);
+      const source = nameOf(claim.source);
+      return {
+        month: claim.month,
+        source,
+        text: claim.text,
+        verdict: label,
+        note,
+        motive: (motive?.text ?? "").replaceAll("{name}", source),
       };
     }),
   };
@@ -538,6 +869,28 @@ function toStepView(state: State, world: World): StepView {
     }
     case "scene":
       return toSceneView(state, world, step);
+    case "find-out": {
+      const method = methodOf(content, step.method);
+      const sources = step.sources.map((id) => personOf(content, id));
+      return {
+        kind: "find-out",
+        title: method.title,
+        prompt: method.prompt.replaceAll("{source}", sources[0]?.name ?? ""),
+        sources,
+        subjects: content.characters.map((c) => personOf(content, c.id)),
+      };
+    }
+    case "claim": {
+      const claim = state.claims[step.index];
+      if (!claim) throw new Error(`Unknown claim ${String(step.index)}.`);
+      const source = personOf(content, claim.source).name;
+      return {
+        kind: "claim",
+        source,
+        title: content.ui.claimTitle.replaceAll("{source}", source),
+        text: claim.text,
+      };
+    }
     case "move": {
       const move = content.moves.find((m) => m.id === step.id);
       if (!move) throw new Error(`Unknown Move "${step.id}".`);
@@ -563,6 +916,17 @@ function toView(state: State, world: World): PlayerView {
   const left = remaining(state, content);
   const actionsLabel = countActions(content, left);
   return structuredClone({
+    notebook: {
+      clues: state.clues.map(({ month, source, text }) => ({
+        month,
+        source,
+        text,
+      })),
+      marks: content.characters.map((c) => ({
+        ...personOf(content, c.id),
+        mark: state.marks.get(c.id) ?? null,
+      })),
+    },
     seed: state.seed,
     month: state.month,
     totalMonths: content.balance.monthsPerRun,

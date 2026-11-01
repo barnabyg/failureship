@@ -134,6 +134,15 @@ body {
 .status dd {
   margin: 0;
   font-weight: 600;
+  white-space: nowrap;
+}
+
+.status .status-buzzwords dd {
+  max-width: 220px;
+  font-size: 0.8125rem;
+  font-weight: 400;
+  line-height: 1.25;
+  white-space: normal;
 }
 
 .next {
@@ -284,6 +293,15 @@ body {
   border-style: dashed;
   color: var(--muted);
   cursor: default;
+}
+
+.panel button.option.primary {
+  background: var(--accent);
+  color: var(--accent-ink);
+}
+
+.panel .find-out-subject {
+  margin-top: 12px;
 }
 
 .option-cost {
@@ -446,6 +464,49 @@ body {
   background: var(--paper);
   color: var(--ink);
   box-shadow: 0 8px 28px rgb(0 0 0 / 45%);
+}
+
+.modal-wide {
+  width: min(720px, calc(100% - 24px));
+}
+
+.notebook h3 {
+  margin: 0 0 4px;
+  color: var(--muted);
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.notebook-marks,
+.notebook-clues {
+  margin: 0 0 12px;
+  padding: 0;
+  list-style: none;
+  font-size: 0.9375rem;
+}
+
+.notebook-marks li {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 3px 0;
+}
+
+.notebook-marks select {
+  padding: 2px 6px;
+  border: 1px solid var(--rule);
+  border-radius: 4px;
+  background: #ffffff;
+  color: var(--ink);
+  font: inherit;
+}
+
+.notebook-clues li {
+  padding: 4px 0;
+  border-top: 1px solid var(--rule);
 }
 
 .modal::backdrop {

@@ -1,92 +1,394 @@
 {
-  "title": "Floor 1 Monthly Summary",
+  "title": "Junior employee Monthly Summary",
   "reportedHeading": "As reported upstairs",
   "happenedHeading": "What actually happened",
   "entries": [
     {
-      "reported": "Floor 1 remains on track against its objectives, which are being finalised."
+      "months": [1],
+      "reported": "You remain on track against your objectives, which are being finalised."
     },
     {
-      "when": { "flag": "filed-report" },
+      "months": [2],
+      "reported": "You have embedded the lessons of last month, and identified further lessons."
+    },
+    {
+      "months": [3],
+      "reported": "You engaged fully with the company's refreshed direction."
+    },
+    {
+      "months": [4],
+      "reported": "You are taking a disciplined approach to a budget that is under discussion."
+    },
+    {
+      "months": [5],
+      "reported": "Your delivery is green overall, on the agreed definition of green."
+    },
+    {
+      "months": [6],
+      "reported": "You close the review period meeting expectations, which are under review."
+    },
+    {
+      "when": {
+        "flag": "filed-report"
+      },
       "reported": "The Monthly Status Report was delivered on time and in full.",
       "happened": "You filed it at 23:58. Nobody has opened it."
     },
     {
-      "when": { "flag": "went-to-pub" },
+      "when": {
+        "flag": "went-to-pub"
+      },
       "reported": "The team invested in senior stakeholder engagement outside core hours.",
       "happened": "You went to the pub. The Monthly Status Report was not filed."
     },
     {
-      "when": { "flag": "backed-holder" },
+      "when": {
+        "flag": "backed-holder"
+      },
       "reported": "You showed mature judgement in a cross-functional forum.",
       "happened": "You agreed with someone, and it seems to have helped. Nobody will say why."
     },
     {
-      "when": { "flag": "backed-wrong-person" },
+      "when": {
+        "flag": "backed-wrong-person"
+      },
       "reported": "You gave visible support to the leadership team.",
       "happened": "You agreed with someone, and it does not seem to have helped. Nobody will say why."
     },
     {
-      "when": { "flag": "said-nothing" },
+      "when": {
+        "flag": "said-nothing"
+      },
       "reported": "You contributed to the Monthly Alignment Meeting.",
       "happened": "You wrote key takeaways on a pad and underlined it."
     },
     {
       "when": {
         "all": [
-          { "flag": "used-buzzword" },
-          { "not": { "flag": "phrase-taken" } }
+          {
+            "flag": "used-buzzword"
+          },
+          {
+            "not": {
+              "flag": "phrase-taken"
+            }
+          }
         ]
       },
       "reported": "You introduced a new strategic framework to the floor.",
       "happened": "You repeated something Dennis said in a pub."
     },
     {
-      "when": { "flag": "phrase-taken" },
+      "when": {
+        "flag": "phrase-taken"
+      },
       "reported": "Dennis Prowse introduced a new strategic framework to the business.",
       "happened": "You repeated something Dennis said in a pub, and Dennis has now said it back to everyone else."
     },
     {
-      "when": { "not": { "flag": "attended-meeting" } },
-      "reported": "You were recorded as present at the Monthly Alignment Meeting.",
-      "happened": "You were not there. Nobody has mentioned it, which may or may not be a good sign."
-    },
-    {
-      "when": { "flag": "had-tea" },
+      "when": {
+        "flag": "had-tea"
+      },
       "reported": "You strengthened cross-functional relationships.",
       "happened": "You had a cup of tea."
     },
     {
-      "when": { "flag": "had-one-to-one" },
-      "reported": "You invested in your professional network.",
-      "happened": "You listened to a long account of a car park."
-    },
-    {
-      "when": { "flag": "did-work" },
+      "when": {
+        "flag": "did-work"
+      },
       "happened": "You did two hours of real work. This has not been recorded anywhere."
     },
     {
-      "when": { "flag": "given-action" },
+      "when": {
+        "flag": "given-action"
+      },
       "reported": "You took ownership of a key action.",
-      "happened": "An action was left on your desk by the minutes."
+      "happened": "You were not at the meeting, and it gave you an action anyway."
     },
     {
-      "when": { "flag": "figures-borrowed" },
+      "when": {
+        "flag": "figures-borrowed"
+      },
       "reported": "Priya Venn presented strong analysis to senior management.",
       "happened": "It was your analysis."
     },
     {
-      "when": { "flag": "report-chased" },
+      "when": {
+        "flag": "report-chased"
+      },
       "reported": "A minor reporting delay was identified and is being managed by Dennis Prowse.",
       "happened": "It is being managed by asking you about it."
     },
     {
-      "when": { "flag": "report-renamed" },
+      "when": {
+        "flag": "report-renamed"
+      },
       "reported": "Dennis Prowse delivered an executive summary of outstanding clarity.",
       "happened": "It was your report, with a new first page."
     },
     {
+      "when": {
+        "flag": "burned-by-a-fact"
+      },
+      "reported": "A colleague's concerns about your conduct have been passed to the appropriate level.",
+      "happened": "You blamed the wrong person. Nobody will tell you why they were the wrong person."
+    },
+    {
+      "when": {
+        "flag": "blamed-a-colleague"
+      },
+      "reported": "A colleague has been supported through a learning opportunity.",
+      "happened": "You blamed someone in front of everyone, and it worked."
+    },
+    {
+      "when": {
+        "flag": "took-the-blame"
+      },
+      "reported": "You demonstrated ownership of a historic delivery issue.",
+      "happened": "It was not your fault. It is now."
+    },
+    {
+      "when": {
+        "flag": "blamed-the-supplier"
+      },
+      "reported": "Root cause was traced to an external dependency.",
+      "happened": "You blamed someone who was not there. So did everyone else."
+    },
+    {
+      "when": {
+        "flag": "used-a-fact"
+      },
+      "reported": "You built a strong working relationship with a key colleague.",
+      "happened": "You let someone know what you know about them."
+    },
+    {
+      "when": {
+        "flag": "misused-a-fact"
+      },
+      "reported": "You raised a matter of interest with a colleague.",
+      "happened": "You repeated gossip to someone's face, and it was wrong."
+    },
+    {
+      "when": {
+        "not": {
+          "flag": "attended-meeting"
+        }
+      },
+      "reported": "You were recorded as present at this month's meeting.",
+      "happened": "You were not there. Nobody has mentioned it, which may or may not be a good sign."
+    },
+    {
+      "when": {
+        "flag": "had-one-to-one"
+      },
+      "reported": "You invested in your professional network.",
+      "happened": "You sat at Priya's desk, and came away with nothing you could use."
+    },
+    {
+      "when": {
+        "flag": "asked-around"
+      },
+      "reported": "You sought informal feedback from across the floor.",
+      "happened": "You hung about at the photocopier, asking about people."
+    },
+    {
+      "when": {
+        "flag": "bought-information"
+      },
+      "reported": "You built your understanding of the wider business.",
+      "happened": "You paid for gossip at the loading bay."
+    },
+    {
+      "when": {
+        "flag": "did-training"
+      },
+      "reported": "You completed mandatory Speaking Up training.",
+      "happened": "You sat through it, and learned that you feel safe."
+    },
+    {
+      "when": {
+        "flag": "skipped-training"
+      },
+      "reported": "You completed mandatory Speaking Up training with a score of 100%.",
+      "happened": "You were at lunch."
+    },
+    {
+      "when": {
+        "flag": "sat-at-front"
+      },
+      "reported": "You showed visible engagement with the Chief Executive's message.",
+      "happened": "You got there early and talked to someone from Facilities."
+    },
+    {
+      "when": {
+        "flag": "watched-recording"
+      },
+      "reported": "You engaged with the Town Hall flexibly.",
+      "happened": "You watched it at twice the speed."
+    },
+    {
+      "when": {
+        "flag": "asked-the-question"
+      },
+      "reported": "You helped the Chief Executive reflect on a successful year.",
+      "happened": "You asked the only question that is safe to ask."
+    },
+    {
+      "when": {
+        "flag": "applauded"
+      },
+      "reported": "You contributed to a positive atmosphere at the Town Hall.",
+      "happened": "You clapped when the others did."
+    },
+    {
+      "when": {
+        "flag": "rolled-out-tool"
+      },
+      "reported": "You led the successful roll-out of a transformative platform.",
+      "happened": "You have installed something. Nobody knows what it does, including the people who sold it."
+    },
+    {
+      "when": {
+        "flag": "stalled-tool"
+      },
+      "reported": "A new platform is undergoing rigorous evaluation.",
+      "happened": "You said that it was being evaluated."
+    },
+    {
+      "when": {
+        "flag": "hired-consultant"
+      },
+      "reported": "External expertise was secured to drive savings.",
+      "happened": "You spent the savings on someone to look for the savings."
+    },
+    {
+      "when": {
+        "flag": "cut-a-colleague"
+      },
+      "reported": "A colleague's work was reprioritised to support the budget.",
+      "happened": "You offered up someone else's work."
+    },
+    {
+      "when": {
+        "flag": "cut-own-work"
+      },
+      "reported": "You led by example on efficiency.",
+      "happened": "You have the same work now, with no budget."
+    },
+    {
+      "when": {
+        "flag": "animated-deck"
+      },
+      "reported": "You delivered a compelling narrative to senior stakeholders.",
+      "happened": "The word Growth spun."
+    },
+    {
+      "when": {
+        "flag": "plain-deck"
+      },
+      "reported": "An early draft was shared with leadership.",
+      "happened": "It was the finished version, and it was accurate."
+    },
+    {
+      "when": {
+        "flag": "made-it-amber"
+      },
+      "reported": "Your project has moved from red to amber.",
+      "happened": "You changed the colour."
+    },
+    {
+      "when": {
+        "flag": "told-the-truth"
+      },
+      "reported": "A colleague raised some challenges with the reporting format.",
+      "happened": "You said what was happening."
+    },
+    {
+      "when": {
+        "flag": "said-exceeds"
+      },
+      "reported": "You took ownership of your development.",
+      "happened": "You used the word impact eleven times."
+    },
+    {
+      "when": {
+        "flag": "said-meets"
+      },
+      "reported": "You completed your Self-Assessment ahead of the deadline.",
+      "happened": "It took four seconds."
+    },
+    {
+      "when": {
+        "flag": "used-buzzword-late"
+      },
+      "reported": "You brought strategic clarity to a senior conversation.",
+      "happened": "You said a phrase you had recently overheard."
+    },
+    {
+      "when": {
+        "flag": "desk-moved"
+      },
+      "reported": "You benefited from the Workplace Refresh.",
+      "happened": "You are next to the printer now."
+    },
+    {
+      "when": {
+        "flag": "rumour-spread"
+      },
+      "reported": "Colleagues expressed concern for your wellbeing.",
+      "happened": "Someone is saying that your project is in trouble."
+    },
+    {
+      "when": {
+        "flag": "information-late"
+      },
+      "reported": "A minor dependency was resolved within the reporting period.",
+      "happened": "It came a day too late, and you have been made to look late."
+    },
+    {
+      "when": {
+        "flag": "meeting-moved"
+      },
+      "reported": "You agreed several actions at a productive meeting.",
+      "happened": "It happened yesterday, and you were not told."
+    },
+    {
+      "when": {
+        "flag": "laptop-promise"
+      },
+      "reported": "You committed to improving your team's equipment.",
+      "happened": "You did not. Nobody believes you now, either way."
+    },
+    {
+      "when": {
+        "flag": "working-group"
+      },
+      "reported": "You were selected to join a senior working group.",
+      "happened": "It has no end date."
+    },
+    {
+      "months": [1],
       "reported": "No risks were identified, as the risk review has been rescheduled."
+    },
+    {
+      "months": [2],
+      "reported": "One risk was identified, and has been moved to next month's register."
+    },
+    {
+      "months": [3],
+      "reported": "The risk register was reviewed, and its format was improved."
+    },
+    {
+      "months": [4],
+      "reported": "Risks have been reduced by thirty per cent, by combining some of them."
+    },
+    {
+      "months": [5],
+      "reported": "All red risks are now amber."
+    },
+    {
+      "months": [6],
+      "reported": "The risk review has been rescheduled to next year, when the risks will be clearer."
     }
   ]
 }

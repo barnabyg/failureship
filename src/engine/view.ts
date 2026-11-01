@@ -1,9 +1,12 @@
+import type { Kind } from "./content";
+
 /** Everything the player can do. The view lists which of these are legal now. */
 export type Choice =
   | { type: "continue" }
   | { type: "action"; actionId: string }
   | { type: "notification"; notificationId: string; optionId: string }
-  | { type: "scene"; sceneId: string; optionId: string };
+  | { type: "scene"; sceneId: string; optionId: string }
+  | { type: "find-out"; sourceId: string; subjectId: string };
 
 export interface Hotspot {
   id: string;
@@ -39,6 +42,12 @@ export interface ChartEntry {
   reportsTo: string | null;
 }
 
+export interface Person {
+  id: string;
+  name: string;
+  title: string;
+}
+
 export type StepView =
   | {
       kind: "notification";
@@ -64,8 +73,18 @@ export type StepView =
       cast: { name: string; title: string }[];
       signs: { label: string; text: string }[];
       behaviours: { who: string; text: string }[];
+      /** How the boss treats the player, if the boss is in the room. */
+      treatment: string | null;
       options: { id: string; label: string }[];
     }
+  | {
+      kind: "find-out";
+      title: string;
+      prompt: string;
+      sources: Person[];
+      subjects: Person[];
+    }
+  | { kind: "claim"; source: string; title: string; text: string }
   | { kind: "notice"; title: string; body: string }
   | { kind: "move"; from: string; title: string; body: string }
   | {
@@ -87,10 +106,32 @@ export type StepView =
         fact: string | null;
       }[];
       powerMap: ChartEntry[];
+      marks: {
+        name: string;
+        mark: string | null;
+        truth: string;
+        correct: boolean;
+      }[];
+      clues: { month: number; source: string; text: string; verdict: string }[];
+      /** Where a Hidden Fact changed what happened in this run. */
+      factEvents: { month: number; note: string; fact: string | null }[];
+      claims: {
+        month: number;
+        source: string;
+        text: string;
+        verdict: string;
+        note: string;
+        motive: string;
+      }[];
     };
 
 /** Only what the player is entitled to see. It never holds undiscovered truth. */
 export interface PlayerView {
+  notebook: {
+    /** Never says which of these can be trusted, until the results screen. */
+    clues: { month: number; source: string; text: string }[];
+    marks: (Person & { mark: Kind | null })[];
+  };
   seed: number;
   month: number;
   totalMonths: number;

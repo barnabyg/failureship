@@ -21,7 +21,150 @@
         "cost": "pub",
         "sets": ["went-to-pub"],
         "dialog": "pub",
-        "learns": ["strategic-patience"]
+        "learns": ["strategic-patience"],
+        "opinion": 1
+      }
+    ],
+    "months": [1]
+  },
+  {
+    "id": "training",
+    "months": [2],
+    "from": "From: Marjorie Tull, Office Co-ordinator",
+    "subject": "ACTION REQUIRED: Speaking Up (mandatory, 45 minutes)",
+    "body": "Our records show you have not completed the e-learning module Speaking Up. Any concerns about this module should be kept to yourself until you have completed it.",
+    "options": [
+      {
+        "id": "do-training",
+        "label": "Sit through the module properly",
+        "cost": "standard",
+        "sets": ["did-training"],
+        "result": {
+          "title": "Speaking Up: completed",
+          "body": "You score 100%. The certificate says that you feel safe to raise concerns. There is a box for concerns about the certificate, and it is not working."
+        }
+      },
+      {
+        "id": "skip-training",
+        "label": "Leave it running in another window",
+        "sets": ["skipped-training"],
+        "opinion": 1,
+        "result": {
+          "title": "Speaking Up: completed",
+          "body": "It finishes while you are at lunch. Dennis mentions that Dennis does it the same way. You score 100%."
+        }
+      }
+    ]
+  },
+  {
+    "id": "town-hall-seat",
+    "months": [3],
+    "from": "From: Office of the Chief Executive",
+    "subject": "All-Colleague Town Hall: seats available",
+    "body": "The Chief Executive will share the company's direction in person, on a large screen. Attendance is voluntary. Your attendance has been recorded.",
+    "options": [
+      {
+        "id": "front-row",
+        "label": "Get there early and sit at the front",
+        "cost": "standard",
+        "sets": ["sat-at-front"],
+        "dialog": "town-hall-front",
+        "learns": ["north-star"]
+      },
+      {
+        "id": "back-row",
+        "label": "Watch the recording later",
+        "sets": ["watched-recording"],
+        "opinion": -1,
+        "result": {
+          "title": "Town Hall recording",
+          "body": "You watch it at twice the speed. The direction is the same, but more urgent."
+        }
+      }
+    ]
+  },
+  {
+    "id": "new-tool",
+    "months": [4],
+    "from": "From: Dennis Prowse, Team Leader",
+    "subject": "FW: This solves ALL your problems (read this!!)",
+    "body": "Dennis has read an article about a new software tool that solves all your problems, and wants it rolled out by the end of the month. Dennis has not said which problems. The article is by the company that sells it.",
+    "options": [
+      {
+        "id": "roll-out",
+        "label": "Go to the demonstration and roll it out",
+        "cost": "standard",
+        "sets": ["rolled-out-tool"],
+        "opinion": 1,
+        "dialog": "tool-demo",
+        "learns": ["single-source-of-truth"]
+      },
+      {
+        "id": "say-evaluated",
+        "label": "Reply that it is being evaluated",
+        "sets": ["stalled-tool"],
+        "result": {
+          "title": "RE: FW: This solves ALL your problems",
+          "body": "Dennis replies with a thumbs up. The word evaluated seems to have the force of a finished thing. You make a note to find out what you have evaluated."
+        }
+      }
+    ]
+  },
+  {
+    "id": "deck-for-upstairs",
+    "months": [5],
+    "from": "From: Dennis Prowse, Team Leader",
+    "subject": "Slides for upstairs, by tomorrow",
+    "body": "Dennis needs three slides for the floor above, by tomorrow. Dennis stresses that content is secondary at this stage, and that the last person's slides did not move.",
+    "options": [
+      {
+        "id": "animate",
+        "label": "Stay late and make everything fly in",
+        "cost": "standard",
+        "sets": ["animated-deck"],
+        "opinion": 2,
+        "result": {
+          "title": "Slides for upstairs",
+          "body": "Each bullet point arrives from a different direction. The word Growth spins. Dennis watches it twice, in silence, and asks whether you have ever thought about moving up."
+        }
+      },
+      {
+        "id": "plain",
+        "label": "Send three plain slides that say what is happening",
+        "sets": ["plain-deck"],
+        "opinion": -1,
+        "result": {
+          "title": "Slides for upstairs",
+          "body": "Dennis replies at 07:12 asking whether this is the draft."
+        }
+      }
+    ]
+  },
+  {
+    "id": "self-assessment",
+    "months": [6],
+    "from": "From: Human Resources",
+    "subject": "Your Self-Assessment closes today",
+    "body": "Please rate your own performance this year as Exceeds, Meets or Developing. There is no right answer. Developing is not available at your grade this year, because of the curve.",
+    "options": [
+      {
+        "id": "exceeds",
+        "label": "Spend an evening writing why you exceed",
+        "cost": "standard",
+        "sets": ["said-exceeds"],
+        "result": {
+          "title": "Self-Assessment submitted",
+          "body": "You use the word impact eleven times. An automatic reply thanks you for your honesty, which it has rated Meets."
+        }
+      },
+      {
+        "id": "meets",
+        "label": "Tick Meets and close the window",
+        "sets": ["said-meets"],
+        "result": {
+          "title": "Self-Assessment submitted",
+          "body": "It takes four seconds. It is the most accurate thing you have written all year, and it will be read as a lack of ambition."
+        }
       }
     ]
   }

@@ -10,7 +10,8 @@
     "signs": [
       {
         "label": "Who interrupts whom",
-        "text": "{holder} talks over {ignored} twice before the first slide. {ignored} apologises both times."
+        "text": "{holder} talks over {ignored} twice before the first slide. {ignored} apologises both times.",
+        "clue": "{holder} talked over {ignored}, and {ignored} apologised."
       },
       {
         "label": "Who everyone looks at",
@@ -27,13 +28,17 @@
         "label": "Agree warmly with Hugh",
         "results": [
           {
-            "when": { "holderIs": "head" },
+            "when": {
+              "holderIs": "head"
+            },
             "body": "Hugh does not look at you. The next agenda has your name on it, spelled correctly, and people start holding doors.",
-            "sets": ["backed-holder"]
+            "sets": ["backed-holder"],
+            "opinion": -2
           },
           {
             "body": "Hugh thanks you, using the name of someone who left in March. Several people make a note of that, and of you.",
-            "sets": ["backed-wrong-person"]
+            "sets": ["backed-wrong-person"],
+            "opinion": -2
           }
         ]
       },
@@ -42,13 +47,17 @@
         "label": "Agree warmly with Dennis, your boss",
         "results": [
           {
-            "when": { "holderIs": "boss" },
+            "when": {
+              "holderIs": "boss"
+            },
             "body": "Dennis nods at you, as one might nod at a useful chair. Afterwards Dennis uses your first name, and it is nearly correct.",
-            "sets": ["backed-holder"]
+            "sets": ["backed-holder"],
+            "opinion": 2
           },
           {
             "body": "Dennis is delighted and says so. Nobody else looks up. Your agreement with your official boss has been noted by your official boss.",
-            "sets": ["backed-wrong-person"]
+            "sets": ["backed-wrong-person"],
+            "opinion": 2
           }
         ]
       },
@@ -57,13 +66,17 @@
         "label": "Agree warmly with Priya",
         "results": [
           {
-            "when": { "holderIs": "analyst" },
+            "when": {
+              "holderIs": "analyst"
+            },
             "body": "Priya writes your name down. It is the first time anyone here has. Two people notice, and one of them passes you a biscuit.",
-            "sets": ["backed-holder"]
+            "sets": ["backed-holder"],
+            "opinion": -1
           },
           {
             "body": "Priya thanks you for your input, in the voice kept for people who have not given any. The meeting carries on, as though a window had briefly rattled.",
-            "sets": ["backed-wrong-person"]
+            "sets": ["backed-wrong-person"],
+            "opinion": -1
           }
         ]
       },
@@ -72,7 +85,9 @@
         "label": "Agree warmly with Marjorie",
         "results": [
           {
-            "when": { "holderIs": "admin" },
+            "when": {
+              "holderIs": "admin"
+            },
             "body": "Marjorie looks at you over the top of the reading glasses for some time. The next morning your broken chair has been replaced. No ticket was raised.",
             "sets": ["backed-holder"]
           },
@@ -87,7 +102,9 @@
         "label": "Agree warmly with Callum",
         "results": [
           {
-            "when": { "holderIs": "projects" },
+            "when": {
+              "holderIs": "projects"
+            },
             "body": "Callum makes a small note and does not look up. By Thursday a project you had never heard of has your name on the good half of it.",
             "sets": ["backed-holder"]
           },
@@ -100,16 +117,22 @@
       {
         "id": "use-buzzword",
         "label": "Suggest that what this calls for is strategic patience",
-        "requires": { "hasBuzzword": "strategic-patience" },
+        "requires": {
+          "hasBuzzword": "strategic-patience"
+        },
         "results": [
           {
-            "when": { "holderIs": "boss" },
+            "when": {
+              "holderIs": "boss"
+            },
             "body": "Dennis looks pleased, then alarmed, then pleased to have thought of it first. By lunchtime the phrase is in the minutes, credited to the team.",
-            "sets": ["used-buzzword"]
+            "sets": ["used-buzzword"],
+            "opinion": 1
           },
           {
             "body": "There is a silence, of the respectful kind. You are asked to say more. You say the same thing again, more slowly. You have been asked to lead a working group on it.",
-            "sets": ["used-buzzword"]
+            "sets": ["used-buzzword"],
+            "opinion": 1
           }
         ]
       },
@@ -120,6 +143,853 @@
           {
             "body": "You write key takeaways on your pad and underline it. Nobody asks you anything. You are recorded as present, which is the highest rating available at your grade.",
             "sets": ["said-nothing"]
+          }
+        ]
+      }
+    ],
+    "months": [1]
+  },
+  {
+    "id": "lessons-learned",
+    "months": [2],
+    "title": "Lessons Learned Review",
+    "location": "Floor 1, Meeting Room 1B",
+    "narration": [
+      "A project was delivered late. The purpose of this session is not to find someone to blame, Dennis explains, and asks whose fault it was. Everyone looks at you, the most junior person present."
+    ],
+    "cast": ["head", "boss", "analyst", "admin", "projects"],
+    "signs": [
+      {
+        "label": "Who has prepared",
+        "text": "{holder} has brought no notes, and nobody has asked why. {ignored} has brought a timeline, and nobody has asked to see it."
+      },
+      {
+        "label": "Who goes quiet",
+        "text": "When the delay comes up, {bystander} looks at {holder}, then at the table.",
+        "clue": "When the delay came up, {bystander} looked at {holder}, then at the table."
+      }
+    ],
+    "options": [
+      {
+        "id": "blame-callum",
+        "label": "Say that the delay began with Callum",
+        "results": [
+          {
+            "when": {
+              "factNature": {
+                "character": "projects",
+                "nature": "dangerous"
+              }
+            },
+            "body": "Callum says nothing. On Thursday you are invited to explain yourself to someone from a floor you have never seen. Nobody tells you what you did, only that it has been noted at a level you cannot reach.",
+            "sets": ["burned-by-a-fact"],
+            "opinion": -2,
+            "factAt": "projects",
+            "factNote": "You blamed Callum for the delay. You had not been told why that was a mistake."
+          },
+          {
+            "body": "Callum goes pink and apologises to the room. It works. The minutes record a learning opportunity, and it is Callum's.",
+            "sets": ["blamed-a-colleague"],
+            "opinion": 1
+          }
+        ]
+      },
+      {
+        "id": "blame-priya",
+        "label": "Say that the delay began with Priya",
+        "results": [
+          {
+            "when": {
+              "factNature": {
+                "character": "analyst",
+                "nature": "dangerous"
+              }
+            },
+            "body": "Priya thanks you for your candour, and writes it down. By the end of the week two people you do not know have asked to see your expenses, going back some way.",
+            "sets": ["burned-by-a-fact"],
+            "opinion": -2,
+            "factAt": "analyst",
+            "factNote": "You blamed Priya for the delay. You had not been told why that was a mistake."
+          },
+          {
+            "body": "Priya looks at you for slightly too long, then agrees that lessons can be learned. It appears to work. The minutes record a learning opportunity, and it is Priya's.",
+            "sets": ["blamed-a-colleague"],
+            "opinion": 1
+          }
+        ]
+      },
+      {
+        "id": "blame-marjorie",
+        "label": "Say that the delay began with Marjorie",
+        "results": [
+          {
+            "when": {
+              "factNature": {
+                "character": "admin",
+                "nature": "dangerous"
+              }
+            },
+            "body": "Marjorie makes a note. Your pay is late this month, and nobody can find out why. You are told that the matter has been raised with the appropriate person, and that you have just met them.",
+            "sets": ["burned-by-a-fact"],
+            "opinion": -2,
+            "factAt": "admin",
+            "factNote": "You blamed Marjorie for the delay. You had not been told why that was a mistake."
+          },
+          {
+            "body": "Marjorie sighs, and takes the action. It seems to work, although your stationery order has since been queried.",
+            "sets": ["blamed-a-colleague"],
+            "opinion": 1
+          }
+        ]
+      },
+      {
+        "id": "take-the-blame",
+        "label": "Say that it was your fault",
+        "results": [
+          {
+            "body": "There is a long, relieved silence. Dennis thanks you for your ownership. You are now the person this happened to.",
+            "sets": ["took-the-blame"],
+            "opinion": 1
+          }
+        ]
+      },
+      {
+        "id": "blame-supplier",
+        "label": "Say that it was the supplier",
+        "results": [
+          {
+            "body": "Everyone agrees at once. The supplier is not present and has no idea. Nothing is learned, which is noted as a lesson.",
+            "sets": ["blamed-the-supplier"]
+          }
+        ]
+      },
+      {
+        "id": "use-abolished-post",
+        "about": "abolished-post",
+        "label": "Mention to {subject}, quietly, the reorganisation of two years ago",
+        "results": [
+          {
+            "when": {
+              "heardTrue": "abolished-post"
+            },
+            "body": "{subject} stops halfway through a sentence. Afterwards {subject} walks you to the lift, for the first time, and asks after your family, whom {subject} has never heard of. Nothing further is said about the delay.",
+            "sets": ["used-a-fact"],
+            "opinion": 3,
+            "factNote": "What you were told about {subject} was so, and you knew to use it."
+          },
+          {
+            "body": "{subject} has no idea what you mean, and asks you to send it over in writing. You now have an action.",
+            "sets": ["misused-a-fact"],
+            "opinion": -1,
+            "factNote": "You acted on something you were told about {subject}. It was not so."
+          }
+        ]
+      },
+      {
+        "id": "use-values-statement",
+        "about": "values-statement",
+        "label": "Quote the values statement at {subject}, with a small smile",
+        "results": [
+          {
+            "when": {
+              "heardTrue": "values-statement"
+            },
+            "body": "{subject} looks at you, then laughs for the first time on record. The following week you are asked to join something with a name. The delay is not raised again.",
+            "sets": ["used-a-fact"],
+            "opinion": 1,
+            "factNote": "What you were told about {subject} was so, and you knew to use it."
+          },
+          {
+            "body": "{subject} nods gravely and says those values mean a great deal. You have made a sincere impression on someone you were trying to make laugh.",
+            "sets": ["misused-a-fact"],
+            "factNote": "You acted on something you were told about {subject}. It was not so."
+          }
+        ]
+      },
+      {
+        "id": "use-lost-list",
+        "about": "lost-list",
+        "label": "Tell {subject} that you could help look for a certain list",
+        "results": [
+          {
+            "when": {
+              "heardTrue": "lost-list"
+            },
+            "body": "{subject} goes very still, then asks you for a word outside. From now on {subject} speaks well of you, to everyone, with a slight tremor.",
+            "sets": ["used-a-fact"],
+            "opinion": 1,
+            "factNote": "What you were told about {subject} was so, and you knew to use it."
+          },
+          {
+            "body": "{subject} asks which list. You say it does not matter. It now does, and {subject} has mentioned it to Marjorie.",
+            "sets": ["misused-a-fact"],
+            "opinion": -1,
+            "factNote": "You acted on something you were told about {subject}. It was not so."
+          }
+        ]
+      },
+      {
+        "id": "use-competitor-offer",
+        "about": "competitor-offer",
+        "label": "Ask {subject} how things are looking at the competition",
+        "results": [
+          {
+            "when": {
+              "heardTrue": "competitor-offer"
+            },
+            "body": "{subject} closes the laptop and looks at you properly for the first time. After the meeting {subject} offers you some advice, which is good, and asks you for your silence, which is free.",
+            "sets": ["used-a-fact"],
+            "opinion": 1,
+            "factNote": "What you were told about {subject} was so, and you knew to use it."
+          },
+          {
+            "body": "{subject} says they are doing rather well, and sends you the market report. You have fifty pages to read and nothing to show for it.",
+            "sets": ["misused-a-fact"],
+            "factNote": "You acted on something you were told about {subject}. It was not so."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "town-hall",
+    "months": [3],
+    "title": "All-Colleague Town Hall",
+    "location": "Floor 1, Meeting Room 1B, by video link",
+    "narration": [
+      "The Chief Executive appears on the screen, slightly too large, and says that this has been a year of challenges and that the challenges have been opportunities. The floor has gathered to watch, and to be seen watching."
+    ],
+    "cast": ["head", "boss", "analyst", "admin", "projects"],
+    "signs": [
+      {
+        "label": "Who sits where",
+        "text": "{holder} takes the chair nearest the door. Nobody asked {holder} to, and nobody else tries it. {ignored} ends up on a stool.",
+        "clue": "At the Town Hall, {holder} had the good chair, and {ignored} had a stool."
+      },
+      {
+        "label": "Who is asked what it means",
+        "text": "When the slide changes, {bystander} leans over to ask {holder} what it means."
+      }
+    ],
+    "options": [
+      {
+        "id": "ask-proudest",
+        "label": "Type a question: which of your decisions are you most proud of?",
+        "results": [
+          {
+            "when": {
+              "flag": "sat-at-front"
+            },
+            "body": "The Chief Executive reads it out, delighted, and talks for eleven minutes. Afterwards three people you have never met know your name. Dennis is one of the people who has noticed.",
+            "sets": ["asked-the-question"],
+            "opinion": 1
+          },
+          {
+            "body": "Your question goes into a queue with four hundred others. It is answered in writing, by a chatbot, in March.",
+            "sets": ["asked-the-question"]
+          }
+        ]
+      },
+      {
+        "id": "sit-by-head",
+        "label": "Sit next to Hugh and nod when Hugh nods",
+        "results": [
+          {
+            "when": {
+              "holderIs": "head"
+            },
+            "body": "Hugh glances at you when the screen freezes, and shrugs, as one shrugs to a colleague. You have not been shrugged at by this floor before.",
+            "sets": ["backed-holder"],
+            "opinion": -1
+          },
+          {
+            "body": "You nod throughout. Hugh is looking at Hugh's phone. You have nodded at a video of a stranger for forty minutes, and been seen doing it.",
+            "sets": ["backed-wrong-person"],
+            "opinion": -1
+          }
+        ]
+      },
+      {
+        "id": "sit-by-boss",
+        "label": "Sit next to Dennis and laugh when Dennis laughs",
+        "results": [
+          {
+            "when": {
+              "holderIs": "boss"
+            },
+            "body": "Dennis laughs at the joke about synergy. You laugh too. By the afternoon people are asking you what Dennis thinks.",
+            "sets": ["backed-holder"],
+            "opinion": 1
+          },
+          {
+            "body": "Dennis laughs at the joke about synergy. You laugh too. You are now, officially, one of Dennis's people. There do not seem to be others.",
+            "sets": ["backed-wrong-person"],
+            "opinion": 1
+          }
+        ]
+      },
+      {
+        "id": "sit-by-priya",
+        "label": "Sit next to Priya and share Priya's notes",
+        "results": [
+          {
+            "when": {
+              "holderIs": "analyst"
+            },
+            "body": "Priya tilts the notes so that you can read them. They say who was talking to whom. A week later you are asked to a meeting that does not appear in your calendar.",
+            "sets": ["backed-holder"]
+          },
+          {
+            "body": "Priya tilts the notes away, kindly. The rest of the room has decided you and Priya are in something together, and has decided that it is nothing.",
+            "sets": ["backed-wrong-person"]
+          }
+        ]
+      },
+      {
+        "id": "north-star-town-hall",
+        "label": "Remark to the room that it is good to have a north star",
+        "requires": {
+          "hasBuzzword": "north-star"
+        },
+        "results": [
+          {
+            "body": "Several people write it down. Someone from the fourth floor asks whether you would look at theirs. You say you would be delighted, and you have no idea what you have agreed to.",
+            "sets": ["used-buzzword-late"],
+            "opinion": 1
+          }
+        ]
+      },
+      {
+        "id": "applaud",
+        "label": "Applaud when everyone else applauds",
+        "results": [
+          {
+            "body": "You time it well. There is nothing to report, which is why you have kept this job.",
+            "sets": ["applauded"]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "budget-round",
+    "months": [4],
+    "title": "Budget Round",
+    "location": "Floor 1, Meeting Room 1B",
+    "narration": [
+      "The Chief Financial Officer has asked Floor 1 to cut its budget by thirty per cent while delivering everything in the plan. Dennis says this is an exciting conversation, and that someone junior should start it."
+    ],
+    "cast": ["head", "boss", "analyst", "admin", "projects"],
+    "signs": [
+      {
+        "label": "Whose budget is safe",
+        "text": "Every proposal so far has somehow avoided anything to do with {holder}. {ignored}'s budget has been mentioned four times.",
+        "clue": "In the Budget Round, nobody went near {holder}'s budget, and {ignored}'s came up four times."
+      },
+      {
+        "label": "Who checks the figures",
+        "text": "{bystander} writes down a number, looks at {holder}, then crosses it out."
+      }
+    ],
+    "options": [
+      {
+        "id": "cut-callum",
+        "label": "Propose cutting Callum's project",
+        "results": [
+          {
+            "when": {
+              "factNature": {
+                "character": "projects",
+                "nature": "dangerous"
+              }
+            },
+            "body": "Callum takes it calmly. Within days the proposal has come back to you from above, with your name on it, and a question about your own project that you cannot answer.",
+            "sets": ["burned-by-a-fact"],
+            "opinion": -2,
+            "factAt": "projects",
+            "factNote": "You proposed cutting Callum's project. You had not been told why that was a mistake."
+          },
+          {
+            "body": "Callum's project is reduced to a small working group, consisting of Callum. You have saved nine per cent.",
+            "sets": ["cut-a-colleague"],
+            "opinion": 1
+          }
+        ]
+      },
+      {
+        "id": "cut-marjorie",
+        "label": "Propose cutting Marjorie's office budget",
+        "results": [
+          {
+            "when": {
+              "factNature": {
+                "character": "admin",
+                "nature": "dangerous"
+              }
+            },
+            "body": "Marjorie thanks you for thinking of her. Your access card stops working on Tuesday, your expenses on Wednesday. There is an email from someone important about both.",
+            "sets": ["burned-by-a-fact"],
+            "opinion": -2,
+            "factAt": "admin",
+            "factNote": "You proposed cutting Marjorie's budget. You had not been told why that was a mistake."
+          },
+          {
+            "body": "The office budget goes. So do the good biscuits, and people know who to thank. It saves almost nothing, and everyone agrees that it shows intent.",
+            "sets": ["cut-a-colleague"],
+            "opinion": 1
+          }
+        ]
+      },
+      {
+        "id": "hire-consultant",
+        "label": "Propose bringing in a consultant to find the savings",
+        "results": [
+          {
+            "body": "Dennis is very impressed. The consultant costs more than the thirty per cent, and recommends a further consultant. It has stopped being your problem.",
+            "sets": ["hired-consultant"],
+            "opinion": 2
+          }
+        ]
+      },
+      {
+        "id": "cut-yourself",
+        "label": "Offer to cut your own work",
+        "results": [
+          {
+            "body": "Everyone is very moved. Your work is cut. You are still expected to do it, but now without the budget, and Dennis calls this leadership.",
+            "sets": ["cut-own-work"],
+            "opinion": -1
+          }
+        ]
+      },
+      {
+        "id": "single-source-budget",
+        "label": "Say that this needs a single source of truth first",
+        "requires": {
+          "hasBuzzword": "single-source-of-truth"
+        },
+        "results": [
+          {
+            "body": "The meeting agrees, with obvious relief, that nothing can be cut until the numbers are agreed. The numbers will never be agreed. You have saved everyone's budget for a year.",
+            "sets": ["used-buzzword-late"],
+            "opinion": 1
+          }
+        ]
+      },
+      {
+        "id": "use-abolished-post-budget",
+        "about": "abolished-post",
+        "label": "Mention to {subject}, quietly, the reorganisation of two years ago",
+        "results": [
+          {
+            "when": {
+              "heardTrue": "abolished-post"
+            },
+            "body": "{subject} stops halfway through a sentence. Afterwards {subject} walks you to the lift, for the first time, and asks after your family, whom {subject} has never heard of. Nothing further is said about the delay.",
+            "sets": ["used-a-fact"],
+            "opinion": 3,
+            "factNote": "What you were told about {subject} was so, and you knew to use it."
+          },
+          {
+            "body": "{subject} has no idea what you mean, and asks you to send it over in writing. You now have an action.",
+            "sets": ["misused-a-fact"],
+            "opinion": -1,
+            "factNote": "You acted on something you were told about {subject}. It was not so."
+          }
+        ]
+      },
+      {
+        "id": "use-values-statement-budget",
+        "about": "values-statement",
+        "label": "Quote the values statement at {subject}, with a small smile",
+        "results": [
+          {
+            "when": {
+              "heardTrue": "values-statement"
+            },
+            "body": "{subject} looks at you, then laughs for the first time on record. The following week you are asked to join something with a name. The delay is not raised again.",
+            "sets": ["used-a-fact"],
+            "opinion": 1,
+            "factNote": "What you were told about {subject} was so, and you knew to use it."
+          },
+          {
+            "body": "{subject} nods gravely and says those values mean a great deal. You have made a sincere impression on someone you were trying to make laugh.",
+            "sets": ["misused-a-fact"],
+            "factNote": "You acted on something you were told about {subject}. It was not so."
+          }
+        ]
+      },
+      {
+        "id": "use-lost-list-budget",
+        "about": "lost-list",
+        "label": "Tell {subject} that you could help look for a certain list",
+        "results": [
+          {
+            "when": {
+              "heardTrue": "lost-list"
+            },
+            "body": "{subject} goes very still, then asks you for a word outside. From now on {subject} speaks well of you, to everyone, with a slight tremor.",
+            "sets": ["used-a-fact"],
+            "opinion": 1,
+            "factNote": "What you were told about {subject} was so, and you knew to use it."
+          },
+          {
+            "body": "{subject} asks which list. You say it does not matter. It now does, and {subject} has mentioned it to Marjorie.",
+            "sets": ["misused-a-fact"],
+            "opinion": -1,
+            "factNote": "You acted on something you were told about {subject}. It was not so."
+          }
+        ]
+      },
+      {
+        "id": "use-competitor-offer-budget",
+        "about": "competitor-offer",
+        "label": "Ask {subject} how things are looking at the competition",
+        "results": [
+          {
+            "when": {
+              "heardTrue": "competitor-offer"
+            },
+            "body": "{subject} closes the laptop and looks at you properly for the first time. After the meeting {subject} offers you some advice, which is good, and asks you for your silence, which is free.",
+            "sets": ["used-a-fact"],
+            "opinion": 1,
+            "factNote": "What you were told about {subject} was so, and you knew to use it."
+          },
+          {
+            "body": "{subject} says they are doing rather well, and sends you the market report. You have fifty pages to read and nothing to show for it.",
+            "sets": ["misused-a-fact"],
+            "factNote": "You acted on something you were told about {subject}. It was not so."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "red-project",
+    "months": [5],
+    "title": "Project Status Review",
+    "location": "Floor 1, Meeting Room 1B",
+    "narration": [
+      "Your project is running late, and on this morning's chart it is flagged red. Dennis has asked you to walk the room through it. There is a chart behind you, and it shows something bad that is actually happening."
+    ],
+    "cast": ["head", "boss", "analyst", "admin", "projects"],
+    "signs": [
+      {
+        "label": "Who decides the colour",
+        "text": "Someone asks whether it is really red. Everybody turns to {holder}, who says nothing, and the question goes away.",
+        "clue": "In the Status Review, the question of what colour things are went away when {holder} said nothing."
+      },
+      {
+        "label": "Who is left holding it",
+        "text": "{ignored} points out that this was flagged in June. {bystander} thanks {ignored} for that, and moves on."
+      }
+    ],
+    "options": [
+      {
+        "id": "make-it-amber",
+        "label": "Make it amber, and add a footnote",
+        "results": [
+          {
+            "body": "It is amber now. The footnote says amber pending review. Dennis looks at it with something like love. The project is still late, but it is no longer red about it.",
+            "sets": ["made-it-amber"],
+            "opinion": 2
+          }
+        ]
+      },
+      {
+        "id": "tell-the-truth",
+        "label": "Tell them the chart is right",
+        "results": [
+          {
+            "body": "You explain what is going wrong, and why, and what it would take. It is the best thing anyone has said in this room for a year. The silence goes on for some time. Someone asks who approved the chart.",
+            "sets": ["told-the-truth"],
+            "opinion": -2
+          }
+        ]
+      },
+      {
+        "id": "blame-priyas-figures",
+        "label": "Say that Priya's figures must be wrong",
+        "results": [
+          {
+            "when": {
+              "factNature": {
+                "character": "analyst",
+                "nature": "dangerous"
+              }
+            },
+            "body": "Priya offers to go through them with you, in front of everyone. They are not wrong. By the evening somebody senior has started going through yours.",
+            "sets": ["burned-by-a-fact"],
+            "opinion": -2,
+            "factAt": "analyst",
+            "factNote": "You said that Priya's figures were wrong. You had not been told why that was a mistake."
+          },
+          {
+            "body": "Priya says nothing and goes to check. By the time the figures turn out to be right, the meeting has ended, and nobody remembers why it was red.",
+            "sets": ["blamed-a-colleague"],
+            "opinion": 1
+          }
+        ]
+      },
+      {
+        "id": "ask-hugh",
+        "label": "Ask Hugh to take a look at it personally",
+        "results": [
+          {
+            "when": {
+              "holderIs": "head"
+            },
+            "body": "Hugh takes a look. The word red does not appear in the next report, and nobody can say who took it out.",
+            "sets": ["backed-holder"],
+            "opinion": -2
+          },
+          {
+            "body": "Hugh takes a look, at great length, and copies in the whole floor. You have gone over Dennis's head for nothing, and Dennis has noticed the copy line.",
+            "sets": ["backed-wrong-person"],
+            "opinion": -2
+          }
+        ]
+      },
+      {
+        "id": "ask-dennis",
+        "label": "Say that Dennis has this completely under control",
+        "results": [
+          {
+            "when": {
+              "holderIs": "boss"
+            },
+            "body": "Dennis accepts this graciously, and the matter is closed. You have told the room who to be afraid of, and Dennis will not forget it.",
+            "sets": ["backed-holder"],
+            "opinion": 2
+          },
+          {
+            "body": "Dennis accepts this graciously. The room does not look convinced, and looks at you for having said it.",
+            "sets": ["backed-wrong-person"],
+            "opinion": 2
+          }
+        ]
+      },
+      {
+        "id": "patience-red",
+        "label": "Suggest that what this calls for is strategic patience",
+        "requires": {
+          "hasBuzzword": "strategic-patience"
+        },
+        "results": [
+          {
+            "body": "There is a pause while everyone decides whether this is a good thing. It is agreed that the project is not late but patient.",
+            "sets": ["used-buzzword-late"],
+            "opinion": 1
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "calibration",
+    "months": [6],
+    "title": "Annual Calibration",
+    "location": "Floor 1, Meeting Room 1B",
+    "narration": [
+      "Ratings are decided here, on a curve, by people who say that nobody is being compared with anybody. Someone must be at the bottom. You have been invited to give your perspective, which is new, and you are told that it is a privilege."
+    ],
+    "cast": ["head", "boss", "analyst", "admin", "projects"],
+    "signs": [
+      {
+        "label": "Who sets the curve",
+        "text": "{holder} has not said a word about anyone, and every name so far has been moved after a look at {holder}.",
+        "clue": "At Calibration, every name moved after a look at {holder}."
+      },
+      {
+        "label": "Who ends up at the bottom",
+        "text": "{ignored}'s name comes up, and {bystander} says what a valued colleague {ignored} is. Everyone knows what that means."
+      }
+    ],
+    "options": [
+      {
+        "id": "praise-hugh",
+        "label": "Say how much you have learned from Hugh",
+        "results": [
+          {
+            "when": {
+              "holderIs": "head"
+            },
+            "body": "Hugh nods once. Your own name comes up shortly afterwards, and passes through without being moved. You now understand how this works.",
+            "sets": ["backed-holder"]
+          },
+          {
+            "body": "Hugh looks mildly surprised, and thanks you. It is noted that you do not yet know how things are done here.",
+            "sets": ["backed-wrong-person"]
+          }
+        ]
+      },
+      {
+        "id": "praise-dennis",
+        "label": "Say how much you have learned from Dennis",
+        "results": [
+          {
+            "when": {
+              "holderIs": "boss"
+            },
+            "body": "Dennis nods once. Your own name comes up shortly afterwards, and passes through without being moved. You now understand how this works.",
+            "sets": ["backed-holder"],
+            "opinion": 1
+          },
+          {
+            "body": "Dennis is delighted, and rates you Meets, warmly, in front of everyone. It carries no weight whatever, and you can see that it does not.",
+            "sets": ["backed-wrong-person"],
+            "opinion": 1
+          }
+        ]
+      },
+      {
+        "id": "praise-priya",
+        "label": "Say how much you have learned from Priya",
+        "results": [
+          {
+            "when": {
+              "holderIs": "analyst"
+            },
+            "body": "Priya makes a mark on a sheet of paper. Your name comes up shortly afterwards, and passes through without being moved.",
+            "sets": ["backed-holder"]
+          },
+          {
+            "body": "Priya thanks you, in the voice kept for people who have got this wrong. The curve carries on without you.",
+            "sets": ["backed-wrong-person"]
+          }
+        ]
+      },
+      {
+        "id": "praise-marjorie",
+        "label": "Say how much you have learned from Marjorie",
+        "results": [
+          {
+            "when": {
+              "holderIs": "admin"
+            },
+            "body": "Marjorie takes off the reading glasses and looks at you for some time. Your name is never raised at all, which you gather is the best thing that can happen.",
+            "sets": ["backed-holder"]
+          },
+          {
+            "body": "Several people look at you to see whether this is a joke. Marjorie is kind about it, which makes it worse.",
+            "sets": ["backed-wrong-person"]
+          }
+        ]
+      },
+      {
+        "id": "praise-callum",
+        "label": "Say how much you have learned from Callum",
+        "results": [
+          {
+            "when": {
+              "holderIs": "projects"
+            },
+            "body": "Callum looks at the table, then makes a very small note. Your name comes up shortly afterwards, and passes through without being moved.",
+            "sets": ["backed-holder"]
+          },
+          {
+            "body": "Callum looks grateful, then frightened. You are told that you can drop off the call now, although it is not a call.",
+            "sets": ["backed-wrong-person"]
+          }
+        ]
+      },
+      {
+        "id": "north-star-calibration",
+        "label": "Say that everyone should be measured against the north star",
+        "requires": {
+          "hasBuzzword": "north-star"
+        },
+        "results": [
+          {
+            "body": "Nobody can argue with this, and nobody can apply it. You leave with a reputation for vision, and without having said anything about anyone.",
+            "sets": ["used-buzzword-late"],
+            "opinion": 1
+          }
+        ]
+      },
+      {
+        "id": "use-abolished-post-calibration",
+        "about": "abolished-post",
+        "label": "Mention to {subject}, quietly, the reorganisation of two years ago",
+        "results": [
+          {
+            "when": {
+              "heardTrue": "abolished-post"
+            },
+            "body": "{subject} stops halfway through a sentence. Afterwards {subject} walks you to the lift, for the first time, and asks after your family, whom {subject} has never heard of. Nothing further is said about the delay.",
+            "sets": ["used-a-fact"],
+            "opinion": 3,
+            "factNote": "What you were told about {subject} was so, and you knew to use it."
+          },
+          {
+            "body": "{subject} has no idea what you mean, and asks you to send it over in writing. You now have an action.",
+            "sets": ["misused-a-fact"],
+            "opinion": -1,
+            "factNote": "You acted on something you were told about {subject}. It was not so."
+          }
+        ]
+      },
+      {
+        "id": "use-values-statement-calibration",
+        "about": "values-statement",
+        "label": "Quote the values statement at {subject}, with a small smile",
+        "results": [
+          {
+            "when": {
+              "heardTrue": "values-statement"
+            },
+            "body": "{subject} looks at you, then laughs for the first time on record. The following week you are asked to join something with a name. The delay is not raised again.",
+            "sets": ["used-a-fact"],
+            "opinion": 1,
+            "factNote": "What you were told about {subject} was so, and you knew to use it."
+          },
+          {
+            "body": "{subject} nods gravely and says those values mean a great deal. You have made a sincere impression on someone you were trying to make laugh.",
+            "sets": ["misused-a-fact"],
+            "factNote": "You acted on something you were told about {subject}. It was not so."
+          }
+        ]
+      },
+      {
+        "id": "use-lost-list-calibration",
+        "about": "lost-list",
+        "label": "Tell {subject} that you could help look for a certain list",
+        "results": [
+          {
+            "when": {
+              "heardTrue": "lost-list"
+            },
+            "body": "{subject} goes very still, then asks you for a word outside. From now on {subject} speaks well of you, to everyone, with a slight tremor.",
+            "sets": ["used-a-fact"],
+            "opinion": 1,
+            "factNote": "What you were told about {subject} was so, and you knew to use it."
+          },
+          {
+            "body": "{subject} asks which list. You say it does not matter. It now does, and {subject} has mentioned it to Marjorie.",
+            "sets": ["misused-a-fact"],
+            "opinion": -1,
+            "factNote": "You acted on something you were told about {subject}. It was not so."
+          }
+        ]
+      },
+      {
+        "id": "use-competitor-offer-calibration",
+        "about": "competitor-offer",
+        "label": "Ask {subject} how things are looking at the competition",
+        "results": [
+          {
+            "when": {
+              "heardTrue": "competitor-offer"
+            },
+            "body": "{subject} closes the laptop and looks at you properly for the first time. After the meeting {subject} offers you some advice, which is good, and asks you for your silence, which is free.",
+            "sets": ["used-a-fact"],
+            "opinion": 1,
+            "factNote": "What you were told about {subject} was so, and you knew to use it."
+          },
+          {
+            "body": "{subject} says they are doing rather well, and sends you the market report. You have fifty pages to read and nothing to show for it.",
+            "sets": ["misused-a-fact"],
+            "factNote": "You acted on something you were told about {subject}. It was not so."
           }
         ]
       }

@@ -8,6 +8,9 @@ const notice = z.strictObject({ title: text, body: text });
 /** Flags record what the player did, for later conditions to read. */
 const sets = z.array(id).default([]);
 
+/** How far this moves the boss's hidden opinion of the player. */
+const opinion = z.number().int().default(0);
+
 const notificationOption = z.strictObject({
   id,
   label: text,
@@ -15,6 +18,7 @@ const notificationOption = z.strictObject({
   dialog: id.optional(),
   learns: z.array(id).default([]),
   sets,
+  opinion,
   result: notice.optional(),
 });
 
@@ -38,8 +42,17 @@ const dialog = z.strictObject({
 
 const buzzword = z.strictObject({ id, term: text, meaning: text });
 
+export const MOODS = ["warm", "neutral", "cold"] as const;
+export type Mood = (typeof MOODS)[number];
+
+export const NATURES = ["dangerous", "useful", "idle"] as const;
+export type Nature = (typeof NATURES)[number];
+
 export type Condition =
   | { holderIs: string }
+  | { factNature: { character: string; nature: Nature } }
+  | { heardFact: string }
+  | { heardTrue: string }
   | { hasBuzzword: string }
   | { flag: string }
   | { not: Condition }
@@ -48,6 +61,14 @@ export type Condition =
 const condition: z.ZodType<Condition> = z.lazy(() =>
   z.union([
     z.strictObject({ holderIs: id }),
+    z.strictObject({
+      factNature: z.strictObject({
+        character: id,
+        nature: z.enum(NATURES),
+      }),
+    }),
+    z.strictObject({ heardFact: id }),
+    z.strictObject({ heardTrue: id }),
     z.strictObject({ hasBuzzword: id }),
     z.strictObject({ flag: id }),
     z.strictObject({ not: condition }),
@@ -59,11 +80,18 @@ const sceneResult = z.strictObject({
   when: condition.optional(),
   body: text,
   sets,
+  opinion,
+  /** Says on the results screen that a Hidden Fact caused this. */
+  factNote: text.optional(),
+  /** Whose Hidden Fact it was, unless the option is `about` one. */
+  factAt: id.optional(),
 });
 
 const sceneOption = z.strictObject({
   id,
   label: text,
+  /** The option appears once the player has heard this Hidden Fact of someone. */
+  about: id.optional(),
   /** The option appears only when this holds. */
   requires: condition.optional(),
   results: z.array(sceneResult).min(1),
@@ -76,7 +104,14 @@ const scene = z.strictObject({
   location: text,
   narration: z.array(text).min(1),
   cast: z.array(id).min(1),
-  signs: z.array(z.strictObject({ label: text, text })),
+  signs: z.array(
+    z.strictObject({
+      label: text,
+      text,
+      /** What the Notebook keeps of this, if anything. */
+      clue: text.optional(),
+    }),
+  ),
   options: z.array(sceneOption).min(1),
   /** Names code in `sceneScripts`, for a Scene that data cannot express. */
   script: id.optional(),
@@ -90,9 +125,13 @@ const action = z.strictObject({
   place: id,
   cost: id,
   result: notice.optional(),
+  /** Further results, used in turn so that a place reads differently each month. */
+  moreResults: z.array(notice).default([]),
   scene: id.optional(),
   /** A place like a meeting can be gone to only once a month. */
   oncePerMonth: z.boolean().default(false),
+  /** A Find Out action names how the player goes about it. */
+  findOut: id.optional(),
   sets,
 });
 
@@ -103,11 +142,14 @@ const move = z.strictObject({
   title: text,
   body: text,
   when: condition.optional(),
+  /** Lands ahead of other Moves whenever its condition holds. */
+  priority: z.boolean().default(false),
   sets,
 });
 
 const storyEntry = z
   .strictObject({
+    months,
     when: condition.optional(),
     reported: text.optional(),
     happened: text.optional(),
@@ -129,7 +171,8 @@ const room = z.strictObject({
   sign: z.strictObject({ title: text, detail: text }).optional(),
 });
 
-export type Kind = "believer" | "incompetent" | "practitioner";
+export const KINDS = ["believer", "incompetent", "practitioner"] as const;
+export type Kind = (typeof KINDS)[number];
 
 const kindRule = z.strictObject({
   label: text,
@@ -141,6 +184,8 @@ const behaviour = z.strictObject({
   id,
   /** Says {who}, so that it works for whichever Character shows it. */
   text,
+  /** What the Notebook keeps of this, if anything. Says {who} too. */
+  clue: text.optional(),
   /** How likely each kind is to show this, relative to its other behaviours. */
   likelihood: z.strictObject({
     believer: z.number().nonnegative(),
@@ -149,11 +194,129 @@ const behaviour = z.strictObject({
   }),
 });
 
+export const CLAIM_STATUSES = [
+  "true",
+  "mistaken",
+  "outOfDate",
+  "false",
+] as const;
+export type ClaimStatus = (typeof CLAIM_STATUSES)[number];
+
+const statusWeights = (number: z.ZodNumber) =>
+  z.strictObject({
+    true: number,
+    mistaken: number,
+    outOfDate: number,
+    false: number,
+  });
+
+const lines = z.array(text).min(1);
+
+const sources = z.strictObject({
+  methods: z.array(
+    z.strictObject({
+      id,
+      title: text,
+      prompt: text,
+      /** Who can be asked this way. */
+      sources: z.array(id).min(1),
+      /** The conversation around a claim. Says {said}, and can say {source}. */
+      frames: lines,
+      /** One of them is already there, so the player does not choose. */
+      someoneThere: z.boolean().default(false),
+      /** How often a claim made this way is about each thing. */
+      topics: z.strictObject({
+        kind: z.number().nonnegative(),
+        influence: z.number().nonnegative(),
+        fact: z.number().nonnegative(),
+      }),
+    }),
+  ),
+  /** How many people, from the top of the Power Map, count as influential. */
+  influentialCount: z.number().int().positive(),
+  /** How often each kind of source gives each sort of claim. */
+  reliability: z.strictObject({
+    believer: statusWeights(z.number().nonnegative()),
+    incompetent: statusWeights(z.number().nonnegative()),
+    practitioner: statusWeights(z.number().nonnegative()),
+  }),
+  /** What a source wants, dealt per run. It shifts the weights above. */
+  motives: z
+    .array(
+      z.strictObject({
+        id,
+        /** Says {name}, and is shown on the results screen. */
+        text,
+        adjust: statusWeights(z.number()),
+      }),
+    )
+    .min(1),
+  /** The words of a claim, which say nothing of whether it is true. */
+  claims: z.strictObject({
+    kind: z.strictObject({
+      believer: lines,
+      incompetent: lines,
+      practitioner: lines,
+    }),
+    influence: z.strictObject({ high: lines, low: lines }),
+    fact: lines,
+  }),
+  /** What the results screen says of each sort of claim. */
+  verdicts: z.strictObject({
+    true: z.strictObject({ label: text, note: text }),
+    mistaken: z.strictObject({ label: text, note: text }),
+    outOfDate: z.strictObject({ label: text, note: text }),
+    false: z.strictObject({ label: text, note: text }),
+  }),
+});
+
+const bossSign = z.strictObject({
+  id,
+  text,
+  /** How likely each opinion is to show this, relative to its other signs. */
+  likelihood: z.strictObject({
+    warm: z.number().nonnegative(),
+    neutral: z.number().nonnegative(),
+    cold: z.number().nonnegative(),
+  }),
+});
+
+export const CLUE_VERDICTS = ["held", "wrong", "idle"] as const;
+export type ClueVerdict = (typeof CLUE_VERDICTS)[number];
+
+const notebook = z.strictObject({
+  /** Things the player did or saw that the Notebook keeps. */
+  events: z.array(
+    z.strictObject({
+      id,
+      months,
+      /** Noted when this first holds in a month. */
+      when: condition,
+      source: text,
+      text,
+      /** What the results screen says of it. */
+      verdict: z.enum(CLUE_VERDICTS),
+    }),
+  ),
+});
+
 const contentSchema = z.strictObject({
   balance: z.strictObject({
     actionsPerMonth: z.number().int().positive(),
     monthsPerRun: z.number().int().positive(),
     actionCosts: z.record(id, z.number().int().nonnegative()),
+    /** How often a Scene's signs swap who holds influence with the next person. */
+    signsMisleadChance: z.number().min(0).max(1),
+    /** The hidden opinion at which the boss's treatment changes. */
+    opinion: z.strictObject({
+      warmAt: z.number().int().positive(),
+      coldAt: z.number().int().negative(),
+    }),
+  }),
+  boss: z.strictObject({
+    /** Whose opinion of the player is tracked. */
+    character: id,
+    signs: z.array(bossSign),
   }),
   hiddenTruth: z.strictObject({
     kinds: z.strictObject({
@@ -173,10 +336,16 @@ const contentSchema = z.strictObject({
           text,
           /** Who it can be dealt to. Left out, it suits anyone. */
           characters: z.array(id).min(1).optional(),
+          /** How someone would say it. Says {name}. Left out, `text` is used. */
+          told: text.optional(),
+          /** Whether it can burn the player, arm them or does neither. */
+          nature: z.enum(NATURES).default("idle"),
         }),
       )
       .min(1),
   }),
+  sources,
+  notebook,
   characters: z
     .array(
       z.strictObject({
@@ -208,12 +377,17 @@ const contentSchema = z.strictObject({
       dialog: text,
       actions: text,
       scene: text,
+      "find-out": text,
+      claim: text,
       notice: text,
       move: text,
       story: text,
       results: text,
     }),
     actionCount: z.strictObject({ one: text, other: text }),
+    /** Says {source}. */
+    claimTitle: text,
+    clueVerdicts: z.strictObject({ held: text, wrong: text, idle: text }),
     costLabel: text,
     freeLabel: text,
     results: z.strictObject({ title: text, intro: text }),
@@ -242,11 +416,37 @@ export function parseContent(raw: unknown): Content {
 }
 
 /** Showing or hiding an option on this would tell the player the truth. */
-function dependsOnHiddenTruth(condition: Condition): boolean {
-  if ("holderIs" in condition) return true;
-  if ("not" in condition) return dependsOnHiddenTruth(condition.not);
-  if ("all" in condition) return condition.all.some(dependsOnHiddenTruth);
+function dependsOnHiddenTruth(
+  condition: Condition,
+  hiddenFlags: ReadonlySet<string> = new Set(),
+): boolean {
+  if ("flag" in condition) return hiddenFlags.has(condition.flag);
+  if (
+    "holderIs" in condition ||
+    "factNature" in condition ||
+    "heardTrue" in condition
+  ) {
+    return true;
+  }
+  if ("not" in condition) {
+    return dependsOnHiddenTruth(condition.not, hiddenFlags);
+  }
+  if ("all" in condition) {
+    return condition.all.some((c) => dependsOnHiddenTruth(c, hiddenFlags));
+  }
   return false;
+}
+
+/** Flags that say which way a hidden result went, so they carry the truth too. */
+function flagsSetByHiddenResults(content: Content): Set<string> {
+  const options = content.scenes.flatMap((s) => s.options);
+  return new Set(
+    options
+      .filter((o) =>
+        o.results.some((r) => r.when && dependsOnHiddenTruth(r.when)),
+      )
+      .flatMap((o) => o.results.flatMap((r) => r.sets)),
+  );
 }
 
 function findBrokenDeal(
@@ -276,7 +476,10 @@ function findBrokenDeal(
   }
   for (const fact of facts) {
     const owner = `Hidden Fact "${fact.id}"`;
-    if (!fact.text.includes("{name}")) {
+    if (
+      !fact.text.includes("{name}") ||
+      fact.told?.includes("{name}") === false
+    ) {
       problems.push(`${owner} needs to say {name}.`);
     }
     for (const [, token] of fact.text.matchAll(/\{(\w+)\}/g)) {
@@ -306,12 +509,14 @@ function findBrokenBehaviours(content: Content): string[] {
   const nameParts = content.characters.flatMap((c) => c.name.split(" "));
   for (const b of content.behaviours) {
     const owner = `Behaviour "${b.id}"`;
-    if (!b.text.includes("{who}")) {
-      problems.push(`${owner} needs to say {who}.`);
-    }
-    for (const [, token] of b.text.matchAll(/\{(\w+)\}/g)) {
-      if (token !== "who") {
-        problems.push(`${owner} uses unknown token "{${token ?? ""}}".`);
+    for (const written of [b.text, b.clue ?? "{who}"]) {
+      if (!written.includes("{who}")) {
+        problems.push(`${owner} needs to say {who}.`);
+      }
+      for (const [, token] of written.matchAll(/\{(\w+)\}/g)) {
+        if (token !== "who") {
+          problems.push(`${owner} uses unknown token "{${token ?? ""}}".`);
+        }
       }
     }
     const words = b.text.split(/\W+/);
@@ -336,20 +541,125 @@ function findBrokenBehaviours(content: Content): string[] {
   return problems;
 }
 
+/** The boss's signs must point somewhere without ever settling it. */
+function findBrokenBossSigns(content: Content): string[] {
+  const { character, signs } = content.boss;
+  const problems: string[] = [];
+  if (!content.characters.some((c) => c.id === character)) {
+    problems.push(`The boss names unknown Character "${character}".`);
+  }
+  for (const sign of signs) {
+    const owner = `Boss sign "${sign.id}"`;
+    for (const [, token] of sign.text.matchAll(/\{(\w+)\}/g)) {
+      problems.push(`${owner} uses unknown token "{${token ?? ""}}".`);
+    }
+    const likelihoods = Object.values(sign.likelihood);
+    if (likelihoods.filter((l) => l > 0).length < 2) {
+      problems.push(`${owner} can come from only one opinion.`);
+    }
+    if (new Set(likelihoods).size === 1) {
+      problems.push(`${owner} gives no evidence: every opinion is as likely.`);
+    }
+  }
+  if (signs.length > 0) {
+    for (const mood of MOODS) {
+      if (signs.every((s) => s.likelihood[mood] === 0)) {
+        problems.push(`No boss sign can show a ${mood} opinion.`);
+      }
+    }
+  }
+  return problems;
+}
+
+/** Sources must be worth weighing: never always right, and never always wrong. */
+function findBrokenSources(content: Content): string[] {
+  const { methods, reliability, motives, claims } = content.sources;
+  const problems: string[] = [];
+  const checkTokens = (owner: string, written: string, tokens: string[]) => {
+    for (const [, token] of written.matchAll(/\{(\w+)\}/g)) {
+      if (!tokens.includes(token ?? "")) {
+        problems.push(`${owner} uses unknown token "{${token ?? ""}}".`);
+      }
+    }
+  };
+  for (const method of methods) {
+    const owner = `Find Out method "${method.id}"`;
+    for (const source of method.sources) {
+      if (!content.characters.some((c) => c.id === source)) {
+        problems.push(`${owner} names unknown Character "${source}".`);
+      }
+    }
+    checkTokens(owner, method.prompt, method.someoneThere ? ["source"] : []);
+    for (const frame of method.frames) {
+      if (!frame.includes("{said}")) {
+        problems.push(`${owner} has a frame that needs {said}: "${frame}"`);
+      }
+      checkTokens(owner, frame, ["said", "source"]);
+    }
+    if (Object.values(method.topics).every((t) => t === 0)) {
+      problems.push(`${owner} has nothing to claim.`);
+    }
+  }
+  for (const kind of KINDS) {
+    for (const motive of motives) {
+      const open = CLAIM_STATUSES.filter(
+        (s) => reliability[kind][s] + motive.adjust[s] > 0,
+      );
+      if (open.length < 2) {
+        problems.push(
+          `A ${kind} with motive "${motive.id}" would always be read the same way.`,
+        );
+      }
+    }
+  }
+  for (const motive of motives) {
+    checkTokens(`Motive "${motive.id}"`, motive.text, ["name"]);
+  }
+  const pools = [
+    ...KINDS.flatMap((k) => claims.kind[k]),
+    ...claims.influence.high,
+    ...claims.influence.low,
+  ];
+  for (const line of pools) {
+    if (!line.includes("{subject}")) {
+      problems.push(`A claim needs to say {subject}: "${line}"`);
+    }
+    checkTokens("A claim", line, ["subject"]);
+  }
+  for (const line of claims.fact) {
+    if (!line.includes("{fact}")) {
+      problems.push(`A claim about a fact needs to say {fact}: "${line}"`);
+    }
+    checkTokens("A claim", line, ["fact"]);
+  }
+  return problems;
+}
+
 function findBrokenReferences(content: Content): string[] {
   const rooms = new Set(content.floor.rooms.map((r) => r.id));
   const dialogs = new Set(content.dialogs.map((d) => d.id));
   const buzzwords = new Set(content.buzzwords.map((b) => b.id));
   const scenes = new Set(content.scenes.map((s) => s.id));
   const characters = new Set(content.characters.map((c) => c.id));
+  const hiddenFlags = flagsSetByHiddenResults(content);
   const problems: string[] = [];
   const checkCharacter = (owner: string, character: string) => {
     if (!characters.has(character)) {
       problems.push(`${owner} names unknown Character "${character}".`);
     }
   };
+  const checkFact = (owner: string, fact: string) => {
+    if (!content.hiddenTruth.facts.some((f) => f.id === fact)) {
+      problems.push(`${owner} names unknown Hidden Fact "${fact}".`);
+    }
+  };
   const checkCondition = (owner: string, condition: Condition) => {
     if ("holderIs" in condition) checkCharacter(owner, condition.holderIs);
+    if ("factNature" in condition) {
+      checkCharacter(owner, condition.factNature.character);
+    }
+    if ("heardFact" in condition) checkFact(owner, condition.heardFact);
+    if ("heardTrue" in condition) checkFact(owner, condition.heardTrue);
     if ("not" in condition) checkCondition(owner, condition.not);
     if ("all" in condition) {
       for (const inner of condition.all) checkCondition(owner, inner);
@@ -360,8 +670,9 @@ function findBrokenReferences(content: Content): string[] {
       );
     }
   };
-  const checkRoles = (owner: string, written: string) => {
+  const checkRoles = (owner: string, written: string, about = false) => {
     for (const [, token] of written.matchAll(/\{(\w+)\}/g)) {
+      if (about && token === "subject") continue;
       if (token !== "holder" && token !== "ignored" && token !== "bystander") {
         problems.push(`${owner} uses unknown role "{${token ?? ""}}".`);
       }
@@ -384,6 +695,8 @@ function findBrokenReferences(content: Content): string[] {
 
   problems.push(...findBrokenDeal(content, characters));
   problems.push(...findBrokenBehaviours(content));
+  problems.push(...findBrokenBossSigns(content));
+  problems.push(...findBrokenSources(content));
   for (const a of content.actions) {
     if (!rooms.has(a.place)) {
       problems.push(`Action "${a.id}" is at unknown place "${a.place}".`);
@@ -401,8 +714,19 @@ function findBrokenReferences(content: Content): string[] {
     ) {
       problems.push(`Action "${a.id}" is set when its Scene never opens.`);
     }
-    if ((a.scene === undefined) === (a.result === undefined)) {
-      problems.push(`Action "${a.id}" needs a Scene or a result, not both.`);
+    const outcomes = [a.scene, a.result, a.findOut].filter(
+      (o) => o !== undefined,
+    );
+    if (outcomes.length !== 1) {
+      problems.push(
+        `Action "${a.id}" needs one of a Scene, a result or a Find Out.`,
+      );
+    }
+    if (
+      a.findOut !== undefined &&
+      !content.sources.methods.some((m) => m.id === a.findOut)
+    ) {
+      problems.push(`Action "${a.id}" uses unknown Find Out "${a.findOut}".`);
     }
   }
   for (const c of content.characters) {
@@ -431,23 +755,39 @@ function findBrokenReferences(content: Content): string[] {
       problems.push(`${owner} names roles, which need three people present.`);
     }
     for (const line of s.narration) checkRoles(owner, line);
-    for (const sign of s.signs) checkRoles(owner, sign.text);
+    for (const sign of s.signs) {
+      checkRoles(owner, sign.text);
+      checkRoles(owner, sign.clue ?? "");
+    }
     for (const o of s.options) {
       const optionOwner = `${owner} option "${o.id}"`;
-      checkRoles(optionOwner, o.label);
+      const about = o.about !== undefined;
+      if (o.about !== undefined) checkFact(optionOwner, o.about);
+      checkRoles(optionOwner, o.label, about);
       for (const r of o.results) {
-        checkRoles(optionOwner, r.body);
+        checkRoles(optionOwner, r.body, about);
+        checkRoles(optionOwner, r.factNote ?? "", about);
+        if (r.factAt !== undefined) checkCharacter(optionOwner, r.factAt);
         if (r.when) checkCondition(optionOwner, r.when);
       }
       if (o.requires) {
         checkCondition(optionOwner, o.requires);
-        if (dependsOnHiddenTruth(o.requires)) {
+        if (dependsOnHiddenTruth(o.requires, hiddenFlags)) {
           problems.push(`${optionOwner} is gated on the hidden truth.`);
         }
       }
       if (o.results.at(-1)?.when !== undefined) {
         problems.push(`${optionOwner} needs a fallback result with no "when".`);
       }
+    }
+  }
+  for (const e of content.notebook.events) {
+    const owner = `Notebook event "${e.id}"`;
+    checkMonths(owner, e.months);
+    checkCondition(owner, e.when);
+    // A hidden result's flag is fine here: the player has just seen that result.
+    if (dependsOnHiddenTruth(e.when)) {
+      problems.push(`${owner} is gated on the hidden truth.`);
     }
   }
   for (const m of content.moves) {
@@ -461,6 +801,7 @@ function findBrokenReferences(content: Content): string[] {
     checkRoles(owner, e.reported ?? "");
     checkRoles(owner, e.happened ?? "");
     if (e.when) checkCondition(owner, e.when);
+    checkMonths(owner, e.months);
   }
   for (const n of content.notifications) {
     checkMonths(`Notification "${n.id}"`, n.months);

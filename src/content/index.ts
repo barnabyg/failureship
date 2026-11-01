@@ -1,25 +1,39 @@
 import actions from "../../content/actions.json";
 import balance from "../../content/balance.json";
 import behaviours from "../../content/behaviours.json";
+import boss from "../../content/boss.json";
 import buzzwords from "../../content/buzzwords.json";
 import characters from "../../content/characters.json";
 import dialogs from "../../content/dialogs.json";
 import floor from "../../content/floor-1.json";
 import hiddenTruth from "../../content/hidden-truth.json";
 import moves from "../../content/moves.json";
+import notebook from "../../content/notebook.json";
 import notifications from "../../content/notifications.json";
 import officialStory from "../../content/official-story.json";
 import scenes from "../../content/scenes.json";
+import sources from "../../content/sources.json";
 import ui from "../../content/ui.json";
 import { z } from "zod";
 import { ContentError, parseContent } from "../engine";
 
-const { hints, actionCount, costLabel, freeLabel, results, ...presentation } =
-  ui;
+const {
+  hints,
+  actionCount,
+  claimTitle,
+  clueVerdicts,
+  costLabel,
+  freeLabel,
+  results,
+  ...presentation
+} = ui;
 
 export const gameContent = parseContent({
   balance,
+  boss,
   hiddenTruth,
+  sources,
+  notebook,
   characters,
   behaviours,
   scenes,
@@ -30,16 +44,31 @@ export const gameContent = parseContent({
   moves,
   officialStory,
   floor,
-  ui: { hints, actionCount, costLabel, freeLabel, results },
+  ui: {
+    hints,
+    actionCount,
+    claimTitle,
+    clueVerdicts,
+    costLabel,
+    freeLabel,
+    results,
+  },
 });
+
+/** The names of the kinds, for marking suspicions. Nothing about who is which. */
+export const kindLabels = {
+  believer: gameContent.hiddenTruth.kinds.believer.label,
+  incompetent: gameContent.hiddenTruth.kinds.incompetent.label,
+  practitioner: gameContent.hiddenTruth.kinds.practitioner.label,
+};
 
 const panelSchema = z.strictObject(
   Object.fromEntries(
     [
       "title",
       "tagline",
-      "floorName",
-      "floorRole",
+      "jobHeading",
+      "jobTitle",
       "monthHeading",
       "monthLabel",
       "actionsHeading",
@@ -53,6 +82,7 @@ const panelSchema = z.strictObject(
       "castHeading",
       "signsHeading",
       "behavioursHeading",
+      "treatmentHeading",
       "optionsHeading",
       "seedLabel",
       "orgChartHeading",
@@ -60,6 +90,21 @@ const panelSchema = z.strictObject(
       "closeLabel",
       "resultsWhoHeading",
       "resultsNoFact",
+      "findOutSourceHeading",
+      "findOutSubjectHeading",
+      "notebookHeading",
+      "notebookMarksHeading",
+      "notebookCluesHeading",
+      "notebookEmpty",
+      "notebookNoMark",
+      "resultsMarksHeading",
+      "resultsMarkRight",
+      "resultsMarkWrong",
+      "resultsCluesHeading",
+      "resultsFactEventsHeading",
+      "resultsClaimsHeading",
+      "resultsNoClaims",
+      "resultsMonthLabel",
       "seedInputLabel",
       "seedRefused",
       "restartLabel",

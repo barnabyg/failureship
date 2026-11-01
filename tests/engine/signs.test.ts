@@ -177,6 +177,71 @@ describe("signs written per kind", () => {
   });
 });
 
+describe("signs of who holds influence", () => {
+  function misleadingRaw(chance: number) {
+    const raw = sceneFixtureRaw();
+    raw.balance.signsMisleadChance = chance;
+    const scene = raw.scenes[0];
+    if (scene) {
+      scene.signs = [
+        {
+          label: "Who everyone looks at",
+          text: "Everyone looks at {holder}.",
+          clue: "CLUE: everyone looked at {holder}.",
+        } as (typeof scene.signs)[number],
+      ];
+    }
+    return raw;
+  }
+
+  function pointsAtHolder(seed: number, content: Content) {
+    const { run, step } = openMeeting(seed, content);
+    const holder = content.characters.find(
+      (c) => c.id === readHiddenTruth(run).powerMap.order[0],
+    )?.name;
+    return step.signs[0]?.text.includes(holder ?? "?");
+  }
+
+  const SEEDS = Array.from({ length: 400 }, (_, i) => i + 1);
+
+  it("is always right when the chance of misleading is zero", () => {
+    const content = parseContent(misleadingRaw(0));
+
+    expect(SEEDS.every((seed) => pointsAtHolder(seed, content))).toBe(true);
+  });
+
+  it("is usually right, and sometimes points at the wrong person", () => {
+    const content = parseContent(misleadingRaw(0.25));
+
+    const right = SEEDS.filter((seed) => pointsAtHolder(seed, content)).length;
+
+    expect(right).toBeGreaterThan(SEEDS.length * 0.65);
+    expect(right).toBeLessThan(SEEDS.length * 0.85);
+  });
+
+  it("is scored at the end according to whether it misled", () => {
+    const content = parseContent(misleadingRaw(0.5));
+    const verdicts = new Map<boolean, Set<string>>([
+      [true, new Set()],
+      [false, new Set()],
+    ]);
+    for (const seed of SEEDS) {
+      const right = pointsAtHolder(seed, content) === true;
+      const { run } = openMeeting(seed, content);
+      let view = run.view();
+      while (view.choices.length > 0) {
+        view = run.choose(view.choices.at(-1) as never);
+      }
+      if (view.step.kind !== "results") throw new Error(view.step.kind);
+      const clue = view.step.clues.find((c) => c.text.startsWith("CLUE"));
+      verdicts.get(right)?.add(clue?.verdict ?? "");
+    }
+
+    expect(verdicts.get(true)).toEqual(new Set(["VERDICT-HELD"]));
+    expect(verdicts.get(false)).toEqual(new Set(["VERDICT-FALSE"]));
+  });
+});
+
 describe("what watching can tell the player", () => {
   it("sees every behaviour from at least two kinds", () => {
     const { counts } = tally(parseContent(signsFixtureRaw()));

@@ -93,8 +93,11 @@ describe("the meeting Scene", () => {
     const run = runWhereHolderIs("ben");
     const { characters, powerMap } = readHiddenTruth(run);
 
-    const seen = JSON.stringify(openMeeting(run));
+    const { notebook, ...rest } = openMeeting(run);
+    const seen = JSON.stringify(rest);
 
+    // The Notebook lists everyone by id, always in the same order.
+    expect(notebook.marks.map((m) => m.id)).toEqual(["ana", "ben", "cal"]);
     for (const { fact } of characters) {
       if (fact) expect(seen).not.toContain(fact.text);
     }
