@@ -162,6 +162,8 @@ export interface PlayerView {
     reported: string;
     news: { month: number; text: string }[];
   };
+  /** Demands the player stalled and has not yet heard the last of. */
+  openDemands: { month: number; subject: string }[];
   seed: number;
   month: number;
   totalMonths: number;

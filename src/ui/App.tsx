@@ -107,6 +107,12 @@ export function App() {
               {panelText.actionsLeft.replace("{actions}", view.actions.label)}
             </dd>
           </div>
+          {view.openDemands.length > 0 && (
+            <div data-testid="open-demands">
+              <dt>{panelText.openDemandsHeading}</dt>
+              <dd>{view.openDemands.length}</dd>
+            </div>
+          )}
           {view.buzzwords.length > 0 && (
             <div className="status-buzzwords" data-testid="buzzwords">
               <dt>{panelText.buzzwordsHeading}</dt>
@@ -211,6 +217,19 @@ export function App() {
               {item.text}
             </p>
           ))}
+          {view.openDemands.length > 0 && (
+            <>
+              <h3>{panelText.openDemandsHeading}</h3>
+              <ul>
+                {view.openDemands.map((item) => (
+                  <li key={item.subject} data-testid="open-demand">
+                    <strong>{monthLabel(item.month)}. </strong>
+                    {item.subject}
+                  </li>
+                ))}
+              </ul>
+            </>
+          )}
           <button
             type="button"
             data-testid="close-project"

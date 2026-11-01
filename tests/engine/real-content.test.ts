@@ -257,10 +257,41 @@ describe("the real month", () => {
       notificationId: "training",
       optionId: "skip-training",
     });
+    run.choose({ type: "continue" });
+    run.choose({
+      type: "notification",
+      notificationId: "fewer-meetings",
+      optionId: "push-back",
+    });
 
     expect(run.choose({ type: "continue" }).step).toMatchObject({
       id: "report-input-late",
     });
+  });
+
+  // The Demand browser test relies on these.
+  it.each([
+    [4, "notification"],
+    [8, "notice"],
+  ])("keeps what follows a stalled Demand on seed %i", (seed, kind) => {
+    const run = startRun({ seed, content: gameContent });
+    let view = run.view();
+    while (view.month < 3) {
+      const { step } = view;
+      const stall =
+        step.kind === "notification" && step.id === "fewer-meetings";
+      const next: Choice | undefined = stall
+        ? {
+            type: "notification",
+            notificationId: "fewer-meetings",
+            optionId: "stall",
+          }
+        : view.choices.at(-1);
+      if (!next) throw new Error(`Stuck at ${step.kind}.`);
+      view = run.choose(next);
+    }
+
+    expect(view.step.kind).toBe(kind);
   });
 
   // The README contrasts these two seeds in its test scenario.

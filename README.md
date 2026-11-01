@@ -80,10 +80,16 @@ dangerous. Start at `http://localhost:5173/?seed=8`.
 | Restart from seed 1, and do the same in month 2                                                   | The Project Co-ordinator takes the blame and you get away with it. Blaming the Senior Analyst is what goes badly on this seed.                                   |
 | In month 1 on seed 1, look at who the signs point to                                              | They point to the Senior Analyst, not your boss. The same warm agreement now does little for you. Signs mislead about one Scene in five, so watch more than one. |
 | Compare your boss's treatment of you in month 2 after agreeing with your boss or your boss's boss | The sign under "How your boss is with you" is usually warmer after agreeing with your boss. No sign is sure.                                                     |
-| On seed 8, file the report, then read the meeting's signs in month 1                              | Your boss overruns the meeting, and the Office Co-ordinator reads back minutes that have changed. Only those roles can show those signs.                         |
+| On seed 8, turn down the pub and file the report, then read the meeting's signs in month 1        | Your boss overruns the meeting, and the Office Co-ordinator reads back minutes that have changed. Only those roles can show those signs.                         |
 | Go to the photocopier in two different months                                                     | Each source sounds like their role: the Senior Analyst talks in figures, the Office Co-ordinator in minutes and stationery.                                      |
 | Go to the loading bay, buy from the Office Co-ordinator, and ask about someone                    | Often a Hidden Fact. If it is one of the useful ones, a later Scene offers a new option about it, whether it is true.                                            |
 | Play to the end of any run, and read the results screen                                           | Your marks against the truth, each claim's truth, and which clues were false or did not matter.                                                                  |
+| Seed 1 (a Believer boss) and seed 8 (an Incompetent one). In month 1, agree warmly with your boss | Your boss's reaction reads quite differently, and neither says what kind your boss is. The results screen does.                                                  |
+| Seed 1. In month 1, file the report honestly, then press Your project                             | Real and reported are both Amber. Restart and choose "make the project green": real stays Amber and reported is Green.                                           |
+| Seed 4. In months 1 and 2, do not file the report                                                 | The Project goes Red in month 2, and the Project Status Review opens by itself. Making it amber changes the reported status.                                     |
+| Seed 1, month 2                                                                                   | The report waits on the Project Co-ordinator's late figures. Chase them, wait, or file without them.                                                             |
+| Seed 4. In month 2, stall the Demand from your boss's boss                                        | It shows under Open Demands. In month 3 you are chased. On seed 8 it is forgotten instead.                                                                       |
+| Play to Annual Calibration, and to the results screen                                             | Your boss gives a verdict that depends on how you have done. The results screen shows your boss's kind and how your choices landed.                              |
 | Restart the same seed and repeat your choices                                                     | The same signs, claims, Move and official story, every time.                                                                                                     |
 
 ## Change the game
@@ -96,6 +102,7 @@ format, the page shows what is wrong instead of the game.
 | --------------------- | -------------------------------------------------------------------------------------------------------------------- |
 | `ui.json`             | Headings, buttons and the "What you can do now" hints                                                                |
 | `notifications.json`  | The month's Notifications, their choices and their results                                                           |
+| `demands.json`        | Demands, their five answers, what happens when they are chased or forgotten, and those odds                          |
 | `project.json`        | The player's Project: its owner, statuses, starting point and written events                                         |
 | `dialogs.json`        | Short text dialogs, such as the pub                                                                                  |
 | `buzzwords.json`      | Buzzwords and their meanings                                                                                         |
@@ -177,6 +184,14 @@ the seed and never from the player's choices, and it sets a flag for the month. 
 be possible from at least two kinds, and certain from none, so that it never settles
 what someone is. A Notification with a `when` waits until that holds. An option with a
 `bet` has a seeded `chance` of going well, and otherwise uses what `lost` says.
+
+`demands.json` holds Demands, which arrive as Notifications with their `months` and
+must offer `deliver`, `push-back`, `hand-off`, `fake` and `stall`. An answer that needs a
+colleague names them by role. `"stalls": true` on `stall` leaves the Demand open, and the
+player can see it under **Your project**. Each later month, a seeded draw uses `odds` for
+the boss's kind: it is `forgotten`, or it is `chased`, which costs the `chasedPenalty`
+and arrives as a Notification of its own, or nothing happens yet. `chased` must have an
+answer that costs nothing.
 
 An approach can have `overdone`, which changes how the listed kinds take it after
 `after` uses in a run. This is how a Practitioner boss turns on someone who shines.

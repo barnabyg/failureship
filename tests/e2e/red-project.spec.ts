@@ -10,6 +10,8 @@ async function turnProjectRed(page: Page) {
   await finishMonth(page);
   await page.getByTestId("option-skip-training").click();
   await page.getByTestId("continue").click();
+  await page.getByTestId("option-push-back").click();
+  await page.getByTestId("continue").click();
   await skipTheReport(page);
 }
 

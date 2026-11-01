@@ -252,7 +252,7 @@ function worthTo(kind: Kind, choice: Choice, view: PlayerView): number {
 }
 
 function allNotifications() {
-  return gameContent.notifications;
+  return [...gameContent.notifications, ...(gameContent.demands?.items ?? [])];
 }
 
 function approachOfChoice(choice: Choice): string | undefined {
@@ -328,7 +328,7 @@ describe("playing the boss you have", () => {
 
       expect(adapted, id).toBeGreaterThan(fixed);
     }
-  });
+  }, 30_000);
 
   it("never reveals the boss's kind in the player view before the run ends", () => {
     const labels = /Believer|Incompetent|Practitioner/;

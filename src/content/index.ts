@@ -4,6 +4,7 @@ import behaviours from "../../content/behaviours.json";
 import boss from "../../content/boss.json";
 import buzzwords from "../../content/buzzwords.json";
 import characters from "../../content/characters.json";
+import demands from "../../content/demands.json";
 import dialogs from "../../content/dialogs.json";
 import floor from "../../content/floor-1.json";
 import hiddenTruth from "../../content/hidden-truth.json";
@@ -37,6 +38,7 @@ export const gameContent = parseContent({
   sources,
   notebook,
   project,
+  demands,
   characters,
   behaviours,
   scenes,
@@ -94,6 +96,7 @@ const panelSchema = z.strictObject(
       "projectOwnerLabel",
       "projectRealLabel",
       "projectReportedLabel",
+      "openDemandsHeading",
       "powerMapHeading",
       "closeLabel",
       "resultsWhoHeading",

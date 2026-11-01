@@ -8,6 +8,8 @@ async function reachLateInput(page: Page) {
   await finishMonth(page);
   await page.getByTestId("option-skip-training").click();
   await page.getByTestId("continue").click();
+  await page.getByTestId("option-push-back").click();
+  await page.getByTestId("continue").click();
   await expect(page.getByTestId("panel-notification")).toContainText(
     "Waiting on",
   );

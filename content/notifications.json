@@ -90,33 +90,6 @@
     ]
   },
   {
-    "id": "new-tool",
-    "months": [4],
-    "from": "From: Your boss, Dennis Prowse",
-    "subject": "FW: This solves ALL your problems (read this!!)",
-    "body": "Your boss has read an article about a new software tool that solves all your problems, and wants it rolled out by the end of the month. Your boss has not said which problems. The article is by the company that sells it.",
-    "options": [
-      {
-        "id": "roll-out",
-        "label": "Go to the demonstration and roll it out",
-        "cost": "standard",
-        "sets": ["rolled-out-tool"],
-        "dialog": "tool-demo",
-        "learns": ["single-source-of-truth"],
-        "approach": "results"
-      },
-      {
-        "id": "say-evaluated",
-        "label": "Reply that it is being evaluated",
-        "sets": ["stalled-tool"],
-        "result": {
-          "title": "RE: FW: This solves ALL your problems",
-          "body": "Your boss replies with a thumbs up. The word evaluated seems to have the force of a finished thing. You make a note to find out what you have evaluated."
-        }
-      }
-    ]
-  },
-  {
     "id": "deck-for-upstairs",
     "months": [5],
     "from": "From: Your boss, Dennis Prowse",

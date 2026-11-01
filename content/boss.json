@@ -315,6 +315,72 @@
           "Your boss files something at 23:59 under your name, and lets you know."
         ]
       }
+    },
+    {
+      "id": "push-back",
+      "shift": {
+        "believer": 2,
+        "incompetent": -2,
+        "practitioner": -1
+      },
+      "reaction": {
+        "believer": [
+          "Your boss reads it twice and says that this is a fair point, and that your boss should have said so upstairs.",
+          "Your boss comes over to ask what you would do instead, and writes down the answer."
+        ],
+        "incompetent": [
+          "Your boss looks at you as if you had spoken in another language, and asks whether you are a team player.",
+          "Your boss says that upstairs will not like that, and looks round to see who else heard you."
+        ],
+        "practitioner": [
+          "Your boss smiles, and asks you to put that in writing, for your own protection.",
+          "Your boss says that you are quite right, and that it would be better coming from you."
+        ]
+      }
+    },
+    {
+      "id": "hand-off",
+      "shift": {
+        "believer": -1,
+        "incompetent": 0,
+        "practitioner": 1
+      },
+      "reaction": {
+        "believer": [
+          "Your boss asks why it could not be you, and seems to want to know.",
+          "Your boss asks whether the person you gave it to knows why they have it."
+        ],
+        "incompetent": [
+          "Your boss asks who is doing that now, and is told, and forgets.",
+          "Your boss says that delegating is very important, and asks you to send over the name of whoever is doing it."
+        ],
+        "practitioner": [
+          "Your boss raises an eyebrow in appreciation. It is a very clean piece of work, and none of it will touch you.",
+          "Your boss notes that there is now someone else to blame, and seems to think well of you for it."
+        ]
+      }
+    },
+    {
+      "id": "stall",
+      "shift": {
+        "believer": -1,
+        "incompetent": 0,
+        "practitioner": -1
+      },
+      "reaction": {
+        "believer": [
+          "Your boss asks you to say when it will be done. You say soon. Your boss writes down soon.",
+          "Your boss says that there is no rush, and looks at you a moment longer than that."
+        ],
+        "incompetent": [
+          "Your boss sends a thumbs up, and appears to have stopped thinking about it at once.",
+          "Your boss says great, thanks, and asks you what it was about."
+        ],
+        "practitioner": [
+          "Your boss says nothing, and marks something in a notebook that has no other marks in it.",
+          "Your boss says that you must let your boss know how that goes, and enters it in a calendar."
+        ]
+      }
     }
   ]
 }

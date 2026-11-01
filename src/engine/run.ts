@@ -2,6 +2,8 @@ import { makeClaim, verdictOfClaim, type Claim } from "./claims";
 import {
   KINDS,
   behavioursOpenTo,
+  chasedIdOf,
+  everyNotification,
   type ClueVerdict,
   type Condition,
   type Content,
@@ -135,6 +137,10 @@ interface State extends MonthRecord {
   /** How often each approach has been used, since some can be overdone. */
   approachUses: Record<string, number>;
   verdict: string | null;
+  /** Demands the player stalled, which stay open until forgotten or answered. */
+  openDemands: { id: string; month: number; chased: boolean }[];
+  /** What the player is told before anything else, as a month opens. */
+  noticesDue: { title: string; body: string }[];
   project: {
     real: string;
     reported: string;
@@ -200,6 +206,8 @@ export function startRun(options: {
     bossLandings: [],
     approachUses: {},
     verdict: null,
+    openDemands: [],
+    noticesDue: [],
     project: { ...content.project.start, news: [], flagged: false },
     step: { kind: "actions" },
     truth: {
@@ -244,8 +252,10 @@ function freshMonth(content: Content, month: number): MonthRecord {
     noted: [],
     spent: 0,
     visited: [],
-    unanswered: content.notifications
+    // What belongs to this month first, and what recurs, like the report, last.
+    unanswered: [...content.notifications, ...(content.demands?.items ?? [])]
       .filter((n) => inMonth(n, month))
+      .sort((a, b) => Number(!a.months) - Number(!b.months))
       .map((n) => n.id),
     flags: [],
     moveLanded: false,
@@ -254,6 +264,7 @@ function freshMonth(content: Content, month: number): MonthRecord {
 
 /** What happens as a month opens, whatever the player has done. */
 function openMonth(state: State, content: Content): void {
+  followUpDemands(state, content);
   const { input } = content.project;
   const late = state.truth.characters.find((c) => c.id === input?.character);
   if (input && late && inMonth(input, state.month)) {
@@ -264,6 +275,34 @@ function openMonth(state: State, content: Content): void {
     if (inMonth(event, state.month)) {
       moveProject(state, content, event.project);
       state.project.news.push({ month: state.month, text: event.text });
+    }
+  }
+}
+
+/** A stalled Demand gets a seeded draw each later month: forgotten, chased or neither. */
+function followUpDemands(state: State, content: Content): void {
+  const { demands } = content;
+  if (!demands) return;
+  const kind = bossKindOf(state, content);
+  const { forgets, chases } = demands.odds[kind];
+  for (const open of [...state.openDemands]) {
+    const item = demands.items.find((d) => d.id === open.id);
+    if (!item || open.chased) continue;
+    const value = drawFor(state.seed, `demand:${open.id}`, state.month);
+    if (value < forgets) {
+      state.openDemands = state.openDemands.filter((d) => d !== open);
+      state.noticesDue.push(item.forgotten);
+      state.flags.push("demand-forgotten");
+    } else if (value < forgets + chases) {
+      open.chased = true;
+      state.unanswered.unshift(chasedIdOf(open.id));
+      state.flags.push("demand-chased");
+      landWithBoss(
+        state,
+        content,
+        { opinion: demands.chasedPenalty[kind] },
+        item.chased.subject,
+      );
     }
   }
 }
@@ -418,10 +457,20 @@ function answerNotification(
   choice: Extract<Choice, { type: "notification" }>,
 ): void {
   const { content } = world;
-  const option = content.notifications
+  const option = everyNotification(content)
     .find((n) => n.id === choice.notificationId)
     ?.options.find((o) => o.id === choice.optionId);
   if (!option) throw new IllegalChoiceError(choice.optionId);
+  if (option.stalls) {
+    state.openDemands.push({
+      id: choice.notificationId,
+      month: state.month,
+      chased: false,
+    });
+  }
+  state.openDemands = state.openDemands.filter(
+    (d) => chasedIdOf(d.id) !== choice.notificationId,
+  );
 
   state.spent += costOf(content, option.cost);
   state.unanswered = state.unanswered.filter(
@@ -742,8 +791,11 @@ function fillParts(
 /** The month's order: Notifications, actions, a Move, then the month closes. */
 function nextStep(state: State, world: World): Step {
   const { content } = world;
+  const due = state.noticesDue.shift();
+  if (due) return { kind: "notice", ...due };
+  const notifications = everyNotification(content);
   for (const id of state.unanswered) {
-    const notification = content.notifications.find((n) => n.id === id);
+    const notification = notifications.find((n) => n.id === id);
     const answerable = notification?.options.some(
       (o) => costOf(content, o.cost) <= remaining(state, content),
     );
@@ -862,7 +914,7 @@ function notificationOptions(
   content: Content,
   id: string,
 ): NotificationOption[] {
-  const notification = content.notifications.find((n) => n.id === id);
+  const notification = everyNotification(content).find((n) => n.id === id);
   return (notification?.options ?? []).map((o) => ({
     id: o.id,
     label: o.label,
@@ -1035,7 +1087,7 @@ function toStepView(state: State, world: World): StepView {
   const { step } = state;
   switch (step.kind) {
     case "notification": {
-      const n = content.notifications.find((x) => x.id === step.id);
+      const n = everyNotification(content).find((x) => x.id === step.id);
       if (!n) throw new Error(`Unknown Notification "${step.id}".`);
       return {
         kind: "notification",
@@ -1141,6 +1193,10 @@ function toView(state: State, world: World): PlayerView {
       })),
     },
     project: toProjectView(state, content),
+    openDemands: state.openDemands.flatMap(({ id, month }) => {
+      const item = content.demands?.items.find((d) => d.id === id);
+      return item ? [{ month, subject: item.subject }] : [];
+    }),
     seed: state.seed,
     month: state.month,
     totalMonths: content.balance.monthsPerRun,

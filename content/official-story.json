@@ -304,6 +304,55 @@
     },
     {
       "when": {
+        "flag": "delivered-demand"
+      },
+      "reported": "Your team met a priority request from senior leadership.",
+      "happened": "You actually did it. It took an afternoon."
+    },
+    {
+      "when": {
+        "flag": "pushed-back"
+      },
+      "reported": "You provided constructive challenge to a leadership priority.",
+      "happened": "You said that it could not be done, to the person who wanted it done."
+    },
+    {
+      "when": {
+        "flag": "handed-off"
+      },
+      "reported": "You empowered a colleague to take ownership of a priority.",
+      "happened": "You gave it to someone else."
+    },
+    {
+      "when": {
+        "flag": "faked-demand"
+      },
+      "reported": "You delivered a priority request ahead of schedule.",
+      "happened": "It has not happened. There is a chart that says it has."
+    },
+    {
+      "when": {
+        "flag": "stalled-demand"
+      },
+      "reported": "A leadership priority is progressing through appropriate review.",
+      "happened": "You said that you were looking at it."
+    },
+    {
+      "when": {
+        "flag": "demand-chased"
+      },
+      "reported": "Senior leadership has taken a close personal interest in your work.",
+      "happened": "You were chased."
+    },
+    {
+      "when": {
+        "flag": "demand-forgotten"
+      },
+      "reported": "A legacy request was closed as part of routine housekeeping.",
+      "happened": "Your boss forgot. The bet came in."
+    },
+    {
+      "when": {
         "flag": "hired-consultant"
       },
       "reported": "External expertise was secured to drive savings.",

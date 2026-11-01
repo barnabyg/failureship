@@ -88,6 +88,8 @@ const notificationOption = z.strictObject({
   reaction: ownReaction,
   project: projectChange,
   result: notice.optional(),
+  /** Leaves a Demand open, as a bet that the boss forgets it. */
+  stalls: z.boolean().default(false),
   /** A seeded chance that this goes the other way, into `lost`. */
   bet: z
     .strictObject({
@@ -116,6 +118,19 @@ const notification = z.strictObject({
   subject: text,
   body: text,
   options: z.array(notificationOption).min(1),
+});
+
+/** An instruction from above, which can be answered in the five ways below. */
+const demand = notification.extend({
+  /** What happens if the boss forgets a stalled Demand. */
+  forgotten: notice,
+  /** What arrives if the boss chases a stalled Demand instead. */
+  chased: z.strictObject({
+    from: text,
+    subject: text,
+    body: text,
+    options: z.array(notificationOption).min(1),
+  }),
 });
 
 const sceneResult = z.strictObject({
@@ -451,6 +466,20 @@ const contentSchema = z.strictObject({
   sources,
   notebook,
   project,
+  demands: z
+    .strictObject({
+      /** Each month, how likely each kind of boss is to forget or to chase. */
+      odds: perKind(
+        z.strictObject({
+          forgets: z.number().min(0).max(1),
+          chases: z.number().min(0).max(1),
+        }),
+      ),
+      /** What being chased costs with each kind, before any answer is given. */
+      chasedPenalty: perKind(z.number().int().nonpositive()),
+      items: z.array(demand),
+    })
+    .optional(),
   characters: z
     .array(
       z.strictObject({
@@ -509,6 +538,34 @@ export type Content = z.infer<typeof contentSchema>;
 export type Room = Content["floor"]["rooms"][number];
 export type SceneData = Content["scenes"][number];
 type SceneResult = SceneData["options"][number]["results"][number];
+
+export const DEMAND_ANSWERS = [
+  "deliver",
+  "push-back",
+  "hand-off",
+  "fake",
+  "stall",
+] as const;
+
+/** The Notification that chases a stalled Demand. */
+export function chasedIdOf(demandId: string): string {
+  return `${demandId}-chased`;
+}
+
+/** Every Notification there is, including Demands and their chasers. */
+export function everyNotification(content: Content) {
+  const items = content.demands?.items ?? [];
+  return [
+    ...content.notifications,
+    ...items,
+    ...items.map(({ id: demandId, chased }) => ({
+      ...chased,
+      id: chasedIdOf(demandId),
+      months: undefined,
+      when: undefined,
+    })),
+  ];
+}
 
 /** Thrown when a data file breaks the content format, naming what is wrong. */
 export class ContentError extends Error {
@@ -770,6 +827,40 @@ function findBrokenInput(content: Content): string[] {
   return problems;
 }
 
+/** A Demand must offer every answer, and stalling must be a real bet. */
+function findBrokenDemands(content: Content): string[] {
+  const { demands } = content;
+  if (!demands) return [];
+  const problems: string[] = [];
+  for (const [kind, { forgets, chases }] of Object.entries(demands.odds)) {
+    if (forgets === 0 || chases === 0) {
+      problems.push(`A ${kind} boss must be able to forget and to chase.`);
+    }
+    if (forgets + chases > 1) {
+      problems.push(`A ${kind} boss's Demand odds add up to more than one.`);
+    }
+  }
+  for (const item of demands.items) {
+    const owner = `Demand "${item.id}"`;
+    const ids = item.options.map((o) => o.id);
+    for (const answer of DEMAND_ANSWERS) {
+      if (!ids.includes(answer)) problems.push(`${owner} needs "${answer}".`);
+    }
+    for (const option of item.options) {
+      if (option.stalls !== (option.id === "stall")) {
+        problems.push(`${owner} must stall on "stall", and only there.`);
+      }
+    }
+    const answerable = item.chased.options.some(
+      (o) => (content.balance.actionCosts[o.cost ?? ""] ?? 0) === 0,
+    );
+    if (!answerable) {
+      problems.push(`${owner}'s chaser needs an answer that costs nothing.`);
+    }
+  }
+  return problems;
+}
+
 /** Sources must be worth weighing: never always right, and never always wrong. */
 function findBrokenSources(content: Content): string[] {
   const { methods, reliability, motives, claims, voices } = content.sources;
@@ -941,6 +1032,7 @@ function findBrokenReferences(content: Content): string[] {
   problems.push(...findBrokenApproaches(content));
   problems.push(...findBrokenSources(content));
   problems.push(...findBrokenInput(content));
+  problems.push(...findBrokenDemands(content));
   const { flagged } = content.project;
   if (flagged) {
     checkStatus("The Project's flag", flagged.at);
@@ -1078,7 +1170,7 @@ function findBrokenReferences(content: Content): string[] {
     if (e.when) checkCondition(owner, e.when);
     checkMonths(owner, e.months);
   }
-  for (const n of content.notifications) {
+  for (const n of everyNotification(content)) {
     checkMonths(`Notification "${n.id}"`, n.months);
     if (n.when) {
       checkCondition(`Notification "${n.id}"`, n.when);

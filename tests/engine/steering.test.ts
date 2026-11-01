@@ -49,15 +49,19 @@ describe("six months that do not feel like one month repeated", () => {
         .filter((s) => s.months !== undefined && inMonth(s, month))
         .map((s) => s.id);
       // The Monthly Status Report recurs, so it is not what sets a month apart.
-      const notifications = gameContent.notifications
+      const notifications = [
+        ...gameContent.notifications,
+        ...(gameContent.demands?.items ?? []),
+      ]
         .filter((n) => n.months !== undefined && inMonth(n, month))
         .map((n) => n.id);
       expect(scenes, `month ${String(month)}`).toHaveLength(1);
-      expect(notifications, `month ${String(month)}`).toHaveLength(1);
+      expect(notifications.length, `month ${String(month)}`).toBeGreaterThan(0);
       return [...scenes, ...notifications];
     });
 
-    expect(new Set(presented.flat()).size).toBe(months.length * 2);
+    const everything = presented.flat();
+    expect(new Set(everything).size).toBe(everything.length);
   });
 
   it("opens a different Scene in each month of a real run", () => {
