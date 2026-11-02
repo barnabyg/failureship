@@ -3,6 +3,7 @@ import { playUntil } from "./play";
 
 // tests/engine/changes.test.ts keeps this seed true: the Senior Analyst is a
 // Believer, and blamed and then let down, starts keeping a file on you.
+// Over 10 s, as the change shows only on the results screen.
 test("a Believer burned twice changes, and only the results screen says so", async ({
   page,
 }) => {

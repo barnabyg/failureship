@@ -1,5 +1,5 @@
 import { expect, test, type Page } from "@playwright/test";
-import { answerAnyNotification, openMeeting, playToResults } from "./play";
+import { answerAnyNotification, continueUntil, openMeeting } from "./play";
 
 async function readOrgChart(page: Page) {
   await page.getByTestId("open-org-chart").click();
@@ -9,6 +9,7 @@ async function readOrgChart(page: Page) {
 }
 
 // On this seed the reorganisation lands in month 3, after a clue in month 2.
+// tests/engine/company-events.test.ts has it on the results screen.
 test("a Company Event lands and the Org Chart changes", async ({ page }) => {
   await page.goto("/?seed=3&month=3");
   const before = await readOrgChart(page);
@@ -22,29 +23,13 @@ test("a Company Event lands and the Org Chart changes", async ({ page }) => {
   expect(await readOrgChart(page)).toBe(before);
 
   const event = page.getByTestId("panel-event");
-  const carryOn = page.getByTestId("continue");
-  const spare = page.getByTestId("hotspot-work");
-  await expect(async () => {
-    if (await carryOn.isVisible()) await carryOn.click();
-    else if (await spare.isEnabled()) await spare.click();
-    await expect(event).toBeVisible({ timeout: 100 });
-  }).toPass();
-
+  await continueUntil(page, event);
   await expect(event).toContainText("Simplifying how we work");
   await expect(page.getByTestId("month")).toContainText("3 of 9");
-  await carryOn.click();
+  await page.getByTestId("continue").click();
   expect(await readOrgChart(page)).not.toBe(before);
 
   const story = page.getByTestId("panel-story");
-  await expect(async () => {
-    if (await carryOn.isVisible()) await carryOn.click();
-    await expect(story).toBeVisible({ timeout: 100 });
-  }).toPass();
+  await continueUntil(page, story);
   await expect(story).toContainText("simplified");
-
-  await playToResults(page);
-
-  await expect(page.getByTestId("results-changes")).toContainText(
-    "reorganisation",
-  );
 });

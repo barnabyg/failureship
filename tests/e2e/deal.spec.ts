@@ -3,6 +3,7 @@ import { playUntil } from "./play";
 
 // tests/engine/deals.test.ts keeps these deals true. On seed 2 the Project
 // Co-ordinator really has sway with your boss, and on seed 3 they do not.
+// Over 10 s, as what the deal was worth shows only on the results screen.
 for (const [seed, worth] of [
   [2, "real sway"],
   [3, "no sway"],
