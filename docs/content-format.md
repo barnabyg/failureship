@@ -482,7 +482,9 @@ of you, from [`reputation.json`](#reputationjson). Until vacancies exist, that i
 
 It reads only the official record. A flag in `deeds` must be set by an action, a Notification's
 answer or a Scene's result, and never by a result, Move, Bill or event that reads the hidden
-truth, or the bar would give the Power Map away. One that is not is refused.
+truth, or the bar would give the Power Map away. A chased Demand's answers do not count either,
+since whether it is chased goes by the boss's kind, though they may set a flag the Demand's own
+answers set. One that is not is refused.
 `label` and `title` are said beside the bar. The results screen's heading is
 `resultsStandingHeading` in [`ui.json`](#uijson).
 

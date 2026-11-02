@@ -1,4 +1,5 @@
 import {
+  chasedIdOf,
   everyBill,
   everyDemand,
   everyNotification,
@@ -247,17 +248,20 @@ export function findBrokenGauges(content: Content): string[] {
 /**
  * Official standing must read only the official record, so each flag it names is
  * set by the player's own choices in plain view, and never by a hidden result.
+ * Whether a Demand is chased goes by the boss's kind, so a chase's answers do not
+ * count, though they can set a flag that the Demand's own answers set too.
  */
 export function findBrokenStanding(content: Content): string[] {
   const written = content.standing;
   if (!written) return [];
   const problems: string[] = [];
   const hidden = flagsSetByHiddenResults(content);
+  const chases = new Set(everyDemand(content).map((d) => chasedIdOf(d.id)));
   const chosen = new Set([
     ...content.actions.flatMap((a) => a.sets),
-    ...everyNotification(content).flatMap((n) =>
-      n.options.flatMap((o) => o.sets),
-    ),
+    ...everyNotification(content)
+      .filter((n) => !chases.has(n.id))
+      .flatMap((n) => n.options.flatMap((o) => o.sets)),
     ...content.scenes.flatMap((s) =>
       s.options.flatMap((o) => o.results.flatMap((r) => r.sets)),
     ),

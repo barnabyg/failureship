@@ -247,6 +247,53 @@ describe("Official standing's data", () => {
     );
   });
 
+  it("is refused with a flag only a chased Demand's answer sets, since the boss's kind decides whether it is chased", () => {
+    const notice = { title: "Done", body: "Done." };
+    const chasable = {
+      ...raw(),
+      demands: {
+        odds: {
+          believer: { forgets: 0.2, chases: 0.4 },
+          incompetent: { forgets: 0.6, chases: 0.1 },
+          practitioner: { forgets: 0.3, chases: 0.3 },
+        },
+        chasedPenalty: { believer: 0, incompetent: 0, practitioner: 0 },
+        sets: { forgotten: "forgot", chased: "chased" },
+        items: [
+          {
+            id: "tool",
+            months: [1],
+            from: "Boss",
+            subject: "A tool",
+            body: "Roll it out.",
+            options: [
+              ...["deliver", "push-back", "hand-off", "fake"].map((id) => ({
+                id,
+                label: id,
+                result: notice,
+              })),
+              { id: "stall", label: "Stall", result: notice, stalls: true },
+            ],
+            forgotten: notice,
+            chased: {
+              from: "Boss",
+              subject: "Well?",
+              body: "Well?",
+              options: [
+                { id: "late", label: "Late", result: notice, sets: ["late"] },
+              ],
+            },
+          },
+        ],
+      },
+    };
+    chasable.standing.deeds = [{ flag: "late", by: 5 }];
+
+    expect(() => parseContent(chasable)).toThrow(
+      /Official standing reads "late"/,
+    );
+  });
+
   it("is refused unless it says what every reported status adds", () => {
     const missing = raw();
     missing.standing.reported = {
