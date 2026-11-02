@@ -2,7 +2,6 @@ import { expect, test, type Page } from "@playwright/test";
 import {
   answerAnyNotification,
   attendAndFinishMonth,
-  finishMonth,
   skipTheReport,
 } from "./play";
 
@@ -59,19 +58,10 @@ test("telling the truth leaves the Project red, and is not asked for twice", asy
 test("a Project that never goes red still has a meeting in month 5", async ({
   page,
 }) => {
-  await page.goto("/?seed=4");
-  for (let month = 1; month <= 4; month++) {
-    await page
-      .locator(
-        '[data-testid="option-decline"], [data-testid^="option-"]:has-text("Costs nothing")',
-      )
-      .first()
-      .click();
-    await page.getByTestId("continue").click();
-    await finishFreeMonth(page);
-  }
-
+  // Plain play to month 5 files every report, so the Project never goes red.
+  await page.goto("/?seed=4&month=5");
   await expect(page.getByTestId("month")).toContainText("5 of 9");
+  expect(await reportedStatus(page)).not.toBe("Red");
   await answerAnyNotification(page);
   await page.getByTestId("hotspot-meeting-quarterly").click();
 
@@ -79,18 +69,3 @@ test("a Project that never goes red still has a meeting in month 5", async ({
     "Quarterly Business Review",
   );
 });
-
-async function finishFreeMonth(page: Page) {
-  const panel = page.getByTestId("panel-notification");
-  while (await panel.isVisible()) {
-    const lie = page.getByTestId("option-lie");
-    if (await lie.isVisible()) await lie.click();
-    else
-      await panel
-        .locator("button:enabled", { hasText: "Costs nothing" })
-        .first()
-        .click();
-    await page.getByTestId("continue").click();
-  }
-  await finishMonth(page);
-}
