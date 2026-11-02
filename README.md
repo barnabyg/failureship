@@ -171,12 +171,12 @@ How to run the checks and tests is in [AGENTS.md](AGENTS.md#verifying).
   in a run's `State` is plain data, so a mechanic gets saving for free. Raise
   `SAVE_VERSION` if a mechanic changes what saved state means. `src/engine/content.ts` holds the content
   schema, and `src/engine/content-checks.ts` parses data against the schema and checks it across files, with
-  each mechanic's checks in `truth-checks.ts` for the hidden truth and its signs, `boss-checks.ts` for the boss,
+  each mechanic's checks in `truth-checks.ts` for dealing the hidden truth and the signs of it, `boss-checks.ts` for the boss,
   going over the head, Demands and reputation, and `consequence-checks.ts` for what choices lead to.
 - `src/tower/` draws the tower and holds no rules.
 - `src/ui/` holds the React panels over the tower. `panels.tsx` picks the panel for each step,
   `ScenePanel.tsx`, `FindOutPanel.tsx` and `ResultsPanel.tsx` are the larger ones, and `Panel.tsx`
-  is the frame they share.
+  holds the frame and buttons they share.
 
 A Scene that data cannot express can name a `script`, which is passed to
 `startRun` in `sceneScripts`. This format is a trial, as the spec, issue #1, says.
