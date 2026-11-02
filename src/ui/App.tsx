@@ -398,7 +398,7 @@ export function App() {
           }}
         >
           {view.gauges.map((gauge) => (
-            <div key={gauge.id}>
+            <div key={gauge.id} data-testid={`gauge-card-${gauge.id}`}>
               <h3>
                 {gauge.label}: {gauge.value}
               </h3>
