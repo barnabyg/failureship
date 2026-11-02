@@ -9,7 +9,9 @@ test("Official standing moves when the report goes unfiled", async ({
   const bar = page.getByTestId("standing");
   const marker = bar.locator(".standing-marker");
   await expect(bar).toBeVisible();
-  await expect(bar).toHaveAttribute("aria-valuetext", "Amber");
+  // No number, not even to a screen reader: only its band is said.
+  await expect(bar).toHaveAccessibleName("Official standing: Amber");
+  await expect(bar).not.toHaveAttribute("aria-valuenow");
   await expect(bar).not.toContainText(/\d/);
   const before = await marker.evaluate((m) => m.style.left);
 

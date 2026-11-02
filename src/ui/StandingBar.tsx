@@ -14,15 +14,12 @@ export function StandingBar({
   testId: string;
 }) {
   const percent = Math.round(standing.at * 100);
+  // An image, not a meter, since a meter has to say its number aloud.
   return (
     <span
       className="standing-bar"
-      role="meter"
-      aria-label={standing.label}
-      aria-valuemin={0}
-      aria-valuemax={100}
-      aria-valuenow={percent}
-      aria-valuetext={standing.band}
+      role="img"
+      aria-label={`${standing.label}: ${standing.band}`}
       data-testid={testId}
     >
       <span
