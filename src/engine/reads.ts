@@ -141,11 +141,6 @@ export function matches(
       (m) => m.character === character && m.about === about,
     );
   }
-  if ("owesYou" in condition) {
-    return state.truth.powerMap.favours.some(
-      (f) => f.owes === condition.owesYou && f.to === YOU,
-    );
-  }
   if ("youOwe" in condition) {
     return state.truth.powerMap.favours.some(
       (f) => f.owes === YOU && f.to === condition.youOwe,

@@ -1258,36 +1258,6 @@
             "factNote": "You acted on something you were told about {subject}. It was not so."
           }
         ]
-      },
-      {
-        "id": "call-in-callum",
-        "family": "trade",
-        "requires": {
-          "owesYou": "projects"
-        },
-        "label": "Remind the Project Co-ordinator that they owe you one, and ask them to say something",
-        "results": [
-          {
-            "body": "You catch the Project Co-ordinator's eye and tap your watch, which you do not wear. They clear their throat and say that you have been very supportive this year, which is the phrase. Your boss writes something down.",
-            "opinion": 1,
-            "sets": ["called-in-a-favour"]
-          }
-        ]
-      },
-      {
-        "id": "call-in-priya",
-        "family": "trade",
-        "requires": {
-          "owesYou": "analyst"
-        },
-        "label": "Remind the Senior Analyst that they owe you one, and ask them to say something",
-        "results": [
-          {
-            "body": "You catch the Senior Analyst's eye and tap your watch, which you do not wear. They clear their throat and say that you have been very supportive this year, which is the phrase. Your boss writes something down.",
-            "opinion": 1,
-            "sets": ["called-in-a-favour"]
-          }
-        ]
       }
     ],
     "verdict": {

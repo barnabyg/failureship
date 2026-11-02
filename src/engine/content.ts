@@ -113,7 +113,6 @@ export type Condition =
   | { did: string }
   | { remembers: { character: string; about: string } }
   | { believes: { character: string; mood: Mood } }
-  | { owesYou: string }
   | { youOwe: string }
   | { not: Condition }
   | { all: Condition[] };
@@ -139,7 +138,6 @@ const condition: z.ZodType<Condition> = z.lazy(() =>
     z.strictObject({
       believes: z.strictObject({ character: id, mood: z.enum(MOODS) }),
     }),
-    z.strictObject({ owesYou: id }),
     z.strictObject({ youOwe: id }),
     z.strictObject({ not: condition }),
     z.strictObject({ all: z.array(condition).min(1) }),
@@ -459,6 +457,8 @@ const move = z.strictObject({
   priority: z.boolean().default(false),
   sets,
   mistake: bigMistake,
+  /** Pays back the favour the player owes this Character. */
+  repays: id.optional(),
 });
 
 const storyEntry = z

@@ -579,7 +579,6 @@ function findBrokenReferences(content: Content): string[] {
     if ("believes" in condition) {
       checkCharacter(owner, condition.believes.character);
     }
-    if ("owesYou" in condition) checkCharacter(owner, condition.owesYou);
     if ("youOwe" in condition) checkCharacter(owner, condition.youOwe);
     if ("heardFact" in condition) checkFact(owner, condition.heardFact);
     if ("heardTrue" in condition) checkFact(owner, condition.heardTrue);
@@ -827,6 +826,7 @@ function findBrokenReferences(content: Content): string[] {
   }
   for (const m of content.moves) {
     const owner = `Move "${m.id}"`;
+    if (m.repays !== undefined) checkCharacter(owner, m.repays);
     checkMonths(owner, m.months);
     checkParts(owner, m.body);
     if (m.when) checkCondition(owner, m.when);

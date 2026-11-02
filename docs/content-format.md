@@ -23,7 +23,6 @@ A `when` or `requires` holds one of these:
 | `{ "holderIs": "boss" }`                                               | That Character is the most influential of those present, or of everyone outside a Scene | Yes                    |
 | `{ "bossIs": "practitioner" }`                                         | The boss is of that kind                                                                | Yes                    |
 | `{ "factNature": { "character": "projects", "nature": "dangerous" } }` | That Character's Hidden Fact has that `nature`                                          | Yes                    |
-| `{ "owesYou": "projects" }`                                            | That Character owes the player a favour                                                 | No                     |
 | `{ "youOwe": "projects" }`                                             | The player owes that Character a favour                                                 | No                     |
 | `{ "not": ... }`                                                       | The condition inside does not hold                                                      | If the inner one does  |
 | `{ "all": [...] }`                                                     | Every condition inside holds                                                            | If any inner one does  |
@@ -131,9 +130,10 @@ How a Believer burned enough changes. How to write it is in
 - `became` is what the results screen calls each change.
 - `whistleblower.signs` say `{who}` and are shown, by `weight`, beside what any Believer of their
   role might show. A `clue` makes the Notebook keep one. A month after changing, a whistleblower
-  brings out the first hidden risk still waiting, whatever its own route, or else sends the first of
-  `reports` whose `when` holds, a Bill as in [`threads.json`](#threadsjson). The last report needs no
-  `when`. `motive` says `{who}` and is what the results screen says of a risk they brought out.
+  sends the first of `reports` whose `when` holds, a Bill as in [`threads.json`](#threadsjson): what
+  they know about goes first. Failing that, they bring out the first hidden risk still waiting,
+  whatever its own route, or else send the last report, which needs no `when`. `share` is how much of
+  what a whistleblower is seen doing is one of their own signs. `motive` says `{who}` and is what the results screen says of a risk they brought out.
 - `leaving` is keyed by Character. Only those listed can leave, and your boss and your boss's boss
   cannot be. Each has the `cover` text uses for whoever stands in for them, the `notice` that says
   they have gone, and optional `sets` and `project`.
@@ -274,6 +274,7 @@ mistake only if it has a `result`.
 
 Character Moves, and when each can land. A Move does not land twice in a run while another
 could. A Move with `"priority": true` lands ahead of the others whenever its `when` holds.
+`"repays": "projects"` pays back the favour the player owes that Character, as it lands.
 
 ## `notebook.json`
 

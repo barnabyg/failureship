@@ -138,7 +138,8 @@
       "youOwe": "projects"
     },
     "priority": true,
-    "sets": ["paid-back-a-favour"]
+    "sets": ["paid-back-a-favour"],
+    "repays": "projects"
   },
   {
     "id": "favour-called-in-analyst",
@@ -149,6 +150,7 @@
       "youOwe": "analyst"
     },
     "priority": true,
-    "sets": ["paid-back-a-favour"]
+    "sets": ["paid-back-a-favour"],
+    "repays": "analyst"
   }
 ]

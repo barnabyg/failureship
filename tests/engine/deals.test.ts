@@ -234,6 +234,39 @@ describe("a Deal", () => {
 });
 
 describe("favours owed", () => {
+  it("are paid back by a Move that says so, and then no longer shown", () => {
+    const written = raw();
+    const paid = {
+      ...written,
+      moves: [
+        {
+          id: "pay-back",
+          from: "Ben",
+          title: "PAY-BACK",
+          body: "Ben calls it in.",
+          when: { youOwe: "ben" },
+          priority: true,
+          repays: "ben",
+        },
+      ],
+    };
+    const run = startRun({ seed: 4, content: parseContent(paid) });
+    run.choose(answer("offer", "shake"));
+    playOn(
+      run,
+      (v) => v.step.kind === "notification" && v.step.id === "word-due",
+    );
+    run.choose(answer("word-due", "not-do-it"));
+
+    expect(run.view().favours).toContain("YOU-OWE Ben Bird: YOU-LET-BEN-DOWN");
+    const landed = playOn(
+      run,
+      (v) => v.step.kind === "move" && v.step.title === "PAY-BACK",
+    );
+    expect(landed.step.kind).toBe("move");
+    expect(landed.favours).toEqual([]);
+  });
+
   it("are part of the Power Map, and never shown unless the player is party", () => {
     const content = parseContent(raw({ favours: 4, gives: 0 }));
     let dealt = 0;

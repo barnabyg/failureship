@@ -2,6 +2,7 @@ import { landWithBoss } from "./boss";
 import { reshuffleCharts, type Reshuffle } from "./charts";
 import type { Content, Kind, MoveFamily, Tone } from "./content";
 import { makeDeal, settleDeal } from "./deals";
+import { YOU } from "./deal";
 import { makeMistake } from "./mistakes";
 import { moveProject, type ProjectChange } from "./project";
 import { makePromise, settlePromise } from "./promises";
@@ -33,6 +34,8 @@ export interface Outcome {
     | undefined;
   promise?: string | undefined;
   deal?: string | undefined;
+  /** Pays back the favour the player owes this Character. */
+  repays?: string | undefined;
   /** Keeps or breaks the commitment that fell due as this Notification. */
   settlesDue?: { id: string; how: "kept" | "broken" } | undefined;
 }
@@ -65,6 +68,11 @@ export function applyOutcome(
     makePromise(state, content, outcome.promise);
   }
   if (outcome.deal !== undefined) makeDeal(state, content, outcome.deal);
+  if (outcome.repays !== undefined) {
+    const owed = outcome.repays;
+    const map = state.truth.powerMap;
+    map.favours = map.favours.filter((f) => !(f.owes === YOU && f.to === owed));
+  }
   if (outcome.settlesDue) {
     const { id, how } = outcome.settlesDue;
     settlePromise(state, content, id, how);
