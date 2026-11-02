@@ -176,7 +176,7 @@ How to run the checks and tests is in [AGENTS.md](AGENTS.md#verifying).
 - `src/tower/` draws the tower and holds no rules.
 - `src/ui/` holds the React panels over the tower. `panels.tsx` picks the panel for each step,
   `ScenePanel.tsx`, `FindOutPanel.tsx` and `ResultsPanel.tsx` are the larger ones, `Panel.tsx` holds
-  their frame and buttons, and `Intranet.tsx` the look of the month's e-mails and newsletter.
+  their frame and buttons, `Header.tsx` the header and the cards beside it, and `Intranet.tsx` the look of the month's e-mails and newsletter.
 
 A Scene that data cannot express can name a `script`, which is passed to
 `startRun` in `sceneScripts`. This format is a trial, as the spec, issue #1, says.
