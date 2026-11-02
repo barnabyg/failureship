@@ -18,12 +18,14 @@ The [README](README.md) covers playing and steering the game, and the code map. 
 
 A new mechanic is rarely a data-only change. It usually touches:
 
-1. `content/*.json`, for its data and words.
-2. `src/engine/content.ts` for the schema, and for its checks across files `truth-checks.ts`, `boss-checks.ts`, `consequence-checks.ts` or `content-checks.ts`, whichever the README's code map gives that kind of check.
-3. A mechanic's own module in `src/engine/` for the rules. A consequence takes effect through `applyOutcome` in `outcome.ts`, and `month.ts` holds the month's order.
-4. `src/engine/view.ts` and `src/engine/to-view.ts`, for what the player sees.
-5. `src/ui/panels.tsx`, for showing it, or `ScenePanel.tsx`, `FindOutPanel.tsx` or `ResultsPanel.tsx` where the step has its own panel.
-6. Tests in `tests/engine/` and `tests/e2e/`, and `docs/content-format.md`.
+1. `content/*.json`, for its data and words, with its labels in `content/ui.json`.
+2. `src/content/index.ts`, which imports a new data file and passes it to `parseContent`, and lists the panels' new `ui.json` keys in `panelSchema`.
+3. `src/engine/content.ts` for the schema, and for its checks across files `truth-checks.ts`, `boss-checks.ts`, `consequence-checks.ts` or `content-checks.ts`, whichever the README's code map gives that kind of check.
+4. `src/engine/state.ts` for what it keeps in a run, and `dealtState` in `run.ts` for where that starts.
+5. A mechanic's own module in `src/engine/` for the rules, added to the README's code map. A consequence takes effect through `applyOutcome` in `outcome.ts`, and `month.ts` holds the month's order. Reads that several mechanics share go in `reads.ts`. Anything offered or said in a Scene goes through `scenes.ts`.
+6. `src/engine/view.ts` and `src/engine/to-view.ts`, for what the player sees, and `to-results.ts` for its reveal on the results screen.
+7. `src/ui/panels.tsx`, for showing it, or `ScenePanel.tsx`, `FindOutPanel.tsx` or `ResultsPanel.tsx` where the step has its own panel. Header buttons and cards that stay up at every step, such as Your word and the Gauges, are in `App.tsx`.
+8. Tests in `tests/engine/` and `tests/e2e/`, and `docs/content-format.md`, whose section for the mechanic says what to write for it.
 
 ### Docs
 
