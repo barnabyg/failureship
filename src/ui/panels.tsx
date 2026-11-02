@@ -6,7 +6,7 @@ import { Continue, Panel, Reaction, Stakes } from "./Panel";
 import { ResultsPanel } from "./ResultsPanel";
 import { ScenePanel } from "./ScenePanel";
 
-/** The Monthly Summary, as that month's issue of the staff newsletter. */
+/** The official story, as that month's issue of the staff newsletter. */
 function StoryPanel({
   step,
   month,
@@ -17,7 +17,7 @@ function StoryPanel({
   onChoose: (choice: Choice) => void;
 }) {
   return (
-    <Panel testId="panel-story" title={step.title} issue={month}>
+    <Panel testId="panel-story" title={step.title} look={{ issue: month }}>
       <div className="story-reported" data-testid="story-reported">
         {step.reportedHeading !== undefined && <h3>{step.reportedHeading}</h3>}
         {step.reported.map((line) => (
@@ -29,16 +29,18 @@ function StoryPanel({
           {line}
         </p>
       ))}
-      {step.happened.length > 0 && <ConfidentialStamp />}
       {step.happened.length > 0 && (
-        <div className="callout story-happened" data-testid="story-happened">
-          {step.happenedHeading !== undefined && (
-            <h3>{step.happenedHeading}</h3>
-          )}
-          {step.happened.map((line) => (
-            <p key={line}>{line}</p>
-          ))}
-        </div>
+        <>
+          <ConfidentialStamp />
+          <div className="callout story-happened" data-testid="story-happened">
+            {step.happenedHeading !== undefined && (
+              <h3>{step.happenedHeading}</h3>
+            )}
+            {step.happened.map((line) => (
+              <p key={line}>{line}</p>
+            ))}
+          </div>
+        </>
       )}
       <Continue onChoose={onChoose} />
     </Panel>
@@ -62,7 +64,7 @@ export function StepPanel({ view, onChoose }: StepPanelProps) {
           testId="panel-notification"
           eyebrow={step.from}
           title={step.subject}
-          sent="notification"
+          look={{ sent: "notification" }}
         >
           <p>{step.body}</p>
           <div className="options">
@@ -104,7 +106,11 @@ export function StepPanel({ view, onChoose }: StepPanelProps) {
       );
     case "dialog":
       return (
-        <Panel testId="panel-dialog" title={step.title} sent="dialog">
+        <Panel
+          testId="panel-dialog"
+          title={step.title}
+          look={{ sent: "dialog" }}
+        >
           {step.lines.map((line) => (
             <p key={line.text}>
               {line.speaker !== undefined && <strong>{line.speaker}: </strong>}
@@ -123,7 +129,11 @@ export function StepPanel({ view, onChoose }: StepPanelProps) {
       );
     case "notice":
       return (
-        <Panel testId="panel-notice" title={step.title} sent="notice">
+        <Panel
+          testId="panel-notice"
+          title={step.title}
+          look={{ sent: "notice" }}
+        >
           <p>{step.body}</p>
           <Reaction text={step.reaction} />
           {step.verdict !== undefined && (
@@ -140,7 +150,7 @@ export function StepPanel({ view, onChoose }: StepPanelProps) {
           testId="panel-move"
           eyebrow={step.from}
           title={step.title}
-          sent="move"
+          look={{ sent: "move" }}
         >
           <p>{step.body}</p>
           <Continue onChoose={onChoose} />
@@ -152,7 +162,7 @@ export function StepPanel({ view, onChoose }: StepPanelProps) {
           testId="panel-event"
           eyebrow={step.from}
           title={step.title}
-          sent="event"
+          look={{ sent: "event" }}
         >
           <p>{step.body}</p>
           <Continue onChoose={onChoose} />

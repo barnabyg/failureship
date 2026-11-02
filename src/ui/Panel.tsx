@@ -1,17 +1,15 @@
 import { useEffect, useRef, type ReactNode } from "react";
 import { panelText } from "../content";
 import type { Choice } from "../engine";
-import { MailFoot, MailHead, Masthead, type Sent } from "./Intranet";
+import { MailFoot, MailHead, Masthead, type Look } from "./Intranet";
 
 interface PanelProps {
   testId: string;
   eyebrow?: string;
   title: string;
   wide?: boolean;
-  /** Arrives as an e-mail on the intranet, with the eyebrow as who sent it. */
-  sent?: Sent;
-  /** Reads as this issue of the staff newsletter. */
-  issue?: number;
+  /** An e-mail, whose eyebrow says who sent it, or the staff newsletter. */
+  look?: Look;
   children: ReactNode;
 }
 
@@ -21,8 +19,7 @@ export function Panel({
   eyebrow,
   title,
   wide,
-  sent,
-  issue,
+  look,
   children,
 }: PanelProps) {
   const heading = useRef<HTMLHeadingElement>(null);
@@ -38,20 +35,20 @@ export function Panel({
     <section
       className={wide ? "panel panel-wide" : "panel"}
       data-testid={testId}
-      data-kind={sent ?? (issue === undefined ? undefined : "story")}
+      data-look={look && ("sent" in look ? "mail" : "newsletter")}
       aria-label={title}
     >
-      {sent !== undefined ? (
-        <MailHead sent={sent} from={eyebrow} subject={h2} />
+      {look && "sent" in look ? (
+        <MailHead sent={look.sent} from={eyebrow} subject={h2} />
       ) : (
         <>
-          {issue !== undefined && <Masthead issue={issue} />}
+          {look && <Masthead issue={look.issue} />}
           {eyebrow !== undefined && <p className="eyebrow">{eyebrow}</p>}
           {h2}
         </>
       )}
       {children}
-      {sent !== undefined && <MailFoot />}
+      {look && "sent" in look && <MailFoot />}
     </section>
   );
 }

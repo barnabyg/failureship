@@ -1,10 +1,17 @@
 import type { ReactNode } from "react";
 import { panelText } from "../content";
+import type { StepView } from "../engine";
 
-/** The panels that arrive like Notifications, and the Monthly Summary. */
-export type Sent = "notification" | "dialog" | "notice" | "move" | "event";
+/** The steps that arrive like Notifications: each is an e-mail on the intranet. */
+export type Sent = Extract<
+  StepView["kind"],
+  "notification" | "dialog" | "notice" | "move" | "event"
+>;
 
-/** What each kind of e-mail is stamped, if anything. */
+/** How a panel looks: an e-mail, or an issue of the staff newsletter. */
+export type Look = { sent: Sent } | { issue: number };
+
+/** What each kind of e-mail is stamped, if anything. A Company Event goes to all staff. */
 const stamps: Partial<Record<Sent, string>> = {
   notification: panelText.stampUrgent,
   move: panelText.stampConfidential,
@@ -42,7 +49,7 @@ function Logo({ size }: { size: number }) {
 function MailRow({ text }: { text: string }) {
   const match = /^([A-Za-z]{2,8}:)\s*(.*)$/.exec(text);
   return (
-    <p className="eyebrow mail-row">
+    <p className="mail-row">
       {match ? (
         <>
           <span className="mail-label">{match[1]}</span>
@@ -73,7 +80,7 @@ export function MailHead({
         <span className="letterhead-company">{panelText.title}</span>
         <span className="letterhead-place">{panelText.intranetLabel}</span>
       </div>
-      <div className="mailhead">
+      <div className={stamp === undefined ? "mailhead" : "mailhead stamped"}>
         {from !== undefined && <MailRow text={from} />}
         <p className="mail-row">
           <span className="mail-label">{panelText.mailToLabel}</span>
@@ -97,7 +104,7 @@ export function MailFoot() {
   return <p className="mail-disclaimer">{panelText.mailDisclaimer}</p>;
 }
 
-/** The Monthly Summary's masthead: the staff newsletter, one issue a month. */
+/** The official story's masthead: the staff newsletter, one issue a month. */
 export function Masthead({ issue }: { issue: number }) {
   return (
     <div className="masthead">
