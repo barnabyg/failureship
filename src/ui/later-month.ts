@@ -34,13 +34,30 @@ export function plainChoice(view: PlayerView): Choice {
   return next;
 }
 
-/** Plays a new run on to the start of the month written, if there is such a month. */
-export function playToMonth(run: Run, written: string | null): PlayerView {
+/**
+ * Plays a new run on to the start of the month written, if there is such a month.
+ * On the way it takes each option named in `chosen`, a comma-separated list, the
+ * first time that option is offered after the one before it, and plays plainly
+ * otherwise.
+ */
+export function playToMonth(
+  run: Run,
+  written: string | null,
+  chosen: string | null = null,
+): PlayerView {
   const month = Number(written);
   let view = run.view();
   if (!Number.isInteger(month) || month > view.totalMonths) return view;
+  const wanted = chosen ? chosen.split(",") : [];
   while (view.month < month && view.choices.length > 0) {
-    view = run.choose(plainChoice(view));
+    const named = view.choices.find(
+      (c) => "optionId" in c && c.optionId === wanted[0],
+    );
+    if (named) wanted.shift();
+    view = run.choose(named ?? plainChoice(view));
+  }
+  if (wanted[0] !== undefined) {
+    throw new Error(`Later-month start was never offered "${wanted[0]}".`);
   }
   return view;
 }
