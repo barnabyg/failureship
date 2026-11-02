@@ -1,12 +1,10 @@
 import { expect, test } from "@playwright/test";
-import { playToResults, playUntil } from "./play";
+import { playUntil } from "./play";
 
-// tests/engine/promises.test.ts keeps this seed true: the Senior Analyst believes it,
-// and by month 6 your boss has heard that it never happened.
-// Over 10 s, as who heard shows only on the results screen.
-test("a Promise is made, broken, and the next one is not believed", async ({
-  page,
-}) => {
+// tests/engine/promises.test.ts keeps this seed true: the Senior Analyst believes it
+// in month 3, it falls due in month 5, and by month 6 your boss has heard that it
+// never happened. The later tests' start makes the Promise as the first test does.
+test("a Promise is made, and is in Your word given", async ({ page }) => {
   await page.goto("/?seed=7&month=3");
   await expect(page.getByTestId("open-word")).toContainText("Your word given");
   await expect(page.getByTestId("word-count")).toHaveText("0 so far");
@@ -19,6 +17,13 @@ test("a Promise is made, broken, and the next one is not believed", async ({
   await expect(page.getByTestId("panel-notice")).toContainText("laptops");
   await expect(page.getByTestId("word-count")).toContainText("1");
   await page.getByTestId("continue").click();
+});
+
+test("a Promise is broken, and the next one is not believed", async ({
+  page,
+}) => {
+  await page.goto("/?seed=7&month=5&choose=promise-laptops-analyst");
+  await expect(page.getByTestId("word-count")).toContainText("1");
 
   await playUntil(page, "option-next-quarter");
   await page.getByTestId("option-next-quarter").click();
@@ -37,8 +42,17 @@ test("a Promise is made, broken, and the next one is not believed", async ({
     "did not believe you",
   );
   await page.getByTestId("close-word").click();
+});
 
-  await playToResults(page);
+// The same run, with the start making the choices the test above makes, since who
+// heard shows only on the results screen.
+test("the results say a Promise was broken, and who heard", async ({
+  page,
+}) => {
+  await page.goto(
+    "/?seed=7&month=9&choose=promise-laptops-analyst,next-quarter,promise-laptops",
+  );
+  await playUntil(page, "panel-results");
   const rows = page.getByTestId("result-promise");
   await expect(rows).toHaveCount(2);
   await expect(rows.first()).toContainText("Broken");
