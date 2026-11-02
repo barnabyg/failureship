@@ -45,8 +45,9 @@ A condition anywhere else is refused, as is one that names an unknown Character,
 Fact or Buzzword. An option must never appear or disappear on undiscovered
 truth, and that includes the boss's kind, so a condition that would show the truth
 this way stops the game from starting. This also goes for a flag set by something
-hidden: a Scene result or a Move whose `when` reads the truth, a Demand being
-forgotten or chased, or your boss finding out about going over their head. A
+hidden: a Scene result or a Move whose `when` reads the truth, a Bill or any of its
+options, a Company Event, a Demand being forgotten or chased, or your boss finding out
+about going over their head. A
 Notebook event can still read such a flag, because the player has just seen that result.
 
 Flags come from `sets`, and are wiped when a new month opens, though `did` can still read
