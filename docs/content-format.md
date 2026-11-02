@@ -27,18 +27,22 @@ A `when` or `requires` holds one of these:
 | `{ "not": ... }`                                                       | The condition inside does not hold                                                      | If the inner one does  |
 | `{ "all": [...] }`                                                     | Every condition inside holds                                                            | If any inner one does  |
 
-Where each can be used:
+Where each can be used. These are all the places that take a condition:
 
-| Used on                     | Conditions allowed                                     |
-| --------------------------- | ------------------------------------------------------ |
-| A Scene result's `when`     | All                                                    |
-| A Move's `when`             | All                                                    |
-| An official story's `when`  | All                                                    |
-| A Scene option's `requires` | Only those that do not read the hidden truth           |
-| A Notification's `when`     | Only those that do not read the hidden truth           |
-| A Notebook event's `when`   | Only those that do not read the hidden truth, as below |
+| Used on                                    | Conditions allowed                                     |
+| ------------------------------------------ | ------------------------------------------------------ |
+| A Scene result's `when`                    | All                                                    |
+| A Move's `when`                            | All                                                    |
+| An official story's `when`                 | All                                                    |
+| A Thread outcome's `when`                  | All                                                    |
+| A hidden risk's `route.means` and `traced` | All                                                    |
+| A whistleblower report's `when`            | All                                                    |
+| A Scene option's `requires`                | Only those that do not read the hidden truth           |
+| A Notification's `when`, a Demand's too    | Only those that do not read the hidden truth           |
+| A Notebook event's `when`                  | Only those that do not read the hidden truth, as below |
 
-Anything else is refused. An option must never appear or disappear on undiscovered
+A condition anywhere else is refused, as is one that names an unknown Character, Hidden
+Fact or Buzzword. An option must never appear or disappear on undiscovered
 truth, and that includes the boss's kind, so a condition that would show the truth
 this way stops the game from starting. This also goes for a flag set by something
 hidden: a Scene result or a Move whose `when` reads the truth, a Demand being
@@ -473,8 +477,8 @@ A `bill` has a unique `id`, a `title` and a `body`, and `as` says how it arrives
 An outcome's `gauges` move the player's Gauges as the month it plays out closes, each with the
 `gauge`, how far it moves it `by`, and the `note` the player sees. Only a Thread can move a Gauge.
 
-A Bill can carry `sets`, `opinion`, `headOpinion`, `project` and `"mistake": "big"`, and these
-take effect when it arrives, or, as a Move, when it lands. Its flags can be read by the official
+A Bill can carry `sets`, `opinion`, `headOpinion`, `project`, `"mistake": "big"`, `remembers` and
+`news`, and these take effect when it arrives, or, as a Move, when it lands. Its flags can be read by the official
 story, and they count as hidden, so no option can depend on them.
 
 ## `ui.json`
