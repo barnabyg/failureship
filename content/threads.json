@@ -553,19 +553,19 @@
     "started": "You stayed late to make everything in your boss's slides fly in.",
     "outcomes": [
       {
-        "playedOut": "Your boss's slides froze upstairs on the one with the spinning logo, and the file had your name on it.",
+        "playedOut": "Your boss's slides froze upstairs on the one where the word Growth spins, and the file had your name on it.",
         "bill": {
           "id": "slides-froze",
           "as": "move",
           "from": "From: IT Services",
           "title": "Incident report: boardroom projector",
-          "body": "Upstairs, your boss's slides froze on the one where the logo spins in. The logo kept spinning. Your boss presented the rest from memory, to the logo. IT Services has traced the file to you, and asks that nothing be made to fly in again without a change request."
+          "body": "Upstairs, your boss's slides froze on the one where the word Growth spins in. Growth kept spinning. Your boss presented the rest from memory, beside it. IT Services has traced the file to you, and asks that nothing be made to fly in again without a change request."
         },
         "gauges": [
           {
             "gauge": "fawning",
             "by": -10,
-            "note": "The slides you made fly in for your boss froze upstairs, on the spinning logo."
+            "note": "The slides you made fly in for your boss froze upstairs, with Growth spinning."
           }
         ]
       }
@@ -611,19 +611,19 @@
     "started": "You spent the underspend on something large, where upstairs would see it.",
     "outcomes": [
       {
-        "playedOut": "Your boss's boss showed a visitor the large chairs as an investment in people, and the caption gave your name.",
+        "playedOut": "Your boss's boss showed a visitor the forty chairs as an investment in people, and the caption gave your name.",
         "bill": {
           "id": "chairs-on-the-tour",
           "as": "move",
           "from": "From: Internal Communications",
           "title": "Investing in our people",
-          "body": "Your boss's boss walked a visitor from head office past the new chairs, said that they were an investment in people, and sat in one for a photograph. The caption on the intranet names you as the person behind the investment. Facilities would still like a receipt."
+          "body": "Your boss's boss walked a visitor from head office past the forty new chairs in the corridor, said that they were an investment in people, and sat in one for a photograph. The caption on the intranet names you as the person behind the investment. Facilities would still like a receipt."
         },
         "gauges": [
           {
             "gauge": "fawning",
             "by": 10,
-            "note": "The large chairs were seen upstairs, and sat in."
+            "note": "The forty chairs in the corridor were seen upstairs, and sat in."
           }
         ]
       }
