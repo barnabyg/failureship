@@ -250,7 +250,7 @@ Use these terms consistently in the design and the game.
 - **Demand:** an instruction from above that the player must answer, often one that cannot honestly be met.
 - **Grand Plan:** a boss's big ambition, which the player works to complete, in appearance or in reality.
 - **Monthly Status Report:** the recurring report to higher management, in which a Project's reported status gets set.
-- **Official story:** the company's account of the month as it closes, set beside what actually happened. In the game it is the staff newsletter headed Monthly Summary, but the term is official story, not "Monthly Summary".
+- **Official story:** the company's account of the month as it closes, set beside what actually happened. In the game it is the staff newsletter, Inside Track, headed "Junior employee Monthly Summary", but the term is official story, not "Monthly Summary".
 - **Project:** a piece of work with an owner, a real status and a reported status.
 - **Promise:** a commitment the player makes to a Character, whether or not the player can deliver it.
 - **Deal:** an exchange in which the player and a Character each offer something. It is worth only what each side can really deliver, and either side can fail.

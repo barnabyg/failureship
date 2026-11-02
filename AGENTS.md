@@ -33,7 +33,7 @@ Keep each agent-facing doc to 200 lines, and state each rule in one place. Two d
 
 ### Vocabulary
 
-There is no glossary yet. The project's terms are in the [Language section of the grill outcome](failureship-grill-outcome.md#language). Use them.
+The project's terms are in the [Language section of the grill outcome](failureship-grill-outcome.md#language), which stands in for a `GLOSSARY.md`. Use them.
 
 ## Agent skills
 
@@ -47,4 +47,4 @@ Uses the default labels: needs-triage, needs-info, ready-for-agent, ready-for-hu
 
 ### Domain docs
 
-Single-context. There is no `GLOSSARY.md` or `docs/adr/` yet: until one is made, the Language section named under Vocabulary stands in for `GLOSSARY.md`. See `docs/agents/domain.md`.
+Single-context, with no `GLOSSARY.md` or `docs/adr/` yet: [Vocabulary](#vocabulary) says where the terms are. See `docs/agents/domain.md`.
