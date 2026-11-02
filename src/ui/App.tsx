@@ -213,9 +213,11 @@ export function App() {
         onChoose={choose}
       />
       <header className="status">
-        <div>
+        <div className="status-title">
           <h1>{panelText.title}</h1>
-          <p className="tagline">{panelText.tagline}</p>
+          <p className="tagline" title={panelText.tagline}>
+            {panelText.tagline}
+          </p>
         </div>
         <dl>
           <div>

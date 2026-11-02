@@ -116,8 +116,16 @@ body {
 
 .tagline {
   margin: 0;
+  overflow: hidden;
   color: var(--muted);
   font-size: 0.875rem;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+/* The title gives way first, so a full header still keeps to one row. */
+.status-title {
+  min-width: 0;
 }
 
 .status dl {
@@ -434,6 +442,7 @@ body {
 .run-controls {
   display: flex;
   flex-direction: column;
+  flex-shrink: 0;
   gap: 4px;
   font-size: 0.8125rem;
 }
