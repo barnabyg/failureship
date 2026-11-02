@@ -743,6 +743,18 @@
             "sets": ["cut-security"]
           }
         ]
+      },
+      {
+        "id": "promise-stationery",
+        "family": "trade",
+        "promise": "stationery-for-the-coordinator",
+        "label": "Lean across and tell the Office Co-ordinator you will get their stationery budget back afterwards",
+        "results": [
+          {
+            "body": "You lean across, under cover of a slide about headcount, and say it quietly.",
+            "sets": ["promised-stationery"]
+          }
+        ]
       }
     ]
   },
@@ -1322,6 +1334,18 @@
             "sets": ["said-nothing-metric"]
           }
         ]
+      },
+      {
+        "id": "promise-laptops",
+        "family": "trade",
+        "promise": "laptops-for-the-boss",
+        "label": "Catch your boss on the way out, and tell them you can get the team new laptops",
+        "results": [
+          {
+            "body": "You catch your boss at the door, and hear yourself say it.",
+            "sets": ["promised-laptops"]
+          }
+        ]
       }
     ]
   },
@@ -1417,6 +1441,18 @@
             "body": "You do not say what the concern is. You say that you would just want to be sure. The candidate is thanked for their time, and the Project Co-ordinator thanks you for yours.",
             "sets": ["sank-a-candidate"],
             "approach": "blame"
+          }
+        ]
+      },
+      {
+        "id": "promise-opening",
+        "family": "trade",
+        "promise": "opening-for-the-coordinator",
+        "label": "Tell the Project Co-ordinator that the next opening is as good as theirs",
+        "results": [
+          {
+            "body": "You say it by the coffee, afterwards, as though it were yours to say.",
+            "sets": ["promised-an-opening"]
           }
         ]
       }

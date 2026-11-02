@@ -17,6 +17,7 @@ import notifications from "../../content/notifications.json";
 import officialStory from "../../content/official-story.json";
 import overHead from "../../content/over-head.json";
 import project from "../../content/project.json";
+import promises from "../../content/promises.json";
 import reputation from "../../content/reputation.json";
 import risks from "../../content/risks.json";
 import scenes from "../../content/scenes.json";
@@ -44,6 +45,7 @@ export const gameContent = parseContent({
   overHead,
   mistakes,
   reputation,
+  promises,
   families,
   hiddenTruth,
   sources,
@@ -116,6 +118,12 @@ const panelSchema = z.strictObject(
       "closeLabel",
       "standingHeading",
       "finalWarningLabel",
+      "promisesHeading",
+      "promisesEmpty",
+      "promisesCount",
+      "resultsPromisesHeading",
+      "resultsPromiseHeardBy",
+      "resultsPromiseHeardByNobody",
       "resultsMistakesHeading",
       "resultsThreadsHeading",
       "resultsRisksHeading",

@@ -1,0 +1,229 @@
+{
+  "belief": {
+    "chance": {
+      "believer": 0.9,
+      "incompetent": 0.75,
+      "practitioner": 0.45
+    },
+    "mood": {
+      "warm": 0.1,
+      "neutral": 0,
+      "cold": -0.25
+    },
+    "perBroken": 0.45,
+    "perKept": 0.2
+  },
+  "replies": {
+    "believed": {
+      "believer": [
+        "{who} writes it down, thanks you, and tells you what it will mean to people. You had not expected to be thanked for {what}.",
+        "{who} shakes your hand. Nobody here has ever shaken your hand about {what}, and they plainly think it is settled."
+      ],
+      "incompetent": [
+        "{who} says that is great, and that they knew it would come together. They have not asked how, and {what} is now in their head as something that has already happened.",
+        "{who} says brilliant, and tells the next person they see about {what}."
+      ],
+      "practitioner": [
+        "{who} considers you for slightly longer than is comfortable, and says that is good to know. They have made a note of {what}, with the date.",
+        "{who} says they will hold you to that, pleasantly, and copies themselves in about {what}."
+      ]
+    },
+    "doubted": {
+      "believer": [
+        "{who} says that is kind of you, and asks who has signed it off. Nobody has. They say they will wait until somebody has, thanks, because {what} has been offered here before.",
+        "{who} asks what the budget line is for {what}. You do not have one. They nod, in a way that closes the matter."
+      ],
+      "incompetent": [
+        "{who} says they have been told that sort of thing before, they think, by someone. They cannot remember who, but they do remember that {what} did not appear.",
+        "{who} laughs, and when you do not laugh, stops, and says no, go on, {what}, really?"
+      ],
+      "practitioner": [
+        "{who} smiles and asks what you would like in return. You say nothing. They say that is what worries them about {what}.",
+        "{who} says that people do not offer {what} for nothing, and that they will wait to see what you are really after."
+      ]
+    },
+    "letDown": [
+      "{who} looks at you for some time. \"You told me {what}. I am still waiting. Thank you, but no.\"",
+      "{who} does not look up. \"You said that the last time, about {what}. Put it in an email, and I will file it with the other one.\""
+    ],
+    "heard": [
+      "{who} says that you told {victim} {what}, and that it never happened. They heard all about it. They say no thank you.",
+      "{who} says they know about {victim} and {what}, because everybody does. They would rather you did not promise them anything, if it is all the same to you."
+    ]
+  },
+  "broken": {
+    "about": "broke-a-promise",
+    "text": "You told {victim} {what}, and it never happened.",
+    "perTie": 1
+  },
+  "kept": {
+    "about": "kept-a-promise",
+    "text": "You told {victim} {what}, and then it happened, which is not usual."
+  },
+  "statuses": {
+    "open": "Believed, and waiting",
+    "kept": "Kept",
+    "broken": "Broken",
+    "refused": "They did not believe you",
+    "lapsed": "They left before it fell due"
+  },
+  "items": [
+    {
+      "id": "laptops-for-the-analyst",
+      "to": "analyst",
+      "title": "New laptops",
+      "what": "new laptops for their team",
+      "after": {
+        "min": 1,
+        "max": 2
+      },
+      "due": {
+        "from": "From: The Senior Analyst, Priya Venn",
+        "subject": "RE: RE: Those laptops",
+        "body": "The Senior Analyst would like to know when the laptops are coming, because the team has cleared a shelf for them. You have no budget, no supplier and no authority. You have looked. Procurement has a form, and the form wants a budget, a supplier and an authority.",
+        "options": [
+          {
+            "id": "blame-procurement",
+            "family": "deflect",
+            "label": "Say that it is stuck with Procurement",
+            "settles": "broken",
+            "sets": ["broke-a-promise"],
+            "result": {
+              "title": "Those laptops",
+              "body": "The Senior Analyst asks who in Procurement. You say it is more of a process. The shelf stays clear for a while, and then somebody puts a plant on it."
+            }
+          },
+          {
+            "id": "next-quarter",
+            "family": "fabricate",
+            "label": "Say that they are coming next quarter",
+            "settles": "broken",
+            "sets": ["broke-a-promise"],
+            "result": {
+              "title": "Those laptops",
+              "body": "You say next quarter, with a confidence you have borrowed from your boss. The Senior Analyst writes down next quarter. Neither of you has said which year."
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": "stationery-for-the-coordinator",
+      "to": "admin",
+      "title": "The stationery budget",
+      "what": "their stationery budget back after the Budget Round",
+      "after": {
+        "min": 1,
+        "max": 2
+      },
+      "due": {
+        "from": "From: The Office Co-ordinator, Marjorie Tull",
+        "subject": "The stationery budget (as discussed)",
+        "body": "The Office Co-ordinator reminds you, as discussed, in writing, that you were going to get the stationery budget restored. It could be done: it needs one form, one signature and most of a day of your time.",
+        "options": [
+          {
+            "id": "do-the-form",
+            "family": "deliver",
+            "label": "Spend the day on the form",
+            "cost": "standard",
+            "settles": "kept",
+            "sets": ["kept-a-promise"],
+            "result": {
+              "title": "Form SB-4",
+              "body": "It takes most of the day, and a signature from someone who has to be found. The stationery budget comes back. The Office Co-ordinator sends you a single, very good pen, and no message."
+            }
+          },
+          {
+            "id": "let-it-drop",
+            "family": "deflect",
+            "label": "Say that the numbers have moved on",
+            "settles": "broken",
+            "sets": ["broke-a-promise"],
+            "result": {
+              "title": "The stationery budget",
+              "body": "You say the numbers have moved on. The Office Co-ordinator says of course they have, and writes something down. It is the last thing written down with a pen from that cupboard for some time."
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": "laptops-for-the-boss",
+      "to": "boss",
+      "title": "New laptops",
+      "what": "new laptops for the team",
+      "after": {
+        "min": 1,
+        "max": 2
+      },
+      "due": {
+        "from": "From: Your boss, Dennis Prowse",
+        "subject": "Laptops?",
+        "body": "Your boss has told upstairs that the team is getting new laptops, on your word, and would like to know the date. There is no date. There are also no laptops, for the same reasons as ever.",
+        "options": [
+          {
+            "id": "blame-upstairs",
+            "family": "deflect",
+            "label": "Say that upstairs has frozen it",
+            "settles": "broken",
+            "sets": ["broke-a-promise"],
+            "result": {
+              "title": "Laptops?",
+              "body": "You say that upstairs has frozen it. Your boss says that upstairs is who they told. There is a short silence, in which both of you work out what the other one has said to whom."
+            }
+          },
+          {
+            "id": "own-up-laptops",
+            "family": "deliver",
+            "label": "Say that you should not have said it",
+            "settles": "broken",
+            "sets": ["broke-a-promise"],
+            "result": {
+              "title": "Laptops?",
+              "body": "You say that you should not have said it. Your boss looks at you as if you had started speaking Portuguese, and asks you not to put that in writing."
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": "opening-for-the-coordinator",
+      "to": "projects",
+      "title": "The next opening",
+      "what": "the next opening, as good as theirs",
+      "after": {
+        "min": 2,
+        "max": 2
+      },
+      "due": {
+        "from": "From: The Project Co-ordinator, Callum Reed",
+        "subject": "That opening",
+        "body": "The Project Co-ordinator has seen a new post advertised, and it has gone to somebody's nephew. They would like a word about what you said after the Recruitment Panel. You do not decide who gets promoted. You have never decided anything of the sort.",
+        "options": [
+          {
+            "id": "the-next-one",
+            "family": "fabricate",
+            "label": "Say that this one was always spoken for, and that it is the next one",
+            "settles": "broken",
+            "sets": ["broke-a-promise"],
+            "result": {
+              "title": "That opening",
+              "body": "You say it is the next one. The Project Co-ordinator asks whether that is in writing. It has now been asked in writing."
+            }
+          },
+          {
+            "id": "admit-no-say",
+            "family": "deliver",
+            "label": "Admit that you have no say in it",
+            "settles": "broken",
+            "sets": ["broke-a-promise"],
+            "result": {
+              "title": "That opening",
+              "body": "You admit that you have no say in it. The Project Co-ordinator thanks you for your honesty, in the voice people use for that, and takes their mug back to their desk."
+            }
+          }
+        ]
+      }
+    }
+  ]
+}

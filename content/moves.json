@@ -94,7 +94,12 @@
     "from": "From: The Senior Analyst, Priya Venn",
     "title": "Those laptops",
     "body": "The Senior Analyst has told several people that you promised the team new laptops. You did not. You have now been asked when they will arrive, by someone who does not believe you.",
-    "sets": ["laptop-promise"]
+    "sets": ["laptop-promise"],
+    "when": {
+      "not": {
+        "did": "promised-laptops"
+      }
+    }
   },
   {
     "id": "tricky-question",

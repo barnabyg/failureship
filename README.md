@@ -161,6 +161,7 @@ format, the page shows what is wrong instead of the game.
 | `events.json`         | Company Events: where each comes from, how it moves the charts, and the official story's words                       |
 | `reputation.json`     | How far and how fast news travels, and the signs of what each Character believes of you                              |
 | `risks.json`          | Hidden risks: what adds each, who it comes out through, and whether it can be traced to you                          |
+| `promises.json`       | Promises: who they are made to, what is said back, and what arrives when they fall due                               |
 | `mistakes.json`       | The words of a Final Warning and of being fired                                                                      |
 | `official-story.json` | The official story, assembled from entries according to what you did                                                 |
 | `behaviours.json`     | What Characters can be seen doing, which roles can do it, and how likely each kind is to do it                       |
@@ -191,6 +192,24 @@ A Thread is how an earlier choice comes back. To add one, needing no code:
 
 The player hears nothing of a Thread until its Bill arrives. Results then trace it back to what
 started it.
+
+### Write a Promise
+
+A Promise is the player's word, which they can give whether or not they can deliver it. There is
+no meter behind it: it is a commitment and a memory. To add one, needing no code:
+
+1. Add an item to `content/promises.json`, with who it is made `to`, a `title`, `what` was offered,
+   which reads after "You told them", and how many months `after` it falls due.
+2. Write its `due`, the Notification that arrives then. Each option `settles` it as `kept` or
+   `broken`, and one must break it for nothing, so that it can always be answered. A Promise that
+   cannot be delivered has only ways to break it.
+3. Offer it: give a Notification option or a Scene option `"promise"` with its id. That option says
+   nothing of its own: what the person says back is its result.
+
+Whether they believe it is seeded, and goes by `belief` in the same file: who they are, what they make
+of the player, and every broken or kept word that has reached them. What they say back shows why. A
+broken Promise reaches everyone tied to its victim at once, and `perTie` makes it cost the victim's
+belief more the better connected they are. The player can see their word at any time, for nothing.
 
 ### Write a Company Event
 

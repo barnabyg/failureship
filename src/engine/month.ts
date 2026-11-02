@@ -3,6 +3,7 @@ import { landEvent, scheduleEvents } from "./company-events";
 import { everyNotification, type Content } from "./content";
 import { dealWithAbsence, followUpDemands } from "./demands";
 import { applyOutcome } from "./outcome";
+import { promisesFallDue } from "./promises";
 import { spreadNews } from "./reputation";
 import {
   actionsThisMonth,
@@ -11,6 +12,7 @@ import {
   inMonth,
   isAvailable,
   matches,
+  optionsOnOffer,
   remaining,
 } from "./reads";
 import { drawFor, pick } from "./rng";
@@ -37,6 +39,7 @@ export function freshMonth(content: Content, month: number): MonthRecord {
 export function openMonth(state: State, content: Content): void {
   spreadNews(state, content);
   followUpDemands(state, content);
+  promisesFallDue(state);
   playThreads(state, content);
   surfaceRisks(state, content);
   scheduleEvents(state, content);
@@ -89,10 +92,12 @@ export function nextStep(state: State, world: World): Step {
   const notifications = everyNotification(content);
   for (const id of state.unanswered) {
     const notification = notifications.find((n) => n.id === id);
-    const answerable = notification?.options.some(
-      (o) => costOf(content, o.cost) <= remaining(state, content),
-    );
-    if (answerable && matches(state, content, notification?.when)) {
+    const answerable =
+      notification &&
+      optionsOnOffer(state, notification.options).some(
+        (o) => costOf(content, o.cost) <= remaining(state, content),
+      );
+    if (answerable && matches(state, content, notification.when)) {
       return { kind: "notification", id };
     }
   }

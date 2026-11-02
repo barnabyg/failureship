@@ -44,6 +44,47 @@ export async function answerAnyNotification(page: Page) {
   }
 }
 
+/**
+ * Plays as src/ui/later-month.ts does, so a seed kept true by an engine test holds:
+ * files the report, says no to the rest, goes to the meeting and then to the desk,
+ * until the wanted thing can be pressed.
+ */
+export async function playUntil(page: Page, testId: string) {
+  const wanted = page.getByTestId(testId);
+  const notification = page.getByTestId("panel-notification");
+  const scene = page.getByTestId("panel-scene");
+  const carryOn = page.getByTestId("continue");
+  const meeting = page.locator('[data-testid^="hotspot-meeting"]:enabled');
+  const desk = page.locator('[data-testid="hotspot-work"]:enabled');
+  for (;;) {
+    await expect(
+      wanted
+        .or(notification)
+        .or(scene)
+        .or(carryOn)
+        .or(meeting)
+        .or(desk)
+        .first(),
+    ).toBeVisible();
+    if ((await wanted.isVisible()) && (await wanted.isEnabled())) return;
+    if (await notification.isVisible()) {
+      const report = page.getByTestId("option-report");
+      const free = notification.locator("button:enabled", {
+        hasText: "Costs nothing",
+      });
+      await ((await report.isVisible()) ? report : free.first()).click();
+    } else if (await scene.isVisible()) {
+      await page.locator('[data-testid^="scene-option-"]').first().click();
+    } else if (await carryOn.isVisible()) {
+      await carryOn.click();
+    } else if (await meeting.isVisible()) {
+      await meeting.click();
+    } else {
+      await desk.click();
+    }
+  }
+}
+
 /** Declines the month's offers and leaves the report unfiled, to keep the actions. */
 export async function skipTheReport(page: Page) {
   await page.getByTestId("option-skip").click();

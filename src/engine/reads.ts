@@ -148,12 +148,22 @@ export function matches(
   return condition.all.every((inner) => matches(state, content, inner, room));
 }
 
+/** The player's word on something is given once in a run, believed or not. */
+export function optionsOnOffer<T extends { promise?: string | undefined }>(
+  state: State,
+  options: readonly T[],
+): T[] {
+  return options.filter(
+    (o) => !state.promises.some((made) => made.id === o.promise),
+  );
+}
+
 export function offeredOptions(
   state: State,
   content: Content,
   scene: SceneData,
 ) {
-  return scene.options.filter(
+  return optionsOnOffer(state, scene.options).filter(
     (o) =>
       (o.about === undefined || heardAbout(state, o.about) !== undefined) &&
       matches(state, content, o.requires),

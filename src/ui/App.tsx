@@ -114,6 +114,23 @@ function ProjectCard({
   );
 }
 
+/** The player's own commitments, always in view, and free to look at. */
+function WordCard({ view, onOpen }: { view: PlayerView; onOpen: () => void }) {
+  return (
+    <button
+      type="button"
+      className="project-card"
+      data-testid="open-word"
+      onClick={onOpen}
+    >
+      <span className="project-card-heading">{panelText.promisesHeading}</span>
+      <span data-testid="word-count">
+        {panelText.promisesCount.replace("{n}", String(view.promises.length))}
+      </span>
+    </button>
+  );
+}
+
 function ProjectStatus(props: {
   label: string;
   status: string;
@@ -149,6 +166,7 @@ export function App() {
   const [orgChartOpen, setOrgChartOpen] = useState(false);
   const [notebookOpen, setNotebookOpen] = useState(false);
   const [projectOpen, setProjectOpen] = useState(false);
+  const [wordOpen, setWordOpen] = useState(false);
 
   // In an effect, because React may run a state initialiser twice in development.
   useEffect(() => {
@@ -265,6 +283,12 @@ export function App() {
             setProjectOpen(true);
           }}
         />
+        <WordCard
+          view={view}
+          onOpen={() => {
+            setWordOpen(true);
+          }}
+        />
       </div>
       <aside className="next" aria-live="polite">
         <h2>{panelText.whatNext}</h2>
@@ -337,6 +361,34 @@ export function App() {
             data-testid="close-project"
             onClick={() => {
               setProjectOpen(false);
+            }}
+          >
+            {panelText.closeLabel}
+          </button>
+        </Modal>
+      )}
+      {wordOpen && (
+        <Modal
+          testId="word"
+          title={panelText.promisesHeading}
+          onClose={() => {
+            setWordOpen(false);
+          }}
+        >
+          {view.promises.length === 0 && <p>{panelText.promisesEmpty}</p>}
+          <ul>
+            {view.promises.map((item) => (
+              <li key={item.what} data-testid="word-promise">
+                <strong>{monthLabel(item.month)}. </strong>
+                {item.to}: {item.what}. {item.status}.
+              </li>
+            ))}
+          </ul>
+          <button
+            type="button"
+            data-testid="close-word"
+            onClick={() => {
+              setWordOpen(false);
             }}
           >
             {panelText.closeLabel}

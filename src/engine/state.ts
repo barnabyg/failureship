@@ -37,7 +37,14 @@ export interface TruthOfRun {
    */
   beliefs: Record<string, number>;
   /** Everything that can travel, from where it started. */
-  news: { about: string; tone: Tone; text: string; month: number }[];
+  news: {
+    about: string;
+    tone: Tone;
+    text: string;
+    month: number;
+    /** If it is about a broken word: whose, and what was offered. */
+    word?: { victim: string; what: string } | undefined;
+  }[];
   /** What the player's decisions have built up. Never shown until the end. */
   risks: {
     id: string;
@@ -126,6 +133,10 @@ interface BossLanding {
   shift: number;
 }
 
+/** Where a commitment has got to. A refused one was never taken up. */
+export type CommitmentStatus =
+  "open" | "kept" | "broken" | "refused" | "lapsed";
+
 /** A written event in the Project's life, which the player can read back. */
 interface ProjectNews {
   month: number;
@@ -206,6 +217,18 @@ export interface State extends MonthRecord {
   /** Company Events waiting to land this month. */
   eventsDue: string[];
   eventsLanded: { id: string; month: number }[];
+  /** Everything the player has given their word on, in plain view. */
+  promises: {
+    id: string;
+    month: number;
+    status: CommitmentStatus;
+    /** The month it falls due. Null if it never will. */
+    due: number | null;
+    /** What was said back. */
+    reply: string;
+    /** The news of how it ended, if there was any. */
+    news: number | null;
+  }[];
   /** Told to the player, and shown from then on. */
   finalWarning: boolean;
   /** The month the player was fired in, which ends the run. */

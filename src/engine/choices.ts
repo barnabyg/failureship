@@ -3,6 +3,7 @@ import { arriveToFindOut, hearClaim } from "./find-out";
 import { leaveStory, nextStep } from "./month";
 import { applyOutcome, countMove } from "./outcome";
 import { goOverHead } from "./over-head";
+import { replyToPromise, settlePromise } from "./promises";
 import { costOf, inTurn } from "./reads";
 import { drawFor } from "./rng";
 import { behaveInScene, openScene } from "./scenes";
@@ -90,8 +91,14 @@ function answerNotification(
     { ...outcome, learns: option.learns },
     option.label,
   );
+  if (outcome.settles) {
+    settlePromise(state, content, choice.notificationId, outcome.settles);
+  }
 
-  if (option.dialog !== undefined) {
+  const reply = replyToPromise(state, content, option.promise);
+  if (reply) {
+    state.step = { kind: "notice", ...reply, reaction };
+  } else if (option.dialog !== undefined) {
     state.step = { kind: "dialog", id: option.dialog, learned, reaction };
   } else if (outcome.result) {
     state.step = { kind: "notice", ...outcome.result, reaction };

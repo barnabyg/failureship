@@ -1,6 +1,8 @@
 import { z } from "zod";
 import {
+  findNamedKinds,
   findBrokenEvents,
+  findBrokenPromises,
   findBrokenRisks,
   findBrokenThreads,
 } from "./consequence-checks";
@@ -309,19 +311,6 @@ function findBrokenApproaches(content: Content): string[] {
 }
 
 /** The player reads a kind from signs, so no reaction may say it out loud. */
-function findNamedKinds(
-  content: Content,
-  owner: string,
-  written: readonly string[],
-): string[] {
-  const labels = Object.values(content.hiddenTruth.kinds).map((k) =>
-    k.label.toLowerCase(),
-  );
-  return written
-    .filter((line) => labels.some((l) => line.toLowerCase().includes(l)))
-    .map((line) => `${owner} names a kind: "${line}"`);
-}
-
 /** Lateness must be a clue about someone's kind, and never settle it. */
 function findBrokenInput(content: Content): string[] {
   const { input } = content.project;
@@ -673,6 +662,7 @@ function findBrokenReferences(content: Content): string[] {
   problems.push(...findBrokenThreads(content));
   problems.push(...findBrokenRisks(content));
   problems.push(...findBrokenEvents(content));
+  problems.push(...findBrokenPromises(content));
   problems.push(...findBrokenReputation(content, characters));
   for (const event of content.events) {
     checkProject(`Company Event "${event.id}"`, event.project);

@@ -142,10 +142,16 @@ const condition: z.ZodType<Condition> = z.lazy(() =>
   ]),
 );
 
+/** How an answer settles a commitment that has fallen due. */
+const settles = z.enum(["kept", "broken"]).optional();
+
 const notificationOption = z.strictObject({
   id,
   label: text,
   family,
+  /** Offers the player's word: a Promise from `promises.json`. */
+  promise: id.optional(),
+  settles,
   cost: id.optional(),
   dialog: id.optional(),
   learns: z.array(id).default([]),
@@ -176,6 +182,7 @@ const notificationOption = z.strictObject({
         mistake: choiceMistake,
         remembers,
         news,
+        settles,
         result: notice,
       }),
     })
@@ -365,6 +372,8 @@ const sceneOption = z.strictObject({
   id,
   label: text,
   family,
+  /** Offers the player's word: a Promise from `promises.json`. */
+  promise: id.optional(),
   /** The option appears once the player has heard this Hidden Fact of someone. */
   about: id.optional(),
   /** The option appears only when this holds. */
@@ -706,6 +715,76 @@ const mistakes = z.strictObject({
   finished: text,
 });
 
+/** What arrives when a commitment falls due. It always offers a free way out. */
+const commitmentDue = z.strictObject({
+  from: text,
+  subject: text,
+  body: text,
+  options: z.array(notificationOption).min(1),
+});
+
+/** How long until a commitment falls due, which is seeded. */
+const wait = z.strictObject({
+  min: z.number().int().positive(),
+  max: z.number().int().positive(),
+});
+
+/** The player's word. There is no meter here: only a commitment and a memory. */
+const promises = z.strictObject({
+  /** The seeded chance of being believed. */
+  belief: z.strictObject({
+    /** By who they are. */
+    chance: perKind(z.number().min(0).max(1)),
+    /** By what they make of the player. */
+    mood: z.strictObject({
+      warm: z.number(),
+      neutral: z.number(),
+      cold: z.number(),
+    }),
+    /** For each broken word that has reached them, and each kept one. */
+    perBroken: z.number().nonnegative(),
+    perKept: z.number().nonnegative(),
+  }),
+  /** What someone says back. Each says {who} and {what}. */
+  replies: z.strictObject({
+    believed: perKind(lines),
+    /** Having nothing yet against the player, by who they are. */
+    doubted: perKind(lines),
+    /** Having been let down by the player themselves. */
+    letDown: lines,
+    /** Having heard of it. Says {victim} too, and {what} is what they heard of. */
+    heard: lines,
+  }),
+  /** What a broken word does. Everyone tied to the victim hears at once. */
+  broken: z.strictObject({
+    about: id,
+    /** What reached them, for the results screen. Says {victim} and {what}. */
+    text,
+    /** How much further the victim's belief falls, for each person tied to them. */
+    perTie: z.number().int().nonnegative(),
+  }),
+  kept: z.strictObject({ about: id, text }),
+  /** What the player's own list says of each. */
+  statuses: z.strictObject({
+    open: text,
+    kept: text,
+    broken: text,
+    refused: text,
+    lapsed: text,
+  }),
+  items: z.array(
+    z.strictObject({
+      id,
+      to: id,
+      title: text,
+      /** The thing offered, which reads after "You told them". */
+      what: text,
+      after: wait,
+      due: commitmentDue,
+    }),
+  ),
+});
+
 /** What Characters believe of the player, and how that reaches them. */
 const reputation = z.strictObject({
   /** How far and how fast news goes along the Power Map's ties. */
@@ -784,6 +863,7 @@ export const contentSchema = z.strictObject({
   overHead: overHead.optional(),
   mistakes: mistakes.optional(),
   reputation: reputation.optional(),
+  promises: promises.optional(),
   /** What the results screen calls each family of Moves. */
   families: z
     .strictObject(
@@ -950,8 +1030,19 @@ export function everyBill(content: Content): Bill[] {
   ];
 }
 
-/** Every Notification there is, including Demands, chasers and Bills. */
+/** The Notification that arrives when a commitment falls due. */
+export function dueIdOf(id: string): string {
+  return `${id}-due`;
+}
+
+/** Every Notification there is, including Demands, chasers, Bills and what falls due. */
 export function everyNotification(content: Content) {
+  const commitments = (content.promises?.items ?? []).map((item) => ({
+    ...item.due,
+    id: dueIdOf(item.id),
+    months: undefined,
+    when: undefined,
+  }));
   const items = everyDemand(content);
   const bills = everyBill(content)
     .filter((b) => b.as === "notification")
@@ -966,6 +1057,7 @@ export function everyNotification(content: Content) {
     }));
   return [
     ...content.notifications,
+    ...commitments,
     ...bills,
     ...items,
     ...items.map(({ id: demandId, chased }) => ({

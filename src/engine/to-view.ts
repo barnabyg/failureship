@@ -16,10 +16,12 @@ import {
   matches,
   methodOf,
   offeredOptions,
+  optionsOnOffer,
   personOf,
   remaining,
   sceneData,
 } from "./reads";
+import { promisesInView } from "./promises";
 import { calledBy, sayPeople } from "./say";
 import type { State, Step, World } from "./state";
 import { toResultsView } from "./to-results";
@@ -88,7 +90,7 @@ function notificationOptions(
   id: string,
 ): NotificationOption[] {
   const notification = everyNotification(content).find((n) => n.id === id);
-  return (notification?.options ?? []).map((o) => ({
+  return optionsOnOffer(state, notification?.options ?? []).map((o) => ({
     id: o.id,
     label: o.label,
     costLabel: costLabel(content, o.cost),
@@ -323,6 +325,7 @@ export function toView(state: State, world: World): PlayerView {
       const item = everyDemand(content).find((d) => d.id === id);
       return item ? [{ month, subject: item.subject }] : [];
     }),
+    promises: promisesInView(state, content),
     finalWarning: state.finalWarning,
     seed: state.seed,
     month: state.month,

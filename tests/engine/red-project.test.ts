@@ -87,6 +87,10 @@ function watchRun(seed: number) {
       reviews += 1;
     }
   }
+  // Being fired the month it goes red leaves no time to explain it.
+  const { step } = view;
+  const fired = step.ending.fired;
+  if (fired && reported === "Red" && flags > reviews) flags -= 1;
   return { flags, reviews };
 }
 

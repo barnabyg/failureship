@@ -80,6 +80,7 @@ function dealtState(seed: number, content: Content): State {
     reportsTo: {},
     eventsDue: [],
     eventsLanded: [],
+    promises: [],
     finalWarning: false,
     firedIn: null,
     mistakes: [],

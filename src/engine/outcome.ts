@@ -3,6 +3,7 @@ import { reshuffleCharts, type Reshuffle } from "./charts";
 import type { Content, Kind, MoveFamily, Tone } from "./content";
 import { makeMistake } from "./mistakes";
 import { moveProject, type ProjectChange } from "./project";
+import { makePromise } from "./promises";
 import { shiftBelief } from "./reads";
 import { remember, startNews } from "./reputation";
 import { startRisks } from "./risks";
@@ -29,6 +30,7 @@ export interface Outcome {
   news?:
     | { about: string; tone: Tone; text: string; at: readonly string[] }
     | undefined;
+  promise?: string | undefined;
 }
 
 /** Counts a Move the player made, for how they played. */
@@ -55,6 +57,9 @@ export function applyOutcome(
     remember(state, content, memory);
   }
   if (outcome.news) startNews(state, content, outcome.news);
+  if (outcome.promise !== undefined) {
+    makePromise(state, content, outcome.promise);
+  }
   for (const word of outcome.learns ?? []) {
     if (!state.buzzwords.includes(word)) state.buzzwords.push(word);
   }

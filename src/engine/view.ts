@@ -145,6 +145,14 @@ export type StepView =
         cameOutIn: number | null;
         fate: string;
       }[];
+      /** The player's word, what became of it, and who came to hear. */
+      promises: {
+        month: number;
+        to: string;
+        what: string;
+        status: string;
+        heardBy: string[];
+      }[];
       /** The big mistakes the player made, in order. */
       mistakes: { month: number; choice: string }[];
       characters: {
@@ -210,6 +218,8 @@ export interface PlayerView {
   };
   /** Demands the player stalled and has not yet heard the last of. */
   openDemands: { month: number; subject: string }[];
+  /** Everything the player has given their word on, and where it has got to. */
+  promises: { month: number; to: string; what: string; status: string }[];
   /** Whether one more big mistake gets the player fired. */
   finalWarning: boolean;
   seed: number;

@@ -26,6 +26,103 @@ function flagsThatCanBeSet(content: Content): Set<string> {
   ]);
 }
 
+/** A line that names a kind would hand the player the hidden truth. */
+export function findNamedKinds(
+  content: Content,
+  owner: string,
+  written: readonly string[],
+): string[] {
+  const labels = Object.values(content.hiddenTruth.kinds).map((k) =>
+    k.label.toLowerCase(),
+  );
+  return written
+    .filter((line) => labels.some((l) => line.toLowerCase().includes(l)))
+    .map((line) => `${owner} names a kind: "${line}"`);
+}
+
+/**
+ * What falls due must always be answerable and must say how it ends, so a month
+ * can never get stuck on a commitment and none can be left neither kept nor broken.
+ */
+function findBrokenDue(
+  content: Content,
+  owner: string,
+  due: Pick<ReturnType<typeof everyNotification>[number], "options">,
+): string[] {
+  const problems: string[] = [];
+  const free = (o: { cost?: string | undefined }) =>
+    (content.balance.actionCosts[o.cost ?? ""] ?? 0) === 0;
+  if (!due.options.some((o) => free(o) && o.settles === "broken")) {
+    problems.push(`${owner} needs a free way to break it.`);
+  }
+  for (const option of due.options) {
+    if (option.settles === undefined) {
+      problems.push(`${owner} option "${option.id}" must say how it settles.`);
+    }
+    if (option.bet && option.bet.lost.settles === undefined) {
+      problems.push(
+        `${owner} option "${option.id}" must say how losing settles.`,
+      );
+    }
+  }
+  return problems;
+}
+
+/** A Promise has to be offered somewhere, to someone who exists, in no kind's name. */
+export function findBrokenPromises(content: Content): string[] {
+  const written = content.promises;
+  const problems: string[] = [];
+  const options = [
+    ...everyNotification(content).flatMap((n) => n.options),
+    ...content.scenes.flatMap((s) => s.options),
+  ];
+  const offered = new Set(options.flatMap((o) => o.promise ?? []));
+  for (const id of offered) {
+    if (!written?.items.some((item) => item.id === id)) {
+      problems.push(`A choice offers unknown Promise "${id}".`);
+    }
+  }
+  const dues = new Set(
+    (written?.items ?? []).flatMap((item) => item.due.options.map((o) => o.id)),
+  );
+  for (const option of everyNotification(content).flatMap((n) => n.options)) {
+    if (option.settles !== undefined && !dues.has(option.id)) {
+      problems.push(`Option "${option.id}" settles nothing that falls due.`);
+    }
+  }
+  if (!written) return problems;
+  for (const item of written.items) {
+    const owner = `Promise "${item.id}"`;
+    if (!content.characters.some((c) => c.id === item.to)) {
+      problems.push(`${owner} is made to unknown "${item.to}".`);
+    }
+    if (!offered.has(item.id)) {
+      problems.push(`${owner} is offered by nothing.`);
+    }
+    if (item.after.min > item.after.max) {
+      problems.push(`${owner} falls due after a shorter wait than it starts.`);
+    }
+    problems.push(...findBrokenDue(content, owner, item.due));
+  }
+  for (const option of content.notifications.flatMap((n) => n.options)) {
+    if (option.promise !== undefined && option.result) {
+      problems.push(
+        `Option "${option.id}" has a result, but what is said back is its result.`,
+      );
+    }
+  }
+  const { replies } = written;
+  problems.push(
+    ...findNamedKinds(content, "A reply to a Promise", [
+      ...Object.values(replies.believed).flat(),
+      ...Object.values(replies.doubted).flat(),
+      ...replies.letDown,
+      ...replies.heard,
+    ]),
+  );
+  return problems;
+}
+
 /** A Bill must be able to reach the player, in the way it says it does. */
 function findBrokenBills(content: Content): string[] {
   const problems: string[] = [];

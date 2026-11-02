@@ -2,6 +2,7 @@ import { treatBoss } from "./boss";
 import { behavioursOpenTo, type ClueVerdict, type Content } from "./content";
 import { applyOutcome, countMove } from "./outcome";
 import { treatHead } from "./over-head";
+import { replyToPromise } from "./promises";
 import {
   fillParts,
   fillSubject,
@@ -126,7 +127,7 @@ export function behaveInScene(
   const reaction = applyOutcome(
     state,
     world.content,
-    result,
+    { ...result, promise: option?.promise },
     fill(option?.label ?? ""),
   );
   const verdict = scene.verdict?.[moodOf(state, world.content)];
@@ -143,10 +144,11 @@ export function behaveInScene(
       fact: relevant ? (dealt?.text ?? null) : null,
     });
   }
+  const reply = replyToPromise(state, world.content, option?.promise);
   state.step = {
     kind: "notice",
     title: scene.title,
-    body: fill(result.body),
+    body: reply ? `${fill(result.body)} ${reply.body}` : fill(result.body),
     reaction,
     verdict,
   };

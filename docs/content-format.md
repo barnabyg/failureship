@@ -285,6 +285,29 @@ reported status arrives at `at`, before the player's actions, whichever month th
 the player's choices, and it sets a flag for the month. It must be possible from at least two
 kinds, and certain from none, so that it never settles what someone is.
 
+## `promises.json`
+
+The player's word. How to write one is in [Write a Promise](../README.md#write-a-promise) in the
+README.
+
+- `belief` sets the seeded chance of being believed: `chance` by the kind they were dealt, plus
+  `mood` for how they stand with the player, less `perBroken` for each broken word that has reached
+  them, and plus `perKept` for each kept one.
+- `replies` are what they say back, and say `{who}` and `{what}`. `believed` and `doubted` are
+  written for each kind, `letDown` is for someone the player let down before, and `heard` is for
+  someone who heard of it, and also says `{victim}`. A reply that names a kind is refused.
+- `broken` and `kept` are the news each starts, as in [`reputation.json`](#reputationjson). A
+  broken Promise is known at once to its victim and to everyone tied to them on the Power Map, and the
+  victim's belief falls `perTie` further for each of those.
+- `statuses` are how the player's own list, and the results screen, say where each has got to.
+- `items` are the Promises. Each has `to`, `title`, `what`, a seeded wait `after`, and `due`, a
+  Notification whose options each `settles` it as `kept` or `broken`. One of them must break it
+  for nothing.
+
+A Notification option or Scene option offers one with `"promise"`, once in a run. A Notification
+option that does has no `result`, since what is said back is its result. A Promise not believed never
+falls due.
+
 ## `reputation.json`
 
 There is no single reputation score. Each Character has their own belief about the player, and

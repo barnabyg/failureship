@@ -193,6 +193,22 @@ function ResultsPanel({
           </ul>
         </>
       )}
+      {step.promises.length > 0 && (
+        <div className="callout" data-testid="results-promises">
+          <h3>{panelText.resultsPromisesHeading}</h3>
+          {step.promises.map((row, index) => (
+            <p key={index} data-testid="result-promise">
+              <strong>{monthLabel(row.month)}. </strong>
+              {row.to}: {row.what}. {row.status}.{" "}
+              <span className="results-title">
+                {row.heardBy.length > 0
+                  ? `${panelText.resultsPromiseHeardBy} ${row.heardBy.join(", ")}.`
+                  : panelText.resultsPromiseHeardByNobody}
+              </span>
+            </p>
+          ))}
+        </div>
+      )}
       {step.threads.length > 0 && (
         <div className="callout" data-testid="results-threads">
           <h3>{panelText.resultsThreadsHeading}</h3>
