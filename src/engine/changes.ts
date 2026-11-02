@@ -100,8 +100,11 @@ export function blowWhistles(state: State, content: Content): void {
   for (const change of state.truth.changes) {
     if (change.to !== "whistleblower" || change.acted) continue;
     if (change.month >= state.month) continue;
+    // What they know about first, then whatever is buried, then anything at all.
     change.acted =
-      bringOutRisk(state, content, change) || report(state, content, written);
+      report(state, content, written, true) ||
+      bringOutRisk(state, content, change) ||
+      report(state, content, written, false);
   }
 }
 
@@ -123,13 +126,37 @@ function bringOutRisk(state: State, content: Content, change: Change): boolean {
   return true;
 }
 
-function report(state: State, content: Content, written: Written): boolean {
-  const reported = written.whistleblower.reports.find((r) =>
-    matches(state, content, r.when),
+function report(
+  state: State,
+  content: Content,
+  written: Written,
+  known: boolean,
+): boolean {
+  const reported = written.whistleblower.reports.find(
+    (r) => (r.when !== undefined) === known && matches(state, content, r.when),
   );
   if (!reported) return false;
   sendBill(state, content, reported.bill);
   return true;
+}
+
+/**
+ * What a Character can be seen doing. A whistleblower's own signs take their `share`
+ * of it, and what any Believer might show takes the rest, so no one sign settles it.
+ */
+export function signsOpenTo(
+  state: State,
+  content: Content,
+  character: string,
+  open: readonly { id: string; weight: number }[],
+): { id: string; weight: number }[] {
+  const own = signsOfChange(state, content, character);
+  const share = content.changing?.whistleblower.share ?? 0;
+  const ownTotal = own.reduce((sum, s) => sum + s.weight, 0);
+  const rest = open.reduce((sum, b) => sum + b.weight, 0);
+  if (own.length === 0 || rest === 0) return [...open, ...own];
+  const scale = (share * rest) / ((1 - share) * ownTotal);
+  return [...open, ...own.map((s) => ({ id: s.id, weight: s.weight * scale }))];
 }
 
 /** Someone's own signs as a whistleblower, beside what anyone of their kind shows. */

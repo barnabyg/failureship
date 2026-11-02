@@ -886,6 +886,8 @@ const changing = z.strictObject({
     left: text,
   }),
   whistleblower: z.strictObject({
+    /** How much of what a whistleblower is seen doing is one of their own signs. */
+    share: z.number().gt(0).lt(1),
     /** Shown beside what any Believer might show. Each says {who}. */
     signs: z.array(
       z.strictObject({
@@ -897,7 +899,10 @@ const changing = z.strictObject({
     ),
     /** Why a risk came out through them, for the results screen. Says {who}. */
     motive: text,
-    /** What they report if no hidden risk is waiting. The first that holds is sent. */
+    /**
+     * What they report. The first whose `when` holds goes ahead of any hidden risk,
+     * and one with no `when` is sent only if no risk is waiting.
+     */
     reports: z.array(z.strictObject({ when: condition.optional(), bill })),
   }),
   /** Who can leave, and what happens if they do. Anyone left out never leaves. */

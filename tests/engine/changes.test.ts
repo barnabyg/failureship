@@ -93,7 +93,8 @@ function raw(ways: Way[] = ["practitioner", "whistleblower", "left"]) {
         left: "BECAME-LEFT",
       },
       whistleblower: {
-        signs: [{ id: "file", text: "{who} KEEPS-A-FILE", weight: 50 }],
+        share: 0.6,
+        signs: [{ id: "file", text: "{who} KEEPS-A-FILE", weight: 1 }],
         motive: "{who} WENT-UPSTAIRS",
         reports: [
           {
@@ -104,7 +105,7 @@ function raw(ways: Way[] = ["practitioner", "whistleblower", "left"]) {
               body: "Someone reported you.",
             },
           },
-        ],
+        ] as { when?: Record<string, unknown>; bill: Record<string, string> }[],
       },
       leaving: {
         ben: {
@@ -195,6 +196,56 @@ describe("a Believer burned repeatedly", () => {
     expect(shown(first) ?? "Ben Bird TRUSTS").toBe("Ben Bird TRUSTS");
     expect(later.length).toBeGreaterThan(0);
     for (const text of later) expect(text).toBe("Ben Bird KNOWS");
+  });
+
+  it("as a whistleblower, mostly shows their own signs", () => {
+    const content = parseContent(raw(["whistleblower"]));
+    let own = 0;
+    let shown = 0;
+    for (const seed of SEEDS) {
+      const ben = kindsAtStart(seed, content).find((c) => c.id === "ben");
+      if (ben?.kind !== "believer") continue;
+      const run = startRun({ seed, content });
+      run.choose(burnAll);
+      for (const view of playOut(run).filter((v) => v.month > 2)) {
+        if (view.step.kind !== "scene") continue;
+        const text = view.step.behaviours.find(
+          (b) => b.who === "Ben Bird",
+        )?.text;
+        shown += 1;
+        if (text?.includes("KEEPS-A-FILE")) own += 1;
+      }
+    }
+
+    expect(own / shown).toBeGreaterThan(0.45);
+    expect(own / shown).toBeLessThan(0.75);
+  });
+
+  it("as a whistleblower, reports what they know ahead of a hidden risk", () => {
+    const written = raw(["whistleblower"]);
+    written.changing.whistleblower.reports.unshift({
+      when: { did: "burned" },
+      bill: {
+        id: "known",
+        as: "notice",
+        title: "KNOWN-REPORTED",
+        body: "They reported what they knew.",
+      },
+    });
+    const content = parseContent(written);
+    const seed = SEEDS.find(
+      (s) =>
+        kindsAtStart(s, content).find((c) => c.id === "ben")?.kind ===
+        "believer",
+    );
+    const run = startRun({ seed: seed ?? 0, content });
+    run.choose(burnAll);
+    const views = playOut(run);
+
+    expect(
+      views.some((v) => JSON.stringify(v.step).includes("KNOWN-REPORTED")),
+    ).toBe(true);
+    expect(readHiddenTruth(run).risks[0]?.cameOut).toBeNull();
   });
 
   it("as a whistleblower, brings a hidden risk out", () => {

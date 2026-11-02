@@ -78,6 +78,7 @@
     "left": "Left the company"
   },
   "whistleblower": {
+    "share": 0.6,
     "signs": [
       {
         "id": "keeps-a-file",

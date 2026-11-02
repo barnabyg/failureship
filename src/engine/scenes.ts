@@ -1,5 +1,5 @@
 import { treatBoss } from "./boss";
-import { signsOfChange } from "./changes";
+import { signsOfChange, signsOpenTo } from "./changes";
 import { behavioursOpenTo, type ClueVerdict, type Content } from "./content";
 import { applyOutcome, countMove } from "./outcome";
 import { replyToDeal } from "./deals";
@@ -37,13 +37,15 @@ export function openScene(state: State, world: World, id: string): Step {
       const kind = state.truth.characters.find((c) => c.id === character)?.kind;
       if (kind === undefined) continue;
       // A changed Character's signs follow their new kind.
-      const open = [
-        ...behavioursOpenTo(content, character).map((b) => ({
+      const open = signsOpenTo(
+        state,
+        content,
+        character,
+        behavioursOpenTo(content, character).map((b) => ({
           id: b.id,
           weight: b.likelihood[kind],
         })),
-        ...signsOfChange(state, content, character),
-      ];
+      );
       const chosen = pickWeighted(state.rng, open, (b) => b.weight);
       state.rng = chosen.next;
       shown.push({ character, behaviour: chosen.item.id });
