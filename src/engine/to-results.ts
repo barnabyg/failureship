@@ -190,14 +190,16 @@ function toStandingResults(
   content: Content,
 ): Extract<StepView, { kind: "results" }>["standing"] {
   const standing = standingAtEnd(state, content);
-  const decides = content.standing?.decides;
-  if (!standing || decides === undefined) return null;
+  if (!standing) return null;
   const boss = content.boss.character;
   const decider =
     state.truth.powerMap.influence.find((i) => i.over === boss)?.who ?? boss;
   return {
     ...standing,
-    decides: decides.replaceAll("{who}", personOf(content, decider).name),
+    decides: standing.decides.replaceAll(
+      "{who}",
+      personOf(content, decider).name,
+    ),
     believes:
       content.reputation?.believes[moodOfCharacter(state, content, decider)] ??
       null,
