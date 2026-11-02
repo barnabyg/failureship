@@ -257,9 +257,8 @@ so a high one does not mean the player is safe.
 
 A Thread that moves Fawning starts from a choice aimed at your boss or your boss's boss, and every
 result of that choice sets its flag. Its outcomes' `when` read only what the player did, and no
-Bill's `from` names a Character, since nothing comes back through someone who has left. Then
-Fawning never reads the Power Map or anyone's belief. `tests/engine/fawning.test.ts` holds the
-content to this.
+Bill's `from` names a Character, since nothing comes back through someone who has left, and who
+leaves is dealt. `tests/engine/fawning.test.ts` holds the content to this.
 
 ## `hidden-truth.json`
 

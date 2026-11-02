@@ -12,7 +12,7 @@ import {
 test("handing your boss the credit comes back on Fawning", async ({ page }) => {
   await page.goto("/?seed=1&month=5");
   const fawning = page.getByTestId("gauge-fawning").locator("dd");
-  await expect(page.getByTestId("gauge-teflon")).toBeVisible();
+  await expect(page.getByTestId("gauge-fawning")).toBeVisible();
   await page.getByTestId("option-plain").click();
   await page.getByTestId("continue").click();
   await answerAnyNotification(page);
