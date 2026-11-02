@@ -376,6 +376,21 @@ describe("the real Believers", () => {
 
 const CHANGE_SEED = 32;
 
+// The README's test scenario: the same choices change the Senior Analyst three ways.
+it("keeps the README's seeds, on which the Senior Analyst changes each way", () => {
+  const became = (seed: number) => {
+    const view = playBurningTheAnalyst(
+      startRun({ seed, content: gameContent }),
+    );
+    if (view.step.kind !== "results") throw new Error("No results.");
+    return view.step.changed.map((c) => [c.month, c.to]);
+  };
+
+  expect(became(32)).toEqual([[6, gameContent.changing?.became.whistleblower]]);
+  expect(became(10)).toEqual([[6, gameContent.changing?.became.left]]);
+  expect(became(9)).toEqual([[6, gameContent.changing?.became.practitioner]]);
+});
+
 /** Plays plainly, but blames the Senior Analyst, and lets them down over laptops. */
 function playBurningTheAnalyst(run: Run): PlayerView {
   let view = run.view();

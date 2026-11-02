@@ -13,6 +13,12 @@ test("nine different months, all the way to the results screen", async ({
       `${String(month)} of 9`,
     );
     await expect(page.getByTestId("hint")).not.toBeEmpty();
+    // Part-way through, a reload carries on from the same step.
+    if (month === 5) {
+      await page.reload();
+      await expect(page.getByTestId("month")).toContainText("5 of 9");
+    }
+    await expect(page.getByTestId("gauge-teflon")).toBeVisible();
     notifications.add(await page.getByTestId("panel-notification").innerText());
     await answerAnyNotification(page);
     await expect(page.getByTestId("hint")).not.toBeEmpty();

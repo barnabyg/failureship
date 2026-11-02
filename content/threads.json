@@ -265,5 +265,60 @@
         ]
       }
     ]
+  },
+  {
+    "id": "the-minutes",
+    "startedBy": "attended-meeting",
+    "chance": 1,
+    "after": {
+      "min": 3,
+      "max": 4
+    },
+    "started": "You went to a meeting, and somebody took minutes.",
+    "outcomes": [
+      {
+        "when": {
+          "believes": {
+            "character": "admin",
+            "mood": "warm"
+          }
+        },
+        "playedOut": "The Office Co-ordinator, who thought well of you, wrote the minutes of that meeting. Months later they were circulated, and they were kind.",
+        "bill": {
+          "id": "minutes-kind",
+          "as": "move",
+          "from": "From: The Office Co-ordinator, Marjorie Tull",
+          "title": "Minutes: for information",
+          "body": "The Office Co-ordinator has circulated the minutes of a meeting you went to months ago. They record that you made a valuable contribution. You did not speak. Your boss has read them, and has started nodding at you in the corridor.",
+          "sets": ["minuted-kindly"],
+          "opinion": 1
+        },
+        "gauges": [
+          {
+            "gauge": "teflon",
+            "by": 10,
+            "note": "The minutes of an old meeting came back, and were kind to you."
+          }
+        ]
+      },
+      {
+        "playedOut": "Months after the meeting, its minutes were circulated, and they had an action against your name that nobody remembered agreeing.",
+        "bill": {
+          "id": "minutes-action",
+          "as": "move",
+          "from": "From: The shared calendar",
+          "title": "Action: you (from the minutes)",
+          "body": "The minutes of a meeting you went to months ago have been circulated at last. They record an action against your name: to take forward the cross-team synergy piece. Nobody remembers agreeing it, including you, but it is minuted, and minutes are how things happen here.",
+          "sets": ["minuted-an-action"]
+        },
+        "gauges": [
+          {
+            "gauge": "teflon",
+            "by": -5,
+            "note": "The minutes of an old meeting came back with an action against your name."
+          }
+        ]
+      }
+    ]
   }
 ]

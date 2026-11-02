@@ -4,10 +4,12 @@ A satirical, single-player browser game. You climb a ten-storey office tower by
 reading people. The design is in
 [failureship-grill-outcome.md](failureship-grill-outcome.md).
 
-This is Phase 4 in progress: a run of nine months on a furnished Floor 1, with kinds of
-boss, a Project, the Monthly Status Report, Demands, one-off Budgets, every family of Moves
-and going over your boss's head. Now earlier choices come back through Threads, hidden risks
-and what people have heard, things happen to the company, you can be fired, and runs save.
+This is Phase 4, ready for its steering checkpoint: a run of nine months on a furnished Floor 1,
+with kinds of boss, a Project, the Monthly Status Report, Demands, one-off Budgets, every family of
+Moves and going over your boss's head. Earlier choices come back through Threads, hidden risks and
+what people have heard, things happen to the company, and you can be fired. You can give your word
+and make Deals, a Believer you burn can change or leave, Teflon moves when a Thread plays out, and
+runs save.
 
 ## Play
 
@@ -66,6 +68,15 @@ Press **Org Chart** at any step to see the formal hierarchy, also at no cost. Th
 one is the hidden Power Map, dealt from the seed. A Company Event can change either of them
 mid-run, and later signs and charts follow.
 
+Your word is yours to give. Some choices offer a **Promise**, whether or not you can deliver it,
+and some a **Deal**, in which each side offers something. Whether you are believed, and whether a
+good word from someone counts, goes by who they really are and what has reached them. The **Your
+word** card shows what you have promised, your Deals and the favours you owe or are owed, at no cost.
+Nothing tells you what other people owe each other.
+
+**Teflon**, in the header, is your track record, not your danger. It moves only when a Thread plays
+out, and the official story says which. Reaching some levels earns a Milestone.
+
 What you do can travel. There is no reputation score: each person believes what has reached them
 along the Power Map, and that shows only in how they are with you. So the same deed is known to
 some and unknown to others, and good news travels too.
@@ -90,6 +101,25 @@ that deal instead, and replaces the saved run. If you have changed anything in
 `content/` since the save, or the game has moved on, you are offered a new run: a save
 only holds for the data it was dealt from. A save can be read in browser storage, hidden
 truth included, which is accepted while the game is in development.
+
+### A test scenario: what comes back
+
+This takes about fifteen minutes, from the root of the repository with `npm run play`, and gives
+away these deals. Each row starts at the address shown. Adding `&month=N` to an address only works
+in the browser tests' own build, so play from month 1 and do the same as the row.
+
+| Seed and what to do                                                                                                             | Expect                                                                                                                                                                                                        |
+| ------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Seed 7. File the report and go to the meeting each month. In month 3, tell the Senior Analyst you will get the team new laptops | They believe you. In month 4 or 5 it falls due, and every answer breaks it.                                                                                                                                   |
+| The same run, month 6. In the meeting, tell your boss you can get the team new laptops                                          | Your boss does not believe you, and says why: you told the Senior Analyst the same thing. **Your word** shows both. The results screen shows who heard of the broken one.                                     |
+| Seed 2. Play as above. In month 3's Town Hall, offer the Project Co-ordinator a move for a good word with your boss             | They shake on it, and in month 4 say the word is given. At the end, the results screen says it really moved your boss.                                                                                        |
+| Seed 3, the same                                                                                                                | You are told exactly the same, but here the Project Co-ordinator has no sway with your boss, and the results screen says the word was worth nothing.                                                          |
+| Seed 32. Play as above, but in month 2 blame the Senior Analyst, then promise them laptops in month 3 and put them off          | Nothing tells you, but the Senior Analyst has started keeping a file. The results screen shows they became a whistleblower, and why. On seed 10 they leave instead, and on seed 9 they learn how things work. |
+| Seed 10, the same                                                                                                               | From month 6 the Senior Analyst has gone. Meetings go on without them, and an acting Senior Analyst does what they did. The run still ends normally.                                                          |
+| Seed 2. In month 4, move the Project Co-ordinator to the desk with no window, and skip the training in month 2                  | In month 6 the Health and Safety committee writes. As that month closes, Teflon moves, and the official story and the **Gauges** button say which Thread moved it.                                            |
+| Seed 2. In month 2, do the training and fake the Demand from your boss's boss                                                   | In month 4 a correction to the minutes lands on you: a hidden risk, traced back to you. The results screen lists it.                                                                                          |
+| Seed 3. In month 2's Lessons Learned Review, blame the Project Co-ordinator, then cut them at the Budget Round in month 4       | The first is a big mistake and puts you on a Final Warning. The second gets you fired, and the run ends at the results screen.                                                                                |
+| Any seed. Play plainly to the end                                                                                               | At least one Thread comes back or one risk lands. Months later, the minutes of a meeting you went to come back on you.                                                                                        |
 
 ### A test scenario: three kinds of boss
 
