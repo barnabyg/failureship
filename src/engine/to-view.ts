@@ -27,6 +27,7 @@ import { dealsInView } from "./deals";
 import { gaugesInView, gaugesThisMonth } from "./gauges";
 import { promisesInView } from "./promises";
 import { calledBy, sayPeople } from "./say";
+import { standingInView } from "./standing";
 import type { State, Step, World } from "./state";
 import { toResultsView } from "./to-results";
 import type {
@@ -352,6 +353,7 @@ export function toView(state: State, world: World): PlayerView {
     promises: promisesInView(state, content),
     ...dealsInView(state, content),
     ...gaugesInView(state, content),
+    standing: standingInView(state, content),
     finalWarning: state.finalWarning,
     seed: state.seed,
     month: state.month,

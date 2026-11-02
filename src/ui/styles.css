@@ -566,6 +566,15 @@ body {
   outline-offset: -2px;
 }
 
+/* Official standing is shown, not opened. */
+.standing-card {
+  cursor: default;
+}
+
+.standing-card:hover {
+  outline: none;
+}
+
 .project-card-heading,
 .project-card-label {
   color: var(--muted);
@@ -689,6 +698,38 @@ body {
   font-size: 0.8rem;
   font-style: italic;
   color: #b3261e;
+}
+
+/*
+ * Official standing: a bar from red to green with a marker, and no number. Each
+ * colour is at the middle of its band in content/standing.json, so the marker's
+ * colour and the band said aloud agree.
+ */
+.standing-bar {
+  position: relative;
+  display: inline-block;
+  width: 88px;
+  height: 10px;
+  vertical-align: middle;
+  border: 1px solid var(--rule);
+  border-radius: 5px;
+  background: linear-gradient(
+    to right,
+    #c0392b 17%,
+    #d9932b 34% 67%,
+    #3f8f4f 83%
+  );
+}
+
+.standing-marker {
+  position: absolute;
+  top: -3px;
+  width: 4px;
+  height: 14px;
+  transform: translateX(-50%);
+  border-radius: 2px;
+  background: var(--ink);
+  box-shadow: 0 0 0 1px var(--paper);
 }
 
 .status-warning dd {

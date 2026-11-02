@@ -1,8 +1,7 @@
 # Failureship
 
-A satirical, single-player browser game. You climb a ten-storey office tower by
-reading people. The design is in
-[failureship-grill-outcome.md](failureship-grill-outcome.md).
+A satirical, single-player browser game. You climb a ten-storey office tower by reading people. The
+design is in [failureship-grill-outcome.md](failureship-grill-outcome.md).
 
 This is Phase 4, ready for its steering checkpoint: a run of nine months on a furnished Floor 1,
 with kinds of boss, a Project, the Monthly Status Report, Demands, one-off Budgets, every family of
@@ -13,8 +12,7 @@ out, and runs save.
 
 ## Play
 
-You need [Node.js](https://nodejs.org/) 22 or later. From the root of the
-repository, run:
+You need [Node.js](https://nodejs.org/) 22 or later. From the root of the repository, run:
 
 ```powershell
 npm run play
@@ -52,14 +50,13 @@ There are four ways to spend an action:
   anything else you can do, or cost you more if your boss finds out. You are not told the odds.
 - **The kitchen, the Senior Analyst's desk and your desk** do what they look like.
 
-People are read first as what they do: your boss, your boss's boss, the Office
-Co-ordinator. Each role is held by the same Character in every deal, and each has
-things only it can be seen doing and its own way of talking. Only someone who chairs
-meetings can overrun one, and only the Office Co-ordinator controls the minutes and
-the stationery. Each of these can still come from more than one kind. Names stay in
-support on the charts, in the cast list and the Notebook's marks, on the results
-screen, on the `from` lines of messages and the Find Out buttons, and in what sources
-say about people.
+People are read first as what they do: your boss, your boss's boss, the Office Co-ordinator. Each
+role is held by the same Character in every deal, and each has things only it can be seen doing and
+its own way of talking. Only someone who chairs meetings can overrun one, and only the Office
+Co-ordinator controls the minutes and the stationery. Each of these can still come from more than
+one kind. Names stay in support on the charts, in the cast list and the Notebook's marks, on the
+results screen, on the `from` lines of messages and the Find Out buttons, and in what sources say
+about people.
 
 Press **Notebook** at any step, at no cost. It keeps claims and important signs for
 you, and it never says which to trust. Mark each Character with the kind you suspect.
@@ -77,6 +74,9 @@ Nothing tells you what other people owe each other.
 **Teflon**, in the header, is your track record, not your danger. **Fawning** is how well sucking up
 to your managers is paying off, not whether they like you, and plays no part in promotion. Each moves
 only when a Thread plays out, and the official story says which. Some levels earn a Milestone.
+**Official standing** is a bar from red to green, with no number: how you would fare on paper if a
+vacancy arose. It reads only the official record, a Final Warning turns it red, and it decides
+nothing. The results screen sets it beside who really decides.
 
 What you do can travel. There is no reputation score: each person believes what has reached them
 along the Power Map, and that shows only in how they are with you. So the same deed is known to
@@ -96,20 +96,18 @@ At any step, **New run** deals a new seed, and typing a seed then pressing
 **Restart from seed** plays that deal from month 1. Leaving a run in progress asks
 first. Swap a seed with a friend and you both get the same deal.
 
-The run is saved in your browser at every step, so reloading the page or coming back
-later carries on exactly where you left off. An address with a different seed starts
-that deal instead, and replaces the saved run. If you have changed anything in
-`content/` since the save, or the game has moved on, you are offered a new run: a save
-only holds for the data it was dealt from. A save can be read in browser storage, hidden
-truth included, which is accepted while the game is in development.
+The run is saved in your browser at every step, so reloading the page or coming back later carries
+on exactly where you left off. An address with a different seed starts that deal instead, and
+replaces the saved run. If you have changed anything in `content/` since the save, or the game has
+moved on, you are offered a new run: a save only holds for the data it was dealt from. A save can be
+read in browser storage, hidden truth included, which is accepted while the game is in development.
 
 A month always leaves you something to decide. Every Notification has an answer that
 costs nothing. Beside the report, a month's own Notifications ask for at most one costly
 answer, though late figures or an action from a missed meeting can add another. A meeting
 you had no action left for leaves no Demand behind.
 
-[docs/playtest.md](docs/playtest.md) has test scenarios to play by hand. They give away some
-deals.
+[docs/playtest.md](docs/playtest.md) has test scenarios to play by hand. They give away some deals.
 
 ## Change the game
 
@@ -145,6 +143,7 @@ format, the page shows what is wrong instead of the game.
 | `changing.json`       | What burns a Believer, how much it takes, what they can become, and who covers for anyone who leaves   |
 | `characters.json`     | Job titles, roles, how text refers to each person, names, and who reports to whom on the Org Chart     |
 | `gauges.json`         | The Gauges, Teflon and Fawning: where each starts, and the Milestones earned along the way             |
+| `standing.json`       | Official standing: what on the official record moves it, its bands, and what the results screen says   |
 | `hidden-truth.json`   | The rules of the deal: kinds, their weights, and the Hidden Facts                                      |
 | `balance.json`        | Actions a month, months in a run, the cost of each choice, how often signs mislead and the boss's mood |
 | `floor-1.json`        | The rooms on the floor: positions, sizes, colours and the lift's sign                                  |
@@ -167,7 +166,7 @@ How to run the checks and tests is in [AGENTS.md](AGENTS.md#verifying).
   `demands.ts`, `find-out.ts`, `notebook.ts`, `over-head.ts`, `project.ts` and
   `scenes.ts` are mechanics of their own, as are `company-events.ts`, `mistakes.ts`, `reputation.ts`,
   `risks.ts`, `threads.ts` with `bills.ts`, `promises.ts`, `deals.ts` (`deal.ts` deals the run itself),
-  `changes.ts` for Believers changing and leaving, and `gauges.ts`, the only module that reads a Gauge; `to-view.ts` builds the player view, and
+  `changes.ts` for Believers changing and leaving, `gauges.ts`, the only module that reads a Gauge, and `standing.ts` for Official standing; `to-view.ts` builds the player view, and
   `to-results.ts` its reveal at the end; `save.ts` writes and reads a run. Everything
   in a run's `State` is plain data, so a mechanic gets saving for free. Raise
   `SAVE_VERSION` if a mechanic changes what saved state means. `src/engine/content.ts` holds the content

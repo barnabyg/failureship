@@ -123,6 +123,16 @@ export type StepView =
       intro: string;
       /** How the run ended. */
       ending: { fired: boolean; text: string | null };
+      /** Official standing at the end, beside who really decides. */
+      standing: {
+        label: string;
+        at: number;
+        band: string;
+        onPaper: string;
+        decides: string;
+        /** What the one who really decides ended up believing of the player. */
+        believes: string | null;
+      } | null;
       /** Each Thread that played out, traced back to what started it. */
       threads: {
         startedIn: number;
@@ -254,6 +264,17 @@ export interface PlayerView {
     moves: { month: number; by: number; note: string }[];
   }[];
   milestones: { month: number; title: string }[];
+  /**
+   * How the player would fare on paper if a vacancy arose, shown as a bar with
+   * no number. It reads only the official record, never the Power Map.
+   */
+  standing: {
+    label: string;
+    title: string;
+    /** How far along the bar, from 0 to 1. */
+    at: number;
+    band: string;
+  } | null;
   /** Whether one more big mistake gets the player fired. */
   finalWarning: boolean;
   seed: number;

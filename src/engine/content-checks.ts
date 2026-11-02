@@ -15,6 +15,7 @@ import {
   findBrokenMistakes,
   findBrokenPromises,
   findBrokenRisks,
+  findBrokenStanding,
   findBrokenThreads,
 } from "./consequence-checks";
 import {
@@ -173,6 +174,7 @@ function findBrokenReferences(content: Content): string[] {
   problems.push(...findBrokenDeals(content));
   problems.push(...findBrokenChanging(content));
   problems.push(...findBrokenGauges(content));
+  problems.push(...findBrokenStanding(content));
   problems.push(...findBrokenReputation(content, characters));
   for (const event of content.events) {
     checkProject(`Company Event "${event.id}"`, event.project);

@@ -5,6 +5,7 @@ import { gaugesInView } from "./gauges";
 import { promisesInResults } from "./promises";
 import { bossKindOf, moodOf, moodOfCharacter, personOf } from "./reads";
 import { calledBy, sayPeople } from "./say";
+import { standingAtEnd } from "./standing";
 import type { State } from "./state";
 import type { StepView } from "./view";
 
@@ -22,6 +23,7 @@ export function toResultsView(
       ? content.mistakes.results
       : content.ui.results),
     ending: toEnding(state, content),
+    standing: toStandingResults(state, content),
     mistakes: state.mistakes,
     milestones: gaugesInView(state, content).milestones,
     changed: state.truth.changes.flatMap((change) => {
@@ -177,6 +179,31 @@ function toBeliefs(
             : written.how.direct,
       })),
   }));
+}
+
+/**
+ * Official standing beside who really decides. Until vacancies exist, that is
+ * whoever holds influence over the boss on the Power Map, or else the boss.
+ */
+function toStandingResults(
+  state: State,
+  content: Content,
+): Extract<StepView, { kind: "results" }>["standing"] {
+  const standing = standingAtEnd(state, content);
+  if (!standing) return null;
+  const boss = content.boss.character;
+  const decider =
+    state.truth.powerMap.influence.find((i) => i.over === boss)?.who ?? boss;
+  return {
+    ...standing,
+    decides: standing.decides.replaceAll(
+      "{who}",
+      personOf(content, decider).name,
+    ),
+    believes:
+      content.reputation?.believes[moodOfCharacter(state, content, decider)] ??
+      null,
+  };
 }
 
 function toEnding(

@@ -1,0 +1,53 @@
+{
+  "label": "Official standing",
+  "title": "How you would fare on paper if a vacancy arose. Paper does not decide who gets it.",
+  "start": 45,
+  "reported": {
+    "green": 15,
+    "amber": 0,
+    "red": -25
+  },
+  "finalWarning": 15,
+  "bands": [
+    {
+      "from": 0,
+      "label": "Red",
+      "onPaper": "On paper, you would not have been shortlisted. The shortlist would not have mentioned you, as a kindness."
+    },
+    {
+      "from": 34,
+      "label": "Amber",
+      "onPaper": "On paper, you would have been considered, which in this building means that you would not."
+    },
+    {
+      "from": 67,
+      "label": "Green",
+      "onPaper": "On paper, you were the obvious choice. Paper does not sit on the panel."
+    }
+  ],
+  "deeds": [
+    { "flag": "filed-report", "by": 3 },
+    { "flag": "skipped-report", "by": -6 },
+    { "flag": "delivered-demand", "by": 5 },
+    { "flag": "faked-demand", "by": 5 },
+    { "flag": "pushed-back", "by": -4 },
+    { "flag": "handed-off", "by": -1 },
+    { "flag": "stalled-demand", "by": -2 },
+    { "flag": "stalled-tool", "by": -2 },
+    { "flag": "said-exceeds", "by": 6 },
+    { "flag": "said-meets", "by": 2 },
+    { "flag": "animated-deck", "by": 4 },
+    { "flag": "plain-deck", "by": -3 },
+    { "flag": "offered-arrow", "by": 4 },
+    { "flag": "nodded-at-arrow", "by": 2 },
+    { "flag": "showed-figures", "by": -4 },
+    { "flag": "told-the-truth", "by": -4 },
+    { "flag": "did-training", "by": 1 },
+    { "flag": "skipped-training", "by": 2 },
+    { "flag": "sat-at-front", "by": 2 },
+    { "flag": "watched-recording", "by": -1 },
+    { "flag": "asked-the-question", "by": 2 },
+    { "flag": "took-the-blame", "by": -6 }
+  ],
+  "decides": "The seat above you was really in the gift of {who}."
+}

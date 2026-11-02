@@ -16,6 +16,7 @@ import { Modal } from "./Modal";
 import { Notebook, monthLabel } from "./Notebook";
 import { StepPanel } from "./panels";
 import { RunControls } from "./RunControls";
+import { StandingBar } from "./StandingBar";
 import { readSavedRun, writeSavedRun } from "./saved-run";
 import { TowerStage } from "./TowerStage";
 
@@ -161,6 +162,30 @@ function LatestBuzzwords({
           </button>
         )}
       </dd>
+    </div>
+  );
+}
+
+/**
+ * How the player would fare on paper, always in view. It sits beside the Project
+ * rather than in the header, which has no room left for it.
+ */
+function StandingCard({
+  standing,
+}: {
+  standing: NonNullable<PlayerView["standing"]>;
+}) {
+  return (
+    <div
+      className="project-card standing-card"
+      title={standing.title}
+      data-testid="standing-card"
+    >
+      <span className="project-card-heading">{standing.label}</span>
+      <span className="project-card-status">
+        <StandingBar standing={standing} testId="standing" />
+        <span>{standing.band}</span>
+      </span>
     </div>
   );
 }
@@ -363,6 +388,7 @@ export function App() {
             setProjectOpen(true);
           }}
         />
+        {view.standing && <StandingCard standing={view.standing} />}
         <WordCard
           view={view}
           onOpen={() => {
