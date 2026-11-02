@@ -1,6 +1,11 @@
 import { z } from "zod";
 import {
+  findNamedKinds,
   findBrokenEvents,
+  findBrokenChanging,
+  findBrokenDeals,
+  findBrokenGauges,
+  findBrokenPromises,
   findBrokenRisks,
   findBrokenThreads,
 } from "./consequence-checks";
@@ -309,19 +314,6 @@ function findBrokenApproaches(content: Content): string[] {
 }
 
 /** The player reads a kind from signs, so no reaction may say it out loud. */
-function findNamedKinds(
-  content: Content,
-  owner: string,
-  written: readonly string[],
-): string[] {
-  const labels = Object.values(content.hiddenTruth.kinds).map((k) =>
-    k.label.toLowerCase(),
-  );
-  return written
-    .filter((line) => labels.some((l) => line.toLowerCase().includes(l)))
-    .map((line) => `${owner} names a kind: "${line}"`);
-}
-
 /** Lateness must be a clue about someone's kind, and never settle it. */
 function findBrokenInput(content: Content): string[] {
   const { input } = content.project;
@@ -587,6 +579,7 @@ function findBrokenReferences(content: Content): string[] {
     if ("believes" in condition) {
       checkCharacter(owner, condition.believes.character);
     }
+    if ("youOwe" in condition) checkCharacter(owner, condition.youOwe);
     if ("heardFact" in condition) checkFact(owner, condition.heardFact);
     if ("heardTrue" in condition) checkFact(owner, condition.heardTrue);
     if ("not" in condition) checkCondition(owner, condition.not);
@@ -673,6 +666,10 @@ function findBrokenReferences(content: Content): string[] {
   problems.push(...findBrokenThreads(content));
   problems.push(...findBrokenRisks(content));
   problems.push(...findBrokenEvents(content));
+  problems.push(...findBrokenPromises(content));
+  problems.push(...findBrokenDeals(content));
+  problems.push(...findBrokenChanging(content));
+  problems.push(...findBrokenGauges(content));
   problems.push(...findBrokenReputation(content, characters));
   for (const event of content.events) {
     checkProject(`Company Event "${event.id}"`, event.project);
@@ -829,6 +826,7 @@ function findBrokenReferences(content: Content): string[] {
   }
   for (const m of content.moves) {
     const owner = `Move "${m.id}"`;
+    if (m.repays !== undefined) checkCharacter(owner, m.repays);
     checkMonths(owner, m.months);
     checkParts(owner, m.body);
     if (m.when) checkCondition(owner, m.when);

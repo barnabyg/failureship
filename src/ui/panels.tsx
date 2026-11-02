@@ -83,6 +83,11 @@ function StoryPanel({
           <p key={line}>{line}</p>
         ))}
       </div>
+      {step.gauges.map((line) => (
+        <p key={line} className="signs" data-testid="story-gauge">
+          {line}
+        </p>
+      ))}
       {step.happened.length > 0 && (
         <div className="callout" data-testid="story-happened">
           {step.happenedHeading !== undefined && (
@@ -180,6 +185,19 @@ function ResultsPanel({
           {step.ending.text}
         </p>
       )}
+      <h3>{panelText.resultsMilestonesHeading}</h3>
+      {step.milestones.length === 0 ? (
+        <p>{panelText.resultsNoMilestones}</p>
+      ) : (
+        <ul>
+          {step.milestones.map((row) => (
+            <li key={row.title} data-testid="result-milestone">
+              <strong>{monthLabel(row.month)}. </strong>
+              {row.title}
+            </li>
+          ))}
+        </ul>
+      )}
       {step.mistakes.length > 0 && (
         <>
           <h3>{panelText.resultsMistakesHeading}</h3>
@@ -192,6 +210,53 @@ function ResultsPanel({
             ))}
           </ul>
         </>
+      )}
+      {step.promises.length > 0 && (
+        <div className="callout" data-testid="results-promises">
+          <h3>{panelText.resultsPromisesHeading}</h3>
+          {step.promises.map((row, index) => (
+            <p key={index} data-testid="result-promise">
+              <strong>{monthLabel(row.month)}. </strong>
+              {row.to}: {row.what}. {row.status}.{" "}
+              <span className="results-title">
+                {row.heardBy.length > 0
+                  ? `${panelText.resultsPromiseHeardBy} ${row.heardBy.join(", ")}.`
+                  : panelText.resultsPromiseHeardByNobody}
+              </span>
+            </p>
+          ))}
+        </div>
+      )}
+      {step.changed.length > 0 && (
+        <div className="callout" data-testid="results-changed">
+          <h3>{panelText.resultsChangedHeading}</h3>
+          {step.changed.map((row) => (
+            <p key={row.name} data-testid="result-changed">
+              <strong>{monthLabel(row.month)}. </strong>
+              {row.title}, {row.name}: {row.from}. {row.to}.{" "}
+              <span className="results-title">{row.why.join(" ")}</span>
+            </p>
+          ))}
+        </div>
+      )}
+      {step.deals.length + step.favours.length > 0 && (
+        <div className="callout" data-testid="results-deals">
+          {step.deals.length > 0 && <h3>{panelText.resultsDealsHeading}</h3>}
+          {step.deals.map((row, index) => (
+            <p key={index} data-testid="result-deal">
+              <strong>{monthLabel(row.month)}. </strong>
+              {row.with}: {row.what}. {row.status}. {row.worth}
+            </p>
+          ))}
+          {step.favours.length > 0 && (
+            <h3>{panelText.resultsFavoursHeading}</h3>
+          )}
+          {step.favours.map((line) => (
+            <p key={line} data-testid="result-favour">
+              {line}
+            </p>
+          ))}
+        </div>
       )}
       {step.threads.length > 0 && (
         <div className="callout" data-testid="results-threads">

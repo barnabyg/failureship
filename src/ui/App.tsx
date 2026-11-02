@@ -114,6 +114,26 @@ function ProjectCard({
   );
 }
 
+/** The player's own commitments, always in view, and free to look at. */
+function WordCard({ view, onOpen }: { view: PlayerView; onOpen: () => void }) {
+  return (
+    <button
+      type="button"
+      className="project-card"
+      data-testid="open-word"
+      onClick={onOpen}
+    >
+      <span className="project-card-heading">{panelText.promisesHeading}</span>
+      <span data-testid="word-count">
+        {panelText.promisesCount.replace(
+          "{n}",
+          String(view.promises.length + view.deals.length),
+        )}
+      </span>
+    </button>
+  );
+}
+
 function ProjectStatus(props: {
   label: string;
   status: string;
@@ -149,6 +169,8 @@ export function App() {
   const [orgChartOpen, setOrgChartOpen] = useState(false);
   const [notebookOpen, setNotebookOpen] = useState(false);
   const [projectOpen, setProjectOpen] = useState(false);
+  const [wordOpen, setWordOpen] = useState(false);
+  const [gaugesOpen, setGaugesOpen] = useState(false);
 
   // In an effect, because React may run a state initialiser twice in development.
   useEffect(() => {
@@ -216,6 +238,24 @@ export function App() {
               <dd>{panelText.finalWarningLabel}</dd>
             </div>
           )}
+          {view.gauges.map((gauge) => (
+            <div key={gauge.id} data-testid={`gauge-${gauge.id}`}>
+              <dt>{gauge.label}</dt>
+              <dd>
+                <button
+                  type="button"
+                  className="status-gauge"
+                  data-testid={`open-gauge-${gauge.id}`}
+                  title={panelText.gaugesHeading}
+                  onClick={() => {
+                    setGaugesOpen(true);
+                  }}
+                >
+                  {gauge.value}
+                </button>
+              </dd>
+            </div>
+          ))}
           {view.buzzwords.length > 0 && (
             <div className="status-buzzwords" data-testid="buzzwords">
               <dt>{panelText.buzzwordsHeading}</dt>
@@ -263,6 +303,12 @@ export function App() {
           view={view}
           onOpen={() => {
             setProjectOpen(true);
+          }}
+        />
+        <WordCard
+          view={view}
+          onOpen={() => {
+            setWordOpen(true);
           }}
         />
       </div>
@@ -337,6 +383,108 @@ export function App() {
             data-testid="close-project"
             onClick={() => {
               setProjectOpen(false);
+            }}
+          >
+            {panelText.closeLabel}
+          </button>
+        </Modal>
+      )}
+      {gaugesOpen && (
+        <Modal
+          testId="gauges"
+          title={panelText.gaugesHeading}
+          onClose={() => {
+            setGaugesOpen(false);
+          }}
+        >
+          {view.gauges.map((gauge) => (
+            <div key={gauge.id}>
+              <h3>
+                {gauge.label}: {gauge.value}
+              </h3>
+              {gauge.moves.length === 0 && <p>{panelText.gaugesNoMoves}</p>}
+              <ul>
+                {gauge.moves.map((move, index) => (
+                  <li key={index} data-testid="gauge-move">
+                    <strong>{monthLabel(move.month)}. </strong>
+                    {move.by > 0 ? `+${String(move.by)}` : move.by}. {move.note}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))}
+          {view.milestones.length > 0 && (
+            <>
+              <h3>{panelText.milestonesHeading}</h3>
+              <ul>
+                {view.milestones.map((row) => (
+                  <li key={row.title} data-testid="milestone">
+                    {row.title}
+                  </li>
+                ))}
+              </ul>
+            </>
+          )}
+          <button
+            type="button"
+            data-testid="close-gauges"
+            onClick={() => {
+              setGaugesOpen(false);
+            }}
+          >
+            {panelText.closeLabel}
+          </button>
+        </Modal>
+      )}
+      {wordOpen && (
+        <Modal
+          testId="word"
+          title={panelText.promisesHeading}
+          onClose={() => {
+            setWordOpen(false);
+          }}
+        >
+          {view.promises.length + view.deals.length === 0 && (
+            <p>{panelText.promisesEmpty}</p>
+          )}
+          <ul>
+            {view.promises.map((item) => (
+              <li key={item.what} data-testid="word-promise">
+                <strong>{monthLabel(item.month)}. </strong>
+                {item.to}: {item.what}. {item.status}.
+              </li>
+            ))}
+          </ul>
+          {view.deals.length > 0 && (
+            <>
+              <h3>{panelText.dealsHeading}</h3>
+              <ul>
+                {view.deals.map((item) => (
+                  <li key={item.what} data-testid="word-deal">
+                    <strong>{monthLabel(item.month)}. </strong>
+                    {item.with}: {item.what}. {item.status}.
+                  </li>
+                ))}
+              </ul>
+            </>
+          )}
+          {view.favours.length > 0 && (
+            <>
+              <h3>{panelText.favoursHeading}</h3>
+              <ul>
+                {view.favours.map((line) => (
+                  <li key={line} data-testid="word-favour">
+                    {line}
+                  </li>
+                ))}
+              </ul>
+            </>
+          )}
+          <button
+            type="button"
+            data-testid="close-word"
+            onClick={() => {
+              setWordOpen(false);
             }}
           >
             {panelText.closeLabel}

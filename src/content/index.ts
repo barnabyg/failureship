@@ -3,12 +3,15 @@ import balance from "../../content/balance.json";
 import behaviours from "../../content/behaviours.json";
 import boss from "../../content/boss.json";
 import buzzwords from "../../content/buzzwords.json";
+import changing from "../../content/changing.json";
 import characters from "../../content/characters.json";
+import deals from "../../content/deals.json";
 import demands from "../../content/demands.json";
 import dialogs from "../../content/dialogs.json";
 import events from "../../content/events.json";
 import families from "../../content/families.json";
 import floor from "../../content/floor-1.json";
+import gauges from "../../content/gauges.json";
 import hiddenTruth from "../../content/hidden-truth.json";
 import mistakes from "../../content/mistakes.json";
 import moves from "../../content/moves.json";
@@ -17,6 +20,7 @@ import notifications from "../../content/notifications.json";
 import officialStory from "../../content/official-story.json";
 import overHead from "../../content/over-head.json";
 import project from "../../content/project.json";
+import promises from "../../content/promises.json";
 import reputation from "../../content/reputation.json";
 import risks from "../../content/risks.json";
 import scenes from "../../content/scenes.json";
@@ -44,6 +48,10 @@ export const gameContent = parseContent({
   overHead,
   mistakes,
   reputation,
+  promises,
+  deals,
+  changing,
+  gauges,
   families,
   hiddenTruth,
   sources,
@@ -116,6 +124,22 @@ const panelSchema = z.strictObject(
       "closeLabel",
       "standingHeading",
       "finalWarningLabel",
+      "promisesHeading",
+      "promisesEmpty",
+      "promisesCount",
+      "dealsHeading",
+      "favoursHeading",
+      "gaugesHeading",
+      "gaugesNoMoves",
+      "milestonesHeading",
+      "resultsMilestonesHeading",
+      "resultsNoMilestones",
+      "resultsChangedHeading",
+      "resultsDealsHeading",
+      "resultsFavoursHeading",
+      "resultsPromisesHeading",
+      "resultsPromiseHeardBy",
+      "resultsPromiseHeardByNobody",
       "resultsMistakesHeading",
       "resultsThreadsHeading",
       "resultsRisksHeading",

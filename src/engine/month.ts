@@ -1,8 +1,12 @@
 import { landBill, playThreads, surfaceRisks } from "./bills";
+import { blowWhistles, changePeople } from "./changes";
 import { landEvent, scheduleEvents } from "./company-events";
 import { everyNotification, type Content } from "./content";
+import { dealsFallDue } from "./deals";
 import { dealWithAbsence, followUpDemands } from "./demands";
+import { closeGauges } from "./gauges";
 import { applyOutcome } from "./outcome";
+import { promisesFallDue } from "./promises";
 import { spreadNews } from "./reputation";
 import {
   actionsThisMonth,
@@ -10,7 +14,10 @@ import {
   costOf,
   inMonth,
   isAvailable,
+  isGone,
   matches,
+  mentionsGone,
+  optionsOnOffer,
   remaining,
 } from "./reads";
 import { drawFor, pick } from "./rng";
@@ -36,13 +43,17 @@ export function freshMonth(content: Content, month: number): MonthRecord {
 /** What happens as a month opens, whatever the player has done. */
 export function openMonth(state: State, content: Content): void {
   spreadNews(state, content);
+  changePeople(state, content);
   followUpDemands(state, content);
+  promisesFallDue(state);
+  dealsFallDue(state, content);
   playThreads(state, content);
   surfaceRisks(state, content);
+  blowWhistles(state, content);
   scheduleEvents(state, content);
   const { input } = content.project;
   const colleague = state.truth.characters.find(
-    (c) => c.id === input?.character,
+    (c) => c.id === input?.character && !isGone(state, c.id),
   );
   if (input && colleague && inMonth(input, state.month)) {
     const value = drawFor(state.seed, "report-input", state.month);
@@ -85,14 +96,22 @@ export function nextStep(state: State, world: World): Step {
   const { content } = world;
   const due = state.noticesDue.shift();
   if (due) return { kind: "notice", ...due };
+  // Answering something from someone who has gone is not on offer.
+  state.unanswered = state.unanswered.filter((id) => {
+    const from = everyNotification(content).find((n) => n.id === id)?.from;
+    return from === undefined || !mentionsGone(state, content, from);
+  });
   if (state.firedIn !== null) return { kind: "results" };
   const notifications = everyNotification(content);
   for (const id of state.unanswered) {
     const notification = notifications.find((n) => n.id === id);
-    const answerable = notification?.options.some(
-      (o) => costOf(content, o.cost) <= remaining(state, content),
-    );
-    if (answerable && matches(state, content, notification?.when)) {
+    const answerable =
+      notification &&
+      !mentionsGone(state, content, notification.from) &&
+      optionsOnOffer(state, content, notification.options).some(
+        (o) => costOf(content, o.cost) <= remaining(state, content),
+      );
+    if (answerable && matches(state, content, notification.when)) {
       return { kind: "notification", id };
     }
   }
@@ -114,7 +133,8 @@ export function nextStep(state: State, world: World): Step {
     dealWithAbsence(state, content) ??
     landEvent(state, content) ??
     landBill(state, content) ??
-    landMove(state, content) ?? { kind: "story" }
+    landMove(state, content) ??
+    closeGauges(state, content) ?? { kind: "story" }
   );
 }
 
@@ -123,7 +143,10 @@ function landMove(state: State, content: Content): Step | null {
   if (state.moveLanded) return null;
   state.moveLanded = true;
   const eligible = content.moves.filter(
-    (m) => inMonth(m, state.month) && matches(state, content, m.when),
+    (m) =>
+      inMonth(m, state.month) &&
+      !mentionsGone(state, content, m.from) &&
+      matches(state, content, m.when),
   );
   if (eligible.length === 0) return null;
   const fresh = eligible.filter((m) => !state.movesLanded.includes(m.id));

@@ -1,0 +1,26 @@
+[
+  {
+    "id": "teflon",
+    "label": "Teflon",
+    "start": 50,
+    "min": 0,
+    "max": 100,
+    "milestones": [
+      {
+        "at": 60,
+        "title": "Wipe-clean",
+        "body": "Something came back on you, and it did not stick. A colleague says you are very easy to work with, and does not mean it kindly. You have earned a Milestone: Wipe-clean."
+      },
+      {
+        "at": 70,
+        "title": "Slippery as an eel",
+        "body": "Another one slid off. People have started to check the minutes after meetings you were in, to see what you said, and you never said anything. You have earned a Milestone: Slippery as an eel."
+      },
+      {
+        "at": 85,
+        "title": "Non-stick, dishwasher safe",
+        "body": "Nothing that comes back on you has ever stayed. Somebody in Finance has started a sweepstake on it. You have earned a Milestone: Non-stick, dishwasher safe."
+      }
+    ]
+  }
+]

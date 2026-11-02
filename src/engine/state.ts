@@ -37,17 +37,42 @@ export interface TruthOfRun {
    */
   beliefs: Record<string, number>;
   /** Everything that can travel, from where it started. */
-  news: { about: string; tone: Tone; text: string; month: number }[];
+  news: {
+    about: string;
+    tone: Tone;
+    text: string;
+    month: number;
+    /** If it is about a broken word: whose, and what was offered. */
+    word?: { victim: string; what: string } | undefined;
+  }[];
   /** What the player's decisions have built up. Never shown until the end. */
   risks: {
     id: string;
     month: number;
     due: number;
     /** When it came out, and whether it could be traced to the player. */
-    cameOut: { month: number; onPlayer: boolean } | null;
+    cameOut: {
+      month: number;
+      onPlayer: boolean;
+      /** The whistleblower it came out through, if it was one. */
+      through?: string | undefined;
+    } | null;
   }[];
   /** What each Character has kept of what the player did. */
   memories: Memory[];
+  /** Believers who were burned enough to change. Never shown until the end. */
+  changes: Change[];
+}
+
+/** A Believer who changed: what into, when and why. */
+export interface Change {
+  character: string;
+  month: number;
+  from: Kind;
+  to: "practitioner" | "whistleblower" | "left";
+  why: string[];
+  /** Whether a whistleblower has acted on what they know. */
+  acted: boolean;
 }
 
 /** The true state of a run, as tests read it. */
@@ -106,6 +131,8 @@ export type Step =
       /** How the boss took it. Signs only: it never says the boss's kind. */
       reaction?: string | undefined;
       verdict?: string | undefined;
+      /** Shown as written, even naming someone who has gone. */
+      asWritten?: boolean | undefined;
     }
   | { kind: "move"; id: string }
   | { kind: "event"; id: string }
@@ -125,6 +152,10 @@ interface BossLanding {
   choice: string;
   shift: number;
 }
+
+/** Where a commitment has got to. A refused one was never taken up. */
+export type CommitmentStatus =
+  "open" | "kept" | "broken" | "refused" | "lapsed";
 
 /** A written event in the Project's life, which the player can read back. */
 interface ProjectNews {
@@ -181,7 +212,7 @@ export interface State extends MonthRecord {
   /** The missed meetings' actions given so far, each of them once in a run. */
   actionsGiven: string[];
   /** What the player is told before anything else, as a month opens. */
-  noticesDue: { title: string; body: string }[];
+  noticesDue: { title: string; body: string; asWritten?: boolean }[];
   project: {
     real: string;
     reported: string;
@@ -206,6 +237,36 @@ export interface State extends MonthRecord {
   /** Company Events waiting to land this month. */
   eventsDue: string[];
   eventsLanded: { id: string; month: number }[];
+  /** Everything the player has given their word on, in plain view. */
+  promises: {
+    id: string;
+    month: number;
+    status: CommitmentStatus;
+    /** The month it falls due. Null if it never will. */
+    due: number | null;
+    /** What was said back. */
+    reply: string;
+    /** The news of how it ended, if there was any. */
+    news: number | null;
+  }[];
+  /** The Deals the player has made, each side of which can fail. */
+  deals: {
+    id: string;
+    month: number;
+    /** Their side: whether they gave the word, and what it was really worth. */
+    word: "pending" | "landed" | "worthless" | "withheld";
+    wordDue: number;
+    status: CommitmentStatus;
+    due: number;
+    news: number | null;
+  }[];
+  /** Each Gauge's value. Only Milestones read these. */
+  gauges: Record<string, number>;
+  /** What moved each Gauge, for the player to see. */
+  gaugeMoves: { month: number; gauge: string; by: number; note: string }[];
+  /** Moves from Threads played out this month, waiting for it to close. */
+  gaugesDue: { gauge: string; by: number; note: string }[];
+  milestones: { gauge: string; at: number; month: number }[];
   /** Told to the player, and shown from then on. */
   finalWarning: boolean;
   /** The month the player was fired in, which ends the run. */

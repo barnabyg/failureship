@@ -654,5 +654,30 @@
         }
       }
     ]
+  },
+  {
+    "id": "laptops-request",
+    "months": [3],
+    "from": "From: The Senior Analyst, Priya Venn",
+    "subject": "Our laptops, again",
+    "body": "The Senior Analyst's team is still on the laptops with the sticker from the previous company on them. One of them has started to smell of toast. They ask, without much hope, whether you know anyone.",
+    "options": [
+      {
+        "id": "no-laptops",
+        "label": "Say that you will see what you can find out",
+        "sets": ["heard-about-laptops"],
+        "result": {
+          "title": "Our laptops, again",
+          "body": "You say that you will see what you can find out. The Senior Analyst says thanks, the way people do when they have already stopped listening."
+        }
+      },
+      {
+        "id": "promise-laptops-analyst",
+        "family": "trade",
+        "promise": "laptops-for-the-analyst",
+        "label": "Tell them you will get the team new laptops",
+        "sets": ["promised-laptops"]
+      }
+    ]
   }
 ]

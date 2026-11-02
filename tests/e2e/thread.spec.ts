@@ -3,6 +3,7 @@ import {
   answerAnyNotification,
   attendAndFinishMonth,
   playToResults,
+  playUntil,
 } from "./play";
 
 // On this seed the desk move goes unnoticed at the time, and comes back in month 6.
@@ -36,8 +37,22 @@ test("the desk with no window comes back as a Bill in a later month", async ({
   await expect(page.getByTestId("panel-notification")).toContainText(
     "Health and Safety",
   );
+  const teflon = page.getByTestId("gauge-teflon").locator("dd");
+  const before = Number(await teflon.innerText());
   await page.getByTestId("option-say-it-was-scheduled").click();
   await page.getByTestId("continue").click();
+
+  // Teflon moves as the month closes, and says which Thread moved it.
+  await playUntil(page, "panel-story");
+  await expect(page.getByTestId("story-gauge")).toContainText(
+    "desk with no window",
+  );
+  await expect(teflon).toHaveText(String(before - 10));
+  await page.getByTestId("open-gauge-teflon").click();
+  await expect(page.getByTestId("gauge-move").last()).toContainText(
+    "desk with no window",
+  );
+  await page.getByTestId("close-gauges").click();
 
   await playToResults(page);
 

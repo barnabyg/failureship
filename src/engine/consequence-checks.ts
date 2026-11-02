@@ -26,6 +26,223 @@ function flagsThatCanBeSet(content: Content): Set<string> {
   ]);
 }
 
+/** A line that names a kind would hand the player the hidden truth. */
+export function findNamedKinds(
+  content: Content,
+  owner: string,
+  written: readonly string[],
+): string[] {
+  const labels = Object.values(content.hiddenTruth.kinds).map((k) =>
+    k.label.toLowerCase(),
+  );
+  return written
+    .filter((line) => labels.some((l) => line.toLowerCase().includes(l)))
+    .map((line) => `${owner} names a kind: "${line}"`);
+}
+
+/**
+ * What falls due must always be answerable and must say how it ends, so a month
+ * can never get stuck on a commitment and none can be left neither kept nor broken.
+ */
+function findBrokenDue(
+  content: Content,
+  owner: string,
+  due: Pick<ReturnType<typeof everyNotification>[number], "options">,
+): string[] {
+  const problems: string[] = [];
+  const free = (o: { cost?: string | undefined }) =>
+    (content.balance.actionCosts[o.cost ?? ""] ?? 0) === 0;
+  if (!due.options.some((o) => free(o) && o.settles === "broken")) {
+    problems.push(`${owner} needs a free way to break it.`);
+  }
+  for (const option of due.options) {
+    if (option.settles === undefined) {
+      problems.push(`${owner} option "${option.id}" must say how it settles.`);
+    }
+    if (option.bet && option.bet.lost.settles === undefined) {
+      problems.push(
+        `${owner} option "${option.id}" must say how losing settles.`,
+      );
+    }
+  }
+  return problems;
+}
+
+/** A Promise has to be offered somewhere, to someone who exists, in no kind's name. */
+export function findBrokenPromises(content: Content): string[] {
+  const written = content.promises;
+  const problems: string[] = [];
+  const options = [
+    ...everyNotification(content).flatMap((n) => n.options),
+    ...content.scenes.flatMap((s) => s.options),
+  ];
+  const offered = new Set(options.flatMap((o) => o.promise ?? []));
+  for (const id of offered) {
+    if (!written?.items.some((item) => item.id === id)) {
+      problems.push(`A choice offers unknown Promise "${id}".`);
+    }
+  }
+  const dues = new Set(
+    [...(written?.items ?? []), ...(content.deals?.items ?? [])].flatMap(
+      (item) => item.due.options.map((o) => o.id),
+    ),
+  );
+  for (const option of everyNotification(content).flatMap((n) => n.options)) {
+    if (option.settles !== undefined && !dues.has(option.id)) {
+      problems.push(`Option "${option.id}" settles nothing that falls due.`);
+    }
+  }
+  if (!written) return problems;
+  for (const item of written.items) {
+    const owner = `Promise "${item.id}"`;
+    if (!content.characters.some((c) => c.id === item.to)) {
+      problems.push(`${owner} is made to unknown "${item.to}".`);
+    }
+    if (!offered.has(item.id)) {
+      problems.push(`${owner} is offered by nothing.`);
+    }
+    if (item.after.min > item.after.max) {
+      problems.push(`${owner} falls due after a shorter wait than it starts.`);
+    }
+    problems.push(...findBrokenDue(content, owner, item.due));
+  }
+  for (const option of content.notifications.flatMap((n) => n.options)) {
+    if (option.promise !== undefined && option.result) {
+      problems.push(
+        `Option "${option.id}" has a result, but what is said back is its result.`,
+      );
+    }
+  }
+  const { replies } = written;
+  problems.push(
+    ...findNamedKinds(content, "A reply to a Promise", [
+      ...Object.values(replies.believed).flat(),
+      ...Object.values(replies.doubted).flat(),
+      ...replies.letDown,
+      ...replies.heard,
+    ]),
+  );
+  return problems;
+}
+
+/** A Deal has to be offered, between people who exist, and end either way. */
+export function findBrokenDeals(content: Content): string[] {
+  const written = content.deals;
+  const problems: string[] = [];
+  const options = [
+    ...everyNotification(content).flatMap((n) => n.options),
+    ...content.scenes.flatMap((s) => s.options),
+  ];
+  const offered = new Set(options.flatMap((o) => o.deal ?? []));
+  for (const id of offered) {
+    if (!written?.items.some((item) => item.id === id)) {
+      problems.push(`A choice offers unknown Deal "${id}".`);
+    }
+  }
+  if (!written) return problems;
+  if (!content.promises) {
+    problems.push("Deals are written, but no Promises to break like them.");
+  }
+  const known = new Set(content.characters.map((c) => c.id));
+  const promised = new Set(content.promises?.items.map((p) => p.id));
+  for (const item of written.items) {
+    const owner = `Deal "${item.id}"`;
+    if (promised.has(item.id)) problems.push(`${owner} shares a Promise's id.`);
+    for (const id of [item.with, item.word.over]) {
+      if (!known.has(id)) problems.push(`${owner} names unknown "${id}".`);
+    }
+    if (item.with === item.word.over) {
+      problems.push(`${owner} has someone put in a word with themselves.`);
+    }
+    if (!offered.has(item.id)) problems.push(`${owner} is offered by nothing.`);
+    for (const span of [item.after, item.word.after]) {
+      if (span.min > span.max) {
+        problems.push(
+          `${owner} falls due after a shorter wait than it starts.`,
+        );
+      }
+    }
+    problems.push(...findBrokenDue(content, owner, item.due));
+  }
+  for (const option of content.notifications.flatMap((n) => n.options)) {
+    if (option.deal !== undefined && option.result) {
+      problems.push(
+        `Option "${option.id}" has a result, but what is said back is its result.`,
+      );
+    }
+  }
+  return problems;
+}
+
+/** Only Believers change, and both of the player's bosses stay, until vacancies exist. */
+export function findBrokenChanging(content: Content): string[] {
+  const written = content.changing;
+  if (!written) return [];
+  const problems: string[] = [];
+  const known = new Set(content.characters.map((c) => c.id));
+  const bosses = [content.boss.character, content.overHead?.character];
+  for (const id of Object.keys(written.leaving)) {
+    if (!known.has(id)) problems.push(`Leaving names unknown "${id}".`);
+    if (bosses.includes(id)) {
+      problems.push(`"${id}" cannot leave: nothing creates a vacancy yet.`);
+    }
+  }
+  for (const burn of written.burns) {
+    const { practitioner, whistleblower, left } = burn.leans;
+    if (practitioner + whistleblower + left === 0) {
+      problems.push(`Burn "${burn.about}" leans nobody any way.`);
+    }
+  }
+  for (const sign of written.whistleblower.signs) {
+    if (!sign.text.includes("{who}")) {
+      problems.push(`Whistleblower sign "${sign.id}" needs to say {who}.`);
+    }
+    if (content.behaviours.some((b) => b.id === sign.id)) {
+      problems.push(`Whistleblower sign "${sign.id}" shares a behaviour's id.`);
+    }
+  }
+  if (!written.whistleblower.motive.includes("{who}")) {
+    problems.push("A whistleblower's motive needs to say {who}.");
+  }
+  if (written.whistleblower.reports.at(-1)?.when !== undefined) {
+    problems.push(
+      'A whistleblower needs a report with no "when", to fall back on.',
+    );
+  }
+  return problems;
+}
+
+/** A Gauge must be reachable by its Milestones, and moved by Threads that name it. */
+export function findBrokenGauges(content: Content): string[] {
+  const problems: string[] = [];
+  const ids = new Set<string>();
+  for (const gauge of content.gauges ?? []) {
+    const owner = `Gauge "${gauge.id}"`;
+    if (ids.has(gauge.id)) problems.push(`${owner} is written twice.`);
+    ids.add(gauge.id);
+    if (gauge.start < gauge.min || gauge.start > gauge.max) {
+      problems.push(`${owner} starts outside its range.`);
+    }
+    for (const milestone of gauge.milestones) {
+      if (milestone.at <= gauge.start || milestone.at > gauge.max) {
+        problems.push(
+          `${owner} has Milestone "${milestone.title}" out of reach.`,
+        );
+      }
+    }
+  }
+  for (const thread of content.threads) {
+    for (const move of thread.outcomes.flatMap((o) => o.gauges)) {
+      if (!ids.has(move.gauge)) {
+        problems.push(
+          `Thread "${thread.id}" moves unknown Gauge "${move.gauge}".`,
+        );
+      }
+    }
+  }
+  return problems;
+}
+
 /** A Bill must be able to reach the player, in the way it says it does. */
 function findBrokenBills(content: Content): string[] {
   const problems: string[] = [];

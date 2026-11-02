@@ -94,7 +94,12 @@
     "from": "From: The Senior Analyst, Priya Venn",
     "title": "Those laptops",
     "body": "The Senior Analyst has told several people that you promised the team new laptops. You did not. You have now been asked when they will arrive, by someone who does not believe you.",
-    "sets": ["laptop-promise"]
+    "sets": ["laptop-promise"],
+    "when": {
+      "not": {
+        "did": "promised-laptops"
+      }
+    }
   },
   {
     "id": "tricky-question",
@@ -123,5 +128,29 @@
     "title": "A small favour",
     "body": "Your boss's boss has put you on a working group about working groups, on the basis of a conversation you do not remember. It meets on Fridays, and it has no end date.",
     "sets": ["working-group"]
+  },
+  {
+    "id": "favour-called-in-projects",
+    "from": "From: The Project Co-ordinator, Callum Reed",
+    "title": "About that favour",
+    "body": "The Project Co-ordinator is still on the supplier's team, and would like you to know that they have not forgotten. They would like you to cover the supplier's Friday call, which is three hours long and in a time zone. Since you owe them, you do.",
+    "when": {
+      "youOwe": "projects"
+    },
+    "priority": true,
+    "sets": ["paid-back-a-favour"],
+    "repays": "projects"
+  },
+  {
+    "id": "favour-called-in-analyst",
+    "from": "From: The Senior Analyst, Priya Venn",
+    "title": "About that favour",
+    "body": "The Senior Analyst needs someone to check four hundred rows of figures by hand, because the system is not trusted. They remind you, pleasantly, about the footer. You spend an evening on rows.",
+    "when": {
+      "youOwe": "analyst"
+    },
+    "priority": true,
+    "sets": ["paid-back-a-favour"],
+    "repays": "analyst"
   }
 ]

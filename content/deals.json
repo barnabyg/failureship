@@ -1,0 +1,180 @@
+{
+  "favours": {
+    "dealt": 2,
+    "why": [
+      "{owes} once left {to} to explain a missed deadline, and has been very nice to them since.",
+      "{to} signed off {owes}'s expenses for a conference that was mostly a hotel.",
+      "{to} knows what {owes} said about the reorganisation, and has never mentioned it.",
+      "{to} covered for {owes} at a fire drill, during which {owes} was at the dentist."
+    ]
+  },
+  "owed": {
+    "youOwe": "You owe {who}. {why}",
+    "owesYou": "{who} owes you. {why}",
+    "between": "{why}"
+  },
+  "statuses": {
+    "open": "Agreed, and your side still to do",
+    "kept": "Your side done",
+    "broken": "Your side not done",
+    "refused": "Turned down",
+    "lapsed": "They left before it was done"
+  },
+  "items": [
+    {
+      "id": "move-for-a-word",
+      "with": "projects",
+      "title": "A move, for a good word",
+      "what": "a move to another team",
+      "agreed": "{who} shakes on it, a little too hard. They have been seconded to the supplier's project team since the spring, and they would put in a good word with your boss in return for a way out. They say they will have a word this month.",
+      "word": {
+        "over": "boss",
+        "after": {
+          "min": 1,
+          "max": 1
+        },
+        "chance": {
+          "believer": 0.9,
+          "incompetent": 0.6,
+          "practitioner": 0.6
+        },
+        "shift": 3,
+        "given": {
+          "title": "A good word",
+          "body": "The Project Co-ordinator stops by your desk to say that it is done: they have had a word with your boss about you, a good one. They do not say what your boss said back. You realise you did not ask them to find out."
+        },
+        "withheld": {
+          "title": "A good word, pending",
+          "body": "The Project Co-ordinator says they have not managed to have that word with your boss yet. Your boss has been in a lot of meetings, apparently. They say they owe you one, and look relieved to have said it."
+        }
+      },
+      "after": {
+        "min": 2,
+        "max": 3
+      },
+      "due": {
+        "from": "From: The Project Co-ordinator, Callum Reed",
+        "subject": "RE: That move",
+        "body": "The Project Co-ordinator would like to know how the move is going. They have started saying goodbye to the supplier's team in a way that the supplier's team has noticed. Moving someone between teams needs a vacancy, two managers and a form, and you have none of them.",
+        "options": [
+          {
+            "id": "arrange-the-move",
+            "family": "trade",
+            "label": "Spend a day finding them a team that will take them",
+            "cost": "standard",
+            "settles": "kept",
+            "sets": ["arranged-a-move"],
+            "result": {
+              "title": "The move",
+              "body": "It takes a day of corridors. The Data Quality team agrees to take them, in return for a monitor. The Project Co-ordinator moves their plant across that afternoon, and tells you that they will not forget it."
+            },
+            "bet": {
+              "chance": 0.6,
+              "lost": {
+                "settles": "broken",
+                "sets": ["move-fell-through"],
+                "result": {
+                  "title": "The move",
+                  "body": "You spend a day in corridors. Every team says it would love to, but there is a freeze. The Project Co-ordinator says they understand, and you can see them working out what you owe them."
+                }
+              }
+            }
+          },
+          {
+            "id": "move-not-possible",
+            "family": "deflect",
+            "label": "Tell them that moves are frozen this quarter",
+            "settles": "broken",
+            "sets": ["move-fell-through"],
+            "result": {
+              "title": "RE: That move",
+              "body": "You tell them that moves are frozen this quarter. They say that they had heard that too, and that they had hoped you were the sort of person it did not apply to."
+            }
+          }
+        ]
+      },
+      "owed": {
+        "you": "You told them you would get them moved off the supplier's team, and you did not.",
+        "them": "They said they would put in a good word with your boss, and did not get round to it."
+      },
+      "worth": {
+        "landed": "The Project Co-ordinator had real sway with your boss, so the good word moved your boss.",
+        "worthless": "The Project Co-ordinator had no sway with your boss, so the good word was worth nothing. Your boss nodded, and forgot it.",
+        "withheld": "The Project Co-ordinator never gave the good word.",
+        "pending": "The good word had not been given when the run ended."
+      }
+    },
+    {
+      "id": "credit-for-a-word",
+      "with": "analyst",
+      "title": "Credit, for a word upstairs",
+      "what": "their name on the next deck",
+      "agreed": "{who} agrees, and says that they will mention you to your boss's boss, whom they see about the figures. In return their name goes on the next deck, at the front, where your boss's name usually is.",
+      "word": {
+        "over": "head",
+        "after": {
+          "min": 1,
+          "max": 1
+        },
+        "chance": {
+          "believer": 0.95,
+          "incompetent": 0.6,
+          "practitioner": 0.5
+        },
+        "shift": 2,
+        "given": {
+          "title": "A word upstairs",
+          "body": "The Senior Analyst mentions, while looking at something else, that they put in a word for you with your boss's boss. They do not say how it went. They say, for nothing, that it was a short meeting."
+        },
+        "withheld": {
+          "title": "A word upstairs, later",
+          "body": "The Senior Analyst says that the figures meeting with your boss's boss was cancelled, and so was the word. They owe you one, they say, and write it on a sticky note, which they keep."
+        }
+      },
+      "after": {
+        "min": 2,
+        "max": 3
+      },
+      "due": {
+        "from": "From: The Senior Analyst, Priya Venn",
+        "subject": "The deck (my name)",
+        "body": "The next deck goes upstairs on Friday. The Senior Analyst would like to see their name on the front of it, as agreed. Your boss would like to see their own name there, as always.",
+        "options": [
+          {
+            "id": "their-name-first",
+            "family": "trade",
+            "label": "Put the Senior Analyst's name on the front",
+            "settles": "kept",
+            "sets": ["credited-the-analyst"],
+            "opinion": -1,
+            "result": {
+              "title": "The deck",
+              "body": "The Senior Analyst's name goes on the front. Your boss notices, which takes them until slide one, and asks why. You say it was their figures. Your boss says that is not the point."
+            }
+          },
+          {
+            "id": "boss-name-first",
+            "family": "deflect",
+            "label": "Leave your boss's name on the front, as usual",
+            "settles": "broken",
+            "sets": ["kept-the-boss-on-the-deck"],
+            "result": {
+              "title": "The deck",
+              "body": "Your boss's name stays on the front. The Senior Analyst's name is on slide fourteen, in the footer, in grey, which is technically where it was agreed."
+            }
+          }
+        ]
+      },
+      "owed": {
+        "you": "You said their name would go on the front of the deck, and it went in the footer.",
+        "them": "They said they would put in a word for you upstairs, and the meeting was cancelled."
+      },
+      "worth": {
+        "landed": "The Senior Analyst had real sway with your boss's boss, so the word moved them.",
+        "worthless": "The Senior Analyst had no sway with your boss's boss, so the word was worth nothing. It was, as they said, a short meeting.",
+        "withheld": "The Senior Analyst never put in the word.",
+        "pending": "The word had not been given when the run ended."
+      }
+    }
+  ]
+}

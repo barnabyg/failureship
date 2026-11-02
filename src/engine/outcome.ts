@@ -1,8 +1,11 @@
 import { landWithBoss } from "./boss";
 import { reshuffleCharts, type Reshuffle } from "./charts";
 import type { Content, Kind, MoveFamily, Tone } from "./content";
+import { makeDeal, settleDeal } from "./deals";
+import { YOU } from "./deal";
 import { makeMistake } from "./mistakes";
 import { moveProject, type ProjectChange } from "./project";
+import { makePromise, settlePromise } from "./promises";
 import { shiftBelief } from "./reads";
 import { remember, startNews } from "./reputation";
 import { startRisks } from "./risks";
@@ -29,6 +32,12 @@ export interface Outcome {
   news?:
     | { about: string; tone: Tone; text: string; at: readonly string[] }
     | undefined;
+  promise?: string | undefined;
+  deal?: string | undefined;
+  /** Pays back the favour the player owes this Character. */
+  repays?: string | undefined;
+  /** Keeps or breaks the commitment that fell due as this Notification. */
+  settlesDue?: { id: string; how: "kept" | "broken" } | undefined;
 }
 
 /** Counts a Move the player made, for how they played. */
@@ -55,6 +64,20 @@ export function applyOutcome(
     remember(state, content, memory);
   }
   if (outcome.news) startNews(state, content, outcome.news);
+  if (outcome.promise !== undefined) {
+    makePromise(state, content, outcome.promise);
+  }
+  if (outcome.deal !== undefined) makeDeal(state, content, outcome.deal);
+  if (outcome.repays !== undefined) {
+    const owed = outcome.repays;
+    const map = state.truth.powerMap;
+    map.favours = map.favours.filter((f) => !(f.owes === YOU && f.to === owed));
+  }
+  if (outcome.settlesDue) {
+    const { id, how } = outcome.settlesDue;
+    settlePromise(state, content, id, how);
+    settleDeal(state, content, id, how);
+  }
   for (const word of outcome.learns ?? []) {
     if (!state.buzzwords.includes(word)) state.buzzwords.push(word);
   }

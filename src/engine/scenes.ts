@@ -1,7 +1,10 @@
 import { treatBoss } from "./boss";
+import { signsOfChange, signsOpenTo } from "./changes";
 import { behavioursOpenTo, type ClueVerdict, type Content } from "./content";
 import { applyOutcome, countMove } from "./outcome";
+import { replyToDeal } from "./deals";
 import { treatHead } from "./over-head";
+import { replyToPromise } from "./promises";
 import {
   fillParts,
   fillSubject,
@@ -33,11 +36,17 @@ export function openScene(state: State, world: World, id: string): Step {
     for (const character of cast) {
       const kind = state.truth.characters.find((c) => c.id === character)?.kind;
       if (kind === undefined) continue;
-      const chosen = pickWeighted(
-        state.rng,
-        behavioursOpenTo(content, character),
-        (b) => b.likelihood[kind],
+      // A changed Character's signs follow their new kind.
+      const open = signsOpenTo(
+        state,
+        content,
+        character,
+        behavioursOpenTo(content, character).map((b) => ({
+          id: b.id,
+          weight: b.likelihood[kind],
+        })),
       );
+      const chosen = pickWeighted(state.rng, open, (b) => b.weight);
       state.rng = chosen.next;
       shown.push({ character, behaviour: chosen.item.id });
     }
@@ -90,6 +99,15 @@ function noteScene(
     }
   }
   for (const { character, behaviour } of shown) {
+    const own = signsOfChange(state, content, character).find(
+      (s) => s.id === behaviour,
+    );
+    if (own?.clue !== undefined) {
+      note(
+        sayPeople(own.clue, { "{who}": calledBy(content, character) }),
+        "held",
+      );
+    }
     const written = content.behaviours.find((b) => b.id === behaviour);
     const kind = state.truth.characters.find((c) => c.id === character)?.kind;
     if (written?.clue === undefined || kind === undefined) continue;
@@ -126,7 +144,7 @@ export function behaveInScene(
   const reaction = applyOutcome(
     state,
     world.content,
-    result,
+    { ...result, promise: option?.promise, deal: option?.deal },
     fill(option?.label ?? ""),
   );
   const verdict = scene.verdict?.[moodOf(state, world.content)];
@@ -143,10 +161,13 @@ export function behaveInScene(
       fact: relevant ? (dealt?.text ?? null) : null,
     });
   }
+  const reply =
+    replyToPromise(state, world.content, option?.promise) ??
+    replyToDeal(world.content, option?.deal);
   state.step = {
     kind: "notice",
     title: scene.title,
-    body: fill(result.body),
+    body: reply ? `${fill(result.body)} ${reply.body}` : fill(result.body),
     reaction,
     verdict,
   };

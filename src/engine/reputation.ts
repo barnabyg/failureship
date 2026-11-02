@@ -35,11 +35,17 @@ export function remember(
 export function startNews(
   state: State,
   content: Content,
-  news: { about: string; tone: Tone; text: string; at: readonly string[] },
-): void {
+  news: {
+    about: string;
+    tone: Tone;
+    text: string;
+    at: readonly string[];
+    word?: { victim: string; what: string };
+  },
+): number {
   const id = state.truth.news.length;
-  const { about, tone, text } = news;
-  state.truth.news.push({ about, tone, text, month: state.month });
+  const { about, tone, text, word } = news;
+  state.truth.news.push({ about, tone, text, month: state.month, word });
   for (const character of news.at) {
     remember(state, content, {
       character,
@@ -51,10 +57,11 @@ export function startNews(
       news: id,
     });
   }
+  return id;
 }
 
 /** Whoever has a tie of influence to this person, in either direction. */
-function tiedTo(state: State, id: string): string[] {
+export function tiedTo(state: State, id: string): string[] {
   return state.truth.powerMap.influence.flatMap((tie) => {
     if (tie.who === id) return [tie.over];
     return tie.over === id ? [tie.who] : [];

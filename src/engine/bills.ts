@@ -1,6 +1,7 @@
 import { everyBill, type Bill, type Content } from "./content";
+import { gaugesFromThread } from "./gauges";
 import { applyOutcome } from "./outcome";
-import { matches } from "./reads";
+import { isGone, matches, mentionsGone } from "./reads";
 import { drawFor } from "./rng";
 import type { State, Step } from "./state";
 
@@ -20,11 +21,15 @@ export function playThreads(state: State, content: Content): void {
   for (const started of state.threads) {
     if (started.due !== state.month) continue;
     const thread = content.threads.find((t) => t.id === started.id);
-    const outcome = thread?.outcomes.find((o) =>
-      matches(state, content, o.when),
+    // Nothing comes back through someone who has gone.
+    const outcome = thread?.outcomes.find(
+      (o) =>
+        !mentionsGone(state, content, o.bill.from ?? "") &&
+        matches(state, content, o.when),
     );
     if (!outcome) continue;
     started.played = { month: state.month, text: outcome.playedOut };
+    gaugesFromThread(state, outcome.gauges);
     sendBill(state, content, outcome.bill);
   }
 }
@@ -41,7 +46,7 @@ export function surfaceRisks(state: State, content: Content): void {
     const dealt = state.truth.characters.find(
       (c) => c.id === written?.route.character,
     );
-    if (!written || !dealt) continue;
+    if (!written || !dealt || isGone(state, dealt.id)) continue;
     const { route } = written;
     const motive =
       drawFor(state.seed, `risk:${risk.id}`, state.month) <
@@ -51,7 +56,9 @@ export function surfaceRisks(state: State, content: Content): void {
     risk.cameOut = { month: state.month, onPlayer: traced };
     if (written.event !== undefined) state.eventsDue.push(written.event);
     const bill = traced ? written.onPlayer : written.onSomeoneElse;
-    if (bill) sendBill(state, content, bill);
+    if (bill && !mentionsGone(state, content, bill.from ?? "")) {
+      sendBill(state, content, bill);
+    }
   }
 }
 

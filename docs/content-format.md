@@ -23,6 +23,7 @@ A `when` or `requires` holds one of these:
 | `{ "holderIs": "boss" }`                                               | That Character is the most influential of those present, or of everyone outside a Scene | Yes                    |
 | `{ "bossIs": "practitioner" }`                                         | The boss is of that kind                                                                | Yes                    |
 | `{ "factNature": { "character": "projects", "nature": "dangerous" } }` | That Character's Hidden Fact has that `nature`                                          | Yes                    |
+| `{ "youOwe": "projects" }`                                             | The player owes that Character a favour                                                 | No                     |
 | `{ "not": ... }`                                                       | The condition inside does not hold                                                      | If the inner one does  |
 | `{ "all": [...] }`                                                     | Every condition inside holds                                                            | If any inner one does  |
 
@@ -115,6 +116,34 @@ uses in a run. This is how a Practitioner boss turns on someone who shines.
 
 Buzzwords and their meanings. A choice's `learns` teaches one, and `hasBuzzword` reads it.
 
+## `changing.json`
+
+How a Believer burned enough changes. How to write it is in
+[Change what burns a Believer](../README.md#change-what-burns-a-believer) in the README.
+
+- `burns` are what burns someone: a memory with that `about`, from news or `remembers`, of something
+  done to them, whether in front of them or to them. Hearing of it second-hand does not burn. Each has
+  a `weight`, a `why` for the results screen, and `leans`, the weights for `practitioner`,
+  `whistleblower` and `left` that pick, by a seeded draw, what they become.
+- `threshold` is the total weight at which a Believer changes, checked as each month opens. Someone
+  changes once. Other kinds never change.
+- `became` is what the results screen calls each change.
+- `whistleblower.signs` say `{who}` and are shown, by `weight`, beside what any Believer of their
+  role might show. A `clue` makes the Notebook keep one. A month after changing, a whistleblower
+  sends the first of `reports` whose `when` holds, a Bill as in [`threads.json`](#threadsjson): what
+  they know about goes first. Failing that, they bring out the first hidden risk still waiting,
+  whatever its own route, or else send the last report, which needs no `when`. `share` is how much of
+  what a whistleblower is seen doing is one of their own signs. `motive` says `{who}` and is what the results screen says of a risk they brought out.
+- `leaving` is keyed by Character. Only those listed can leave, and your boss and your boss's boss
+  cannot be. Each has the `cover` text uses for whoever stands in for them, the `notice` that says
+  they have gone, and optional `sets` and `project`.
+
+Someone who leaves comes off the Power Map, and whoever answered to them answers to whoever was above
+them. Scenes go on without them. Any option or action whose words name them, or Notification or Move
+from them, is no longer offered, and a Thread's outcome from them is passed over. A risk that would
+come out through them never does. Their open Promises and Deals lapse. If the report's `input` came
+from them, it is never late again.
+
 ## `characters.json`
 
 Job titles, roles, names, and who reports to whom on the Org Chart.
@@ -123,6 +152,29 @@ A Character's `called` is how running text refers to them, such as `your boss`, 
 a capital only where a sentence starts. Write people into text that way too, and keep their
 `name` for a Notification or Move's `from` line. A test fails if a name turns up in the
 running text.
+
+## `deals.json`
+
+Deals, in which each side offers something. How to write one is in
+[Write a Deal](../README.md#write-a-deal) in the README.
+
+- `favours` deals `dealt` favours between Characters when a run is dealt, each with one of the
+  `why` lines, which say `{owes}` and `{to}`. They are part of the hidden Power Map.
+- `owed` is how a favour reads: `youOwe` and `owesYou` say `{who}` and `{why}`, and `between`,
+  shown only on the results screen, says `{why}`.
+- `statuses` say where the player's side has got to.
+- Each item has `with`, `title`, `what`, `agreed` (which says `{who}`), `word`, `after`, `due`,
+  `owed` and `worth`.
+- `word` is their side: a good word with `over`, given `after` a seeded wait with a seeded `chance`
+  by their kind, which moves that person's belief by `shift` only if they have sway. `given` and
+  `withheld` are what the player is told. If it is withheld, they owe the player.
+- `due` is the player's side, written as for a Promise. Breaking it starts the same news as a broken
+  Promise, and the player owes them. `owed.you` and `owed.them` say why.
+- `worth` is what the results screen says it was really worth: `landed`, `worthless`, `withheld`,
+  or `pending` if the run ended first.
+
+A Scene option or Notification option offers one with `"deal"`, once in a run. Deals need
+[`promises.json`](#promisesjson), whose `broken` news they share.
 
 ## `demands.json`
 
@@ -184,6 +236,16 @@ choice with an `approach` should say which family it is, and a test fails if it 
 
 The rooms on the floor: positions, sizes, colours and the lift's sign.
 
+## `gauges.json`
+
+The player's Gauges, in plain view at every step. How to add one is in
+[Add a Gauge or a Milestone](../README.md#add-a-gauge-or-a-milestone) in the README.
+
+Each has `id`, `label`, `start`, and the `min` and `max` it stays within. Its `milestones` are
+earned once each, on reaching `at`, and the player is told `title` and `body` as the month closes.
+A Milestone it can never reach is refused. A Gauge moves only from the `gauges` of a Thread's outcome,
+as in [`threads.json`](#threadsjson). Nothing else moves it, and nothing but its Milestones reads it.
+
 ## `hidden-truth.json`
 
 The rules of the deal: kinds, their weights, and the Hidden Facts.
@@ -212,6 +274,7 @@ mistake only if it has a `result`.
 
 Character Moves, and when each can land. A Move does not land twice in a run while another
 could. A Move with `"priority": true` lands ahead of the others whenever its `when` holds.
+`"repays": "projects"` pays back the favour the player owes that Character, as it lands.
 
 ## `notebook.json`
 
@@ -284,6 +347,29 @@ reported status arrives at `at`, before the player's actions, whichever month th
 `chance` of that for each kind they might be. Lateness is drawn from the seed and never from
 the player's choices, and it sets a flag for the month. It must be possible from at least two
 kinds, and certain from none, so that it never settles what someone is.
+
+## `promises.json`
+
+The player's word. How to write one is in [Write a Promise](../README.md#write-a-promise) in the
+README.
+
+- `belief` sets the seeded chance of being believed: `chance` by the kind they were dealt, plus
+  `mood` for how they stand with the player, less `perBroken` for each broken word that has reached
+  them, and plus `perKept` for each kept one.
+- `replies` are what they say back, and say `{who}` and `{what}`. `believed` and `doubted` are
+  written for each kind, `letDown` is for someone the player let down before, and `heard` is for
+  someone who heard of it, and also says `{victim}`. A reply that names a kind is refused.
+- `broken` and `kept` are the news each starts, as in [`reputation.json`](#reputationjson). A
+  broken Promise is known at once to its victim and to everyone tied to them on the Power Map, and the
+  victim's belief falls `perTie` further for each of those.
+- `statuses` are how the player's own list, and the results screen, say where each has got to.
+- `items` are the Promises. Each has `to`, `title`, `what`, a seeded wait `after`, and `due`, a
+  Notification whose options each `settles` it as `kept` or `broken`. One of them must break it
+  for nothing.
+
+A Notification option or Scene option offers one with `"promise"`, once in a run. A Notification
+option that does has no `result`, since what is said back is its result. A Promise not believed never
+falls due.
 
 ## `reputation.json`
 
@@ -384,7 +470,10 @@ A `bill` has a unique `id`, a `title` and a `body`, and `as` says how it arrives
   them free. The options are written as in [`notifications.json`](#notificationsjson).
 - `"move"` lands where Character Moves do, beside the month's own, and needs `from`.
 
-It can carry `sets`, `opinion`, `headOpinion`, `project` and `"mistake": "big"`, and these
+An outcome's `gauges` move the player's Gauges as the month it plays out closes, each with the
+`gauge`, how far it moves it `by`, and the `note` the player sees. Only a Thread can move a Gauge.
+
+A Bill can carry `sets`, `opinion`, `headOpinion`, `project` and `"mistake": "big"`, and these
 take effect when it arrives, or, as a Move, when it lands. Its flags can be read by the official
 story, and they count as hidden, so no option can depend on them.
 

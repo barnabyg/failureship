@@ -1,4 +1,8 @@
+import { startedAs } from "./changes";
 import { MOVE_FAMILIES, type Content } from "./content";
+import { dealsInResults } from "./deals";
+import { gaugesInView } from "./gauges";
+import { promisesInResults } from "./promises";
 import { bossKindOf, moodOf, moodOfCharacter, personOf } from "./reads";
 import { calledBy, sayPeople } from "./say";
 import type { State } from "./state";
@@ -19,6 +23,24 @@ export function toResultsView(
       : content.ui.results),
     ending: toEnding(state, content),
     mistakes: state.mistakes,
+    milestones: gaugesInView(state, content).milestones,
+    changed: state.truth.changes.flatMap((change) => {
+      const written = content.changing;
+      if (!written) return [];
+      const { name, title } = personOf(content, change.character);
+      return [
+        {
+          month: change.month,
+          name,
+          title,
+          from: content.hiddenTruth.kinds[change.from].label,
+          to: written.became[change.to],
+          why: change.why,
+        },
+      ];
+    }),
+    promises: promisesInResults(state, content),
+    ...dealsInResults(state, content),
     beliefs: toBeliefs(state, content),
     changes: state.eventsLanded.flatMap(({ id, month }) => {
       const written = content.events.find((e) => e.id === id);
@@ -33,11 +55,18 @@ export function toResultsView(
       const landed = cameOut?.onPlayer
         ? written.landedOnYou
         : written.landedElsewhere;
+      const through = cameOut?.through;
+      const motive =
+        through !== undefined && content.changing
+          ? sayPeople(content.changing.whistleblower.motive, {
+              "{who}": calledBy(content, through),
+            })
+          : written.route.motive;
       return [
         {
           addedIn: risk.month,
           note: written.note,
-          motive: written.route.motive,
+          motive,
           cameOutIn: cameOut?.month ?? null,
           fate: cameOut ? landed : written.neverCameOut,
         },
@@ -61,7 +90,8 @@ export function toResultsView(
       return {
         name: known?.name ?? dealt.id,
         title: known?.title ?? "",
-        kind: content.hiddenTruth.kinds[dealt.kind].label,
+        kind: content.hiddenTruth.kinds[startedAs(state, dealt.id, dealt.kind)]
+          .label,
         fact: dealt.fact?.text ?? null,
       };
     }),
@@ -80,8 +110,10 @@ export function toResultsView(
         name: nameOf(dealt.id),
         title: personOf(content, dealt.id).title,
         mark: mark === null ? null : kinds[mark].label,
-        truth: kinds[dealt.kind].label,
-        correct: mark === dealt.kind,
+        truth: kinds[startedAs(state, dealt.id, dealt.kind)].label,
+        correct:
+          mark === dealt.kind ||
+          mark === startedAs(state, dealt.id, dealt.kind),
       };
     }),
     clues: state.clues.map(({ month, source, text, verdict }) => ({

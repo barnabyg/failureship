@@ -4,10 +4,12 @@ A satirical, single-player browser game. You climb a ten-storey office tower by
 reading people. The design is in
 [failureship-grill-outcome.md](failureship-grill-outcome.md).
 
-This is Phase 4 in progress: a run of nine months on a furnished Floor 1, with kinds of
-boss, a Project, the Monthly Status Report, Demands, one-off Budgets, every family of Moves
-and going over your boss's head. Now earlier choices come back through Threads, hidden risks
-and what people have heard, things happen to the company, you can be fired, and runs save.
+This is Phase 4, ready for its steering checkpoint: a run of nine months on a furnished Floor 1,
+with kinds of boss, a Project, the Monthly Status Report, Demands, one-off Budgets, every family of
+Moves and going over your boss's head. Earlier choices come back through Threads, hidden risks and
+what people have heard, things happen to the company, and you can be fired. You can give your word
+and make Deals, a Believer you burn can change or leave, Teflon moves when a Thread plays out, and
+runs save.
 
 ## Play
 
@@ -66,6 +68,15 @@ Press **Org Chart** at any step to see the formal hierarchy, also at no cost. Th
 one is the hidden Power Map, dealt from the seed. A Company Event can change either of them
 mid-run, and later signs and charts follow.
 
+Your word is yours to give. Some choices offer a **Promise**, whether or not you can deliver it,
+and some a **Deal**, in which each side offers something. Whether you are believed, and whether a
+good word from someone counts, goes by who they really are and what has reached them. The **Your
+word** card shows what you have promised, your Deals and the favours you owe or are owed, at no cost.
+Nothing tells you what other people owe each other.
+
+**Teflon**, in the header, is your track record, not your danger. It moves only when a Thread plays
+out, and the official story says which. Reaching some levels earns a Milestone.
+
 What you do can travel. There is no reputation score: each person believes what has reached them
 along the Power Map, and that shows only in how they are with you. So the same deed is known to
 some and unknown to others, and good news travels too.
@@ -90,6 +101,25 @@ that deal instead, and replaces the saved run. If you have changed anything in
 `content/` since the save, or the game has moved on, you are offered a new run: a save
 only holds for the data it was dealt from. A save can be read in browser storage, hidden
 truth included, which is accepted while the game is in development.
+
+### A test scenario: what comes back
+
+This takes about fifteen minutes, from the root of the repository with `npm run play`, and gives
+away these deals. Each row starts at the address shown. Adding `&month=N` to an address only works
+in the browser tests' own build, so play from month 1 and do the same as the row.
+
+| Seed and what to do                                                                                                             | Expect                                                                                                                                                                                                        |
+| ------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Seed 7. File the report and go to the meeting each month. In month 3, tell the Senior Analyst you will get the team new laptops | They believe you. In month 4 or 5 it falls due, and every answer breaks it.                                                                                                                                   |
+| The same run, month 6. In the meeting, tell your boss you can get the team new laptops                                          | Your boss does not believe you, and says why: you told the Senior Analyst the same thing. **Your word** shows both. The results screen shows who heard of the broken one.                                     |
+| Seed 2. Play as above. In month 3's Town Hall, offer the Project Co-ordinator a move for a good word with your boss             | They shake on it, and in month 4 say the word is given. At the end, the results screen says it really moved your boss.                                                                                        |
+| Seed 3, the same                                                                                                                | You are told exactly the same, but here the Project Co-ordinator has no sway with your boss, and the results screen says the word was worth nothing.                                                          |
+| Seed 32. Play as above, but in month 2 blame the Senior Analyst, then promise them laptops in month 3 and put them off          | Nothing tells you, but the Senior Analyst has started keeping a file. The results screen shows they became a whistleblower, and why. On seed 10 they leave instead, and on seed 9 they learn how things work. |
+| Seed 10, the same                                                                                                               | From month 6 the Senior Analyst has gone. Meetings go on without them, and an acting Senior Analyst does what they did. The run still ends normally.                                                          |
+| Seed 2. In month 4, move the Project Co-ordinator to the desk with no window, and skip the training in month 2                  | In month 6 the Health and Safety committee writes. As that month closes, Teflon moves, and the official story and the **Gauges** button say which Thread moved it.                                            |
+| Seed 2. In month 2, do the training and fake the Demand from your boss's boss                                                   | In month 4 a correction to the minutes lands on you: a hidden risk, traced back to you. The results screen lists it.                                                                                          |
+| Seed 3. In month 2's Lessons Learned Review, blame the Project Co-ordinator, then cut them at the Budget Round in month 4       | The first is a big mistake and puts you on a Final Warning. The second gets you fired, and the run ends at the results screen.                                                                                |
+| Any seed. Play plainly to the end                                                                                               | At least one Thread comes back or one risk lands. Months later, the minutes of a meeting you went to come back on you.                                                                                        |
 
 ### A test scenario: three kinds of boss
 
@@ -161,6 +191,8 @@ format, the page shows what is wrong instead of the game.
 | `events.json`         | Company Events: where each comes from, how it moves the charts, and the official story's words                       |
 | `reputation.json`     | How far and how fast news travels, and the signs of what each Character believes of you                              |
 | `risks.json`          | Hidden risks: what adds each, who it comes out through, and whether it can be traced to you                          |
+| `deals.json`          | Deals: what each side offers, whether a good word counts, and the favours owed between people                        |
+| `promises.json`       | Promises: who they are made to, what is said back, and what arrives when they fall due                               |
 | `mistakes.json`       | The words of a Final Warning and of being fired                                                                      |
 | `official-story.json` | The official story, assembled from entries according to what you did                                                 |
 | `behaviours.json`     | What Characters can be seen doing, which roles can do it, and how likely each kind is to do it                       |
@@ -169,7 +201,9 @@ format, the page shows what is wrong instead of the game.
 | `over-head.json`      | Going over your boss's head: the odds, the effects, the words and your boss's boss's signs                           |
 | `sources.json`        | Find Out: who can be asked, how each role talks, how reliable each kind is, and every claim                          |
 | `notebook.json`       | Events the Notebook keeps a clue of, and what each clue was worth                                                    |
+| `changing.json`       | What burns a Believer, how much it takes, what they can become, and who covers for anyone who leaves                 |
 | `characters.json`     | Job titles, roles, how text refers to each person, names, and who reports to whom on the Org Chart                   |
+| `gauges.json`         | Gauges such as Teflon, where each starts, and the Milestones earned along the way                                    |
 | `hidden-truth.json`   | The rules of the deal: kinds, their weights, and the Hidden Facts                                                    |
 | `balance.json`        | Actions a month, months in a run, the cost of each choice, how often signs mislead and when the boss's opinion shows |
 | `floor-1.json`        | The rooms on the floor: positions, sizes, colours and the lift's sign                                                |
@@ -191,6 +225,70 @@ A Thread is how an earlier choice comes back. To add one, needing no code:
 
 The player hears nothing of a Thread until its Bill arrives. Results then trace it back to what
 started it.
+
+### Write a Promise
+
+A Promise is the player's word, which they can give whether or not they can deliver it. There is
+no meter behind it: it is a commitment and a memory. To add one, needing no code:
+
+1. Add an item to `content/promises.json`, with who it is made `to`, a `title`, `what` was offered,
+   which reads after "You told them", and how many months `after` it falls due.
+2. Write its `due`, the Notification that arrives then. Each option `settles` it as `kept` or
+   `broken`, and one must break it for nothing, so that it can always be answered. A Promise that
+   cannot be delivered has only ways to break it.
+3. Offer it: give a Notification option or a Scene option `"promise"` with its id. That option says
+   nothing of its own: what the person says back is its result.
+
+Whether they believe it is seeded, and goes by `belief` in the same file: who they are, what they make
+of the player, and every broken or kept word that has reached them. What they say back shows why. A
+broken Promise reaches everyone tied to its victim at once, and `perTie` makes it cost the victim's
+belief more the better connected they are. The player can see their word at any time, for nothing.
+
+### Write a Deal
+
+A Deal is worth only what the people in it can really deliver, and either side can fail. To add one,
+needing no code, add an item to `content/deals.json`:
+
+1. Say who it is `with`, its `title`, `what` the player offers, and what they say as they shake on it.
+2. Write their side, the `word`: whom it is put in `over`, the seeded `chance` that they give it at
+   all, by who they are, and how far it moves that person if it lands. It lands only if they really
+   have sway: they are above that person on the Power Map, or are owed a favour by them. The player
+   is told the same either way.
+3. Write the player's side as `due`, like a Promise's. Breaking it behaves like a broken Promise, and
+   the player then owes them.
+4. Offer it from a Scene option or a Notification option, with `"deal"` and its id.
+
+`favours.dealt` in the same file is how many favours are owed between Characters when a run is dealt.
+The player sees only the favours they are party to, at no cost. The results screen shows the rest.
+
+### Change what burns a Believer
+
+How the player treats people changes them. A Believer who is burned enough, by something done to them
+directly, becomes a Practitioner, a whistleblower, or leaves. Nobody else ever changes, and the player
+is not told: the results screen says who changed, from what to what, and why. In
+`content/changing.json`, needing no code:
+
+- `burns` lists what burns someone, by the `about` of what they remember, with its `weight` and
+  which way it `leans` them. `threshold` is how much it takes.
+- `whistleblower.signs` are shown beside what any Believer shows. A whistleblower brings out a hidden
+  risk if one is waiting, or else sends the first of `reports` that holds.
+- `leaving` says who can leave. Anyone left out never does, and neither of your bosses can, until
+  vacancies exist. Someone who leaves is gone for the rest of the run: they are left out of Scenes,
+  the charts and Find Out, nothing arrives from them and no choice names them, their Promises and
+  Deals lapse, and running text calls whoever covers for them by their `cover`.
+
+### Add a Gauge or a Milestone
+
+Gauges, such as Teflon, are the player's track record, in plain view. They move only when a Thread
+plays out, as the month closes, and the official story says which. They never read the Power Map or a
+hidden risk, and nothing in the rules reads them but their own Milestones, so a high one does not mean
+the player is safe. Needing no code:
+
+- To add a Milestone, add an entry to that Gauge's `milestones` in `content/gauges.json`, with the
+  level it is earned `at`, its `title`, and the `body` the player is told.
+- To add a Gauge, add an entry to `content/gauges.json` with its `label`, `start`, `min` and `max`,
+  then move it from the `gauges` of a Thread's outcome in `content/threads.json`, each with the
+  `gauge`, how far it moves it `by`, and the `note` the player sees.
 
 ### Write a Company Event
 
@@ -241,8 +339,8 @@ at a later month. `npm run build` and `npm run play` ignore it.
   takes effect; `state.ts` and `reads.ts` are what the mechanics share; `boss.ts`,
   `demands.ts`, `find-out.ts`, `notebook.ts`, `over-head.ts`, `project.ts` and
   `scenes.ts` are mechanics of their own, as are `company-events.ts`, `mistakes.ts`, `reputation.ts`,
-  `risks.ts`, and `threads.ts`
-  with `bills.ts`; `to-view.ts` builds the player view, and
+  `risks.ts`, `threads.ts` with `bills.ts`, `promises.ts`, `deals.ts` (`deal.ts` deals the run itself),
+  `changes.ts` for Believers changing and leaving, and `gauges.ts`, the only module that reads a Gauge; `to-view.ts` builds the player view, and
   `to-results.ts` its reveal at the end; `save.ts` writes and reads a run. Everything
   in a run's `State` is plain data, so a mechanic gets saving for free. Raise
   `SAVE_VERSION` if a mechanic changes what saved state means. `src/engine/content.ts` holds the content
