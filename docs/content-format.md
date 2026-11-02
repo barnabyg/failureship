@@ -23,6 +23,8 @@ A `when` or `requires` holds one of these:
 | `{ "holderIs": "boss" }`                                               | That Character is the most influential of those present, or of everyone outside a Scene | Yes                    |
 | `{ "bossIs": "practitioner" }`                                         | The boss is of that kind                                                                | Yes                    |
 | `{ "factNature": { "character": "projects", "nature": "dangerous" } }` | That Character's Hidden Fact has that `nature`                                          | Yes                    |
+| `{ "owesYou": "projects" }`                                            | That Character owes the player a favour                                                 | No                     |
+| `{ "youOwe": "projects" }`                                             | The player owes that Character a favour                                                 | No                     |
 | `{ "not": ... }`                                                       | The condition inside does not hold                                                      | If the inner one does  |
 | `{ "all": [...] }`                                                     | Every condition inside holds                                                            | If any inner one does  |
 
@@ -123,6 +125,29 @@ A Character's `called` is how running text refers to them, such as `your boss`, 
 a capital only where a sentence starts. Write people into text that way too, and keep their
 `name` for a Notification or Move's `from` line. A test fails if a name turns up in the
 running text.
+
+## `deals.json`
+
+Deals, in which each side offers something. How to write one is in
+[Write a Deal](../README.md#write-a-deal) in the README.
+
+- `favours` deals `dealt` favours between Characters when a run is dealt, each with one of the
+  `why` lines, which say `{owes}` and `{to}`. They are part of the hidden Power Map.
+- `owed` is how a favour reads: `youOwe` and `owesYou` say `{who}` and `{why}`, and `between`,
+  shown only on the results screen, says `{why}`.
+- `statuses` say where the player's side has got to.
+- Each item has `with`, `title`, `what`, `agreed` (which says `{who}`), `word`, `after`, `due`,
+  `owed` and `worth`.
+- `word` is their side: a good word with `over`, given `after` a seeded wait with a seeded `chance`
+  by their kind, which moves that person's belief by `shift` only if they have sway. `given` and
+  `withheld` are what the player is told. If it is withheld, they owe the player.
+- `due` is the player's side, written as for a Promise. Breaking it starts the same news as a broken
+  Promise, and the player owes them. `owed.you` and `owed.them` say why.
+- `worth` is what the results screen says it was really worth: `landed`, `worthless`, `withheld`,
+  or `pending` if the run ended first.
+
+A Scene option or Notification option offers one with `"deal"`, once in a run. Deals need
+[`promises.json`](#promisesjson), whose `broken` news they share.
 
 ## `demands.json`
 

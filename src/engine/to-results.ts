@@ -1,4 +1,5 @@
 import { MOVE_FAMILIES, type Content } from "./content";
+import { dealsInResults } from "./deals";
 import { promisesInResults } from "./promises";
 import { bossKindOf, moodOf, moodOfCharacter, personOf } from "./reads";
 import { calledBy, sayPeople } from "./say";
@@ -21,6 +22,7 @@ export function toResultsView(
     ending: toEnding(state, content),
     mistakes: state.mistakes,
     promises: promisesInResults(state, content),
+    ...dealsInResults(state, content),
     beliefs: toBeliefs(state, content),
     changes: state.eventsLanded.flatMap(({ id, month }) => {
       const written = content.events.find((e) => e.id === id);

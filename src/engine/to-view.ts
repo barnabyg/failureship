@@ -21,6 +21,7 @@ import {
   remaining,
   sceneData,
 } from "./reads";
+import { dealsInView } from "./deals";
 import { promisesInView } from "./promises";
 import { calledBy, sayPeople } from "./say";
 import type { State, Step, World } from "./state";
@@ -326,6 +327,7 @@ export function toView(state: State, world: World): PlayerView {
       return item ? [{ month, subject: item.subject }] : [];
     }),
     promises: promisesInView(state, content),
+    ...dealsInView(state, content),
     finalWarning: state.finalWarning,
     seed: state.seed,
     month: state.month,

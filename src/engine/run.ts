@@ -1,6 +1,6 @@
 import { applyChoice } from "./choices";
 import { KINDS, type Content, type Kind } from "./content";
-import { dealCharacters, dealMotives, dealPowerMap } from "./deal";
+import { dealCharacters, dealFavours, dealMotives, dealPowerMap } from "./deal";
 import { freshMonth, nextStep, openMonth } from "./month";
 import { noteEvents } from "./notebook";
 import { beliefOf } from "./reads";
@@ -81,13 +81,14 @@ function dealtState(seed: number, content: Content): State {
     eventsDue: [],
     eventsLanded: [],
     promises: [],
+    deals: [],
     finalWarning: false,
     firedIn: null,
     mistakes: [],
     step: { kind: "actions" },
     truth: {
       characters: motives.characters,
-      powerMap: power.powerMap,
+      powerMap: dealFavours(seed, power.powerMap, content),
       beliefs: {},
       news: [],
       risks: [],

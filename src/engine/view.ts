@@ -153,6 +153,15 @@ export type StepView =
         status: string;
         heardBy: string[];
       }[];
+      /** What each Deal was really worth, and who owed whom on the Power Map. */
+      deals: {
+        month: number;
+        with: string;
+        what: string;
+        status: string;
+        worth: string;
+      }[];
+      favours: string[];
       /** The big mistakes the player made, in order. */
       mistakes: { month: number; choice: string }[];
       characters: {
@@ -220,6 +229,9 @@ export interface PlayerView {
   openDemands: { month: number; subject: string }[];
   /** Everything the player has given their word on, and where it has got to. */
   promises: { month: number; to: string; what: string; status: string }[];
+  /** The Deals the player has made, and the favours they are party to. No others. */
+  deals: { month: number; with: string; what: string; status: string }[];
+  favours: string[];
   /** Whether one more big mistake gets the player fired. */
   finalWarning: boolean;
   seed: number;

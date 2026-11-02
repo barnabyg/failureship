@@ -411,6 +411,7 @@ describe("a reshuffle", () => {
 describe("the Power Map's moves", () => {
   const map: PowerMap = {
     order: ["a", "b", "c", "d"],
+    favours: [],
     influence: [
       { who: "a", over: "b" },
       { who: "b", over: "c" },

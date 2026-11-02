@@ -1,6 +1,7 @@
 import { landBill, playThreads, surfaceRisks } from "./bills";
 import { landEvent, scheduleEvents } from "./company-events";
 import { everyNotification, type Content } from "./content";
+import { dealsFallDue } from "./deals";
 import { dealWithAbsence, followUpDemands } from "./demands";
 import { applyOutcome } from "./outcome";
 import { promisesFallDue } from "./promises";
@@ -40,6 +41,7 @@ export function openMonth(state: State, content: Content): void {
   spreadNews(state, content);
   followUpDemands(state, content);
   promisesFallDue(state);
+  dealsFallDue(state, content);
   playThreads(state, content);
   surfaceRisks(state, content);
   scheduleEvents(state, content);

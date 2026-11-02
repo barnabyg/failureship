@@ -2,6 +2,7 @@ import { z } from "zod";
 import {
   findNamedKinds,
   findBrokenEvents,
+  findBrokenDeals,
   findBrokenPromises,
   findBrokenRisks,
   findBrokenThreads,
@@ -576,6 +577,8 @@ function findBrokenReferences(content: Content): string[] {
     if ("believes" in condition) {
       checkCharacter(owner, condition.believes.character);
     }
+    if ("owesYou" in condition) checkCharacter(owner, condition.owesYou);
+    if ("youOwe" in condition) checkCharacter(owner, condition.youOwe);
     if ("heardFact" in condition) checkFact(owner, condition.heardFact);
     if ("heardTrue" in condition) checkFact(owner, condition.heardTrue);
     if ("not" in condition) checkCondition(owner, condition.not);
@@ -663,6 +666,7 @@ function findBrokenReferences(content: Content): string[] {
   problems.push(...findBrokenRisks(content));
   problems.push(...findBrokenEvents(content));
   problems.push(...findBrokenPromises(content));
+  problems.push(...findBrokenDeals(content));
   problems.push(...findBrokenReputation(content, characters));
   for (const event of content.events) {
     checkProject(`Company Event "${event.id}"`, event.project);

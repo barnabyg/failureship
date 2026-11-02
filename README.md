@@ -161,6 +161,7 @@ format, the page shows what is wrong instead of the game.
 | `events.json`         | Company Events: where each comes from, how it moves the charts, and the official story's words                       |
 | `reputation.json`     | How far and how fast news travels, and the signs of what each Character believes of you                              |
 | `risks.json`          | Hidden risks: what adds each, who it comes out through, and whether it can be traced to you                          |
+| `deals.json`          | Deals: what each side offers, whether a good word counts, and the favours owed between people                        |
 | `promises.json`       | Promises: who they are made to, what is said back, and what arrives when they fall due                               |
 | `mistakes.json`       | The words of a Final Warning and of being fired                                                                      |
 | `official-story.json` | The official story, assembled from entries according to what you did                                                 |
@@ -210,6 +211,23 @@ Whether they believe it is seeded, and goes by `belief` in the same file: who th
 of the player, and every broken or kept word that has reached them. What they say back shows why. A
 broken Promise reaches everyone tied to its victim at once, and `perTie` makes it cost the victim's
 belief more the better connected they are. The player can see their word at any time, for nothing.
+
+### Write a Deal
+
+A Deal is worth only what the people in it can really deliver, and either side can fail. To add one,
+needing no code, add an item to `content/deals.json`:
+
+1. Say who it is `with`, its `title`, `what` the player offers, and what they say as they shake on it.
+2. Write their side, the `word`: whom it is put in `over`, the seeded `chance` that they give it at
+   all, by who they are, and how far it moves that person if it lands. It lands only if they really
+   have sway: they are above that person on the Power Map, or are owed a favour by them. The player
+   is told the same either way.
+3. Write the player's side as `due`, like a Promise's. Breaking it behaves like a broken Promise, and
+   the player then owes them.
+4. Offer it from a Scene option or a Notification option, with `"deal"` and its id.
+
+`favours.dealt` in the same file is how many favours are owed between Characters when a run is dealt.
+The player sees only the favours they are party to, at no cost. The results screen shows the rest.
 
 ### Write a Company Event
 

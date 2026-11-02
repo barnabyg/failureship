@@ -83,7 +83,9 @@ export function findBrokenPromises(content: Content): string[] {
     }
   }
   const dues = new Set(
-    (written?.items ?? []).flatMap((item) => item.due.options.map((o) => o.id)),
+    [...(written?.items ?? []), ...(content.deals?.items ?? [])].flatMap(
+      (item) => item.due.options.map((o) => o.id),
+    ),
   );
   for (const option of everyNotification(content).flatMap((n) => n.options)) {
     if (option.settles !== undefined && !dues.has(option.id)) {
@@ -120,6 +122,55 @@ export function findBrokenPromises(content: Content): string[] {
       ...replies.heard,
     ]),
   );
+  return problems;
+}
+
+/** A Deal has to be offered, between people who exist, and end either way. */
+export function findBrokenDeals(content: Content): string[] {
+  const written = content.deals;
+  const problems: string[] = [];
+  const options = [
+    ...everyNotification(content).flatMap((n) => n.options),
+    ...content.scenes.flatMap((s) => s.options),
+  ];
+  const offered = new Set(options.flatMap((o) => o.deal ?? []));
+  for (const id of offered) {
+    if (!written?.items.some((item) => item.id === id)) {
+      problems.push(`A choice offers unknown Deal "${id}".`);
+    }
+  }
+  if (!written) return problems;
+  if (!content.promises) {
+    problems.push("Deals are written, but no Promises to break like them.");
+  }
+  const known = new Set(content.characters.map((c) => c.id));
+  const promised = new Set(content.promises?.items.map((p) => p.id));
+  for (const item of written.items) {
+    const owner = `Deal "${item.id}"`;
+    if (promised.has(item.id)) problems.push(`${owner} shares a Promise's id.`);
+    for (const id of [item.with, item.word.over]) {
+      if (!known.has(id)) problems.push(`${owner} names unknown "${id}".`);
+    }
+    if (item.with === item.word.over) {
+      problems.push(`${owner} has someone put in a word with themselves.`);
+    }
+    if (!offered.has(item.id)) problems.push(`${owner} is offered by nothing.`);
+    for (const span of [item.after, item.word.after]) {
+      if (span.min > span.max) {
+        problems.push(
+          `${owner} falls due after a shorter wait than it starts.`,
+        );
+      }
+    }
+    problems.push(...findBrokenDue(content, owner, item.due));
+  }
+  for (const option of content.notifications.flatMap((n) => n.options)) {
+    if (option.deal !== undefined && option.result) {
+      problems.push(
+        `Option "${option.id}" has a result, but what is said back is its result.`,
+      );
+    }
+  }
   return problems;
 }
 

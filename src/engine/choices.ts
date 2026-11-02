@@ -1,4 +1,5 @@
 import { chasedIdOf, everyNotification } from "./content";
+import { replyToDeal, settleDeal } from "./deals";
 import { arriveToFindOut, hearClaim } from "./find-out";
 import { leaveStory, nextStep } from "./month";
 import { applyOutcome, countMove } from "./outcome";
@@ -93,9 +94,12 @@ function answerNotification(
   );
   if (outcome.settles) {
     settlePromise(state, content, choice.notificationId, outcome.settles);
+    settleDeal(state, content, choice.notificationId, outcome.settles);
   }
 
-  const reply = replyToPromise(state, content, option.promise);
+  const reply =
+    replyToPromise(state, content, option.promise) ??
+    replyToDeal(content, option.deal);
   if (reply) {
     state.step = { kind: "notice", ...reply, reaction };
   } else if (option.dialog !== undefined) {

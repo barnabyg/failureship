@@ -209,6 +209,25 @@ function ResultsPanel({
           ))}
         </div>
       )}
+      {step.deals.length + step.favours.length > 0 && (
+        <div className="callout" data-testid="results-deals">
+          {step.deals.length > 0 && <h3>{panelText.resultsDealsHeading}</h3>}
+          {step.deals.map((row, index) => (
+            <p key={index} data-testid="result-deal">
+              <strong>{monthLabel(row.month)}. </strong>
+              {row.with}: {row.what}. {row.status}. {row.worth}
+            </p>
+          ))}
+          {step.favours.length > 0 && (
+            <h3>{panelText.resultsFavoursHeading}</h3>
+          )}
+          {step.favours.map((line) => (
+            <p key={line} data-testid="result-favour">
+              {line}
+            </p>
+          ))}
+        </div>
+      )}
       {step.threads.length > 0 && (
         <div className="callout" data-testid="results-threads">
           <h3>{panelText.resultsThreadsHeading}</h3>

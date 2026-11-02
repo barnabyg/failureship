@@ -113,6 +113,8 @@ export type Condition =
   | { did: string }
   | { remembers: { character: string; about: string } }
   | { believes: { character: string; mood: Mood } }
+  | { owesYou: string }
+  | { youOwe: string }
   | { not: Condition }
   | { all: Condition[] };
 
@@ -137,6 +139,8 @@ const condition: z.ZodType<Condition> = z.lazy(() =>
     z.strictObject({
       believes: z.strictObject({ character: id, mood: z.enum(MOODS) }),
     }),
+    z.strictObject({ owesYou: id }),
+    z.strictObject({ youOwe: id }),
     z.strictObject({ not: condition }),
     z.strictObject({ all: z.array(condition).min(1) }),
   ]),
@@ -151,6 +155,8 @@ const notificationOption = z.strictObject({
   family,
   /** Offers the player's word: a Promise from `promises.json`. */
   promise: id.optional(),
+  /** Offers a Deal from `deals.json`, in which each side offers something. */
+  deal: id.optional(),
   settles,
   cost: id.optional(),
   dialog: id.optional(),
@@ -374,6 +380,8 @@ const sceneOption = z.strictObject({
   family,
   /** Offers the player's word: a Promise from `promises.json`. */
   promise: id.optional(),
+  /** Offers a Deal from `deals.json`, in which each side offers something. */
+  deal: id.optional(),
   /** The option appears once the player has heard this Hidden Fact of someone. */
   about: id.optional(),
   /** The option appears only when this holds. */
@@ -785,6 +793,61 @@ const promises = z.strictObject({
   ),
 });
 
+/** A trade worth only what the people in it can really deliver, on either side. */
+const deals = z.strictObject({
+  /** Favours owed between Characters, dealt with the Power Map and never shown. */
+  favours: z.strictObject({
+    dealt: z.number().int().nonnegative(),
+    /** Why one owes another. Says {owes} and {to}. */
+    why: lines,
+  }),
+  /** How a favour reads. Each says {who} or {owes} and {to}, and {why}. */
+  owed: z.strictObject({ youOwe: text, owesYou: text, between: text }),
+  statuses: z.strictObject({
+    open: text,
+    kept: text,
+    broken: text,
+    refused: text,
+    lapsed: text,
+  }),
+  items: z.array(
+    z.strictObject({
+      id,
+      /** Who the player makes it with. */
+      with: id,
+      title: text,
+      /** What the player offered, which reads after "You told them". */
+      what: text,
+      /** What they say as they shake on it. Says {who}. */
+      agreed: text,
+      /** Their side: a good word with someone, which only someone with sway can give. */
+      word: z.strictObject({
+        over: id,
+        after: wait,
+        /** The seeded chance they give it at all, by who they are. */
+        chance: perKind(z.number().min(0).max(1)),
+        /** How far it moves the belief of the one it is given to, if it lands. */
+        shift: z.number().int().positive(),
+        /** What the player is told. It is the same whether it lands or not. */
+        given: notice,
+        withheld: notice,
+      }),
+      /** When the player's side falls due, and what arrives then. */
+      after: wait,
+      due: commitmentDue,
+      /** Why a favour is owed, if either side lets the other down. */
+      owed: z.strictObject({ you: text, them: text }),
+      /** What the results screen says the Deal was really worth. */
+      worth: z.strictObject({
+        landed: text,
+        worthless: text,
+        withheld: text,
+        pending: text,
+      }),
+    }),
+  ),
+});
+
 /** What Characters believe of the player, and how that reaches them. */
 const reputation = z.strictObject({
   /** How far and how fast news goes along the Power Map's ties. */
@@ -864,6 +927,7 @@ export const contentSchema = z.strictObject({
   mistakes: mistakes.optional(),
   reputation: reputation.optional(),
   promises: promises.optional(),
+  deals: deals.optional(),
   /** What the results screen calls each family of Moves. */
   families: z
     .strictObject(
@@ -1037,7 +1101,10 @@ export function dueIdOf(id: string): string {
 
 /** Every Notification there is, including Demands, chasers, Bills and what falls due. */
 export function everyNotification(content: Content) {
-  const commitments = (content.promises?.items ?? []).map((item) => ({
+  const commitments = [
+    ...(content.promises?.items ?? []),
+    ...(content.deals?.items ?? []),
+  ].map((item) => ({
     ...item.due,
     id: dueIdOf(item.id),
     months: undefined,

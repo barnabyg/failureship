@@ -229,6 +229,17 @@ export interface State extends MonthRecord {
     /** The news of how it ended, if there was any. */
     news: number | null;
   }[];
+  /** The Deals the player has made, each side of which can fail. */
+  deals: {
+    id: string;
+    month: number;
+    /** Their side: whether they gave the word, and what it was really worth. */
+    word: "pending" | "landed" | "worthless" | "withheld";
+    wordDue: number;
+    status: CommitmentStatus;
+    due: number;
+    news: number | null;
+  }[];
   /** Told to the player, and shown from then on. */
   finalWarning: boolean;
   /** The month the player was fired in, which ends the run. */

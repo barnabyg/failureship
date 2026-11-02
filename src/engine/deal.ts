@@ -1,5 +1,5 @@
 import type { Content, Kind } from "./content";
-import { pick, pickWeighted, shuffle } from "./rng";
+import { drawFor, pick, pickWeighted, shuffle } from "./rng";
 
 export interface DealtCharacter {
   id: string;
@@ -9,15 +9,64 @@ export interface DealtCharacter {
   motive: string;
 }
 
-/**
- * The hidden truth of who really has influence over whom. Kept small for now:
- * who protects or owes whom can join it later as further lists of ties.
- */
+/** Who stands for the player in a tie, such as a favour owed. */
+export const YOU = "you";
+
+/** The hidden truth of who really has influence over whom, and who owes whom. */
 export interface PowerMap {
   /** Everyone, most influential first. */
   order: string[];
   /** Each person after the first, with the one person who has influence over them. */
   influence: { who: string; over: string }[];
+  /** Favours owed. Either side can be the player, `YOU`. */
+  favours: { owes: string; to: string; why: string }[];
+}
+
+/**
+ * Whether someone's word counts with someone else: they are above them on the
+ * Power Map, or are owed a favour by them.
+ */
+export function hasSway(map: PowerMap, who: string, over: string): boolean {
+  if (map.favours.some((f) => f.owes === over && f.to === who)) return true;
+  const seen = new Set<string>();
+  let above = map.influence.find((i) => i.over === over)?.who;
+  while (above !== undefined && !seen.has(above)) {
+    if (above === who) return true;
+    seen.add(above);
+    const next = above;
+    above = map.influence.find((i) => i.over === next)?.who;
+  }
+  return false;
+}
+
+/** Favours already owed between Characters, by named draws, so the rest of a deal stands. */
+export function dealFavours(
+  seed: number,
+  map: PowerMap,
+  content: Content,
+): PowerMap {
+  const written = content.deals?.favours;
+  if (!written) return map;
+  const favours: PowerMap["favours"] = [];
+  const ids = content.characters.map((c) => c.id);
+  for (let i = 0; i < written.dealt; i++) {
+    const at = (name: string, items: readonly string[]) =>
+      items[
+        Math.floor(
+          drawFor(seed, `favour-${name}:${String(i)}`, 0) * items.length,
+        )
+      ];
+    const owes = at("owes", ids);
+    const to = at(
+      "to",
+      ids.filter((id) => id !== owes),
+    );
+    const why = at("why", written.why);
+    if (owes === undefined || to === undefined || why === undefined) continue;
+    if (favours.some((f) => f.owes === owes && f.to === to)) continue;
+    favours.push({ owes, to, why });
+  }
+  return { ...map, favours };
 }
 
 /** Whether someone is among the few at the top of the Power Map. */
@@ -45,7 +94,7 @@ export function dealPowerMap(
     influence.push({ who: above.item, over });
     next = above.next;
   });
-  return { powerMap: { order: dealt.items, influence }, next };
+  return { powerMap: { order: dealt.items, influence, favours: [] }, next };
 }
 
 /** Deals every Character a kind, and most of them a Hidden Fact. */
@@ -134,6 +183,7 @@ export function raiseOnMap(map: PowerMap, id: string): PowerMap {
   const [top] = map.order;
   if (top === id || top === undefined) return map;
   return {
+    ...map,
     order: [id, ...map.order.filter((o) => o !== id)],
     influence: [
       { who: id, over: top },
@@ -150,6 +200,7 @@ export function lowerOnMap(map: PowerMap, id: string): PowerMap {
   // Someone at the very top has no one above them, so the next person takes over.
   const above = map.influence.find((i) => i.over === id)?.who ?? top;
   return {
+    ...map,
     order,
     influence: [
       ...map.influence

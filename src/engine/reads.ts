@@ -1,5 +1,5 @@
 import type { Condition, Content, Kind, Mood, SceneData } from "./content";
-import type { PowerMap } from "./deal";
+import { YOU, type PowerMap } from "./deal";
 import { calledBy, sayPeople } from "./say";
 import type { State, World } from "./state";
 import type { Person } from "./view";
@@ -141,6 +141,16 @@ export function matches(
       (m) => m.character === character && m.about === about,
     );
   }
+  if ("owesYou" in condition) {
+    return state.truth.powerMap.favours.some(
+      (f) => f.owes === condition.owesYou && f.to === YOU,
+    );
+  }
+  if ("youOwe" in condition) {
+    return state.truth.powerMap.favours.some(
+      (f) => f.owes === YOU && f.to === condition.youOwe,
+    );
+  }
   if ("did" in condition) {
     return state.deeds.some((deed) => deed.flag === condition.did);
   }
@@ -148,13 +158,14 @@ export function matches(
   return condition.all.every((inner) => matches(state, content, inner, room));
 }
 
-/** The player's word on something is given once in a run, believed or not. */
-export function optionsOnOffer<T extends { promise?: string | undefined }>(
-  state: State,
-  options: readonly T[],
-): T[] {
+/** The player's word on something, or a Deal, is offered once in a run. */
+export function optionsOnOffer<
+  T extends { promise?: string | undefined; deal?: string | undefined },
+>(state: State, options: readonly T[]): T[] {
   return options.filter(
-    (o) => !state.promises.some((made) => made.id === o.promise),
+    (o) =>
+      !state.promises.some((made) => made.id === o.promise) &&
+      !state.deals.some((made) => made.id === o.deal),
   );
 }
 

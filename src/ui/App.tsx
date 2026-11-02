@@ -125,7 +125,10 @@ function WordCard({ view, onOpen }: { view: PlayerView; onOpen: () => void }) {
     >
       <span className="project-card-heading">{panelText.promisesHeading}</span>
       <span data-testid="word-count">
-        {panelText.promisesCount.replace("{n}", String(view.promises.length))}
+        {panelText.promisesCount.replace(
+          "{n}",
+          String(view.promises.length + view.deals.length),
+        )}
       </span>
     </button>
   );
@@ -375,7 +378,9 @@ export function App() {
             setWordOpen(false);
           }}
         >
-          {view.promises.length === 0 && <p>{panelText.promisesEmpty}</p>}
+          {view.promises.length + view.deals.length === 0 && (
+            <p>{panelText.promisesEmpty}</p>
+          )}
           <ul>
             {view.promises.map((item) => (
               <li key={item.what} data-testid="word-promise">
@@ -384,6 +389,31 @@ export function App() {
               </li>
             ))}
           </ul>
+          {view.deals.length > 0 && (
+            <>
+              <h3>{panelText.dealsHeading}</h3>
+              <ul>
+                {view.deals.map((item) => (
+                  <li key={item.what} data-testid="word-deal">
+                    <strong>{monthLabel(item.month)}. </strong>
+                    {item.with}: {item.what}. {item.status}.
+                  </li>
+                ))}
+              </ul>
+            </>
+          )}
+          {view.favours.length > 0 && (
+            <>
+              <h3>{panelText.favoursHeading}</h3>
+              <ul>
+                {view.favours.map((line) => (
+                  <li key={line} data-testid="word-favour">
+                    {line}
+                  </li>
+                ))}
+              </ul>
+            </>
+          )}
           <button
             type="button"
             data-testid="close-word"

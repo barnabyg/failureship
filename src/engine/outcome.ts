@@ -1,6 +1,7 @@
 import { landWithBoss } from "./boss";
 import { reshuffleCharts, type Reshuffle } from "./charts";
 import type { Content, Kind, MoveFamily, Tone } from "./content";
+import { makeDeal } from "./deals";
 import { makeMistake } from "./mistakes";
 import { moveProject, type ProjectChange } from "./project";
 import { makePromise } from "./promises";
@@ -31,6 +32,7 @@ export interface Outcome {
     | { about: string; tone: Tone; text: string; at: readonly string[] }
     | undefined;
   promise?: string | undefined;
+  deal?: string | undefined;
 }
 
 /** Counts a Move the player made, for how they played. */
@@ -60,6 +62,7 @@ export function applyOutcome(
   if (outcome.promise !== undefined) {
     makePromise(state, content, outcome.promise);
   }
+  if (outcome.deal !== undefined) makeDeal(state, content, outcome.deal);
   for (const word of outcome.learns ?? []) {
     if (!state.buzzwords.includes(word)) state.buzzwords.push(word);
   }
