@@ -427,8 +427,8 @@ describe("the real Believers", () => {
 
 const CHANGE_SEED = 32;
 
-// The README's test scenario: the same choices change the Senior Analyst three ways.
-it("keeps the README's seeds, on which the Senior Analyst changes each way", () => {
+// The playtest's scenario: the same choices change the Senior Analyst three ways.
+it("keeps the playtest's seeds, on which the Senior Analyst changes each way", () => {
   const became = (seed: number) => {
     const view = playBurningTheAnalyst(
       startRun({ seed, content: gameContent }),

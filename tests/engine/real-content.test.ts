@@ -310,8 +310,8 @@ describe("the real month", () => {
     expect(view.step.kind).toBe(kind);
   });
 
-  // The README contrasts these two seeds in its test scenario.
-  it("keeps the two contrasting deals the README describes", () => {
+  // docs/playtest.md contrasts these two seeds.
+  it("keeps the two contrasting deals the playtest describes", () => {
     const of = (seed: number) => {
       const { characters } = readHiddenTruth(
         startRun({ seed, content: gameContent }),
@@ -356,7 +356,7 @@ describe("the real month", () => {
     expect(of(1).boss?.kind).toBe("believer");
   });
 
-  // The README's test scenario relies on these.
+  // docs/playtest.md relies on these.
   it.each([
     [1, "believer"],
     [8, "incompetent"],

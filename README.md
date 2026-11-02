@@ -102,73 +102,13 @@ that deal instead, and replaces the saved run. If you have changed anything in
 only holds for the data it was dealt from. A save can be read in browser storage, hidden
 truth included, which is accepted while the game is in development.
 
-### A test scenario: what comes back
-
-This takes about fifteen minutes, from the root of the repository with `npm run play`, and gives
-away these deals. Each row starts at the address shown. Adding `&month=N` to an address only works
-in the browser tests' own build, so play from month 1 and do the same as the row.
-
-| Seed and what to do                                                                                                             | Expect                                                                                                                                                                                                        |
-| ------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Seed 7. File the report and go to the meeting each month. In month 3, tell the Senior Analyst you will get the team new laptops | They believe you. In month 4 or 5 it falls due, and every answer breaks it.                                                                                                                                   |
-| The same run, month 6. In the meeting, tell your boss you can get the team new laptops                                          | Your boss does not believe you, and says why: you told the Senior Analyst the same thing. **Your word** shows both. The results screen shows who heard of the broken one.                                     |
-| Seed 2. Play as above. In month 3's Town Hall, offer the Project Co-ordinator a move for a good word with your boss             | They shake on it, and in month 4 say the word is given. At the end, the results screen says it really moved your boss.                                                                                        |
-| Seed 3, the same                                                                                                                | You are told exactly the same, but here the Project Co-ordinator has no sway with your boss, and the results screen says the word was worth nothing.                                                          |
-| Seed 32. Play as above, but in month 2 blame the Senior Analyst, then promise them laptops in month 3 and put them off          | Nothing tells you, but the Senior Analyst has started keeping a file. The results screen shows they became a whistleblower, and why. On seed 10 they leave instead, and on seed 9 they learn how things work. |
-| Seed 10, the same                                                                                                               | From month 6 the Senior Analyst has gone. Meetings go on without them, and an acting Senior Analyst does what they did. The run still ends normally.                                                          |
-| Seed 2. In month 4, move the Project Co-ordinator to the desk with no window, and skip the training in month 2                  | In month 6 the Health and Safety committee writes. As that month closes, Teflon moves. The official story says which Thread moved it, and so does clicking Teflon's number at the top.                        |
-| Seed 2. In month 2, do the training and fake the Demand from your boss's boss                                                   | In month 4 a correction to the minutes lands on you: a hidden risk, traced back to you. The results screen lists it.                                                                                          |
-| Seed 3. In month 2's Lessons Learned Review, blame the Project Co-ordinator, then cut them at the Budget Round in month 4       | The first is a big mistake and puts you on a Final Warning. The second gets you fired, and the run ends at the results screen.                                                                                |
-| Any seed. Play plainly to the end                                                                                               | At least one Thread comes back or one risk lands. Months later, the minutes of a meeting you went to come back on you.                                                                                        |
-
-### A test scenario: three kinds of boss
-
-This takes about twenty minutes, and it gives away these deals, so use other seeds if
-you want to play blind. Each seed deals a different kind of boss:
-
-| Seed                             | Your boss      | Try                                                            |
-| -------------------------------- | -------------- | -------------------------------------------------------------- |
-| `http://localhost:5173/?seed=1`  | A Believer     | Do the work, tell the truth, and stay away from the theatre    |
-| `http://localhost:5173/?seed=8`  | An Incompetent | Slides, confidence and buzzwords, and the green report         |
-| `http://localhost:5173/?seed=16` | A Practitioner | Make your boss look good, offer favours, and do not shine much |
-
-Play each one the same way first, then the way the table suggests. The same choice
-reads and lands differently, and the results screen shows how each of your choices
-went down. Then try these:
-
-| Try this                                                                                           | Expect                                                                                                                                                             |
-| -------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| Seed 8. In month 1 go to the pub, then Meeting Room 1B                                             | You learn "strategic patience", and the Scene offers an extra option using it. The signs point to your boss.                                                       |
-| Agree warmly with your boss                                                                        | It goes well: your boss holds influence on this seed.                                                                                                              |
-| Open the Notebook, and mark your boss as anything you like                                         | The action count does not change, and new clues are at the top.                                                                                                    |
-| Month 2. In the Lessons Learned Review, blame the Project Co-ordinator                             | It goes badly, and you are not told why. At the end, the results screen explains: the Project Co-ordinator has a dangerous Hidden Fact.                            |
-| Restart from seed 1, and do the same in month 2                                                    | The Project Co-ordinator takes the blame and you get away with it. Blaming the Senior Analyst is what goes badly on this seed.                                     |
-| In month 1 on seed 1, look at who the signs point to                                               | They point to the Senior Analyst, not your boss. The same warm agreement now does little for you. Signs mislead about one Scene in five, so watch more than one.   |
-| Compare your boss's treatment of you in month 2 after agreeing with your boss or your boss's boss  | The sign under "How your boss is with you" is usually warmer after agreeing with your boss. No sign is sure.                                                       |
-| On seed 8, turn down the pub and file the report, then read the meeting's signs in month 1         | Your boss overruns the meeting, and the Project Co-ordinator closes a late task and reopens it. Only those roles can show those signs.                             |
-| Go to the photocopier in two different months                                                      | Each source sounds like their role: the Senior Analyst talks in figures, the Office Co-ordinator in minutes and stationery.                                        |
-| Go to the loading bay, buy from the Office Co-ordinator, and ask about someone                     | Often a Hidden Fact. If it is one of the useful ones, a later Scene offers a new option about it, whether it is true.                                              |
-| Play to the end of any run, and read the results screen                                            | Your marks against the truth, each claim's truth, and which clues were false or did not matter.                                                                    |
-| Seed 1 (a Believer boss) and seed 8 (an Incompetent one). In month 1, agree warmly with your boss  | Your boss's reaction reads quite differently, and neither says what kind your boss is. The results screen does.                                                    |
-| Seed 1. In month 1, file the report honestly, then read the Your project card                      | Real and reported are both Amber. Restart and choose "make the project green": real stays Amber and reported is Green.                                             |
-| Seed 4. In months 1 and 2, do not file the report                                                  | The Project goes Red in month 2, and the Project Status Review opens by itself. Making it amber changes the reported status.                                       |
-| Seed 1, month 2                                                                                    | The report waits on the Project Co-ordinator's late figures. Chase them, wait, or file without them.                                                               |
-| Seed 4. Go to the meeting in month 1, then in month 2 stall the Demand from your boss's boss       | It shows under Open Demands. In month 3 you are chased. On seed 8 it is forgotten instead.                                                                         |
-| Seed 2. In month 1, go nowhere near Meeting Room 1B                                                | The minutes give you an action, shown under Open Demands. It arrives in month 2 with the same five answers as any Demand, and you saw none of the meeting's signs. |
-| Seed 4, month 1. Decline the pub, file the report, and go to your boss's boss's office             | It pays off: your boss's boss has real influence on this seed, and your boss does not hear of it. The next Scene shows how your boss's boss is with you.           |
-| Seed 13, the same                                                                                  | It works, but your boss's boss turns out to have little influence, and not much comes of it.                                                                       |
-| Seed 16, the same                                                                                  | It goes badly, and then **Your boss knows**. Watch how your boss treats you afterwards.                                                                            |
-| Any seed, month 6, then month 8                                                                    | The bonus pot and the underspend. Each is a one-off, with no balance anywhere. Choose who gets the money, and compare a Believer's reaction with a Practitioner's. |
-| Any seed, months 4 to 8                                                                            | The desk with no window, the new metric, the Recruitment Panel and the Listening Session. Nothing says which family of Move each of these is.                      |
-| Seed 2. In month 4, move the Project Co-ordinator to the desk with no window                       | Nothing, for now. Two or three months later the Health and Safety committee writes. The results screen traces it back to the desk.                                 |
-| Play to Annual Calibration in month 9, and to the results screen                                   | Your boss gives a verdict that depends on how you have done. The results screen shows both bosses' kinds, how your choices landed and how you played, by family.   |
-| Seed 2, month 2. Blame the Senior Analyst in the Lessons Learned Review, and read the later Scenes | Someone tied to them may start to treat you differently. The results screen shows who heard, and from whom.                                                        |
-| Restart the same seed and repeat your choices                                                      | The same signs, claims, Move and official story, every time.                                                                                                       |
-
 A month always leaves you something to decide. Every Notification has an answer that
 costs nothing. Beside the report, a month's own Notifications ask for at most one costly
 answer, though late figures or an action from a missed meeting can add another. A meeting
 you had no action left for leaves no Demand behind.
+
+[docs/playtest.md](docs/playtest.md) has test scenarios to play by hand. They give away some
+deals.
 
 ## Change the game
 
@@ -208,127 +148,13 @@ format, the page shows what is wrong instead of the game.
 | `balance.json`        | Actions a month, months in a run, the cost of each choice, how often signs mislead and when the boss's opinion shows |
 | `floor-1.json`        | The rooms on the floor: positions, sizes, colours and the lift's sign                                                |
 
-Each file's fields, and the conditions they can use, are in the
+Each file's fields, the conditions they can use, and what to write for a Thread, a Promise,
+a Deal, a Company Event, a hidden risk or a Gauge are in the
 [content format reference](docs/content-format.md).
-
-### Write a Thread
-
-A Thread is how an earlier choice comes back. To add one, needing no code:
-
-1. Find or add the flag that starts it, in the `sets` of a choice. Not every Move should
-   have a Thread, and a Bill is better if it arrives through someone else.
-2. Add an entry to `content/threads.json`, with `startedBy`, a `chance` that it comes back,
-   how many months `after` it does, and the `started` words for the results screen.
-3. Write its `outcomes`, each with a `bill`, which is what reaches the player, and `playedOut`
-   words. The first whose `when` holds is used, and a later one can be written as the fallback.
-   A Bill can be good news, and `"mistake": "big"` makes it a big mistake.
-
-The player hears nothing of a Thread until its Bill arrives. Results then trace it back to what
-started it.
-
-### Write a Promise
-
-A Promise is the player's word, which they can give whether or not they can deliver it. There is
-no meter behind it: it is a commitment and a memory. To add one, needing no code:
-
-1. Add an item to `content/promises.json`, with who it is made `to`, a `title`, `what` was offered,
-   which reads after "You told them", and how many months `after` it falls due.
-2. Write its `due`, the Notification that arrives then. Each option `settles` it as `kept` or
-   `broken`, and one must break it for nothing, so that it can always be answered. A Promise that
-   cannot be delivered has only ways to break it.
-3. Offer it: give a Notification option or a Scene option `"promise"` with its id. That option says
-   nothing of its own: what the person says back is its result.
-
-Whether they believe it is seeded, and goes by `belief` in the same file: who they are, what they make
-of the player, and every broken or kept word that has reached them. What they say back shows why. A
-broken Promise reaches everyone tied to its victim at once, and `perTie` makes it cost the victim's
-belief more the better connected they are. The player can see their word at any time, for nothing.
-
-### Write a Deal
-
-A Deal is worth only what the people in it can really deliver, and either side can fail. To add one,
-needing no code, add an item to `content/deals.json`:
-
-1. Say who it is `with`, its `title`, `what` the player offers, and what they say as they shake on it.
-2. Write their side, the `word`: whom it is put in `over`, the seeded `chance` that they give it at
-   all, by who they are, and how far it moves that person if it lands. It lands only if they really
-   have sway: they are above that person on the Power Map, or are owed a favour by them. The player
-   is told the same either way.
-3. Write the player's side as `due`, like a Promise's. Breaking it behaves like a broken Promise, and
-   the player then owes them.
-4. Offer it from a Scene option or a Notification option, with `"deal"` and its id.
-
-`favours.dealt` in the same file is how many favours are owed between Characters when a run is dealt.
-The player sees only the favours they are party to, at no cost. The results screen shows the rest.
-
-### Change what burns a Believer
-
-How the player treats people changes them. A Believer who is burned enough, by something done to them
-directly, becomes a Practitioner, a whistleblower, or leaves. Nobody else ever changes, and the player
-is not told: the results screen says who changed, from what to what, and why. In
-`content/changing.json`, needing no code:
-
-- `burns` lists what burns someone, by the `about` of what they remember, with its `weight` and
-  which way it `leans` them. `threshold` is how much it takes.
-- `whistleblower.signs` are shown beside what any Believer shows. A whistleblower brings out a hidden
-  risk if one is waiting, or else sends the first of `reports` that holds.
-- `leaving` says who can leave. Anyone left out never does, and neither of your bosses can, until
-  vacancies exist. Someone who leaves is gone for the rest of the run: they are left out of Scenes,
-  the charts and Find Out, nothing arrives from them and no choice names them, their Promises and
-  Deals lapse, and running text calls whoever covers for them by their `cover`.
-
-### Add a Gauge or a Milestone
-
-Gauges, such as Teflon, are the player's track record, in plain view. They move only when a Thread
-plays out, as the month closes, and the official story says which. They never read the Power Map or a
-hidden risk, and nothing in the rules reads them but their own Milestones, so a high one does not mean
-the player is safe. Needing no code:
-
-- To add a Milestone, add an entry to that Gauge's `milestones` in `content/gauges.json`, with the
-  level it is earned `at`, its `title`, and the `body` the player is told.
-- To add a Gauge, add an entry to `content/gauges.json` with its `label`, `start`, `min` and `max`,
-  then move it from the `gauges` of a Thread's outcome in `content/threads.json`, each with the
-  `gauge`, how far it moves it `by`, and the `note` the player sees.
-
-### Write a Company Event
-
-A Company Event happens to the company as a whole. To add one, needing no code, add an entry to
-`content/events.json` with `from`, `title`, `body` and its `story`, then give it one way to land:
-
-- Name it as the `event` of a hidden risk in `content/risks.json`.
-- Give it a `schedule`, for something from outside, with the `months` and `chance`, and a `clue`
-  if the Notebook should see it coming.
-- Say `"disaster": true`, for one with no clue. `disasterChance` in `content/balance.json` sets
-  how often these come. It cannot be a big mistake, because a surprise should be funny and not unfair.
-
-Its `reshuffle` can move people on the Org Chart and the Power Map, and `changed` says so on the
-results screen. Your boss stays your boss for now, so neither of your bosses can be moved on the chart.
-
-### Write a hidden risk
-
-A hidden risk is what the player's decisions have built up, with no simulation behind it. To
-add one, needing no code:
-
-1. Find or add the flag that adds it, in the `sets` of a choice. A one-off Budget is a good source.
-2. Add an entry to `content/risks.json`, with `addedBy`, how many months `after` it can come out,
-   and a `note` saying what was building up.
-3. Give it a `route`: the Character it comes out through, the `chance` they act by their kind, and
-   their `motive`.
-4. Say what makes it `traced` to the player. Reading a flag with `did` lets the player change that,
-   as clearing the shared drive in month 7 does.
-5. Write `onPlayer` and `onSomeoneElse`, which are Bills, and the words for how it ended.
-   `"mistake": "big"` on `onPlayer` makes a landed risk a big mistake.
-
-The same risk can land on the player, land on someone else, or never come out at all. The player
-sees none of it until it does, and the results screen lists the lot.
 
 ## Develop
 
-`npm run verify` runs every check: formatting, lint, types, engine tests, browser
-tests, dependency audit and build. The browser tests need Chromium once:
-`npx playwright install chromium`. They run against their own build,
-`vite build --mode e2e` in `dist-e2e/`, the only one where `?month=N` starts a run
-at a later month. `npm run build` and `npm run play` ignore it.
+How to run the checks and tests is in [AGENTS.md](AGENTS.md#verifying).
 
 - `content/` holds the game's data and text.
 - `src/content/` loads it at start-up, through the checks in `src/engine/`, and
