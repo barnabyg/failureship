@@ -174,7 +174,9 @@ How to run the checks and tests is in [AGENTS.md](AGENTS.md#verifying).
   each mechanic's checks in `truth-checks.ts` for the hidden truth and its signs, `boss-checks.ts` for the boss,
   going over the head, Demands and reputation, and `consequence-checks.ts` for what choices lead to.
 - `src/tower/` draws the tower and holds no rules.
-- `src/ui/` holds the React panels over the tower.
+- `src/ui/` holds the React panels over the tower. `panels.tsx` picks the panel for each step,
+  `ScenePanel.tsx`, `FindOutPanel.tsx` and `ResultsPanel.tsx` are the larger ones, and `Panel.tsx`
+  is the frame they share.
 
 A Scene that data cannot express can name a `script`, which is passed to
 `startRun` in `sceneScripts`. This format is a trial, as the spec, issue #1, says.
