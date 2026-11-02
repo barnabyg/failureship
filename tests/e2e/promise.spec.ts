@@ -8,6 +8,8 @@ test("a Promise is made, broken, and the next one is not believed", async ({
   page,
 }) => {
   await page.goto("/?seed=7&month=3");
+  await expect(page.getByTestId("open-word")).toContainText("Your word given");
+  await expect(page.getByTestId("word-count")).toHaveText("0 so far");
   await page.getByTestId("open-word").click();
   await expect(page.getByTestId("word")).toContainText("promised nobody");
   await page.getByTestId("close-word").click();
