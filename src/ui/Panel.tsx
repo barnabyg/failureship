@@ -1,32 +1,54 @@
 import { useEffect, useRef, type ReactNode } from "react";
 import { panelText } from "../content";
 import type { Choice } from "../engine";
+import { MailFoot, MailHead, Masthead, type Look } from "./Intranet";
 
 interface PanelProps {
   testId: string;
   eyebrow?: string;
   title: string;
   wide?: boolean;
+  /** An e-mail, whose eyebrow says who sent it, or the staff newsletter. */
+  look?: Look;
   children: ReactNode;
 }
 
 /** A panel over the tower. It takes focus, so the keyboard follows the month. */
-export function Panel({ testId, eyebrow, title, wide, children }: PanelProps) {
+export function Panel({
+  testId,
+  eyebrow,
+  title,
+  wide,
+  look,
+  children,
+}: PanelProps) {
   const heading = useRef<HTMLHeadingElement>(null);
   useEffect(() => {
     heading.current?.focus();
   }, [title]);
+  const h2 = (
+    <h2 ref={heading} tabIndex={-1}>
+      {title}
+    </h2>
+  );
   return (
     <section
       className={wide ? "panel panel-wide" : "panel"}
       data-testid={testId}
+      data-look={look && ("sent" in look ? "mail" : "newsletter")}
       aria-label={title}
     >
-      {eyebrow !== undefined && <p className="eyebrow">{eyebrow}</p>}
-      <h2 ref={heading} tabIndex={-1}>
-        {title}
-      </h2>
+      {look && "sent" in look ? (
+        <MailHead sent={look.sent} from={eyebrow} subject={h2} />
+      ) : (
+        <>
+          {look && <Masthead issue={look.issue} />}
+          {eyebrow !== undefined && <p className="eyebrow">{eyebrow}</p>}
+          {h2}
+        </>
+      )}
       {children}
+      {look && "sent" in look && <MailFoot />}
     </section>
   );
 }

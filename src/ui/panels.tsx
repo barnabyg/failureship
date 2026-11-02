@@ -1,20 +1,24 @@
 import { panelText } from "../content";
 import type { Choice, PlayerView, StepView } from "../engine";
 import { FindOutPanel } from "./FindOutPanel";
+import { ConfidentialStamp } from "./Intranet";
 import { Continue, Panel, Reaction, Stakes } from "./Panel";
 import { ResultsPanel } from "./ResultsPanel";
 import { ScenePanel } from "./ScenePanel";
 
+/** The official story, as that month's issue of the staff newsletter. */
 function StoryPanel({
   step,
+  month,
   onChoose,
 }: {
   step: Extract<StepView, { kind: "story" }>;
+  month: number;
   onChoose: (choice: Choice) => void;
 }) {
   return (
-    <Panel testId="panel-story" title={step.title}>
-      <div data-testid="story-reported">
+    <Panel testId="panel-story" title={step.title} look={{ issue: month }}>
+      <div className="story-reported" data-testid="story-reported">
         {step.reportedHeading !== undefined && <h3>{step.reportedHeading}</h3>}
         {step.reported.map((line) => (
           <p key={line}>{line}</p>
@@ -26,14 +30,17 @@ function StoryPanel({
         </p>
       ))}
       {step.happened.length > 0 && (
-        <div className="callout" data-testid="story-happened">
-          {step.happenedHeading !== undefined && (
-            <h3>{step.happenedHeading}</h3>
-          )}
-          {step.happened.map((line) => (
-            <p key={line}>{line}</p>
-          ))}
-        </div>
+        <>
+          <ConfidentialStamp />
+          <div className="callout story-happened" data-testid="story-happened">
+            {step.happenedHeading !== undefined && (
+              <h3>{step.happenedHeading}</h3>
+            )}
+            {step.happened.map((line) => (
+              <p key={line}>{line}</p>
+            ))}
+          </div>
+        </>
       )}
       <Continue onChoose={onChoose} />
     </Panel>
@@ -57,6 +64,7 @@ export function StepPanel({ view, onChoose }: StepPanelProps) {
           testId="panel-notification"
           eyebrow={step.from}
           title={step.subject}
+          look={{ sent: "notification" }}
         >
           <p>{step.body}</p>
           <div className="options">
@@ -98,7 +106,11 @@ export function StepPanel({ view, onChoose }: StepPanelProps) {
       );
     case "dialog":
       return (
-        <Panel testId="panel-dialog" title={step.title}>
+        <Panel
+          testId="panel-dialog"
+          title={step.title}
+          look={{ sent: "dialog" }}
+        >
           {step.lines.map((line) => (
             <p key={line.text}>
               {line.speaker !== undefined && <strong>{line.speaker}: </strong>}
@@ -117,7 +129,11 @@ export function StepPanel({ view, onChoose }: StepPanelProps) {
       );
     case "notice":
       return (
-        <Panel testId="panel-notice" title={step.title}>
+        <Panel
+          testId="panel-notice"
+          title={step.title}
+          look={{ sent: "notice" }}
+        >
           <p>{step.body}</p>
           <Reaction text={step.reaction} />
           {step.verdict !== undefined && (
@@ -130,20 +146,30 @@ export function StepPanel({ view, onChoose }: StepPanelProps) {
       );
     case "move":
       return (
-        <Panel testId="panel-move" eyebrow={step.from} title={step.title}>
+        <Panel
+          testId="panel-move"
+          eyebrow={step.from}
+          title={step.title}
+          look={{ sent: "move" }}
+        >
           <p>{step.body}</p>
           <Continue onChoose={onChoose} />
         </Panel>
       );
     case "event":
       return (
-        <Panel testId="panel-event" eyebrow={step.from} title={step.title}>
+        <Panel
+          testId="panel-event"
+          eyebrow={step.from}
+          title={step.title}
+          look={{ sent: "event" }}
+        >
           <p>{step.body}</p>
           <Continue onChoose={onChoose} />
         </Panel>
       );
     case "story":
-      return <StoryPanel step={step} onChoose={onChoose} />;
+      return <StoryPanel step={step} month={view.month} onChoose={onChoose} />;
     case "results":
       return <ResultsPanel step={step} orgChart={view.orgChart} />;
   }

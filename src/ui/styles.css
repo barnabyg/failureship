@@ -158,9 +158,11 @@ body {
 }
 
 /* Only the latest few, on one line, so the header never grows. */
+/* The terms give way after the title, but "+N more" never does. */
 .status .status-buzzwords dd {
-  display: flex;
-  gap: 8px;
+  display: grid;
+  grid-template-columns: minmax(0, auto) auto;
+  column-gap: 8px;
   align-items: baseline;
   font-size: 0.8125rem;
   font-weight: 400;
