@@ -71,7 +71,7 @@ mid-run, and later signs and charts follow.
 Your word is yours to give. Some choices offer a **Promise**, whether or not you can deliver it,
 and some a **Deal**, in which each side offers something. Whether you are believed, and whether a
 good word from someone counts, goes by who they really are and what has reached them. The **Your
-word** card shows what you have promised, your Deals and the favours you owe or are owed, at no cost.
+word given** card shows what you have promised, your Deals and the favours you owe or are owed, at no cost.
 Nothing tells you what other people owe each other.
 
 **Teflon**, in the header, is your track record, not your danger. **Fawning** is how well sucking up
