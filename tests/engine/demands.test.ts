@@ -226,7 +226,7 @@ describe("a stalled Demand", () => {
     const opinionAfterAnswering = (seed: number) => {
       const run = startRun({ seed, content: content() });
       run.choose(answer("deliver"));
-      return readHiddenTruth(run).bossOpinion;
+      return readHiddenTruth(run).bossBelief;
     };
     const opinionAfterBeingChased = (seed: number) => {
       const run = startRun({ seed, content: content() });
@@ -239,7 +239,7 @@ describe("a stalled Demand", () => {
         notificationId: "tool-chased",
         optionId: "late",
       });
-      return readHiddenTruth(run).bossOpinion;
+      return readHiddenTruth(run).bossBelief;
     };
 
     const chased = SEEDS.filter(
@@ -262,7 +262,7 @@ describe("a Demand's answers", () => {
       const { step } = run.choose(answer(optionId));
       return {
         reaction: step.kind === "notice" ? step.reaction : null,
-        opinion: readHiddenTruth(run).bossOpinion,
+        opinion: readHiddenTruth(run).bossBelief,
       };
     };
 

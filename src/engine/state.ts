@@ -77,10 +77,10 @@ export interface Change {
 
 /** The true state of a run, as tests read it. */
 export interface HiddenTruth extends TruthOfRun {
-  /** What the boss believes of the player. */
-  bossOpinion: number;
+  /** The boss's belief about the player. */
+  bossBelief: number;
   /** The same of the boss's boss, whom the player can also try to impress. */
-  headOpinion: number;
+  headBelief: number;
 }
 
 /** Custom behaviour for a Scene: reshapes its data for the current truth. */

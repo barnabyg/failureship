@@ -338,9 +338,9 @@ describe("Deliver", () => {
     const landed = (kind: Kind) => {
       const run = startRun({ seed: seedWithBoss(kind), content: gameContent });
       reachFloor(run);
-      const before = readHiddenTruth(run).bossOpinion;
+      const before = readHiddenTruth(run).bossBelief;
       const { reaction } = deliver(run);
-      return { reaction, shift: readHiddenTruth(run).bossOpinion - before };
+      return { reaction, shift: readHiddenTruth(run).bossBelief - before };
     };
 
     expect(landed("practitioner").reaction).not.toEqual(
@@ -385,9 +385,9 @@ describe("Deliver", () => {
     const shifts: number[] = [];
     for (let done = 0; done < 3; done++) {
       reachFloor(run, done === 0 ? "report" : "skip");
-      const before = readHiddenTruth(run).bossOpinion;
+      const before = readHiddenTruth(run).bossBelief;
       deliver(run);
-      shifts.push(readHiddenTruth(run).bossOpinion - before);
+      shifts.push(readHiddenTruth(run).bossBelief - before);
       finishMonth(run);
     }
 
@@ -402,10 +402,10 @@ describe("Deliver", () => {
     });
     for (let done = 0; done < 3; done++) {
       reachFloor(run, "report");
-      const before = readHiddenTruth(run).bossOpinion;
+      const before = readHiddenTruth(run).bossBelief;
       deliver(run);
 
-      expect(readHiddenTruth(run).bossOpinion).toBeGreaterThan(before);
+      expect(readHiddenTruth(run).bossBelief).toBeGreaterThan(before);
       finishMonth(run);
     }
   });

@@ -25,7 +25,7 @@ const reputation = (travel: object = {}) => ({
     shift: { good: 1, bad: -1 },
     ...travel,
   },
-  opinion: { warmAt: 1, coldAt: -1 },
+  mood: { warmAt: 1, coldAt: -1 },
   signs: [sign("warm", 9, 1, 0), sign("flat", 1, 9, 1), sign("cold", 0, 1, 9)],
   believes: { warm: "THINKS-WELL", neutral: "NO-VIEW", cold: "THINKS-BADLY" },
   how: { direct: "WAS-THERE", heardFrom: "HEARD-FROM {who}" },
@@ -219,7 +219,7 @@ describe("news", () => {
     });
 
     const truth = readHiddenTruth(run);
-    expect(truth.bossOpinion).toBe(-1);
+    expect(truth.bossBelief).toBe(-1);
     expect(truth.beliefs.ana).toBe(-1);
   });
 

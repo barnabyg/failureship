@@ -80,9 +80,8 @@ export function leaveStory(state: State, world: World): void {
   // Adding zero turns -0 into 0, which is all that a save can hold.
   const { character } = world.content.boss;
   state.truth.beliefs[character] =
-    Math.trunc(
-      beliefOf(state, character) * world.content.balance.opinion.keeps,
-    ) + 0;
+    Math.trunc(beliefOf(state, character) * world.content.balance.beliefKeeps) +
+    0;
   Object.assign(state, freshMonth(world.content, state.month));
   openMonth(state, world.content);
   state.step = nextStep(state, world);

@@ -260,6 +260,12 @@ Use these terms consistently in the design and the game.
 - **Notebook:** the player's retained record of important clues about the Power Map, which may include false or outdated claims.
 - **Company Event:** something that happens to the company as a whole, such as a takeover bid or a security breach.
 
+### What people think of you
+
+- **Belief:** what a Character believes of the player: a hidden number, moved by what reaches them. It is the one idea of what someone thinks of you, the bosses' included. Not "opinion" or "reputation". In the data, a choice's `opinion` and `headOpinion` are changes to the boss's and the boss's boss's belief.
+- **Mood:** how a belief stands: warm, neutral or cold. The boss, the boss's boss and everyone else each have their own points at which it changes, under `mood` in the data.
+- **Regard:** the sign of their mood that someone other than the bosses shows in a Scene. The bosses show theirs in how they treat the player. The player never sees a belief or a mood itself.
+
 ### Discovery
 
 - **Scenario:** a generic, non-identifiable account of office life drawn from real experience. It is input to the design, not content in the game. Names are not real people.

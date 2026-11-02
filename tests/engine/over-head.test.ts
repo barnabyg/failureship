@@ -68,8 +68,8 @@ function attempt(seed: number): Attempt {
     headKind: kindOf(run, "head") ?? "",
     influential: isInfluential(run),
     bossKind: kindOf(run, "boss") ?? "",
-    headShift: after.headOpinion - before.headOpinion,
-    bossShift: after.bossOpinion - before.bossOpinion,
+    headShift: after.headBelief - before.headBelief,
+    bossShift: after.bossBelief - before.bossBelief,
     caught: titles.includes(caughtTitle ?? ""),
   };
 }
@@ -193,7 +193,7 @@ describe("going over your boss's head", () => {
         if (!next) throw new Error(`Stuck at ${step.kind}.`);
         view = run.choose(next);
       }
-      return readHiddenTruth(run).bossOpinion;
+      return readHiddenTruth(run).bossBelief;
     };
     const mean = (climbs: boolean) =>
       SEEDS.slice(0, 150).reduce((sum, s) => sum + finalOpinion(s, climbs), 0) /

@@ -116,37 +116,37 @@ All the text and numbers are in `content/`, and editing them needs no code
 change. The running game reloads when you save a file. If an edit breaks the
 format, the page shows what is wrong instead of the game.
 
-| File                  | What it holds                                                                                                        |
-| --------------------- | -------------------------------------------------------------------------------------------------------------------- |
-| `ui.json`             | Headings, buttons and the "What you can do now" hints                                                                |
-| `notifications.json`  | The month's Notifications, their choices and their results                                                           |
-| `demands.json`        | Demands, their five answers, what happens when they are chased or forgotten, and those odds                          |
-| `project.json`        | The player's Project: its owner, statuses, starting point and written events                                         |
-| `dialogs.json`        | Short text dialogs, such as the pub                                                                                  |
-| `buzzwords.json`      | Buzzwords and their meanings                                                                                         |
-| `actions.json`        | What can be done on the floor, and the results                                                                       |
-| `scenes.json`         | Each month's Scene: its signs, its choices and their results                                                         |
-| `moves.json`          | Character Moves, and when each can land                                                                              |
-| `threads.json`        | What comes back months later: what starts each Thread, and the Bill it sends                                         |
-| `events.json`         | Company Events: where each comes from, how it moves the charts, and the official story's words                       |
-| `reputation.json`     | How far and how fast news travels, and the signs of what each Character believes of you                              |
-| `risks.json`          | Hidden risks: what adds each, who it comes out through, and whether it can be traced to you                          |
-| `deals.json`          | Deals: what each side offers, whether a good word counts, and the favours owed between people                        |
-| `promises.json`       | Promises: who they are made to, what is said back, and what arrives when they fall due                               |
-| `mistakes.json`       | The words of a Final Warning and of being fired                                                                      |
-| `official-story.json` | The official story, assembled from entries according to what you did                                                 |
-| `behaviours.json`     | What Characters can be seen doing, which roles can do it, and how likely each kind is to do it                       |
-| `boss.json`           | Who your boss is, the signs of how they treat you, and what impresses each kind                                      |
-| `families.json`       | What the results screen calls each family of Moves, and what it says of them                                         |
-| `over-head.json`      | Going over your boss's head: the odds, the effects, the words and your boss's boss's signs                           |
-| `sources.json`        | Find Out: who can be asked, how each role talks, how reliable each kind is, and every claim                          |
-| `notebook.json`       | Events the Notebook keeps a clue of, and what each clue was worth                                                    |
-| `changing.json`       | What burns a Believer, how much it takes, what they can become, and who covers for anyone who leaves                 |
-| `characters.json`     | Job titles, roles, how text refers to each person, names, and who reports to whom on the Org Chart                   |
-| `gauges.json`         | Gauges such as Teflon, where each starts, and the Milestones earned along the way                                    |
-| `hidden-truth.json`   | The rules of the deal: kinds, their weights, and the Hidden Facts                                                    |
-| `balance.json`        | Actions a month, months in a run, the cost of each choice, how often signs mislead and when the boss's opinion shows |
-| `floor-1.json`        | The rooms on the floor: positions, sizes, colours and the lift's sign                                                |
+| File                  | What it holds                                                                                          |
+| --------------------- | ------------------------------------------------------------------------------------------------------ |
+| `ui.json`             | Headings, buttons and the "What you can do now" hints                                                  |
+| `notifications.json`  | The month's Notifications, their choices and their results                                             |
+| `demands.json`        | Demands, their five answers, what happens when they are chased or forgotten, and those odds            |
+| `project.json`        | The player's Project: its owner, statuses, starting point and written events                           |
+| `dialogs.json`        | Short text dialogs, such as the pub                                                                    |
+| `buzzwords.json`      | Buzzwords and their meanings                                                                           |
+| `actions.json`        | What can be done on the floor, and the results                                                         |
+| `scenes.json`         | Each month's Scene: its signs, its choices and their results                                           |
+| `moves.json`          | Character Moves, and when each can land                                                                |
+| `threads.json`        | What comes back months later: what starts each Thread, and the Bill it sends                           |
+| `events.json`         | Company Events: where each comes from, how it moves the charts, and the official story's words         |
+| `reputation.json`     | How far and how fast news travels, and the signs of what each Character believes of you                |
+| `risks.json`          | Hidden risks: what adds each, who it comes out through, and whether it can be traced to you            |
+| `deals.json`          | Deals: what each side offers, whether a good word counts, and the favours owed between people          |
+| `promises.json`       | Promises: who they are made to, what is said back, and what arrives when they fall due                 |
+| `mistakes.json`       | The words of a Final Warning and of being fired                                                        |
+| `official-story.json` | The official story, assembled from entries according to what you did                                   |
+| `behaviours.json`     | What Characters can be seen doing, which roles can do it, and how likely each kind is to do it         |
+| `boss.json`           | Who your boss is, the signs of how they treat you, and what impresses each kind                        |
+| `families.json`       | What the results screen calls each family of Moves, and what it says of them                           |
+| `over-head.json`      | Going over your boss's head: the odds, the effects, the words and your boss's boss's signs             |
+| `sources.json`        | Find Out: who can be asked, how each role talks, how reliable each kind is, and every claim            |
+| `notebook.json`       | Events the Notebook keeps a clue of, and what each clue was worth                                      |
+| `changing.json`       | What burns a Believer, how much it takes, what they can become, and who covers for anyone who leaves   |
+| `characters.json`     | Job titles, roles, how text refers to each person, names, and who reports to whom on the Org Chart     |
+| `gauges.json`         | Gauges such as Teflon, where each starts, and the Milestones earned along the way                      |
+| `hidden-truth.json`   | The rules of the deal: kinds, their weights, and the Hidden Facts                                      |
+| `balance.json`        | Actions a month, months in a run, the cost of each choice, how often signs mislead and the boss's mood |
+| `floor-1.json`        | The rooms on the floor: positions, sizes, colours and the lift's sign                                  |
 
 Each file's fields, the conditions they can use, and what to write for a Thread, a Promise,
 a Deal, a Company Event, a hidden risk or a Gauge are in the

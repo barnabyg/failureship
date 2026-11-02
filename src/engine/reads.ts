@@ -43,10 +43,7 @@ export function shiftBelief(
 }
 
 export function moodOf(state: State, content: Content): Mood {
-  return moodAt(
-    beliefOf(state, content.boss.character),
-    content.balance.opinion,
-  );
+  return moodAt(beliefOf(state, content.boss.character), content.balance.mood);
 }
 
 /** How someone's belief stands. Each boss has their own point at which it shows. */
@@ -58,17 +55,17 @@ export function moodOfCharacter(
   if (character === content.boss.character) return moodOf(state, content);
   const scale =
     character === content.overHead?.character
-      ? content.overHead.opinion
-      : (content.reputation?.opinion ?? content.balance.opinion);
+      ? content.overHead.mood
+      : (content.reputation?.mood ?? content.balance.mood);
   return moodAt(beliefOf(state, character), scale);
 }
 
 export function moodAt(
-  opinion: number,
+  belief: number,
   { warmAt, coldAt }: { warmAt: number; coldAt: number },
 ): Mood {
-  if (opinion >= warmAt) return "warm";
-  return opinion <= coldAt ? "cold" : "neutral";
+  if (belief >= warmAt) return "warm";
+  return belief <= coldAt ? "cold" : "neutral";
 }
 
 export function heardAbout(state: State, fact: string | undefined) {

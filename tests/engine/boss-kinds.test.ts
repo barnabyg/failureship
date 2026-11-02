@@ -65,7 +65,7 @@ describe("what impresses each kind of boss", () => {
     const content = parseContent(kindsFixtureRaw());
     const opinionOf = (kind: Kind) =>
       readHiddenTruth(dazzle(seedWhereBossIs(kind, content), content).run)
-        .bossOpinion;
+        .bossBelief;
 
     expect(opinionOf("incompetent")).toBe(2);
     expect(opinionOf("practitioner")).toBe(1);
@@ -89,7 +89,7 @@ describe("what impresses each kind of boss", () => {
     const content = parseContent(raw);
     const seed = seedWhereBossIs("incompetent", content);
 
-    expect(readHiddenTruth(dazzle(seed, content).run).bossOpinion).toBe(3);
+    expect(readHiddenTruth(dazzle(seed, content).run).bossBelief).toBe(3);
   });
 
   it("lets an option write its own reaction", () => {
@@ -325,7 +325,7 @@ function playOut(
       : (meeting ?? first);
     view = run.choose(choice);
   }
-  return { run, view, opinion: readHiddenTruth(run).bossOpinion };
+  return { run, view, opinion: readHiddenTruth(run).bossBelief };
 }
 
 const adapts = (choices: Choice[], view: PlayerView, kind: Kind): Choice => {

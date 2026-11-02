@@ -5,7 +5,7 @@ import { pickWeighted } from "./rng";
 import type { State, World } from "./state";
 
 /**
- * Moves the boss's opinion by what the choice says, and by how this kind of
+ * Moves the boss's belief by what the choice says, and by how this kind of
  * boss takes its approach. Returns the sign of that, if it has one.
  */
 export function landWithBoss(

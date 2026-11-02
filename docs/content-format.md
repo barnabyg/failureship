@@ -16,7 +16,7 @@ A `when` or `requires` holds one of these:
 | `{ "flag": "went-to-pub" }`                                            | A flag is set this month                                                                | Only if the flag does  |
 | `{ "did": "moved-a-colleague" }`                                       | A flag has been set in any month of the run                                             | Only if the flag does  |
 | `{ "remembers": { "character": "projects", "about": "passed-over" } }` | That Character keeps a memory written with that `about`                                 | Yes                    |
-| `{ "believes": { "character": "admin", "mood": "cold" } }`             | How that Character's belief about the player stands: `warm`, `neutral` or `cold`        | Yes                    |
+| `{ "believes": { "character": "admin", "mood": "cold" } }`             | That Character's mood, how their belief stands: `warm`, `neutral` or `cold`             | Yes                    |
 | `{ "hasBuzzword": "strategic-patience" }`                              | The player has learnt the Buzzword                                                      | No                     |
 | `{ "heardFact": "lost-list" }`                                         | The player has been told that Hidden Fact about someone, true or not                    | No                     |
 | `{ "heardTrue": "lost-list" }`                                         | What the player was told about that Hidden Fact is true                                 | Yes                    |
@@ -79,9 +79,10 @@ Actions a month, months in a run and the cost of each choice.
 - `signsMisleadChance` is how often a Scene's signs swap `{holder}` with `{bystander}`,
   so that one Scene never settles who holds influence. A Scene's results still go by the
   truth.
-- `opinion` holds `warmAt` and `coldAt`, which say how the boss's hidden opinion stands,
-  and `keeps`, which is how much of it carries into each new month, so that it is mostly
-  about lately.
+- `mood` holds `warmAt` and `coldAt`, the points at which the boss's belief about the player
+  makes their mood `warm` or `cold`.
+- `beliefKeeps` is how much of the boss's belief carries into each new month, so that it is
+  mostly about lately.
 
 ## `behaviours.json`
 
@@ -101,14 +102,13 @@ chosen by their dealt kind.
 
 Who your boss is, the signs of how they treat you, and what impresses each kind.
 
-A choice can carry `"opinion": 1` or `-1` to move your boss's hidden opinion of you. The
-opinion has no number on screen. It shows only through `signs`: when the boss is in a
-Scene, one sign is picked using the `likelihood` for how the opinion stands, as
-`balance.json` sets. Every sign must be possible from at least two of `warm`, `neutral`
+A choice can carry `"opinion": 1` or `-1` to move your boss's hidden belief about you. The
+belief has no number on screen. It shows only through `signs`: when the boss is in a
+Scene, one sign is picked using the `likelihood` for their mood, as `balance.json` sets. Every sign must be possible from at least two of `warm`, `neutral`
 and `cold`, so that no sign settles it.
 
 A choice can also carry `"approach": "theatre"`. `approaches` lists each one, how far it
-moves the opinion of each kind of boss, and how each kind shows it, so the same choice can
+moves the belief of each kind of boss, and how each kind shows it, so the same choice can
 warm one boss and chill another. The player reads that from `reaction` lines and never
 from a label: a line naming a kind, or an approach that every kind takes alike, is
 refused. A choice can write its own `reaction` for each kind.
@@ -322,17 +322,17 @@ The official story, assembled from `entries` according to what you did. Each ent
 
 Going over your boss's head, which an action with `"overHead": true` does.
 
-Your boss's boss has a hidden opinion of their own, which `signs` show whenever they are in a
-Scene, and which a choice can move with `"headOpinion": 1`. Its own `opinion` here says when
+Your boss's boss has a hidden belief of their own, which `signs` show whenever they are in a
+Scene, and which a choice can move with `"headOpinion": 1`. Its own `mood` here says when
 that shows.
 
 - `outcomes` holds the seeded chance of it working, by their dealt kind and by whether they
   are `influential` or `sidelined`. The count at the top of the Power Map that makes someone
   influential is `influentialCount` in [`sources.json`](#sourcesjson).
-- `effects` says how far each opinion moves if it works. Your boss gains little if your boss's
+- `effects` says how far each belief moves if it works. Your boss gains little if your boss's
   boss has little influence.
 - `findsOut` is the seeded chance of your boss hearing of it, by your boss's kind, which grows
-  by `perUse` with each trip, and how sharply their opinion then falls.
+  by `perUse` with each trip, and how sharply their belief then falls.
 - `verdict` is what the results screen says your boss's boss made of you.
 
 ## `project.json`
@@ -383,8 +383,7 @@ falls due. The player can see their word at any time, for nothing.
 ## `reputation.json`
 
 There is no single reputation score. Each Character has their own belief about the player, and
-that belief is what your boss's and your boss's boss's opinions are too, so there is one idea of
-what someone thinks of you. It has no number on screen. It shows through signs, and through
+your bosses' beliefs are the same idea, so there is one idea of what someone thinks of you. It has no number on screen. It shows through signs, and through
 anything written with the `believes` condition.
 
 A choice's outcome, a Bill or a Scene result can carry `news`: an `about` that the `remembers`
@@ -395,7 +394,7 @@ whom it was done in front of, or to. They know at once. Only true deeds start ne
   along the ties of the Power Map, no more than `maxHops` from where it started. `passOnChance` is
   the seeded chance of each person telling each person tied to them, and `shift` is how far it then
   moves their belief. So the same deed reaches different people on different deals.
-- `opinion` says when the belief of anyone but your bosses shows. Your bosses have their own, in
+- `mood` says when the belief of anyone but your bosses shows. Your bosses have their own, in
   [`balance.json`](#balancejson) and [`over-head.json`](#over-headjson).
 - `signs` show how everyone else present in a Scene is with the player. Each says `{who}`, and
   must be possible from at least two of `warm`, `neutral` and `cold`, so that no sign settles it.
@@ -439,7 +438,7 @@ meeting has everyone in it.
 - A result's `when` picks it. A result with `factNote` is listed on the results screen beside the
   fact itself, and `factAt` names whose fact it was, unless the option is `about` one.
 - A result can carry `sets`, `opinion`, `headOpinion`, `approach`, `reaction` and `project`.
-- A Scene with a `verdict` adds what the boss finally says, by how the opinion stands.
+- A Scene with a `verdict` adds what the boss finally says, by their mood.
 
 ## `sources.json`
 

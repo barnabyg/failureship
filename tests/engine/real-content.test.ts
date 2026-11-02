@@ -382,8 +382,8 @@ describe("the real month", () => {
       run.choose({ type: "action", actionId: "over-head" });
       const after = readHiddenTruth(run);
 
-      expect(after.headOpinion - before.headOpinion).toBe(head);
-      expect(after.bossOpinion - before.bossOpinion).toBe(boss);
+      expect(after.headBelief - before.headBelief).toBe(head);
+      expect(after.bossBelief - before.bossBelief).toBe(boss);
       expect(run.choose({ type: "continue" }).step.kind).toBe(then);
     },
   );

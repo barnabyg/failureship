@@ -106,7 +106,7 @@ describe("the boss's opinion", () => {
     const content = parseContent(bossFixtureRaw());
     const { run } = nextMeeting(1, "please", content);
 
-    expect(readHiddenTruth(run).bossOpinion).toBe(2);
+    expect(readHiddenTruth(run).bossBelief).toBe(2);
     // The fixture's own sign says WARM, so this checks what the view is made of.
     const seen = JSON.stringify(run.view());
     expect(seen).not.toMatch(/opinion|likelihood|mood/i);
@@ -165,7 +165,7 @@ describe("the boss's opinion", () => {
       optionId: "no",
     });
 
-    expect(readHiddenTruth(run).bossOpinion).toBe(-1);
+    expect(readHiddenTruth(run).bossBelief).toBe(-1);
   });
 });
 
