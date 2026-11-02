@@ -129,7 +129,7 @@ function LatestBuzzwords({
   buzzwords: readonly Buzzword[];
   onOpen: () => void;
 }) {
-  const [onLoad] = useState(() => new Set(buzzwords.map((b) => b.id)));
+  const [learnedBefore] = useState(() => new Set(buzzwords.map((b) => b.id)));
   if (buzzwords.length === 0) return null;
   const rest = buzzwords.length - latestShown;
   const latest = buzzwords.slice(-latestShown).reverse();
@@ -141,7 +141,9 @@ function LatestBuzzwords({
           {latest.map((word) => (
             <li
               key={word.id}
-              className={onLoad.has(word.id) ? undefined : "buzzword-new"}
+              className={
+                learnedBefore.has(word.id) ? undefined : "buzzword-new"
+              }
               data-testid="buzzword"
             >
               {word.term}
@@ -151,7 +153,7 @@ function LatestBuzzwords({
         {rest > 0 && (
           <button
             type="button"
-            className="status-gauge"
+            className="status-link"
             data-testid="open-buzzwords"
             onClick={onOpen}
           >
@@ -221,6 +223,8 @@ export function App() {
   const [wordOpen, setWordOpen] = useState(false);
   const [gaugesOpen, setGaugesOpen] = useState(false);
   const [buzzwordsOpen, setBuzzwordsOpen] = useState(false);
+  // Each run's header starts afresh, even on the same seed.
+  const [runNumber, setRunNumber] = useState(0);
 
   // In an effect, because React may run a state initialiser twice in development.
   useEffect(() => {
@@ -243,6 +247,7 @@ export function App() {
 
   const restart = (seed: number) => {
     setGame(begin(seed));
+    setRunNumber((n) => n + 1);
     setMessage(null);
     setLeavingFor(null);
   };
@@ -263,7 +268,7 @@ export function App() {
         onChoose={choose}
       />
       <header className="status">
-        <div>
+        <div className="status-title">
           <h1>{panelText.title}</h1>
           <p className="tagline" title={panelText.tagline}>
             {panelText.tagline}
@@ -296,7 +301,7 @@ export function App() {
               <dd>
                 <button
                   type="button"
-                  className="status-gauge"
+                  className="status-link"
                   data-testid={`open-gauge-${gauge.id}`}
                   title={panelText.gaugesHeading}
                   onClick={() => {
@@ -309,6 +314,7 @@ export function App() {
             </div>
           ))}
           <LatestBuzzwords
+            key={runNumber}
             buzzwords={view.buzzwords}
             onOpen={() => {
               setBuzzwordsOpen(true);

@@ -114,7 +114,8 @@ describe("the Buzzwords learned", () => {
       { id: "third", term: "THIRD", meaning: "Written third." },
     );
     const pub = raw.notifications[0]?.options.find((o) => o.id === "pub");
-    if (pub) pub.learns = ["third", "fixture-word", "second"];
+    if (!pub) throw new Error("The pub has gone.");
+    pub.learns = ["third", "fixture-word", "second"];
     const run = startRun({ seed: 1, content: parseContent(raw) });
 
     run.choose({

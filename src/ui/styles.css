@@ -125,7 +125,7 @@ body {
 }
 
 /* The title gives way first, so a full header still keeps to one row. */
-.status > div:first-child {
+.status-title {
   min-width: 0;
 }
 
@@ -146,8 +146,8 @@ body {
   white-space: nowrap;
 }
 
-/* A Gauge's value opens what moved it, without widening the header. */
-.status-gauge {
+/* A Gauge's value, or "+N more", opens a panel without widening the header. */
+.status-link {
   padding: 0;
   border: none;
   border-bottom: 1px dotted currentColor;
@@ -185,10 +185,10 @@ body {
 
 /* A Buzzword just learned stands out, then settles. */
 .buzzword-new {
-  animation: buzzword-learned 4s ease-out;
+  animation: buzzword-highlight 4s ease-out;
 }
 
-@keyframes buzzword-learned {
+@keyframes buzzword-highlight {
   from {
     background: var(--highlight);
   }

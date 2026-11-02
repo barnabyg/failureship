@@ -119,4 +119,12 @@ test("ten Buzzwords show the latest three, and the rest behind +7 more", async (
   await page.reload();
   await expect(shown).toHaveCount(3);
   await expect(page.locator(".buzzword-new")).toHaveCount(0);
+
+  // Starting the same seed again, the pub teaches them anew, and they stand out.
+  await page.getByTestId("seed-input").fill("1");
+  await page.getByTestId("restart-seed").click();
+  await page.getByTestId("confirm-leave-yes").click();
+  await expect(page.getByTestId("buzzwords")).toHaveCount(0);
+  await page.getByTestId("option-pub").click();
+  await expect(shown.first()).toHaveClass("buzzword-new");
 });
