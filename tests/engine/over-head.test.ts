@@ -195,12 +195,14 @@ describe("going over your boss's head", () => {
       }
       return readHiddenTruth(run).bossBelief;
     };
+    // Twenty-five is plenty: climbing every month leaves the boss's belief
+    // over 11 lower on all 16 sets of twenty-five tried.
     const mean = (climbs: boolean) =>
-      SEEDS.slice(0, 150).reduce((sum, s) => sum + finalBelief(s, climbs), 0) /
-      150;
+      SEEDS.slice(0, 25).reduce((sum, s) => sum + finalBelief(s, climbs), 0) /
+      25;
 
     expect(mean(true)).toBeLessThan(mean(false));
-  }, 30_000);
+  });
 
   it("never shows either belief or kind before the run ends", () => {
     for (const seed of SEEDS.slice(0, 60)) {

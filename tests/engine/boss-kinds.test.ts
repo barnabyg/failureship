@@ -352,8 +352,9 @@ const average = (values: number[]) =>
 
 describe("playing the boss you have", () => {
   it("ends warmer for a player who adapts than one with one approach for all", () => {
-    // Fifteen is plenty: the gap is over six, on all 19 sets of fifteen tried.
-    const seeds = SEEDS.slice(0, 15);
+    // Ten is plenty: the gap is over 2.5 on all 30 sets of ten tried, and over
+    // seven on this one.
+    const seeds = SEEDS.slice(0, 10);
     const adapted = average(seeds.map((seed) => playOut(seed, adapts).belief));
 
     for (const { id } of gameContent.boss.approaches) {
