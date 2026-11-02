@@ -20,7 +20,14 @@
           "title": "FW: Health and Safety Committee",
           "body": "It turns out that the colleague you moved beside the printer sits on the Health and Safety committee. The committee has reviewed your training record, and can find nothing wrong with it. It has asked you to fill in a form confirming this, in triplicate, by the printer.",
           "sets": ["safety-committee-called"]
-        }
+        },
+        "gauges": [
+          {
+            "gauge": "teflon",
+            "by": 15,
+            "note": "The desk with no window came back, and you had done the training. It cost you a form."
+          }
+        ]
       },
       {
         "playedOut": "The colleague by the printer turned out to sit on the Health and Safety committee. Months after the desk, they called you out for never putting your team through safety training.",
@@ -56,7 +63,14 @@
               }
             }
           ]
-        }
+        },
+        "gauges": [
+          {
+            "gauge": "teflon",
+            "by": -10,
+            "note": "The desk with no window came back, and the committee had you on the training."
+          }
+        ]
       }
     ]
   },
@@ -83,7 +97,14 @@
           "project": {
             "real": "better"
           }
-        }
+        },
+        "gauges": [
+          {
+            "gauge": "teflon",
+            "by": 10,
+            "note": "You took the blame in the review, and it came back as figures on your desk."
+          }
+        ]
       }
     ]
   },
@@ -113,7 +134,14 @@
           "project": {
             "reported": "real"
           }
-        }
+        },
+        "gauges": [
+          {
+            "gauge": "teflon",
+            "by": 20,
+            "note": "The green report came back, and Finance believed it."
+          }
+        ]
       },
       {
         "playedOut": "Someone from Finance set your green report beside the real figures. It went nowhere much: your boss had signed the same report, and preferred it left alone.",
@@ -125,7 +153,14 @@
           "body": "Someone in Finance, whom you have never met, has been reading old Monthly Status Reports for pleasure. They have laid one of your green ones beside the figures, and sent both to your boss. Your boss replies to all, thanking Finance for its engagement. You are not to do it again, or at least not in writing.",
           "sets": ["green-report-found"],
           "opinion": -1
-        }
+        },
+        "gauges": [
+          {
+            "gauge": "teflon",
+            "by": -15,
+            "note": "The green report came back, and it had your name on it."
+          }
+        ]
       }
     ]
   },
@@ -158,7 +193,14 @@
           "project": {
             "real": "worse"
           }
-        }
+        },
+        "gauges": [
+          {
+            "gauge": "teflon",
+            "by": -5,
+            "note": "The bonus pot came back, and it was remembered who decided it."
+          }
+        ]
       },
       {
         "when": {
@@ -178,7 +220,14 @@
           "project": {
             "real": "better"
           }
-        }
+        },
+        "gauges": [
+          {
+            "gauge": "teflon",
+            "by": 10,
+            "note": "The bonus pot came back, as a favour returned."
+          }
+        ]
       }
     ]
   },
@@ -206,7 +255,14 @@
           "title": "Room change",
           "body": "Your one o'clock has been moved. Nobody can find the message that said so, though the Office Co-ordinator is quite sure that one was sent. By the time you arrive, it has finished, and it went very well.",
           "sets": ["room-moved"]
-        }
+        },
+        "gauges": [
+          {
+            "gauge": "teflon",
+            "by": 10,
+            "note": "Blaming a colleague came back on them, and not on you."
+          }
+        ]
       }
     ]
   }

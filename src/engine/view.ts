@@ -114,6 +114,8 @@ export type StepView =
       happenedHeading?: string | undefined;
       reported: string[];
       happened: string[];
+      /** What moved a Gauge as the month closed. */
+      gauges: string[];
     }
   | {
       kind: "results";
@@ -171,6 +173,8 @@ export type StepView =
         to: string;
         why: string[];
       }[];
+      /** The Milestones earned, for comparing with friends. */
+      milestones: { month: number; title: string }[];
       /** The big mistakes the player made, in order. */
       mistakes: { month: number; choice: string }[];
       characters: {
@@ -241,6 +245,15 @@ export interface PlayerView {
   /** The Deals the player has made, and the favours they are party to. No others. */
   deals: { month: number; with: string; what: string; status: string }[];
   favours: string[];
+  /** The player's Gauges, which say nothing of the Power Map or real danger. */
+  gauges: {
+    id: string;
+    label: string;
+    value: number;
+    /** Each Thread that moved it. */
+    moves: { month: number; by: number; note: string }[];
+  }[];
+  milestones: { month: number; title: string }[];
   /** Whether one more big mistake gets the player fired. */
   finalWarning: boolean;
   seed: number;

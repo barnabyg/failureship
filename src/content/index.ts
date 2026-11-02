@@ -11,6 +11,7 @@ import dialogs from "../../content/dialogs.json";
 import events from "../../content/events.json";
 import families from "../../content/families.json";
 import floor from "../../content/floor-1.json";
+import gauges from "../../content/gauges.json";
 import hiddenTruth from "../../content/hidden-truth.json";
 import mistakes from "../../content/mistakes.json";
 import moves from "../../content/moves.json";
@@ -50,6 +51,7 @@ export const gameContent = parseContent({
   promises,
   deals,
   changing,
+  gauges,
   families,
   hiddenTruth,
   sources,
@@ -127,6 +129,11 @@ const panelSchema = z.strictObject(
       "promisesCount",
       "dealsHeading",
       "favoursHeading",
+      "gaugesHeading",
+      "gaugesNoMoves",
+      "milestonesHeading",
+      "resultsMilestonesHeading",
+      "resultsNoMilestones",
       "resultsChangedHeading",
       "resultsDealsHeading",
       "resultsFavoursHeading",

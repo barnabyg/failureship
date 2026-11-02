@@ -83,6 +83,11 @@ function StoryPanel({
           <p key={line}>{line}</p>
         ))}
       </div>
+      {step.gauges.map((line) => (
+        <p key={line} className="signs" data-testid="story-gauge">
+          {line}
+        </p>
+      ))}
       {step.happened.length > 0 && (
         <div className="callout" data-testid="story-happened">
           {step.happenedHeading !== undefined && (
@@ -179,6 +184,19 @@ function ResultsPanel({
         <p className="callout" data-testid="results-ending">
           {step.ending.text}
         </p>
+      )}
+      <h3>{panelText.resultsMilestonesHeading}</h3>
+      {step.milestones.length === 0 ? (
+        <p>{panelText.resultsNoMilestones}</p>
+      ) : (
+        <ul>
+          {step.milestones.map((row) => (
+            <li key={row.title} data-testid="result-milestone">
+              <strong>{monthLabel(row.month)}. </strong>
+              {row.title}
+            </li>
+          ))}
+        </ul>
       )}
       {step.mistakes.length > 0 && (
         <>

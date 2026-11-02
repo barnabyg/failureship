@@ -4,6 +4,7 @@ import {
   findBrokenEvents,
   findBrokenChanging,
   findBrokenDeals,
+  findBrokenGauges,
   findBrokenPromises,
   findBrokenRisks,
   findBrokenThreads,
@@ -669,6 +670,7 @@ function findBrokenReferences(content: Content): string[] {
   problems.push(...findBrokenPromises(content));
   problems.push(...findBrokenDeals(content));
   problems.push(...findBrokenChanging(content));
+  problems.push(...findBrokenGauges(content));
   problems.push(...findBrokenReputation(content, characters));
   for (const event of content.events) {
     checkProject(`Company Event "${event.id}"`, event.project);

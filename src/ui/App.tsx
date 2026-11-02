@@ -170,6 +170,7 @@ export function App() {
   const [notebookOpen, setNotebookOpen] = useState(false);
   const [projectOpen, setProjectOpen] = useState(false);
   const [wordOpen, setWordOpen] = useState(false);
+  const [gaugesOpen, setGaugesOpen] = useState(false);
 
   // In an effect, because React may run a state initialiser twice in development.
   useEffect(() => {
@@ -237,6 +238,12 @@ export function App() {
               <dd>{panelText.finalWarningLabel}</dd>
             </div>
           )}
+          {view.gauges.map((gauge) => (
+            <div key={gauge.id} data-testid={`gauge-${gauge.id}`}>
+              <dt>{gauge.label}</dt>
+              <dd>{gauge.value}</dd>
+            </div>
+          ))}
           {view.buzzwords.length > 0 && (
             <div className="status-buzzwords" data-testid="buzzwords">
               <dt>{panelText.buzzwordsHeading}</dt>
@@ -263,6 +270,17 @@ export function App() {
           >
             {panelText.orgChartHeading}
           </button>
+          {view.gauges.length > 0 && (
+            <button
+              type="button"
+              data-testid="open-gauges"
+              onClick={() => {
+                setGaugesOpen(true);
+              }}
+            >
+              {panelText.gaugesHeading}
+            </button>
+          )}
           <button
             type="button"
             data-testid="open-notebook"
@@ -364,6 +382,53 @@ export function App() {
             data-testid="close-project"
             onClick={() => {
               setProjectOpen(false);
+            }}
+          >
+            {panelText.closeLabel}
+          </button>
+        </Modal>
+      )}
+      {gaugesOpen && (
+        <Modal
+          testId="gauges"
+          title={panelText.gaugesHeading}
+          onClose={() => {
+            setGaugesOpen(false);
+          }}
+        >
+          {view.gauges.map((gauge) => (
+            <div key={gauge.id}>
+              <h3>
+                {gauge.label}: {gauge.value}
+              </h3>
+              {gauge.moves.length === 0 && <p>{panelText.gaugesNoMoves}</p>}
+              <ul>
+                {gauge.moves.map((move, index) => (
+                  <li key={index} data-testid="gauge-move">
+                    <strong>{monthLabel(move.month)}. </strong>
+                    {move.by > 0 ? `+${String(move.by)}` : move.by}. {move.note}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))}
+          {view.milestones.length > 0 && (
+            <>
+              <h3>{panelText.milestonesHeading}</h3>
+              <ul>
+                {view.milestones.map((row) => (
+                  <li key={row.title} data-testid="milestone">
+                    {row.title}
+                  </li>
+                ))}
+              </ul>
+            </>
+          )}
+          <button
+            type="button"
+            data-testid="close-gauges"
+            onClick={() => {
+              setGaugesOpen(false);
             }}
           >
             {panelText.closeLabel}

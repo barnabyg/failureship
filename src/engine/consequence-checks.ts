@@ -212,6 +212,37 @@ export function findBrokenChanging(content: Content): string[] {
   return problems;
 }
 
+/** A Gauge must be reachable by its Milestones, and moved by Threads that name it. */
+export function findBrokenGauges(content: Content): string[] {
+  const problems: string[] = [];
+  const ids = new Set<string>();
+  for (const gauge of content.gauges ?? []) {
+    const owner = `Gauge "${gauge.id}"`;
+    if (ids.has(gauge.id)) problems.push(`${owner} is written twice.`);
+    ids.add(gauge.id);
+    if (gauge.start < gauge.min || gauge.start > gauge.max) {
+      problems.push(`${owner} starts outside its range.`);
+    }
+    for (const milestone of gauge.milestones) {
+      if (milestone.at <= gauge.start || milestone.at > gauge.max) {
+        problems.push(
+          `${owner} has Milestone "${milestone.title}" out of reach.`,
+        );
+      }
+    }
+  }
+  for (const thread of content.threads) {
+    for (const move of thread.outcomes.flatMap((o) => o.gauges)) {
+      if (!ids.has(move.gauge)) {
+        problems.push(
+          `Thread "${thread.id}" moves unknown Gauge "${move.gauge}".`,
+        );
+      }
+    }
+  }
+  return problems;
+}
+
 /** A Bill must be able to reach the player, in the way it says it does. */
 function findBrokenBills(content: Content): string[] {
   const problems: string[] = [];

@@ -236,6 +236,16 @@ choice with an `approach` should say which family it is, and a test fails if it 
 
 The rooms on the floor: positions, sizes, colours and the lift's sign.
 
+## `gauges.json`
+
+The player's Gauges, in plain view at every step. How to add one is in
+[Add a Gauge or a Milestone](../README.md#add-a-gauge-or-a-milestone) in the README.
+
+Each has `id`, `label`, `start`, and the `min` and `max` it stays within. Its `milestones` are
+earned once each, on reaching `at`, and the player is told `title` and `body` as the month closes.
+A Milestone it can never reach is refused. A Gauge moves only from the `gauges` of a Thread's outcome,
+as in [`threads.json`](#threadsjson). Nothing else moves it, and nothing but its Milestones reads it.
+
 ## `hidden-truth.json`
 
 The rules of the deal: kinds, their weights, and the Hidden Facts.
@@ -459,7 +469,10 @@ A `bill` has a unique `id`, a `title` and a `body`, and `as` says how it arrives
   them free. The options are written as in [`notifications.json`](#notificationsjson).
 - `"move"` lands where Character Moves do, beside the month's own, and needs `from`.
 
-It can carry `sets`, `opinion`, `headOpinion`, `project` and `"mistake": "big"`, and these
+An outcome's `gauges` move the player's Gauges as the month it plays out closes, each with the
+`gauge`, how far it moves it `by`, and the `note` the player sees. Only a Thread can move a Gauge.
+
+A Bill can carry `sets`, `opinion`, `headOpinion`, `project` and `"mistake": "big"`, and these
 take effect when it arrives, or, as a Move, when it lands. Its flags can be read by the official
 story, and they count as hidden, so no option can depend on them.
 

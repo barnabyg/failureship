@@ -1,4 +1,5 @@
 import { everyBill, type Bill, type Content } from "./content";
+import { gaugesFromThread } from "./gauges";
 import { applyOutcome } from "./outcome";
 import { isGone, matches, mentionsGone } from "./reads";
 import { drawFor } from "./rng";
@@ -28,6 +29,7 @@ export function playThreads(state: State, content: Content): void {
     );
     if (!outcome) continue;
     started.played = { month: state.month, text: outcome.playedOut };
+    gaugesFromThread(state, outcome.gauges);
     sendBill(state, content, outcome.bill);
   }
 }

@@ -1,6 +1,7 @@
 import { startedAs } from "./changes";
 import { MOVE_FAMILIES, type Content } from "./content";
 import { dealsInResults } from "./deals";
+import { gaugesInView } from "./gauges";
 import { promisesInResults } from "./promises";
 import { bossKindOf, moodOf, moodOfCharacter, personOf } from "./reads";
 import { calledBy, sayPeople } from "./say";
@@ -22,6 +23,7 @@ export function toResultsView(
       : content.ui.results),
     ending: toEnding(state, content),
     mistakes: state.mistakes,
+    milestones: gaugesInView(state, content).milestones,
     changed: state.truth.changes.flatMap((change) => {
       const written = content.changing;
       if (!written) return [];

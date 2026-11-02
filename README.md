@@ -173,6 +173,7 @@ format, the page shows what is wrong instead of the game.
 | `notebook.json`       | Events the Notebook keeps a clue of, and what each clue was worth                                                    |
 | `changing.json`       | What burns a Believer, how much it takes, what they can become, and who covers for anyone who leaves                 |
 | `characters.json`     | Job titles, roles, how text refers to each person, names, and who reports to whom on the Org Chart                   |
+| `gauges.json`         | Gauges such as Teflon, where each starts, and the Milestones earned along the way                                    |
 | `hidden-truth.json`   | The rules of the deal: kinds, their weights, and the Hidden Facts                                                    |
 | `balance.json`        | Actions a month, months in a run, the cost of each choice, how often signs mislead and when the boss's opinion shows |
 | `floor-1.json`        | The rooms on the floor: positions, sizes, colours and the lift's sign                                                |
@@ -245,6 +246,19 @@ is not told: the results screen says who changed, from what to what, and why. In
   vacancies exist. Someone who leaves is gone for the rest of the run: they are left out of Scenes,
   the charts and Find Out, nothing arrives from them and no choice names them, their Promises and
   Deals lapse, and running text calls whoever covers for them by their `cover`.
+
+### Add a Gauge or a Milestone
+
+Gauges, such as Teflon, are the player's track record, in plain view. They move only when a Thread
+plays out, as the month closes, and the official story says which. They never read the Power Map or a
+hidden risk, and nothing in the rules reads them but their own Milestones, so a high one does not mean
+the player is safe. Needing no code:
+
+- To add a Milestone, add an entry to that Gauge's `milestones` in `content/gauges.json`, with the
+  level it is earned `at`, its `title`, and the `body` the player is told.
+- To add a Gauge, add an entry to `content/gauges.json` with its `label`, `start`, `min` and `max`,
+  then move it from the `gauges` of a Thread's outcome in `content/threads.json`, each with the
+  `gauge`, how far it moves it `by`, and the `note` the player sees.
 
 ### Write a Company Event
 

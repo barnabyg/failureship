@@ -4,6 +4,7 @@ import { landEvent, scheduleEvents } from "./company-events";
 import { everyNotification, type Content } from "./content";
 import { dealsFallDue } from "./deals";
 import { dealWithAbsence, followUpDemands } from "./demands";
+import { closeGauges } from "./gauges";
 import { applyOutcome } from "./outcome";
 import { promisesFallDue } from "./promises";
 import { spreadNews } from "./reputation";
@@ -132,7 +133,8 @@ export function nextStep(state: State, world: World): Step {
     dealWithAbsence(state, content) ??
     landEvent(state, content) ??
     landBill(state, content) ??
-    landMove(state, content) ?? { kind: "story" }
+    landMove(state, content) ??
+    closeGauges(state, content) ?? { kind: "story" }
   );
 }
 

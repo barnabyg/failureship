@@ -256,6 +256,17 @@ const thread = z.strictObject({
         /** What the results screen says came of it. */
         playedOut: text,
         bill,
+        /** How it moves the player's Gauges, as the month closes. */
+        gauges: z
+          .array(
+            z.strictObject({
+              gauge: id,
+              by: z.number().int(),
+              /** What the player is told moved it. */
+              note: text,
+            }),
+          )
+          .default([]),
       }),
     )
     .min(1),
@@ -902,6 +913,22 @@ const changing = z.strictObject({
   ),
 });
 
+/**
+ * A visible, comic measure of the player's track record. It moves only when a
+ * Thread plays out, and nothing but its Milestones reads it.
+ */
+const gauge = z.strictObject({
+  id,
+  label: text,
+  start: z.number().int(),
+  min: z.number().int(),
+  max: z.number().int(),
+  /** A comic title, earned on reaching `at`. */
+  milestones: z.array(
+    z.strictObject({ at: z.number().int(), title: text, body: text }),
+  ),
+});
+
 /** What Characters believe of the player, and how that reaches them. */
 const reputation = z.strictObject({
   /** How far and how fast news goes along the Power Map's ties. */
@@ -983,6 +1010,7 @@ export const contentSchema = z.strictObject({
   promises: promises.optional(),
   deals: deals.optional(),
   changing: changing.optional(),
+  gauges: z.array(gauge).optional(),
   /** What the results screen calls each family of Moves. */
   families: z
     .strictObject(

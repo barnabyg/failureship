@@ -24,6 +24,7 @@ import {
   sceneData,
 } from "./reads";
 import { dealsInView } from "./deals";
+import { gaugesInView, gaugesThisMonth } from "./gauges";
 import { promisesInView } from "./promises";
 import { calledBy, sayPeople } from "./say";
 import type { State, Step, World } from "./state";
@@ -185,6 +186,7 @@ function toStoryView(
     happenedHeading,
     reported: [...events, ...told].flatMap((e) => fill(e.reported)),
     happened: [...events, ...told].flatMap((e) => fill(e.happened)),
+    gauges: gaugesThisMonth(state, content),
   };
 }
 
@@ -349,6 +351,7 @@ export function toView(state: State, world: World): PlayerView {
     }),
     promises: promisesInView(state, content),
     ...dealsInView(state, content),
+    ...gaugesInView(state, content),
     finalWarning: state.finalWarning,
     seed: state.seed,
     month: state.month,

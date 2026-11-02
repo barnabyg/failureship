@@ -260,6 +260,13 @@ export interface State extends MonthRecord {
     due: number;
     news: number | null;
   }[];
+  /** Each Gauge's value. Only Milestones read these. */
+  gauges: Record<string, number>;
+  /** What moved each Gauge, for the player to see. */
+  gaugeMoves: { month: number; gauge: string; by: number; note: string }[];
+  /** Moves from Threads played out this month, waiting for it to close. */
+  gaugesDue: { gauge: string; by: number; note: string }[];
+  milestones: { gauge: string; at: number; month: number }[];
   /** Told to the player, and shown from then on. */
   finalWarning: boolean;
   /** The month the player was fired in, which ends the run. */

@@ -2,6 +2,7 @@ import { applyChoice } from "./choices";
 import { KINDS, type Content, type Kind } from "./content";
 import { dealCharacters, dealFavours, dealMotives, dealPowerMap } from "./deal";
 import { freshMonth, nextStep, openMonth } from "./month";
+import { startingGauges } from "./gauges";
 import { noteEvents } from "./notebook";
 import { beliefOf } from "./reads";
 import { readSave, UnusableSaveError, writeSave } from "./save";
@@ -82,6 +83,7 @@ function dealtState(seed: number, content: Content): State {
     eventsLanded: [],
     promises: [],
     deals: [],
+    ...startingGauges(content),
     finalWarning: false,
     firedIn: null,
     mistakes: [],
