@@ -8,8 +8,8 @@ This is Phase 4, ready for its steering checkpoint: a run of nine months on a fu
 with kinds of boss, a Project, the Monthly Status Report, Demands, one-off Budgets, every family of
 Moves and going over your boss's head. Earlier choices come back through Threads, hidden risks and
 what people have heard, things happen to the company, and you can be fired. You can give your word
-and make Deals, a Believer you burn can change or leave, Teflon moves when a Thread plays out, and
-runs save.
+and make Deals, a Believer you burn can change or leave, Teflon and Fawning move when a Thread plays
+out, and runs save.
 
 ## Play
 
@@ -74,8 +74,9 @@ good word from someone counts, goes by who they really are and what has reached 
 word** card shows what you have promised, your Deals and the favours you owe or are owed, at no cost.
 Nothing tells you what other people owe each other.
 
-**Teflon**, in the header, is your track record, not your danger. It moves only when a Thread plays
-out, and the official story says which. Reaching some levels earns a Milestone.
+**Teflon**, in the header, is your track record, not your danger. **Fawning** is how well sucking up
+to your managers is paying off, not whether they like you, and plays no part in promotion. Each moves
+only when a Thread plays out, and the official story says which. Some levels earn a Milestone.
 
 What you do can travel. There is no reputation score: each person believes what has reached them
 along the Power Map, and that shows only in how they are with you. So the same deed is known to
@@ -143,7 +144,7 @@ format, the page shows what is wrong instead of the game.
 | `notebook.json`       | Events the Notebook keeps a clue of, and what each clue was worth                                      |
 | `changing.json`       | What burns a Believer, how much it takes, what they can become, and who covers for anyone who leaves   |
 | `characters.json`     | Job titles, roles, how text refers to each person, names, and who reports to whom on the Org Chart     |
-| `gauges.json`         | Gauges such as Teflon, where each starts, and the Milestones earned along the way                      |
+| `gauges.json`         | The Gauges, Teflon and Fawning: where each starts, and the Milestones earned along the way             |
 | `hidden-truth.json`   | The rules of the deal: kinds, their weights, and the Hidden Facts                                      |
 | `balance.json`        | Actions a month, months in a run, the cost of each choice, how often signs mislead and the boss's mood |
 | `floor-1.json`        | The rooms on the floor: positions, sizes, colours and the lift's sign                                  |
