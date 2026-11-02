@@ -299,6 +299,16 @@ describe("a Believer burned repeatedly", () => {
 
     expect(() => parseContent(broken)).toThrow(/cannot leave/);
   });
+
+  it("refuses a whistleblower report whose condition names an unknown Character", () => {
+    const broken = raw();
+    broken.changing.whistleblower.reports.unshift({
+      when: { youOwe: "nobody" },
+      bill: { id: "owed", as: "notice", title: "OWED", body: "Owed." },
+    });
+
+    expect(() => parseContent(broken)).toThrow(/unknown Character "nobody"/);
+  });
 });
 
 /** The real game, with one Character burned in month 1 so that they leave. */

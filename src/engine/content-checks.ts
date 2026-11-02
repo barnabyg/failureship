@@ -194,6 +194,10 @@ function findBrokenReferences(content: Content): string[] {
       if (outcome.when) checkCondition(owner, outcome.when);
     }
   }
+  for (const report of content.changing?.whistleblower.reports ?? []) {
+    const owner = `Whistleblower report "${report.bill.id}"`;
+    if (report.when) checkCondition(owner, report.when);
+  }
   const { flagged } = content.project;
   if (flagged) {
     checkStatus("The Project's flag", flagged.at);
