@@ -169,14 +169,14 @@ How to run the checks and tests is in [AGENTS.md](AGENTS.md#verifying).
   `changes.ts` for Believers changing and leaving, `gauges.ts`, the only module that reads a Gauge, and `standing.ts` for Official standing; `to-view.ts` builds the player view, and
   `to-results.ts` its reveal at the end; `save.ts` writes and reads a run. Everything
   in a run's `State` is plain data, so a mechanic gets saving for free. Raise
-  `SAVE_VERSION` if a mechanic changes what saved state means. `src/engine/content.ts` holds the content
-  schema, and `src/engine/content-checks.ts` parses data against the schema and checks it across files, with
-  each mechanic's checks in `truth-checks.ts` for dealing the hidden truth and the signs of it, `boss-checks.ts` for the boss,
-  going over the head, Demands and reputation, and `consequence-checks.ts` for what choices lead to.
+  `SAVE_VERSION` if a mechanic changes what saved state means. `src/engine/content.ts` assembles the content schema from `basic-schema.ts`, its shared parts,
+  `outcome-schema.ts` for what a choice does, `step-schema.ts` for what a month's steps offer, and `truth-schema.ts`, `boss-schema.ts` and `consequence-schema.ts`, split as the checks are.
+  `src/engine/content-checks.ts` parses data against the schema and checks it across files, with each mechanic's checks in `truth-checks.ts` for dealing the hidden truth and the signs of it,
+  `boss-checks.ts` for the boss, going over the head, Demands and reputation, and `consequence-checks.ts` for what choices lead to.
 - `src/tower/` draws the tower and holds no rules.
 - `src/ui/` holds the React panels over the tower. `panels.tsx` picks the panel for each step,
   `ScenePanel.tsx`, `FindOutPanel.tsx` and `ResultsPanel.tsx` are the larger ones, `Panel.tsx` holds
-  their frame and buttons, and `Intranet.tsx` the look of the month's e-mails and newsletter.
+  their frame and buttons, `Header.tsx` the header and the cards beside it, and `Intranet.tsx` the look of the month's e-mails and newsletter.
 
 A Scene that data cannot express can name a `script`, which is passed to
 `startRun` in `sceneScripts`. This format is a trial, as the spec, issue #1, says.

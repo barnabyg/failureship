@@ -20,11 +20,11 @@ A new mechanic is rarely a data-only change. It usually touches:
 
 1. `content/*.json`, for its data and words, with its labels in `content/ui.json`.
 2. `src/content/index.ts`, which imports a new data file and passes it to `parseContent`, and lists the panels' new `ui.json` keys in `panelSchema`.
-3. `src/engine/content.ts` for the schema, and for its checks across files `truth-checks.ts`, `boss-checks.ts`, `consequence-checks.ts` or `content-checks.ts`, whichever the README's code map gives that kind of check.
+3. The schema in `src/engine/`, with its checks across files beside it: `truth-schema.ts` and `truth-checks.ts`, `boss-schema.ts` and `boss-checks.ts`, or `consequence-schema.ts` and `consequence-checks.ts`, whichever the README's code map gives that kind of check. A step's own schema goes in `step-schema.ts`, a choice's effects in `outcome-schema.ts` and parts they all share in `basic-schema.ts`, with any checks in `content-checks.ts`. `contentSchema` in `content.ts` puts them together.
 4. `src/engine/state.ts` for what it keeps in a run, and `dealtState` in `run.ts` for where that starts.
 5. A mechanic's own module in `src/engine/` for the rules, added to the README's code map. A consequence takes effect through `applyOutcome` in `outcome.ts`, and `month.ts` holds the month's order. Reads that several mechanics share go in `reads.ts`. Anything offered or said in a Scene goes through `scenes.ts`.
 6. `src/engine/view.ts` and `src/engine/to-view.ts`, for what the player sees, and `to-results.ts` for its reveal on the results screen.
-7. `src/ui/panels.tsx`, for showing it, or `ScenePanel.tsx`, `FindOutPanel.tsx` or `ResultsPanel.tsx` where the step has its own panel. Header buttons and cards that stay up at every step, such as Your word given and the Gauges, are in `App.tsx`.
+7. `src/ui/panels.tsx`, for showing it, or `ScenePanel.tsx`, `FindOutPanel.tsx` or `ResultsPanel.tsx` where the step has its own panel. Header buttons and cards that stay up at every step, such as Your word given and the Gauges, are in `Header.tsx`, and `App.tsx` wires them to the run and holds the modals they open.
 8. Tests in `tests/engine/` and `tests/e2e/`, and `docs/content-format.md`, whose section for the mechanic says what to write for it.
 
 ### Docs
