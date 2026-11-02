@@ -3,7 +3,8 @@ import { answerAnyNotification, attendAndFinishMonth, playUntil } from "./play";
 
 // On this seed the desk move goes unnoticed at the time, and comes back in month 6.
 // Leaving the training undone in month 2 is what the committee then calls out.
-// tests/engine/threads.test.ts has the Thread on the results screen.
+// The results screen is checked by "a Thread > traces back to what started it on
+// the results screen" in tests/engine/threads.test.ts.
 test("the desk with no window comes back as a Bill in a later month", async ({
   page,
 }) => {

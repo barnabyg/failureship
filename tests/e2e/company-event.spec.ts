@@ -9,7 +9,8 @@ async function readOrgChart(page: Page) {
 }
 
 // On this seed the reorganisation lands in month 3, after a clue in month 2.
-// tests/engine/company-events.test.ts has it on the results screen.
+// The results screen is checked by "a reshuffle > is on the results screen, as the
+// charts ended up and what changed them" in tests/engine/company-events.test.ts.
 test("a Company Event lands and the Org Chart changes", async ({ page }) => {
   await page.goto("/?seed=3&month=3");
   const before = await readOrgChart(page);
