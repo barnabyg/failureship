@@ -105,3 +105,29 @@ describe("a Buzzword in the meeting Scene", () => {
     expect(() => parseContent(raw)).toThrow(/leaky/);
   });
 });
+
+describe("the Buzzwords learned", () => {
+  it("are in the order learned, not the order written", () => {
+    const raw = buzzwordFixtureRaw();
+    raw.buzzwords.push(
+      { id: "second", term: "SECOND", meaning: "Written second." },
+      { id: "third", term: "THIRD", meaning: "Written third." },
+    );
+    const pub = raw.notifications[0]?.options.find((o) => o.id === "pub");
+    if (!pub) throw new Error("The pub has gone.");
+    pub.learns = ["third", "fixture-word", "second"];
+    const run = startRun({ seed: 1, content: parseContent(raw) });
+
+    run.choose({
+      type: "notification",
+      notificationId: "invite",
+      optionId: "pub",
+    });
+
+    expect(run.view().buzzwords.map((b) => b.id)).toEqual([
+      "third",
+      "fixture-word",
+      "second",
+    ]);
+  });
+});

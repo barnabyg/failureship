@@ -9,6 +9,8 @@
   "actionsLeft": "{actions} left",
   "buzzwordsHeading": "Buzzwords",
   "learnedLabel": "Buzzword learned",
+  "buzzwordsMore": "+{n} more",
+  "buzzwordsListHeading": "Buzzwords you have learned",
   "continueLabel": "Continue",
   "doneLabel": "Done this month",
   "unavailableLabel": "No actions left",

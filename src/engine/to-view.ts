@@ -376,8 +376,9 @@ export function toView(state: State, world: World): PlayerView {
   });
 }
 
+/** In the order learned, which is the order the header and its list show. */
 function buzzwordsOf(content: Content, ids: readonly string[]): Buzzword[] {
-  return content.buzzwords.filter((b) => ids.includes(b.id));
+  return ids.flatMap((id) => content.buzzwords.find((b) => b.id === id) ?? []);
 }
 
 function toHotspot(

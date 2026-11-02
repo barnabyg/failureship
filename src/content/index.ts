@@ -103,6 +103,8 @@ const panelSchema = z.strictObject(
       "actionsLeft",
       "buzzwordsHeading",
       "learnedLabel",
+      "buzzwordsMore",
+      "buzzwordsListHeading",
       "continueLabel",
       "doneLabel",
       "unavailableLabel",
