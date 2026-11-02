@@ -156,44 +156,45 @@ a Deal, a Company Event, a hidden risk or a Gauge are in the
 
 How to run the checks and tests is in [AGENTS.md](AGENTS.md#verifying).
 
-- `content/` holds the game's data and text.
-- `src/content/` loads it at start-up, through the checks in `src/engine/`, and
-  checks the panel text itself.
-- `src/engine/` holds the rules: headless, seeded, and free of Three.js and React.
-  `run.ts` is the interface to a run; `choices.ts` carries out each choice;
-  `month.ts` holds the month's order; `charts.ts` moves people on the charts; `outcome.ts` is the one place any consequence
-  takes effect; `state.ts` and `reads.ts` are what the mechanics share; `boss.ts`,
-  `demands.ts`, `find-out.ts`, `notebook.ts`, `over-head.ts`, `project.ts` and
-  `scenes.ts` are mechanics of their own, as are `company-events.ts`, `mistakes.ts`, `reputation.ts`,
-  `risks.ts`, `threads.ts` with `bills.ts`, `promises.ts`, `deals.ts` (`deal.ts` deals the run itself),
-  `changes.ts` for Believers changing and leaving, `gauges.ts`, the only module that reads a Gauge, and `standing.ts` for Official standing; `to-view.ts` builds the player view, and
-  `to-results.ts` its reveal at the end; `save.ts` writes and reads a run. Everything
-  in a run's `State` is plain data, so a mechanic gets saving for free. Raise
-  `SAVE_VERSION` if a mechanic changes what saved state means. `src/engine/content.ts` assembles the content schema from `basic-schema.ts`, its shared parts,
-  `outcome-schema.ts` for what a choice does, `step-schema.ts` for what a month's steps offer, and `truth-schema.ts`, `boss-schema.ts` and `consequence-schema.ts`, split as the checks are.
-  `src/engine/content-checks.ts` parses data against the schema and checks it across files, with each mechanic's checks in `truth-checks.ts` for dealing the hidden truth and the signs of it,
-  `boss-checks.ts` for the boss, going over the head, Demands and reputation, and `consequence-checks.ts` for what choices lead to.
+- `content/` holds the game's data and text. `src/content/` loads it at start-up, through the checks
+  in `src/engine/`, and checks the panel text itself.
+- `src/engine/` holds the rules: headless, seeded, and free of Three.js and React. `run.ts` is the
+  interface to a run and `deal.ts` deals it; `choices.ts` carries out each choice; `month.ts` holds
+  the month's order; `charts.ts` moves people on the charts; `outcome.ts` is the one place any
+  consequence takes effect; `state.ts` and `reads.ts` are what the mechanics share. The mechanics
+  are `boss.ts`, `demands.ts`, `find-out.ts` with `claims.ts`, `notebook.ts`, `over-head.ts`,
+  `project.ts`, `scenes.ts`, `company-events.ts`, `mistakes.ts`, `reputation.ts`, `risks.ts`,
+  `threads.ts` with `bills.ts`, `promises.ts`, `deals.ts`, `changes.ts` for Believers changing and
+  leaving, `gauges.ts`, the only module that reads a Gauge, and `standing.ts`. `say.ts` names
+  Characters in text, and `rng.ts` and `seed.ts` hold the seed. `view.ts` is the player view, built
+  by `to-view.ts`, with `to-results.ts` its reveal at the end; `hidden-truth.ts` is the tests' read
+  of the truth. `save.ts` writes and reads a run. A run's `State` is plain data, so a mechanic gets
+  saving for free: raise `SAVE_VERSION` if it changes what saved state means. `content.ts` assembles
+  the schema from `basic-schema.ts`, `outcome-schema.ts` for what a choice does, `step-schema.ts`
+  for what a step offers, and `truth-schema.ts`, `boss-schema.ts` and `consequence-schema.ts`.
+  `content-checks.ts` parses and checks data across files, with each mechanic's checks in
+  `truth-checks.ts` for the hidden truth and its signs, `boss-checks.ts` for the boss, going over
+  the head, Demands and reputation, and `consequence-checks.ts` for what choices lead to.
 - `src/tower/` draws the tower and holds no rules.
-- `src/ui/` holds the React panels over the tower. `panels.tsx` picks the panel for each step,
-  `ScenePanel.tsx`, `FindOutPanel.tsx` and `ResultsPanel.tsx` are the larger ones, `Panel.tsx` holds
-  their frame and buttons, `Header.tsx` the header and the cards beside it, and `Intranet.tsx` the look of the month's e-mails and newsletter.
-
-A Scene that data cannot express can name a `script`, which is passed to
-`startRun` in `sceneScripts`. This format is a trial, as the spec, issue #1, says.
+- `src/ui/` holds the React panels over the tower: `App.tsx` wires them to the run, and
+  `TowerStage.tsx` the tower's hotspots. `panels.tsx` picks each step's panel, the larger being
+  `ScenePanel.tsx`, `FindOutPanel.tsx` and `ResultsPanel.tsx`; `Panel.tsx` holds their frame and
+  buttons, and `Intranet.tsx` styles the e-mails and newsletter. `Header.tsx` draws the header and
+  its cards, with `RunControls.tsx` and `StandingBar.tsx`. `Chart.tsx` and `Notebook.tsx` open in a
+  `Modal.tsx`. `saved-run.ts` saves the run, and `later-month.ts` plays the e2e build to `?month=N`.
 
 ### Checks and exceptions
 
-- Static bug analysis is the type-aware `typescript-eslint` strict rule set. It
-  skips `eslint.config.js` and `scripts/`, which sit outside `tsconfig.json`.
-- Secret scanning is not a separate gate: the project holds no credentials.
-  Review this if it ever needs any.
-- The `minimatch` override in `package.json` patches GHSA-g3hv-75wg-m249 in the
-  lint tooling. Remove it when `eslint` depends on a patched version itself.
-- `test.testTimeout` in `vite.config.ts` is raised because some engine tests play
-  hundreds of whole runs. Review it if the suite gets much faster or slower.
-- `build.chunkSizeWarningLimit` in `vite.config.ts` is raised because Three.js
-  and the game's text make up the single bundle. Review it if hosting is ever added.
-- `.prettierignore` leaves the owner's design records and agent docs unformatted.
-- `.prettierignore` and `eslint.config.js` skip `.claude/worktrees/`, and
-  `.prettierignore` skips `.claude/settings.local.json`: both are untracked and local to
-  one machine. Review this if anything in them comes to be tracked.
+- Static bug analysis is the type-aware `typescript-eslint` strict rule set. It skips
+  `eslint.config.js` and `scripts/`, which sit outside `tsconfig.json`.
+- Secret scanning is not a separate gate: the project holds no credentials. Review this if it ever
+  needs any.
+- The `minimatch` override in `package.json` patches GHSA-g3hv-75wg-m249 in the lint tooling. Remove
+  it when `eslint` depends on a patched version itself.
+- `test.testTimeout` in `vite.config.ts` is raised because some engine tests play hundreds of whole
+  runs. Review it if the suite gets much faster or slower.
+- `build.chunkSizeWarningLimit` in `vite.config.ts` is raised because Three.js and the game's text
+  make up the single bundle. Review it if hosting is ever added.
+- `.prettierignore` leaves the owner's design records and agent docs unformatted, and skips
+  `.claude/settings.local.json` and, with `eslint.config.js`, `.claude/worktrees/`, which are
+  untracked and local to one machine. Review this if anything in them comes to be tracked.

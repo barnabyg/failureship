@@ -445,6 +445,8 @@ meeting has everyone in it.
   fact itself, and `factAt` names whose fact it was, unless the option is `about` one.
 - A result can carry `sets`, `opinion`, `headOpinion`, `approach`, `reaction` and `project`.
 - A Scene with a `verdict` adds what the boss finally says, by their mood.
+- A Scene that data cannot express can name a `script`, which is passed to `startRun` in
+  `sceneScripts`. This format is a trial, as the spec, issue #1, says.
 
 ## `sources.json`
 
