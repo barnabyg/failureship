@@ -1,10 +1,10 @@
 import { landWithBoss } from "./boss";
 import { reshuffleCharts, type Reshuffle } from "./charts";
 import type { Content, Kind, MoveFamily, Tone } from "./content";
-import { makeDeal } from "./deals";
+import { makeDeal, settleDeal } from "./deals";
 import { makeMistake } from "./mistakes";
 import { moveProject, type ProjectChange } from "./project";
-import { makePromise } from "./promises";
+import { makePromise, settlePromise } from "./promises";
 import { shiftBelief } from "./reads";
 import { remember, startNews } from "./reputation";
 import { startRisks } from "./risks";
@@ -33,6 +33,8 @@ export interface Outcome {
     | undefined;
   promise?: string | undefined;
   deal?: string | undefined;
+  /** Keeps or breaks the commitment that fell due as this Notification. */
+  settlesDue?: { id: string; how: "kept" | "broken" } | undefined;
 }
 
 /** Counts a Move the player made, for how they played. */
@@ -63,6 +65,11 @@ export function applyOutcome(
     makePromise(state, content, outcome.promise);
   }
   if (outcome.deal !== undefined) makeDeal(state, content, outcome.deal);
+  if (outcome.settlesDue) {
+    const { id, how } = outcome.settlesDue;
+    settlePromise(state, content, id, how);
+    settleDeal(state, content, id, how);
+  }
   for (const word of outcome.learns ?? []) {
     if (!state.buzzwords.includes(word)) state.buzzwords.push(word);
   }

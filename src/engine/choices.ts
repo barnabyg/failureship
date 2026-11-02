@@ -1,10 +1,10 @@
 import { chasedIdOf, everyNotification } from "./content";
-import { replyToDeal, settleDeal } from "./deals";
+import { replyToDeal } from "./deals";
 import { arriveToFindOut, hearClaim } from "./find-out";
 import { leaveStory, nextStep } from "./month";
 import { applyOutcome, countMove } from "./outcome";
 import { goOverHead } from "./over-head";
-import { replyToPromise, settlePromise } from "./promises";
+import { replyToPromise } from "./promises";
 import { costOf, inTurn } from "./reads";
 import { drawFor } from "./rng";
 import { behaveInScene, openScene } from "./scenes";
@@ -89,13 +89,16 @@ function answerNotification(
   const reaction = applyOutcome(
     state,
     content,
-    { ...outcome, learns: option.learns },
+    {
+      ...outcome,
+      learns: option.learns,
+      settlesDue: outcome.settles && {
+        id: choice.notificationId,
+        how: outcome.settles,
+      },
+    },
     option.label,
   );
-  if (outcome.settles) {
-    settlePromise(state, content, choice.notificationId, outcome.settles);
-    settleDeal(state, content, choice.notificationId, outcome.settles);
-  }
 
   const reply =
     replyToPromise(state, content, option.promise) ??
