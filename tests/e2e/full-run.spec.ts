@@ -1,6 +1,7 @@
 import { expect, test } from "@playwright/test";
 import { answerAnyNotification, finishMonth, openMeeting } from "./play";
 
+// Over 10 s, as walking every month in the browser is what it is for.
 test("nine different months, all the way to the results screen", async ({
   page,
 }) => {

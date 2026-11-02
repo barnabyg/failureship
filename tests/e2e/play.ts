@@ -1,4 +1,4 @@
-import { expect, type Page } from "@playwright/test";
+import { expect, type Locator, type Page } from "@playwright/test";
 
 /** Goes to an address as a new player would, with no saved run to come back to. */
 export async function freshRun(page: Page, address: string) {
@@ -22,6 +22,17 @@ export async function finishMonth(page: Page) {
     if (await carryOn.isVisible()) await carryOn.click();
     else if (await spare.isEnabled()) await spare.click();
   }
+}
+
+/** Presses Continue, or takes a spare action, until the panel shows. */
+export async function continueUntil(page: Page, panel: Locator) {
+  const carryOn = page.getByTestId("continue");
+  const spare = page.getByTestId("hotspot-work");
+  await expect(async () => {
+    if (await carryOn.isVisible()) await carryOn.click();
+    else if (await spare.isEnabled()) await spare.click();
+    await expect(panel).toBeVisible({ timeout: 100 });
+  }).toPass();
 }
 
 /** Answers the month's Notifications, filing the report and saying no to the rest. */

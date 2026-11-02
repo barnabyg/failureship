@@ -167,10 +167,10 @@ describe("a Deal", () => {
     const landed = SEEDS.map((seed) => {
       const run = startRun({ seed, content });
       run.choose(answer("offer", "shake"));
-      const before = readHiddenTruth(run).bossOpinion;
+      const before = readHiddenTruth(run).bossBelief;
       playOn(run, (v) => v.month === 2);
       const truth = readHiddenTruth(run);
-      const moved = truth.bossOpinion - before;
+      const moved = truth.bossBelief - before;
 
       expect(moved).toBe(swayOf(truth.powerMap, "ben", "ana") ? 3 : 0);
       return moved > 0;

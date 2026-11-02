@@ -1,28 +1,38 @@
 import { z } from "zod";
 import {
+  findBrokenApproaches,
+  findBrokenBossSigns,
+  findBrokenDemands,
+  findBrokenOverHead,
+  findBrokenReputation,
+} from "./boss-checks";
+import {
   findNamedKinds,
   findBrokenEvents,
   findBrokenChanging,
   findBrokenDeals,
   findBrokenGauges,
+  findBrokenMistakes,
   findBrokenPromises,
   findBrokenRisks,
   findBrokenThreads,
 } from "./consequence-checks";
 import {
-  CLAIM_STATUSES,
-  DEMAND_ANSWERS,
-  KINDS,
-  MOODS,
-  behavioursOpenTo,
   contentSchema,
   everyBill,
-  everyDemand,
   everyNotification,
   type Condition,
   type Content,
   type SceneData,
 } from "./content";
+import {
+  dependsOnHiddenTruth,
+  findBrokenBehaviours,
+  findBrokenDeal,
+  findBrokenInput,
+  findBrokenSources,
+  flagsSetByHiddenResults,
+} from "./truth-checks";
 
 type SceneResult = SceneData["options"][number]["results"][number];
 
@@ -41,513 +51,6 @@ export function parseContent(raw: unknown): Content {
   const problems = findBrokenReferences(content);
   if (problems.length > 0) throw new ContentError(problems.join("\n"));
   return content;
-}
-
-/** Showing or hiding an option on this would tell the player the truth. */
-function dependsOnHiddenTruth(
-  condition: Condition,
-  hiddenFlags: ReadonlySet<string> = new Set(),
-): boolean {
-  if ("flag" in condition) return hiddenFlags.has(condition.flag);
-  if ("did" in condition) return hiddenFlags.has(condition.did);
-  if (
-    "believes" in condition ||
-    "remembers" in condition ||
-    "holderIs" in condition ||
-    "bossIs" in condition ||
-    "factNature" in condition ||
-    "heardTrue" in condition
-  ) {
-    return true;
-  }
-  if ("not" in condition) {
-    return dependsOnHiddenTruth(condition.not, hiddenFlags);
-  }
-  if ("all" in condition) {
-    return condition.all.some((c) => dependsOnHiddenTruth(c, hiddenFlags));
-  }
-  return false;
-}
-
-/** Flags that say which way something hidden went, so they carry the truth too. */
-function flagsSetByHiddenResults(content: Content): Set<string> {
-  const options = content.scenes.flatMap((s) => s.options);
-  return new Set([
-    ...options
-      .filter((o) =>
-        o.results.some((r) => r.when && dependsOnHiddenTruth(r.when)),
-      )
-      .flatMap((o) => o.results.flatMap((r) => r.sets)),
-    ...content.moves
-      .filter((m) => m.when && dependsOnHiddenTruth(m.when))
-      .flatMap((m) => m.sets),
-    // Whether and how a Bill arrives is drawn, and can read the truth.
-    ...everyBill(content).flatMap((b) => [
-      ...b.sets,
-      ...b.options.flatMap((o) => o.sets),
-    ]),
-    // Whether a Company Event lands is drawn too.
-    ...content.events.flatMap((e) => e.sets),
-    // Whether a Demand is forgotten or chased goes by the boss's kind.
-    ...Object.values(content.demands?.sets ?? {}),
-    // Whether the boss finds out goes by the boss's kind too.
-    ...(content.overHead ? [content.overHead.sets.caught] : []),
-  ]);
-}
-
-function findBrokenDeal(
-  content: Content,
-  characters: ReadonlySet<string>,
-): string[] {
-  const { kinds, minPractitioners, charactersWithFact, facts } =
-    content.hiddenTruth;
-  const everyone = content.characters;
-  const problems: string[] = [];
-  if (new Set(everyone.map((c) => c.name)).size < everyone.length) {
-    problems.push("Two Characters share a name, which the charts cannot show.");
-  }
-  if (minPractitioners > everyone.length) {
-    problems.push(
-      `The deal wants ${String(minPractitioners)} Practitioners from ${String(everyone.length)} Characters.`,
-    );
-  }
-  if (Object.values(kinds).every((k) => k.weight === 0)) {
-    problems.push("The deal needs a kind with a weight above zero.");
-  }
-  if (charactersWithFact * 2 <= everyone.length) {
-    problems.push("The deal must give most Characters a Hidden Fact.");
-  }
-  if (charactersWithFact > everyone.length) {
-    problems.push("The deal wants more Hidden Facts than Characters.");
-  }
-  for (const fact of facts) {
-    const owner = `Hidden Fact "${fact.id}"`;
-    if (
-      !fact.text.includes("{name}") ||
-      fact.told?.includes("{name}") === false
-    ) {
-      problems.push(`${owner} needs to say {name}.`);
-    }
-    for (const [, token] of fact.text.matchAll(/\{(\w+)\}/g)) {
-      if (token !== "name") {
-        problems.push(`${owner} uses unknown token "{${token ?? ""}}".`);
-      }
-    }
-    for (const c of fact.characters ?? []) {
-      if (!characters.has(c)) {
-        problems.push(`${owner} names unknown Character "${c}".`);
-      }
-    }
-  }
-  // With this many open to everyone, dealing can never run out, in any order.
-  for (const { id: character } of everyone) {
-    const open = facts.filter((f) => f.characters?.includes(character) ?? true);
-    if (open.length < charactersWithFact) {
-      problems.push(`Too few Hidden Facts can be dealt to "${character}".`);
-    }
-  }
-  return problems;
-}
-
-function rolesOf(content: Content): Set<string> {
-  return new Set(content.characters.flatMap((c) => c.role ?? []));
-}
-
-/** Signs must narrow the answer without ever settling it. */
-function findBrokenBehaviours(content: Content): string[] {
-  const problems: string[] = [];
-  const nameParts = content.characters.flatMap((c) => c.name.split(" "));
-  for (const b of content.behaviours) {
-    const owner = `Behaviour "${b.id}"`;
-    for (const written of [b.text, b.clue ?? "{who}"]) {
-      if (!written.includes("{who}")) {
-        problems.push(`${owner} needs to say {who}.`);
-      }
-      for (const [, token] of written.matchAll(/\{(\w+)\}/g)) {
-        if (token !== "who") {
-          problems.push(`${owner} uses unknown token "{${token ?? ""}}".`);
-        }
-      }
-    }
-    const words = b.text.split(/\W+/);
-    if (nameParts.some((part) => words.includes(part))) {
-      problems.push(`${owner} names a Character, not a kind of person.`);
-    }
-    const likelihoods = Object.values(b.likelihood);
-    if (likelihoods.filter((l) => l > 0).length < 2) {
-      problems.push(`${owner} can come from only one kind.`);
-    }
-    if (new Set(likelihoods).size === 1) {
-      problems.push(`${owner} gives no evidence: every kind is as likely.`);
-    }
-  }
-  const roles = rolesOf(content);
-  for (const b of content.behaviours) {
-    for (const role of b.roles ?? []) {
-      if (!roles.has(role)) {
-        problems.push(`Behaviour "${b.id}" names unknown role "${role}".`);
-      }
-    }
-  }
-  for (const role of roles) {
-    if (
-      !content.behaviours.some(
-        (b) => b.roles?.length === 1 && b.roles[0] === role,
-      )
-    ) {
-      problems.push(`Role "${role}" has no behaviour of its own.`);
-    }
-  }
-  if (content.behaviours.length > 0) {
-    for (const character of content.characters) {
-      const open = behavioursOpenTo(content, character.id);
-      for (const kind of KINDS) {
-        if (open.every((b) => b.likelihood[kind] === 0)) {
-          problems.push(
-            `Character "${character.id}" has no behaviour to show as a ${kind}.`,
-          );
-        }
-      }
-    }
-  }
-  return problems;
-}
-
-/** The boss's signs must point somewhere without ever settling it. */
-function findBrokenBossSigns(content: Content): string[] {
-  const { character, signs } = content.boss;
-  const problems = findBrokenOpinionSigns(signs, "Boss sign");
-  if (!content.characters.some((c) => c.id === character)) {
-    problems.push(`The boss names unknown Character "${character}".`);
-  }
-  return problems;
-}
-
-/** A first trip over the boss's head must be a gamble, and no words may name a kind. */
-function findBrokenOverHead(content: Content): string[] {
-  const { overHead: written } = content;
-  if (!written) return [];
-  const problems = findBrokenOpinionSigns(written.signs, "Over-head sign");
-  if (!content.characters.some((c) => c.id === written.character)) {
-    problems.push(`Over-head names unknown Character "${written.character}".`);
-  }
-  if (written.character === content.boss.character) {
-    problems.push("Going over the boss's head cannot lead to the boss.");
-  }
-  if (!content.actions.some((a) => a.overHead)) {
-    problems.push("No action goes over the boss's head.");
-  }
-  const words = [
-    ...KINDS.flatMap((kind) => {
-      const { worked, failed } = written.outcomes[kind];
-      return [
-        ...worked.influential,
-        ...worked.sidelined,
-        ...failed,
-        ...written.findsOut.reaction[kind],
-      ];
-    }),
-    ...written.signs.map((s) => s.text),
-    ...Object.values(written.verdict),
-  ];
-  problems.push(...findNamedKinds(content, "Going over the head", words));
-  for (const [kind, { works }] of Object.entries(written.outcomes)) {
-    for (const chance of Object.values(works)) {
-      if (chance === 0 || chance === 1) {
-        problems.push(`Going to a ${kind} must be able to go either way.`);
-      }
-    }
-  }
-  for (const [kind, chance] of Object.entries(written.findsOut.chance)) {
-    if (chance === 0 || chance === 1) {
-      problems.push(`A ${kind} boss must be able to find out, or not.`);
-    }
-  }
-  return problems;
-}
-
-function findBrokenOpinionSigns(
-  signs: Content["boss"]["signs"],
-  label: string,
-): string[] {
-  const problems: string[] = [];
-  for (const sign of signs) {
-    const owner = `${label} "${sign.id}"`;
-    for (const [, token] of sign.text.matchAll(/\{(\w+)\}/g)) {
-      problems.push(`${owner} uses unknown token "{${token ?? ""}}".`);
-    }
-    const likelihoods = Object.values(sign.likelihood);
-    if (likelihoods.filter((l) => l > 0).length < 2) {
-      problems.push(`${owner} can come from only one opinion.`);
-    }
-    if (new Set(likelihoods).size === 1) {
-      problems.push(`${owner} gives no evidence: every opinion is as likely.`);
-    }
-  }
-  if (signs.length > 0) {
-    for (const mood of MOODS) {
-      if (signs.every((s) => s.likelihood[mood] === 0)) {
-        problems.push(`No boss sign can show a ${mood} opinion.`);
-      }
-    }
-  }
-  return problems;
-}
-
-/** An approach must split the kinds, and its words must never name one. */
-function findBrokenApproaches(content: Content): string[] {
-  const problems: string[] = [];
-  for (const approach of content.boss.approaches) {
-    const owner = `Approach "${approach.id}"`;
-    if (new Set(Object.values(approach.shift)).size === 1) {
-      problems.push(`${owner} is taken the same way by every kind.`);
-    }
-    const written = [
-      ...Object.values(approach.reaction).flat(),
-      ...Object.values(approach.overdone?.reaction ?? {}).flatMap(
-        (l) => l ?? [],
-      ),
-    ];
-    problems.push(...findNamedKinds(content, owner, written));
-  }
-  return problems;
-}
-
-/** The player reads a kind from signs, so no reaction may say it out loud. */
-/** Lateness must be a clue about someone's kind, and never settle it. */
-function findBrokenInput(content: Content): string[] {
-  const { input } = content.project;
-  if (!input) return [];
-  const problems: string[] = [];
-  if (!content.characters.some((c) => c.id === input.character)) {
-    problems.push(`The report's input names unknown "${input.character}".`);
-  }
-  const chances = Object.values(input.chance);
-  if (chances.filter((c) => c > 0).length < 2) {
-    problems.push("Late input can come from only one kind.");
-  }
-  if (new Set(chances).size === 1) {
-    problems.push("Late input gives no evidence: every kind is as likely.");
-  }
-  if (chances.includes(1)) {
-    problems.push(
-      "Late input is certain from one kind, which would settle it.",
-    );
-  }
-  return problems;
-}
-
-/** A Demand must offer every answer, and stalling must be a real bet. */
-function findBrokenDemands(content: Content): string[] {
-  const { demands } = content;
-  if (!demands) return [];
-  const problems: string[] = [];
-  for (const [kind, { forgets, chases }] of Object.entries(demands.odds)) {
-    if (forgets === 0 || chases === 0) {
-      problems.push(`A ${kind} boss must be able to forget and to chase.`);
-    }
-    if (forgets + chases > 1) {
-      problems.push(`A ${kind} boss's Demand odds add up to more than one.`);
-    }
-  }
-  const { missed } = demands;
-  if (missed) {
-    if (missed.actions.length < content.balance.monthsPerRun) {
-      problems.push("A missed meeting needs an action for every month.");
-    }
-    if (!content.actions.some((a) => a.sets.includes(missed.attended))) {
-      problems.push(`No action sets "${missed.attended}".`);
-    }
-    if (!content.boss.approaches.some((a) => a.id === missed.approach)) {
-      problems.push(`A missed meeting uses unknown "${missed.approach}".`);
-    }
-    const written = [
-      ...missed.actions.flatMap((a) => [a.title, a.body, a.ask]),
-      missed.forgotten.body,
-      missed.chased.body,
-    ];
-    problems.push(...findNamedKinds(content, "A missed meeting", written));
-  }
-  for (const item of everyDemand(content)) {
-    const owner = `Demand "${item.id}"`;
-    const ids = item.options.map((o) => o.id);
-    for (const answer of DEMAND_ANSWERS) {
-      if (!ids.includes(answer)) problems.push(`${owner} needs "${answer}".`);
-    }
-    for (const option of item.options) {
-      if (option.stalls !== (option.id === "stall")) {
-        problems.push(`${owner} must stall on "stall", and only there.`);
-      }
-    }
-    const answerable = item.chased.options.some(
-      (o) => (content.balance.actionCosts[o.cost ?? ""] ?? 0) === 0,
-    );
-    if (!answerable) {
-      problems.push(`${owner}'s chaser needs an answer that costs nothing.`);
-    }
-  }
-  return problems;
-}
-
-/** Sources must be worth weighing: never always right, and never always wrong. */
-function findBrokenSources(content: Content): string[] {
-  const { methods, reliability, motives, claims, voices } = content.sources;
-  const problems: string[] = [];
-  const checkTokens = (owner: string, written: string, tokens: string[]) => {
-    for (const [, token] of written.matchAll(/\{(\w+)\}/g)) {
-      if (!tokens.includes(token ?? "")) {
-        problems.push(`${owner} uses unknown token "{${token ?? ""}}".`);
-      }
-    }
-  };
-  for (const method of methods) {
-    const owner = `Find Out method "${method.id}"`;
-    for (const source of method.sources) {
-      if (!content.characters.some((c) => c.id === source)) {
-        problems.push(`${owner} names unknown Character "${source}".`);
-      }
-    }
-    checkTokens(owner, method.prompt, method.someoneThere ? ["source"] : []);
-    for (const frame of method.frames) {
-      if (!frame.includes("{said}")) {
-        problems.push(`${owner} has a frame that needs {said}: "${frame}"`);
-      }
-      checkTokens(owner, frame, ["said", "source"]);
-    }
-    if (Object.values(method.topics).every((t) => t === 0)) {
-      problems.push(`${owner} has nothing to claim.`);
-    }
-  }
-  const roles = rolesOf(content);
-  for (const [role, spoken] of Object.entries(voices)) {
-    const owner = `The voice of "${role}"`;
-    if (!roles.has(role))
-      problems.push(`A voice names unknown role "${role}".`);
-    for (const line of spoken) {
-      if (!line.includes("{said}")) {
-        problems.push(`${owner} needs to say {said}: "${line}"`);
-      }
-      checkTokens(owner, line, ["said"]);
-    }
-  }
-  for (const kind of KINDS) {
-    for (const motive of motives) {
-      const open = CLAIM_STATUSES.filter(
-        (s) => reliability[kind][s] + motive.adjust[s] > 0,
-      );
-      if (open.length < 2) {
-        problems.push(
-          `A ${kind} with motive "${motive.id}" would always be read the same way.`,
-        );
-      }
-    }
-  }
-  for (const motive of motives) {
-    checkTokens(`Motive "${motive.id}"`, motive.text, ["name"]);
-  }
-  const pools = [
-    ...KINDS.flatMap((k) => claims.kind[k]),
-    ...claims.influence.high,
-    ...claims.influence.low,
-  ];
-  for (const line of pools) {
-    if (!line.includes("{subject}")) {
-      problems.push(`A claim needs to say {subject}: "${line}"`);
-    }
-    checkTokens("A claim", line, ["subject"]);
-  }
-  for (const line of claims.fact) {
-    if (!line.includes("{fact}")) {
-      problems.push(`A claim about a fact needs to say {fact}: "${line}"`);
-    }
-    checkTokens("A claim", line, ["fact"]);
-  }
-  return problems;
-}
-
-/** A catastrophe has to be fair: words for it, and a warning before the choice. */
-function findBrokenMistakes(content: Content): string[] {
-  const problems: string[] = [];
-  const options = [
-    ...everyNotification(content).flatMap((n) =>
-      n.options.map((o) => ({
-        owner: `Notification "${n.id}" option "${o.id}"`,
-        stakes: o.stakes,
-        outcomes: [o, ...(o.bet ? [o.bet.lost] : [])],
-      })),
-    ),
-    ...content.scenes.flatMap((s) =>
-      s.options.map((o) => ({
-        owner: `Scene "${s.id}" option "${o.id}"`,
-        stakes: o.stakes,
-        outcomes: o.results,
-      })),
-    ),
-  ];
-  for (const { owner, stakes, outcomes } of options) {
-    const catastrophic = outcomes.some((o) => o.mistake === "catastrophic");
-    if (catastrophic && stakes === undefined) {
-      problems.push(`${owner} is catastrophic, with no stakes to signal it.`);
-    }
-    if (!catastrophic && stakes !== undefined) {
-      problems.push(`${owner} signals stakes it does not have.`);
-    }
-  }
-  const anyMistake =
-    options.some((o) => o.outcomes.some((x) => x.mistake !== undefined)) ||
-    content.moves.some((m) => m.mistake !== undefined) ||
-    everyBill(content).some((b) => b.mistake !== undefined) ||
-    content.actions.some((a) => a.mistake !== undefined);
-  if (anyMistake && !content.mistakes) {
-    problems.push("A big mistake is written, but no words for one.");
-  }
-  for (const a of content.actions) {
-    if (a.mistake !== undefined && a.result === undefined) {
-      problems.push(`Action "${a.id}" is a big mistake, so needs a result.`);
-    }
-  }
-  return problems;
-}
-
-/** No sign may settle what someone believes, and news must start from someone. */
-function findBrokenReputation(
-  content: Content,
-  characters: ReadonlySet<string>,
-): string[] {
-  const written = content.reputation;
-  const problems = written
-    ? findBrokenOpinionSigns(
-        written.signs.map((s) => ({
-          ...s,
-          text: s.text.replaceAll("{who}", ""),
-        })),
-        "Reputation sign",
-      )
-    : [];
-  for (const sign of written?.signs ?? []) {
-    if (!sign.text.includes("{who}")) {
-      problems.push(`Reputation sign "${sign.id}" needs to say {who}.`);
-    }
-  }
-  const outcomes = [
-    ...content.scenes.flatMap((s) => s.options.flatMap((o) => o.results)),
-    ...everyNotification(content).flatMap((n) =>
-      n.options.flatMap((o) => [o, ...(o.bet ? [o.bet.lost] : [])]),
-    ),
-    ...everyBill(content),
-  ];
-  for (const outcome of outcomes) {
-    if (!outcome.news) continue;
-    if (!written) {
-      problems.push("News is written, but no reputation for it to reach.");
-    }
-    for (const character of outcome.news.at) {
-      if (!characters.has(character)) {
-        problems.push(`News names unknown Character "${character}".`);
-      }
-    }
-  }
-  return problems;
 }
 
 function findBrokenReferences(content: Content): string[] {
@@ -690,6 +193,10 @@ function findBrokenReferences(content: Content): string[] {
       const owner = `Thread "${thread.id}"`;
       if (outcome.when) checkCondition(owner, outcome.when);
     }
+  }
+  for (const report of content.changing?.whistleblower.reports ?? []) {
+    const owner = `Whistleblower report "${report.bill.id}"`;
+    if (report.when) checkCondition(owner, report.when);
   }
   const { flagged } = content.project;
   if (flagged) {

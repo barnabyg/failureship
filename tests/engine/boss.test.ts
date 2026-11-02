@@ -58,7 +58,7 @@ function nextMeeting(seed: number, optionId: string, content: Content) {
   };
 }
 
-describe("the boss's opinion", () => {
+describe("the boss's belief", () => {
   it("shows in how the boss treats the player in a later month", () => {
     const content = parseContent(bossFixtureRaw());
     const treatments = (optionId: string) =>
@@ -90,7 +90,7 @@ describe("the boss's opinion", () => {
     expect(differs.length).toBeGreaterThan(0);
   });
 
-  it("stays deniable: a sign can come from more than one opinion", () => {
+  it("stays deniable: a sign can come from more than one mood", () => {
     const content = parseContent(bossFixtureRaw());
     const seen = new Set(
       Array.from(
@@ -106,7 +106,7 @@ describe("the boss's opinion", () => {
     const content = parseContent(bossFixtureRaw());
     const { run } = nextMeeting(1, "please", content);
 
-    expect(readHiddenTruth(run).bossOpinion).toBe(2);
+    expect(readHiddenTruth(run).bossBelief).toBe(2);
     // The fixture's own sign says WARM, so this checks what the view is made of.
     const seen = JSON.stringify(run.view());
     expect(seen).not.toMatch(/opinion|likelihood|mood/i);
@@ -165,7 +165,7 @@ describe("the boss's opinion", () => {
       optionId: "no",
     });
 
-    expect(readHiddenTruth(run).bossOpinion).toBe(-1);
+    expect(readHiddenTruth(run).bossBelief).toBe(-1);
   });
 });
 
@@ -175,14 +175,14 @@ describe("the boss's signs in content", () => {
   type RawSign = ReturnType<typeof bossFixtureRaw>["boss"]["signs"][number];
   const breaks: [string, (s: RawSign) => void, RegExp][] = [
     [
-      "only one opinion",
+      "only one mood",
       (s) => {
         s.likelihood = { warm: 3, neutral: 0, cold: 0 };
       },
-      /only one opinion/,
+      /only one mood/,
     ],
     [
-      "the same likelihood from every opinion",
+      "the same likelihood from every mood",
       (s) => {
         s.likelihood = { warm: 2, neutral: 2, cold: 2 };
       },
@@ -213,7 +213,7 @@ describe("the boss's signs in content", () => {
     expect(() => parseContent(raw)).toThrow(/nobody/);
   });
 
-  it("rejects signs that leave an opinion with nothing to show", () => {
+  it("rejects signs that leave a mood with nothing to show", () => {
     const raw = bossFixtureRaw();
     for (const sign of raw.boss.signs) sign.likelihood.cold = 0;
 

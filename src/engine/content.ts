@@ -8,10 +8,10 @@ const notice = z.strictObject({ title: text, body: text });
 /** Flags record what the player did, for later conditions to read. */
 const sets = z.array(id).default([]);
 
-/** How far this moves the boss's hidden opinion of the player. */
+/** How far this moves the boss's hidden belief about the player. */
 const opinion = z.number().int().default(0);
 
-/** How far this moves the hidden opinion of the boss's boss. */
+/** How far this moves the hidden belief of the boss's boss. */
 const headOpinion = z.number().int().default(0);
 
 export const MOVE_FAMILIES = [
@@ -417,7 +417,7 @@ const scene = z.strictObject({
   options: z.array(sceneOption).min(1),
   /** Names code in `sceneScripts`, for a Scene that data cannot express. */
   script: id.optional(),
-  /** What the boss finally says of the player, by how the opinion stands. */
+  /** What the boss finally says of the player, by their mood. */
   verdict: z.strictObject({ warm: text, neutral: text, cold: text }).optional(),
 });
 
@@ -617,7 +617,7 @@ const bossApproach = z.strictObject({
 const bossSign = z.strictObject({
   id,
   text,
-  /** How likely each opinion is to show this, relative to its other signs. */
+  /** How likely each mood is to show this, relative to its other signs. */
   likelihood: z.strictObject({
     warm: z.number().nonnegative(),
     neutral: z.number().nonnegative(),
@@ -671,12 +671,12 @@ const project = z.strictObject({
 
 /** Going over the boss's head: what it can do, and who can find out. */
 const overHead = z.strictObject({
-  /** Whom the player goes to, whose own hidden opinion this moves. */
+  /** Whom the player goes to, whose own hidden belief this moves. */
   character: id,
-  /** How they treat the player in a Scene, by how their opinion stands. */
+  /** How they treat the player in a Scene, by their mood. */
   signs: z.array(bossSign),
-  /** The hidden opinion at which that changes. It moves less often than the boss's. */
-  opinion: z.strictObject({
+  /** The belief at which their mood changes. It moves less often than the boss's. */
+  mood: z.strictObject({
     warmAt: z.number().int().positive(),
     coldAt: z.number().int().negative(),
   }),
@@ -692,7 +692,7 @@ const overHead = z.strictObject({
       failed: lines,
     }),
   ),
-  /** How far each opinion moves. The boss gains only by what they can make stick. */
+  /** How far each belief moves. The boss gains only by what they can make stick. */
   effects: z.strictObject({
     worked: z.strictObject({
       head: z.number().int().positive(),
@@ -947,8 +947,8 @@ const reputation = z.strictObject({
       bad: z.number().int().negative(),
     }),
   }),
-  /** The hidden belief at which the signs change. */
-  opinion: z.strictObject({
+  /** The belief at which someone's mood, and so their signs, change. */
+  mood: z.strictObject({
     warmAt: z.number().int().positive(),
     coldAt: z.number().int().negative(),
   }),
@@ -969,16 +969,16 @@ export const contentSchema = z.strictObject({
     signsMisleadChance: z.number().min(0).max(1),
     /** How often a month brings a disaster with no clue. */
     disasterChance: z.number().min(0).max(1).default(0),
-    /** The hidden opinion at which the boss's treatment changes. */
-    opinion: z.strictObject({
+    /** The belief at which the boss's mood, and so their treatment, changes. */
+    mood: z.strictObject({
       warmAt: z.number().int().positive(),
       coldAt: z.number().int().negative(),
-      /** How much of the opinion carries into each new month. */
-      keeps: z.number().min(0).max(1).default(1),
     }),
+    /** How much of the boss's belief carries into each new month. */
+    bossBeliefKeeps: z.number().min(0).max(1).default(1),
   }),
   boss: z.strictObject({
-    /** Whose opinion of the player is tracked. */
+    /** Whose belief about the player is tracked. */
     character: id,
     signs: z.array(bossSign),
     approaches: z.array(bossApproach).default([]),

@@ -1,8 +1,8 @@
 # Content format
 
 The reference for the data files in `content/`. Each file has one section here, and
-the conditions they share have their own. To start editing, see
-[Change the game](../README.md#change-the-game) in the README.
+the conditions they share have their own. Adding to any of them needs no code. To start
+editing, see [Change the game](../README.md#change-the-game) in the README.
 
 The game checks all of this at start-up. Where this page says a mistake is _refused_,
 the game does not start and the page shows what is wrong.
@@ -16,7 +16,7 @@ A `when` or `requires` holds one of these:
 | `{ "flag": "went-to-pub" }`                                            | A flag is set this month                                                                | Only if the flag does  |
 | `{ "did": "moved-a-colleague" }`                                       | A flag has been set in any month of the run                                             | Only if the flag does  |
 | `{ "remembers": { "character": "projects", "about": "passed-over" } }` | That Character keeps a memory written with that `about`                                 | Yes                    |
-| `{ "believes": { "character": "admin", "mood": "cold" } }`             | How that Character's belief about the player stands: `warm`, `neutral` or `cold`        | Yes                    |
+| `{ "believes": { "character": "admin", "mood": "cold" } }`             | That Character's mood, how their belief stands: `warm`, `neutral` or `cold`             | Yes                    |
 | `{ "hasBuzzword": "strategic-patience" }`                              | The player has learnt the Buzzword                                                      | No                     |
 | `{ "heardFact": "lost-list" }`                                         | The player has been told that Hidden Fact about someone, true or not                    | No                     |
 | `{ "heardTrue": "lost-list" }`                                         | What the player was told about that Hidden Fact is true                                 | Yes                    |
@@ -27,22 +27,27 @@ A `when` or `requires` holds one of these:
 | `{ "not": ... }`                                                       | The condition inside does not hold                                                      | If the inner one does  |
 | `{ "all": [...] }`                                                     | Every condition inside holds                                                            | If any inner one does  |
 
-Where each can be used:
+Where each can be used. These are all the places that take a condition:
 
-| Used on                     | Conditions allowed                                     |
-| --------------------------- | ------------------------------------------------------ |
-| A Scene result's `when`     | All                                                    |
-| A Move's `when`             | All                                                    |
-| An official story's `when`  | All                                                    |
-| A Scene option's `requires` | Only those that do not read the hidden truth           |
-| A Notification's `when`     | Only those that do not read the hidden truth           |
-| A Notebook event's `when`   | Only those that do not read the hidden truth, as below |
+| Used on                                    | Conditions allowed                                     |
+| ------------------------------------------ | ------------------------------------------------------ |
+| A Scene result's `when`                    | All                                                    |
+| A Move's `when`                            | All                                                    |
+| An official story's `when`                 | All                                                    |
+| A Thread outcome's `when`                  | All                                                    |
+| A hidden risk's `route.means` and `traced` | All                                                    |
+| A whistleblower report's `when`            | All                                                    |
+| A Scene option's `requires`                | Only those that do not read the hidden truth           |
+| A Notification's `when`, a Demand's too    | Only those that do not read the hidden truth           |
+| A Notebook event's `when`                  | Only those that do not read the hidden truth, as below |
 
-Anything else is refused. An option must never appear or disappear on undiscovered
+A condition anywhere else is refused, as is one that names an unknown Character, Hidden
+Fact or Buzzword. An option must never appear or disappear on undiscovered
 truth, and that includes the boss's kind, so a condition that would show the truth
 this way stops the game from starting. This also goes for a flag set by something
-hidden: a Scene result or a Move whose `when` reads the truth, a Demand being
-forgotten or chased, or your boss finding out about going over their head. A
+hidden: a Scene result or a Move whose `when` reads the truth, a Bill or any of its
+options, a Company Event, a Demand being forgotten or chased, or your boss finding out
+about going over their head. A
 Notebook event can still read such a flag, because the player has just seen that result.
 
 Flags come from `sets`, and are wiped when a new month opens, though `did` can still read
@@ -75,9 +80,10 @@ Actions a month, months in a run and the cost of each choice.
 - `signsMisleadChance` is how often a Scene's signs swap `{holder}` with `{bystander}`,
   so that one Scene never settles who holds influence. A Scene's results still go by the
   truth.
-- `opinion` holds `warmAt` and `coldAt`, which say how the boss's hidden opinion stands,
-  and `keeps`, which is how much of it carries into each new month, so that it is mostly
-  about lately.
+- `mood` holds `warmAt` and `coldAt`, the points at which the boss's belief about the player
+  makes their mood `warm` or `cold`.
+- `bossBeliefKeeps` is how much of the boss's belief carries into each new month, so that it is
+  mostly about lately.
 
 ## `behaviours.json`
 
@@ -97,14 +103,13 @@ chosen by their dealt kind.
 
 Who your boss is, the signs of how they treat you, and what impresses each kind.
 
-A choice can carry `"opinion": 1` or `-1` to move your boss's hidden opinion of you. The
-opinion has no number on screen. It shows only through `signs`: when the boss is in a
-Scene, one sign is picked using the `likelihood` for how the opinion stands, as
-`balance.json` sets. Every sign must be possible from at least two of `warm`, `neutral`
+A choice can carry `"opinion": 1` or `-1` to move your boss's hidden belief about you. The
+belief has no number on screen. It shows only through `signs`: when the boss is in a
+Scene, one sign is picked using the `likelihood` for their mood, as `balance.json` sets. Every sign must be possible from at least two of `warm`, `neutral`
 and `cold`, so that no sign settles it.
 
 A choice can also carry `"approach": "theatre"`. `approaches` lists each one, how far it
-moves the opinion of each kind of boss, and how each kind shows it, so the same choice can
+moves the belief of each kind of boss, and how each kind shows it, so the same choice can
 warm one boss and chill another. The player reads that from `reaction` lines and never
 from a label: a line naming a kind, or an approach that every kind takes alike, is
 refused. A choice can write its own `reaction` for each kind.
@@ -118,8 +123,9 @@ Buzzwords and their meanings. A choice's `learns` teaches one, and `hasBuzzword`
 
 ## `changing.json`
 
-How a Believer burned enough changes. How to write it is in
-[Change what burns a Believer](../README.md#change-what-burns-a-believer) in the README.
+How a Believer burned enough changes. How the player treats people changes them: a Believer who is
+burned enough, by something done to them directly, becomes a Practitioner, a whistleblower, or
+leaves. The player is not told. The results screen says who changed, from what to what, and why.
 
 - `burns` are what burns someone: a memory with that `about`, from news or `remembers`, of something
   done to them, whether in front of them or to them. Hearing of it second-hand does not burn. Each has
@@ -139,7 +145,7 @@ How a Believer burned enough changes. How to write it is in
   they have gone, and optional `sets` and `project`.
 
 Someone who leaves comes off the Power Map, and whoever answered to them answers to whoever was above
-them. Scenes go on without them. Any option or action whose words name them, or Notification or Move
+them. Scenes and Find Out go on without them. Any option or action whose words name them, or Notification or Move
 from them, is no longer offered, and a Thread's outcome from them is passed over. A risk that would
 come out through them never does. Their open Promises and Deals lapse. If the report's `input` came
 from them, it is never late again.
@@ -155,19 +161,21 @@ running text.
 
 ## `deals.json`
 
-Deals, in which each side offers something. How to write one is in
-[Write a Deal](../README.md#write-a-deal) in the README.
+Deals, in which each side offers something. A Deal is worth only what the people in it can really
+deliver, and either side can fail.
 
 - `favours` deals `dealt` favours between Characters when a run is dealt, each with one of the
-  `why` lines, which say `{owes}` and `{to}`. They are part of the hidden Power Map.
+  `why` lines, which say `{owes}` and `{to}`. They are part of the hidden Power Map. The player
+  sees only the favours they are party to, at no cost, and the results screen shows the rest.
 - `owed` is how a favour reads: `youOwe` and `owesYou` say `{who}` and `{why}`, and `between`,
   shown only on the results screen, says `{why}`.
 - `statuses` say where the player's side has got to.
 - Each item has `with`, `title`, `what`, `agreed` (which says `{who}`), `word`, `after`, `due`,
   `owed` and `worth`.
 - `word` is their side: a good word with `over`, given `after` a seeded wait with a seeded `chance`
-  by their kind, which moves that person's belief by `shift` only if they have sway. `given` and
-  `withheld` are what the player is told. If it is withheld, they owe the player.
+  by their kind, which moves that person's belief by `shift` only if they have sway: they are above
+  that person on the Power Map, or are owed a favour by them. The player is told the same either
+  way. `given` and `withheld` are what the player is told. If it is withheld, they owe the player.
 - `due` is the player's side, written as for a Promise. Breaking it starts the same news as a broken
   Promise, and the player owes them. `owed.you` and `owed.them` say why.
 - `worth` is what the results screen says it was really worth: `landed`, `worthless`, `withheld`,
@@ -202,12 +210,12 @@ Short text dialogs, such as the pub. A choice's `dialog` opens one.
 ## `events.json`
 
 Company Events: things that happen to the company as a whole. They land after the player's
-actions and before the month closes, ahead of the month's Character Move. How to write one is in
-[Write a Company Event](../README.md#write-a-company-event) in the README.
+actions and before the month closes, ahead of the month's Character Move.
 
 Each has `from`, `title`, `body`, and `story`, the official story's own `reported` and optional
 `happened` words for it. It can carry `sets` and `project`. It has no `mistake`, so a surprise is
-never a big mistake by itself. A risk that lands can still be one, through its own Bill.
+never a big mistake by itself: it should be funny and not unfair. A risk that lands can still be
+one, through its own Bill.
 
 Each has exactly one way to land, or it is refused:
 
@@ -238,13 +246,14 @@ The rooms on the floor: positions, sizes, colours and the lift's sign.
 
 ## `gauges.json`
 
-The player's Gauges, in plain view at every step. How to add one is in
-[Add a Gauge or a Milestone](../README.md#add-a-gauge-or-a-milestone) in the README.
+The player's Gauges, such as Teflon: their track record, in plain view at every step.
 
 Each has `id`, `label`, `start`, and the `min` and `max` it stays within. Its `milestones` are
 earned once each, on reaching `at`, and the player is told `title` and `body` as the month closes.
 A Milestone it can never reach is refused. A Gauge moves only from the `gauges` of a Thread's outcome,
-as in [`threads.json`](#threadsjson). Nothing else moves it, and nothing but its Milestones reads it.
+as in [`threads.json`](#threadsjson), as the month closes, and the official story says which. Nothing
+else moves it. It never reads the Power Map or a hidden risk, and nothing but its Milestones reads it,
+so a high one does not mean the player is safe.
 
 ## `hidden-truth.json`
 
@@ -314,17 +323,17 @@ The official story, assembled from `entries` according to what you did. Each ent
 
 Going over your boss's head, which an action with `"overHead": true` does.
 
-Your boss's boss has a hidden opinion of their own, which `signs` show whenever they are in a
-Scene, and which a choice can move with `"headOpinion": 1`. Its own `opinion` here says when
+Your boss's boss has a hidden belief of their own, which `signs` show whenever they are in a
+Scene, and which a choice can move with `"headOpinion": 1`. Its own `mood` here says when
 that shows.
 
 - `outcomes` holds the seeded chance of it working, by their dealt kind and by whether they
   are `influential` or `sidelined`. The count at the top of the Power Map that makes someone
   influential is `influentialCount` in [`sources.json`](#sourcesjson).
-- `effects` says how far each opinion moves if it works. Your boss gains little if your boss's
+- `effects` says how far each belief moves if it works. Your boss gains little if your boss's
   boss has little influence.
 - `findsOut` is the seeded chance of your boss hearing of it, by your boss's kind, which grows
-  by `perUse` with each trip, and how sharply their opinion then falls.
+  by `perUse` with each trip, and how sharply their belief then falls.
 - `verdict` is what the results screen says your boss's boss made of you.
 
 ## `project.json`
@@ -350,8 +359,8 @@ kinds, and certain from none, so that it never settles what someone is.
 
 ## `promises.json`
 
-The player's word. How to write one is in [Write a Promise](../README.md#write-a-promise) in the
-README.
+The player's word, which they can give whether or not they can deliver it. There is no meter
+behind it: it is a commitment and a memory.
 
 - `belief` sets the seeded chance of being believed: `chance` by the kind they were dealt, plus
   `mood` for how they stand with the player, less `perBroken` for each broken word that has reached
@@ -363,19 +372,19 @@ README.
   broken Promise is known at once to its victim and to everyone tied to them on the Power Map, and the
   victim's belief falls `perTie` further for each of those.
 - `statuses` are how the player's own list, and the results screen, say where each has got to.
-- `items` are the Promises. Each has `to`, `title`, `what`, a seeded wait `after`, and `due`, a
-  Notification whose options each `settles` it as `kept` or `broken`. One of them must break it
-  for nothing.
+- `items` are the Promises. Each has `to`, `title`, `what`, which reads after "You told them", a
+  seeded wait `after`, and `due`, a Notification whose options each `settles` it as `kept` or
+  `broken`. One of them must break it for nothing, so that it can always be answered. A Promise
+  that cannot be delivered has only ways to break it.
 
 A Notification option or Scene option offers one with `"promise"`, once in a run. A Notification
 option that does has no `result`, since what is said back is its result. A Promise not believed never
-falls due.
+falls due. The player can see their word at any time, for nothing.
 
 ## `reputation.json`
 
 There is no single reputation score. Each Character has their own belief about the player, and
-that belief is what your boss's and your boss's boss's opinions are too, so there is one idea of
-what someone thinks of you. It has no number on screen. It shows through signs, and through
+your bosses' beliefs are the same idea, so there is one idea of what someone thinks of you. It has no number on screen. It shows through signs, and through
 anything written with the `believes` condition.
 
 A choice's outcome, a Bill or a Scene result can carry `news`: an `about` that the `remembers`
@@ -386,7 +395,7 @@ whom it was done in front of, or to. They know at once. Only true deeds start ne
   along the ties of the Power Map, no more than `maxHops` from where it started. `passOnChance` is
   the seeded chance of each person telling each person tied to them, and `shift` is how far it then
   moves their belief. So the same deed reaches different people on different deals.
-- `opinion` says when the belief of anyone but your bosses shows. Your bosses have their own, in
+- `mood` says when the belief of anyone but your bosses shows. Your bosses have their own, in
   [`balance.json`](#balancejson) and [`over-head.json`](#over-headjson).
 - `signs` show how everyone else present in a Scene is with the player. Each says `{who}`, and
   must be possible from at least two of `warm`, `neutral` and `cold`, so that no sign settles it.
@@ -396,15 +405,17 @@ whom it was done in front of, or to. They know at once. Only true deeds start ne
 
 The short list of hidden risks the player's decisions build up. There is no running balance and
 no company simulation: a risk is a written item with a source, a route out and a way of being
-traced. The player never sees the list during play. How to write one is in
-[Write a hidden risk](../README.md#write-a-hidden-risk) in the README.
+traced. The same risk can land on the player, land on someone else, or never come out at all. The
+player sees none of it until it does, and the results screen lists the lot.
 
-- `addedBy` is a flag. The first time anything sets it, the risk is added.
+- `addedBy` is a flag, from the `sets` of a choice. The first time anything sets it, the risk is
+  added. A one-off Budget is a good source.
 - `after` gives the `min` and `max` months until it can come out, which are seeded.
 - `route` is who it comes out through: their `character`, the seeded `chance` that they act,
   by the kind they were dealt, their `motive`, for the results screen, and optionally their
   `means`, a condition they need. It gets one chance. If that fails, it never comes out.
-- `traced` is read as it comes out. If it holds, `onPlayer` is sent. If not, `onSomeoneElse`
+- `traced` is read as it comes out. Reading a flag with `did` lets the player change that, as
+  clearing the shared drive in month 7 does. If it holds, `onPlayer` is sent. If not, `onSomeoneElse`
   is, if it is written, and otherwise nothing happens. Either is a Bill, as in
   [`threads.json`](#threadsjson), so a risk that lands can be `"mistake": "big"`.
 - `event` names a Company Event, from [`events.json`](#eventsjson), that lands as it comes out.
@@ -428,7 +439,7 @@ meeting has everyone in it.
 - A result's `when` picks it. A result with `factNote` is listed on the results screen beside the
   fact itself, and `factAt` names whose fact it was, unless the option is `about` one.
 - A result can carry `sets`, `opinion`, `headOpinion`, `approach`, `reaction` and `project`.
-- A Scene with a `verdict` adds what the boss finally says, by how the opinion stands.
+- A Scene with a `verdict` adds what the boss finally says, by their mood.
 
 ## `sources.json`
 
@@ -452,16 +463,19 @@ so the results screen is the only place that says.
 ## `threads.json`
 
 A Thread runs from something the player did to the point, months later, where it pays off or
-backfires. Adding one needs no code. How to write one is in
-[Write a Thread](../README.md#write-a-thread) in the README.
+backfires. The player hears nothing of it until its Bill arrives, and the results screen then
+traces it back to what started it. Not every Move needs a Thread, and a Bill is better if it
+arrives through someone else.
 
-- `startedBy` is a flag. The first time anything sets it, the Thread starts.
+- `startedBy` is a flag, from the `sets` of a choice. The first time anything sets it, the Thread
+  starts.
 - `chance` is the seeded chance that it ever comes back, and `after` gives the `min` and `max`
   months it then waits. A Thread due past the end of the run never plays out.
 - `started` is what the results screen says started it.
 - `outcomes` are tried in order as the month it is due opens, and the first whose `when` holds
-  plays out. If none holds, it comes to nothing. Each has `playedOut`, for the results screen,
-  and a `bill`.
+  plays out, so the last can be a fallback with no `when`. If none holds, it comes to nothing.
+  Each has `playedOut`, for the results screen, and a `bill`, which is what reaches the player.
+  A Bill can be good news.
 
 A `bill` has a unique `id`, a `title` and a `body`, and `as` says how it arrives:
 
@@ -473,8 +487,8 @@ A `bill` has a unique `id`, a `title` and a `body`, and `as` says how it arrives
 An outcome's `gauges` move the player's Gauges as the month it plays out closes, each with the
 `gauge`, how far it moves it `by`, and the `note` the player sees. Only a Thread can move a Gauge.
 
-A Bill can carry `sets`, `opinion`, `headOpinion`, `project` and `"mistake": "big"`, and these
-take effect when it arrives, or, as a Move, when it lands. Its flags can be read by the official
+A Bill can carry `sets`, `opinion`, `headOpinion`, `project`, `"mistake": "big"`, `remembers` and
+`news`, and these take effect when it arrives, or, as a Move, when it lands. Its flags can be read by the official
 story, and they count as hidden, so no option can depend on them.
 
 ## `ui.json`

@@ -4,14 +4,14 @@ The [README](README.md) covers playing and steering the game, and the code map. 
 
 ### Verifying
 
-- `npm run verify` runs every check. The browser tests need Chromium once: `npx playwright install chromium`.
+- `npm run verify` runs every check: formatting, lint, types, engine tests, browser tests, dependency audit and build. The browser tests need Chromium once: `npx playwright install chromium`.
 - One engine test: `npx vitest run <file> -t "<name>"`.
 - One browser test: `npx playwright test <file> -g "<name>"`.
 
 ### Tests
 
 - `tests/engine/` tests the rules headlessly, and a few checks on the builds and lint. `fixture.ts` there builds small content, and `src/engine/hidden-truth.ts` is the test-only read of the hidden truth.
-- `tests/e2e/` holds the browser tests. `play.ts` there has the helpers for playing through a month. Most run against a test-only build where `?month=N` starts a run at a later month, so use it when a test only needs walking months as setup.
+- `tests/e2e/` holds the browser tests. `play.ts` there has the helpers for playing through a month. Most run against a test-only build, `vite build --mode e2e` in `dist-e2e/`, where `?month=N` starts a run at a later month, so use it when a test only needs walking months as setup. `npm run build` and `npm run play` ignore it.
 - `tests/tower/` tests the tower's fittings.
 
 ### Adding a game mechanic
@@ -19,11 +19,15 @@ The [README](README.md) covers playing and steering the game, and the code map. 
 A new mechanic is rarely a data-only change. It usually touches:
 
 1. `content/*.json`, for its data and words.
-2. `src/engine/content.ts` for the schema, and `src/engine/content-checks.ts` or `consequence-checks.ts` for its checks across files.
+2. `src/engine/content.ts` for the schema, and for its checks across files `truth-checks.ts`, `boss-checks.ts`, `consequence-checks.ts` or `content-checks.ts`, whichever the README's code map gives that kind of check.
 3. A mechanic's own module in `src/engine/` for the rules. A consequence takes effect through `applyOutcome` in `outcome.ts`, and `month.ts` holds the month's order.
 4. `src/engine/view.ts` and `src/engine/to-view.ts`, for what the player sees.
-5. `src/ui/panels.tsx`, for showing it.
+5. `src/ui/panels.tsx`, for showing it, or `ScenePanel.tsx`, `FindOutPanel.tsx` or `ResultsPanel.tsx` where the step has its own panel.
 6. Tests in `tests/engine/` and `tests/e2e/`, and `docs/content-format.md`.
+
+### Docs
+
+Keep each agent-facing doc to 200 lines, and state each rule in one place. Two docs are allowed to be longer: `docs/content-format.md` is a reference read one section at a time, and `failureship-grill-outcome.md` is the owner's design record. Test scenarios for playing by hand are in [docs/playtest.md](docs/playtest.md).
 
 ### Vocabulary
 

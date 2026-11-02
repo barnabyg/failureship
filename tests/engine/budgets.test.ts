@@ -38,7 +38,7 @@ function reach(run: Run, notificationId: string): PlayerView {
 function decide(seed: number, notificationId: string, optionId: string) {
   const run = startRun({ seed, content: gameContent });
   reach(run, notificationId);
-  const before = readHiddenTruth(run).bossOpinion;
+  const before = readHiddenTruth(run).bossBelief;
   const { step } = run.choose({
     type: "notification",
     notificationId,
@@ -47,7 +47,7 @@ function decide(seed: number, notificationId: string, optionId: string) {
   if (step.kind !== "notice") throw new Error(step.kind);
   return {
     kind: bossKind(run),
-    shift: readHiddenTruth(run).bossOpinion - before,
+    shift: readHiddenTruth(run).bossBelief - before,
     reaction: step.reaction,
   };
 }

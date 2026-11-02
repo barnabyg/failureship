@@ -168,8 +168,8 @@ function runOf(state: State, world: World): Run {
   };
   truths.set(run, () => ({
     ...structuredClone(state.truth),
-    bossOpinion: beliefOf(state, content.boss.character),
-    headOpinion: beliefOf(state, content.overHead?.character ?? ""),
+    bossBelief: beliefOf(state, content.boss.character),
+    headBelief: beliefOf(state, content.overHead?.character ?? ""),
   }));
   return run;
 }

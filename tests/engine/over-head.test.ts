@@ -50,7 +50,7 @@ interface Attempt {
   caught: boolean;
 }
 
-/** One trip upstairs in month 1, and what it did to both opinions. */
+/** One trip upstairs in month 1, and what it did to both beliefs. */
 function attempt(seed: number): Attempt {
   const run = startRun({ seed, content: gameContent });
   toFloor(run);
@@ -68,13 +68,13 @@ function attempt(seed: number): Attempt {
     headKind: kindOf(run, "head") ?? "",
     influential: isInfluential(run),
     bossKind: kindOf(run, "boss") ?? "",
-    headShift: after.headOpinion - before.headOpinion,
-    bossShift: after.bossOpinion - before.bossOpinion,
+    headShift: after.headBelief - before.headBelief,
+    bossShift: after.bossBelief - before.bossBelief,
     caught: titles.includes(caughtTitle ?? ""),
   };
 }
 
-/** What the ordinary choices can do to the boss's opinion, at their extremes. */
+/** What the ordinary choices can do to the boss's belief, at their extremes. */
 function ordinaryExtremes() {
   const shifts = gameContent.boss.approaches.flatMap((a) =>
     Object.values(a.shift),
@@ -165,7 +165,7 @@ describe("going over your boss's head", () => {
   });
 
   it("is not simply the best action every month", () => {
-    const finalOpinion = (seed: number, climbs: boolean) => {
+    const finalBelief = (seed: number, climbs: boolean) => {
       const run = startRun({ seed, content: gameContent });
       let view = run.view();
       while (view.step.kind !== "results") {
@@ -193,16 +193,16 @@ describe("going over your boss's head", () => {
         if (!next) throw new Error(`Stuck at ${step.kind}.`);
         view = run.choose(next);
       }
-      return readHiddenTruth(run).bossOpinion;
+      return readHiddenTruth(run).bossBelief;
     };
     const mean = (climbs: boolean) =>
-      SEEDS.slice(0, 150).reduce((sum, s) => sum + finalOpinion(s, climbs), 0) /
+      SEEDS.slice(0, 150).reduce((sum, s) => sum + finalBelief(s, climbs), 0) /
       150;
 
     expect(mean(true)).toBeLessThan(mean(false));
   }, 30_000);
 
-  it("never shows either opinion or kind before the run ends", () => {
+  it("never shows either belief or kind before the run ends", () => {
     for (const seed of SEEDS.slice(0, 60)) {
       const run = startRun({ seed, content: gameContent });
       let view = run.view();
@@ -231,7 +231,7 @@ describe("going over your boss's head", () => {
     expect(signs).toContain(step.headTreatment);
   });
 
-  it("shifts those signs as their opinion of you shifts", () => {
+  it("shifts those signs as their belief about you shifts", () => {
     const signText = (mood: "warm" | "cold") =>
       new Set(
         gameContent.overHead?.signs
@@ -296,12 +296,12 @@ describe("going over your boss's head", () => {
     expect(() => parseContent(raw)).toThrow(/names a kind/);
   });
 
-  it("refuses a sign that would settle their opinion", () => {
+  it("refuses a sign that would settle their mood", () => {
     const raw = structuredClone(gameContent);
     const sign = raw.overHead?.signs[0];
     if (!sign) throw new Error("No sign.");
     sign.likelihood = { warm: 1, neutral: 0, cold: 0 };
 
-    expect(() => parseContent(raw)).toThrow(/only one opinion/);
+    expect(() => parseContent(raw)).toThrow(/only one mood/);
   });
 });

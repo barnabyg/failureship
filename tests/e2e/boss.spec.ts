@@ -21,7 +21,8 @@ async function treatmentAfter(page: Page, seed: number, option: string) {
 
 test("the boss treats you differently after a choice", async ({ page }) => {
   const changed: number[] = [];
-  for (const seed of [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]) {
+  // Seed 2 shows it, so it goes first. The rest are there if the content moves it.
+  for (const seed of [2, 1, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]) {
     const pleased = await treatmentAfter(page, seed, "back-boss");
     const snubbed = await treatmentAfter(page, seed, "back-head");
     if (pleased !== snubbed) changed.push(seed);
@@ -62,19 +63,20 @@ test("the same choice lands differently with a different kind of boss", async ({
   );
 });
 
+// Flattery in the last month's meeting, so the results screen is a month away.
 test("the results screen shows the boss's kind and how choices landed", async ({
   page,
 }) => {
-  await page.goto("/?seed=8");
+  await page.goto("/?seed=8&month=9");
   await answerAnyNotification(page);
   await openMeeting(page);
-  await page.getByTestId("scene-option-back-boss").click();
+  await page.getByTestId("scene-option-praise-dennis").click();
   await playToResults(page);
 
   await expect(page.getByTestId("result-boss-kind")).toHaveText("Incompetent");
   await expect(
     page
       .getByTestId("result-boss-choice")
-      .filter({ hasText: "Agree warmly with your boss" }),
+      .filter({ hasText: "Say how much you have learned from your boss" }),
   ).toContainText("Went down well");
 });

@@ -81,7 +81,7 @@ export function leaveStory(state: State, world: World): void {
   const { character } = world.content.boss;
   state.truth.beliefs[character] =
     Math.trunc(
-      beliefOf(state, character) * world.content.balance.opinion.keeps,
+      beliefOf(state, character) * world.content.balance.bossBeliefKeeps,
     ) + 0;
   Object.assign(state, freshMonth(world.content, state.month));
   openMonth(state, world.content);

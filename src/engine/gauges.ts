@@ -6,7 +6,7 @@ type Written = NonNullable<Content["gauges"]>[number];
 /**
  * The only place a Gauge is read. Gauges are the player's track record, so they
  * move only when a Thread plays out, and nothing in the rules but Milestones reads
- * them: never the Power Map, a hidden risk or anyone's opinion.
+ * them: never the Power Map, a hidden risk or anyone's belief.
  */
 export function startingGauges(
   content: Content,

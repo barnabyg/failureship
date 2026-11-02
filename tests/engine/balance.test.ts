@@ -71,7 +71,7 @@ function playIn(seed: number, style: Style) {
   return readHiddenTruth(run);
 }
 
-function meanOpinions(kind: Kind) {
+function meanBeliefs(kind: Kind) {
   const seeds = SEEDS.filter(
     (s) =>
       readHiddenTruth(
@@ -79,7 +79,7 @@ function meanOpinions(kind: Kind) {
       ).characters.find((c) => c.id === "boss")?.kind === kind,
   ).slice(0, 60);
   const mean = (style: Style) =>
-    seeds.reduce((sum, s) => sum + playIn(s, style).bossOpinion, 0) /
+    seeds.reduce((sum, s) => sum + playIn(s, style).bossBelief, 0) /
     seeds.length;
   return {
     straight: mean("straight"),
@@ -129,26 +129,26 @@ describe(
   { timeout: 60_000 },
   () => {
     it("rewards a straight approach most with a Believer", () => {
-      const { straight, showy, useful } = meanOpinions("believer");
+      const { straight, showy, useful } = meanBeliefs("believer");
 
       expect(straight).toBeGreaterThan(Math.max(showy, useful));
     });
 
     it("rewards a showy approach most with an Incompetent", () => {
-      const { straight, showy } = meanOpinions("incompetent");
+      const { straight, showy } = meanBeliefs("incompetent");
 
       expect(showy).toBeGreaterThan(straight);
     });
 
     it("rewards being useful most with a Practitioner", () => {
-      const { straight, showy, useful } = meanOpinions("practitioner");
+      const { straight, showy, useful } = meanBeliefs("practitioner");
 
       expect(useful).toBeGreaterThan(Math.max(straight, showy));
     });
 
     it("has no style that is best with every kind of boss", () => {
       const winner = (kind: Kind) => {
-        const means = Object.entries(meanOpinions(kind));
+        const means = Object.entries(meanBeliefs(kind));
         return means.sort((a, b) => b[1] - a[1])[0]?.[0];
       };
 
@@ -264,12 +264,12 @@ describe("consequences have room to land", { timeout: 60_000 }, () => {
   });
 });
 
-describe("the boss's opinion stays worth reading", { timeout: 60_000 }, () => {
+describe("the boss's belief stays worth reading", { timeout: 60_000 }, () => {
   it("ends a run within reach of the thresholds, not many times past them", () => {
-    const { warmAt } = gameContent.balance.opinion;
+    const { warmAt } = gameContent.balance.mood;
     const finals = SEEDS.slice(0, 60).flatMap((seed) =>
       (["straight", "showy", "useful"] as const).map(
-        (style) => playIn(seed, style).bossOpinion,
+        (style) => playIn(seed, style).bossBelief,
       ),
     );
 
@@ -277,7 +277,7 @@ describe("the boss's opinion stays worth reading", { timeout: 60_000 }, () => {
   });
 
   it("is not settled in the first months, whatever the player does", () => {
-    const { warmAt, coldAt } = gameContent.balance.opinion;
+    const { warmAt, coldAt } = gameContent.balance.mood;
     const styles: Style[] = ["straight", "showy", "useful"];
     let runs = 0;
     let open = 0;
@@ -292,9 +292,9 @@ describe("the boss's opinion stays worth reading", { timeout: 60_000 }, () => {
           if (!best) throw new Error(`Stuck at ${view.step.kind}.`);
           view = run.choose(best);
         }
-        const { bossOpinion } = readHiddenTruth(run);
+        const { bossBelief } = readHiddenTruth(run);
         runs += 1;
-        if (bossOpinion < warmAt && bossOpinion > coldAt) open += 1;
+        if (bossBelief < warmAt && bossBelief > coldAt) open += 1;
       }
     }
 

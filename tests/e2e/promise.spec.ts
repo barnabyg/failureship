@@ -3,6 +3,7 @@ import { playToResults, playUntil } from "./play";
 
 // tests/engine/promises.test.ts keeps this seed true: the Senior Analyst believes it,
 // and by month 6 your boss has heard that it never happened.
+// Over 10 s, as who heard shows only on the results screen.
 test("a Promise is made, broken, and the next one is not believed", async ({
   page,
 }) => {

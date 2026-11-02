@@ -164,7 +164,7 @@ describe("a meeting you do not go to", () => {
     );
   });
 
-  it("moves the boss's opinion by their kind, with no number shown", () => {
+  it("moves the boss's belief by their kind, with no number shown", () => {
     const titles = gameContent.demands?.missed?.actions.map((a) => a.title);
     const shifts = new Map<string, Set<number>>();
     const reactions = new Map<string, Set<string>>();
@@ -189,10 +189,10 @@ describe("a meeting you do not go to", () => {
               }
             : view.choices.find((c) => !isMeeting(c));
         if (!next) throw new Error(`Stuck at ${step.kind}.`);
-        const before = readHiddenTruth(run).bossOpinion;
+        const before = readHiddenTruth(run).bossBelief;
         view = run.choose(next);
         if (view.step.kind === "notice" && titles?.includes(view.step.title)) {
-          const shift = readHiddenTruth(run).bossOpinion - before;
+          const shift = readHiddenTruth(run).bossBelief - before;
           shifts.set(kind, (shifts.get(kind) ?? new Set()).add(shift));
           reactions.set(
             kind,

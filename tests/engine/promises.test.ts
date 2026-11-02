@@ -50,7 +50,7 @@ function raw(chance = 1) {
         passOnChance: 1,
         shift: { good: 1, bad: -1 },
       },
-      opinion: { warmAt: 50, coldAt: -50 },
+      mood: { warmAt: 50, coldAt: -50 },
       signs: [
         {
           id: "s",

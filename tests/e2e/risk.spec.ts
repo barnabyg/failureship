@@ -2,11 +2,13 @@ import { expect, test } from "@playwright/test";
 import {
   answerAnyNotification,
   attendAndFinishMonth,
+  continueUntil,
   openMeeting,
   playToResults,
 } from "./play";
 
 // On this seed the Office Co-ordinator acts on a Demand faked in month 2, in month 4.
+// Over 10 s, as it plays on to the results screen, which #50 asks to see here.
 test("a hidden risk lands on the player, and is on the results screen", async ({
   page,
 }) => {
@@ -29,15 +31,9 @@ test("a hidden risk lands on the player, and is on the results screen", async ({
   const landed = page
     .getByTestId("panel-move")
     .filter({ hasText: "correction to the minutes" });
-  const carryOn = page.getByTestId("continue");
-  const spare = page.getByTestId("hotspot-work");
-  await expect(async () => {
-    if (await carryOn.isVisible()) await carryOn.click();
-    else if (await spare.isEnabled()) await spare.click();
-    await expect(landed).toBeVisible({ timeout: 100 });
-  }).toPass();
+  await continueUntil(page, landed);
 
-  await carryOn.click();
+  await page.getByTestId("continue").click();
   await expect(page.getByTestId("final-warning")).toBeVisible();
 
   await playToResults(page);
