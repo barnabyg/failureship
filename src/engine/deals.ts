@@ -176,12 +176,7 @@ export function dealsInResults(state: State, content: Content) {
   const deals = state.deals.flatMap((made) => {
     const item = writtenDeal(content, made.id);
     if (!item) return [];
-    const worth =
-      made.word === "landed" ||
-      made.word === "worthless" ||
-      made.word === "withheld"
-        ? item.worth[made.word]
-        : item.worth.pending;
+    const worth = item.worth[made.word];
     return [
       {
         month: made.month,

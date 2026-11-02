@@ -181,33 +181,33 @@ export function settlePromise(
       : breakWord(state, content, word);
 }
 
-export function promisesInView(state: State, content: Content) {
+/** Each Promise made, with what is written of it. */
+function promisesMade(state: State, content: Content) {
   const written = content.promises;
-  if (!written) return [];
   return state.promises.flatMap((made) => {
-    const item = written.items.find((p) => p.id === made.id);
-    return item
-      ? [
-          {
-            month: made.month,
-            to: calledBy(content, item.to),
-            what: item.what,
-            status: written.statuses[made.status],
-          },
-        ]
-      : [];
+    const item = written?.items.find((p) => p.id === made.id);
+    if (!written || !item) return [];
+    const row = {
+      month: made.month,
+      to: calledBy(content, item.to),
+      what: item.what,
+      status: written.statuses[made.status],
+    };
+    return [{ made, item, row }];
   });
+}
+
+export function promisesInView(state: State, content: Content) {
+  return promisesMade(state, content).map(({ row }) => row);
 }
 
 /** Everything the list said, and who else it reached, which only now can be told. */
 export function promisesInResults(state: State, content: Content) {
-  return promisesInView(state, content).map((row, index) => {
-    const made = state.promises[index];
-    const item = content.promises?.items.find((p) => p.id === made?.id);
+  return promisesMade(state, content).map(({ made, item, row }) => {
     const heardBy = state.truth.memories
       .filter(
         (m) =>
-          m.news !== null && m.news === made?.news && m.character !== item?.to,
+          made.news !== null && m.news === made.news && m.character !== item.to,
       )
       .map((m) => calledBy(content, m.character));
     return { ...row, heardBy };
