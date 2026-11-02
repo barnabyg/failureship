@@ -190,7 +190,7 @@
   background: #4caf50;
 }
 
-/* The Monthly Summary as a glossy staff newsletter. */
+/* The official story as a glossy staff newsletter. */
 
 .panel[data-look="newsletter"] {
   width: min(720px, calc(100% - 24px));

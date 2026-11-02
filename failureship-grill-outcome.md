@@ -250,14 +250,21 @@ Use these terms consistently in the design and the game.
 - **Demand:** an instruction from above that the player must answer, often one that cannot honestly be met.
 - **Grand Plan:** a boss's big ambition, which the player works to complete, in appearance or in reality.
 - **Monthly Status Report:** the recurring report to higher management, in which a Project's reported status gets set.
+- **Official story:** the company's account of the month as it closes, set beside what actually happened. In the game it is the staff newsletter headed Monthly Summary, but the term is official story, not "Monthly Summary".
 - **Project:** a piece of work with an owner, a real status and a reported status.
 - **Promise:** a commitment the player makes to a Character, whether or not the player can deliver it.
+- **Deal:** an exchange in which the player and a Character each offer something. It is worth only what each side can really deliver, and either side can fail.
 - **Buzzword:** a fashionable phrase the player has picked up, which opens an option in a later Scene.
 - **Thread:** a chain of play running from something the player did to the point where it pays off or backfires.
 - **Gauge:** a visible, comic measure of the player's career that moves only when a Thread plays out. It does not necessarily lead to promotion.
 - **Teflon:** the Gauge reflecting the player's ability to avoid blame.
+- **Fawning:** the Gauge reflecting how well sucking up to the player's managers is paying off. Not whether they like the player, and it plays no part in promotion.
 - **Milestone:** a comic title awarded when a Gauge reaches a set level.
 - **Notebook:** the player's retained record of important clues about the Power Map, which may include false or outdated claims.
+- **Find Out:** spending an action to ask someone about a Character or to buy information, which gives a claim that may be true, mistaken, out of date or deliberately false.
+- **Character Move:** a Move a Character makes that lands on the player after the month's actions, with no choice offered.
+- **Hidden risk:** a written item that the player's decisions add, with a source, a route out and a way of being traced. It may land on the player, on someone else or never come out, and the player sees none of it until it does. Not a running balance.
+- **Budget:** a one-off money decision, such as the Budget Round, the bonus pot or the underspend. It comes back through what Characters remember and the hidden risks it adds. Not a running balance.
 - **Company Event:** something that happens to the company as a whole, such as a takeover bid or a security breach.
 
 ### What people think of you
