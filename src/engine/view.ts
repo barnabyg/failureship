@@ -162,6 +162,15 @@ export type StepView =
         worth: string;
       }[];
       favours: string[];
+      /** Who changed, from what, into what, and what was done to them. */
+      changed: {
+        month: number;
+        name: string;
+        title: string;
+        from: string;
+        to: string;
+        why: string[];
+      }[];
       /** The big mistakes the player made, in order. */
       mistakes: { month: number; choice: string }[];
       characters: {

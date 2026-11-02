@@ -2,6 +2,7 @@ import { z } from "zod";
 import {
   findNamedKinds,
   findBrokenEvents,
+  findBrokenChanging,
   findBrokenDeals,
   findBrokenPromises,
   findBrokenRisks,
@@ -667,6 +668,7 @@ function findBrokenReferences(content: Content): string[] {
   problems.push(...findBrokenEvents(content));
   problems.push(...findBrokenPromises(content));
   problems.push(...findBrokenDeals(content));
+  problems.push(...findBrokenChanging(content));
   problems.push(...findBrokenReputation(content, characters));
   for (const event of content.events) {
     checkProject(`Company Event "${event.id}"`, event.project);

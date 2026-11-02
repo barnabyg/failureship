@@ -174,6 +174,44 @@ export function findBrokenDeals(content: Content): string[] {
   return problems;
 }
 
+/** Only Believers change, and both of the player's bosses stay, until vacancies exist. */
+export function findBrokenChanging(content: Content): string[] {
+  const written = content.changing;
+  if (!written) return [];
+  const problems: string[] = [];
+  const known = new Set(content.characters.map((c) => c.id));
+  const bosses = [content.boss.character, content.overHead?.character];
+  for (const id of Object.keys(written.leaving)) {
+    if (!known.has(id)) problems.push(`Leaving names unknown "${id}".`);
+    if (bosses.includes(id)) {
+      problems.push(`"${id}" cannot leave: nothing creates a vacancy yet.`);
+    }
+  }
+  for (const burn of written.burns) {
+    const { practitioner, whistleblower, left } = burn.leans;
+    if (practitioner + whistleblower + left === 0) {
+      problems.push(`Burn "${burn.about}" leans nobody any way.`);
+    }
+  }
+  for (const sign of written.whistleblower.signs) {
+    if (!sign.text.includes("{who}")) {
+      problems.push(`Whistleblower sign "${sign.id}" needs to say {who}.`);
+    }
+    if (content.behaviours.some((b) => b.id === sign.id)) {
+      problems.push(`Whistleblower sign "${sign.id}" shares a behaviour's id.`);
+    }
+  }
+  if (!written.whistleblower.motive.includes("{who}")) {
+    problems.push("A whistleblower's motive needs to say {who}.");
+  }
+  if (written.whistleblower.reports.at(-1)?.when !== undefined) {
+    problems.push(
+      'A whistleblower needs a report with no "when", to fall back on.',
+    );
+  }
+  return problems;
+}
+
 /** A Bill must be able to reach the player, in the way it says it does. */
 function findBrokenBills(content: Content): string[] {
   const problems: string[] = [];

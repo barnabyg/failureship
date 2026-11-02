@@ -1,0 +1,173 @@
+{
+  "threshold": 3,
+  "burns": [
+    {
+      "about": "blamed-in-the-review",
+      "weight": 2,
+      "why": "You blamed them in the Lessons Learned Review, in the minutes.",
+      "leans": {
+        "practitioner": 3,
+        "whistleblower": 2,
+        "left": 1
+      }
+    },
+    {
+      "about": "broke-a-promise",
+      "weight": 2,
+      "why": "You gave them your word, and broke it.",
+      "leans": {
+        "practitioner": 2,
+        "whistleblower": 1,
+        "left": 2
+      }
+    },
+    {
+      "about": "reported-someone",
+      "weight": 2,
+      "why": "You reported them at the Listening Session, in complete confidence.",
+      "leans": {
+        "practitioner": 1,
+        "whistleblower": 3,
+        "left": 1
+      }
+    },
+    {
+      "about": "started-a-rumour",
+      "weight": 2,
+      "why": "You started a rumour about them.",
+      "leans": {
+        "practitioner": 2,
+        "whistleblower": 2,
+        "left": 1
+      }
+    },
+    {
+      "about": "moved-to-the-printer",
+      "weight": 1,
+      "why": "You moved them to the desk with no window.",
+      "leans": {
+        "practitioner": 1,
+        "whistleblower": 1,
+        "left": 2
+      }
+    },
+    {
+      "about": "passed-over",
+      "weight": 1,
+      "why": "You passed them over for the bonus.",
+      "leans": {
+        "practitioner": 2,
+        "whistleblower": 0,
+        "left": 2
+      }
+    },
+    {
+      "about": "hired-a-friend",
+      "weight": 1,
+      "why": "You hired a friend over the person they recommended.",
+      "leans": {
+        "practitioner": 1,
+        "whistleblower": 2,
+        "left": 1
+      }
+    }
+  ],
+  "became": {
+    "practitioner": "Learnt how things really work here, and became a Practitioner",
+    "whistleblower": "Started keeping a file, and became a whistleblower",
+    "left": "Left the company"
+  },
+  "whistleblower": {
+    "signs": [
+      {
+        "id": "keeps-a-file",
+        "text": "{who} writes down the time whenever you speak, and underlines it.",
+        "clue": "{who} has started writing down the time whenever you speak.",
+        "weight": 4
+      },
+      {
+        "id": "forwards-to-self",
+        "text": "{who} forwards something to their personal address, and closes the laptop when you look over.",
+        "weight": 3
+      },
+      {
+        "id": "asks-for-it-in-writing",
+        "text": "{who} asks for that in writing, please, and smiles while asking.",
+        "weight": 3
+      }
+    ],
+    "motive": "{who} had been keeping a file on you, and took it upstairs.",
+    "reports": [
+      {
+        "when": {
+          "did": "made-up-schedule"
+        },
+        "bill": {
+          "id": "schedule-reported",
+          "as": "move",
+          "from": "From: Your boss's boss, Hugh Lamb",
+          "title": "The schedule",
+          "body": "Your boss's boss would like a word about the schedule you sent upstairs. Somebody has been to see them with a folder, and the folder has the real dates in it. Your boss's boss does not say who. They say that they are not angry, which is how you know.",
+          "sets": ["schedule-reported"],
+          "opinion": -1,
+          "headOpinion": -2
+        }
+      },
+      {
+        "when": {
+          "did": "lied-in-report"
+        },
+        "bill": {
+          "id": "report-reported",
+          "as": "move",
+          "from": "From: Your boss's boss, Hugh Lamb",
+          "title": "Your status reports",
+          "body": "Your boss's boss has been sent your Monthly Status Reports, side by side with what actually happened, in two colours. They would like you to talk them through the green ones. There are a lot of green ones.",
+          "sets": ["reports-reported"],
+          "opinion": -1,
+          "headOpinion": -2
+        }
+      },
+      {
+        "bill": {
+          "id": "conduct-reported",
+          "as": "move",
+          "from": "From: Human Resources",
+          "title": "A brief, informal conversation, recorded",
+          "body": "Human Resources would like a brief, informal conversation about some concerns that have been raised, informally, in a document of eleven pages. They cannot say who raised them. The document has a contents page.",
+          "sets": ["conduct-reported"],
+          "headOpinion": -1
+        }
+      }
+    ]
+  },
+  "leaving": {
+    "analyst": {
+      "cover": "the acting Senior Analyst",
+      "notice": {
+        "title": "Priya Venn has left",
+        "body": "The Senior Analyst has left, with a week's notice and most of a carrot cake. An all-staff email thanks Priya for her contribution and says she is leaving to pursue other opportunities. An agency temp has been given her desk, her login and her figures, and has been told the figures are self-explanatory."
+      },
+      "sets": ["a-colleague-left"]
+    },
+    "admin": {
+      "cover": "the interim Office Co-ordinator",
+      "notice": {
+        "title": "Marjorie Tull has left",
+        "body": "The Office Co-ordinator has left after twenty-six years, taking the key to the stationery cupboard and the knowledge of where everything is kept. An interim has started. The interim has been told where nothing is kept, and is writing it down."
+      },
+      "sets": ["a-colleague-left"]
+    },
+    "projects": {
+      "cover": "the contract Project Co-ordinator",
+      "notice": {
+        "title": "Callum Reed has left",
+        "body": "The Project Co-ordinator has left. A contractor is now co-ordinating your project at a day rate, from home, and the Monthly Status Report's figures now arrive on time, from a template. Nobody has checked them, and nobody can now say who would have."
+      },
+      "sets": ["a-colleague-left"],
+      "project": {
+        "real": "worse"
+      }
+    }
+  }
+}

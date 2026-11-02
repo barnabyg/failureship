@@ -1,6 +1,6 @@
 import { makeClaim, verdictOfClaim } from "./claims";
 import type { Content } from "./content";
-import { methodOf } from "./reads";
+import { methodOf, sourcesHere } from "./reads";
 import { pick } from "./rng";
 import { calledBy, capitalised } from "./say";
 import { IllegalChoiceError, type State, type Step } from "./state";
@@ -13,10 +13,11 @@ export function arriveToFindOut(
   id: string,
 ): Step {
   const method = methodOf(content, id);
+  const sources = sourcesHere(state, method.sources);
   if (!method.someoneThere) {
-    return { kind: "find-out", method: id, sources: method.sources };
+    return { kind: "find-out", method: id, sources };
   }
-  const there = pick(state.rng, method.sources);
+  const there = pick(state.rng, sources);
   state.rng = there.next;
   return { kind: "find-out", method: id, sources: [there.item] };
 }

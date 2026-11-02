@@ -51,10 +51,28 @@ export interface TruthOfRun {
     month: number;
     due: number;
     /** When it came out, and whether it could be traced to the player. */
-    cameOut: { month: number; onPlayer: boolean } | null;
+    cameOut: {
+      month: number;
+      onPlayer: boolean;
+      /** The whistleblower it came out through, if it was one. */
+      through?: string | undefined;
+    } | null;
   }[];
   /** What each Character has kept of what the player did. */
   memories: Memory[];
+  /** Believers who were burned enough to change. Never shown until the end. */
+  changes: Change[];
+}
+
+/** A Believer who changed: what into, when and why. */
+export interface Change {
+  character: string;
+  month: number;
+  from: Kind;
+  to: "practitioner" | "whistleblower" | "left";
+  why: string[];
+  /** Whether a whistleblower has acted on what they know. */
+  acted: boolean;
 }
 
 /** The true state of a run, as tests read it. */
@@ -113,6 +131,8 @@ export type Step =
       /** How the boss took it. Signs only: it never says the boss's kind. */
       reaction?: string | undefined;
       verdict?: string | undefined;
+      /** Shown as written, even naming someone who has gone. */
+      asWritten?: boolean | undefined;
     }
   | { kind: "move"; id: string }
   | { kind: "event"; id: string }
@@ -192,7 +212,7 @@ export interface State extends MonthRecord {
   /** The missed meetings' actions given so far, each of them once in a run. */
   actionsGiven: string[];
   /** What the player is told before anything else, as a month opens. */
-  noticesDue: { title: string; body: string }[];
+  noticesDue: { title: string; body: string; asWritten?: boolean }[];
   project: {
     real: string;
     reported: string;

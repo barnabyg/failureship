@@ -1,6 +1,6 @@
 import type { Condition, Content, Kind, Mood, SceneData } from "./content";
 import { YOU, type PowerMap } from "./deal";
-import { calledBy, sayPeople } from "./say";
+import { calledBy, capitalised, sayPeople } from "./say";
 import type { State, World } from "./state";
 import type { Person } from "./view";
 
@@ -158,15 +158,78 @@ export function matches(
   return condition.all.every((inner) => matches(state, content, inner, room));
 }
 
-/** The player's word on something, or a Deal, is offered once in a run. */
+/** Whether someone has left the company, which is for the rest of the run. */
+export function isGone(state: State, id: string): boolean {
+  return state.truth.changes.some((c) => c.character === id && c.to === "left");
+}
+
+/** Whether text names someone who has left, by name or by what text calls them. */
+export function mentionsGone(
+  state: State,
+  content: Content,
+  written: string,
+): boolean {
+  const lower = written.toLowerCase();
+  return content.characters.some(
+    (c) =>
+      isGone(state, c.id) &&
+      [c.name, c.called ?? c.name].some((n) => lower.includes(n.toLowerCase())),
+  );
+}
+
+/** Writes whoever covers for someone who left in place of them, in any text shown. */
+export function coverForGone<T>(state: State, content: Content, shown: T): T {
+  const gone = content.characters.filter((c) => isGone(state, c.id));
+  if (gone.length === 0) return shown;
+  const cover = (written: string) =>
+    gone.reduce((text, c) => {
+      const by = content.changing?.leaving[c.id]?.cover ?? c.name;
+      return [c.name, c.called ?? c.name].reduce(
+        (t, n) =>
+          t.replace(
+            new RegExp(n.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"), "gi"),
+            (found) =>
+              found[0] === found[0]?.toUpperCase() ? capitalised(by) : by,
+          ),
+        text,
+      );
+    }, written);
+  const walk = (value: unknown): unknown => {
+    if (typeof value === "string") return cover(value);
+    if (Array.isArray(value)) return value.map(walk);
+    if (typeof value === "object" && value !== null) {
+      return Object.fromEntries(
+        Object.entries(value).map(([key, inner]) => [key, walk(inner)]),
+      );
+    }
+    return value;
+  };
+  return walk(shown) as T;
+}
+
+/**
+ * The player's word on something, or a Deal, is offered once in a run, and nothing
+ * is offered that names someone who has left.
+ */
 export function optionsOnOffer<
-  T extends { promise?: string | undefined; deal?: string | undefined },
->(state: State, options: readonly T[]): T[] {
+  T extends {
+    label: string;
+    promise?: string | undefined;
+    deal?: string | undefined;
+  },
+>(state: State, content: Content, options: readonly T[]): T[] {
   return options.filter(
     (o) =>
       !state.promises.some((made) => made.id === o.promise) &&
-      !state.deals.some((made) => made.id === o.deal),
+      !state.deals.some((made) => made.id === o.deal) &&
+      !mentionsGone(state, content, o.label),
   );
+}
+
+/** The player has heard this of someone who is still here. */
+function isHeardOfSomeoneHere(state: State, fact: string): boolean {
+  const heard = heardAbout(state, fact);
+  return heard !== undefined && !isGone(state, heard.subject);
 }
 
 export function offeredOptions(
@@ -174,9 +237,9 @@ export function offeredOptions(
   content: Content,
   scene: SceneData,
 ) {
-  return optionsOnOffer(state, scene.options).filter(
+  return optionsOnOffer(state, content, scene.options).filter(
     (o) =>
-      (o.about === undefined || heardAbout(state, o.about) !== undefined) &&
+      (o.about === undefined || isHeardOfSomeoneHere(state, o.about)) &&
       matches(state, content, o.requires),
   );
 }
@@ -186,7 +249,11 @@ export function sceneData(state: State, world: World, id: string): SceneData {
   if (!scene) throw new Error(`Unknown Scene "${id}".`);
   const script =
     scene.script === undefined ? undefined : world.sceneScripts[scene.script];
-  return script ? script(scene, { powerMap: state.truth.powerMap }) : scene;
+  const shaped = script
+    ? script(scene, { powerMap: state.truth.powerMap })
+    : scene;
+  // Whoever has left is not in the room, and whoever covers for them never chairs.
+  return { ...shaped, cast: shaped.cast.filter((c) => !isGone(state, c)) };
 }
 
 /** Writes the dealt Characters into text that names parts in the Power Map. */
@@ -211,8 +278,21 @@ export function fillParts(
 export function actionsThisMonth(state: State, content: Content) {
   return content.actions.filter((a) => {
     const scene = content.scenes.find((s) => s.id === a.scene);
-    return inMonth(a, state.month) && (!scene || inMonth(scene, state.month));
+    const method = content.sources.methods.find((m) => m.id === a.findOut);
+    const nobodyThere =
+      method !== undefined && sourcesHere(state, method.sources).length === 0;
+    return (
+      inMonth(a, state.month) &&
+      (!scene || inMonth(scene, state.month)) &&
+      !nobodyThere &&
+      !mentionsGone(state, content, `${a.label} ${a.description}`)
+    );
   });
+}
+
+/** Who of these can still be asked. */
+export function sourcesHere(state: State, sources: readonly string[]) {
+  return sources.filter((s) => !isGone(state, s));
 }
 
 export function isAvailable(

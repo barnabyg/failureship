@@ -848,6 +848,60 @@ const deals = z.strictObject({
   ),
 });
 
+/** How a Believer burned enough changes, and what happens when someone leaves. */
+const changing = z.strictObject({
+  /** How much burning it takes. */
+  threshold: z.number().int().positive(),
+  /** What burns someone: something done to them directly, which they remember. */
+  burns: z.array(
+    z.strictObject({
+      /** The `about` of a memory, from news or `remembers`. */
+      about: id,
+      weight: z.number().int().positive(),
+      /** What the results screen says was done. */
+      why: text,
+      /** Which way it leans them, relative to the other burns. */
+      leans: z.strictObject({
+        practitioner: z.number().nonnegative(),
+        whistleblower: z.number().nonnegative(),
+        left: z.number().nonnegative(),
+      }),
+    }),
+  ),
+  /** What the results screen calls each change. */
+  became: z.strictObject({
+    practitioner: text,
+    whistleblower: text,
+    left: text,
+  }),
+  whistleblower: z.strictObject({
+    /** Shown beside what any Believer might show. Each says {who}. */
+    signs: z.array(
+      z.strictObject({
+        id,
+        text,
+        clue: text.optional(),
+        weight: z.number().positive(),
+      }),
+    ),
+    /** Why a risk came out through them, for the results screen. Says {who}. */
+    motive: text,
+    /** What they report if no hidden risk is waiting. The first that holds is sent. */
+    reports: z.array(z.strictObject({ when: condition.optional(), bill })),
+  }),
+  /** Who can leave, and what happens if they do. Anyone left out never leaves. */
+  leaving: z.record(
+    id,
+    z.strictObject({
+      /** What text calls whoever covers for them, in place of what it called them. */
+      cover: text,
+      notice,
+      sets,
+      project: projectChange,
+    }),
+  ),
+});
+
 /** What Characters believe of the player, and how that reaches them. */
 const reputation = z.strictObject({
   /** How far and how fast news goes along the Power Map's ties. */
@@ -928,6 +982,7 @@ export const contentSchema = z.strictObject({
   reputation: reputation.optional(),
   promises: promises.optional(),
   deals: deals.optional(),
+  changing: changing.optional(),
   /** What the results screen calls each family of Moves. */
   families: z
     .strictObject(
@@ -1091,6 +1146,7 @@ export function everyBill(content: Content): Bill[] {
     ...content.risks.flatMap((r) =>
       r.onSomeoneElse ? [r.onPlayer, r.onSomeoneElse] : [r.onPlayer],
     ),
+    ...(content.changing?.whistleblower.reports.map((r) => r.bill) ?? []),
   ];
 }
 

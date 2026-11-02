@@ -117,6 +117,33 @@ uses in a run. This is how a Practitioner boss turns on someone who shines.
 
 Buzzwords and their meanings. A choice's `learns` teaches one, and `hasBuzzword` reads it.
 
+## `changing.json`
+
+How a Believer burned enough changes. How to write it is in
+[Change what burns a Believer](../README.md#change-what-burns-a-believer) in the README.
+
+- `burns` are what burns someone: a memory with that `about`, from news or `remembers`, of something
+  done to them, whether in front of them or to them. Hearing of it second-hand does not burn. Each has
+  a `weight`, a `why` for the results screen, and `leans`, the weights for `practitioner`,
+  `whistleblower` and `left` that pick, by a seeded draw, what they become.
+- `threshold` is the total weight at which a Believer changes, checked as each month opens. Someone
+  changes once. Other kinds never change.
+- `became` is what the results screen calls each change.
+- `whistleblower.signs` say `{who}` and are shown, by `weight`, beside what any Believer of their
+  role might show. A `clue` makes the Notebook keep one. A month after changing, a whistleblower
+  brings out the first hidden risk still waiting, whatever its own route, or else sends the first of
+  `reports` whose `when` holds, a Bill as in [`threads.json`](#threadsjson). The last report needs no
+  `when`. `motive` says `{who}` and is what the results screen says of a risk they brought out.
+- `leaving` is keyed by Character. Only those listed can leave, and your boss and your boss's boss
+  cannot be. Each has the `cover` text uses for whoever stands in for them, the `notice` that says
+  they have gone, and optional `sets` and `project`.
+
+Someone who leaves comes off the Power Map, and whoever answered to them answers to whoever was above
+them. Scenes go on without them. Any option or action whose words name them, or Notification or Move
+from them, is no longer offered, and a Thread's outcome from them is passed over. A risk that would
+come out through them never does. Their open Promises and Deals lapse. If the report's `input` came
+from them, it is never late again.
+
 ## `characters.json`
 
 Job titles, roles, names, and who reports to whom on the Org Chart.

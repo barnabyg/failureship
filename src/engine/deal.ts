@@ -178,6 +178,21 @@ function nameOf(content: Content, id: string): string {
   return content.characters.find((c) => c.id === id)?.name ?? id;
 }
 
+/** Someone leaves, and whoever answered to them answers to whoever was above them. */
+export function leaveMap(map: PowerMap, id: string): PowerMap {
+  const lowered = lowerOnMap(map, id);
+  const above = lowered.influence.find((i) => i.over === id)?.who;
+  return {
+    ...lowered,
+    order: lowered.order.filter((o) => o !== id),
+    influence: lowered.influence
+      .filter((i) => i.over !== id)
+      .map((i) =>
+        i.who === id && above !== undefined ? { who: above, over: i.over } : i,
+      ),
+  };
+}
+
 /** Someone goes to the top, and whoever was there now answers to them. */
 export function raiseOnMap(map: PowerMap, id: string): PowerMap {
   const [top] = map.order;

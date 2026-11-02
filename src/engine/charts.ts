@@ -1,5 +1,6 @@
 import type { Content } from "./content";
 import { lowerOnMap, raiseOnMap } from "./deal";
+import { isGone } from "./reads";
 import type { State } from "./state";
 
 /** Who moves on the Org Chart, and who rises or falls on the Power Map. */
@@ -27,13 +28,20 @@ export function reshuffleCharts(
   content: Content,
   { reports, rises, falls }: Reshuffle,
 ): void {
-  for (const { character, to } of reports) {
+  const here = (id: string) => !isGone(state, id);
+  for (const { character, to } of reports.filter(
+    (r) => here(r.character) && here(r.to),
+  )) {
     const answersTo = (id: string | undefined): boolean =>
       id !== undefined &&
       (id === character || answersTo(managerOf(state, content, id)));
     if (!answersTo(to)) state.reportsTo[character] = to;
   }
   const { truth } = state;
-  for (const id of rises) truth.powerMap = raiseOnMap(truth.powerMap, id);
-  for (const id of falls) truth.powerMap = lowerOnMap(truth.powerMap, id);
+  for (const id of rises.filter(here)) {
+    truth.powerMap = raiseOnMap(truth.powerMap, id);
+  }
+  for (const id of falls.filter(here)) {
+    truth.powerMap = lowerOnMap(truth.powerMap, id);
+  }
 }

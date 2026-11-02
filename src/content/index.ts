@@ -3,6 +3,7 @@ import balance from "../../content/balance.json";
 import behaviours from "../../content/behaviours.json";
 import boss from "../../content/boss.json";
 import buzzwords from "../../content/buzzwords.json";
+import changing from "../../content/changing.json";
 import characters from "../../content/characters.json";
 import deals from "../../content/deals.json";
 import demands from "../../content/demands.json";
@@ -48,6 +49,7 @@ export const gameContent = parseContent({
   reputation,
   promises,
   deals,
+  changing,
   families,
   hiddenTruth,
   sources,
@@ -125,6 +127,7 @@ const panelSchema = z.strictObject(
       "promisesCount",
       "dealsHeading",
       "favoursHeading",
+      "resultsChangedHeading",
       "resultsDealsHeading",
       "resultsFavoursHeading",
       "resultsPromisesHeading",

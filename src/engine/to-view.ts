@@ -8,11 +8,13 @@ import {
 import {
   actionsThisMonth,
   costOf,
+  coverForGone,
   fillParts,
   fillSubject,
   inMonth,
   isAvailable,
   isDone,
+  isGone,
   matches,
   methodOf,
   offeredOptions,
@@ -65,7 +67,7 @@ export function legalChoices(state: State, world: World): Choice[] {
     case "find-out":
       return step.sources.flatMap((sourceId) =>
         content.characters
-          .filter((c) => c.id !== sourceId)
+          .filter((c) => c.id !== sourceId && !isGone(state, c.id))
           .map((c) => ({
             type: "find-out" as const,
             sourceId,
@@ -91,13 +93,15 @@ function notificationOptions(
   id: string,
 ): NotificationOption[] {
   const notification = everyNotification(content).find((n) => n.id === id);
-  return optionsOnOffer(state, notification?.options ?? []).map((o) => ({
-    id: o.id,
-    label: o.label,
-    costLabel: costLabel(content, o.cost),
-    affordable: costOf(content, o.cost) <= remaining(state, content),
-    stakes: o.stakes,
-  }));
+  return optionsOnOffer(state, content, notification?.options ?? []).map(
+    (o) => ({
+      id: o.id,
+      label: o.label,
+      costLabel: costLabel(content, o.cost),
+      affordable: costOf(content, o.cost) <= remaining(state, content),
+      stakes: o.stakes,
+    }),
+  );
 }
 
 function toSceneView(
@@ -133,7 +137,10 @@ function toSceneView(
     })),
     behaviours: shown.map(({ character, behaviour }) => {
       const who = calledBy(content, character);
-      const written = content.behaviours.find((b) => b.id === behaviour);
+      const written = [
+        ...content.behaviours,
+        ...(content.changing?.whistleblower.signs ?? []),
+      ].find((b) => b.id === behaviour);
       return {
         who,
         text: sayPeople(written?.text ?? "", { "{who}": who }),
@@ -183,8 +190,12 @@ function toStoryView(
 
 /** The formal hierarchy, the same in every deal until a Company Event moves it. */
 function toOrgChart(state: State, content: Content): ChartEntry[] {
-  return content.characters.map((c) => {
-    const manager = managerOf(state, content, c.id);
+  const here = content.characters.filter((c) => !isGone(state, c.id));
+  return here.map((c) => {
+    let manager = managerOf(state, content, c.id);
+    while (manager !== undefined && isGone(state, manager)) {
+      manager = managerOf(state, content, manager);
+    }
     return {
       name: c.name,
       title: c.title,
@@ -237,7 +248,9 @@ function toStepView(state: State, world: World): StepView {
           "{source}": calledBy(content, sources[0]?.id ?? ""),
         }),
         sources,
-        subjects: content.characters.map((c) => personOf(content, c.id)),
+        subjects: content.characters
+          .filter((c) => !isGone(state, c.id))
+          .map((c) => personOf(content, c.id)),
       };
     }
     case "claim": {
@@ -281,6 +294,14 @@ function toStepView(state: State, world: World): StepView {
     case "notice":
       return step;
   }
+}
+
+/** The step, with whoever covers for anyone who has gone written in their place. */
+function shownStep(state: State, world: World): StepView {
+  const step = toStepView(state, world);
+  const asWritten = state.step.kind === "notice" && state.step.asWritten;
+  if (step.kind === "results" || asWritten) return step;
+  return coverForGone(state, world.content, step);
 }
 
 function statusLabel(content: Content, id: string): string {
@@ -343,7 +364,7 @@ export function toView(state: State, world: World): PlayerView {
     hotspots: actionsThisMonth(state, content).map((a) =>
       toHotspot(state, content, a),
     ),
-    step: toStepView(state, world),
+    step: shownStep(state, world),
     hint: content.ui.hints[state.step.kind].replaceAll(
       "{actions}",
       actionsLabel,

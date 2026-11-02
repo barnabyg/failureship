@@ -209,6 +209,18 @@ function ResultsPanel({
           ))}
         </div>
       )}
+      {step.changed.length > 0 && (
+        <div className="callout" data-testid="results-changed">
+          <h3>{panelText.resultsChangedHeading}</h3>
+          {step.changed.map((row) => (
+            <p key={row.name} data-testid="result-changed">
+              <strong>{monthLabel(row.month)}. </strong>
+              {row.title}, {row.name}: {row.from}. {row.to}.{" "}
+              <span className="results-title">{row.why.join(" ")}</span>
+            </p>
+          ))}
+        </div>
+      )}
       {step.deals.length + step.favours.length > 0 && (
         <div className="callout" data-testid="results-deals">
           {step.deals.length > 0 && <h3>{panelText.resultsDealsHeading}</h3>}

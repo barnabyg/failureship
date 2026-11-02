@@ -1,4 +1,5 @@
 import { treatBoss } from "./boss";
+import { signsOfChange } from "./changes";
 import { behavioursOpenTo, type ClueVerdict, type Content } from "./content";
 import { applyOutcome, countMove } from "./outcome";
 import { replyToDeal } from "./deals";
@@ -35,11 +36,15 @@ export function openScene(state: State, world: World, id: string): Step {
     for (const character of cast) {
       const kind = state.truth.characters.find((c) => c.id === character)?.kind;
       if (kind === undefined) continue;
-      const chosen = pickWeighted(
-        state.rng,
-        behavioursOpenTo(content, character),
-        (b) => b.likelihood[kind],
-      );
+      // A changed Character's signs follow their new kind.
+      const open = [
+        ...behavioursOpenTo(content, character).map((b) => ({
+          id: b.id,
+          weight: b.likelihood[kind],
+        })),
+        ...signsOfChange(state, content, character),
+      ];
+      const chosen = pickWeighted(state.rng, open, (b) => b.weight);
       state.rng = chosen.next;
       shown.push({ character, behaviour: chosen.item.id });
     }
@@ -92,6 +97,15 @@ function noteScene(
     }
   }
   for (const { character, behaviour } of shown) {
+    const own = signsOfChange(state, content, character).find(
+      (s) => s.id === behaviour,
+    );
+    if (own?.clue !== undefined) {
+      note(
+        sayPeople(own.clue, { "{who}": calledBy(content, character) }),
+        "held",
+      );
+    }
     const written = content.behaviours.find((b) => b.id === behaviour);
     const kind = state.truth.characters.find((c) => c.id === character)?.kind;
     if (written?.clue === undefined || kind === undefined) continue;

@@ -171,6 +171,7 @@ format, the page shows what is wrong instead of the game.
 | `over-head.json`      | Going over your boss's head: the odds, the effects, the words and your boss's boss's signs                           |
 | `sources.json`        | Find Out: who can be asked, how each role talks, how reliable each kind is, and every claim                          |
 | `notebook.json`       | Events the Notebook keeps a clue of, and what each clue was worth                                                    |
+| `changing.json`       | What burns a Believer, how much it takes, what they can become, and who covers for anyone who leaves                 |
 | `characters.json`     | Job titles, roles, how text refers to each person, names, and who reports to whom on the Org Chart                   |
 | `hidden-truth.json`   | The rules of the deal: kinds, their weights, and the Hidden Facts                                                    |
 | `balance.json`        | Actions a month, months in a run, the cost of each choice, how often signs mislead and when the boss's opinion shows |
@@ -228,6 +229,22 @@ needing no code, add an item to `content/deals.json`:
 
 `favours.dealt` in the same file is how many favours are owed between Characters when a run is dealt.
 The player sees only the favours they are party to, at no cost. The results screen shows the rest.
+
+### Change what burns a Believer
+
+How the player treats people changes them. A Believer who is burned enough, by something done to them
+directly, becomes a Practitioner, a whistleblower, or leaves. Nobody else ever changes, and the player
+is not told: the results screen says who changed, from what to what, and why. In
+`content/changing.json`, needing no code:
+
+- `burns` lists what burns someone, by the `about` of what they remember, with its `weight` and
+  which way it `leans` them. `threshold` is how much it takes.
+- `whistleblower.signs` are shown beside what any Believer shows. A whistleblower brings out a hidden
+  risk if one is waiting, or else sends the first of `reports` that holds.
+- `leaving` says who can leave. Anyone left out never does, and neither of your bosses can, until
+  vacancies exist. Someone who leaves is gone for the rest of the run: they are left out of Scenes,
+  the charts and Find Out, nothing arrives from them and no choice names them, their Promises and
+  Deals lapse, and running text calls whoever covers for them by their `cover`.
 
 ### Write a Company Event
 
