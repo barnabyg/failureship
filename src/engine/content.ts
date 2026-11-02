@@ -934,6 +934,37 @@ const gauge = z.strictObject({
   ),
 });
 
+/**
+ * How the player would fare on paper if a vacancy arose, from 0 to 100. It reads
+ * only the official record: the flags named here, the Project's reported status
+ * and a Final Warning. It decides nothing, and the player never sees its number.
+ */
+const standing = z.strictObject({
+  label: text,
+  /** What the bar is, said beside it. */
+  title: text,
+  start: z.number().int().min(0).max(100),
+  /** What each reported status of the Project adds, for as long as it stands. */
+  reported: z.record(id, z.number().int()),
+  /** The most it can be once the player is on a Final Warning. */
+  finalWarning: z.number().int().min(0).max(100),
+  /** Each from where it starts, in order from 0. */
+  bands: z
+    .array(
+      z.strictObject({
+        from: z.number().int().min(0).max(100),
+        label: text,
+        /** What the results screen says of ending in it. */
+        onPaper: text,
+      }),
+    )
+    .min(1),
+  /** What each time a flag is set adds. Only flags the player's choices set in plain view. */
+  deeds: z.array(z.strictObject({ flag: id, by: z.number().int() })),
+  /** Who really holds influence over the boss's seat, at the end. Says {who}. */
+  decides: text,
+});
+
 /** What Characters believe of the player, and how that reaches them. */
 const reputation = z.strictObject({
   /** How far and how fast news goes along the Power Map's ties. */
@@ -1016,6 +1047,7 @@ export const contentSchema = z.strictObject({
   deals: deals.optional(),
   changing: changing.optional(),
   gauges: z.array(gauge).optional(),
+  standing: standing.optional(),
   /** What the results screen calls each family of Moves. */
   families: z
     .strictObject(

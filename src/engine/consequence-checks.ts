@@ -4,6 +4,7 @@ import {
   everyNotification,
   type Content,
 } from "./content";
+import { flagsSetByHiddenResults } from "./truth-checks";
 
 /** Every flag anything can set, which is all that a Thread can start from. */
 function flagsThatCanBeSet(content: Content): Set<string> {
@@ -239,6 +240,61 @@ export function findBrokenGauges(content: Content): string[] {
         );
       }
     }
+  }
+  return problems;
+}
+
+/**
+ * Official standing must read only the official record, so each flag it names is
+ * set by the player's own choices in plain view, and never by a hidden result.
+ */
+export function findBrokenStanding(content: Content): string[] {
+  const written = content.standing;
+  if (!written) return [];
+  const problems: string[] = [];
+  const hidden = flagsSetByHiddenResults(content);
+  const chosen = new Set([
+    ...content.actions.flatMap((a) => a.sets),
+    ...everyNotification(content).flatMap((n) =>
+      n.options.flatMap((o) => o.sets),
+    ),
+    ...content.scenes.flatMap((s) =>
+      s.options.flatMap((o) => o.results.flatMap((r) => r.sets)),
+    ),
+  ]);
+  for (const { flag } of written.deeds) {
+    if (!chosen.has(flag) || hidden.has(flag)) {
+      problems.push(
+        `Official standing reads "${flag}", which no choice of the player's sets in plain view.`,
+      );
+    }
+  }
+  const statuses = content.project.statuses.map((s) => s.id);
+  for (const status of statuses) {
+    if (!(status in written.reported)) {
+      problems.push(
+        `Official standing says nothing of reported status "${status}".`,
+      );
+    }
+  }
+  for (const status of Object.keys(written.reported)) {
+    if (!statuses.includes(status)) {
+      problems.push(`Official standing names unknown status "${status}".`);
+    }
+  }
+  const starts = written.bands.map((b) => b.from);
+  if (
+    starts[0] !== 0 ||
+    starts.some((from, i) => i > 0 && from <= (starts[i - 1] ?? 0))
+  ) {
+    problems.push(
+      "Official standing's bands must start at 0 and go up from there.",
+    );
+  }
+  if (starts.length > 1 && written.finalWarning >= (starts[1] ?? 0)) {
+    problems.push(
+      "Official standing on a Final Warning must be within its first band.",
+    );
   }
   return problems;
 }

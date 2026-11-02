@@ -16,6 +16,7 @@ import { Modal } from "./Modal";
 import { Notebook, monthLabel } from "./Notebook";
 import { StepPanel } from "./panels";
 import { RunControls } from "./RunControls";
+import { StandingBar } from "./StandingBar";
 import { readSavedRun, writeSavedRun } from "./saved-run";
 import { TowerStage } from "./TowerStage";
 
@@ -293,6 +294,14 @@ export function App() {
             <div className="status-warning" data-testid="final-warning">
               <dt>{panelText.standingHeading}</dt>
               <dd>{panelText.finalWarningLabel}</dd>
+            </div>
+          )}
+          {view.standing && (
+            <div className="status-standing" title={view.standing.title}>
+              <dt>{view.standing.label}</dt>
+              <dd>
+                <StandingBar standing={view.standing} testId="standing" />
+              </dd>
             </div>
           )}
           {view.gauges.map((gauge) => (

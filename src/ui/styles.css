@@ -691,6 +691,29 @@ body {
   color: #b3261e;
 }
 
+/* Official standing: a bar from red to green with a marker, and no number. */
+.standing-bar {
+  position: relative;
+  display: inline-block;
+  width: 88px;
+  height: 10px;
+  vertical-align: middle;
+  border: 1px solid var(--rule);
+  border-radius: 5px;
+  background: linear-gradient(to right, #c0392b, #d9932b 50%, #3f8f4f);
+}
+
+.standing-marker {
+  position: absolute;
+  top: -3px;
+  width: 4px;
+  height: 14px;
+  transform: translateX(-50%);
+  border-radius: 2px;
+  background: var(--ink);
+  box-shadow: 0 0 0 1px var(--paper);
+}
+
 .status-warning dd {
   color: #b3261e;
   font-weight: 700;

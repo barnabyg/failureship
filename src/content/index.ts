@@ -25,6 +25,7 @@ import reputation from "../../content/reputation.json";
 import risks from "../../content/risks.json";
 import scenes from "../../content/scenes.json";
 import sources from "../../content/sources.json";
+import standing from "../../content/standing.json";
 import threads from "../../content/threads.json";
 import ui from "../../content/ui.json";
 import { z } from "zod";
@@ -52,6 +53,7 @@ export const gameContent = parseContent({
   deals,
   changing,
   gauges,
+  standing,
   families,
   hiddenTruth,
   sources,
@@ -144,6 +146,7 @@ const panelSchema = z.strictObject(
       "gaugesHeading",
       "gaugesNoMoves",
       "milestonesHeading",
+      "resultsStandingHeading",
       "resultsMilestonesHeading",
       "resultsNoMilestones",
       "resultsChangedHeading",

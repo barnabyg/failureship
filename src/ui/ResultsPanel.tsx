@@ -3,6 +3,7 @@ import type { ChartEntry, StepView } from "../engine";
 import { Chart } from "./Chart";
 import { monthLabel } from "./Notebook";
 import { Panel } from "./Panel";
+import { StandingBar } from "./StandingBar";
 
 export function ResultsPanel({
   step,
@@ -18,6 +19,23 @@ export function ResultsPanel({
         <p className="callout" data-testid="results-ending">
           {step.ending.text}
         </p>
+      )}
+      {step.standing && (
+        <div data-testid="result-standing">
+          <h3>{panelText.resultsStandingHeading}</h3>
+          <p>
+            <strong>{step.standing.label}: </strong>
+            <StandingBar
+              standing={step.standing}
+              testId="result-standing-bar"
+            />{" "}
+            {step.standing.band}. {step.standing.onPaper}
+          </p>
+          <p>
+            {step.standing.decides}
+            {step.standing.believes !== null && ` ${step.standing.believes}.`}
+          </p>
+        </div>
       )}
       <h3>{panelText.resultsMilestonesHeading}</h3>
       {step.milestones.length === 0 ? (

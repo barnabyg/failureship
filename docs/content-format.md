@@ -465,6 +465,27 @@ so the results screen is the only place that says.
 
 `influentialCount` is how many people, from the top of the Power Map, count as influential.
 
+## `standing.json`
+
+Official standing: how the player would fare on paper if a vacancy arose. It is shown at every
+step as a bar from red through amber to green, with no number, and it decides nothing.
+
+It runs from 0 to 100, starting at `start`. Each time a flag in `deeds` is set, it moves `by`
+that much, and the Project's current reported status adds what `reported` gives it, which must
+name every status in [`project.json`](#projectjson). On a Final Warning it can be no higher
+than `finalWarning`, which must be within the first band.
+
+`bands` start `from` 0 and go up. Each has the `label` said for the bar, and `onPaper`, what the
+results screen says of ending in it. There, `decides` says `{who}`: whoever holds influence over
+your boss on the Power Map, or your boss if nobody does, followed by what they ended up believing
+of you, from [`reputation.json`](#reputationjson). Until vacancies exist, that is who really decides.
+
+It reads only the official record. A flag in `deeds` must be set by an action, a Notification's
+answer or a Scene's result, and never by a result, Move, Bill or event that reads the hidden
+truth, or the bar would give the Power Map away. One that is not is refused.
+`label` and `title` are said beside the bar. The results screen's heading is
+`resultsStandingHeading` in [`ui.json`](#uijson).
+
 ## `threads.json`
 
 A Thread runs from something the player did to the point, months later, where it pays off or
