@@ -90,7 +90,7 @@ describe("the boss's opinion", () => {
     expect(differs.length).toBeGreaterThan(0);
   });
 
-  it("stays deniable: a sign can come from more than one opinion", () => {
+  it("stays deniable: a sign can come from more than one mood", () => {
     const content = parseContent(bossFixtureRaw());
     const seen = new Set(
       Array.from(
@@ -175,14 +175,14 @@ describe("the boss's signs in content", () => {
   type RawSign = ReturnType<typeof bossFixtureRaw>["boss"]["signs"][number];
   const breaks: [string, (s: RawSign) => void, RegExp][] = [
     [
-      "only one opinion",
+      "only one mood",
       (s) => {
         s.likelihood = { warm: 3, neutral: 0, cold: 0 };
       },
-      /only one opinion/,
+      /only one mood/,
     ],
     [
-      "the same likelihood from every opinion",
+      "the same likelihood from every mood",
       (s) => {
         s.likelihood = { warm: 2, neutral: 2, cold: 2 };
       },
@@ -213,7 +213,7 @@ describe("the boss's signs in content", () => {
     expect(() => parseContent(raw)).toThrow(/nobody/);
   });
 
-  it("rejects signs that leave an opinion with nothing to show", () => {
+  it("rejects signs that leave a mood with nothing to show", () => {
     const raw = bossFixtureRaw();
     for (const sign of raw.boss.signs) sign.likelihood.cold = 0;
 

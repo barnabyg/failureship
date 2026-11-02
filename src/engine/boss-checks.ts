@@ -12,7 +12,7 @@ import {
 /** The boss's signs must point somewhere without ever settling it. */
 export function findBrokenBossSigns(content: Content): string[] {
   const { character, signs } = content.boss;
-  const problems = findBrokenOpinionSigns(signs, "Boss sign");
+  const problems = findBrokenMoodSigns(signs, "Boss sign");
   if (!content.characters.some((c) => c.id === character)) {
     problems.push(`The boss names unknown Character "${character}".`);
   }
@@ -23,7 +23,7 @@ export function findBrokenBossSigns(content: Content): string[] {
 export function findBrokenOverHead(content: Content): string[] {
   const { overHead: written } = content;
   if (!written) return [];
-  const problems = findBrokenOpinionSigns(written.signs, "Over-head sign");
+  const problems = findBrokenMoodSigns(written.signs, "Over-head sign");
   if (!content.characters.some((c) => c.id === written.character)) {
     problems.push(`Over-head names unknown Character "${written.character}".`);
   }
@@ -62,7 +62,7 @@ export function findBrokenOverHead(content: Content): string[] {
   return problems;
 }
 
-function findBrokenOpinionSigns(
+function findBrokenMoodSigns(
   signs: Content["boss"]["signs"],
   label: string,
 ): string[] {
@@ -74,16 +74,16 @@ function findBrokenOpinionSigns(
     }
     const likelihoods = Object.values(sign.likelihood);
     if (likelihoods.filter((l) => l > 0).length < 2) {
-      problems.push(`${owner} can come from only one opinion.`);
+      problems.push(`${owner} can come from only one mood.`);
     }
     if (new Set(likelihoods).size === 1) {
-      problems.push(`${owner} gives no evidence: every opinion is as likely.`);
+      problems.push(`${owner} gives no evidence: every mood is as likely.`);
     }
   }
   if (signs.length > 0) {
     for (const mood of MOODS) {
       if (signs.every((s) => s.likelihood[mood] === 0)) {
-        problems.push(`No boss sign can show a ${mood} opinion.`);
+        problems.push(`No boss sign can show a ${mood} mood.`);
       }
     }
   }
@@ -168,7 +168,7 @@ export function findBrokenReputation(
 ): string[] {
   const written = content.reputation;
   const problems = written
-    ? findBrokenOpinionSigns(
+    ? findBrokenMoodSigns(
         written.signs.map((s) => ({
           ...s,
           text: s.text.replaceAll("{who}", ""),

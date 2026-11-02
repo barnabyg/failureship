@@ -302,6 +302,6 @@ describe("going over your boss's head", () => {
     if (!sign) throw new Error("No sign.");
     sign.likelihood = { warm: 1, neutral: 0, cold: 0 };
 
-    expect(() => parseContent(raw)).toThrow(/only one opinion/);
+    expect(() => parseContent(raw)).toThrow(/only one mood/);
   });
 });
