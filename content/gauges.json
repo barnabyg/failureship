@@ -22,5 +22,29 @@
         "body": "Nothing that comes back on you has ever stayed. Somebody in Finance has started a sweepstake on it. You have earned a Milestone: Non-stick, dishwasher safe."
       }
     ]
+  },
+  {
+    "id": "fawning",
+    "label": "Fawning",
+    "start": 30,
+    "min": 0,
+    "max": 100,
+    "milestones": [
+      {
+        "at": 60,
+        "title": "Team player",
+        "body": "Some sucking up paid off, and somebody upstairs said your name. A colleague says you are a real team player, and looks at your boss while saying it. You have earned a Milestone: Team player."
+      },
+      {
+        "at": 70,
+        "title": "Professional nodder",
+        "body": "You agreed with something before it had finished being said. Your neck has started to ache at about the time of the Monthly Alignment Meeting. You have earned a Milestone: Professional nodder."
+      },
+      {
+        "at": 85,
+        "title": "Human footstool",
+        "body": "Your boss rests a cup of coffee on you without noticing, and you thank them for the opportunity. The Office Co-ordinator has added you to the inventory, under furniture. You have earned a Milestone: Human footstool."
+      }
+    ]
   }
 ]
