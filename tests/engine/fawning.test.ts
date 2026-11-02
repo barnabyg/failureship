@@ -7,7 +7,10 @@ import {
   type Run,
 } from "../../src/engine";
 import { readHiddenTruth } from "../../src/engine/hidden-truth";
-import { dependsOnHiddenTruth } from "../../src/engine/truth-checks";
+import {
+  dependsOnHiddenTruth,
+  flagsSetByHiddenResults,
+} from "../../src/engine/truth-checks";
 import { plainChoice } from "../../src/ui/later-month";
 
 const fawning = (view: PlayerView) =>
@@ -102,6 +105,30 @@ describe("Fawning", () => {
     expect([...(all?.values ?? [])]).toEqual([55]);
   });
 
+  it("earns its Milestones, told as they come and shown on the results screen", () => {
+    const run = startRun({ seed: 1, content: gameContent });
+    const views = playOut(run, [
+      "back-head",
+      "take-the-blame",
+      "sit-by-head",
+      "credit-head",
+      "plain",
+      "bonus-boss",
+      "underspend-chairs",
+    ]);
+    const titles = ["Team player", "Professional nodder", "Human footstool"];
+
+    const told = views.flatMap((v) =>
+      v.step.kind === "notice" ? [v.step.title] : [],
+    );
+    for (const title of titles) expect(told).toContain(title);
+    const end = views.at(-1)?.step;
+    if (end?.kind !== "results") throw new Error("No results.");
+    expect(end.milestones.map((m) => m.title)).toEqual(
+      expect.arrayContaining(titles),
+    );
+  });
+
   it("starts only from choices aimed at a manager, and never reads the hidden truth", () => {
     const aimedAtAManager = new Set([
       "back-head",
@@ -125,6 +152,17 @@ describe("Fawning", () => {
         n.options.map((o) => ({ id: o.id, sets: [o.sets] })),
       ),
     ];
+    // A flag that every result of its choice sets says nothing of which way it went.
+    const everyResultSets = new Set(
+      options.flatMap((o) =>
+        o.sets.reduce((all, sets) => all.filter((f) => sets.includes(f))),
+      ),
+    );
+    const hidden = new Set(
+      [...flagsSetByHiddenResults(gameContent)].filter(
+        (flag) => !everyResultSets.has(flag),
+      ),
+    );
     const people = gameContent.characters.flatMap((c) => [
       c.name.toLowerCase(),
       (c.called ?? c.name).toLowerCase(),
@@ -145,7 +183,9 @@ describe("Fawning", () => {
       }
       for (const outcome of thread.outcomes) {
         if (outcome.when) {
-          expect(dependsOnHiddenTruth(outcome.when), thread.id).toBe(false);
+          expect(dependsOnHiddenTruth(outcome.when, hidden), thread.id).toBe(
+            false,
+          );
         }
         // A Bill through someone who has left would not arrive, and leaving is dealt.
         const from = (outcome.bill.from ?? "").toLowerCase();
