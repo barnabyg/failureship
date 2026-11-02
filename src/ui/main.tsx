@@ -3,6 +3,7 @@ import { createRoot } from "react-dom/client";
 import { panelText } from "../content";
 import { App } from "./App";
 import "./styles.css";
+import "./intranet.css";
 
 const root = document.getElementById("root");
 if (!root) throw new Error("The page has no #root element.");

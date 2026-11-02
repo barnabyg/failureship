@@ -1,0 +1,365 @@
+/*
+ * The look of the panels that arrive like Notifications, as e-mails on the
+ * company intranet, and of the Monthly Summary, as the staff newsletter. Only
+ * panels with a `data-kind` take it, from `sent` or `issue` in Panel.tsx.
+ */
+
+.mail-row {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+}
+
+.happened-stamp {
+  position: relative;
+  display: block;
+  height: 0;
+}
+
+/* An e-mail on the company intranet: white, with a letterhead and a mail header. */
+.panel[data-kind] {
+  overflow-x: hidden;
+  padding: 0 20px 14px;
+  border: 1px solid #c8d1dc;
+  border-radius: 8px;
+  background: #ffffff;
+  color: #1d2733;
+  font-family: "Segoe UI", Calibri, Arial, sans-serif;
+  font-size: 0.9375rem;
+}
+
+.letterhead {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 0 -20px;
+  padding: 8px 20px;
+  background: linear-gradient(90deg, #0b3d6e, #1565a8);
+  box-shadow: inset 0 -3px 0 #f39c12;
+  color: #ffffff;
+}
+
+.letterhead-company {
+  font-size: 0.9375rem;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+}
+
+.letterhead-place {
+  margin-left: auto;
+  font-size: 0.75rem;
+  opacity: 0.85;
+}
+
+.mailhead {
+  position: relative;
+  margin: 0 -20px 14px;
+  padding: 10px 20px;
+  border-bottom: 1px solid #d9e1ea;
+  background: #f3f6fa;
+  font-size: 0.875rem;
+}
+
+.panel .mailhead p {
+  margin: 0 0 2px;
+  color: #1d2733;
+  font-size: 0.875rem;
+}
+
+.mailhead .mail-label {
+  flex: none;
+  width: 62px;
+  color: #5b6b7d;
+}
+
+.mail-subject h2 {
+  margin: 2px 0 0;
+  padding-right: 130px;
+  color: #0b3d6e;
+  font-size: 1.125rem;
+}
+
+/* A rubber stamp, a little crooked. */
+.stamp {
+  position: absolute;
+  top: 12px;
+  right: 18px;
+  padding: 2px 10px;
+  border: 3px double #c0392b;
+  border-radius: 4px;
+  color: #c0392b;
+  font:
+    900 1.0625rem/1.2 "Arial Black",
+    Impact,
+    sans-serif;
+  letter-spacing: 0.14em;
+  transform: rotate(-9deg);
+  opacity: 0.85;
+  /* Ink that soaks unevenly into the paper. */
+  mask-image: repeating-radial-gradient(
+    circle at 37% 61%,
+    #000 0 1.6px,
+    rgb(0 0 0 / 72%) 1.6px 2.4px,
+    #000 2.4px 3.5px
+  );
+  mix-blend-mode: multiply;
+  pointer-events: none;
+}
+
+.panel[data-kind] .options {
+  gap: 8px;
+}
+
+.panel[data-kind] button.option {
+  padding: 7px 12px;
+  border: 1px solid #b8c6d6;
+  border-radius: 3px;
+  background: #ffffff;
+  box-shadow: 0 1px 0 #d9e1ea;
+  color: #0b3d6e;
+}
+
+.panel[data-kind] button.option > span:first-child::before {
+  content: "\21A9";
+  margin-right: 8px;
+  color: #7b8fa6;
+}
+
+.panel[data-kind] button.option:hover:enabled,
+.panel[data-kind] button.option:focus-visible {
+  border-color: #1565a8;
+  background: #e8f1fb;
+  color: #0b3d6e;
+}
+
+.panel[data-kind] .option-cost {
+  align-self: center;
+  white-space: nowrap;
+  padding: 0 8px;
+  border-radius: 999px;
+  background: #eef2f6;
+  color: #5b6b7d;
+}
+
+.panel[data-kind] button.primary {
+  border-color: #1565a8;
+  border-radius: 3px;
+  background: #1565a8;
+}
+
+.panel[data-kind] .signs,
+.panel[data-kind] .callout {
+  border-left-color: #2fa3d8;
+  background: #eef6fc;
+}
+
+.mail-disclaimer {
+  margin: 14px 0 0;
+  padding-top: 8px;
+  border-top: 1px solid #e3e8ee;
+  color: #3f8f4f;
+  font-size: 0.75rem;
+  font-style: italic;
+}
+
+.panel .mail-disclaimer {
+  margin-bottom: 0;
+}
+
+.mail-disclaimer::before {
+  content: "";
+  display: inline-block;
+  width: 9px;
+  height: 9px;
+  margin-right: 6px;
+  border-radius: 0 9px;
+  background: #4caf50;
+}
+
+/* The Monthly Summary as a glossy staff newsletter. */
+
+.panel[data-kind="story"] {
+  width: min(720px, calc(100% - 24px));
+  background: #fffdf8;
+  font-family: Georgia, "Times New Roman", serif;
+}
+
+.masthead {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin: 0 -20px;
+  padding: 12px 20px;
+  background: linear-gradient(115deg, #0b3d6e 0%, #1565a8 55%, #2fa3d8 100%);
+  box-shadow: inset 0 -4px 0 #f39c12;
+  color: #ffffff;
+  overflow: hidden;
+}
+
+.masthead::after {
+  content: "";
+  position: absolute;
+  inset: 0 0 50%;
+  background: linear-gradient(rgb(255 255 255 / 28%), rgb(255 255 255 / 4%));
+  pointer-events: none;
+}
+
+.panel .masthead-name {
+  margin: 0;
+  font:
+    italic 700 2.25rem/1 Georgia,
+    "Times New Roman",
+    serif;
+  letter-spacing: -0.01em;
+  text-shadow: 0 2px 0 rgb(0 0 0 / 25%);
+}
+
+.panel .masthead-sub {
+  margin: 4px 0 0;
+  font-family: "Segoe UI", Arial, sans-serif;
+  font-size: 0.6875rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  opacity: 0.9;
+}
+
+.masthead-issue {
+  display: grid;
+  place-items: center;
+  align-content: center;
+  width: 62px;
+  height: 62px;
+  margin-left: auto;
+  border-radius: 50%;
+  background: #f5c518;
+  box-shadow: 0 3px 8px rgb(0 0 0 / 30%);
+  color: #0b3d6e;
+  font:
+    900 1.5rem/1 "Arial Black",
+    Arial,
+    sans-serif;
+  transform: rotate(10deg);
+}
+
+.masthead-issue small {
+  font-family: "Segoe UI", Arial, sans-serif;
+  font-size: 0.625rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.panel[data-kind="story"] h2 {
+  margin: 12px 0 10px;
+  padding-bottom: 6px;
+  border-bottom: 3px solid #0b3d6e;
+  color: #0b3d6e;
+  font-size: 1.625rem;
+  line-height: 1.15;
+}
+
+.panel[data-kind="story"] .story-reported {
+  column-count: 2;
+  column-gap: 24px;
+  column-rule: 1px solid #e3dccb;
+  margin-bottom: 12px;
+  font-size: 0.9375rem;
+  line-height: 1.45;
+}
+
+.panel[data-kind="story"] .story-reported h3 {
+  column-span: all;
+  margin-bottom: 6px;
+  color: #c0392b;
+  font-family: "Segoe UI", Arial, sans-serif;
+}
+
+.panel[data-kind="story"] .story-reported p {
+  margin-bottom: 8px;
+  break-inside: avoid;
+}
+
+.panel[data-kind="story"] .story-reported p:first-of-type::first-letter {
+  float: left;
+  margin: 4px 6px 0 0;
+  color: #1565a8;
+  font-size: 3.1em;
+  font-weight: 700;
+  line-height: 0.8;
+}
+
+.panel[data-kind="story"] .signs {
+  font-family: "Segoe UI", Arial, sans-serif;
+}
+
+.happened-stamp .stamp {
+  top: 8px;
+  z-index: 1;
+  border-color: #f5c518;
+  color: #f5c518;
+  mix-blend-mode: normal;
+}
+
+.panel[data-kind="story"] .story-happened {
+  padding: 12px 16px;
+  border: none;
+  border-radius: 4px;
+  background: #1d2733;
+  color: #e8edf2;
+  font-family: "Segoe UI", Arial, sans-serif;
+  font-size: 0.875rem;
+}
+
+.panel[data-kind="story"] .story-happened h3 {
+  color: #f5c518;
+}
+
+.panel[data-kind="story"] .story-happened p {
+  margin-bottom: 6px;
+}
+
+.panel[data-kind="story"] button.primary {
+  font-family: "Segoe UI", Arial, sans-serif;
+}
+
+/* On a narrow screen the stamp joins the header, and the newsletter is one column. */
+@media (max-width: 600px) {
+  .mail-subject h2 {
+    padding-right: 0;
+  }
+
+  .mailhead .stamp {
+    position: static;
+    display: inline-block;
+    margin-top: 8px;
+  }
+
+  .letterhead-place {
+    display: none;
+  }
+
+  .panel .masthead-name {
+    font-size: 1.625rem;
+  }
+
+  .masthead-issue {
+    width: 48px;
+    height: 48px;
+    font-size: 1.125rem;
+  }
+
+  .panel[data-kind="story"] .story-reported {
+    column-count: 1;
+  }
+
+  .happened-stamp .stamp {
+    right: 8px;
+    font-size: 0.8125rem;
+  }
+
+  .panel[data-kind="story"] .story-happened h3 {
+    padding-right: 130px;
+  }
+}
