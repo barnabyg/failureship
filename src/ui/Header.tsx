@@ -165,7 +165,7 @@ function ProjectStatus(props: {
   );
 }
 
-/** The Gauges, each opening the list of what moved it. */
+/** The Gauges, whose values each open the list of what moved them. */
 function Gauges({
   gauges,
   onOpen,
