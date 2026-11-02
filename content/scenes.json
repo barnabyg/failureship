@@ -34,13 +34,17 @@
             },
             "body": "Your boss's boss does not look at you. The next agenda has your name on it, spelled correctly, and people start holding doors.",
             "headOpinion": 1,
-            "sets": ["backed-holder"],
+            "sets": ["backed-holder", "agreed-with-head", "agreed-up-the-line"],
             "approach": "over-head"
           },
           {
             "body": "Your boss's boss thanks you, using the name of someone who left in March. Several people make a note of that, and of you.",
             "headOpinion": 1,
-            "sets": ["backed-wrong-person"],
+            "sets": [
+              "backed-wrong-person",
+              "agreed-with-head",
+              "agreed-up-the-line"
+            ],
             "approach": "over-head"
           }
         ]
@@ -55,12 +59,16 @@
               "holderIs": "boss"
             },
             "body": "You agree warmly with your boss. People look up, and two of them write something down. It seems that this was the thing to agree with.",
-            "sets": ["backed-holder"],
+            "sets": ["backed-holder", "agreed-with-boss", "agreed-up-the-line"],
             "approach": "flatter"
           },
           {
             "body": "You agree warmly with your boss. Nobody else looks up. Your agreement with your official boss has been noted by your official boss.",
-            "sets": ["backed-wrong-person"],
+            "sets": [
+              "backed-wrong-person",
+              "agreed-with-boss",
+              "agreed-up-the-line"
+            ],
             "approach": "flatter"
           }
         ]
@@ -449,13 +457,13 @@
             },
             "body": "Your boss's boss glances at you when the screen freezes, and shrugs, as one shrugs to a colleague. You have not been shrugged at by this floor before.",
             "headOpinion": 1,
-            "sets": ["backed-holder"],
+            "sets": ["backed-holder", "sat-by-head", "sat-by-a-manager"],
             "opinion": -1
           },
           {
             "body": "You nod throughout. Your boss's boss is looking at a phone. You have nodded at a video of a stranger for forty minutes, and been seen doing it.",
             "headOpinion": 1,
-            "sets": ["backed-wrong-person"],
+            "sets": ["backed-wrong-person", "sat-by-head", "sat-by-a-manager"],
             "opinion": -1
           }
         ]
@@ -470,12 +478,12 @@
               "holderIs": "boss"
             },
             "body": "Your boss laughs at the joke about synergy. You laugh too. By the afternoon people are asking you what your boss thinks.",
-            "sets": ["backed-holder"],
+            "sets": ["backed-holder", "sat-by-boss", "sat-by-a-manager"],
             "approach": "flatter"
           },
           {
             "body": "Your boss laughs at the joke about synergy. You laugh too. You are now, officially, one of your boss's people. There do not seem to be others.",
-            "sets": ["backed-wrong-person"],
+            "sets": ["backed-wrong-person", "sat-by-boss", "sat-by-a-manager"],
             "approach": "flatter"
           }
         ]
@@ -801,12 +809,16 @@
               "holderIs": "boss"
             },
             "body": "Several people turn to look at your boss, then write something down. It appears that you have said the right name.",
-            "sets": ["backed-holder"],
+            "sets": ["backed-holder", "credited-boss", "gave-credit-upstairs"],
             "approach": "flatter"
           },
           {
             "body": "You say it clearly, and it is minuted. Nobody else in the room seems to have thought that this was in question.",
-            "sets": ["backed-wrong-person"],
+            "sets": [
+              "backed-wrong-person",
+              "credited-boss",
+              "gave-credit-upstairs"
+            ],
             "approach": "flatter"
           }
         ]
@@ -822,13 +834,17 @@
             },
             "body": "Your boss's boss does not acknowledge it, in the way of someone who has heard it before and expects to again. The next slide is taken more quickly.",
             "headOpinion": 1,
-            "sets": ["backed-holder"],
+            "sets": ["backed-holder", "credited-head", "gave-credit-upstairs"],
             "approach": "over-head"
           },
           {
             "body": "Your boss's boss looks up, puzzled, and says that it is a team effort. You have gone a long way round to say nothing.",
             "headOpinion": 1,
-            "sets": ["backed-wrong-person"],
+            "sets": [
+              "backed-wrong-person",
+              "credited-head",
+              "gave-credit-upstairs"
+            ],
             "approach": "over-head"
           }
         ]

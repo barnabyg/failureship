@@ -20,6 +20,7 @@ test("nine different months, all the way to the results screen", async ({
       await expect(page.getByTestId("month")).toContainText("5 of 9");
     }
     await expect(page.getByTestId("gauge-teflon")).toBeVisible();
+    await expect(page.getByTestId("gauge-fawning")).toBeVisible();
     notifications.add(await page.getByTestId("panel-notification").innerText());
     await answerAnyNotification(page);
     await expect(page.getByTestId("hint")).not.toBeEmpty();

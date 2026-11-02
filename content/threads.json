@@ -320,5 +320,313 @@
         ]
       }
     ]
+  },
+  {
+    "id": "agreed-up-the-line",
+    "startedBy": "agreed-up-the-line",
+    "chance": 0.9,
+    "after": {
+      "min": 2,
+      "max": 3
+    },
+    "started": "In the Monthly Alignment Meeting, you agreed warmly with one of your managers.",
+    "outcomes": [
+      {
+        "when": {
+          "did": "agreed-with-head"
+        },
+        "playedOut": "Your boss's boss passed your warm agreement up a floor, as proof that the team was aligned, and it came back down with your name on it.",
+        "bill": {
+          "id": "relayed-from-the-head",
+          "as": "move",
+          "from": "From: Floor 2, copied to you",
+          "title": "FW: FW: FW: the view from the ground",
+          "body": "Your boss's boss has told Floor 2 that the team is fully aligned, and given you as the example. Floor 2 has replied with a thumbs-up, from someone whose title has the word Chief in it twice. You have printed it out, and you are not sure where to put it."
+        },
+        "gauges": [
+          {
+            "gauge": "fawning",
+            "by": 10,
+            "note": "Agreeing warmly with your boss's boss went up a floor, with your name on it."
+          }
+        ]
+      },
+      {
+        "playedOut": "Your boss repeated your warm agreement upstairs, as proof that they had their team behind them, and it came back down with your name on it.",
+        "bill": {
+          "id": "relayed-from-the-boss",
+          "as": "move",
+          "from": "From: Floor 2, copied to you",
+          "title": "RE: who is behind this?",
+          "body": "Your boss has told Floor 2 that the team is right behind them, and named you, as the team. Floor 2 has asked who you are. Your boss has replied with a photograph of you agreeing, which you did not know had been taken."
+        },
+        "gauges": [
+          {
+            "gauge": "fawning",
+            "by": 10,
+            "note": "Agreeing warmly with your boss went up a floor, with your name on it."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "both-sides",
+    "startedBy": "sat-by-a-manager",
+    "chance": 0.9,
+    "after": {
+      "min": 2,
+      "max": 3
+    },
+    "started": "At the Town Hall, you sat next to one of your managers and were seen agreeing with them.",
+    "outcomes": [
+      {
+        "when": {
+          "all": [
+            {
+              "did": "sat-by-head"
+            },
+            {
+              "did": "agreed-with-boss"
+            }
+          ]
+        },
+        "playedOut": "A colleague set your warm agreement with your boss beside your nodding at your boss's boss, who wanted the opposite, and sent the two round.",
+        "bill": {
+          "id": "spot-the-difference-head",
+          "as": "move",
+          "from": "From: A colleague on the fourth floor",
+          "title": "Spot the difference",
+          "body": "A colleague you have never met has sent the whole floor two photographs. In one, you agree warmly with your boss. In the other, you nod beside your boss's boss, who is saying the opposite. The subject line is Spot the difference. Nineteen people have replied with the answer, which is you."
+        },
+        "gauges": [
+          {
+            "gauge": "fawning",
+            "by": -10,
+            "note": "You were caught agreeing with your boss, then nodding along with your boss's boss on the other side."
+          }
+        ]
+      },
+      {
+        "when": {
+          "all": [
+            {
+              "did": "sat-by-boss"
+            },
+            {
+              "did": "agreed-with-head"
+            }
+          ]
+        },
+        "playedOut": "A colleague set your warm agreement with your boss's boss beside your laughing along with your boss, who wanted the opposite, and sent the two round.",
+        "bill": {
+          "id": "spot-the-difference-boss",
+          "as": "move",
+          "from": "From: A colleague on the fourth floor",
+          "title": "Spot the difference",
+          "body": "A colleague you have never met has sent the whole floor two photographs. In one, you agree warmly with your boss's boss. In the other, you laugh beside your boss, at a joke about synergy. The subject line is Spot the difference. Nineteen people have replied with the answer, which is you."
+        },
+        "gauges": [
+          {
+            "gauge": "fawning",
+            "by": -10,
+            "note": "You were caught agreeing with your boss's boss, then laughing along with your boss on the other side."
+          }
+        ]
+      },
+      {
+        "when": {
+          "did": "sat-by-head"
+        },
+        "playedOut": "The Town Hall's photographer caught you nodding beside your boss's boss, and the picture went on the intranet.",
+        "bill": {
+          "id": "nodding-on-the-intranet",
+          "as": "move",
+          "from": "From: Internal Communications",
+          "title": "Our people: a picture says it all",
+          "body": "The front page of the intranet has a new picture, under the heading Our people. It shows your boss's boss at the Town Hall, and beside them, nodding, you. Your boss's boss has asked Internal Communications for a copy, in a frame."
+        },
+        "gauges": [
+          {
+            "gauge": "fawning",
+            "by": 15,
+            "note": "Nodding beside your boss's boss at the Town Hall made the front page of the intranet."
+          }
+        ]
+      },
+      {
+        "playedOut": "The recording of the Town Hall caught you laughing along with your boss, and it was used to show what engagement looks like.",
+        "bill": {
+          "id": "laughing-in-the-training",
+          "as": "move",
+          "from": "From: Internal Communications",
+          "title": "New module: What Engagement Looks Like",
+          "body": "The new mandatory module on engagement has a clip from the Town Hall. It shows your boss laughing at the joke about synergy, and you laughing half a second later, every time. The voice-over calls this active listening. Your boss has watched it twice, and sent it to their boss."
+        },
+        "gauges": [
+          {
+            "gauge": "fawning",
+            "by": 15,
+            "note": "Laughing along with your boss at the Town Hall ended up in a training module."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "credit-upstairs",
+    "startedBy": "gave-credit-upstairs",
+    "chance": 0.9,
+    "after": {
+      "min": 1,
+      "max": 2
+    },
+    "started": "In the Quarterly Business Review, you said your team's arrow was all down to one of your managers.",
+    "outcomes": [
+      {
+        "when": {
+          "did": "lied-in-report"
+        },
+        "playedOut": "Floor 2 traced the arrow you gave away back to your green Monthly Status Report, and the credit came back to you with the blame attached.",
+        "bill": {
+          "id": "credit-returned",
+          "as": "move",
+          "from": "From: Floor 2",
+          "title": "Returned to sender",
+          "body": "Floor 2 has looked into the arrow you said was all down to leadership. It was drawn from one of your green Monthly Status Reports. Leadership has politely declined the credit, and returned it to you, with the arrow, in an envelope marked Not for us."
+        },
+        "gauges": [
+          {
+            "gauge": "fawning",
+            "by": -10,
+            "note": "You gave the credit for an arrow from your green report away, and it was sent back."
+          }
+        ]
+      },
+      {
+        "when": {
+          "did": "credited-head"
+        },
+        "playedOut": "Your boss's boss put your line on a slide of their own, and the slide said who had said it first.",
+        "bill": {
+          "id": "credit-on-the-slide",
+          "as": "move",
+          "from": "From: Floor 2, copied to you",
+          "title": "Deck: Leadership Offsite (draft 4)",
+          "body": "Your boss's boss has a new slide for the Leadership Offsite. It says All down to leadership, in large type, and underneath, in very small type, a quote from you. Floor 2 has asked who you are, and your boss's boss has told them."
+        },
+        "gauges": [
+          {
+            "gauge": "fawning",
+            "by": 15,
+            "note": "Handing the arrow to your boss's boss was noticed, with your name on it."
+          }
+        ]
+      },
+      {
+        "playedOut": "Your boss put the arrow in their own summary for upstairs, and upstairs found the minutes that said who had given it to them.",
+        "bill": {
+          "id": "credit-in-the-minutes",
+          "as": "move",
+          "from": "From: Floor 2, copied to you",
+          "title": "Thank you for your generosity of spirit",
+          "body": "Your boss has written up the arrow for Floor 2 as personally delivered. Floor 2 read the minutes of the Quarterly Business Review, found who had said so first, and has written to thank you for your generosity of spirit. Your boss has been copied, and has started saying good morning to you by name."
+        },
+        "gauges": [
+          {
+            "gauge": "fawning",
+            "by": 15,
+            "note": "Handing the arrow to your boss was noticed, with your name on it."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "flying-slides",
+    "startedBy": "animated-deck",
+    "chance": 0.8,
+    "after": {
+      "min": 1,
+      "max": 2
+    },
+    "started": "You stayed late to make everything in your boss's slides fly in.",
+    "outcomes": [
+      {
+        "playedOut": "Your boss's slides froze upstairs on the one where the word Growth spins, and the file had your name on it.",
+        "bill": {
+          "id": "slides-froze",
+          "as": "move",
+          "from": "From: IT Services",
+          "title": "Incident report: boardroom projector",
+          "body": "Upstairs, your boss's slides froze on the one where the word Growth spins in. Growth kept spinning. Your boss presented the rest from memory, beside it. IT Services has traced the file to you, and asks that nothing be made to fly in again without a change request."
+        },
+        "gauges": [
+          {
+            "gauge": "fawning",
+            "by": -10,
+            "note": "The slides you made fly in for your boss froze upstairs, with Growth spinning."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "bonus-for-the-boss",
+    "startedBy": "bonus-to-boss",
+    "chance": 0.85,
+    "after": {
+      "min": 1,
+      "max": 2
+    },
+    "started": "You suggested that the bonus pot should go to your boss, for leadership.",
+    "outcomes": [
+      {
+        "playedOut": "Human Resources took your bonus pot recommendation as a nomination, and your boss was shortlisted with your name on the form.",
+        "bill": {
+          "id": "leader-of-the-year",
+          "as": "move",
+          "from": "From: Human Resources",
+          "title": "Nomination received: Leader of the Year",
+          "body": "Human Resources thanks you for nominating your boss for Leader of the Year, which it turns out your bonus pot recommendation did. Your boss has been shortlisted. The form has your name at the top as nominator, and your boss has read it several times."
+        },
+        "gauges": [
+          {
+            "gauge": "fawning",
+            "by": 10,
+            "note": "Suggesting the bonus pot go to your boss came back as a nomination, with your name on it."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "chairs-upstairs",
+    "startedBy": "bought-chairs",
+    "chance": 0.9,
+    "after": {
+      "min": 1,
+      "max": 1
+    },
+    "started": "You spent the underspend on something large, where upstairs would see it.",
+    "outcomes": [
+      {
+        "playedOut": "Your boss's boss showed a visitor the forty chairs as an investment in people, and the caption gave your name.",
+        "bill": {
+          "id": "chairs-on-the-tour",
+          "as": "move",
+          "from": "From: Internal Communications",
+          "title": "Investing in our people",
+          "body": "Your boss's boss walked a visitor from head office past the forty new chairs in the corridor, said that they were an investment in people, and sat in one for a photograph. The caption on the intranet names you as the person behind the investment. Facilities would still like a receipt."
+        },
+        "gauges": [
+          {
+            "gauge": "fawning",
+            "by": 10,
+            "note": "The forty chairs in the corridor were seen upstairs, and sat in."
+          }
+        ]
+      }
+    ]
   }
 ]

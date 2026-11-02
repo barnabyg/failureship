@@ -44,8 +44,8 @@ test("the desk with no window comes back as a Bill in a later month", async ({
   );
   await expect(teflon).toHaveText(String(before - 10));
   await page.getByTestId("open-gauge-teflon").click();
-  await expect(page.getByTestId("gauge-move").last()).toContainText(
-    "desk with no window",
-  );
+  await expect(
+    page.getByTestId("gauge-card-teflon").getByTestId("gauge-move").last(),
+  ).toContainText("desk with no window");
   await page.getByTestId("close-gauges").click();
 });

@@ -168,8 +168,8 @@ describe("nothing in the rules but Milestones", () => {
 });
 
 describe("the real Gauges", () => {
-  it("start with Teflon, which every Thread's ending moves", () => {
-    expect(gameContent.gauges?.map((g) => g.id)).toEqual(["teflon"]);
+  it("are Teflon and Fawning, one of which every Thread's ending moves", () => {
+    expect(gameContent.gauges?.map((g) => g.id)).toEqual(["teflon", "fawning"]);
     for (const thread of gameContent.threads) {
       for (const outcome of thread.outcomes) {
         expect(outcome.gauges.length, thread.id).toBeGreaterThan(0);

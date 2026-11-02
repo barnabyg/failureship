@@ -246,7 +246,7 @@ The rooms on the floor: positions, sizes, colours and the lift's sign.
 
 ## `gauges.json`
 
-The player's Gauges, such as Teflon: their track record, in plain view at every step.
+The player's Gauges, Teflon and Fawning: their track record, in plain view at every step.
 
 Each has `id`, `label`, `start`, and the `min` and `max` it stays within. Its `milestones` are
 earned once each, on reaching `at`, and the player is told `title` and `body` as the month closes.
@@ -254,6 +254,11 @@ A Milestone it can never reach is refused. A Gauge moves only from the `gauges` 
 as in [`threads.json`](#threadsjson), as the month closes, and the official story says which. Nothing
 else moves it. It never reads the Power Map or a hidden risk, and nothing but its Milestones reads it,
 so a high one does not mean the player is safe.
+
+A Thread that moves Fawning starts from a choice aimed at your boss or your boss's boss, and every
+result of that choice sets its flag. Its outcomes' `when` read only what the player did, and no
+Bill's `from` names a Character, since nothing comes back through someone who has left, and who
+leaves is dealt. `tests/engine/fawning.test.ts` holds the content to this.
 
 ## `hidden-truth.json`
 
