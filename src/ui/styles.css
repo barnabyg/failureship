@@ -5,6 +5,7 @@
   --muted: #5d625f;
   --accent: #2f4a6d;
   --accent-ink: #ffffff;
+  --highlight: #f4dc6b;
   font-family:
     "Segoe UI",
     system-ui,
@@ -116,8 +117,16 @@ body {
 
 .tagline {
   margin: 0;
+  overflow: hidden;
   color: var(--muted);
   font-size: 0.875rem;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+/* The title gives way first, so a full header still keeps to one row. */
+.status > div:first-child {
+  min-width: 0;
 }
 
 .status dl {
@@ -148,12 +157,58 @@ body {
   cursor: pointer;
 }
 
+/* Only the latest few, on one line, so the header never grows. */
 .status .status-buzzwords dd {
-  max-width: 220px;
+  display: flex;
+  gap: 8px;
+  align-items: baseline;
   font-size: 0.8125rem;
   font-weight: 400;
-  line-height: 1.25;
-  white-space: normal;
+}
+
+.status-buzzwords ul {
+  max-width: 360px;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  list-style: none;
+  text-overflow: ellipsis;
+}
+
+.status-buzzwords li {
+  display: inline;
+}
+
+.status-buzzwords li + li::before {
+  content: ", ";
+}
+
+/* A Buzzword just learned stands out, then settles. */
+.buzzword-new {
+  animation: buzzword-learned 4s ease-out;
+}
+
+@keyframes buzzword-learned {
+  from {
+    background: var(--highlight);
+  }
+  to {
+    background: transparent;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .buzzword-new {
+    animation: none;
+  }
+}
+
+.buzzword-list dt {
+  font-weight: 600;
+}
+
+.buzzword-list dd {
+  margin: 0 0 8px;
 }
 
 .next {
@@ -434,6 +489,7 @@ body {
 .run-controls {
   display: flex;
   flex-direction: column;
+  flex-shrink: 0;
   gap: 4px;
   font-size: 0.8125rem;
 }

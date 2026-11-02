@@ -5,6 +5,7 @@ import {
   resumeRun,
   startRun,
   UnusableSaveError,
+  type Buzzword,
   type Choice,
   type PlayerView,
   type Run,
@@ -114,6 +115,54 @@ function ProjectCard({
   );
 }
 
+/** How many Buzzwords the header has room for. The rest are behind "+N more". */
+const latestShown = 3;
+
+/**
+ * The latest Buzzwords learned, newest first. One learned while the player
+ * watches stands out briefly, and none does on a reload.
+ */
+function LatestBuzzwords({
+  buzzwords,
+  onOpen,
+}: {
+  buzzwords: readonly Buzzword[];
+  onOpen: () => void;
+}) {
+  const [onLoad] = useState(() => new Set(buzzwords.map((b) => b.id)));
+  if (buzzwords.length === 0) return null;
+  const rest = buzzwords.length - latestShown;
+  const latest = buzzwords.slice(-latestShown).reverse();
+  return (
+    <div className="status-buzzwords" data-testid="buzzwords">
+      <dt>{panelText.buzzwordsHeading}</dt>
+      <dd>
+        <ul title={latest.map((word) => word.term).join(", ")}>
+          {latest.map((word) => (
+            <li
+              key={word.id}
+              className={onLoad.has(word.id) ? undefined : "buzzword-new"}
+              data-testid="buzzword"
+            >
+              {word.term}
+            </li>
+          ))}
+        </ul>
+        {rest > 0 && (
+          <button
+            type="button"
+            className="status-gauge"
+            data-testid="open-buzzwords"
+            onClick={onOpen}
+          >
+            {panelText.buzzwordsMore.replace("{n}", String(rest))}
+          </button>
+        )}
+      </dd>
+    </div>
+  );
+}
+
 /** The player's own commitments, always in view, and free to look at. */
 function WordCard({ view, onOpen }: { view: PlayerView; onOpen: () => void }) {
   return (
@@ -171,6 +220,7 @@ export function App() {
   const [projectOpen, setProjectOpen] = useState(false);
   const [wordOpen, setWordOpen] = useState(false);
   const [gaugesOpen, setGaugesOpen] = useState(false);
+  const [buzzwordsOpen, setBuzzwordsOpen] = useState(false);
 
   // In an effect, because React may run a state initialiser twice in development.
   useEffect(() => {
@@ -215,7 +265,9 @@ export function App() {
       <header className="status">
         <div>
           <h1>{panelText.title}</h1>
-          <p className="tagline">{panelText.tagline}</p>
+          <p className="tagline" title={panelText.tagline}>
+            {panelText.tagline}
+          </p>
         </div>
         <dl>
           <div>
@@ -256,12 +308,12 @@ export function App() {
               </dd>
             </div>
           ))}
-          {view.buzzwords.length > 0 && (
-            <div className="status-buzzwords" data-testid="buzzwords">
-              <dt>{panelText.buzzwordsHeading}</dt>
-              <dd>{view.buzzwords.map((b) => b.term).join(", ")}</dd>
-            </div>
-          )}
+          <LatestBuzzwords
+            buzzwords={view.buzzwords}
+            onOpen={() => {
+              setBuzzwordsOpen(true);
+            }}
+          />
         </dl>
         <RunControls
           seed={view.seed}
@@ -430,6 +482,33 @@ export function App() {
             data-testid="close-gauges"
             onClick={() => {
               setGaugesOpen(false);
+            }}
+          >
+            {panelText.closeLabel}
+          </button>
+        </Modal>
+      )}
+      {buzzwordsOpen && (
+        <Modal
+          testId="buzzword-list"
+          title={panelText.buzzwordsListHeading}
+          onClose={() => {
+            setBuzzwordsOpen(false);
+          }}
+        >
+          <dl className="buzzword-list">
+            {view.buzzwords.map((word) => (
+              <div key={word.id} data-testid="buzzword-learned">
+                <dt>{word.term}</dt>
+                <dd>{word.meaning}</dd>
+              </div>
+            ))}
+          </dl>
+          <button
+            type="button"
+            data-testid="close-buzzwords"
+            onClick={() => {
+              setBuzzwordsOpen(false);
             }}
           >
             {panelText.closeLabel}
