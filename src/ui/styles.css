@@ -566,6 +566,15 @@ body {
   outline-offset: -2px;
 }
 
+/* Official standing is shown, not opened. */
+.standing-card {
+  cursor: default;
+}
+
+.standing-card:hover {
+  outline: none;
+}
+
 .project-card-heading,
 .project-card-label {
   color: var(--muted);

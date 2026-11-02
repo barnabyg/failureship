@@ -166,6 +166,30 @@ function LatestBuzzwords({
   );
 }
 
+/**
+ * How the player would fare on paper, always in view. It sits beside the Project
+ * rather than in the header, which has no room left for it.
+ */
+function StandingCard({
+  standing,
+}: {
+  standing: NonNullable<PlayerView["standing"]>;
+}) {
+  return (
+    <div
+      className="project-card standing-card"
+      title={standing.title}
+      data-testid="standing-card"
+    >
+      <span className="project-card-heading">{standing.label}</span>
+      <span className="project-card-status">
+        <StandingBar standing={standing} testId="standing" />
+        <span>{standing.band}</span>
+      </span>
+    </div>
+  );
+}
+
 /** The player's own commitments, always in view, and free to look at. */
 function WordCard({ view, onOpen }: { view: PlayerView; onOpen: () => void }) {
   return (
@@ -296,14 +320,6 @@ export function App() {
               <dd>{panelText.finalWarningLabel}</dd>
             </div>
           )}
-          {view.standing && (
-            <div className="status-standing" title={view.standing.title}>
-              <dt>{view.standing.label}</dt>
-              <dd>
-                <StandingBar standing={view.standing} testId="standing" />
-              </dd>
-            </div>
-          )}
           {view.gauges.map((gauge) => (
             <div key={gauge.id} data-testid={`gauge-${gauge.id}`}>
               <dt>{gauge.label}</dt>
@@ -372,6 +388,7 @@ export function App() {
             setProjectOpen(true);
           }}
         />
+        {view.standing && <StandingCard standing={view.standing} />}
         <WordCard
           view={view}
           onOpen={() => {
