@@ -339,8 +339,8 @@ at a later month. `npm run build` and `npm run play` ignore it.
   takes effect; `state.ts` and `reads.ts` are what the mechanics share; `boss.ts`,
   `demands.ts`, `find-out.ts`, `notebook.ts`, `over-head.ts`, `project.ts` and
   `scenes.ts` are mechanics of their own, as are `company-events.ts`, `mistakes.ts`, `reputation.ts`,
-  `risks.ts`, and `threads.ts`
-  with `bills.ts`; `to-view.ts` builds the player view, and
+  `risks.ts`, `threads.ts` with `bills.ts`, `promises.ts`, `deals.ts` (`deal.ts` deals the run itself),
+  `changes.ts` for Believers changing and leaving, and `gauges.ts`, the only module that reads a Gauge; `to-view.ts` builds the player view, and
   `to-results.ts` its reveal at the end; `save.ts` writes and reads a run. Everything
   in a run's `State` is plain data, so a mechanic gets saving for free. Raise
   `SAVE_VERSION` if a mechanic changes what saved state means. `src/engine/content.ts` holds the content
