@@ -177,7 +177,6 @@ export function findBrokenBehaviours(content: Content): string[] {
   return problems;
 }
 
-/** The player reads a kind from signs, so no reaction may say it out loud. */
 /** Lateness must be a clue about someone's kind, and never settle it. */
 export function findBrokenInput(content: Content): string[] {
   const { input } = content.project;
