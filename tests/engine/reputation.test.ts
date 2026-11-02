@@ -208,7 +208,7 @@ describe("news", () => {
     expect(reached.size).toBeGreaterThan(1);
   });
 
-  it("moves the boss's opinion too, as the one idea of what they think", () => {
+  it("moves the boss's belief too, as the one idea of what they think", () => {
     const content = parseContent(raw({}, "bad", ["ana"]));
     const run = startRun({ seed: 1, content });
 

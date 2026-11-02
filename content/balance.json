@@ -9,5 +9,5 @@
   "signsMisleadChance": 0.2,
   "disasterChance": 0.1,
   "mood": { "warmAt": 5, "coldAt": -5 },
-  "beliefKeeps": 0.5
+  "bossBeliefKeeps": 0.5
 }

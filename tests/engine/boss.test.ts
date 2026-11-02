@@ -58,7 +58,7 @@ function nextMeeting(seed: number, optionId: string, content: Content) {
   };
 }
 
-describe("the boss's opinion", () => {
+describe("the boss's belief", () => {
   it("shows in how the boss treats the player in a later month", () => {
     const content = parseContent(bossFixtureRaw());
     const treatments = (optionId: string) =>

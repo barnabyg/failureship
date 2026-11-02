@@ -164,7 +164,7 @@ describe("a meeting you do not go to", () => {
     );
   });
 
-  it("moves the boss's opinion by their kind, with no number shown", () => {
+  it("moves the boss's belief by their kind, with no number shown", () => {
     const titles = gameContent.demands?.missed?.actions.map((a) => a.title);
     const shifts = new Map<string, Set<number>>();
     const reactions = new Map<string, Set<string>>();

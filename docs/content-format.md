@@ -82,7 +82,7 @@ Actions a month, months in a run and the cost of each choice.
   truth.
 - `mood` holds `warmAt` and `coldAt`, the points at which the boss's belief about the player
   makes their mood `warm` or `cold`.
-- `beliefKeeps` is how much of the boss's belief carries into each new month, so that it is
+- `bossBeliefKeeps` is how much of the boss's belief carries into each new month, so that it is
   mostly about lately.
 
 ## `behaviours.json`

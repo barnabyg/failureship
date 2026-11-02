@@ -975,7 +975,7 @@ export const contentSchema = z.strictObject({
       coldAt: z.number().int().negative(),
     }),
     /** How much of the boss's belief carries into each new month. */
-    beliefKeeps: z.number().min(0).max(1).default(1),
+    bossBeliefKeeps: z.number().min(0).max(1).default(1),
   }),
   boss: z.strictObject({
     /** Whose belief about the player is tracked. */

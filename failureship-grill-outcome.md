@@ -262,7 +262,7 @@ Use these terms consistently in the design and the game.
 
 ### What people think of you
 
-- **Belief:** what a Character believes of the player: a hidden number, moved by what reaches them. It is the one idea of what someone thinks of you, the bosses' included. Not "opinion" or "reputation". In the data, a choice's `opinion` and `headOpinion` are changes to the boss's and the boss's boss's belief.
+- **Belief:** what a Character believes of the player: a hidden number, moved by what reaches them. It is the one idea of what someone thinks of you, the bosses' included. Not "opinion". Reputation is how news of the player travels from one belief to the next. In the data, a choice's `opinion` and `headOpinion` are changes to the boss's and the boss's boss's belief.
 - **Mood:** how a belief stands: warm, neutral or cold. The boss, the boss's boss and everyone else each have their own points at which it changes, under `mood` in the data.
 - **Regard:** the sign of their mood that someone other than the bosses shows in a Scene. The bosses show theirs in how they treat the player. The player never sees a belief or a mood itself.
 

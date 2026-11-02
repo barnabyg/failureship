@@ -61,15 +61,15 @@ function dazzle(seed: number, content: Content) {
 }
 
 describe("what impresses each kind of boss", () => {
-  it("raises one kind's opinion and lowers another's with the same choice", () => {
+  it("raises one kind's belief and lowers another's with the same choice", () => {
     const content = parseContent(kindsFixtureRaw());
-    const opinionOf = (kind: Kind) =>
+    const beliefOf = (kind: Kind) =>
       readHiddenTruth(dazzle(seedWhereBossIs(kind, content), content).run)
         .bossBelief;
 
-    expect(opinionOf("incompetent")).toBe(2);
-    expect(opinionOf("practitioner")).toBe(1);
-    expect(opinionOf("believer")).toBe(-2);
+    expect(beliefOf("incompetent")).toBe(2);
+    expect(beliefOf("practitioner")).toBe(1);
+    expect(beliefOf("believer")).toBe(-2);
   });
 
   it("shows the reaction through signs, written for that kind", () => {
@@ -81,7 +81,7 @@ describe("what impresses each kind of boss", () => {
     }
   });
 
-  it("adds to any flat opinion on the same result", () => {
+  it("adds to any flat `opinion` on the same result", () => {
     const raw = kindsFixtureRaw();
     const option = raw.scenes[0]?.options.at(-1);
     const result = option?.results[0];
@@ -325,7 +325,7 @@ function playOut(
       : (meeting ?? first);
     view = run.choose(choice);
   }
-  return { run, view, opinion: readHiddenTruth(run).bossBelief };
+  return { run, view, belief: readHiddenTruth(run).bossBelief };
 }
 
 const adapts = (choices: Choice[], view: PlayerView, kind: Kind): Choice => {
@@ -354,11 +354,11 @@ describe("playing the boss you have", () => {
   it("ends warmer for a player who adapts than one with one approach for all", () => {
     // Fifteen is plenty: the gap is over six, on all 19 sets of fifteen tried.
     const seeds = SEEDS.slice(0, 15);
-    const adapted = average(seeds.map((seed) => playOut(seed, adapts).opinion));
+    const adapted = average(seeds.map((seed) => playOut(seed, adapts).belief));
 
     for (const { id } of gameContent.boss.approaches) {
       const fixed = average(
-        seeds.map((seed) => playOut(seed, alwaysUses(id)).opinion),
+        seeds.map((seed) => playOut(seed, alwaysUses(id)).belief),
       );
 
       expect(adapted, id).toBeGreaterThan(fixed);
@@ -399,7 +399,7 @@ describe("the Annual Calibration's verdict", () => {
     return view.step.boss.verdict;
   };
 
-  it("depends on the boss's opinion, with no number shown", () => {
+  it("depends on the boss's mood, with no number shown", () => {
     const seeds = SEEDS.slice(0, 60);
     const verdicts = new Set<string | null>();
     for (const seed of seeds) {
@@ -446,7 +446,7 @@ describe("the Annual Calibration's verdict", () => {
     const said = (kind: Kind) =>
       dazzle(seedWhereBossIs(kind, content), content).step.verdict;
 
-    // The fixture's opinion goes warm at 1 and cold at -1.
+    // The fixture's mood goes warm at 1 and cold at -1.
     expect(said("incompetent")).toBe("V-WARM");
     expect(said("believer")).toBe("V-COLD");
   });

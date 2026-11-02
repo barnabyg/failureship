@@ -223,12 +223,12 @@ describe("a stalled Demand", () => {
   });
 
   it("goes worse when chased than having answered in the first place", () => {
-    const opinionAfterAnswering = (seed: number) => {
+    const beliefAfterAnswering = (seed: number) => {
       const run = startRun({ seed, content: content() });
       run.choose(answer("deliver"));
       return readHiddenTruth(run).bossBelief;
     };
-    const opinionAfterBeingChased = (seed: number) => {
+    const beliefAfterBeingChased = (seed: number) => {
       const run = startRun({ seed, content: content() });
       run.choose(answer("stall"));
       run.choose({ type: "continue" });
@@ -247,8 +247,8 @@ describe("a stalled Demand", () => {
     ).slice(0, 20);
     expect(chased.length).toBeGreaterThan(0);
     for (const seed of chased) {
-      expect(opinionAfterBeingChased(seed)).toBeLessThan(
-        opinionAfterAnswering(seed),
+      expect(beliefAfterBeingChased(seed)).toBeLessThan(
+        beliefAfterAnswering(seed),
       );
     }
   });
@@ -262,15 +262,15 @@ describe("a Demand's answers", () => {
       const { step } = run.choose(answer(optionId));
       return {
         reaction: step.kind === "notice" ? step.reaction : null,
-        opinion: readHiddenTruth(run).bossBelief,
+        belief: readHiddenTruth(run).bossBelief,
       };
     };
 
-    expect(landed("believer", "deliver").opinion).toBeGreaterThan(
-      landed("incompetent", "deliver").opinion,
+    expect(landed("believer", "deliver").belief).toBeGreaterThan(
+      landed("incompetent", "deliver").belief,
     );
-    expect(landed("incompetent", "fake").opinion).toBeGreaterThan(
-      landed("believer", "fake").opinion,
+    expect(landed("incompetent", "fake").belief).toBeGreaterThan(
+      landed("believer", "fake").belief,
     );
     expect(landed("believer", "deliver").reaction).toBe("WORK-BELIEVER");
     expect(landed("incompetent", "deliver").reaction).toBe("WORK-INCOMPETENT");
