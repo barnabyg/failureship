@@ -137,6 +137,17 @@ body {
   white-space: nowrap;
 }
 
+/* A Gauge's value opens what moved it, without widening the header. */
+.status-gauge {
+  padding: 0;
+  border: none;
+  border-bottom: 1px dotted currentColor;
+  background: none;
+  color: inherit;
+  font: inherit;
+  cursor: pointer;
+}
+
 .status .status-buzzwords dd {
   max-width: 220px;
   font-size: 0.8125rem;

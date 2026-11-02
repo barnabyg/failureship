@@ -241,7 +241,19 @@ export function App() {
           {view.gauges.map((gauge) => (
             <div key={gauge.id} data-testid={`gauge-${gauge.id}`}>
               <dt>{gauge.label}</dt>
-              <dd>{gauge.value}</dd>
+              <dd>
+                <button
+                  type="button"
+                  className="status-gauge"
+                  data-testid={`open-gauge-${gauge.id}`}
+                  title={panelText.gaugesHeading}
+                  onClick={() => {
+                    setGaugesOpen(true);
+                  }}
+                >
+                  {gauge.value}
+                </button>
+              </dd>
             </div>
           ))}
           {view.buzzwords.length > 0 && (
@@ -270,17 +282,6 @@ export function App() {
           >
             {panelText.orgChartHeading}
           </button>
-          {view.gauges.length > 0 && (
-            <button
-              type="button"
-              data-testid="open-gauges"
-              onClick={() => {
-                setGaugesOpen(true);
-              }}
-            >
-              {panelText.gaugesHeading}
-            </button>
-          )}
           <button
             type="button"
             data-testid="open-notebook"
