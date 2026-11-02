@@ -132,6 +132,7 @@ body {
 .status dl {
   display: flex;
   gap: 24px;
+  min-width: 0;
   margin: 0;
 }
 
@@ -158,6 +159,12 @@ body {
 }
 
 /* Only the latest few, on one line, so the header never grows. */
+/* The Buzzwords give way after the title, so the header never overflows. */
+.status-buzzwords,
+.status .status-buzzwords dd {
+  min-width: 0;
+}
+
 .status .status-buzzwords dd {
   display: flex;
   gap: 8px;
