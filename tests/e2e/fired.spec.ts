@@ -1,5 +1,10 @@
 import { expect, test } from "@playwright/test";
-import { answerAnyNotification, finishMonth, openMeeting } from "./play";
+import {
+  answerAnyNotification,
+  attendAndFinishMonth,
+  finishMonth,
+  openMeeting,
+} from "./play";
 
 test("a catastrophic choice says so first, and ends at the results screen", async ({
   page,
@@ -51,5 +56,37 @@ test("a Final Warning shows, and a second big mistake gets the player fired", as
   await expect(page.getByTestId("panel-notice")).toContainText("released");
   await page.getByTestId("continue").click();
   await expect(page.getByTestId("panel-results")).toBeVisible();
+  await expect(page.getByTestId("result-mistake")).toHaveCount(2);
+});
+
+// The same deal from the very start, as a player would see it, with a reload part-way.
+test("a whole run from month 1 to being fired, reloaded on a Final Warning", async ({
+  page,
+}) => {
+  await page.goto("/?seed=3");
+  await answerAnyNotification(page);
+  await attendAndFinishMonth(page);
+
+  await expect(page.getByTestId("month")).toContainText("2 of 9");
+  await answerAnyNotification(page);
+  await page.getByTestId("hotspot-meeting-lessons").click();
+  await page.getByTestId("scene-option-blame-callum").click();
+  await page.getByTestId("continue").click();
+  await expect(page.getByTestId("final-warning")).toBeVisible();
+  await finishMonth(page);
+
+  await page.reload();
+  await expect(page.getByTestId("month")).toContainText("3 of 9");
+  await expect(page.getByTestId("final-warning")).toBeVisible();
+  await answerAnyNotification(page);
+  await finishMonth(page);
+  await answerAnyNotification(page);
+  await openMeeting(page);
+  await page.getByTestId("scene-option-cut-callum").click();
+  await page.getByTestId("continue").click();
+
+  await expect(page.getByTestId("panel-notice")).toContainText("released");
+  await page.getByTestId("continue").click();
+  await expect(page.getByTestId("results-ending")).toContainText("fired");
   await expect(page.getByTestId("result-mistake")).toHaveCount(2);
 });
