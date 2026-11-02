@@ -2,7 +2,7 @@ import { build, type Rolldown } from "vite";
 import { describe, expect, it } from "vitest";
 import { gameContent } from "../../src/content";
 import { startRun } from "../../src/engine";
-import { playToMonth } from "../../src/ui/later-month";
+import { plainChoice, playToMonth } from "../../src/ui/later-month";
 
 const newRun = (seed = 1) => startRun({ seed, content: gameContent });
 
@@ -20,6 +20,38 @@ describe("the browser tests' later-month start", () => {
     const first = playToMonth(newRun(), "6");
 
     expect(playToMonth(newRun(), "6")).toEqual(first);
+  });
+
+  it("takes the options named, each once and in order, and plays plainly otherwise", () => {
+    // On seed 2, month 2's Notifications are training and then fewer-meetings,
+    // and "fake" is offered again in month 4, where it is not named a second time.
+    const run = newRun(2);
+    let view = run.view();
+    const wanted: Record<string, string> = {
+      training: "do-training",
+      "fewer-meetings": "fake",
+    };
+    while (view.month < 6) {
+      const { step } = view;
+      const optionId =
+        step.kind === "notification" ? wanted[step.id] : undefined;
+      view = run.choose(
+        step.kind === "notification" && optionId
+          ? { type: "notification", notificationId: step.id, optionId }
+          : plainChoice(view),
+      );
+    }
+
+    expect(playToMonth(newRun(2), "6", "do-training,fake")).toEqual(view);
+    expect(playToMonth(newRun(2), "6", "do-training,fake")).not.toEqual(
+      playToMonth(newRun(2), "6"),
+    );
+  });
+
+  it("refuses to start when a named option is never offered", () => {
+    expect(() => playToMonth(newRun(2), "6", "do-training,nothing")).toThrow(
+      /never offered "nothing"/,
+    );
   });
 
   it.each([null, "", "0", "-1", "1", "2.5", "10", "soon"])(

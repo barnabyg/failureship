@@ -16,11 +16,13 @@ async function fileTheReport(page: Page) {
 test("a discovered Hidden Fact changes what a Scene offers", async ({
   page,
 }) => {
-  await page.goto("/?seed=74&month=8");
-  await fileTheReport(page);
-  await finishMonth(page);
+  // Without asking in month 8, month 9's meeting has no such option.
+  await page.goto("/?seed=74&month=9");
   await answerAnyNotification(page);
   await openMeeting(page);
+  await expect(page.getByTestId("panel-scene")).toContainText(
+    "Annual Calibration",
+  );
   await expect(
     page.getByTestId("scene-option-use-abolished-post-calibration"),
   ).toHaveCount(0);

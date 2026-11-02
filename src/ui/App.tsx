@@ -64,7 +64,11 @@ function beginFromAddress() {
   // Only Playwright's build has this mode. Every other build drops this branch,
   // and later-month.ts with it, which tests/engine/later-month.test.ts checks.
   if (import.meta.env.MODE === "e2e") {
-    game.view = playToMonth(game.run, address.get("month"));
+    game.view = playToMonth(
+      game.run,
+      address.get("month"),
+      address.get("choose"),
+    );
   }
   return {
     game,

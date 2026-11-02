@@ -2,21 +2,14 @@ import { expect, test } from "@playwright/test";
 import { playUntil } from "./play";
 
 // tests/engine/changes.test.ts keeps this seed true: the Senior Analyst is a
-// Believer, and blamed and then let down, starts keeping a file on you.
-// Over 10 s, as the change shows only on the results screen.
+// Believer, and blamed in month 2 and let down over the laptops, changes in month 6.
+// The start makes those choices, as promise.spec.ts already plays the laptops.
 test("a Believer burned twice changes, and only the results screen says so", async ({
   page,
 }) => {
-  await page.goto("/?seed=32&month=2");
-  await playUntil(page, "scene-option-blame-priya");
-  await page.getByTestId("scene-option-blame-priya").click();
-  await page.getByTestId("continue").click();
-  await playUntil(page, "option-promise-laptops-analyst");
-  await page.getByTestId("option-promise-laptops-analyst").click();
-  await page.getByTestId("continue").click();
-  await playUntil(page, "option-next-quarter");
-  await page.getByTestId("option-next-quarter").click();
-  await page.getByTestId("continue").click();
+  await page.goto(
+    "/?seed=32&month=9&choose=blame-priya,promise-laptops-analyst,next-quarter",
+  );
   await expect(page.locator("body")).not.toContainText("whistleblower");
 
   await playUntil(page, "panel-results");
