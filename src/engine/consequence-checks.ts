@@ -391,3 +391,47 @@ export function findBrokenThreads(content: Content): string[] {
   }
   return problems;
 }
+
+/** A catastrophe has to be fair: words for it, and a warning before the choice. */
+export function findBrokenMistakes(content: Content): string[] {
+  const problems: string[] = [];
+  const options = [
+    ...everyNotification(content).flatMap((n) =>
+      n.options.map((o) => ({
+        owner: `Notification "${n.id}" option "${o.id}"`,
+        stakes: o.stakes,
+        outcomes: [o, ...(o.bet ? [o.bet.lost] : [])],
+      })),
+    ),
+    ...content.scenes.flatMap((s) =>
+      s.options.map((o) => ({
+        owner: `Scene "${s.id}" option "${o.id}"`,
+        stakes: o.stakes,
+        outcomes: o.results,
+      })),
+    ),
+  ];
+  for (const { owner, stakes, outcomes } of options) {
+    const catastrophic = outcomes.some((o) => o.mistake === "catastrophic");
+    if (catastrophic && stakes === undefined) {
+      problems.push(`${owner} is catastrophic, with no stakes to signal it.`);
+    }
+    if (!catastrophic && stakes !== undefined) {
+      problems.push(`${owner} signals stakes it does not have.`);
+    }
+  }
+  const anyMistake =
+    options.some((o) => o.outcomes.some((x) => x.mistake !== undefined)) ||
+    content.moves.some((m) => m.mistake !== undefined) ||
+    everyBill(content).some((b) => b.mistake !== undefined) ||
+    content.actions.some((a) => a.mistake !== undefined);
+  if (anyMistake && !content.mistakes) {
+    problems.push("A big mistake is written, but no words for one.");
+  }
+  for (const a of content.actions) {
+    if (a.mistake !== undefined && a.result === undefined) {
+      problems.push(`Action "${a.id}" is a big mistake, so needs a result.`);
+    }
+  }
+  return problems;
+}
