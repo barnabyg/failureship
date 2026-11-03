@@ -7,7 +7,7 @@ import {
   type PlayerView,
   type Run,
 } from "../../src/engine";
-import { action, emptyMonthRaw } from "./fixture";
+import { action, emptyMonthRaw, floorOwn } from "./fixture";
 
 const notice = { title: "Done", body: "Done." };
 
@@ -50,6 +50,7 @@ function redFixtureRaw() {
           { id: "quiet", label: "Say nothing", result: notice },
         ],
       },
+      ...floorOwn(),
     ],
   };
 }
@@ -267,7 +268,7 @@ describe("the flag in content", () => {
   it("refuses a review that is also set in a month or opened by an action", () => {
     const inMonth = redFixtureRaw();
     const scene = inMonth.scenes[0];
-    if (scene) scene.months = [1];
+    if (scene) Object.assign(scene, { floor: "fixture-job", months: [1] });
     const byAction = redFixtureRaw();
 
     expect(() => parseContent(inMonth)).toThrow(/not by month/);

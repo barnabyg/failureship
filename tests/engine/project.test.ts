@@ -10,7 +10,7 @@ import {
   type Run,
 } from "../../src/engine";
 import { readHiddenTruth } from "../../src/engine/hidden-truth";
-import { action, emptyMonthRaw } from "./fixture";
+import { action, emptyMonthRaw, floorOwn } from "./fixture";
 
 const SEEDS = Array.from({ length: 200 }, (_, i) => i + 1);
 const notice = { title: "Done", body: "Done." };
@@ -47,6 +47,7 @@ function reportFixtureRaw() {
         },
       ],
     },
+    ...floorOwn(),
   ];
   return {
     ...raw,
@@ -174,7 +175,12 @@ describe("a Project", () => {
   it("is moved by written events as a month opens, and says so", () => {
     const raw = reportFixtureRaw();
     raw.project.events = [
-      { months: [2], text: "EVENT-WORSE", project: { real: "worse" } },
+      {
+        floor: "fixture-job",
+        months: [2],
+        text: "EVENT-WORSE",
+        project: { real: "worse" },
+      },
     ];
     const run = startRun({ seed: 7, content: parseContent(raw) });
     run.choose(answer("do"));
@@ -212,7 +218,12 @@ describe("a Project in content", () => {
   it("refuses a real status that claims to come from itself", () => {
     const raw = reportFixtureRaw();
     raw.project.events = [
-      { months: [2], text: "Oh.", project: { real: "real" } },
+      {
+        floor: "fixture-job",
+        months: [2],
+        text: "Oh.",
+        project: { real: "real" },
+      },
     ];
 
     expect(() => parseContent(raw)).toThrow(/unknown status "real"/);

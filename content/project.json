@@ -24,6 +24,7 @@
   },
   "events": [
     {
+      "floor": "junior-employee",
       "months": [3],
       "text": "The supplier's only engineer has gone on a sabbatical that the supplier describes as open-ended.",
       "project": {
@@ -31,6 +32,7 @@
       }
     },
     {
+      "floor": "junior-employee",
       "months": [7],
       "text": "The new system was switched on by mistake, over a weekend, and some of it works. Nobody has been told which part.",
       "project": {
@@ -38,6 +40,7 @@
       }
     },
     {
+      "floor": "junior-employee",
       "months": [5],
       "text": "The old system has been switched off a month early, to save money. Nobody has told the new one.",
       "project": {
@@ -47,6 +50,7 @@
   ],
   "input": {
     "character": "projects",
+    "floor": "junior-employee",
     "months": [2, 4, 6, 8],
     "chance": {
       "believer": 0.15,

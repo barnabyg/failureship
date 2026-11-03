@@ -9,7 +9,7 @@ import {
   type Run,
 } from "../../src/engine";
 import { readHiddenTruth } from "../../src/engine/hidden-truth";
-import { fixtureRaw } from "./fixture";
+import { fixtureRaw, floorOwn } from "./fixture";
 
 const mistakes = {
   finalWarning: { title: "WARNED", body: "One more." },
@@ -28,6 +28,7 @@ function raw(risk: object = {}) {
   base.notifications = [
     {
       id: "budget",
+      floor: "fixture-job",
       months: [1],
       from: "Finance",
       subject: "A budget",
@@ -39,6 +40,7 @@ function raw(risk: object = {}) {
     },
     {
       id: "tidy",
+      floor: "fixture-job",
       months: [2],
       from: "IT",
       subject: "Tidy up",
@@ -48,6 +50,7 @@ function raw(risk: object = {}) {
         { id: "leave", label: "Leave it" },
       ],
     },
+    ...floorOwn(),
   ];
   return {
     ...base,

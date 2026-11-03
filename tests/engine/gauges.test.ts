@@ -10,7 +10,7 @@ import {
   type Run,
 } from "../../src/engine";
 import { readHiddenTruth } from "../../src/engine/hidden-truth";
-import { emptyMonthRaw } from "./fixture";
+import { emptyMonthRaw, floorOwn } from "./fixture";
 
 function raw() {
   const base = emptyMonthRaw();
@@ -23,12 +23,14 @@ function raw() {
         from: "Someone",
         subject: "START",
         body: "Start it, or not.",
+        floor: "fixture-job",
         months: [1],
         options: [
           { id: "nothing", label: "Do nothing" },
           { id: "start-it", label: "Start it", sets: ["started"] },
         ],
       },
+      ...floorOwn(),
     ],
     threads: [
       {

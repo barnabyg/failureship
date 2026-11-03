@@ -24,6 +24,7 @@ interface RawNotification {
   months?: number[];
   floor?: string;
   pool?: boolean;
+  when?: RawCondition;
 }
 
 type RawCondition = Record<string, unknown>;
@@ -69,6 +70,7 @@ interface RawMove {
   when?: RawCondition;
   priority?: boolean;
   sets?: string[];
+  floor?: string;
   months?: number[];
 }
 
@@ -77,6 +79,35 @@ interface RawStoryEntry {
   when?: RawCondition;
   reported?: string;
   happened?: string;
+}
+
+/** A Notification of the fixture's floor that never arrives. */
+function unseen(id: string): RawNotification {
+  return {
+    id,
+    floor: "fixture-job",
+    when: { flag: "never-set" },
+    from: "Facilities",
+    subject: "NEVER-SEEN",
+    body: "Never seen.",
+    options: [{ id: "noted", label: "Noted" }],
+  };
+}
+
+/**
+ * What every floor needs of its own, for the fixture's floor, made of
+ * Notifications that never arrive, so that a test sees only those it adds: a
+ * pool, and one for each month given that a test's own months leave out. A test
+ * that replaces the Notifications keeps these.
+ */
+export function floorOwn(...leftOut: number[]): RawNotification[] {
+  return [
+    { ...unseen("fixture-floor-own"), pool: true },
+    ...leftOut.map((month) => ({
+      ...unseen(`fixture-floor-month-${String(month)}`),
+      months: [month],
+    })),
+  ];
 }
 
 /**
@@ -156,6 +187,7 @@ export function fixtureRaw() {
       ],
       start: { real: "fair", reported: "good" },
       events: [] as {
+        floor: string;
         months: number[];
         text: string;
         project?: { real?: string; reported?: string };
@@ -212,7 +244,7 @@ export function fixtureRaw() {
       };
     }[],
     scenes: [] as RawScene[],
-    notifications,
+    notifications: [...notifications, ...floorOwn()],
     dialogs: [
       {
         id: "pub",
@@ -515,7 +547,7 @@ export function fixture(): Content {
 
 /** A month with no Notifications, for tests about spending actions. */
 export function emptyMonthRaw() {
-  return { ...fixtureRaw(), notifications: [] };
+  return { ...fixtureRaw(), notifications: floorOwn() };
 }
 
 export function emptyMonth(): Content {

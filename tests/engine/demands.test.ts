@@ -58,6 +58,7 @@ function demandFixtureRaw() {
       items: [
         {
           id: "tool",
+          floor: "fixture-job",
           months: [1],
           from: "Boss",
           subject: "DEMAND-SUBJECT",

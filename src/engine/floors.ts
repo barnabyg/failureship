@@ -52,8 +52,11 @@ export function recurs(item: Scheduled): boolean {
   return item.months === undefined && item.pool !== true;
 }
 
-/** The Scenes and Notifications written for a floor's own months. */
-function ownContent(content: Content, job: string): Scheduled[] {
+/**
+ * A floor's own content: the Scenes, Notifications and Demands that name it,
+ * pool items included. Its months are the months the floor is written for.
+ */
+export function ownContent(content: Content, job: string): Scheduled[] {
   return [
     ...content.scenes,
     ...content.notifications,

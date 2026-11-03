@@ -9,7 +9,7 @@ import {
   type Run,
 } from "../../src/engine";
 import { readHiddenTruth } from "../../src/engine/hidden-truth";
-import { fixtureRaw } from "./fixture";
+import { fixtureRaw, floorOwn } from "./fixture";
 
 const mistakes = {
   finalWarning: { title: "WARNED", body: "One more." },
@@ -41,6 +41,7 @@ function contentWithMistakes() {
         },
       ] as (typeof raw.notifications)[number]["options"],
     },
+    ...floorOwn(),
   ];
   return parseContent({ ...raw, mistakes });
 }
@@ -171,6 +172,7 @@ describe("what is written", () => {
         body: "Fill it in.",
         options: [{ id: "o", label: "O", ...extra }],
       },
+      ...floorOwn(),
     ];
     return { ...raw, mistakes };
   };

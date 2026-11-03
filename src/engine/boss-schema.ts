@@ -122,7 +122,7 @@ const chasedDemand = z.strictObject({
 });
 
 /** An instruction from above, which can be answered in the five ways below. */
-const demand = notification.extend({
+const demand = notification.omit({ pool: true }).extend({
   /** What happens if the boss forgets a stalled Demand. */
   forgotten: notice,
   /** What arrives if the boss chases a stalled Demand instead. */

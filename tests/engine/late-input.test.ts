@@ -10,7 +10,7 @@ import {
   type Run,
 } from "../../src/engine";
 import { readHiddenTruth } from "../../src/engine/hidden-truth";
-import { emptyMonthRaw } from "./fixture";
+import { emptyMonthRaw, floorOwn } from "./fixture";
 
 const SEEDS = Array.from({ length: 600 }, (_, i) => i + 1);
 const INPUT = gameContent.project.input;
@@ -266,6 +266,7 @@ describe("late input in content", () => {
             { id: "ok", label: "OK", result: { title: "T", body: "B" } },
           ],
         },
+        ...floorOwn(),
       ],
     };
 

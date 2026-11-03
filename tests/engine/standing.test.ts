@@ -11,7 +11,7 @@ import {
   type Run,
 } from "../../src/engine";
 import { readHiddenTruth } from "../../src/engine/hidden-truth";
-import { closingFixtureRaw, fixtureRaw } from "./fixture";
+import { closingFixtureRaw, fixtureRaw, floorOwn } from "./fixture";
 
 function standing() {
   return {
@@ -53,6 +53,7 @@ function raw() {
           { id: "lose", label: "Lose it", mistake: "big" },
         ],
       },
+      ...floorOwn(),
     ] as ReturnType<typeof fixtureRaw>["notifications"],
     standing: standing(),
     mistakes,
@@ -262,6 +263,7 @@ describe("Official standing's data", () => {
         items: [
           {
             id: "tool",
+            floor: "fixture-job",
             months: [1],
             from: "Boss",
             subject: "A tool",

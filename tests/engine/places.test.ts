@@ -9,7 +9,7 @@ import {
   type Run,
 } from "../../src/engine";
 import { readHiddenTruth } from "../../src/engine/hidden-truth";
-import { action, room, sceneFixtureRaw, withRoom } from "./fixture";
+import { action, room, sceneFixtureRaw, withRoom, floorOwn } from "./fixture";
 
 /*
  * On the fixture's Org Chart, Ana is at the top and Ben and Cal answer to her.
@@ -68,6 +68,7 @@ function placesFixtureRaw(cast = ["ana", "ben", "cal"]) {
           { id: "promise", label: "Promise", promise: "to-the-boss" },
         ],
       },
+      ...floorOwn(),
     ],
     places: {
       boss: { called: "your boss", title: "{title}, YOUR-BOSS" },

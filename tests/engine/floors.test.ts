@@ -17,13 +17,13 @@ function memo(id: string, floor?: string, months?: number[]) {
     subject: `MEMO-${id}`,
     body: "Please read.",
     options: [{ id: "noted", label: "Noted" }],
-    floor,
-    months,
+    ...(floor === undefined ? {} : { floor }),
+    ...(months === undefined ? {} : { months }),
   };
 }
 
-/** A Scene, and the meeting action that opens it. */
-function meeting(id: string, floor?: string, months?: number[]) {
+/** A Scene, and the meeting action that opens it in a room on its floor. */
+function meeting(id: string, floor: string, months?: number[]) {
   return {
     scene: {
       id,
@@ -39,7 +39,7 @@ function meeting(id: string, floor?: string, months?: number[]) {
     },
     action: {
       ...action(`go-${id}`),
-      place: "plant",
+      place: floor === "manager" ? "boardroom" : "plant",
       result: undefined,
       scene: id,
       oncePerMonth: true,
@@ -64,14 +64,18 @@ function upstairsRaw() {
   raw.floors.push({
     job: "manager",
     title: "JOB-MANAGER",
-    rooms: [room("plant", 0), room("lift", 1)],
+    rooms: [room("boardroom", 0), room("lift", 1)],
   });
   raw.you.job = "manager";
   raw.officialStory.title = "{job} Monthly Summary";
-  return {
-    ...raw,
-    notifications: [{ ...memo("ground-pool", "fixture-job"), pool: true }],
-  };
+  raw.actions.push(action("boardroom"));
+  // Its own content, which never arrives.
+  raw.notifications.push({
+    ...memo("manager-own", "manager"),
+    pool: true,
+    when: { flag: "never-set" },
+  });
+  return raw;
 }
 
 describe("the floor of the player's job", () => {
@@ -84,7 +88,7 @@ describe("the floor of the player's job", () => {
   it("offers only what is done in its own rooms", () => {
     const run = startRun({ seed: 1, content: parseContent(upstairsRaw()) });
 
-    expect(run.view().hotspots.map((h) => h.id)).toEqual(["plant"]);
+    expect(run.view().hotspots.map((h) => h.id)).toEqual(["boardroom"]);
   });
 
   it("heads the official story with the job title from the run", () => {
@@ -110,11 +114,20 @@ describe("the floor of the player's job", () => {
     raw.floors.push({
       job: "fixture-job",
       title: "JOB-AGAIN",
-      rooms: [room("plant", 0)],
+      rooms: [room("annexe", 0)],
     });
 
     expect(() => parseContent(raw)).toThrow(
       'Job "fixture-job" has more than one floor.',
+    );
+  });
+
+  it("refuses a room on two floors", () => {
+    const raw = upstairsRaw();
+    raw.floors[1]?.rooms.push(room("plant", 2));
+
+    expect(() => parseContent(raw)).toThrow(
+      'Room "plant" appears more than once in the tower.',
     );
   });
 
@@ -138,7 +151,7 @@ function scheduledRaw() {
   raw.floors.push({
     job: "manager",
     title: "JOB-MANAGER",
-    rooms: [room("plant", 0)],
+    rooms: [room("boardroom", 0)],
   });
   const written = [
     meeting("ground-1", "fixture-job", [1]),
@@ -157,7 +170,6 @@ function scheduledRaw() {
       { ...memo("ground-memo-pool", "fixture-job"), pool: true },
       memo("manager-memo-1", "manager", [1]),
       { ...memo("manager-memo-pool", "manager"), pool: true },
-      memo("every-floor", undefined, [2]),
     ],
   };
 }
@@ -220,7 +232,7 @@ describe("content scheduled by the month on its floor", () => {
       {
         month: 2,
         job: "fixture-job",
-        notifications: ["every-floor"],
+        notifications: [],
         scenes: ["ground-2"],
       },
     ]);
@@ -268,18 +280,18 @@ describe("content scheduled by the month on its floor", () => {
         notifications: ["manager-memo-1"],
         scenes: ["manager-1"],
       },
-      // Past what it was written for, and in its own month 2.
+      // Past what it was written for.
       {
         month: 3,
         job: "manager",
-        notifications: ["manager-memo-pool", "every-floor"],
+        notifications: ["manager-memo-pool"],
         scenes: ["manager-pool"],
       },
       // Back downstairs, at its own month 2.
       {
         month: 4,
         job: "fixture-job",
-        notifications: ["every-floor"],
+        notifications: [],
         scenes: ["ground-2"],
       },
       {
@@ -344,7 +356,7 @@ describe("the checks on floors", () => {
     raw.notifications.push(memo("ground-memo-3", "fixture-job", [3]));
 
     expect(() => parseContent(raw)).toThrow(
-      'Floor "fixture-job" has no Scene or Notification of its own for month 2.',
+      'Floor "fixture-job" has no Scene, Notification or Demand of its own for month 2.',
     );
   });
 
@@ -360,7 +372,7 @@ describe("the checks on floors", () => {
     );
   });
 
-  it("refuse a floor that a run does not start on, with nothing of its own", () => {
+  it("refuse a floor with nothing of its own, even the one a run starts on", () => {
     const raw = scheduledRaw();
     raw.scenes = raw.scenes.filter((s) => !s.id.startsWith("manager"));
     raw.notifications = raw.notifications.filter(
@@ -368,7 +380,7 @@ describe("the checks on floors", () => {
     );
 
     expect(() => parseContent(raw)).toThrow(
-      'Floor "manager" has no Scene or Notification of its own.',
+      'Floor "manager" has no Scene, Notification or Demand of its own.',
     );
   });
 
@@ -392,9 +404,73 @@ describe("the checks on floors", () => {
     raw.actions = raw.actions.filter((a) => a.id !== "go-ground-pool-a");
 
     expect(() => parseContent(raw)).toThrow(
-      'Scene "ground-pool-a" is in a pool, but no action without months opens it.',
+      'Scene "ground-pool-a" is in a pool, but no action without months opens it in a room on its floor.',
+    );
+  });
+
+  it("refuse a pool Scene opened only in a room on another floor", () => {
+    const raw = scheduledRaw();
+    const opens = raw.actions.find((a) => a.id === "go-manager-pool");
+    if (opens) opens.place = "plant";
+
+    expect(() => parseContent(raw)).toThrow(
+      'Scene "manager-pool" is in a pool, but no action without months opens it in a room on its floor.',
+    );
+  });
+
+  it.each([
+    [
+      'Notification "late"',
+      (raw: Raw) => raw.notifications.push(memo("late", undefined, [2])),
+    ],
+    [
+      'Action "kettle"',
+      (raw: Raw) =>
+        Object.assign(raw.actions.find((a) => a.id === "kettle") ?? {}, {
+          months: [2],
+        }),
+    ],
+    [
+      "A Project event",
+      (raw: Raw) =>
+        raw.project.events.push({ months: [2], text: "Oh." } as never),
+    ],
+  ])("refuse %s set by months with no floor", (owner, change) => {
+    const raw = scheduledRaw();
+    change(raw);
+
+    expect(() => parseContent(raw)).toThrow(
+      `${owner} has months, so it needs a floor.`,
     );
   });
 });
 
 type Raw = ReturnType<typeof scheduledRaw>;
+
+describe("the Project on another floor", () => {
+  it("does not replay the events written for the floor the player left", () => {
+    const raw = scheduledRaw();
+    raw.project.events = [
+      {
+        floor: "fixture-job",
+        months: [2],
+        text: "EVENT-DOWNSTAIRS",
+        project: { real: "worse" },
+      },
+    ];
+    const content = parseContent(raw);
+    const first = startRun({ seed: 3, content });
+    playMonth(first);
+    const upstairs = giveJob(first, content, "manager");
+    playMonth(upstairs);
+    playMonth(upstairs);
+
+    expect(upstairs.view().project.news).toEqual([]);
+    const back = giveJob(upstairs, content, "fixture-job");
+    playMonth(back);
+
+    expect(back.view().project.news.map((n) => n.text)).toEqual([
+      "EVENT-DOWNSTAIRS",
+    ]);
+  });
+});

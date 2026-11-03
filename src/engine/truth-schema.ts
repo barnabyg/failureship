@@ -1,5 +1,13 @@
 import { z } from "zod";
-import { condition, id, lines, months, NATURES, text } from "./basic-schema";
+import {
+  condition,
+  floor,
+  id,
+  lines,
+  months,
+  NATURES,
+  text,
+} from "./basic-schema";
 
 const kindRule = z.strictObject({
   label: text,
@@ -107,6 +115,7 @@ export const notebook = z.strictObject({
   events: z.array(
     z.strictObject({
       id,
+      floor,
       months,
       /** Noted when this first holds in a month. */
       when: condition,

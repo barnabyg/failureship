@@ -105,6 +105,7 @@ export const scene = z.strictObject({
 
 export const action = z.strictObject({
   id,
+  floor,
   months,
   label: text,
   description: text,
