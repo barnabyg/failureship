@@ -89,6 +89,7 @@ function giveTheWord(
   if (over === bossOf(state, content)) {
     state.bossLandings.push({
       month: state.month,
+      boss: over,
       choice: item.title,
       shift: word.shift,
     });

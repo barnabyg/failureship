@@ -226,7 +226,8 @@ function toBossResults(
   content: Content,
 ): Extract<StepView, { kind: "results" }>["boss"] {
   const { warmer, cooler, unmoved } = content.ui.bossLanded;
-  const { name, title } = personOf(state, content, bossOf(state, content));
+  const boss = bossOf(state, content);
+  const { name, title } = personOf(state, content, boss);
   return {
     name,
     title,
@@ -238,11 +239,14 @@ function toBossResults(
         moodOf(state, content)
       ] ??
       null,
-    choices: state.bossLandings.map(({ month, choice, shift }) => ({
-      month,
-      choice,
-      landed: shift > 0 ? warmer : shift < 0 ? cooler : unmoved,
-    })),
+    // Only what came across to this boss, not to anyone who was boss before.
+    choices: state.bossLandings
+      .filter((landing) => landing.boss === boss)
+      .map(({ month, choice, shift }) => ({
+        month,
+        choice,
+        landed: shift > 0 ? warmer : shift < 0 ? cooler : unmoved,
+      })),
     head: toHeadResults(state, content),
   };
 }

@@ -9,15 +9,6 @@ import { monthAfter } from "./threads";
 
 type Written = NonNullable<Content["promises"]>;
 
-/** Whom a Promise is made to: the Character written, or whoever holds the place. */
-export function promisedTo(
-  state: State,
-  content: Content,
-  item: { to: string },
-): string {
-  return whoIs(state, content, item.to);
-}
-
 function writtenPromises(content: Content): Written {
   if (!content.promises) throw new Error("No Promises are written.");
   return content.promises;
@@ -61,9 +52,9 @@ function replyOf(
   content: Content,
   written: Written,
   item: Written["items"][number],
+  to: string,
   believed: boolean,
 ): string {
-  const to = promisedTo(state, content, item);
   const dealt = state.truth.characters.find((c) => c.id === to);
   if (!dealt) return "";
   const { replies } = written;
@@ -93,11 +84,13 @@ export function makePromise(state: State, content: Content, id: string): void {
   const written = writtenPromises(content);
   const item = written.items.find((p) => p.id === id);
   if (!item) throw new Error(`Unknown Promise "${id}".`);
-  const to = promisedTo(state, content, item);
+  // Made to whoever is in the place now, who stays the one it was made to.
+  const to = whoIs(state, content, item.to);
   const believed = believes(state, content, written, id, to);
-  const reply = replyOf(state, content, written, item, believed);
+  const reply = replyOf(state, content, written, item, to, believed);
   state.promises.push({
     id,
+    to,
     month: state.month,
     status: believed ? "open" : "refused",
     due: believed ? monthAfter(state, `promise-wait:${id}`, item.after) : null,
@@ -185,7 +178,7 @@ export function settlePromise(
   const made = state.promises.find((p) => dueIdOf(p.id) === notificationId);
   const item = content.promises?.items.find((p) => p.id === made?.id);
   if (!made || !item) return;
-  const word = { victim: promisedTo(state, content, item), what: item.what };
+  const word = { victim: made.to, what: item.what };
   made.status = how;
   made.news =
     how === "kept"
@@ -201,7 +194,7 @@ function promisesMade(state: State, content: Content) {
     if (!written || !item) return [];
     const row = {
       month: made.month,
-      to: calledBy(state, content, promisedTo(state, content, item)),
+      to: calledBy(state, content, made.to),
       what: item.what,
       status: written.statuses[made.status],
     };
@@ -215,11 +208,11 @@ export function promisesInView(state: State, content: Content) {
 
 /** Everything the list said, and who else it reached, which only now can be told. */
 export function promisesInResults(state: State, content: Content) {
-  return promisesMade(state, content).map(({ made, item, row }) => {
-    const to = promisedTo(state, content, item);
+  return promisesMade(state, content).map(({ made, row }) => {
     const heardBy = state.truth.memories
       .filter(
-        (m) => made.news !== null && m.news === made.news && m.character !== to,
+        (m) =>
+          made.news !== null && m.news === made.news && m.character !== made.to,
       )
       .map((m) => calledBy(state, content, m.character));
     return { ...row, heardBy };

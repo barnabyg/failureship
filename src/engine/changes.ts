@@ -2,7 +2,6 @@ import { sendBill } from "./bills";
 import { dueIdOf, type Content, type Kind } from "./content";
 import { leaveMap } from "./deal";
 import { applyOutcome } from "./outcome";
-import { promisedTo } from "./promises";
 import { mentionsGone, matches } from "./reads";
 import { drawFor, pickWeighted } from "./rng";
 import type { Change, State } from "./state";
@@ -71,12 +70,7 @@ function leave(
   state.truth.powerMap = leaveMap(state.truth.powerMap, id);
   const lapsed: string[] = [];
   for (const made of state.promises) {
-    const item = content.promises?.items.find((p) => p.id === made.id);
-    if (
-      made.status === "open" &&
-      item !== undefined &&
-      promisedTo(state, content, item) === id
-    ) {
+    if (made.status === "open" && made.to === id) {
       made.status = "lapsed";
       lapsed.push(dueIdOf(made.id));
     }

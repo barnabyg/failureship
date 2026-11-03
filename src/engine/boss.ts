@@ -35,7 +35,7 @@ export function landWithBoss(
   const boss = bossOf(state, content);
   shiftBelief(state, boss, shift);
   if (approach === undefined && shift === 0) return undefined;
-  state.bossLandings.push({ month: state.month, choice: label, shift });
+  state.bossLandings.push({ month: state.month, boss, choice: label, shift });
   if (shift !== 0) {
     remember(state, content, {
       character: boss,

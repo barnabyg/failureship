@@ -25,6 +25,7 @@ export function remember(
     if (memory.character === bossOf(state, content)) {
       state.bossLandings.push({
         month: state.month,
+        boss: memory.character,
         choice: memory.text,
         shift,
       });
