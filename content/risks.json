@@ -134,7 +134,7 @@
     "id": "tool-hollow",
     "addedBy": "tool-is-hollow",
     "after": { "min": 1, "max": 2 },
-    "note": "You made your boss's Grand Plan look done: the new tool is an icon over an empty folder, and the launch e-mail says otherwise.",
+    "note": "You made your boss's Grand Plan look done: the new tool says it is in use, and what is in it is not the real figures, if anything is.",
     "route": {
       "character": "head",
       "chance": { "believer": 0.9, "incompetent": 0.3, "practitioner": 0.6 },
@@ -146,7 +146,7 @@
       "as": "move",
       "from": "From: The Head of Operations, Hugh Lamb",
       "title": "The new tool, for the board",
-      "body": "The Head of Operations opened the new tool to take its figures to the board, and found an empty folder with a nice icon. The launch e-mail is from you. The Head of Operations would like a short note on what the tool does. It is to be shorter than the e-mail.",
+      "body": "The Head of Operations opened the new tool to take its figures to the board, and found that they were not the real ones, where there were any. The launch e-mail is from you. The Head of Operations would like a short note on what the tool does. It is to be shorter than the e-mail.",
       "opinion": -1,
       "headOpinion": -2,
       "sets": ["tool-found-hollow"]
@@ -156,7 +156,7 @@
       "as": "move",
       "from": "From: The Head of Operations, Hugh Lamb",
       "title": "The new tool, for the board",
-      "body": "The Head of Operations opened the new tool for the board, and found an empty folder. The shared drive no longer says who made it. It is now thought to have been a test by IT, and IT has been asked to stop testing things.",
+      "body": "The Head of Operations opened the new tool for the board, and found that its figures were not the real ones. The shared drive no longer says who made it. It is now thought to have been a test by IT, and IT has been asked to stop testing things.",
       "sets": ["tool-hollow-untraced"]
     },
     "landedOnYou": "It came out when the board wanted the figures, and the launch e-mail led to you.",

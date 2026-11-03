@@ -132,7 +132,7 @@
       "months": [4],
       "from": "From: Your boss, {boss}",
       "subject": "FW: This solves ALL your problems (read this!!)",
-      "body": "Your boss has found the tool for the Grand Plan, in an article about a new software tool that solves all your problems, and wants it rolled out across the floor by the half-year review. Your boss has not said which problems. The article is by the company that sells it.",
+      "body": "Your boss has found the tool for the Grand Plan, in an article about a new software tool that solves all your problems, and wants it rolled out across the floor, as the Grand Plan says. Your boss has not said which problems. The article is by the company that sells it.",
       "options": [
         {
           "id": "deliver",

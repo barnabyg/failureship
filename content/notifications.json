@@ -698,7 +698,7 @@
     "when": { "planRunning": "hot-desks" },
     "from": "From: Your boss, {boss}",
     "subject": "Hot-desking: where are we?",
-    "body": "Your boss's Grand Plan is hot-desking: nobody will have a desk of their own, so that everyone has every desk. Your boss would like it done within three months, and asks each month where it has got to.",
+    "body": "Your boss's Grand Plan is hot-desking: nobody will have a desk of their own, so that everyone has every desk. Your boss asks each month where it has got to.",
     "options": [
       {
         "id": "being-phased",
@@ -741,6 +741,57 @@
         "result": {
           "title": "Hot-desking",
           "body": "In the morning there are no labels, and everyone is at the same desk as yesterday. It is agreed to be a big change."
+        }
+      }
+    ]
+  },
+  {
+    "id": "tool-figures",
+    "floor": "junior-employee",
+    "months": [5],
+    "when": {
+      "all": [{ "planRunning": "one-tool" }, { "did": "rolled-out-tool" }]
+    },
+    "from": "From: The new tool, no-reply",
+    "subject": "Welcome! Let's get your figures in",
+    "body": "The new tool is installed, and empty. It would like the real figures, and says it will not be fully transformative without them. Nobody has said who has them.",
+    "options": [
+      {
+        "id": "ask-analyst-for-figures",
+        "family": "find-out",
+        "label": "Ask the Senior Analyst for the real figures",
+        "sets": ["asked-analyst-for-figures", "asked-for-figures"],
+        "result": {
+          "title": "The real figures",
+          "body": "The Senior Analyst says that they will send something over. Something arrives, in a spreadsheet called FINAL final."
+        }
+      },
+      {
+        "id": "ask-admin-for-figures",
+        "family": "find-out",
+        "label": "Ask the Office Co-ordinator for the real figures",
+        "sets": ["asked-admin-for-figures", "asked-for-figures"],
+        "result": {
+          "title": "The real figures",
+          "body": "The Office Co-ordinator says that they will send something over. Something arrives, in a spreadsheet called FINAL final."
+        }
+      },
+      {
+        "id": "ask-projects-for-figures",
+        "family": "find-out",
+        "label": "Ask the Project Co-ordinator for the real figures",
+        "sets": ["asked-projects-for-figures", "asked-for-figures"],
+        "result": {
+          "title": "The real figures",
+          "body": "The Project Co-ordinator says that they will send something over. Something arrives, in a spreadsheet called FINAL final."
+        }
+      },
+      {
+        "id": "figures-later",
+        "label": "Leave the figures until someone asks for them",
+        "result": {
+          "title": "The real figures",
+          "body": "The tool sends you a reminder, and then a reminder about the reminder, which you file with the first."
         }
       }
     ]

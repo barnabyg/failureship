@@ -5,7 +5,7 @@
     "location": "Floor 1, Meeting Room 1B",
     "narration": [
       "Item one on the agenda is the agenda. The projector shows a slide titled Where We Are. Nobody can say.",
-      "Item two is your boss's Grand Plan: one tool for everything, in use across the whole floor by the half-year review. The slide is a photograph of a lighthouse. Your boss has not seen the tool yet, but has read about it, and is visibly moved."
+      "Item two is your boss's Grand Plan, which is called {plan}. The slide is a photograph of a lighthouse. Your boss has not seen it working yet, but has read about it, and is visibly moved."
     ],
     "cast": ["head", "boss", "analyst", "admin", "projects", "associate"],
     "signs": [
@@ -181,6 +181,10 @@
       {
         "label": "Who has prepared",
         "text": "{holder} has brought no notes, and nobody has asked why. {ignored} has brought a timeline, and nobody has asked to see it."
+      },
+      {
+        "label": "Who has the figures",
+        "text": "When someone asks where the real figures are kept, nobody answers, and everyone looks at {keeper}."
       },
       {
         "label": "Who goes quiet",
@@ -893,13 +897,13 @@
       {
         "id": "load-the-real-figures",
         "family": "deliver",
-        "label": "Offer to sit with the Senior Analyst, load the real figures into the new tool, and launch it yourself",
+        "label": "Offer to load the figures you were sent into the new tool, and launch it yourself",
         "requires": {
-          "all": [{ "planRunning": "one-tool" }, { "did": "rolled-out-tool" }]
+          "all": [{ "planRunning": "one-tool" }, { "did": "asked-for-figures" }]
         },
         "results": [
           {
-            "body": "The Senior Analyst has the real figures, in a spreadsheet called FINAL final. It takes an afternoon to load them. The launch e-mail goes out under your name, with a chart in it that goes down.",
+            "body": "The figures you were sent are in a spreadsheet called FINAL final. It takes an afternoon to load them. The launch e-mail goes out under your name, with a chart in it.",
             "sets": ["tool-real-figures"],
             "approach": "results"
           }
@@ -908,13 +912,13 @@
       {
         "id": "launch-it-as-theirs",
         "family": "impress",
-        "label": "Offer to load the real figures, so that your boss can launch the new tool as their own idea",
+        "label": "Offer to load the figures you were sent, so that your boss can launch the new tool as their own idea",
         "requires": {
-          "all": [{ "planRunning": "one-tool" }, { "did": "rolled-out-tool" }]
+          "all": [{ "planRunning": "one-tool" }, { "did": "asked-for-figures" }]
         },
         "results": [
           {
-            "body": "You and the Senior Analyst load the real figures. Your boss's note is moved to the top of the wall, and the launch e-mail goes out from your boss.",
+            "body": "You load the figures you were sent. Your boss's note is moved to the top of the wall, and the launch e-mail goes out from your boss.",
             "sets": ["tool-real-for-boss"],
             "approach": "favour"
           }
@@ -1130,13 +1134,13 @@
       {
         "id": "show-the-tool-live",
         "family": "deliver",
-        "label": "Put the new tool on the big screen, and load the real figures into it while everyone watches",
+        "label": "Put the new tool on the big screen, and load the figures you were sent into it while everyone watches",
         "requires": {
-          "all": [{ "planRunning": "one-tool" }, { "did": "rolled-out-tool" }]
+          "all": [{ "planRunning": "one-tool" }, { "did": "asked-for-figures" }]
         },
         "results": [
           {
-            "body": "It takes eleven minutes, during which the video link freezes on your face. Then the real figures appear, and they are worse than the arrows. The minutes record that the tool is in use.",
+            "body": "It takes eleven minutes, during which the video link freezes on your face. Then the figures appear, and they are not the same as the arrows. The minutes record that the tool is in use.",
             "sets": ["tool-real-figures"],
             "approach": "results"
           }
