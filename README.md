@@ -8,7 +8,7 @@ with kinds of boss, a Project, the Monthly Status Report, Demands, one-off Budge
 Moves and going over your boss's head. Earlier choices come back through Threads, hidden risks and
 what people have heard, things happen to the company, and you can be fired. You can give your word
 and make Deals, a Believer you burn can change or leave, Teflon and Fawning move when a Thread plays
-out, and runs save.
+out, a quarterly review comes round every third month, and runs save.
 
 ## Play
 
@@ -18,18 +18,17 @@ You need [Node.js](https://nodejs.org/) 22 or later. From the root of the reposi
 npm run play
 ```
 
-This installs anything missing the first time, starts the game and opens it in
-your browser. If the browser does not open, go to the address the command prints.
-Press `Ctrl+C` in the terminal to stop it.
+This installs anything missing the first time, starts the game and opens it in your browser. If the
+browser does not open, go to the address it prints. Press `Ctrl+C` in the terminal to stop it.
 
 On Windows, you can double-click `run.bat` in the root of the repository instead.
 
 ## What to try
 
-Every run has a seed, shown at the top right. Add `?seed=8` to the address to pick
-one. Each of the nine months has the same shape and different contents:
+Every run has a seed, at the top right, and `?seed=8` picks one. Each month has the same shape:
 
-1. **A Notification arrives.** Answer it. The answer may cost one of your 3 actions.
+1. **A Notification arrives.** Answer it. The answer may cost one of your 3 actions. In months 3,
+   6 and 9 the **Quarterly Business Review** follows by itself, at no cost, and goes on the record.
 2. **Spend your remaining actions** by clicking a place on the floor or its label.
    The panel at the bottom left always says what you can do now.
 3. **Any Company Event, then a Character Move, lands on you.** You do not get a choice.
@@ -37,15 +36,15 @@ one. Each of the nine months has the same shape and different contents:
 
 There are four ways to spend an action:
 
-- **Meeting Room 1B** opens that month's Scene. You can stay away: it saves the action,
-  but you see none of its signs, your boss may take it badly, and the minutes give you
-  an action that follows you as a Demand. Everyone present behaves according
-  to their role and their dealt kind, and no single sign settles what they are. Your
-  boss's treatment of you shows what they think of you, but only roughly.
-- **The photocopier** and **the loading bay** are Find Out. At the photocopier, someone
-  is already there and you choose whom to ask about. At the loading bay, you also
-  choose who to buy from. Either way you get a claim that may be true, mistaken, out of date or deliberately
-  false. Asking is mostly about people. Buying is mostly about Hidden Facts.
+- **Meeting Room 1B** opens that month's Scene. You can stay away: it saves the action, but you see
+  none of its signs, your boss may take it badly, and the minutes give you an action that follows
+  you as a Demand. Everyone present behaves according to their role and their dealt kind, and no
+  single sign settles what they are. Your boss's treatment of you shows what they think of you, but
+  only roughly.
+- **The photocopier** and **the loading bay** are Find Out. At the photocopier, someone is already
+  there and you choose whom to ask about. At the loading bay, you also choose who to buy from.
+  Either way you get a claim that may be true, mistaken, out of date or deliberately false. Asking
+  is mostly about people. Buying is mostly about Hidden Facts.
 - **Your boss's boss's office** goes over your boss's head. It can pay off better than
   anything else you can do, or cost you more if your boss finds out. You are not told the odds.
 - **The kitchen, the Senior Analyst's desk and your desk** do what they look like.
@@ -124,7 +123,7 @@ format, the page shows what is wrong instead of the game.
 | `dialogs.json`        | Short text dialogs, such as the pub                                                                    |
 | `buzzwords.json`      | Buzzwords and their meanings                                                                           |
 | `actions.json`        | What can be done on the floor, and the results                                                         |
-| `scenes.json`         | Each month's Scene: its signs, its choices and their results                                           |
+| `scenes.json`         | Each month's Scene and each quarter's review: signs, choices, results                                  |
 | `moves.json`          | Character Moves, and when each can land                                                                |
 | `threads.json`        | What comes back months later: what starts each Thread, and the Bill it sends                           |
 | `events.json`         | Company Events: where each comes from, how it moves the charts, and the official story's words         |
@@ -145,7 +144,7 @@ format, the page shows what is wrong instead of the game.
 | `gauges.json`         | The Gauges, Teflon and Fawning: where each starts, and the Milestones earned along the way             |
 | `standing.json`       | Official standing: what on the official record moves it, its bands, and what the results screen says   |
 | `hidden-truth.json`   | The rules of the deal: kinds, their weights, and the Hidden Facts                                      |
-| `balance.json`        | Actions a month, months in a run, the cost of each choice, how often signs mislead and the boss's mood |
+| `balance.json`        | Actions a month, months in a run and a quarter, each choice's cost, how signs mislead, the boss's mood |
 | `floors.json`         | Each floor, by the job done on it: the job title, the rooms, their fittings and the lift's sign        |
 
 Each file's fields, the conditions they can use, which floor and month content belongs to, and what
@@ -166,16 +165,17 @@ How to run the checks and tests is in [AGENTS.md](AGENTS.md#verifying).
   The mechanics are `boss.ts`, `demands.ts`, `find-out.ts` with `claims.ts`, `notebook.ts`,
   `over-head.ts`, `project.ts`, `scenes.ts`, `company-events.ts`, `mistakes.ts`, `reputation.ts`,
   `risks.ts`, `threads.ts` with `bills.ts`, `promises.ts`, `deals.ts`, `changes.ts` for Believers
-  changing and leaving, `gauges.ts`, the only module that reads a Gauge, and `standing.ts`. `say.ts`
-  names Characters in text, and `rng.ts` and `seed.ts` hold the seed. `view.ts` is the player view,
-  built by `to-view.ts`, with `to-results.ts` its reveal at the end; `hidden-truth.ts` is the tests'
-  read of the truth. `save.ts` writes and reads a run. A run's `State` is plain data, so a mechanic
-  gets saving for free: raise `SAVE_VERSION` if it changes what saved state means. `content.ts`
-  assembles the schema from the `*-schema.ts` files, as [AGENTS.md](AGENTS.md) says.
-  `content-checks.ts` parses and checks data across files, with each mechanic's checks in
-  `truth-checks.ts` for the hidden truth and its signs, `boss-checks.ts` for the boss, going over
-  the head, Demands and reputation, and `consequence-checks.ts` for what choices lead to, with
-  `word-checks.ts` for Promises and Deals and `floor-checks.ts` for floors.
+  changing and leaving, `gauges.ts`, the only module that reads a Gauge, `standing.ts`, and
+  `reviews.ts` for the quarterly reviews. `say.ts` names Characters in text, and `rng.ts` and
+  `seed.ts` hold the seed. `view.ts` is the player view, built by `to-view.ts`, with `to-results.ts`
+  its reveal at the end; `hidden-truth.ts` is the tests' read of the truth. `save.ts` writes and
+  reads a run. A run's `State` is plain data, so a mechanic gets saving for free: raise
+  `SAVE_VERSION` if it changes what saved state means. `content.ts` assembles the schema from the
+  `*-schema.ts` files, as [AGENTS.md](AGENTS.md) says. `content-checks.ts` parses and checks data
+  across files, with each mechanic's checks in `truth-checks.ts` for the hidden truth and its signs,
+  `boss-checks.ts` for the boss, going over the head, Demands and reputation, and
+  `consequence-checks.ts` for what choices lead to, with `word-checks.ts` for Promises and Deals and
+  `floor-checks.ts` for floors and `review-checks.ts` for reviews.
 - `src/tower/` draws the floor the view names, and holds no rules.
 - `src/ui/` holds the React panels over the tower: `App.tsx` wires them to the run, and
   `TowerStage.tsx` the tower's hotspots. `panels.tsx` picks each step's panel, the larger being
