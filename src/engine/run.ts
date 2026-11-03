@@ -4,6 +4,7 @@ import { dealCharacters, dealFavours, dealMotives, dealPowerMap } from "./deal";
 import { freshMonth, nextStep, openMonth } from "./month";
 import { startingGauges } from "./gauges";
 import { noteEvents } from "./notebook";
+import { bossOf, headOf } from "./places";
 import { beliefOf } from "./reads";
 import { readSave, UnusableSaveError, writeSave } from "./save";
 import {
@@ -168,8 +169,8 @@ function runOf(state: State, world: World): Run {
   };
   truths.set(run, () => ({
     ...structuredClone(state.truth),
-    bossBelief: beliefOf(state, content.boss.character),
-    headBelief: beliefOf(state, content.overHead?.character ?? ""),
+    bossBelief: beliefOf(state, bossOf(state, content)),
+    headBelief: beliefOf(state, headOf(state, content) ?? ""),
   }));
   return run;
 }

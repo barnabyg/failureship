@@ -20,7 +20,7 @@ A `when` or `requires` holds one of these:
 | `{ "hasBuzzword": "strategic-patience" }`                              | The player has learnt the Buzzword                                                      | No                     |
 | `{ "heardFact": "lost-list" }`                                         | The player has been told that Hidden Fact about someone, true or not                    | No                     |
 | `{ "heardTrue": "lost-list" }`                                         | What the player was told about that Hidden Fact is true                                 | Yes                    |
-| `{ "holderIs": "boss" }`                                               | That Character is the most influential of those present, or of everyone outside a Scene | Yes                    |
+| `{ "holderIs": "{boss}" }`                                             | That Character is the most influential of those present, or of everyone outside a Scene | Yes                    |
 | `{ "bossIs": "practitioner" }`                                         | The boss is of that kind                                                                | Yes                    |
 | `{ "factNature": { "character": "projects", "nature": "dangerous" } }` | That Character's Hidden Fact has that `nature`                                          | Yes                    |
 | `{ "youOwe": "projects" }`                                             | The player owes that Character a favour                                                 | No                     |
@@ -42,7 +42,8 @@ Where each can be used. These are all the places that take a condition:
 | A Notebook event's `when`                  | Only those that do not read the hidden truth, as below |
 
 A condition anywhere else is refused, as is one that names an unknown Character, Hidden
-Fact or Buzzword. An option must never appear or disappear on undiscovered
+Fact or Buzzword. A condition can name your boss or your boss's boss, as in
+[the next section](#your-boss-and-your-bosss-boss). An option must never appear or disappear on undiscovered
 truth, and that includes the boss's kind, so a condition that would show the truth
 this way stops the game from starting. This also goes for a flag set by something
 hidden: a Scene result or a Move whose `when` reads the truth, a Bill or any of its
@@ -52,6 +53,28 @@ Notebook event can still read such a flag, because the player has just seen that
 
 Flags come from `sets`, and are wiped when a new month opens, though `did` can still read
 them for the rest of the run. Buzzwords carry over for the whole run.
+
+## Your boss and your boss's boss
+
+There are two places above the player on the Org Chart. Your boss is whoever the player reports
+to, and your boss's boss is whoever your boss reports to. A place is not a Character: whoever is
+in it can change when someone moves on the Org Chart. Where the player sits is `you` in
+[`characters.json`](#charactersjson), and a run keeps it from there. If your boss reports to
+nobody, there is no boss's boss, and data that names one is refused.
+
+Everything written for your boss or your boss's boss goes to whoever is in that place at the time:
+the signs and approaches in [`boss.json`](#bossjson), going over the head in
+[`over-head.json`](#over-headjson), `opinion` and `headOpinion`, their `mood`, and the words for
+them in `places`. What was done with one boss stays with them: a Promise to `{boss}` is made to
+whoever is boss then, and the results screen lists only what came across to the boss at the end.
+
+Data names them as `{boss}` and `{head}`, wherever it would name a Character to say who a choice
+or a condition concerns: any condition, `remembers`, news `at`, `factAt`, `repays`, a Promise's
+`to`, a Deal's `word.over`, and a Company Event's `reshuffle`. Name a Character there only when
+it means that person, whatever their place. The Org Chart's own `reportsTo`, a Scene's `cast`,
+Find Out's `sources`, `leaving`, a Hidden Fact's `characters`, a risk's `route.character` and a
+Deal's `with` always name a Character. A `from` line can say `{boss}` or `{head}` for the name of
+whoever is in that place, such as `"From: Your boss, {boss}"`.
 
 ## `months`, in several files
 
@@ -101,7 +124,8 @@ chosen by their dealt kind.
 
 ## `boss.json`
 
-Who your boss is, the signs of how they treat you, and what impresses each kind.
+The signs of how [your boss](#your-boss-and-your-bosss-boss) treats you, and what impresses each
+kind.
 
 A choice can carry `"opinion": 1` or `-1` to move your boss's hidden belief about you. The
 belief has no number on screen. It shows only through `signs`: when the boss is in a
@@ -152,12 +176,19 @@ from them, it is never late again.
 
 ## `characters.json`
 
-Job titles, roles, names, and who reports to whom on the Org Chart.
+Job titles, roles, names, who reports to whom on the Org Chart, and where the player sits on it.
 
-A Character's `called` is how running text refers to them, such as `your boss`, and it gets
-a capital only where a sentence starts. Write people into text that way too, and keep their
-`name` for a Notification or Move's `from` line. A test fails if a name turns up in the
-running text.
+- `characters` lists the Characters. Each has an `id`, `name`, `title`, `called`, `role`, and
+  `reportsTo`, whom they answer to on the Org Chart, except for whoever is at the top.
+- `you` is where the player sits: `reportsTo` names a Character, as in
+  [Your boss and your boss's boss](#your-boss-and-your-bosss-boss).
+- `places` holds the words for whoever is in each place, `boss` and `head`, while they are:
+  `called`, and a `title` that says `{title}`, their own job title.
+
+A Character's `called` is how running text refers to them, such as `the Senior Analyst`, and it
+gets a capital only where a sentence starts. While someone is your boss or your boss's boss, the
+place's `called` is used instead. Write people into text that way too, and keep their `name` for a
+Notification or Move's `from` line. A test fails if a name turns up in the running text.
 
 ## `deals.json`
 
@@ -227,9 +258,10 @@ Each has exactly one way to land, or it is refused:
 
 `reshuffle` changes the charts. `reports` moves a Character on the Org Chart, so `character` now
 reports `to` someone else, and a move that would make a loop does not happen. `rises` sends someone
-to the top of the Power Map, and `falls` to the bottom, which changes later signs. Your boss and your
-boss's boss cannot be moved in `reports`, since nothing creates a vacancy yet. An event that moves
-anyone needs `changed`, which the results screen shows beside the charts.
+to the top of the Power Map, and `falls` to the bottom, which changes later signs. Any of them can be
+`{boss}` or `{head}`. Your boss, your boss's boss and the player, `you`, cannot be moved in
+`reports`, since nothing creates a vacancy yet. An event that moves anyone needs `changed`, which the
+results screen shows beside the charts.
 
 ## `families.json`
 
@@ -326,7 +358,8 @@ The official story, assembled from `entries` according to what you did. Each ent
 
 ## `over-head.json`
 
-Going over your boss's head, which an action with `"overHead": true` does.
+Going over your boss's head, to [your boss's boss](#your-boss-and-your-bosss-boss), which an action
+with `"overHead": true` does. It is refused if there is no boss's boss.
 
 Your boss's boss has a hidden belief of their own, which `signs` show whenever they are in a
 Scene, and which a choice can move with `"headOpinion": 1`. Its own `mood` here says when

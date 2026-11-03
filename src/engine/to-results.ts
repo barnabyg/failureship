@@ -2,9 +2,10 @@ import { startedAs } from "./changes";
 import { MOVE_FAMILIES, type Content } from "./content";
 import { dealsInResults } from "./deals";
 import { gaugesInView } from "./gauges";
+import { bossOf, headOf } from "./places";
 import { promisesInResults } from "./promises";
 import { bossKindOf, moodOf, moodOfCharacter, personOf } from "./reads";
-import { calledBy, sayPeople } from "./say";
+import { calledBy, sayPeople, titleOf } from "./say";
 import { standingAtEnd } from "./standing";
 import type { State } from "./state";
 import type { StepView } from "./view";
@@ -29,7 +30,7 @@ export function toResultsView(
     changed: state.truth.changes.flatMap((change) => {
       const written = content.changing;
       if (!written) return [];
-      const { name, title } = personOf(content, change.character);
+      const { name, title } = personOf(state, content, change.character);
       return [
         {
           month: change.month,
@@ -61,7 +62,7 @@ export function toResultsView(
       const motive =
         through !== undefined && content.changing
           ? sayPeople(content.changing.whistleblower.motive, {
-              "{who}": calledBy(content, through),
+              "{who}": calledBy(state, content, through),
             })
           : written.route.motive;
       return [
@@ -91,7 +92,7 @@ export function toResultsView(
       const known = content.characters.find((c) => c.id === dealt.id);
       return {
         name: known?.name ?? dealt.id,
-        title: known?.title ?? "",
+        title: titleOf(state, content, dealt.id),
         kind: content.hiddenTruth.kinds[startedAs(state, dealt.id, dealt.kind)]
           .label,
         fact: dealt.fact?.text ?? null,
@@ -101,7 +102,7 @@ export function toResultsView(
       const above = influence.find((i) => i.over === id);
       return {
         name: nameOf(id),
-        title: content.characters.find((c) => c.id === id)?.title ?? "",
+        title: titleOf(state, content, id),
         reportsTo: above ? nameOf(above.who) : null,
       };
     }),
@@ -110,7 +111,7 @@ export function toResultsView(
       const { kinds } = content.hiddenTruth;
       return {
         name: nameOf(dealt.id),
-        title: personOf(content, dealt.id).title,
+        title: personOf(state, content, dealt.id).title,
         mark: mark === null ? null : kinds[mark].label,
         truth: kinds[startedAs(state, dealt.id, dealt.kind)].label,
         correct:
@@ -162,9 +163,9 @@ function toBeliefs(
 ): Extract<StepView, { kind: "results" }>["beliefs"] {
   const written = content.reputation;
   if (!written) return [];
-  return content.characters.map(({ id, name, title }) => ({
+  return content.characters.map(({ id, name }) => ({
     name,
-    title,
+    title: titleOf(state, content, id),
     believes: written.believes[moodOfCharacter(state, content, id)],
     reached: state.truth.memories
       .filter((m) => m.character === id)
@@ -174,7 +175,7 @@ function toBeliefs(
         how:
           typeof via === "string"
             ? sayPeople(written.how.heardFrom, {
-                "{who}": calledBy(content, via),
+                "{who}": calledBy(state, content, via),
               })
             : written.how.direct,
       })),
@@ -191,14 +192,14 @@ function toStandingResults(
 ): Extract<StepView, { kind: "results" }>["standing"] {
   const standing = standingAtEnd(state, content);
   if (!standing) return null;
-  const boss = content.boss.character;
+  const boss = bossOf(state, content);
   const decider =
     state.truth.powerMap.influence.find((i) => i.over === boss)?.who ?? boss;
   return {
     ...standing,
     decides: standing.decides.replaceAll(
       "{who}",
-      personOf(content, decider).name,
+      personOf(state, content, decider).name,
     ),
     believes:
       content.reputation?.believes[moodOfCharacter(state, content, decider)] ??
@@ -225,7 +226,8 @@ function toBossResults(
   content: Content,
 ): Extract<StepView, { kind: "results" }>["boss"] {
   const { warmer, cooler, unmoved } = content.ui.bossLanded;
-  const { name, title } = personOf(content, content.boss.character);
+  const boss = bossOf(state, content);
+  const { name, title } = personOf(state, content, boss);
   return {
     name,
     title,
@@ -237,11 +239,14 @@ function toBossResults(
         moodOf(state, content)
       ] ??
       null,
-    choices: state.bossLandings.map(({ month, choice, shift }) => ({
-      month,
-      choice,
-      landed: shift > 0 ? warmer : shift < 0 ? cooler : unmoved,
-    })),
+    // Only what came across to this boss, not to anyone who was boss before.
+    choices: state.bossLandings
+      .filter((landing) => landing.boss === boss)
+      .map(({ month, choice, shift }) => ({
+        month,
+        choice,
+        landed: shift > 0 ? warmer : shift < 0 ? cooler : unmoved,
+      })),
     head: toHeadResults(state, content),
   };
 }
@@ -252,9 +257,10 @@ function toHeadResults(
   content: Content,
 ): Extract<StepView, { kind: "results" }>["boss"]["head"] {
   const written = content.overHead;
-  const dealt = state.truth.characters.find((c) => c.id === written?.character);
+  const head = headOf(state, content);
+  const dealt = state.truth.characters.find((c) => c.id === head);
   if (!written || !dealt) return null;
-  const { name, title } = personOf(content, dealt.id);
+  const { name, title } = personOf(state, content, dealt.id);
   return {
     name,
     title,

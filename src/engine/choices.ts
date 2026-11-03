@@ -102,7 +102,7 @@ function answerNotification(
 
   const reply =
     replyToPromise(state, content, option.promise) ??
-    replyToDeal(content, option.deal);
+    replyToDeal(state, content, option.deal);
   if (reply) {
     state.step = { kind: "notice", ...reply, reaction };
   } else if (option.dialog !== undefined) {

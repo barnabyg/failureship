@@ -70,8 +70,7 @@ function leave(
   state.truth.powerMap = leaveMap(state.truth.powerMap, id);
   const lapsed: string[] = [];
   for (const made of state.promises) {
-    const item = content.promises?.items.find((p) => p.id === made.id);
-    if (made.status === "open" && item?.to === id) {
+    if (made.status === "open" && made.to === id) {
       made.status = "lapsed";
       lapsed.push(dueIdOf(made.id));
     }

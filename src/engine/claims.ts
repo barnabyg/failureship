@@ -7,7 +7,7 @@ import {
 } from "./content";
 import { isInfluential, type DealtCharacter, type PowerMap } from "./deal";
 import { pick, pickWeighted } from "./rng";
-import { calledBy, sayPeople } from "./say";
+import { sayPeople } from "./say";
 
 /** What a source told the player. Its status stays hidden until the run ends. */
 export interface Claim {
@@ -27,6 +27,8 @@ interface ClaimRequest {
   method: Method;
   source: string;
   subject: string;
+  /** How running text refers to the source now. */
+  sourceCalled: string;
   characters: readonly DealtCharacter[];
   powerMap: PowerMap;
 }
@@ -143,7 +145,7 @@ export function makeClaim(
       subject: subject.id,
       factId: fact?.id ?? null,
       text: sayPeople(frame.item, {
-        "{source}": calledBy(content, source.id),
+        "{source}": request.sourceCalled,
       }).replaceAll("{said}", text),
       status: status.item,
     },

@@ -10,10 +10,8 @@ import {
   findNamedKinds,
   findBrokenEvents,
   findBrokenChanging,
-  findBrokenDeals,
   findBrokenGauges,
   findBrokenMistakes,
-  findBrokenPromises,
   findBrokenRisks,
   findBrokenStanding,
   findBrokenThreads,
@@ -26,6 +24,7 @@ import {
   type Content,
   type SceneData,
 } from "./content";
+import { bossesAtStart, meantBy } from "./places";
 import {
   dependsOnHiddenTruth,
   findBrokenBehaviours,
@@ -34,6 +33,7 @@ import {
   findBrokenSources,
   flagsSetByHiddenResults,
 } from "./truth-checks";
+import { findBrokenDeals, findBrokenPromises } from "./word-checks";
 
 type SceneResult = SceneData["options"][number]["results"][number];
 
@@ -62,10 +62,16 @@ function findBrokenReferences(content: Content): string[] {
   const characters = new Set(content.characters.map((c) => c.id));
   const hiddenFlags = flagsSetByHiddenResults(content);
   const problems: string[] = [];
+  const bosses = bossesAtStart(content);
+  /** Where data must name a Character, whatever their place. */
   const checkCharacter = (owner: string, character: string) => {
     if (!characters.has(character)) {
       problems.push(`${owner} names unknown Character "${character}".`);
     }
+  };
+  /** Where data can name a place above the player instead, which must be filled. */
+  const checkCharacterOrPlace = (owner: string, written: string) => {
+    checkCharacter(owner, meantBy(bosses, written) ?? written);
   };
   const checkFact = (owner: string, fact: string) => {
     if (!content.hiddenTruth.facts.some((f) => f.id === fact)) {
@@ -73,17 +79,18 @@ function findBrokenReferences(content: Content): string[] {
     }
   };
   const checkCondition = (owner: string, condition: Condition) => {
-    if ("holderIs" in condition) checkCharacter(owner, condition.holderIs);
+    if ("holderIs" in condition)
+      checkCharacterOrPlace(owner, condition.holderIs);
     if ("factNature" in condition) {
-      checkCharacter(owner, condition.factNature.character);
+      checkCharacterOrPlace(owner, condition.factNature.character);
     }
     if ("remembers" in condition) {
-      checkCharacter(owner, condition.remembers.character);
+      checkCharacterOrPlace(owner, condition.remembers.character);
     }
     if ("believes" in condition) {
-      checkCharacter(owner, condition.believes.character);
+      checkCharacterOrPlace(owner, condition.believes.character);
     }
-    if ("youOwe" in condition) checkCharacter(owner, condition.youOwe);
+    if ("youOwe" in condition) checkCharacterOrPlace(owner, condition.youOwe);
     if ("heardFact" in condition) checkFact(owner, condition.heardFact);
     if ("heardTrue" in condition) checkFact(owner, condition.heardTrue);
     if ("not" in condition) checkCondition(owner, condition.not);
@@ -186,7 +193,7 @@ function findBrokenReferences(content: Content): string[] {
   }
   for (const b of everyBill(content)) {
     for (const memory of b.remembers) {
-      checkCharacter(`Bill "${b.id}"`, memory.character);
+      checkCharacterOrPlace(`Bill "${b.id}"`, memory.character);
     }
     checkProject(`Bill "${b.id}"`, b.project);
   }
@@ -267,6 +274,7 @@ function findBrokenReferences(content: Content): string[] {
       problems.push(`Action "${a.id}" uses unknown Find Out "${a.findOut}".`);
     }
   }
+  checkCharacter("The player", content.you.reportsTo);
   for (const c of content.characters) {
     const owner = `Character "${c.id}"`;
     if (c.reportsTo !== undefined) checkCharacter(owner, c.reportsTo);
@@ -305,12 +313,13 @@ function findBrokenReferences(content: Content): string[] {
       for (const r of o.results) {
         checkParts(optionOwner, r.body, about);
         checkParts(optionOwner, r.factNote ?? "", about);
-        if (r.factAt !== undefined) checkCharacter(optionOwner, r.factAt);
+        if (r.factAt !== undefined)
+          checkCharacterOrPlace(optionOwner, r.factAt);
         if (r.when) checkCondition(optionOwner, r.when);
         checkApproach(optionOwner, r);
         checkProject(optionOwner, r.project);
         for (const memory of r.remembers) {
-          checkCharacter(optionOwner, memory.character);
+          checkCharacterOrPlace(optionOwner, memory.character);
         }
       }
       if (o.requires) {
@@ -335,7 +344,7 @@ function findBrokenReferences(content: Content): string[] {
   }
   for (const m of content.moves) {
     const owner = `Move "${m.id}"`;
-    if (m.repays !== undefined) checkCharacter(owner, m.repays);
+    if (m.repays !== undefined) checkCharacterOrPlace(owner, m.repays);
     checkMonths(owner, m.months);
     checkParts(owner, m.body);
     if (m.when) checkCondition(owner, m.when);
@@ -368,7 +377,7 @@ function findBrokenReferences(content: Content): string[] {
       checkApproach(owner, o);
       checkProject(owner, o.project);
       for (const memory of [...o.remembers, ...(o.bet?.lost.remembers ?? [])]) {
-        checkCharacter(owner, memory.character);
+        checkCharacterOrPlace(owner, memory.character);
       }
       if (o.bet) {
         checkApproach(owner, o.bet.lost);

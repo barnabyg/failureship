@@ -498,7 +498,7 @@ describe("the real Company Events", () => {
   });
 
   it("never moves your boss off the chart", () => {
-    const { character } = gameContent.boss;
+    const character = gameContent.you.reportsTo;
     const moved = gameContent.events.flatMap((e) =>
       e.reshuffle.reports.map((r) => r.character),
     );

@@ -135,13 +135,13 @@ format, the page shows what is wrong instead of the game.
 | `mistakes.json`       | The words of a Final Warning and of being fired                                                        |
 | `official-story.json` | The official story, assembled from entries according to what you did                                   |
 | `behaviours.json`     | What Characters can be seen doing, which roles can do it, and how likely each kind is to do it         |
-| `boss.json`           | Who your boss is, the signs of how they treat you, and what impresses each kind                        |
+| `boss.json`           | The signs of how your boss treats you, and what impresses each kind                                    |
 | `families.json`       | What the results screen calls each family of Moves, and what it says of them                           |
 | `over-head.json`      | Going over your boss's head: the odds, the effects, the words and your boss's boss's signs             |
 | `sources.json`        | Find Out: who can be asked, how each role talks, how reliable each kind is, and every claim            |
 | `notebook.json`       | Events the Notebook keeps a clue of, and what each clue was worth                                      |
 | `changing.json`       | What burns a Believer, how much it takes, what they can become, and who covers for anyone who leaves   |
-| `characters.json`     | Job titles, roles, how text refers to each person, names, and who reports to whom on the Org Chart     |
+| `characters.json`     | Job titles, roles, how text refers to each person, names, the Org Chart and where you sit on it        |
 | `gauges.json`         | The Gauges, Teflon and Fawning: where each starts, and the Milestones earned along the way             |
 | `standing.json`       | Official standing: what on the official record moves it, its bands, and what the results screen says   |
 | `hidden-truth.json`   | The rules of the deal: kinds, their weights, and the Hidden Facts                                      |
@@ -160,21 +160,22 @@ How to run the checks and tests is in [AGENTS.md](AGENTS.md#verifying).
   in `src/engine/`, and checks the panel text itself.
 - `src/engine/` holds the rules: headless, seeded, and free of Three.js and React. `run.ts` is the
   interface to a run and `deal.ts` deals it; `choices.ts` carries out each choice; `month.ts` holds
-  the month's order; `charts.ts` moves people on the charts; `outcome.ts` is the one place any
-  consequence takes effect; `state.ts` and `reads.ts` are what the mechanics share. The mechanics
-  are `boss.ts`, `demands.ts`, `find-out.ts` with `claims.ts`, `notebook.ts`, `over-head.ts`,
-  `project.ts`, `scenes.ts`, `company-events.ts`, `mistakes.ts`, `reputation.ts`, `risks.ts`,
-  `threads.ts` with `bills.ts`, `promises.ts`, `deals.ts`, `changes.ts` for Believers changing and
-  leaving, `gauges.ts`, the only module that reads a Gauge, and `standing.ts`. `say.ts` names
-  Characters in text, and `rng.ts` and `seed.ts` hold the seed. `view.ts` is the player view, built
-  by `to-view.ts`, with `to-results.ts` its reveal at the end; `hidden-truth.ts` is the tests' read
-  of the truth. `save.ts` writes and reads a run. A run's `State` is plain data, so a mechanic gets
-  saving for free: raise `SAVE_VERSION` if it changes what saved state means. `content.ts` assembles
-  the schema from `basic-schema.ts`, `outcome-schema.ts` for what a choice does, `step-schema.ts`
-  for what a step offers, and `truth-schema.ts`, `boss-schema.ts` and `consequence-schema.ts`.
-  `content-checks.ts` parses and checks data across files, with each mechanic's checks in
-  `truth-checks.ts` for the hidden truth and its signs, `boss-checks.ts` for the boss, going over
-  the head, Demands and reputation, and `consequence-checks.ts` for what choices lead to.
+  the month's order; `charts.ts` moves people on the charts, and `places.ts` reads your bosses from
+  your place on them; `outcome.ts` is the one place any consequence takes effect; `state.ts` and
+  `reads.ts` are what the mechanics share. The mechanics are `boss.ts`, `demands.ts`, `find-out.ts`
+  with `claims.ts`, `notebook.ts`, `over-head.ts`, `project.ts`, `scenes.ts`, `company-events.ts`,
+  `mistakes.ts`, `reputation.ts`, `risks.ts`, `threads.ts` with `bills.ts`, `promises.ts`,
+  `deals.ts`, `changes.ts` for Believers changing and leaving, `gauges.ts`, the only module that
+  reads a Gauge, and `standing.ts`. `say.ts` names Characters in text, and `rng.ts` and `seed.ts`
+  hold the seed. `view.ts` is the player view, built by `to-view.ts`, with `to-results.ts` its
+  reveal at the end; `hidden-truth.ts` is the tests' read of the truth. `save.ts` writes and reads a
+  run. A run's `State` is plain data, so a mechanic gets saving for free: raise `SAVE_VERSION` if it
+  changes what saved state means. `content.ts` assembles the schema from `basic-schema.ts`,
+  `outcome-schema.ts` for what a choice does, `step-schema.ts` for what a step offers, and
+  `truth-schema.ts`, `boss-schema.ts` and `consequence-schema.ts`. `content-checks.ts` parses and
+  checks data across files, with each mechanic's checks in `truth-checks.ts` for the hidden truth
+  and its signs, `boss-checks.ts` for the boss, going over the head, Demands and reputation, and
+  `consequence-checks.ts` for what choices lead to, with `word-checks.ts` for Promises and Deals.
 - `src/tower/` draws the tower and holds no rules.
 - `src/ui/` holds the React panels over the tower: `App.tsx` wires them to the run, and
   `TowerStage.tsx` the tower's hotspots. `panels.tsx` picks each step's panel, the larger being
@@ -187,8 +188,7 @@ How to run the checks and tests is in [AGENTS.md](AGENTS.md#verifying).
 
 - Static bug analysis is the type-aware `typescript-eslint` strict rule set. It skips
   `eslint.config.js` and `scripts/`, which sit outside `tsconfig.json`.
-- Secret scanning is not a separate gate: the project holds no credentials. Review this if it ever
-  needs any.
+- Secret scanning is not a separate gate: the project holds no credentials. Review if that changes.
 - The `minimatch` override in `package.json` patches GHSA-g3hv-75wg-m249 in the lint tooling. Remove
   it when `eslint` depends on a patched version itself.
 - `test.testTimeout` in `vite.config.ts` is raised because some engine tests play hundreds of whole

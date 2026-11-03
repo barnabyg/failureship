@@ -1,6 +1,7 @@
 import type { Condition, Content, Kind, Mood, SceneData } from "./content";
 import { YOU, type PowerMap } from "./deal";
-import { calledBy, capitalised, sayPeople } from "./say";
+import { bossOf, placeOf, whoIs } from "./places";
+import { calledBy, capitalised, sayFrom, sayPeople, titleOf } from "./say";
 import type { State, World } from "./state";
 import type { Person } from "./view";
 
@@ -23,9 +24,8 @@ export function inTurn<T>(items: readonly T[], month: number): T | undefined {
 }
 
 export function bossKindOf(state: State, content: Content): Kind {
-  const dealt = state.truth.characters.find(
-    (c) => c.id === content.boss.character,
-  );
+  const boss = bossOf(state, content);
+  const dealt = state.truth.characters.find((c) => c.id === boss);
   if (!dealt) throw new Error("The boss was not dealt.");
   return dealt.kind;
 }
@@ -43,18 +43,22 @@ export function shiftBelief(
 }
 
 export function moodOf(state: State, content: Content): Mood {
-  return moodAt(beliefOf(state, content.boss.character), content.balance.mood);
+  return moodAt(beliefOf(state, bossOf(state, content)), content.balance.mood);
 }
 
-/** How someone's belief stands. Each boss has their own point at which it shows. */
+/**
+ * How someone's belief stands. Whoever is in each place above the player has
+ * that place's point at which it shows.
+ */
 export function moodOfCharacter(
   state: State,
   content: Content,
   character: string,
 ): Mood {
-  if (character === content.boss.character) return moodOf(state, content);
+  const place = placeOf(state, content, character);
+  if (place === "boss") return moodOf(state, content);
   const scale =
-    character === content.overHead?.character
+    place === "head" && content.overHead
       ? content.overHead.mood
       : (content.reputation?.mood ?? content.balance.mood);
   return moodAt(beliefOf(state, character), scale);
@@ -81,7 +85,7 @@ export function fillSubject(
 ): string {
   const heard = heardAbout(state, fact);
   return sayPeople(written, {
-    "{subject}": heard ? calledBy(content, heard.subject) : "",
+    "{subject}": heard ? calledBy(state, content, heard.subject) : "",
   });
 }
 
@@ -102,15 +106,18 @@ export function matches(
   room?: readonly string[],
 ): boolean {
   if (condition === undefined) return true;
+  const who = (written: string) => whoIs(state, content, written);
   if ("holderIs" in condition) {
-    return condition.holderIs === partsIn(state.truth.powerMap, room).holder;
+    return (
+      who(condition.holderIs) === partsIn(state.truth.powerMap, room).holder
+    );
   }
   if ("bossIs" in condition) {
     return bossKindOf(state, content) === condition.bossIs;
   }
   if ("factNature" in condition) {
     const { character, nature } = condition.factNature;
-    const dealt = state.truth.characters.find((c) => c.id === character);
+    const dealt = state.truth.characters.find((c) => c.id === who(character));
     const fact = content.hiddenTruth.facts.find(
       (f) => f.id === dealt?.fact?.id,
     );
@@ -130,17 +137,17 @@ export function matches(
   if ("flag" in condition) return state.flags.includes(condition.flag);
   if ("believes" in condition) {
     const { character, mood } = condition.believes;
-    return moodOfCharacter(state, content, character) === mood;
+    return moodOfCharacter(state, content, who(character)) === mood;
   }
   if ("remembers" in condition) {
     const { character, about } = condition.remembers;
     return state.truth.memories.some(
-      (m) => m.character === character && m.about === about,
+      (m) => m.character === who(character) && m.about === about,
     );
   }
   if ("youOwe" in condition) {
     return state.truth.powerMap.favours.some(
-      (f) => f.owes === YOU && f.to === condition.youOwe,
+      (f) => f.owes === YOU && f.to === who(condition.youOwe),
     );
   }
   if ("did" in condition) {
@@ -161,7 +168,7 @@ export function mentionsGone(
   content: Content,
   written: string,
 ): boolean {
-  const lower = written.toLowerCase();
+  const lower = sayFrom(state, content, written).toLowerCase();
   return content.characters.some(
     (c) =>
       isGone(state, c.id) &&
@@ -257,7 +264,7 @@ export function fillParts(
   misleading = false,
 ): string {
   const who = (id: string | undefined) =>
-    id === undefined ? "" : calledBy(content, id);
+    id === undefined ? "" : calledBy(state, content, id);
   const { holder, ignored, bystander } = partsIn(state.truth.powerMap, room);
   return sayPeople(written, {
     "{holder}": who(misleading ? bystander : holder),
@@ -313,7 +320,7 @@ export function costOf(content: Content, key: string | undefined): number {
   return key === undefined ? 0 : (content.balance.actionCosts[key] ?? 0);
 }
 
-export function personOf(content: Content, id: string): Person {
+export function personOf(state: State, content: Content, id: string): Person {
   const known = content.characters.find((c) => c.id === id);
-  return { id, name: known?.name ?? id, title: known?.title ?? "" };
+  return { id, name: known?.name ?? id, title: titleOf(state, content, id) };
 }

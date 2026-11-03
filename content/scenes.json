@@ -30,7 +30,7 @@
         "results": [
           {
             "when": {
-              "holderIs": "head"
+              "holderIs": "{head}"
             },
             "body": "Your boss's boss does not look at you. The next agenda has your name on it, spelled correctly, and people start holding doors.",
             "headOpinion": 1,
@@ -56,7 +56,7 @@
         "results": [
           {
             "when": {
-              "holderIs": "boss"
+              "holderIs": "{boss}"
             },
             "body": "You agree warmly with your boss. People look up, and two of them write something down. It seems that this was the thing to agree with.",
             "sets": ["backed-holder", "agreed-with-boss", "agreed-up-the-line"],
@@ -139,7 +139,7 @@
         "results": [
           {
             "when": {
-              "holderIs": "boss"
+              "holderIs": "{boss}"
             },
             "body": "The phrase goes round the table, and comes back slightly larger. By lunchtime it is in the minutes, credited to the team.",
             "sets": ["used-buzzword"],
@@ -453,7 +453,7 @@
         "results": [
           {
             "when": {
-              "holderIs": "head"
+              "holderIs": "{head}"
             },
             "body": "Your boss's boss glances at you when the screen freezes, and shrugs, as one shrugs to a colleague. You have not been shrugged at by this floor before.",
             "headOpinion": 1,
@@ -475,7 +475,7 @@
         "results": [
           {
             "when": {
-              "holderIs": "boss"
+              "holderIs": "{boss}"
             },
             "body": "Your boss laughs at the joke about synergy. You laugh too. By the afternoon people are asking you what your boss thinks.",
             "sets": ["backed-holder", "sat-by-boss", "sat-by-a-manager"],
@@ -806,7 +806,7 @@
         "results": [
           {
             "when": {
-              "holderIs": "boss"
+              "holderIs": "{boss}"
             },
             "body": "Several people turn to look at your boss, then write something down. It appears that you have said the right name.",
             "sets": ["backed-holder", "credited-boss", "gave-credit-upstairs"],
@@ -830,7 +830,7 @@
         "results": [
           {
             "when": {
-              "holderIs": "head"
+              "holderIs": "{head}"
             },
             "body": "Your boss's boss does not acknowledge it, in the way of someone who has heard it before and expects to again. The next slide is taken more quickly.",
             "headOpinion": 1,
@@ -996,7 +996,7 @@
         "results": [
           {
             "when": {
-              "holderIs": "head"
+              "holderIs": "{head}"
             },
             "body": "Your boss's boss takes a look. The word red does not appear in the next report, and nobody can say who took it out.",
             "headOpinion": 1,
@@ -1021,7 +1021,7 @@
         "results": [
           {
             "when": {
-              "holderIs": "boss"
+              "holderIs": "{boss}"
             },
             "body": "Your boss accepts this graciously, and the matter is closed. You have told the room who to be afraid of, and your boss will not forget it.",
             "sets": ["backed-holder"],
@@ -1085,7 +1085,7 @@
         "results": [
           {
             "when": {
-              "holderIs": "head"
+              "holderIs": "{head}"
             },
             "body": "Your boss's boss nods once. Your own name comes up shortly afterwards, and passes through without being moved. You now understand how this works.",
             "sets": ["backed-holder"]
@@ -1103,7 +1103,7 @@
         "results": [
           {
             "when": {
-              "holderIs": "boss"
+              "holderIs": "{boss}"
             },
             "body": "Your boss nods once. Your own name comes up shortly afterwards, and passes through without being moved. You now understand how this works.",
             "sets": ["backed-holder"],

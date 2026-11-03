@@ -26,7 +26,7 @@
     {
       "id": "fewer-meetings",
       "months": [2],
-      "from": "From: Your boss's boss, Hugh Lamb",
+      "from": "From: Your boss's boss, {head}",
       "subject": "Meetings: reduce by half, by Friday",
       "body": "Your boss's boss would like the floor's meetings reduced by half by Friday. A kick-off meeting has been arranged to discuss how, with a weekly meeting to follow, to track progress.",
       "options": [
@@ -95,7 +95,7 @@
         "body": "A new message from your boss's boss arrives about a different thing entirely, and the meetings are not mentioned again. They continue. You remove the note from your screen."
       },
       "chased": {
-        "from": "From: Your boss's boss, Hugh Lamb",
+        "from": "From: Your boss's boss, {head}",
         "subject": "RE: Meetings: where are we on this?",
         "body": "Your boss's boss has noticed that nothing has changed, and has asked you to say why, with your boss copied in. It has been some time, and you have not got an answer.",
         "options": [
@@ -128,7 +128,7 @@
     {
       "id": "new-tool",
       "months": [4],
-      "from": "From: Your boss, Dennis Prowse",
+      "from": "From: Your boss, {boss}",
       "subject": "FW: This solves ALL your problems (read this!!)",
       "body": "Your boss has read an article about a new software tool that solves all your problems, and wants it rolled out by the end of the month. Your boss has not said which problems. The article is by the company that sells it.",
       "options": [
@@ -194,7 +194,7 @@
         "body": "Your boss has read a new article, about a different tool, by a different company. The first tool is never spoken of again, and nor is your evaluation of it."
       },
       "chased": {
-        "from": "From: Your boss, Dennis Prowse",
+        "from": "From: Your boss, {boss}",
         "subject": "RE: RE: FW: Where is the evaluation?",
         "body": "Your boss would like to see the evaluation of the new tool today, as your boss has told several people upstairs that it went well.",
         "options": [

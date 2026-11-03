@@ -7,7 +7,7 @@ import {
   type PlayerView,
 } from "../../src/engine";
 import { readHiddenTruth } from "../../src/engine/hidden-truth";
-import { sceneFixtureRaw } from "./fixture";
+import { calledAtStart, sceneFixtureRaw } from "./fixture";
 
 const KINDS = ["believer", "incompetent", "practitioner"] as const;
 
@@ -66,7 +66,7 @@ function tally(content: Content, seeds = 3000) {
     const { characters } = readHiddenTruth(run);
     for (const { who, text } of step.behaviours) {
       const known = content.characters.find(
-        (c) => (c.called ?? c.name) === who,
+        (c) => calledAtStart(content, c.id) === who,
       );
       const kind = characters.find((c) => c.id === known?.id)?.kind;
       const count = counts.get(text.replace(new RegExp(who, "gi"), "{who}"));

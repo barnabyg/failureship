@@ -1,6 +1,7 @@
 import type { Content } from "./content";
 import { isInfluential } from "./deal";
 import { applyOutcome } from "./outcome";
+import { headOf } from "./places";
 import { bossKindOf, inTurn, moodOfCharacter } from "./reads";
 import { drawFor, pickWeighted } from "./rng";
 import type { State, Step } from "./state";
@@ -14,7 +15,8 @@ export function goOverHead(
   const written = content.overHead;
   if (!written) throw new Error("Nothing is written for going over the head.");
   state.overHeadUses += 1;
-  const dealt = state.truth.characters.find((c) => c.id === written.character);
+  const head = headOf(state, content);
+  const dealt = state.truth.characters.find((c) => c.id === head);
   if (!dealt) throw new Error("The boss's boss was not dealt.");
   const standing = isInfluential(state.truth.powerMap, content, dealt.id)
     ? "influential"
@@ -73,8 +75,9 @@ export function treatHead(
   cast: readonly string[],
 ): string | null {
   const written = content.overHead;
-  if (!written || !cast.includes(written.character)) return null;
-  const mood = moodOfCharacter(state, content, written.character);
+  const head = headOf(state, content);
+  if (!written || head === undefined || !cast.includes(head)) return null;
+  const mood = moodOfCharacter(state, content, head);
   const value = drawFor(state.seed, "head-sign", state.month);
   const chosen = pickWeighted(
     Math.floor(value * 2 ** 32),

@@ -116,7 +116,7 @@ describe("the boss's belief", () => {
 
   it("shows no treatment when the boss is not in the room", () => {
     const raw = bossFixtureRaw();
-    raw.boss.character = "ben";
+    raw.you.reportsTo = "ben";
     const scene = raw.scenes[0];
     if (scene) {
       scene.cast = ["ana", "cal"];
@@ -208,7 +208,7 @@ describe("the boss's signs in content", () => {
 
   it("rejects a boss who is not a Character", () => {
     const raw = bossFixtureRaw();
-    raw.boss.character = "nobody";
+    raw.you.reportsTo = "nobody";
 
     expect(() => parseContent(raw)).toThrow(/nobody/);
   });

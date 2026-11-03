@@ -8,15 +8,11 @@ import {
   everyDemand,
   type Content,
 } from "./content";
+import { bossesAtStart, meantBy } from "./places";
 
 /** The boss's signs must point somewhere without ever settling it. */
 export function findBrokenBossSigns(content: Content): string[] {
-  const { character, signs } = content.boss;
-  const problems = findBrokenMoodSigns(signs, "Boss sign");
-  if (!content.characters.some((c) => c.id === character)) {
-    problems.push(`The boss names unknown Character "${character}".`);
-  }
-  return problems;
+  return findBrokenMoodSigns(content.boss.signs, "Boss sign");
 }
 
 /** A first trip over the boss's head must be a gamble, and no words may name a kind. */
@@ -24,11 +20,10 @@ export function findBrokenOverHead(content: Content): string[] {
   const { overHead: written } = content;
   if (!written) return [];
   const problems = findBrokenMoodSigns(written.signs, "Over-head sign");
-  if (!content.characters.some((c) => c.id === written.character)) {
-    problems.push(`Over-head names unknown Character "${written.character}".`);
-  }
-  if (written.character === content.boss.character) {
-    problems.push("Going over the boss's head cannot lead to the boss.");
+  if (bossesAtStart(content).head === undefined) {
+    problems.push(
+      "Going over the boss's head needs your boss to answer to someone.",
+    );
   }
   if (!content.actions.some((a) => a.overHead)) {
     problems.push("No action goes over the boss's head.");
@@ -188,13 +183,15 @@ export function findBrokenReputation(
     ),
     ...everyBill(content),
   ];
+  const bosses = bossesAtStart(content);
   for (const outcome of outcomes) {
     if (!outcome.news) continue;
     if (!written) {
       problems.push("News is written, but no reputation for it to reach.");
     }
     for (const character of outcome.news.at) {
-      if (!characters.has(character)) {
+      const id = meantBy(bosses, character);
+      if (id === undefined || !characters.has(id)) {
         problems.push(`News names unknown Character "${character}".`);
       }
     }

@@ -1,7 +1,7 @@
 [
   {
     "id": "credit-taken",
-    "from": "From: Your boss, Dennis Prowse",
+    "from": "From: Your boss, {boss}",
     "title": "A great month for the team",
     "body": "Your boss has told the floor above about the good work your boss has been doing on your project. It is your work, and it has been described with great accuracy. Your name is in the copy line.",
     "when": {
@@ -26,7 +26,7 @@
   },
   {
     "id": "report-chased",
-    "from": "From: Your boss, Dennis Prowse",
+    "from": "From: Your boss, {boss}",
     "title": "FW: Monthly Status Report OVERDUE",
     "body": "Your boss has forwarded you a chaser about the report you did not file. The whole message reads: Thoughts?",
     "when": {
@@ -36,7 +36,7 @@
   },
   {
     "id": "report-renamed",
-    "from": "From: Your boss, Dennis Prowse",
+    "from": "From: Your boss, {boss}",
     "title": "Thanks for your input",
     "body": "Your Monthly Status Report has gone upstairs under your boss's name, as an executive summary of your Monthly Status Report. The summary is your report.",
     "when": {
@@ -124,7 +124,7 @@
   },
   {
     "id": "working-group",
-    "from": "From: Your boss's boss, Hugh Lamb",
+    "from": "From: Your boss's boss, {head}",
     "title": "A small favour",
     "body": "Your boss's boss has put you on a working group about working groups, on the basis of a conversation you do not remember. It meets on Fridays, and it has no end date.",
     "sets": ["working-group"]

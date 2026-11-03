@@ -35,6 +35,7 @@ export function hearClaim(
     method: methodOf(content, state.step.method),
     source: choice.sourceId,
     subject: choice.subjectId,
+    sourceCalled: calledBy(state, content, choice.sourceId),
     characters: state.truth.characters,
     powerMap: state.truth.powerMap,
   });
@@ -42,7 +43,7 @@ export function hearClaim(
   state.claims.push(made.claim);
   state.clues.push({
     month: state.month,
-    source: capitalised(calledBy(content, made.claim.source)),
+    source: capitalised(calledBy(state, content, made.claim.source)),
     text: made.claim.text,
     verdict: verdictOfClaim(content, made.claim),
   });

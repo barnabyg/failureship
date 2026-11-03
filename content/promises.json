@@ -149,7 +149,7 @@
     },
     {
       "id": "laptops-for-the-boss",
-      "to": "boss",
+      "to": "{boss}",
       "title": "New laptops",
       "what": "new laptops for the team",
       "after": {
@@ -157,7 +157,7 @@
         "max": 2
       },
       "due": {
-        "from": "From: Your boss, Dennis Prowse",
+        "from": "From: Your boss, {boss}",
         "subject": "Laptops?",
         "body": "Your boss has told upstairs that the team is getting new laptops, on your word, and would like to know the date. There is no date. There are also no laptops, for the same reasons as ever.",
         "options": [

@@ -4,6 +4,7 @@ import type { Content, Kind, MoveFamily, Tone } from "./content";
 import { makeDeal, settleDeal } from "./deals";
 import { YOU } from "./deal";
 import { makeMistake } from "./mistakes";
+import { headOf, whoIs } from "./places";
 import { moveProject, type ProjectChange } from "./project";
 import { makePromise, settlePromise } from "./promises";
 import { shiftBelief } from "./reads";
@@ -60,16 +61,22 @@ export function applyOutcome(
   state.deeds.push(...sets.map((flag) => ({ flag, month: state.month })));
   startThreads(state, content, sets);
   startRisks(state, content, sets);
+  const who = (written: string) => whoIs(state, content, written);
   for (const memory of outcome.remembers ?? []) {
-    remember(state, content, memory);
+    remember(state, content, { ...memory, character: who(memory.character) });
   }
-  if (outcome.news) startNews(state, content, outcome.news);
+  if (outcome.news) {
+    startNews(state, content, {
+      ...outcome.news,
+      at: outcome.news.at.map(who),
+    });
+  }
   if (outcome.promise !== undefined) {
     makePromise(state, content, outcome.promise);
   }
   if (outcome.deal !== undefined) makeDeal(state, content, outcome.deal);
   if (outcome.repays !== undefined) {
-    const owed = outcome.repays;
+    const owed = who(outcome.repays);
     const map = state.truth.powerMap;
     map.favours = map.favours.filter((f) => !(f.owes === YOU && f.to === owed));
   }
@@ -82,7 +89,7 @@ export function applyOutcome(
     if (!state.buzzwords.includes(word)) state.buzzwords.push(word);
   }
   if (outcome.reshuffle) reshuffleCharts(state, content, outcome.reshuffle);
-  const head = content.overHead?.character;
+  const head = headOf(state, content);
   if (head !== undefined && outcome.headOpinion) {
     shiftBelief(state, head, outcome.headOpinion);
     remember(state, content, {

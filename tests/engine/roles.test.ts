@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { gameContent } from "../../src/content";
 import { parseContent, startRun, type Content } from "../../src/engine";
-import { findOutFixtureRaw, sceneFixtureRaw } from "./fixture";
+import { calledAtStart, findOutFixtureRaw, sceneFixtureRaw } from "./fixture";
 
 const LIKELY = { believer: 4, incompetent: 2, practitioner: 1 };
 
@@ -66,7 +66,12 @@ describe("behaviour that belongs to a role", () => {
   });
 
   it("is never shown out of role with the game's own content", () => {
-    const role = new Map(gameContent.characters.map((c) => [c.called, c.role]));
+    const role = new Map(
+      gameContent.characters.map((c) => [
+        calledAtStart(gameContent, c.id),
+        c.role,
+      ]),
+    );
     let shownInRole = 0;
 
     for (let seed = 1; seed <= 400; seed++) {

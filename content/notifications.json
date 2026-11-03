@@ -1,7 +1,7 @@
 [
   {
     "id": "pub-invite",
-    "from": "From: Your boss, Dennis Prowse",
+    "from": "From: Your boss, {boss}",
     "subject": "RE: RE: FW: the Feathers at five",
     "body": "A few of us are going to the Feathers at five. Your Monthly Status Report is also due tonight, and I am sure you have that in hand. No pressure either way. I will remember which you chose.",
     "options": [
@@ -95,7 +95,7 @@
   {
     "id": "deck-for-upstairs",
     "months": [5],
-    "from": "From: Your boss, Dennis Prowse",
+    "from": "From: Your boss, {boss}",
     "subject": "Slides for upstairs, by tomorrow",
     "body": "Your boss needs three slides for the floor above, by tomorrow. Your boss stresses that content is secondary at this stage, and that the last person's slides did not move.",
     "options": [
@@ -230,7 +230,7 @@
   },
   {
     "id": "monthly-report",
-    "from": "From: Your boss, Dennis Prowse",
+    "from": "From: Your boss, {boss}",
     "subject": "Monthly Status Report: due tonight",
     "body": "Your Monthly Status Report is due tonight, and nothing matters more to the people upstairs. Your project is really {real}. It was last reported as {reported}.",
     "options": [
@@ -311,7 +311,7 @@
   {
     "id": "made-up-schedule",
     "months": [6],
-    "from": "From: Your boss, Dennis Prowse",
+    "from": "From: Your boss, {boss}",
     "subject": "Schedule for upstairs: dates only, please",
     "body": "Upstairs would like a schedule for your project, by Friday. Your boss adds that they do not need the detail, only the dates, and that the dates should be good ones.",
     "options": [
@@ -495,7 +495,7 @@
   {
     "id": "bonus-pot",
     "months": [6],
-    "from": "From: Your boss, Dennis Prowse",
+    "from": "From: Your boss, {boss}",
     "subject": "Bonus pot: your recommendation, by tonight",
     "body": "A small bonus pot has been found, and it has to be gone by the end of the day. You have been asked to say who on the floor gets it. It is a one-off, it is confidential, and everybody already knows about it.",
     "options": [

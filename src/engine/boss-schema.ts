@@ -30,17 +30,17 @@ const bossSign = z.strictObject({
   }),
 });
 
+/** Whoever is the player's boss, as the Org Chart has it. */
 export const boss = z.strictObject({
-  /** Whose belief about the player is tracked. */
-  character: id,
   signs: z.array(bossSign),
   approaches: z.array(bossApproach).default([]),
 });
 
-/** Going over the boss's head: what it can do, and who can find out. */
+/**
+ * Going over the boss's head, to the boss's boss as the Org Chart has it: what it
+ * can do, and who can find out.
+ */
 export const overHead = z.strictObject({
-  /** Whom the player goes to, whose own hidden belief this moves. */
-  character: id,
   /** How they treat the player in a Scene, by their mood. */
   signs: z.array(bossSign),
   /** The belief at which their mood changes. It moves less often than the boss's. */

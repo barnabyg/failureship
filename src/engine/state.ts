@@ -149,6 +149,8 @@ interface Clue {
 /** How one choice came across to the boss, for the results screen. */
 interface BossLanding {
   month: number;
+  /** Whoever was the player's boss then. */
+  boss: string;
   choice: string;
   shift: number;
 }
@@ -232,7 +234,7 @@ export interface State extends MonthRecord {
   }[];
   /** Bills waiting to land this month as Character Moves. */
   billsDue: string[];
-  /** Who has been moved on the Org Chart, and who to. */
+  /** Who has been moved on the Org Chart, the player included, and who to. */
   reportsTo: Record<string, string>;
   /** Company Events waiting to land this month. */
   eventsDue: string[];
@@ -240,6 +242,8 @@ export interface State extends MonthRecord {
   /** Everything the player has given their word on, in plain view. */
   promises: {
     id: string;
+    /** Whom it was made to: whoever was in the place written, if it names one. */
+    to: string;
     month: number;
     status: CommitmentStatus;
     /** The month it falls due. Null if it never will. */
