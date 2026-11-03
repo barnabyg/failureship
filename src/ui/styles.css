@@ -425,11 +425,11 @@ body {
 /* Fonts differ by platform, so a Scene needs room to spare at 1280x800. */
 .scene-columns {
   display: grid;
-  grid-template-columns: 1fr 235px;
+  grid-template-columns: 1fr 215px;
   gap: 14px;
   align-items: start;
   font-size: 0.8125rem;
-  line-height: 1.3;
+  line-height: 1.25;
 }
 
 .scene-columns .options {
