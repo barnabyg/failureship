@@ -325,7 +325,7 @@ describe("the real Deals", () => {
 
   // tests/e2e/deal.spec.ts plays these two deals.
   it("keeps the good word working on one seed and not on another", () => {
-    expect(goodWordRun(2)).toMatch(/real sway/);
+    expect(goodWordRun(10)).toMatch(/real sway/);
     expect(goodWordRun(3)).toMatch(/no sway/);
   });
 });

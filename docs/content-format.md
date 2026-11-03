@@ -24,8 +24,10 @@ A `when` or `requires` holds one of these:
 | `{ "bossIs": "practitioner" }`                                         | The boss is of that kind                                                                | Yes                    |
 | `{ "factNature": { "character": "projects", "nature": "dangerous" } }` | That Character's Hidden Fact has that `nature`                                          | Yes                    |
 | `{ "youOwe": "projects" }`                                             | The player owes that Character a favour                                                 | No                     |
+| `{ "sawMove": "rumour" }`                                              | That Move from [`moves.json`](#movesjson) has landed on the player in this run          | No                     |
 | `{ "not": ... }`                                                       | The condition inside does not hold                                                      | If the inner one does  |
 | `{ "all": [...] }`                                                     | Every condition inside holds                                                            | If any inner one does  |
+| `{ "any": [...] }`                                                     | At least one condition inside holds                                                     | If any inner one does  |
 
 Where each can be used. These are all the places that take a condition:
 
@@ -42,11 +44,11 @@ Where each can be used. These are all the places that take a condition:
 | A Notebook event's `when`                  | Only those that do not read the hidden truth, as below |
 
 A condition anywhere else is refused, as is one that names an unknown Character, Hidden
-Fact or Buzzword. A condition can name your boss or your boss's boss, as in
+Fact, Buzzword or Move. A condition can name your boss or your boss's boss, as in
 [the next section](#your-boss-and-your-bosss-boss). An option must never appear or disappear on undiscovered
 truth, and that includes the boss's kind, so a condition that would show the truth
 this way stops the game from starting. This also goes for a flag set by something
-hidden: a Scene result or a Move whose `when` reads the truth, a Bill or any of its
+hidden: a Scene result or a Move whose `when` reads the truth, a Rival's Move, a Bill or any of its
 options, a Company Event, a Demand being forgotten or chased, or your boss finding out
 about going over their head. A
 Notebook event can still read such a flag, because the player has just seen that result.
@@ -70,7 +72,7 @@ whoever is boss then, and the results screen lists only what came across to the 
 
 Data names them as `{boss}` and `{head}`, wherever it would name a Character to say who a choice
 or a condition concerns: any condition, `remembers`, news `at`, `factAt`, `repays`, a Promise's
-`to`, a Deal's `word.over`, and a Company Event's `reshuffle`. Name a Character there only when
+`to`, a Deal's `word.over`, a Company Event's `reshuffle`, a Move's `by` and a Rival's `who`. Name a Character there only when
 it means that person, whatever their place. The Org Chart's own `reportsTo`, a Scene's `cast`,
 Find Out's `sources`, `leaving`, a Hidden Fact's `characters`, a risk's `route.character` and a
 Deal's `with` always name a Character. A `from` line can say `{boss}` or `{head}` for the name of
@@ -358,6 +360,10 @@ A Hidden Fact says `{name}`, so that it reads correctly for whoever is dealt it,
 `told` is how someone would say it out loud, and its `text` is how the results screen states
 it.
 
+The first `minPractitioners` are dealt to seats in a seeded order. With
+[`rivals.json`](#rivalsjson), the first of them goes, `seatChance` of the time, to someone who could
+compete with the player, so that a run with no Rival is rare.
+
 ## `mistakes.json`
 
 The words of a Final Warning and of being fired, and what the results screen says of them.
@@ -378,6 +384,20 @@ mistake only if it has a `result`.
 Character Moves, and when each can land. A Move does not land twice in a run while another
 could. A Move with `"priority": true` lands ahead of the others whenever its `when` holds.
 `"repays": "projects"` pays back the favour the player owes that Character, as it lands.
+
+- `by` says who makes it: a Character, `{boss}` or `{head}`, or `{rival}`, one of the player's
+  [Rivals](#rivalsjson), picked by a seeded draw. It lands only while they are there to make it, so
+  a Rival's Move needs a Rival. Only a Rival's Move can say `{rival}`, and only in its `body`, for
+  what text calls whoever made it. Its flags read the hidden truth, as a hidden result's do.
+- `family` is which family of Move it is, from [`families.json`](#familiesjson). A Move made by
+  someone while they are a Rival, with a `family`, is listed on the results screen as what they did.
+- `opinion` and `headOpinion` move your bosses' beliefs, as a choice's do.
+- `story` is a false story about the player: an `about`, which `remembers` reads, and the `text`
+  that the results screen shows. It needs a `by`, who made it up. It starts with them and travels
+  the Power Map as true news does, in [`reputation.json`](#reputationjson), moving the belief of each
+  person it reaches, though not of whoever made it up, until someone sees through it.
+- An option can wait for a Move with `requires` and `sawMove`, so the player can use a Move once
+  they have seen it done to them, and not before.
 
 ## `notebook.json`
 
@@ -485,7 +505,7 @@ anything written with the `believes` condition.
 
 A choice's outcome, a Bill or a Scene result can carry `news`: an `about` that the `remembers`
 condition reads, a `tone` of `good` or `bad`, the `text` that the results screen shows, and `at`,
-whom it was done in front of, or to. They know at once. Only true deeds start news, for now.
+whom it was done in front of, or to. They know at once. A Move's `story` is news too, but false.
 
 - `travel` sets how far and how fast it goes. As each month opens, it moves `hopsPerMonth` steps
   along the ties of the Power Map, no more than `maxHops` from where it started. `passOnChance` is
@@ -496,6 +516,11 @@ whom it was done in front of, or to. They know at once. Only true deeds start ne
 - `signs` show how everyone else present in a Scene is with the player. Each says `{who}`, and
   must be possible from at least two of `warm`, `neutral` and `cold`, so that no sign settles it.
 - `believes` and `how` are the results screen's words. `how.heardFrom` says `{who}`.
+- `falseStories` says how a false story is found out. As each month opens, before news moves, each
+  person who heard one in an earlier month sees through it at the seeded chance in `foundOut` for
+  their kind. They then believe what they did before it reached them, and pass it on no further.
+  `started` is what the results screen says of whoever made it up, and `found`, which says
+  `{month}`, of someone who found out.
 
 ## `risks.json`
 
@@ -517,6 +542,30 @@ player sees none of it until it does, and the results screen lists the lot.
 - `event` names a Company Event, from [`events.json`](#eventsjson), that lands as it comes out.
 - `note` says what was building up, and `landedOnYou`, `landedElsewhere` and `neverCameOut` say
   what became of it. The results screen lists every risk that was added.
+
+## `rivals.json`
+
+Who competes with the player. Rival is a relationship, not a kind: a Rival is any Practitioner
+competing with the player for something, as things stand, wherever they are on the Org Chart. Your
+boss can be one. The player is never told who is a Rival, and reads it from signs, such as the Moves
+made against them. The results screen lists each Rival, what they competed for and what they did.
+
+- `competing` lists what can be competed for. Each has an `id`, `for`, which the results screen
+  shows, and `who`: Characters, or `{boss}` or `{head}` for whoever is in that place. A `when`
+  makes it a competition only while that holds, which is how a vacancy can be written: the
+  candidates, with a `when` that reads the flag that opened the seat.
+- As each month opens, and as a Move lands, every Practitioner among them is a Rival, up to `most` of
+  them, the most influential on the Power Map first. A Believer who changes into a Practitioner can
+  become one. Anyone who has been a Rival stays on the results screen.
+- `seatChance` is how often the deal gives its first Practitioner to someone who could compete, as
+  in [`hidden-truth.json`](#hidden-truthjson), so that a run with no Rival is rare.
+- `moveChance` is how often a month's Character Move is a Rival's, while one is still to land and
+  the player has a Rival. Any priority Move still comes first. See [`moves.json`](#movesjson).
+- `didNothing` is what the results screen says of a Rival who made no Move against the player.
+
+These are refused: a `who` that names nobody, an `id` written twice, a Move by `{rival}` with no
+`rivals.json`, a Move by someone unknown, `{rival}` in a Move no Rival makes or outside its `body`,
+and a `story` with no `by` or no `falseStories` in [`reputation.json`](#reputationjson).
 
 ## `scenes.json`
 

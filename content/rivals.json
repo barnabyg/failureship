@@ -1,0 +1,18 @@
+{
+  "competing": [
+    {
+      "id": "credit",
+      "for": "The credit for your work",
+      "who": ["{boss}", "analyst", "associate"]
+    },
+    {
+      "id": "favour",
+      "for": "Your boss's favour",
+      "who": ["analyst", "projects", "associate"]
+    }
+  ],
+  "most": 2,
+  "seatChance": 0.7,
+  "moveChance": 0.2,
+  "didNothing": "Did nothing to you that you noticed, which may have been the idea."
+}

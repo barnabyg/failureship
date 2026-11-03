@@ -171,7 +171,7 @@ function landMove(state: State, content: Content): Step | null {
   state.rng = next;
   state.movesLanded.push(item.id);
   const by = makerOf(state, content, item);
-  noteMoveMade(state, content, by, item.id);
+  noteMoveMade(state, content, by, item);
   if (item.story && by !== undefined) {
     startStory(state, content, { ...item.story, by });
   }

@@ -4,6 +4,8 @@
     "from": "From: Your boss, {boss}",
     "title": "A great month for the team",
     "body": "Your boss has told the floor above about the good work your boss has been doing on your project. It is your work, and it has been described with great accuracy. Your name is in the copy line.",
+    "by": "{boss}",
+    "family": "deflect",
     "when": {
       "all": [
         {
@@ -22,6 +24,8 @@
     "from": "From: The Senior Analyst, Priya Venn",
     "title": "Your figures have been presented",
     "body": "The Senior Analyst has shown your figures to the floor above, with one small improvement: a different name is now in the corner where yours was. An email thanks the team for its support.",
+    "by": "analyst",
+    "family": "deflect",
     "sets": ["figures-borrowed"]
   },
   {
@@ -29,6 +33,7 @@
     "from": "From: Your boss, {boss}",
     "title": "FW: Monthly Status Report OVERDUE",
     "body": "Your boss has forwarded you a chaser about the report you did not file. The whole message reads: Thoughts?",
+    "by": "{boss}",
     "when": {
       "flag": "skipped-report"
     },
@@ -39,6 +44,8 @@
     "from": "From: Your boss, {boss}",
     "title": "Thanks for your input",
     "body": "Your Monthly Status Report has gone upstairs under your boss's name, as an executive summary of your Monthly Status Report. The summary is your report.",
+    "by": "{boss}",
+    "family": "deflect",
     "when": {
       "all": [
         {
@@ -56,6 +63,8 @@
     "from": "Overheard in the lift",
     "title": "You hear your phrase on the way up",
     "body": "Your boss is explaining strategic patience to someone from the fifth floor, and is doing so as its author. You are holding the door.",
+    "by": "{boss}",
+    "family": "deflect",
     "when": {
       "flag": "used-buzzword"
     },
@@ -73,13 +82,20 @@
     "from": "Overheard in the kitchen",
     "title": "Your project is apparently in trouble",
     "body": "Someone from another team asks kindly how you are coping. You did not know that you were coping with anything. It seems to be widely known that your project is in trouble.",
-    "sets": ["rumour-spread"]
+    "by": "{rival}",
+    "family": "attack",
+    "sets": ["rumour-spread"],
+    "story": {
+      "about": "project-in-trouble",
+      "text": "A story that your project was in trouble."
+    }
   },
   {
     "id": "information-late",
     "from": "From: The Project Co-ordinator, Callum Reed",
     "title": "RE: The figures you needed by Tuesday",
     "body": "The Project Co-ordinator has sent you the figures you needed. It is Wednesday. The Project Co-ordinator's message adds that they are sorry for the delay, and that the whole team has been copied in, along with your deadline.",
+    "by": "projects",
     "sets": ["information-late"]
   },
   {
@@ -87,6 +103,7 @@
     "from": "From: The Office Co-ordinator, Marjorie Tull",
     "title": "Invitation updated",
     "body": "A meeting you were preparing for has moved to yesterday. The minutes are attached. You were present, and you agreed to several things.",
+    "by": "admin",
     "sets": ["meeting-moved"]
   },
   {
@@ -94,6 +111,8 @@
     "from": "From: The Senior Analyst, Priya Venn",
     "title": "Those laptops",
     "body": "The Senior Analyst has told several people that you promised the team new laptops. You did not. You have now been asked when they will arrive, by someone who does not believe you.",
+    "by": "analyst",
+    "family": "attack",
     "sets": ["laptop-promise"],
     "when": {
       "not": {
@@ -106,6 +125,8 @@
     "from": "From: The Senior Analyst, Priya Venn",
     "title": "A question from the floor",
     "body": "You gave a short update to people from upstairs. The Senior Analyst asked, very pleasantly, one question about a number on your third slide. Nobody had looked at that number until then. They are all looking at it now.",
+    "by": "analyst",
+    "family": "attack",
     "sets": ["tricky-question"]
   },
   {
@@ -127,6 +148,7 @@
     "from": "From: Your boss's boss, {head}",
     "title": "A small favour",
     "body": "Your boss's boss has put you on a working group about working groups, on the basis of a conversation you do not remember. It meets on Fridays, and it has no end date.",
+    "by": "{head}",
     "sets": ["working-group"]
   },
   {
@@ -134,6 +156,7 @@
     "from": "From: The Project Co-ordinator, Callum Reed",
     "title": "About that favour",
     "body": "The Project Co-ordinator is still on the supplier's team, and would like you to know that they have not forgotten. They would like you to cover the supplier's Friday call, which is three hours long and in a time zone. Since you owe them, you do.",
+    "by": "projects",
     "when": {
       "youOwe": "projects"
     },
@@ -146,11 +169,42 @@
     "from": "From: The Senior Analyst, Priya Venn",
     "title": "About that favour",
     "body": "The Senior Analyst needs someone to check four hundred rows of figures by hand, because the system is not trusted. They remind you, pleasantly, about the footer. You spend an evening on rows.",
+    "by": "analyst",
     "when": {
       "youOwe": "analyst"
     },
     "priority": true,
     "sets": ["paid-back-a-favour"],
     "repays": "analyst"
+  },
+  {
+    "id": "credit-claimed",
+    "from": "Overheard by the lift",
+    "title": "Somebody else's long evenings",
+    "body": "{rival} is telling someone from the floor above about this month's figures, and the long evenings that went into them. They were your figures, and your evenings.",
+    "by": "{rival}",
+    "family": "deflect",
+    "sets": ["credit-claimed"],
+    "opinion": -1
+  },
+  {
+    "id": "blamed-for-the-delay",
+    "from": "From: Meeting minutes (draft)",
+    "title": "Action: you",
+    "body": "The draft minutes of a meeting you were not invited to record that the delay to your project began with you. {rival} raised it, with regret, and has kindly offered to help you catch up.",
+    "by": "{rival}",
+    "family": "deflect",
+    "sets": ["blamed-by-a-colleague"],
+    "opinion": -1
+  },
+  {
+    "id": "pointed-question",
+    "from": "Your update to the floor above",
+    "title": "Just one more question",
+    "body": "You gave a short update to people from upstairs. At the very end {rival} asked, warmly, what the plan was if the dates slipped. You had no plan for that, and now everyone knows that you had no plan for that.",
+    "by": "{rival}",
+    "family": "attack",
+    "sets": ["asked-a-pointed-question"],
+    "headOpinion": -1
   }
 ]

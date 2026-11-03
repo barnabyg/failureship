@@ -76,5 +76,14 @@
   "how": {
     "direct": "They were there.",
     "heardFrom": "They heard it from {who}."
+  },
+  "falseStories": {
+    "foundOut": {
+      "believer": 0.3,
+      "incompetent": 0.05,
+      "practitioner": 0.15
+    },
+    "started": "They made it up.",
+    "found": "In month {month} they worked out that it was not true."
   }
 }

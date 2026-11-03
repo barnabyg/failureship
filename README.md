@@ -8,7 +8,7 @@ with kinds of boss, a Project, the Monthly Status Report, Demands, one-off Budge
 Moves and going over your boss's head. Earlier choices come back through Threads, hidden risks and
 what people have heard, things happen to the company, and you can be fired. You can give your word
 and make Deals, a Believer you burn can change or leave, Teflon and Fawning move when a Thread plays
-out, a quarterly review comes round every third month, and runs save.
+out, a quarterly review comes round every third month, colleagues compete with you, and runs save.
 
 ## Play
 
@@ -57,38 +57,39 @@ one kind. Names stay in support on the charts, in the cast list and the Notebook
 results screen, on the `from` lines of messages and the Find Out buttons, and in what sources say
 about people.
 
-Press **Notebook** at any step, at no cost. It keeps claims and important signs for
-you, and it never says which to trust. Mark each Character with the kind you suspect.
+Press **Notebook** at any step, at no cost. It keeps claims and important signs for you, and it
+never says which to trust. Mark each Character with the kind you suspect.
 
 Press **Org Chart** at any step, at no cost, for the formal hierarchy. The real one is the hidden
 Power Map, dealt from the seed. A Company Event can change either mid-run, and later signs follow.
 
-Your word is yours to give. Some choices offer a **Promise**, whether or not you can deliver it,
-and some a **Deal**, in which each side offers something. Whether you are believed, and whether a
-good word from someone counts, goes by who they really are and what has reached them. The **Your
-word given** card shows what you have promised, your Deals and the favours you owe or are owed, at no cost.
-Nothing tells you what other people owe each other.
+Your word is yours to give. Some choices offer a **Promise**, whether or not you can deliver it, and
+some a **Deal**, in which each side offers something. Whether you are believed, and whether a good
+word from someone counts, goes by who they really are and what has reached them. The **Your word
+given** card shows what you have promised, your Deals and the favours you owe or are owed, at no
+cost. Nothing tells you what other people owe each other.
 
 **Teflon**, in the header, is your track record, not your danger. **Fawning** is how well sucking up
-to your managers is paying off, not whether they like you, and plays no part in promotion. Each moves
-only when a Thread plays out, and the official story says which. Some levels earn a Milestone.
+to your managers is paying off, not whether they like you, and plays no part in promotion. Each
+moves only when a Thread plays out, and the official story says which. Some levels earn a Milestone.
 **Official standing** is a bar from red to green, with no number: how you would fare on paper if a
 vacancy arose. It reads only the official record, a Final Warning turns it red, and it decides
 nothing. The results screen sets it beside who really decides.
 
 What you do can travel. There is no reputation score: each person believes what has reached them
-along the Power Map, and that shows only in how they are with you. So the same deed is known to
-some and unknown to others, and good news travels too.
+along the Power Map, and that shows only in how they are with you. So the same deed is known to some
+and unknown to others, and good news travels too, as do false stories. A **Rival** is any
+Practitioner competing with you, your boss included, and nothing says who. Rivals use your own Moves
+on you, and once you have seen one done you can use it too.
 
-After nine months the results screen shows who was really who: each Character's kind
-and Hidden Fact, your marks against the truth, how you played by family of Move, what
-your boss and your boss's boss really made of you, each claim and whether it was true,
-each clue and what it was worth, and the Org Chart beside the true Power Map.
+After nine months the results screen shows who was really who: each Character's kind and Hidden
+Fact, each Rival and what they did, your marks against the truth, how you played by family of Move,
+what your bosses made of you, each claim and clue and its worth, and both charts.
 
-You can also be fired. Some choices are big mistakes, and blaming someone with a dangerous
-Hidden Fact is one. The first puts you on a **Final Warning**, shown beside your job title
-from then on. The second ends the run, at the same results screen. A few choices fire you
-outright, and those say so on the button before you press it.
+You can also be fired. Some choices are big mistakes, and blaming someone with a dangerous Hidden
+Fact is one. The first puts you on a **Final Warning**, shown beside your job title from then on.
+The second ends the run, at the same results screen. A few choices fire you outright, and those say
+so on the button before you press it.
 
 At any step, **New run** deals a new seed, and **Restart from seed** plays the seed you type from
 month 1. Leaving a run in progress asks first. Swap a seed with a friend for the same deal.
@@ -99,10 +100,10 @@ replaces the saved run. If you have changed anything in `content/` since the sav
 moved on, you are offered a new run: a save only holds for the data it was dealt from. A save can be
 read in browser storage, hidden truth included, which is accepted while the game is in development.
 
-A month always leaves you something to decide. Every Notification has an answer that
-costs nothing. Beside the report, a month's own Notifications ask for at most one costly
-answer, though late figures or an action from a missed meeting can add another. A meeting
-you had no action left for leaves no Demand behind.
+A month always leaves you something to decide. Every Notification has an answer that costs nothing.
+Beside the report, a month's own Notifications ask for at most one costly answer, though late
+figures or an action from a missed meeting can add another. A meeting you had no action left for
+leaves no Demand behind.
 
 [docs/playtest.md](docs/playtest.md) has test scenarios to play by hand. They give away some deals.
 
@@ -142,6 +143,7 @@ format, the page shows what is wrong instead of the game.
 | `gauges.json`         | The Gauges, Teflon and Fawning: where each starts, and the Milestones earned along the way             |
 | `standing.json`       | Official standing: what on the official record moves it, its bands, and what the results screen says   |
 | `hidden-truth.json`   | The rules of the deal: kinds, their weights, and the Hidden Facts                                      |
+| `rivals.json`         | What Rivals compete with you for, who can, how many at once and how often they make a Move             |
 | `balance.json`        | Actions a month, months in a run and a quarter, each choice's cost, how signs mislead, the boss's mood |
 | `floors.json`         | Each floor, by the job done on it: the job title, the rooms, their fittings and the lift's sign        |
 
@@ -163,17 +165,17 @@ How to run the checks and tests is in [AGENTS.md](AGENTS.md#verifying).
   The mechanics are `boss.ts`, `demands.ts`, `find-out.ts` with `claims.ts`, `notebook.ts`,
   `over-head.ts`, `project.ts`, `scenes.ts`, `company-events.ts`, `mistakes.ts`, `reputation.ts`,
   `risks.ts`, `threads.ts` with `bills.ts`, `promises.ts`, `deals.ts`, `changes.ts` for Believers
-  changing and leaving, `gauges.ts`, the only module that reads a Gauge, `standing.ts`, and
-  `reviews.ts` for the quarterly reviews. `say.ts` names Characters in text, and `rng.ts` and
-  `seed.ts` hold the seed. `view.ts` is the player view, built by `to-view.ts`, with `to-results.ts`
-  its reveal at the end; `hidden-truth.ts` is the tests' read of the truth. `save.ts` writes and
-  reads a run. A run's `State` is plain data, so a mechanic gets saving for free: raise
-  `SAVE_VERSION` if it changes what saved state means. `content.ts` assembles the schema from the
-  `*-schema.ts` files, as [AGENTS.md](AGENTS.md) says. `content-checks.ts` parses and checks data
-  across files, with each mechanic's checks in `truth-checks.ts` for the hidden truth and its signs,
-  `boss-checks.ts` for the boss, going over the head, Demands and reputation, and
+  changing and leaving, `gauges.ts`, the only module that reads a Gauge, `standing.ts`, `reviews.ts`
+  for the quarterly reviews, and `rivals.ts` for Rivals. `say.ts` names Characters in text, and
+  `rng.ts` and `seed.ts` hold the seed. `view.ts` is the player view, built by `to-view.ts`, with
+  `to-results.ts` its reveal at the end; `hidden-truth.ts` is the tests' read of the truth.
+  `save.ts` writes and reads a run. A run's `State` is plain data, so a mechanic gets saving for
+  free: raise `SAVE_VERSION` if it changes what saved state means. `content.ts` assembles the schema
+  from the `*-schema.ts` files, as [AGENTS.md](AGENTS.md) says. `content-checks.ts` parses and
+  checks data across files, with each mechanic's checks in `truth-checks.ts` for the hidden truth
+  and its signs, `boss-checks.ts` for the boss, going over the head, Demands and reputation, and
   `consequence-checks.ts` for what choices lead to, with `word-checks.ts` for Promises and Deals and
-  `floor-checks.ts` for floors and `review-checks.ts` for reviews.
+  `floor-checks.ts` for floors, `review-checks.ts` for reviews and `rival-checks.ts` for Rivals.
 - `src/tower/` draws the floor the view names, and holds no rules.
 - `src/ui/` holds the React panels over the tower: `App.tsx` wires them to the run, and
   `TowerStage.tsx` the tower's hotspots. `panels.tsx` picks each step's panel, the larger being

@@ -97,17 +97,22 @@ export function makerOf(
   return rivals[Math.floor(value * rivals.length)]?.character;
 }
 
-/** A Move has landed on the player: if a Rival made it, it is what they did. */
+/**
+ * A Move has landed on the player. If a Rival made it, and it is one of the
+ * families of Move, it is what they did to the player.
+ */
 export function noteMoveMade(
   state: State,
   content: Content,
   maker: string | undefined,
-  move: string,
+  move: { id: string; family?: string | undefined },
 ): void {
   noteRivals(state, content);
   const rival = rivalsNow(state, content).some((r) => r.character === maker);
   const record = state.truth.rivals.find((r) => r.character === maker);
-  if (rival && record) record.did.push({ month: state.month, move });
+  if (rival && record && move.family !== undefined) {
+    record.did.push({ month: state.month, move: move.id });
+  }
 }
 
 /** Each Rival, what they competed for, and the Moves they made against the player. */

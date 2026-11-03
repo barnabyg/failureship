@@ -23,6 +23,7 @@ import project from "../../content/project.json";
 import promises from "../../content/promises.json";
 import reputation from "../../content/reputation.json";
 import risks from "../../content/risks.json";
+import rivals from "../../content/rivals.json";
 import scenes from "../../content/scenes.json";
 import sources from "../../content/sources.json";
 import standing from "../../content/standing.json";
@@ -56,6 +57,7 @@ export const gameContent = parseContent({
   standing,
   families,
   hiddenTruth,
+  rivals,
   sources,
   notebook,
   project,
@@ -150,6 +152,9 @@ const panelSchema = z.strictObject(
       "resultsStandingHeading",
       "resultsMilestonesHeading",
       "resultsNoMilestones",
+      "resultsRivalsHeading",
+      "resultsNoRivals",
+      "resultsRivalSince",
       "resultsChangedHeading",
       "resultsDealsHeading",
       "resultsFavoursHeading",

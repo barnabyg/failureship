@@ -9,7 +9,7 @@ import {
 test("a catastrophic choice says so first, and ends at the results screen", async ({
   page,
 }) => {
-  await page.goto("/?seed=1&month=8");
+  await page.goto("/?seed=96&month=8");
   await answerAnyNotification(page);
   await openMeeting(page);
   const choice = page.getByTestId("scene-option-tell-them-everything");

@@ -6,8 +6,10 @@ import {
   type PlayerView,
   type Run,
 } from "../../src/engine";
+import { gameContent, panelText } from "../../src/content";
 import { readHiddenTruth, type PowerMap } from "../../src/engine/hidden-truth";
 import { capitalised } from "../../src/engine/say";
+import { plainChoice } from "../../src/ui/later-month";
 import { calledAtStart, floorOwn, sceneFixtureRaw } from "./fixture";
 
 const SEEDS = Array.from({ length: 200 }, (_, i) => i + 1);
@@ -568,5 +570,97 @@ describe("using a Move a Rival used on you", () => {
     if (option) option.requires = { sawMove: "clamied" };
 
     expect(() => parseContent(raw)).toThrow(/unknown Move "clamied"/);
+  });
+});
+
+describe("the game's Rivals", () => {
+  const MANY = Array.from({ length: 1000 }, (_, i) => i + 1);
+
+  /** Plays as the browser tests' plain player does, keeping every view. */
+  function playPlainly(seed: number) {
+    const run = startRun({ seed, content: gameContent });
+    const views = [run.view()];
+    let view = views[0] as PlayerView;
+    while (view.choices.length > 0) {
+      view = run.choose(plainChoice(view));
+      views.push(view);
+    }
+    return { run, views };
+  }
+
+  it("deals a run with no Rival rarely, and never more than two at once", () => {
+    const counts = [0, 0, 0];
+    for (const seed of MANY) {
+      const { rivals } = readHiddenTruth(
+        startRun({ seed, content: gameContent }),
+      );
+      counts[rivals.length] = (counts[rivals.length] ?? 0) + 1;
+    }
+    const [none = 0, one = 0, two = 0] = counts;
+
+    // 36 runs in 1000 have none, as the deal stands.
+    expect(none / MANY.length).toBeLessThan(0.06);
+    expect(none).toBeGreaterThan(0);
+    expect(one).toBeGreaterThan(0);
+    expect(two).toBeGreaterThan(0);
+    expect(none + one + two).toBe(MANY.length);
+  });
+
+  it("makes Rivals' Moves from the families the player has", () => {
+    const families = (items: readonly { family?: string | undefined }[]) =>
+      new Set(items.flatMap((i) => i.family ?? []));
+    const players = families([
+      ...gameContent.actions,
+      ...gameContent.notifications.flatMap((n) => n.options),
+      ...gameContent.scenes.flatMap((s) => s.options),
+    ]);
+    const rivals = gameContent.moves.filter((m) => m.by === "{rival}");
+
+    expect(families(rivals)).toEqual(new Set(["deflect", "attack"]));
+    for (const family of families(rivals)) expect(players).toContain(family);
+    expect(rivals.some((m) => m.story !== undefined)).toBe(true);
+  });
+
+  it("never says who is a Rival before the results screen", () => {
+    const written = gameContent.rivals;
+    const words = [
+      ...(written?.competing.map((c) => c.for) ?? []),
+      written?.didNothing ?? "",
+      panelText.resultsRivalsHeading,
+      panelText.resultsNoRivals,
+    ];
+    for (const seed of SEEDS.slice(0, 30)) {
+      const { views } = playPlainly(seed);
+      for (const view of views.slice(0, -1)) {
+        const seen = JSON.stringify(view);
+        expect(seen).not.toMatch(/\brivals?\b/i);
+        for (const word of words) expect(seen).not.toContain(word);
+      }
+    }
+  });
+
+  // tests/e2e/rival.spec.ts plays these: a Rival's false story lands in month 1 of
+  // seed 39 and has travelled by month 8, when the player can tell one too. On
+  // seed 22 nobody tells one, so the player cannot either.
+  it("keeps the seeds the browser test uses", () => {
+    const { run, views } = playPlainly(39);
+    const offered = (all: readonly PlayerView[]) =>
+      all.some(
+        (v) =>
+          v.step.kind === "scene" &&
+          v.step.options.some((o) => o.id === "start-a-rumour"),
+      );
+    const rumour = views.find(
+      (v) => v.step.kind === "move" && v.step.title.includes("in trouble"),
+    );
+    const truth = readHiddenTruth(run);
+    const story = truth.news.findIndex((n) => n.startedBy !== undefined);
+
+    expect(rumour?.month).toBe(1);
+    expect(offered(views)).toBe(true);
+    expect(
+      truth.memories.filter((m) => m.news === story && m.via !== null).length,
+    ).toBeGreaterThan(0);
+    expect(offered(playPlainly(22).views)).toBe(false);
   });
 });

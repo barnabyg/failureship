@@ -36,7 +36,9 @@ test("a hidden risk that landed is on the results screen", async ({ page }) => {
   await expect(page.getByTestId("results-risks")).toContainText(
     "your email attached",
   );
-  await expect(page.getByTestId("result-mistake")).toContainText(
-    "correction to the minutes",
-  );
+  await expect(
+    page
+      .getByTestId("result-mistake")
+      .filter({ hasText: "correction to the minutes" }),
+  ).toHaveCount(1);
 });

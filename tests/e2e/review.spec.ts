@@ -7,7 +7,7 @@ import { freshRun, playUntil } from "./play";
 test("a quarterly review comes round by itself and moves Official standing", async ({
   page,
 }) => {
-  await page.goto("/?seed=1&month=3");
+  await page.goto("/?seed=96&month=3");
   const marker = page.getByTestId("standing").locator(".standing-marker");
   const actions = page.getByTestId("actions-left").locator("dd");
 

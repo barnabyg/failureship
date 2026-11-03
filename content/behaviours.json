@@ -301,5 +301,37 @@
       "incompetent": 7,
       "practitioner": 2
     }
+  },
+  {
+    "id": "makes-your-point-louder",
+    "text": "{who} makes your point again, a minute after you made it and a little louder, and is thanked for it.",
+    "clue": "{who} made your point again, louder, and was thanked for it.",
+    "roles": ["junior-associate"],
+    "likelihood": {
+      "believer": 2,
+      "incompetent": 5,
+      "practitioner": 7
+    }
+  },
+  {
+    "id": "asks-how-you-did-it",
+    "text": "{who} asks how you did the figures, and writes down your answer word for word.",
+    "roles": ["junior-associate"],
+    "likelihood": {
+      "believer": 6,
+      "incompetent": 3,
+      "practitioner": 6
+    }
+  },
+  {
+    "id": "thanks-you-by-name",
+    "text": "{who} thanks you by name for the figures, in front of the people who will remember it.",
+    "clue": "{who} thanked you by name, in front of the right people.",
+    "roles": ["junior-associate"],
+    "likelihood": {
+      "believer": 7,
+      "incompetent": 3,
+      "practitioner": 2
+    }
   }
 ]

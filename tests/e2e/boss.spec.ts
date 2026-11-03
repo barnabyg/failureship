@@ -42,7 +42,7 @@ test("the boss's opinion never appears as a number or label", async ({
   await expect(page.locator(".status")).not.toContainText(/opinion|mood/i);
 });
 
-// The real-content test keeps seed 1's boss a Believer and seed 8's Incompetent.
+// The real-content test keeps seed 96's boss a Believer and seed 8's Incompetent.
 test("the same choice lands differently with a different kind of boss", async ({
   page,
 }) => {
@@ -54,7 +54,7 @@ test("the same choice lands differently with a different kind of boss", async ({
     return page.getByTestId("boss-reaction").innerText();
   };
 
-  const believer = await reactionOnSeed(1);
+  const believer = await reactionOnSeed(96);
   const incompetent = await reactionOnSeed(8);
 
   expect(believer).not.toEqual(incompetent);

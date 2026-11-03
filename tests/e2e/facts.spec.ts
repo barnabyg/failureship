@@ -12,12 +12,12 @@ async function fileTheReport(page: Page) {
 }
 
 // The real-content test keeps these seeds true: the Office Co-ordinator tells you in month 8 of
-// seed 22 about your boss's post, and the Senior Analyst really has a dangerous fact on seed 1.
+// seed 87 about your boss's post, and the Senior Analyst really has a dangerous fact on seed 96.
 test("a discovered Hidden Fact changes what a Scene offers", async ({
   page,
 }) => {
   // Without asking in month 8, month 9's meeting has no such option.
-  await page.goto("/?seed=22&month=9");
+  await page.goto("/?seed=87&month=9");
   await answerAnyNotification(page);
   await openMeeting(page);
   await expect(page.getByTestId("panel-scene")).toContainText(
@@ -27,7 +27,7 @@ test("a discovered Hidden Fact changes what a Scene offers", async ({
     page.getByTestId("scene-option-use-abolished-post-calibration"),
   ).toHaveCount(0);
 
-  await freshRun(page, "/?seed=22&month=8");
+  await freshRun(page, "/?seed=87&month=8");
   await fileTheReport(page);
   await page.getByTestId("hotspot-inside-info").click();
   await page.getByTestId("source-admin").click();
@@ -53,7 +53,7 @@ test("a discovered Hidden Fact changes what a Scene offers", async ({
 test("blundering into a dangerous Hidden Fact is explained at the end", async ({
   page,
 }) => {
-  await page.goto("/?seed=1&month=8");
+  await page.goto("/?seed=96&month=8");
   await fileTheReport(page);
   await openMeeting(page);
 
