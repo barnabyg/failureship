@@ -8,8 +8,9 @@ function walkingToTheEnd() {
   test.slow();
 }
 
-/** The player's own desk, on whichever floor they are: "work" or "work-2". */
-const DESK = '[data-testid^="hotspot-work"]';
+/** The player's own desk, on whichever floor they are, by its action in actions.json. */
+const DESKS = ["work", "work-2"];
+const DESK = DESKS.map((id) => `[data-testid="hotspot-${id}"]`).join(", ");
 
 /** Goes to an address as a new player would, with no saved run to come back to. */
 export async function freshRun(page: Page, address: string) {
@@ -78,7 +79,9 @@ export async function playUntil(page: Page, testId: string) {
   const scene = page.getByTestId("panel-scene");
   const carryOn = page.getByTestId("continue");
   const meeting = page.locator('[data-testid^="hotspot-meeting"]:enabled');
-  const desk = page.locator(`${DESK}:enabled`);
+  const desk = page.locator(
+    DESKS.map((id) => `[data-testid="hotspot-${id}"]:enabled`).join(", "),
+  );
   for (;;) {
     await expect(
       wanted
