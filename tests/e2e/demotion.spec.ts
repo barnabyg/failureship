@@ -23,9 +23,9 @@ test("a big mistake while the seat is open costs it, and the decision says so", 
   await playUntil(page, "decided");
   const told = page.getByTestId("panel-notice");
   await expect(told).toContainText("Congratulations to the Junior Associate");
-  await expect(told).toContainText("until the incident");
+  await expect(told).toContainText("The incident during the process");
   await expect(page.getByTestId("decided-in-fact")).toContainText(
-    "until the incident report arrived",
+    "The incident report was taken into account",
   );
   await page.getByTestId("continue").click();
   await expect(page.getByTestId("lift-ride")).toHaveCount(0);

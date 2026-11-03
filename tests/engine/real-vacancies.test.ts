@@ -194,8 +194,10 @@ describe("a big mistake, in the game", () => {
       blocked: true,
     });
     expect(views.at(-1)?.job.id).toBe("junior-employee");
-    expect(told.step.body).toContain("until the incident");
-    expect(told.step.decided?.inFact).toContain("until the incident report");
+    expect(told.step.body).toContain("The incident during the process");
+    expect(told.step.decided?.inFact).toContain(
+      "The incident report was taken into account",
+    );
     expect(results.vacancies[0]?.inFact).toContain(
       "As for you: There was an incident while the seat was open",
     );

@@ -25,7 +25,7 @@
       },
       "blocked": {
         "title": "Congratulations to {winner}",
-        "body": "After a fair and transparent process, the seat goes to {winner}, who is now your boss. Your application was the strongest received, until the incident, which has been attached to it. It has been kept on file, with the attachment. You stay where you are, at the same desk, facing the other way."
+        "body": "After a fair and transparent process, the seat goes to {winner}, who is now your boss. The incident during the process was taken into account, as the process requires. Your application has been kept on file, with the incident report stapled to the front. You stay where you are, at the same desk, facing the other way."
       }
     }
   ],
@@ -163,7 +163,7 @@
       },
       "rulesOut": ["believer", "incompetent"],
       "why": "There was an incident while the seat was open, and {decider} could not be seen to reward it.",
-      "told": "{decider} had the seat down for you, until the incident report arrived, and was then seen to think again."
+      "told": "The incident report was taken into account by {decider}, and so was its timing."
     }
   },
   "resultsAt": 6,
