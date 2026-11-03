@@ -64,7 +64,7 @@ export function StepPanel({ view, onChoose }: StepPanelProps) {
           testId="panel-notification"
           eyebrow={step.from}
           title={step.subject}
-          look={{ sent: "notification" }}
+          look={{ sent: "notification", to: view.job.title }}
         >
           <p>{step.body}</p>
           <div className="options">
@@ -109,7 +109,7 @@ export function StepPanel({ view, onChoose }: StepPanelProps) {
         <Panel
           testId="panel-dialog"
           title={step.title}
-          look={{ sent: "dialog" }}
+          look={{ sent: "dialog", to: view.job.title }}
         >
           {step.lines.map((line) => (
             <p key={line.text}>
@@ -132,7 +132,7 @@ export function StepPanel({ view, onChoose }: StepPanelProps) {
         <Panel
           testId="panel-notice"
           title={step.title}
-          look={{ sent: "notice" }}
+          look={{ sent: "notice", to: view.job.title }}
         >
           <p>{step.body}</p>
           <Reaction text={step.reaction} />
@@ -150,7 +150,7 @@ export function StepPanel({ view, onChoose }: StepPanelProps) {
           testId="panel-move"
           eyebrow={step.from}
           title={step.title}
-          look={{ sent: "move" }}
+          look={{ sent: "move", to: view.job.title }}
         >
           <p>{step.body}</p>
           <Continue onChoose={onChoose} />
@@ -162,7 +162,7 @@ export function StepPanel({ view, onChoose }: StepPanelProps) {
           testId="panel-event"
           eyebrow={step.from}
           title={step.title}
-          look={{ sent: "event" }}
+          look={{ sent: "event", to: view.job.title }}
         >
           <p>{step.body}</p>
           <Continue onChoose={onChoose} />

@@ -1,5 +1,6 @@
 import type { Condition, Content, Kind, Mood, SceneData } from "./content";
 import { YOU, type PowerMap } from "./deal";
+import { isOnFloor } from "./floors";
 import { bossOf, placeOf, whoIs } from "./places";
 import { calledBy, capitalised, sayFrom, sayPeople, titleOf } from "./say";
 import type { State, World } from "./state";
@@ -281,6 +282,7 @@ export function actionsThisMonth(state: State, content: Content) {
     const nobodyThere =
       method !== undefined && sourcesHere(state, method.sources).length === 0;
     return (
+      isOnFloor(state, content, a.place) &&
       inMonth(a, state.month) &&
       (!scene || inMonth(scene, state.month)) &&
       !nobodyThere &&

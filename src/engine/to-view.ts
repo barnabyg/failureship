@@ -23,6 +23,7 @@ import {
   sceneData,
 } from "./reads";
 import { dealsInView } from "./deals";
+import { floorNow } from "./floors";
 import { gaugesInView, gaugesThisMonth } from "./gauges";
 import { managerOf } from "./places";
 import { promisesInView } from "./promises";
@@ -182,7 +183,7 @@ function toStoryView(
     .map((e) => e.story);
   return {
     kind: "story",
-    title,
+    title: title.replaceAll("{job}", floorNow(state, content).title),
     reportedHeading,
     happenedHeading,
     reported: [...events, ...told].flatMap((e) => fill(e.reported)),
@@ -355,6 +356,7 @@ export function toView(state: State, world: World): PlayerView {
     ...gaugesInView(state, content),
     standing: standingInView(state, content),
     finalWarning: state.finalWarning,
+    job: { id: state.job, title: floorNow(state, content).title },
     seed: state.seed,
     month: state.month,
     totalMonths: content.balance.monthsPerRun,

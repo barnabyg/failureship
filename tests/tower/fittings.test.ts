@@ -4,7 +4,8 @@ import { fittingsFor, type Part } from "../../src/tower/fittings";
 import { floorScenery } from "../../src/tower/scenery";
 
 const EDGE = 0.001;
-const { rooms } = gameContent.floor;
+const rooms = gameContent.floors.flatMap((f) => f.rooms);
+const firstFloor = gameContent.floors[0]?.rooms ?? [];
 const scenery = floorScenery(16, 8, 4.2);
 
 const extent = (part: Part, axis: 0 | 1 | 2): [number, number] => [
@@ -14,7 +15,7 @@ const extent = (part: Part, axis: 0 | 1 | 2): [number, number] => [
 
 describe("the furniture on the floor", () => {
   it("furnishes every room on Floor 1", () => {
-    for (const room of rooms) {
+    for (const room of firstFloor) {
       expect(room.fittings, room.id).toBeDefined();
     }
   });

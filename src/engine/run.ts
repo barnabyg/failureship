@@ -80,6 +80,7 @@ function dealtState(seed: number, content: Content): State {
     threads: [],
     billsDue: [],
     reportsTo: {},
+    job: content.you.job,
     eventsDue: [],
     eventsLanded: [],
     promises: [],

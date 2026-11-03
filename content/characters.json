@@ -1,6 +1,7 @@
 {
   "you": {
-    "reportsTo": "boss"
+    "reportsTo": "boss",
+    "job": "junior-employee"
   },
   "places": {
     "boss": {

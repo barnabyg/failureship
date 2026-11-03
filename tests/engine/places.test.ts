@@ -9,7 +9,7 @@ import {
   type Run,
 } from "../../src/engine";
 import { readHiddenTruth } from "../../src/engine/hidden-truth";
-import { action, room, sceneFixtureRaw } from "./fixture";
+import { action, room, sceneFixtureRaw, withRoom } from "./fixture";
 
 /*
  * On the fixture's Org Chart, Ana is at the top and Ben and Cal answer to her.
@@ -160,7 +160,7 @@ function upFixtureRaw() {
       { ...action("upstairs"), result: undefined, overHead: true },
       ...raw.actions,
     ],
-    floor: { rooms: [...raw.floor.rooms, room("upstairs", 10)] },
+    floors: withRoom(raw.floors, room("upstairs", 10)),
   };
 }
 

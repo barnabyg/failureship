@@ -1,7 +1,12 @@
 import { createHash } from "node:crypto";
 import { beforeAll, describe, expect, it } from "vitest";
-import { gameContent, panelText } from "../../src/content";
-import { startRun, type Choice, type PlayerView } from "../../src/engine";
+import { gameContent } from "../../src/content";
+import {
+  floorOf,
+  startRun,
+  type Choice,
+  type PlayerView,
+} from "../../src/engine";
 import { plainChoice } from "../../src/ui/later-month";
 
 /*
@@ -72,10 +77,11 @@ function canonical(value: unknown): string {
 
 /** What the player sees at a step: the view, their job title and the floor the tower draws. */
 function seen(view: PlayerView) {
+  const { job, ...shown } = view;
   return {
-    ...view,
-    jobTitle: panelText.jobTitle,
-    floor: gameContent.floor.rooms,
+    ...shown,
+    jobTitle: job.title,
+    floor: floorOf(gameContent, job.id).rooms,
   };
 }
 

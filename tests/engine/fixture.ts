@@ -195,7 +195,7 @@ export function fixtureRaw() {
       role?: string;
       called?: string;
     }[],
-    you: { reportsTo: "ana" },
+    you: { reportsTo: "ana", job: "fixture-job" },
     behaviours: [] as {
       id: string;
       text: string;
@@ -229,7 +229,13 @@ export function fixtureRaw() {
       title: "Official story",
       entries: [{ reported: "All is well." }] as RawStoryEntry[],
     },
-    floor: { rooms: ["kettle", "desk", "copier", "plant"].map(room) },
+    floors: [
+      {
+        job: "fixture-job",
+        title: "FIXTURE-JOB",
+        rooms: ["kettle", "desk", "copier", "plant"].map(room),
+      },
+    ] as RawFloor[],
     ui: {
       hints: {
         notification: "Answer the Notification.",
@@ -331,6 +337,22 @@ export function action(id: string) {
   };
 }
 
+interface RawFloor {
+  job: string;
+  title: string;
+  rooms: ReturnType<typeof room>[];
+}
+
+/** The floors, with one more room on the first. */
+export function withRoom(
+  floors: readonly RawFloor[],
+  added: ReturnType<typeof room>,
+): RawFloor[] {
+  return floors.map((f, i) =>
+    i === 0 ? { ...f, rooms: [...f.rooms, added] } : f,
+  );
+}
+
 export function room(id: string, index: number) {
   return {
     id,
@@ -390,7 +412,7 @@ export function sceneFixtureRaw() {
       },
       ...raw.actions,
     ],
-    floor: { rooms: [...raw.floor.rooms, room("meeting", 9)] },
+    floors: withRoom(raw.floors, room("meeting", 9)),
   };
 }
 

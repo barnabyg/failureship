@@ -216,7 +216,7 @@ export function Header(props: {
       <dl>
         <div>
           <dt>{panelText.jobHeading}</dt>
-          <dd data-testid="job-title">{panelText.jobTitle}</dd>
+          <dd data-testid="job-title">{view.job.title}</dd>
         </div>
         <div data-testid="month">
           <dt>{panelText.monthHeading}</dt>
