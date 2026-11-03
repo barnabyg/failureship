@@ -18,7 +18,7 @@ function ProjectCard({
   view: PlayerView;
   onOpen: () => void;
 }) {
-  const { project, openDemands } = view;
+  const { project, openDemands, grandPlan } = view;
   return (
     <button
       type="button"
@@ -42,6 +42,11 @@ function ProjectCard({
           testId="card-reported"
         />
       </span>
+      {grandPlan && (
+        <span data-testid="grand-plan-card" title={grandPlan.what}>
+          {panelText.grandPlanHeading}: {grandPlan.title}. {grandPlan.status}
+        </span>
+      )}
       {openDemands.length > 0 && (
         <span data-testid="open-demands">
           {panelText.openDemandsHeading}: {openDemands.length}

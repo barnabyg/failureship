@@ -86,6 +86,7 @@ function dealtState(seed: number, content: Content): State {
     eventsLanded: [],
     promises: [],
     deals: [],
+    plans: [],
     ...startingGauges(content),
     finalWarning: false,
     firedIn: null,
@@ -174,6 +175,7 @@ function runOf(state: State, world: World): Run {
     ...structuredClone(state.truth),
     bossBelief: beliefOf(state, bossOf(state, content)),
     headBelief: beliefOf(state, headOf(state, content) ?? ""),
+    plans: structuredClone(state.plans),
   }));
   return run;
 }

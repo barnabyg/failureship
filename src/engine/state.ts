@@ -4,6 +4,7 @@ import type {
   Content,
   Kind,
   MoveFamily,
+  PlanHow,
   SceneData,
   Tone,
 } from "./content";
@@ -102,6 +103,8 @@ export interface HiddenTruth extends TruthOfRun {
   bossBelief: number;
   /** The same of the boss's boss, whom the player can also try to impress. */
   headBelief: number;
+  /** Each boss's Grand Plans, with who really had what each needed. */
+  plans: TakenPlan[];
 }
 
 /** Custom behaviour for a Scene: reshapes its data for the current truth. */
@@ -181,6 +184,27 @@ interface BossLanding {
   shift: number;
 }
 
+/** A Grand Plan a boss took on, and what became of it. */
+export interface TakenPlan {
+  id: string;
+  /** Whose it is: whoever was the player's boss when they took it on. */
+  boss: string;
+  month: number;
+  /** The last month of the run it can be completed in. */
+  due: number;
+  /** The month the player heard of it. Null until they do. */
+  heard: number | null;
+  /** Who really has what it needs, dealt as it is taken on. Never shown until the end. */
+  keeper: string | null;
+  /** How it ended, by which of its ways, and whether its boss counted it done. */
+  ended: {
+    month: number;
+    how: PlanHow | "failed";
+    way: string | null;
+    counted: boolean;
+  } | null;
+}
+
 /** Where a commitment has got to. A refused one was never taken up. */
 export type CommitmentStatus =
   "open" | "kept" | "broken" | "refused" | "lapsed";
@@ -242,7 +266,13 @@ export interface State extends MonthRecord {
   /** The missed meetings' actions given so far, each of them once in a run. */
   actionsGiven: string[];
   /** What the player is told before anything else, as a month opens. */
-  noticesDue: { title: string; body: string; asWritten?: boolean }[];
+  noticesDue: {
+    title: string;
+    body: string;
+    asWritten?: boolean;
+    /** How the boss took it. Signs only: it never says the boss's kind. */
+    reaction?: string | undefined;
+  }[];
   project: {
     real: string;
     reported: string;
@@ -296,6 +326,8 @@ export interface State extends MonthRecord {
     due: number;
     news: number | null;
   }[];
+  /** The Grand Plan each of the player's bosses took on, one each, in order. */
+  plans: TakenPlan[];
   /** Each Gauge's value. Only Milestones read these. */
   gauges: Record<string, number>;
   /** What moved each Gauge, for the player to see. */

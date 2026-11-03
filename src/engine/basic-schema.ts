@@ -47,6 +47,7 @@ export type Condition =
   | { believes: { character: string; mood: Mood } }
   | { youOwe: string }
   | { sawMove: string }
+  | { planRunning: string }
   | { not: Condition }
   | { all: Condition[] }
   | { any: Condition[] };
@@ -74,6 +75,7 @@ export const condition: z.ZodType<Condition> = z.lazy(() =>
     }),
     z.strictObject({ youOwe: id }),
     z.strictObject({ sawMove: id }),
+    z.strictObject({ planRunning: id }),
     z.strictObject({ not: condition }),
     z.strictObject({ all: z.array(condition).min(1) }),
     z.strictObject({ any: z.array(condition).min(1) }),

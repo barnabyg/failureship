@@ -193,6 +193,16 @@ export type StepView =
         /** What is said of a Rival who did nothing the player would notice. */
         didNothing: string | null;
       }[];
+      /** Each boss's Grand Plan, and what really became of it. */
+      grandPlans: {
+        month: number;
+        name: string;
+        title: string;
+        plan: string;
+        fate: string;
+        /** Who really had what it needed, if it needed anything. */
+        keeper: string | null;
+      }[];
       /** The Milestones earned, for comparing with friends. */
       milestones: { month: number; title: string }[];
       /** The big mistakes the player made, in order. */
@@ -258,6 +268,8 @@ export interface PlayerView {
     reportedColour: string;
     news: { month: number; text: string }[];
   };
+  /** The boss's Grand Plan, once the player has heard of it, and where it has got to. */
+  grandPlan: { title: string; what: string; status: string } | null;
   /** Demands the player stalled and has not yet heard the last of. */
   openDemands: { month: number; subject: string }[];
   /** Everything the player has given their word on, and where it has got to. */

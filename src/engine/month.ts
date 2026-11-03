@@ -6,6 +6,7 @@ import { dealsFallDue } from "./deals";
 import { dealWithAbsence, followUpDemands } from "./demands";
 import { isOn, recurs, startMonthOnFloor, type Whereabouts } from "./floors";
 import { closeGauges } from "./gauges";
+import { followPlans } from "./grand-plans";
 import { applyOutcome } from "./outcome";
 import { bossOf } from "./places";
 import { promisesFallDue } from "./promises";
@@ -53,6 +54,8 @@ export function freshMonth(where: Whereabouts, content: Content): MonthRecord {
 
 /** What happens as a month opens, whatever the player has done. */
 export function openMonth(state: State, content: Content): void {
+  // Plans past due fail before anything else this month can complete them.
+  followPlans(state, content);
   spreadNews(state, content);
   changePeople(state, content);
   noteRivals(state, competitionNow(state, content));

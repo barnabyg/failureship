@@ -1,5 +1,15 @@
 import { z } from "zod";
-import { id, lines, notice, perKind, text } from "./basic-schema";
+import {
+  KINDS,
+  condition,
+  floor,
+  id,
+  lines,
+  notice,
+  perKind,
+  text,
+} from "./basic-schema";
+import { bill } from "./consequence-schema";
 import { notificationOption, sets } from "./outcome-schema";
 import { notification } from "./step-schema";
 
@@ -193,3 +203,91 @@ export const DEMAND_ANSWERS = [
   "fake",
   "stall",
 ] as const;
+
+export const PLAN_HOWS = ["reality", "appearance"] as const;
+/** How a Grand Plan was completed: really done, or made to look done. */
+export type PlanHow = (typeof PLAN_HOWS)[number];
+
+/** One way of completing a Grand Plan, and how each kind of boss takes it. */
+const planWay = z.strictObject({
+  id,
+  /** Really done, or made to look done. */
+  how: z.enum(PLAN_HOWS),
+  /**
+   * What the player did that completes it this way. Never the hidden truth. Left
+   * out, it is only ever another way's `otherwise`.
+   */
+  when: condition.optional(),
+  /** Whether it needs what the Plan `needs`, from whoever really has it. */
+  needs: z.boolean().default(false),
+  /** The way it is completed instead, without what it needs. */
+  otherwise: id.optional(),
+  /** The kinds of boss who count it done. Others still see it on the record. */
+  counts: z.array(z.enum(KINDS)).min(1),
+  /** How far it moves the boss's belief, by their kind. */
+  belief: perKind(z.number().int()),
+  /** How each kind shows it, which is a sign and never says the kind. */
+  reaction: perKind(text),
+  /** What goes on the official record, and any hidden risk it adds. */
+  sets,
+  /** What the player is told as it is completed. */
+  done: notice,
+});
+
+/**
+ * A boss's big ambition, which runs for several months from when the boss takes
+ * it on, and which the player can complete in appearance or in reality.
+ */
+const grandPlan = z.strictObject({
+  id,
+  floor,
+  title: text,
+  /** What the player knows of it, once they have heard of it. */
+  what: text,
+  /** How many months it runs, from the month the boss takes it on. */
+  lasts: z.number().int().positive(),
+  /** The Scenes and Notifications in which the player hears of it. */
+  heardIn: z.array(id).min(1),
+  /**
+   * What doing it for real needs, which one of `from` really has, dealt as the
+   * Plan is taken on. The player has it once they have done `asked` of them.
+   */
+  needs: z
+    .strictObject({
+      from: z.array(z.strictObject({ character: id, asked: id })).min(2),
+      /** What the results screen says of whoever had it. Says {who}. */
+      told: text,
+    })
+    .optional(),
+  ways: z.array(planWay).min(2),
+  /** If it is not done in time, the boss looks for someone to blame. */
+  failed: z.strictObject({
+    blame: z.strictObject({
+      /** Whether blame can stick to the player at all. Left out, it can. */
+      sticks: condition.optional(),
+      /** The seeded chance the player is blamed, by the boss's kind. */
+      chance: perKind(z.number().min(0).max(1)),
+      /** Added for how the boss stands with the player. */
+      mood: z.strictObject({
+        warm: z.number(),
+        neutral: z.number(),
+        cold: z.number(),
+      }),
+    }),
+    onPlayer: bill,
+    onSomeoneElse: bill,
+  }),
+  /** What the results screen says became of it. */
+  results: z.strictObject({
+    reality: text,
+    appearance: text,
+    failed: text,
+    running: text,
+  }),
+});
+
+export const grandPlans = z.strictObject({
+  /** Where the player's view says it has got to. `running` says {month}. */
+  statuses: z.strictObject({ running: text, completed: text, failed: text }),
+  plans: z.array(grandPlan).min(1),
+});

@@ -3,6 +3,7 @@ import { reshuffleCharts, type Reshuffle } from "./charts";
 import type { Content, Kind, MoveFamily, Tone } from "./content";
 import { makeDeal, settleDeal } from "./deals";
 import { YOU } from "./deal";
+import { completePlans } from "./grand-plans";
 import { makeMistake } from "./mistakes";
 import { headOf, whoIs } from "./places";
 import { moveProject, type ProjectChange } from "./project";
@@ -70,6 +71,7 @@ export function applyOutcome(
   state.deeds.push(...sets.map((flag) => ({ flag, month: state.month })));
   startThreads(state, content, sets);
   startRisks(state, content, sets);
+  completePlans(state, content);
   const who = (written: string) => whoIs(state, content, written);
   for (const memory of outcome.remembers ?? []) {
     remember(state, content, { ...memory, character: who(memory.character) });

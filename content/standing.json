@@ -56,7 +56,8 @@
     { "flag": "sat-at-front", "by": 2 },
     { "flag": "watched-recording", "by": -1 },
     { "flag": "asked-the-question", "by": 2 },
-    { "flag": "took-the-blame", "by": -6 }
+    { "flag": "took-the-blame", "by": -6 },
+    { "flag": "delivered-grand-plan", "by": 8 }
   ],
   "decides": "The seat above you was really in the gift of {who}."
 }

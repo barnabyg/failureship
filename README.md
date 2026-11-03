@@ -7,8 +7,8 @@ This is Phase 4, ready for its steering checkpoint: a run of nine months on a fu
 with kinds of boss, a Project, the Monthly Status Report, Demands, one-off Budgets, every family of
 Moves and going over your boss's head. Earlier choices come back through Threads, hidden risks and
 what people have heard, things happen to the company, and you can be fired. You can give your word
-and make Deals, a Believer you burn can change or leave, Teflon and Fawning move when a Thread plays
-out, a quarterly review comes round every third month, colleagues compete with you, and runs save.
+and make Deals, Believers you burn can change or leave, Teflon and Fawning move with Threads, a
+quarterly review comes every third month, colleagues compete, bosses have Grand Plans, runs save.
 
 ## Play
 
@@ -19,9 +19,8 @@ npm run play
 ```
 
 This installs anything missing the first time, starts the game and opens it in your browser. If the
-browser does not open, go to the address it prints. Press `Ctrl+C` in the terminal to stop it.
-
-On Windows, you can double-click `run.bat` in the root of the repository instead.
+browser does not open, go to the address it prints. Press `Ctrl+C` in the terminal to stop it. On
+Windows, you can double-click `run.bat` in the root of the repository instead.
 
 ## What to try
 
@@ -29,8 +28,8 @@ Every run has a seed, at the top right, and `?seed=8` picks one. Each month has 
 
 1. **A Notification arrives.** Answer it. The answer may cost one of your 3 actions. In months 3,
    6 and 9 the **Quarterly Business Review** follows by itself, at no cost, and goes on the record.
-2. **Spend your remaining actions** by clicking a place on the floor or its label.
-   The panel at the bottom left always says what you can do now.
+2. **Spend your remaining actions** by clicking a place on the floor or its label. The panel at
+   the bottom left always says what you can do now.
 3. **Any Company Event, then a Character Move, lands on you.** You do not get a choice.
 4. **The month closes** with the official story beside what actually happened.
 
@@ -58,10 +57,9 @@ results screen, on the `from` lines of messages and the Find Out buttons, and in
 about people.
 
 Press **Notebook** at any step, at no cost. It keeps claims and important signs for you, and it
-never says which to trust. Mark each Character with the kind you suspect.
-
-Press **Org Chart** at any step, at no cost, for the formal hierarchy. The real one is the hidden
-Power Map, dealt from the seed. A Company Event can change either mid-run, and later signs follow.
+never says which to trust. Mark each Character with the kind you suspect. Press **Org Chart**, at no
+cost, for the formal hierarchy. The real one is the hidden Power Map, dealt from the seed. A Company
+Event can change either mid-run, and later signs follow.
 
 Your word is yours to give. Some choices offer a **Promise**, whether or not you can deliver it, and
 some a **Deal**, in which each side offers something. Whether you are believed, and whether a good
@@ -81,6 +79,10 @@ along the Power Map, and that shows only in how they are with you. So the same d
 and unknown to others, and good news travels too, as do false stories. A **Rival** is any
 Practitioner competing with you, your boss included, and nothing says who. Rivals use your own Moves
 on you, and once you have seen one done, or have other means, you can use it too.
+
+Your boss's **Grand Plan** is on the **Your project** card once you hear of it. Doing it for real
+needs whoever really has what it takes. Done or faked, it goes on the record, but whether your boss
+counts it goes by who they are, a fake can be found out, and a failed one is blamed on someone.
 
 After nine months the results screen shows who was really who: each Character's kind and Hidden
 Fact, each Rival and what they did, your marks against the truth, how you played by family of Move,
@@ -103,15 +105,13 @@ read in browser storage, hidden truth included, which is accepted while the game
 A month always leaves you something to decide. Every Notification has an answer that costs nothing.
 Beside the report, a month's own Notifications ask for at most one costly answer, though late
 figures or an action from a missed meeting can add another. A meeting you had no action left for
-leaves no Demand behind.
-
-[docs/playtest.md](docs/playtest.md) has test scenarios to play by hand. They give away some deals.
+leaves no Demand behind. [docs/playtest.md](docs/playtest.md) has test scenarios to play by hand,
+which give away some deals.
 
 ## Change the game
 
-All the text and numbers are in `content/`, and editing them needs no code
-change. The running game reloads when you save a file. If an edit breaks the
-format, the page shows what is wrong instead of the game.
+All the text and numbers are in `content/`, and editing them needs no code change. The running
+game reloads when you save a file. If an edit breaks the format, the page shows what is wrong.
 
 | File                  | What it holds                                                                                          |
 | --------------------- | ------------------------------------------------------------------------------------------------------ |
@@ -144,12 +144,12 @@ format, the page shows what is wrong instead of the game.
 | `standing.json`       | Official standing: what on the official record moves it, its bands, and what the results screen says   |
 | `hidden-truth.json`   | The rules of the deal: kinds, their weights, and the Hidden Facts                                      |
 | `rivals.json`         | What is competed for and by whom, how many Rivals at once, and who makes a competitor's Move           |
+| `grand-plans.json`    | Each boss's Grand Plan: how long it runs, where you hear of it, how it is done, and who is blamed      |
 | `balance.json`        | Actions a month, months in a run and a quarter, each choice's cost, how signs mislead, the boss's mood |
 | `floors.json`         | Each floor, by the job done on it: the job title, the rooms, their fittings and the lift's sign        |
 
 Each file's fields, the conditions they can use, which floor and month content belongs to, and what
-to write for a Thread, a Promise, a Deal, a Company Event, a hidden risk or a Gauge are in the
-[content format reference](docs/content-format.md).
+to write for each mechanic are in the [content format reference](docs/content-format.md).
 
 ## Develop
 
@@ -166,16 +166,17 @@ How to run the checks and tests is in [AGENTS.md](AGENTS.md#verifying).
   `over-head.ts`, `project.ts`, `scenes.ts`, `company-events.ts`, `mistakes.ts`, `reputation.ts`,
   `risks.ts`, `threads.ts` with `bills.ts`, `promises.ts`, `deals.ts`, `changes.ts` for Believers
   changing and leaving, `gauges.ts`, the only module that reads a Gauge, `standing.ts`, `reviews.ts`
-  for the quarterly reviews, and `rivals.ts` for Rivals. `say.ts` names Characters in text, and
-  `rng.ts` and `seed.ts` hold the seed. `view.ts` is the player view, built by `to-view.ts`, with
-  `to-results.ts` its reveal at the end; `hidden-truth.ts` is the tests' read of the truth.
-  `save.ts` writes and reads a run. A run's `State` is plain data, so a mechanic gets saving for
+  for quarterly reviews, `rivals.ts` for Rivals and `grand-plans.ts` for Grand Plans. `say.ts` names
+  Characters in text, and `rng.ts` and `seed.ts` hold the seed. `view.ts` is the player view, built
+  by `to-view.ts`, with `to-results.ts` its reveal; `hidden-truth.ts` is the tests' read of the
+  truth. `save.ts` writes and reads a run. `State` is plain data, so a mechanic gets saving for
   free: raise `SAVE_VERSION` if it changes what saved state means. `content.ts` assembles the schema
-  from the `*-schema.ts` files, as [AGENTS.md](AGENTS.md) says. `content-checks.ts` parses and
-  checks data across files, with each mechanic's checks in `truth-checks.ts` for the hidden truth
-  and its signs, `boss-checks.ts` for the boss, going over the head, Demands and reputation, and
-  `consequence-checks.ts` for what choices lead to, with `word-checks.ts` for Promises and Deals and
-  `floor-checks.ts` for floors, `review-checks.ts` for reviews and `rival-checks.ts` for Rivals.
+  from the `*-schema.ts` files, as [AGENTS.md](AGENTS.md) says. `content-checks.ts` checks data
+  across files, with each mechanic's checks beside it: `truth-checks.ts` for the hidden truth and
+  its signs, `boss-checks.ts` for the boss, going over the head, Demands and reputation,
+  `consequence-checks.ts` for what choices lead to, `word-checks.ts` for Promises and Deals, and
+  `floor-checks.ts`, `review-checks.ts`, `rival-checks.ts` and `plan-checks.ts` for floors,
+  reviews, Rivals and Grand Plans.
 - `src/tower/` draws the floor the view names, and holds no rules.
 - `src/ui/` holds the React panels over the tower: `App.tsx` wires them to the run, and
   `TowerStage.tsx` the tower's hotspots. `panels.tsx` picks each step's panel, the larger being
@@ -187,14 +188,13 @@ How to run the checks and tests is in [AGENTS.md](AGENTS.md#verifying).
 ### Checks and exceptions
 
 - Static bug analysis is the type-aware `typescript-eslint` strict rule set. It skips
-  `eslint.config.js` and `scripts/`, which sit outside `tsconfig.json`.
-- Secret scanning is not a separate gate: the project holds no credentials. Review if that changes.
+  `eslint.config.js` and `scripts/`, which sit outside `tsconfig.json`. Secret scanning is not a
+  separate gate: the project holds no credentials. Review if that changes.
 - The `minimatch` override in `package.json` patches GHSA-g3hv-75wg-m249 in the lint tooling. Remove
   it when `eslint` depends on a patched version itself.
-- `test.testTimeout` in `vite.config.ts` is raised because some engine tests play hundreds of whole
-  runs. Review it if the suite gets much faster or slower.
-- `build.chunkSizeWarningLimit` in `vite.config.ts` is raised because Three.js and the game's text
-  make up the single bundle. Review it if hosting is ever added.
+- In `vite.config.ts`, `test.testTimeout` is raised because some engine tests play hundreds of
+  whole runs, and `build.chunkSizeWarningLimit` because Three.js and the game's text make up the
+  single bundle. Review them if the suite gets much faster or slower, or hosting is ever added.
 - `.prettierignore` leaves the owner's design records and agent docs unformatted, and skips
   `.claude/settings.local.json` and, with `eslint.config.js`, `.claude/worktrees/`, which are
   untracked and local to one machine. Review this if anything in them comes to be tracked.

@@ -132,12 +132,12 @@
       "months": [4],
       "from": "From: Your boss, {boss}",
       "subject": "FW: This solves ALL your problems (read this!!)",
-      "body": "Your boss has read an article about a new software tool that solves all your problems, and wants it rolled out by the end of the month. Your boss has not said which problems. The article is by the company that sells it.",
+      "body": "Your boss has found the tool for the Grand Plan, in an article about a new software tool that solves all your problems, and wants it rolled out across the floor, as the Grand Plan says. Your boss has not said which problems. The article is by the company that sells it.",
       "options": [
         {
           "id": "deliver",
           "family": "deliver",
-          "label": "Go to the demonstration and roll it out",
+          "label": "Go to the demonstration and start rolling it out",
           "cost": "standard",
           "sets": ["rolled-out-tool", "delivered-demand"],
           "dialog": "tool-demo",
@@ -148,7 +148,7 @@
           "id": "push-back",
           "family": "deflect",
           "label": "Ask your boss which of your problems it solves",
-          "sets": ["pushed-back"],
+          "sets": ["pushed-back", "asked-which-problems"],
           "approach": "push-back",
           "result": {
             "title": "RE: FW: This solves ALL your problems",
@@ -171,7 +171,7 @@
           "family": "fabricate",
           "label": "Tell your boss it is rolled out, and add an icon to the shared drive",
           "cost": "standard",
-          "sets": ["faked-demand"],
+          "sets": ["faked-demand", "tool-icon"],
           "approach": "theatre",
           "result": {
             "title": "This solves ALL your problems",

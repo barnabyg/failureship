@@ -35,6 +35,25 @@ export function landWithBoss(
   const boss = bossOf(state, content);
   shiftBelief(state, boss, shift);
   if (approach === undefined && shift === 0) return undefined;
+  noteLanding(state, content, boss, shift, label);
+  if (approach === undefined) return undefined;
+  const lines = overdone?.reaction[kind];
+  if (lines) return inTurn(lines, state.month);
+  const usual = approach.reaction[kind];
+  return choice.reaction?.[kind] ?? inTurn(usual, state.month);
+}
+
+/**
+ * Keeps how something came across to a boss, for the results screen, and has
+ * them remember it if it moved them. Their belief has already moved by `shift`.
+ */
+export function noteLanding(
+  state: State,
+  content: Content,
+  boss: string,
+  shift: number,
+  label: string,
+): void {
   state.bossLandings.push({ month: state.month, boss, choice: label, shift });
   if (shift !== 0) {
     remember(state, content, {
@@ -43,11 +62,6 @@ export function landWithBoss(
       text: label,
     });
   }
-  if (approach === undefined) return undefined;
-  const lines = overdone?.reaction[kind];
-  if (lines) return inTurn(lines, state.month);
-  const usual = approach.reaction[kind];
-  return choice.reaction?.[kind] ?? inTurn(usual, state.month);
 }
 
 /** If the boss is present, one sign of how they treat the player. */

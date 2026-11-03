@@ -29,6 +29,7 @@ import { promisesInView } from "./promises";
 import { COMPETITOR } from "./rivals";
 import { calledBy, sayFrom, sayPeople, titleOf } from "./say";
 import { standingInView } from "./standing";
+import { planInView } from "./grand-plans";
 import type { State, Step, World } from "./state";
 import { toResultsView } from "./to-results";
 import type {
@@ -351,6 +352,7 @@ export function toView(state: State, world: World): PlayerView {
       })),
     },
     project: toProjectView(state, content),
+    grandPlan: planInView(state, content),
     openDemands: state.openDemands.flatMap(({ id, month }) => {
       const item = everyDemand(content).find((d) => d.id === id);
       return item ? [{ month, subject: item.subject }] : [];

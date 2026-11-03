@@ -25,6 +25,7 @@ import {
   type SceneData,
 } from "./content";
 import { findBrokenFloors } from "./floor-checks";
+import { findBrokenPlans } from "./plan-checks";
 import { findBrokenReviews } from "./review-checks";
 import { findBrokenRivals, withoutMaker } from "./rival-checks";
 import { bossesAtStart, meantBy } from "./places";
@@ -39,6 +40,9 @@ import {
 import { findBrokenDeals, findBrokenPromises } from "./word-checks";
 
 type SceneResult = SceneData["options"][number]["results"][number];
+
+/** What text in a Scene can name: parts of the Power Map, and the boss's Grand Plan. */
+const PART_TOKENS = ["holder", "ignored", "bystander", "plan", "keeper"];
 
 /** Thrown when a data file breaks the content format, naming what is wrong. */
 export class ContentError extends Error {
@@ -66,6 +70,7 @@ function findBrokenReferences(content: Content): string[] {
   const scenes = new Set(content.scenes.map((s) => s.id));
   const moves = new Set(content.moves.map((m) => m.id));
   const characters = new Set(content.characters.map((c) => c.id));
+  const plans = new Set(content.grandPlans?.plans.map((p) => p.id));
   const hiddenFlags = flagsSetByHiddenResults(content);
   const problems: string[] = [];
   const bosses = bossesAtStart(content);
@@ -109,6 +114,11 @@ function findBrokenReferences(content: Content): string[] {
     if ("sawMove" in condition && !moves.has(condition.sawMove)) {
       problems.push(`${owner} needs unknown Move "${condition.sawMove}".`);
     }
+    if ("planRunning" in condition && !plans.has(condition.planRunning)) {
+      problems.push(
+        `${owner} needs unknown Grand Plan "${condition.planRunning}".`,
+      );
+    }
     if ("hasBuzzword" in condition && !buzzwords.has(condition.hasBuzzword)) {
       problems.push(
         `${owner} needs unknown Buzzword "${condition.hasBuzzword}".`,
@@ -118,7 +128,7 @@ function findBrokenReferences(content: Content): string[] {
   const checkParts = (owner: string, written: string, about = false) => {
     for (const [, token] of written.matchAll(/\{(\w+)\}/g)) {
       if (about && token === "subject") continue;
-      if (token !== "holder" && token !== "ignored" && token !== "bystander") {
+      if (!PART_TOKENS.includes(token ?? "")) {
         problems.push(`${owner} uses unknown part "{${token ?? ""}}".`);
       }
     }
@@ -172,6 +182,7 @@ function findBrokenReferences(content: Content): string[] {
   problems.push(...findBrokenFloors(content));
   problems.push(...findBrokenReviews(content, hiddenFlags));
   problems.push(...findBrokenRivals(content));
+  problems.push(...findBrokenPlans(content, hiddenFlags, checkCondition));
   problems.push(...findBrokenDeal(content, characters));
   problems.push(...findBrokenBehaviours(content));
   problems.push(...findBrokenBossSigns(content));

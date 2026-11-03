@@ -2,6 +2,7 @@ import { startedAs } from "./changes";
 import { MOVE_FAMILIES, type Content } from "./content";
 import { dealsInResults } from "./deals";
 import { gaugesInView } from "./gauges";
+import { plansInResults } from "./grand-plans";
 import { bossOf, headOf } from "./places";
 import { promisesInResults } from "./promises";
 import { rivalsInResults } from "./rivals";
@@ -45,6 +46,7 @@ export function toResultsView(
     }),
     promises: promisesInResults(state, content),
     rivals: rivalsInResults(state, content),
+    grandPlans: plansInResults(state, content),
     ...dealsInResults(state, content),
     beliefs: toBeliefs(state, content),
     changes: state.eventsLanded.flatMap(({ id, month }) => {

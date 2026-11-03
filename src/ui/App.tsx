@@ -220,6 +220,16 @@ export function App() {
               {item.text}
             </p>
           ))}
+          {view.grandPlan && (
+            <div data-testid="grand-plan">
+              <h3>{panelText.grandPlanHeading}</h3>
+              <p>
+                <strong>{view.grandPlan.title}. </strong>
+                {view.grandPlan.what}
+              </p>
+              <p data-testid="grand-plan-status">{view.grandPlan.status}</p>
+            </div>
+          )}
           {view.openDemands.length > 0 && (
             <>
               <h3>{panelText.openDemandsHeading}</h3>

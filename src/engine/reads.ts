@@ -1,6 +1,7 @@
 import type { Condition, Content, Kind, Mood, SceneData } from "./content";
 import { YOU, type PowerMap } from "./deal";
 import { isOn, isOnFloor } from "./floors";
+import { isPlanRunning, planWords } from "./grand-plans";
 import { bossOf, placeOf, whoIs } from "./places";
 import { calledBy, capitalised, sayFrom, sayPeople, titleOf } from "./say";
 import type { State, World } from "./state";
@@ -18,9 +19,13 @@ export function inTurn<T>(items: readonly T[], month: number): T | undefined {
 }
 
 export function bossKindOf(state: State, content: Content): Kind {
-  const boss = bossOf(state, content);
-  const dealt = state.truth.characters.find((c) => c.id === boss);
-  if (!dealt) throw new Error("The boss was not dealt.");
+  return kindOf(state, bossOf(state, content));
+}
+
+/** The kind someone was dealt, or has since become. */
+export function kindOf(state: State, character: string): Kind {
+  const dealt = state.truth.characters.find((c) => c.id === character);
+  if (!dealt) throw new Error(`"${character}" was not dealt.`);
   return dealt.kind;
 }
 
@@ -150,6 +155,9 @@ export function matches(
   if ("sawMove" in condition) {
     return state.movesLanded.includes(condition.sawMove);
   }
+  if ("planRunning" in condition) {
+    return isPlanRunning(state, content, condition.planRunning);
+  }
   if ("not" in condition) return !matches(state, content, condition.not, room);
   if ("any" in condition) {
     return condition.any.some((inner) => matches(state, content, inner, room));
@@ -270,6 +278,7 @@ export function fillParts(
     "{holder}": who(misleading ? bystander : holder),
     "{ignored}": who(ignored),
     "{bystander}": who(misleading ? holder : bystander),
+    ...planWords(state, content),
   });
 }
 
