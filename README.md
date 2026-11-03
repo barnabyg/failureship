@@ -80,7 +80,7 @@ What you do can travel. There is no reputation score: each person believes what 
 along the Power Map, and that shows only in how they are with you. So the same deed is known to some
 and unknown to others, and good news travels too, as do false stories. A **Rival** is any
 Practitioner competing with you, your boss included, and nothing says who. Rivals use your own Moves
-on you, and once you have seen one done you can use it too.
+on you, and once you have seen one done, or have other means, you can use it too.
 
 After nine months the results screen shows who was really who: each Character's kind and Hidden
 Fact, each Rival and what they did, your marks against the truth, how you played by family of Move,
@@ -143,7 +143,7 @@ format, the page shows what is wrong instead of the game.
 | `gauges.json`         | The Gauges, Teflon and Fawning: where each starts, and the Milestones earned along the way             |
 | `standing.json`       | Official standing: what on the official record moves it, its bands, and what the results screen says   |
 | `hidden-truth.json`   | The rules of the deal: kinds, their weights, and the Hidden Facts                                      |
-| `rivals.json`         | What Rivals compete with you for, who can, how many at once and how often they make a Move             |
+| `rivals.json`         | What is competed for and by whom, how many Rivals at once, and who makes a competitor's Move           |
 | `balance.json`        | Actions a month, months in a run and a quarter, each choice's cost, how signs mislead, the boss's mood |
 | `floors.json`         | Each floor, by the job done on it: the job title, the rooms, their fittings and the lift's sign        |
 

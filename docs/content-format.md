@@ -361,8 +361,9 @@ A Hidden Fact says `{name}`, so that it reads correctly for whoever is dealt it,
 it.
 
 The first `minPractitioners` are dealt to seats in a seeded order. With
-[`rivals.json`](#rivalsjson), the first of them goes, `seatChance` of the time, to someone who could
-compete with the player, so that a run with no Rival is rare.
+[`rivals.json`](#rivalsjson), a deal in which nobody who could compete with the player is a
+Practitioner is dealt again, once, `dealAgain` of the time, so that a run with no Rival is rare.
+Dealing again leans every role the same way, so no role's kind is a tell.
 
 ## `mistakes.json`
 
@@ -385,19 +386,24 @@ Character Moves, and when each can land. A Move does not land twice in a run whi
 could. A Move with `"priority": true` lands ahead of the others whenever its `when` holds.
 `"repays": "projects"` pays back the favour the player owes that Character, as it lands.
 
-- `by` says who makes it: a Character, `{boss}` or `{head}`, or `{rival}`, one of the player's
-  [Rivals](#rivalsjson), picked by a seeded draw. It lands only while they are there to make it, so
-  a Rival's Move needs a Rival. Only a Rival's Move can say `{rival}`, and only in its `body`, for
-  what text calls whoever made it. Its flags read the hidden truth, as a hidden result's do.
+- `by` says who makes it: a Character, `{boss}` or `{head}`, or `{competitor}`, anyone competing
+  with the player in [`rivals.json`](#rivalsjson), whatever their kind, drawn by the odds in
+  `makers`. It lands only while they are there to make it. Only a competitor's Move can say
+  `{competitor}`, and only in its `body`, for what text calls whoever made it. A Practitioner is
+  likeliest to make one, but anyone competing can, so a named maker is a sign of a Rival and never
+  says who is one.
 - `family` is which family of Move it is, from [`families.json`](#familiesjson). A Move made by
   someone while they are a Rival, with a `family`, is listed on the results screen as what they did.
+  Made by anyone else, it is listed nowhere as theirs.
 - `opinion` and `headOpinion` move your bosses' beliefs, as a choice's do.
-- `story` is a false story about the player: an `about`, which `remembers` reads, and the `text`
-  that the results screen shows. It needs a `by`, who made it up. It starts with them and travels
-  the Power Map as true news does, in [`reputation.json`](#reputationjson), moving the belief of each
-  person it reaches, though not of whoever made it up, until someone sees through it.
+- `falseStory` is a false story about the player: an `about`, which `remembers` reads, and the
+  `text` that the results screen shows. It needs a `by`, who made it up. It starts with them and
+  travels the Power Map as true news does, in [`reputation.json`](#reputationjson), moving the belief
+  of each person it reaches, though not of whoever made it up, until someone sees through it. A
+  story about the same thing is only ever started once, however often its Move lands.
 - An option can wait for a Move with `requires` and `sawMove`, so the player can use a Move once
-  they have seen it done to them, and not before.
+  they have seen it done to them, and not before. `any` gives other means to the same option, such
+  as `hasBuzzword`, as the metric review's tricky question does with "single source of truth".
 
 ## `notebook.json`
 
@@ -505,7 +511,7 @@ anything written with the `believes` condition.
 
 A choice's outcome, a Bill or a Scene result can carry `news`: an `about` that the `remembers`
 condition reads, a `tone` of `good` or `bad`, the `text` that the results screen shows, and `at`,
-whom it was done in front of, or to. They know at once. A Move's `story` is news too, but false.
+whom it was done in front of, or to. They know at once. A `falseStory` is news too, but false.
 
 - `travel` sets how far and how fast it goes. As each month opens, it moves `hopsPerMonth` steps
   along the ties of the Power Map, no more than `maxHops` from where it started. `passOnChance` is
@@ -519,8 +525,10 @@ whom it was done in front of, or to. They know at once. A Move's `story` is news
 - `falseStories` says how a false story is found out. As each month opens, before news moves, each
   person who heard one in an earlier month sees through it at the seeded chance in `foundOut` for
   their kind. They then believe what they did before it reached them, and pass it on no further.
-  `started` is what the results screen says of whoever made it up, and `found`, which says
-  `{month}`, of someone who found out.
+  Seeing through one the player made up traces it back to them: its `exposed` starts as bad news of
+  the player, from whoever saw through it, and burns only the one it was about. `started` is what
+  the results screen says of whoever made a story up, and `found`, which says `{month}`, of someone
+  who found out.
 
 ## `risks.json`
 
@@ -551,21 +559,27 @@ boss can be one. The player is never told who is a Rival, and reads it from sign
 made against them. The results screen lists each Rival, what they competed for and what they did.
 
 - `competing` lists what can be competed for. Each has an `id`, `for`, which the results screen
-  shows, and `who`: Characters, or `{boss}` or `{head}` for whoever is in that place. A `when`
-  makes it a competition only while that holds, which is how a vacancy can be written: the
-  candidates, with a `when` that reads the flag that opened the seat.
+  shows, and `who`, read as things stand: `{boss}` or `{head}` for whoever is in that place,
+  `{peers}` for whoever shares the player's boss on the Org Chart, `{everyone}` for anyone still in
+  the company, or a Character by name, whatever their place, such as a former boss. A `when` makes
+  it a competition only while that holds, which is how a vacancy can be written: its candidates,
+  with a `when` that reads the flag that opened the seat.
 - As each month opens, and as a Move lands, every Practitioner among them is a Rival, up to `most` of
   them, the most influential on the Power Map first. A Believer who changes into a Practitioner can
   become one. Anyone who has been a Rival stays on the results screen.
-- `seatChance` is how often the deal gives its first Practitioner to someone who could compete, as
-  in [`hidden-truth.json`](#hidden-truthjson), so that a run with no Rival is rare.
-- `moveChance` is how often a month's Character Move is a Rival's, while one is still to land and
-  the player has a Rival. Any priority Move still comes first. See [`moves.json`](#movesjson).
+- `dealAgain` is how often a deal with no Practitioner among those who could compete as a run
+  starts is dealt again, as in [`hidden-truth.json`](#hidden-truthjson).
+- `moveChance` is how often a month's Character Move is a competitor's, while one is still to land
+  and anyone competes. Any priority Move still comes first. See [`moves.json`](#movesjson).
+- `makers` are the odds, for each kind, of a competitor being the one who makes such a Move. Every
+  kind must be able to, and the odds must differ, so that it is a sign and never settles anything.
 - `didNothing` is what the results screen says of a Rival who made no Move against the player.
 
-These are refused: a `who` that names nobody, an `id` written twice, a Move by `{rival}` with no
-`rivals.json`, a Move by someone unknown, `{rival}` in a Move no Rival makes or outside its `body`,
-and a `story` with no `by` or no `falseStories` in [`reputation.json`](#reputationjson).
+These are refused: a `who` that names nobody, an `id` written twice, `makers` that are all the
+same, a Move by `{competitor}` with no `rivals.json`, a Move by someone unknown, `{competitor}` in a
+Move no competitor makes or outside its `body`, a Move's `falseStory` with no `by` or with an `of`
+or `at`, a choice's with no `of` or `at`, and any `falseStory` with no `falseStories` in
+[`reputation.json`](#reputationjson).
 
 ## `scenes.json`
 
@@ -584,6 +598,11 @@ meeting has everyone in it.
 - A result's `when` picks it. A result with `factNote` is listed on the results screen beside the
   fact itself, and `factAt` names whose fact it was, unless the option is `about` one.
 - A result can carry `sets`, `opinion`, `headOpinion`, `approach`, `reaction` and `project`.
+- A result's `falseStory` is one the player tells, as a Rival's Move does: an `about`, a `text`,
+  `of`, whom it is about, `at`, whom the player tells it to first, and optionally `exposed`, the
+  `about` and `text` of the news of the player once someone sees through it. See
+  [`reputation.json`](#reputationjson). It moves nobody's belief in the player until it is seen
+  through.
 - A Scene with a `verdict` adds what the boss finally says, by their mood.
 - A Scene that data cannot express can name a `script`, which is passed to `startRun` in
   `sceneScripts`. This format is a trial, as the spec, issue #1, says.
