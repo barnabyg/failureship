@@ -1,5 +1,13 @@
 import { z } from "zod";
-import { condition, id, months, notice, text } from "./basic-schema";
+import {
+  condition,
+  floor,
+  id,
+  months,
+  notice,
+  pool,
+  text,
+} from "./basic-schema";
 import {
   approachTag,
   bigMistake,
@@ -26,7 +34,9 @@ export const buzzword = z.strictObject({ id, term: text, meaning: text });
 
 export const notification = z.strictObject({
   id,
+  floor,
   months,
+  pool,
   /** The Notification waits until this holds, and goes unseen if it never does. */
   when: condition.optional(),
   from: text,
@@ -71,7 +81,9 @@ const sceneOption = z.strictObject({
 
 export const scene = z.strictObject({
   id,
+  floor,
   months,
+  pool,
   title: text,
   location: text,
   narration: z.array(text).min(1),
@@ -118,6 +130,7 @@ export const action = z.strictObject({
 
 export const move = z.strictObject({
   id,
+  floor,
   months,
   from: text,
   title: text,
@@ -133,6 +146,7 @@ export const move = z.strictObject({
 
 export const storyEntry = z
   .strictObject({
+    floor,
     months,
     when: condition.optional(),
     reported: text.optional(),

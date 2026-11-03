@@ -10,7 +10,6 @@ import {
   coverForGone,
   fillParts,
   fillSubject,
-  inMonth,
   isAvailable,
   isDone,
   isGone,
@@ -23,7 +22,7 @@ import {
   sceneData,
 } from "./reads";
 import { dealsInView } from "./deals";
-import { floorNow } from "./floors";
+import { floorNow, isOn } from "./floors";
 import { gaugesInView, gaugesThisMonth } from "./gauges";
 import { managerOf } from "./places";
 import { promisesInView } from "./promises";
@@ -172,7 +171,7 @@ function toStoryView(
   const { title, reportedHeading, happenedHeading, entries } =
     content.officialStory;
   const told = entries.filter(
-    (e) => inMonth(e, state.month) && matches(state, content, e.when),
+    (e) => isOn(state, content, e) && matches(state, content, e.when),
   );
   const fill = (written: string | undefined) =>
     written === undefined ? [] : [fillParts(state, content, written)];

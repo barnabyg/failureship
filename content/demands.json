@@ -25,6 +25,7 @@
   "items": [
     {
       "id": "fewer-meetings",
+      "floor": "junior-employee",
       "months": [2],
       "from": "From: Your boss's boss, {head}",
       "subject": "Meetings: reduce by half, by Friday",
@@ -127,6 +128,7 @@
     },
     {
       "id": "new-tool",
+      "floor": "junior-employee",
       "months": [4],
       "from": "From: Your boss, {boss}",
       "subject": "FW: This solves ALL your problems (read this!!)",
@@ -226,6 +228,7 @@
     },
     {
       "id": "travel-freeze",
+      "floor": "junior-employee",
       "months": [5],
       "from": "From: The Chief Financial Officer",
       "subject": "Travel: frozen, with immediate effect",

@@ -11,8 +11,17 @@ export const lines = z.array(text).min(1);
 export const perKind = <T extends z.ZodType>(value: T) =>
   z.strictObject({ believer: value, incompetent: value, practitioner: value });
 
-/** The months something belongs to. Left out, it belongs to every month. */
+/**
+ * The months something belongs to, counted on its floor: the month the player
+ * is in there. Left out, it belongs to every month.
+ */
 export const months = z.array(z.number().int().positive()).min(1).optional();
+
+/** The floor something belongs to, by its job. Left out, it belongs to every floor. */
+export const floor = id.optional();
+
+/** In its floor's pool, drawn in turn once the floor's written months run out. */
+export const pool = z.boolean().optional();
 
 export const colour = z.string().regex(/^#[0-9a-fA-F]{6}$/);
 

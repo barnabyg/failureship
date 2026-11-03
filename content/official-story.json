@@ -4,26 +4,32 @@
   "happenedHeading": "What actually happened",
   "entries": [
     {
+      "floor": "junior-employee",
       "months": [1],
       "reported": "You remain on track against your objectives, which are being finalised."
     },
     {
+      "floor": "junior-employee",
       "months": [2],
       "reported": "You have embedded the lessons of last month, and identified further lessons."
     },
     {
+      "floor": "junior-employee",
       "months": [3],
       "reported": "You engaged fully with the company's refreshed direction."
     },
     {
+      "floor": "junior-employee",
       "months": [4],
       "reported": "You are taking a disciplined approach to a budget that is under discussion."
     },
     {
+      "floor": "junior-employee",
       "months": [5],
       "reported": "Your delivery is green overall, on the agreed definition of green."
     },
     {
+      "floor": "junior-employee",
       "months": [9],
       "reported": "You close the review period meeting expectations, which are under review."
     },
@@ -520,50 +526,62 @@
       "happened": "It has no end date."
     },
     {
+      "floor": "junior-employee",
       "months": [1],
       "reported": "No risks were identified, as the risk review has been rescheduled."
     },
     {
+      "floor": "junior-employee",
       "months": [2],
       "reported": "One risk was identified, and has been moved to next month's register."
     },
     {
+      "floor": "junior-employee",
       "months": [3],
       "reported": "The risk register was reviewed, and its format was improved."
     },
     {
+      "floor": "junior-employee",
       "months": [4],
       "reported": "Risks have been reduced by thirty per cent, by combining some of them."
     },
     {
+      "floor": "junior-employee",
       "months": [5],
       "reported": "All red risks are now amber."
     },
     {
+      "floor": "junior-employee",
       "months": [9],
       "reported": "The risk review has been rescheduled to next year, when the risks will be clearer."
     },
     {
+      "floor": "junior-employee",
       "months": [6],
       "reported": "You are making measurable progress against the new metric."
     },
     {
+      "floor": "junior-employee",
       "months": [7],
       "reported": "You supported the floor's growth, and its culture of fairness."
     },
     {
+      "floor": "junior-employee",
       "months": [8],
       "reported": "You contributed to a safe and open environment for colleagues."
     },
     {
+      "floor": "junior-employee",
       "months": [6],
       "reported": "The risk register has been reformatted, and now has fewer rows."
     },
     {
+      "floor": "junior-employee",
       "months": [7],
       "reported": "A new risk was raised, and has been given to someone on leave."
     },
     {
+      "floor": "junior-employee",
       "months": [8],
       "reported": "Risks are stable. The person monitoring them has left."
     },

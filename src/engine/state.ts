@@ -238,6 +238,8 @@ export interface State extends MonthRecord {
   reportsTo: Record<string, string>;
   /** The player's job now, which decides the floor they are on. */
   job: string;
+  /** How many months the player has spent on each floor, by job, this one included. */
+  monthsOnFloor: Record<string, number>;
   /** Company Events waiting to land this month. */
   eventsDue: string[];
   eventsLanded: { id: string; month: number }[];

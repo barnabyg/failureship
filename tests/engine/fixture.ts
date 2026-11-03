@@ -22,6 +22,8 @@ interface RawNotification {
   body: string;
   options: RawOption[];
   months?: number[];
+  floor?: string;
+  pool?: boolean;
 }
 
 type RawCondition = Record<string, unknown>;
@@ -54,6 +56,8 @@ interface RawScene {
   options: RawSceneOption[];
   script?: string;
   months?: number[];
+  floor?: string;
+  pool?: boolean;
   verdict?: { warm: string; neutral: string; cold: string };
 }
 
@@ -69,6 +73,7 @@ interface RawMove {
 }
 
 interface RawStoryEntry {
+  floor?: string;
   when?: RawCondition;
   reported?: string;
   happened?: string;
