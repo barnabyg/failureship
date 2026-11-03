@@ -26,7 +26,10 @@ export function managerOf(
   return state.reportsTo[id] ?? managerAtStart(content, id);
 }
 
-function managerAtStart(content: Content, id: string): string | undefined {
+export function managerAtStart(
+  content: Content,
+  id: string,
+): string | undefined {
   if (id === YOU) return content.you.reportsTo;
   return content.characters.find((c) => c.id === id)?.reportsTo;
 }

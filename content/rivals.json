@@ -1,0 +1,23 @@
+{
+  "competing": [
+    {
+      "id": "credit",
+      "for": "The credit for your work",
+      "who": ["{boss}", "{peers}"]
+    },
+    {
+      "id": "favour",
+      "for": "Your boss's favour",
+      "who": ["{peers}"]
+    }
+  ],
+  "most": 2,
+  "dealAgain": 0.7,
+  "moveChance": 0.2,
+  "makers": {
+    "believer": 1,
+    "incompetent": 2,
+    "practitioner": 6
+  },
+  "didNothing": "Did nothing to you that you noticed, which may have been the idea."
+}

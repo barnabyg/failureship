@@ -27,7 +27,13 @@ import {
   scene,
   storyEntry,
 } from "./step-schema";
-import { behaviour, hiddenTruth, notebook, sources } from "./truth-schema";
+import {
+  behaviour,
+  hiddenTruth,
+  notebook,
+  rivals,
+  sources,
+} from "./truth-schema";
 
 // The schema is split by mechanic into the *-schema.ts files, and assembled here.
 // What the rest of the engine reads of it is exported from here, wherever it is written.
@@ -143,6 +149,7 @@ export const contentSchema = z.strictObject({
   }),
   boss,
   hiddenTruth,
+  rivals: rivals.optional(),
   overHead: overHead.optional(),
   mistakes: mistakes.optional(),
   reputation: reputation.optional(),

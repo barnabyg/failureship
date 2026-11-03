@@ -6,6 +6,7 @@ import {
   lines,
   months,
   NATURES,
+  perKind,
   text,
 } from "./basic-schema";
 
@@ -153,4 +154,41 @@ export const hiddenTruth = z.strictObject({
       }),
     )
     .min(1),
+});
+
+/**
+ * Who competes with the player. A Rival is a relationship, not a kind: any
+ * Practitioner who is competing with the player for something, as things stand.
+ */
+export const rivals = z.strictObject({
+  /** What can be competed for, and who can compete for it. */
+  competing: z
+    .array(
+      z.strictObject({
+        id,
+        /** What the results screen says they competed with the player for. */
+        for: text,
+        /**
+         * Characters, a place above the player, meaning whoever is in it, or a
+         * group read from the Org Chart: `{peers}` or `{everyone}`.
+         */
+        who: z.array(id).min(1),
+        /** Competed for only while this holds, such as a vacancy being open. */
+        when: condition.optional(),
+      }),
+    )
+    .min(1),
+  /** The most Rivals at once: the most influential of those competing. */
+  most: z.number().int().positive(),
+  /**
+   * How often a deal with no Practitioner among those who could compete is dealt
+   * again, once, so that a run with no Rival is rare.
+   */
+  dealAgain: z.number().min(0).max(1),
+  /** How often a month's Character Move is one made by `{competitor}`, while anyone competes. */
+  moveChance: z.number().min(0).max(1),
+  /** The odds of each kind of competitor being the one who makes such a Move. */
+  makers: perKind(z.number().positive()),
+  /** What the results screen says of a Rival who did nothing anyone noticed. */
+  didNothing: text,
 });

@@ -147,7 +147,13 @@ export function matches(
   if ("did" in condition) {
     return state.deeds.some((deed) => deed.flag === condition.did);
   }
+  if ("sawMove" in condition) {
+    return state.movesLanded.includes(condition.sawMove);
+  }
   if ("not" in condition) return !matches(state, content, condition.not, room);
+  if ("any" in condition) {
+    return condition.any.some((inner) => matches(state, content, inner, room));
+  }
   return condition.all.every((inner) => matches(state, content, inner, room));
 }
 

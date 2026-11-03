@@ -463,6 +463,6 @@ describe("the real content", () => {
       );
     }
 
-    expect(view.step.regard.length).toBe(3);
+    expect(view.step.regard.length).toBe(4);
   });
 });

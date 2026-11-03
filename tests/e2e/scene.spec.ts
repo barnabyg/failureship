@@ -52,19 +52,22 @@ test("the meeting shows a dealt sign for each person present", async ({
   await reachMeeting(page, "report");
 
   const signs = page.getByTestId("behaviour");
-  await expect(signs).toHaveCount(5);
+  await expect(signs).toHaveCount(6);
   await expect(signs.filter({ hasText: /^Your boss (?!'s)/ })).toHaveCount(1);
   await expect(signs.filter({ hasText: "{who}" })).toHaveCount(0);
 });
 
-// The real-content test keeps these signs true of seed 8.
+// The real-content test keeps these signs true of seeds 58 and 57.
 test("a Scene shows behaviour that belongs to a role", async ({ page }) => {
-  await reachMeeting(page, "report", 8);
-
   const signs = page.getByTestId("behaviour");
+  await reachMeeting(page, "report", 58);
   await expect(
     signs.filter({ hasText: "Your boss overruns the meeting" }),
   ).toHaveCount(1);
+
+  await freshRun(page, "/?seed=57");
+  await answerAnyNotification(page);
+  await page.getByTestId("hotspot-meeting").click();
   await expect(
     signs.filter({ hasText: "The Project Co-ordinator marks a late task" }),
   ).toHaveCount(1);

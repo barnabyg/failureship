@@ -52,6 +52,14 @@
       "called": "the Project Co-ordinator",
       "role": "project-coordinator",
       "reportsTo": "boss"
+    },
+    {
+      "id": "associate",
+      "name": "Tessa Croft",
+      "title": "Junior Associate",
+      "called": "the Junior Associate",
+      "role": "junior-associate",
+      "reportsTo": "boss"
     }
   ]
 }

@@ -112,6 +112,17 @@ export const reputation = z.strictObject({
   believes: z.strictObject({ warm: text, neutral: text, cold: text }),
   /** How something reached them. The second says {who}. */
   how: z.strictObject({ direct: text, heardFrom: text }),
+  /** False stories about the player, which travel as news does. */
+  falseStories: z
+    .strictObject({
+      /** The seeded chance, each month, that someone of each kind sees through one. */
+      foundOut: perKind(z.number().min(0).max(1)),
+      /** What the results screen says of whoever made it up. */
+      started: text,
+      /** What it says of someone who found out. Says {month}. */
+      found: text,
+    })
+    .optional(),
 });
 
 const chasedDemand = z.strictObject({

@@ -79,6 +79,35 @@ export function ResultsPanel({
           ))}
         </div>
       )}
+      <div className="callout" data-testid="results-rivals">
+        <h3>{panelText.resultsRivalsHeading}</h3>
+        {step.rivals.length === 0 && <p>{panelText.resultsNoRivals}</p>}
+        {step.rivals.map((row) => (
+          <div key={row.name} data-testid="result-rival">
+            <p>
+              <strong>
+                {row.title}, {row.name}.{" "}
+              </strong>
+              {row.competed.join(". ")}.{" "}
+              <span className="results-title">
+                {panelText.resultsRivalSince.replace("{n}", String(row.since))}
+              </span>
+            </p>
+            {row.didNothing !== null && <p>{row.didNothing}</p>}
+            {row.did.length > 0 && (
+              <ul>
+                {row.did.map((move, index) => (
+                  <li key={index} data-testid="result-rival-move">
+                    <strong>{monthLabel(move.month)}. </strong>
+                    {move.text}
+                    {move.family !== null && ` (${move.family})`}
+                  </li>
+                ))}
+              </ul>
+            )}
+          </div>
+        ))}
+      </div>
       {step.changed.length > 0 && (
         <div className="callout" data-testid="results-changed">
           <h3>{panelText.resultsChangedHeading}</h3>

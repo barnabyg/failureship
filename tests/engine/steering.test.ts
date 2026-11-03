@@ -250,6 +250,13 @@ describe("the balance of the deal", () => {
           (c) => calledAtStart(gameContent, c.id) === who,
         );
         const held = belief.get(shownBy?.id ?? "");
+        // A whistleblower's own signs say nothing of the kind they were dealt.
+        const whistled = gameContent.changing?.whistleblower.signs.some(
+          (s) =>
+            s.text.replaceAll("{who}", who).toLowerCase() ===
+            text.toLowerCase(),
+        );
+        if (whistled) continue;
         if (!written || !held) throw new Error(`Unknown sign: ${text}`);
         const role = shownBy?.role;
         const open = gameContent.behaviours.filter(

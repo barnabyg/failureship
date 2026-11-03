@@ -46,8 +46,10 @@ export type Condition =
   | { remembers: { character: string; about: string } }
   | { believes: { character: string; mood: Mood } }
   | { youOwe: string }
+  | { sawMove: string }
   | { not: Condition }
-  | { all: Condition[] };
+  | { all: Condition[] }
+  | { any: Condition[] };
 
 export const condition: z.ZodType<Condition> = z.lazy(() =>
   z.union([
@@ -71,7 +73,9 @@ export const condition: z.ZodType<Condition> = z.lazy(() =>
       believes: z.strictObject({ character: id, mood: z.enum(MOODS) }),
     }),
     z.strictObject({ youOwe: id }),
+    z.strictObject({ sawMove: id }),
     z.strictObject({ not: condition }),
     z.strictObject({ all: z.array(condition).min(1) }),
+    z.strictObject({ any: z.array(condition).min(1) }),
   ]),
 );

@@ -328,7 +328,7 @@ describe("the real Promises", () => {
   // tests/e2e/promise.spec.ts plays this: the Senior Analyst believes it in month 3,
   // and by month 6 your boss has heard, and turns the next one down.
   it("keeps the deal that the browser test uses", () => {
-    const seed = 7;
+    const seed = 24;
     const run = startRun({ seed, content: gameContent });
     let view = run.view();
     while (view.month < 3) view = run.choose(plainChoice(view));

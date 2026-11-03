@@ -44,6 +44,13 @@ interface RawSceneOption {
     factAt?: string;
     factNote?: string;
     project?: { real?: string; reported?: string };
+    falseStory?: {
+      about: string;
+      text: string;
+      of?: string;
+      at?: string[];
+      exposed?: { about: string; text: string };
+    };
   }[];
 }
 
@@ -67,6 +74,11 @@ interface RawMove {
   from: string;
   title: string;
   body: string;
+  by?: string;
+  family?: string;
+  falseStory?: { about: string; text: string };
+  opinion?: number;
+  headOpinion?: number;
   when?: RawCondition;
   priority?: boolean;
   sets?: string[];

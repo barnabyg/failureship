@@ -23,9 +23,9 @@ describe("the browser tests' later-month start", () => {
   });
 
   it("takes the options named, each once and in order, and plays plainly otherwise", () => {
-    // On seed 2, month 2's Notifications are training and then fewer-meetings,
+    // On seed 4, month 2's Notifications are training and then fewer-meetings,
     // and "fake" is offered again in month 4, where it is not named a second time.
-    const run = newRun(2);
+    const run = newRun(4);
     let view = run.view();
     const wanted: Record<string, string> = {
       training: "do-training",
@@ -42,9 +42,9 @@ describe("the browser tests' later-month start", () => {
       );
     }
 
-    expect(playToMonth(newRun(2), "6", "do-training,fake")).toEqual(view);
-    expect(playToMonth(newRun(2), "6", "do-training,fake")).not.toEqual(
-      playToMonth(newRun(2), "6"),
+    expect(playToMonth(newRun(4), "6", "do-training,fake")).toEqual(view);
+    expect(playToMonth(newRun(4), "6", "do-training,fake")).not.toEqual(
+      playToMonth(newRun(4), "6"),
     );
   });
 

@@ -4,6 +4,7 @@ import { dealsInResults } from "./deals";
 import { gaugesInView } from "./gauges";
 import { bossOf, headOf } from "./places";
 import { promisesInResults } from "./promises";
+import { rivalsInResults } from "./rivals";
 import { bossKindOf, moodOf, moodOfCharacter, personOf } from "./reads";
 import { calledBy, sayPeople, titleOf } from "./say";
 import { standingAtEnd } from "./standing";
@@ -43,6 +44,7 @@ export function toResultsView(
       ];
     }),
     promises: promisesInResults(state, content),
+    rivals: rivalsInResults(state, content),
     ...dealsInResults(state, content),
     beliefs: toBeliefs(state, content),
     changes: state.eventsLanded.flatMap(({ id, month }) => {
@@ -169,16 +171,25 @@ function toBeliefs(
     believes: written.believes[moodOfCharacter(state, content, id)],
     reached: state.truth.memories
       .filter((m) => m.character === id)
-      .map(({ month, text, via }) => ({
-        month,
-        text,
-        how:
+      .map(({ month, text, via, news, foundOut }) => {
+        const stories = written.falseStories;
+        const started = state.truth.news[news ?? -1]?.startedBy === id;
+        const how =
           typeof via === "string"
             ? sayPeople(written.how.heardFrom, {
                 "{who}": calledBy(state, content, via),
               })
-            : written.how.direct,
-      })),
+            : written.how.direct;
+        const found =
+          foundOut === null || !stories
+            ? ""
+            : ` ${stories.found.replaceAll("{month}", String(foundOut))}`;
+        return {
+          month,
+          text,
+          how: started && stories ? stories.started : `${how}${found}`,
+        };
+      }),
   }));
 }
 

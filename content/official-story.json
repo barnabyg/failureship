@@ -527,6 +527,34 @@
     },
     {
       "when": {
+        "flag": "credit-claimed"
+      },
+      "reported": "Your contribution to the team's figures was recognised.",
+      "happened": "Somebody else was thanked for it."
+    },
+    {
+      "when": {
+        "flag": "blamed-by-a-colleague"
+      },
+      "reported": "A colleague offered support with a delay.",
+      "happened": "A colleague put the delay on you, in the minutes."
+    },
+    {
+      "when": {
+        "flag": "asked-a-pointed-question"
+      },
+      "reported": "You took a question from the floor with confidence.",
+      "happened": "You had no answer, and the floor above saw that you had none."
+    },
+    {
+      "when": {
+        "flag": "claimed-the-figures"
+      },
+      "reported": "You were recognised for the team's figures.",
+      "happened": "They were not your figures."
+    },
+    {
+      "when": {
         "flag": "information-late"
       },
       "reported": "A minor dependency was resolved within the reporting period.",

@@ -169,6 +169,14 @@
       "project": {
         "real": "worse"
       }
+    },
+    "associate": {
+      "cover": "the new Junior Associate",
+      "notice": {
+        "title": "Tessa Croft has left",
+        "body": "The Junior Associate has left for a role with a longer title at a smaller company. A new Junior Associate starts on Monday, and has already asked for the figures, and how you did them."
+      },
+      "sets": ["a-colleague-left"]
     }
   }
 }

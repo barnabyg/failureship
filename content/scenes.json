@@ -6,7 +6,7 @@
     "narration": [
       "Item one on the agenda is the agenda. The projector shows a slide titled Where We Are. Nobody can say."
     ],
-    "cast": ["head", "boss", "analyst", "admin", "projects"],
+    "cast": ["head", "boss", "analyst", "admin", "projects", "associate"],
     "signs": [
       {
         "label": "Who interrupts whom",
@@ -175,7 +175,7 @@
     "narration": [
       "A project was delivered late. The purpose of this session is not to find someone to blame, your boss explains, and asks whose fault it was. Everyone looks at you, the most junior person present."
     ],
-    "cast": ["head", "boss", "analyst", "admin", "projects"],
+    "cast": ["head", "boss", "analyst", "admin", "projects", "associate"],
     "signs": [
       {
         "label": "Who has prepared",
@@ -280,6 +280,38 @@
               "tone": "bad",
               "text": "You blamed the Office Co-ordinator in the Lessons Learned Review, in front of everyone.",
               "at": ["admin"]
+            }
+          }
+        ]
+      },
+      {
+        "id": "blame-tessa",
+        "family": "deflect",
+        "label": "Say that the delay began with the Junior Associate",
+        "results": [
+          {
+            "when": {
+              "factNature": {
+                "character": "associate",
+                "nature": "dangerous"
+              }
+            },
+            "body": "The Junior Associate nods, and says that they will reflect on that. They reflect on it at length with someone from the fifth floor. By Friday you have been asked, by someone you have never met, to walk them through your own part in the delay.",
+            "sets": ["burned-by-a-fact"],
+            "opinion": -2,
+            "factAt": "associate",
+            "factNote": "You blamed the Junior Associate for the delay. You had not been told why that was a mistake.",
+            "mistake": "big"
+          },
+          {
+            "body": "The Junior Associate thanks you for the feedback, and asks whether you could put it in writing, so that they can learn from it. It appears to work. The minutes record a learning opportunity, and it is the Junior Associate's.",
+            "sets": ["blamed-a-colleague"],
+            "approach": "blame",
+            "news": {
+              "about": "blamed-in-the-review",
+              "tone": "bad",
+              "text": "You blamed the Junior Associate in the Lessons Learned Review, in front of everyone.",
+              "at": ["associate"]
             }
           }
         ]
@@ -415,7 +447,7 @@
     "narration": [
       "The Chief Executive appears on the screen, slightly too large, and says that this has been a year of challenges and that the challenges have been opportunities. The floor has gathered to watch, and to be seen watching."
     ],
-    "cast": ["head", "boss", "analyst", "admin", "projects"],
+    "cast": ["head", "boss", "analyst", "admin", "projects", "associate"],
     "signs": [
       {
         "label": "Who sits where",
@@ -557,7 +589,7 @@
     "narration": [
       "The Chief Financial Officer has asked Floor 1 to cut its budget by thirty per cent while delivering everything in the plan. Your boss says this is an exciting conversation, and that someone junior should start it."
     ],
-    "cast": ["head", "boss", "analyst", "admin", "projects"],
+    "cast": ["head", "boss", "analyst", "admin", "projects", "associate"],
     "signs": [
       {
         "label": "Whose budget is safe",
@@ -791,7 +823,7 @@
     "narration": [
       "An Ideas Workshop, with a wall, a pad of sticky notes each and a facilitator from Floor 3. There are no bad ideas. The ideas will be prioritised afterwards, by your boss, who has brought one."
     ],
-    "cast": ["boss", "analyst", "admin", "projects"],
+    "cast": ["boss", "analyst", "admin", "projects", "associate"],
     "signs": [
       {
         "label": "Whose note goes to the top",
@@ -868,7 +900,7 @@
       "The first Quarterly Business Review of the year. Attendance is mandatory, and it is held over lunch, so that it takes up nobody's time.",
       "The quarter is reviewed. Each team presents what it has achieved, on a slide with an arrow going up. The arrows have been drawn before the figures, so as not to influence them."
     ],
-    "cast": ["head", "boss", "analyst", "admin", "projects"],
+    "cast": ["head", "boss", "analyst", "admin", "projects", "associate"],
     "signs": [
       {
         "label": "Whose slide is skipped",
@@ -979,7 +1011,7 @@
       "The second Quarterly Business Review, held over lunch again. The sandwiches are from the first one.",
       "This quarter, each team's arrow is shown beside last quarter's. Where last quarter's arrow was higher, it has been restated, so that progress can be seen."
     ],
-    "cast": ["head", "boss", "analyst", "admin", "projects"],
+    "cast": ["head", "boss", "analyst", "admin", "projects", "associate"],
     "signs": [
       {
         "label": "Whose arrow is restated",
@@ -1062,7 +1094,7 @@
       "The last Quarterly Business Review of the year, held over lunch. Lunch is one biscuit each, because of the forecast.",
       "This quarter, the year's three arrows have been joined into one, in the shape of a hockey stick. The handle is this year. The blade is next year, and has been drawn already, so that the figures know what is expected of them."
     ],
-    "cast": ["head", "boss", "analyst", "admin", "projects"],
+    "cast": ["head", "boss", "analyst", "admin", "projects", "associate"],
     "signs": [
       {
         "label": "Who says how steep",
@@ -1131,7 +1163,7 @@
     "narration": [
       "Your project has been flagged red on this morning's chart, and the Project Status Review has been called for you. Your boss has asked you to walk the room through it. There is a chart behind you, and it shows something bad that is actually happening."
     ],
-    "cast": ["head", "boss", "analyst", "admin", "projects"],
+    "cast": ["head", "boss", "analyst", "admin", "projects", "associate"],
     "signs": [
       {
         "label": "Who decides the colour",
@@ -1277,7 +1309,7 @@
     "narration": [
       "Ratings are decided here, on a curve, by people who say that nobody is being compared with anybody. Someone must be at the bottom. You have been invited to give your perspective, which is new, and you are told that it is a privilege."
     ],
-    "cast": ["head", "boss", "analyst", "admin", "projects"],
+    "cast": ["head", "boss", "analyst", "admin", "projects", "associate"],
     "signs": [
       {
         "label": "Who sets the curve",
@@ -1378,6 +1410,24 @@
           },
           {
             "body": "The Project Co-ordinator looks grateful, then frightened. You are told that you can drop off the call now, although it is not a call.",
+            "sets": ["backed-wrong-person"]
+          }
+        ]
+      },
+      {
+        "id": "praise-tessa",
+        "family": "impress",
+        "label": "Say how much you have learned from the Junior Associate",
+        "results": [
+          {
+            "when": {
+              "holderIs": "associate"
+            },
+            "body": "The Junior Associate smiles, as if this had been arranged. Your name comes up shortly afterwards, and passes through without being moved. You are not sure who arranged it.",
+            "sets": ["backed-holder"]
+          },
+          {
+            "body": "Everyone looks at the Junior Associate, who has been here since the spring, and then at you. The Junior Associate thanks you warmly, and moves up the curve, past you.",
             "sets": ["backed-wrong-person"]
           }
         ]
@@ -1486,6 +1536,40 @@
             "factNote": "You acted on something you were told about {subject}. It was not so."
           }
         ]
+      },
+      {
+        "id": "claim-the-figures",
+        "family": "deflect",
+        "label": "Mention, modestly and twice, the long evenings you spent on the team's figures",
+        "requires": {
+          "any": [
+            {
+              "sawMove": "credit-claimed"
+            },
+            {
+              "sawMove": "figures-borrowed"
+            },
+            {
+              "sawMove": "credit-taken"
+            },
+            {
+              "sawMove": "report-renamed"
+            }
+          ]
+        },
+        "results": [
+          {
+            "body": "You have seen how this is done, and you do it. The figures were mostly the Senior Analyst's, and so were the evenings, but the Senior Analyst is not asked. Your name moves up the curve by a small, well-lit amount.",
+            "sets": ["claimed-the-figures"],
+            "approach": "theatre",
+            "news": {
+              "about": "took-the-credit",
+              "tone": "bad",
+              "text": "You took the credit for the team's figures at Calibration.",
+              "at": ["analyst"]
+            }
+          }
+        ]
       }
     ],
     "verdict": {
@@ -1503,7 +1587,7 @@
     "narration": [
       "Your boss has introduced a new metric, the Stakeholder Delight Index. It will be reported monthly, and it goes up when a form is filled in. The first results are being shown today. Nobody has said who fills in the form."
     ],
-    "cast": ["head", "boss", "analyst", "admin", "projects"],
+    "cast": ["head", "boss", "analyst", "admin", "projects", "associate"],
     "signs": [
       {
         "label": "Whose number is not discussed",
@@ -1544,6 +1628,19 @@
         "id": "tricky-question-analyst",
         "family": "attack",
         "label": "Ask the Senior Analyst, kindly, how their number was arrived at",
+        "requires": {
+          "any": [
+            {
+              "sawMove": "tricky-question"
+            },
+            {
+              "sawMove": "pointed-question"
+            },
+            {
+              "hasBuzzword": "single-source-of-truth"
+            }
+          ]
+        },
         "results": [
           {
             "when": {
@@ -1611,7 +1708,7 @@
     "narration": [
       "The floor has a vacancy for an analyst, and you are on the panel, for balance. There are three candidates. One is excellent, one was recommended, and one is an old friend of yours who has asked you not to mention how you know each other."
     ],
-    "cast": ["head", "boss", "analyst", "admin", "projects"],
+    "cast": ["head", "boss", "analyst", "admin", "projects", "associate"],
     "signs": [
       {
         "label": "Whose candidate it is",
@@ -1721,7 +1818,7 @@
     "narration": [
       "Human Resources is holding a Listening Session, in which anyone may raise anything in complete confidence, in this room, in front of everybody. There are biscuits. Someone from Human Resources is writing down who takes one."
     ],
-    "cast": ["head", "boss", "analyst", "admin", "projects"],
+    "cast": ["head", "boss", "analyst", "admin", "projects", "associate"],
     "signs": [
       {
         "label": "Who is safe to mention",
@@ -1782,6 +1879,9 @@
         "id": "start-a-rumour",
         "family": "attack",
         "label": "Mention, by the biscuits, that the Project Co-ordinator's project is in trouble",
+        "requires": {
+          "sawMove": "rumour"
+        },
         "results": [
           {
             "when": {
@@ -1798,14 +1898,18 @@
             "mistake": "big"
           },
           {
-            "body": "By the time you reach your desk it has come back to you, with details. The Project Co-ordinator's project is in serious trouble, and people are being very kind about it.",
+            "body": "You say it to the Office Co-ordinator, by the biscuits, as something you had assumed everyone knew. By the time you reach your desk it has come back to you, with details. The Project Co-ordinator's project is in serious trouble, and people are being very kind about it.",
             "sets": ["started-a-rumour"],
             "approach": "blame",
-            "news": {
-              "about": "started-a-rumour",
-              "tone": "bad",
-              "text": "You started a rumour about the Project Co-ordinator's project, by the biscuits.",
-              "at": ["projects"]
+            "falseStory": {
+              "about": "their-project-in-trouble",
+              "text": "A story that the Project Co-ordinator's project was in trouble.",
+              "of": "projects",
+              "at": ["admin"],
+              "exposed": {
+                "about": "started-a-rumour",
+                "text": "You started the story that the Project Co-ordinator's project was in trouble."
+              }
             }
           }
         ]

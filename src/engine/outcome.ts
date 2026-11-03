@@ -8,7 +8,7 @@ import { headOf, whoIs } from "./places";
 import { moveProject, type ProjectChange } from "./project";
 import { makePromise, settlePromise } from "./promises";
 import { shiftBelief } from "./reads";
-import { remember, startNews } from "./reputation";
+import { remember, startNews, startStory } from "./reputation";
 import { startRisks } from "./risks";
 import { startThreads } from "./threads";
 import type { State } from "./state";
@@ -32,6 +32,15 @@ export interface Outcome {
   }[];
   news?:
     | { about: string; tone: Tone; text: string; at: readonly string[] }
+    | undefined;
+  falseStory?:
+    | {
+        about: string;
+        text: string;
+        of?: string | undefined;
+        at?: readonly string[] | undefined;
+        exposed?: { about: string; text: string } | undefined;
+      }
     | undefined;
   promise?: string | undefined;
   deal?: string | undefined;
@@ -69,6 +78,16 @@ export function applyOutcome(
     startNews(state, content, {
       ...outcome.news,
       at: outcome.news.at.map(who),
+    });
+  }
+  // A Move's story is started where it lands, by whoever made it.
+  const told = outcome.falseStory;
+  if (told?.of !== undefined) {
+    startStory(state, content, {
+      ...told,
+      of: who(told.of),
+      at: told.at?.map(who),
+      by: YOU,
     });
   }
   if (outcome.promise !== undefined) {

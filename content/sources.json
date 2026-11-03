@@ -4,7 +4,7 @@
       "id": "ask",
       "title": "At the photocopier",
       "prompt": "{source} is at the photocopier, waiting for it to warm up. It will be a while, and you could ask about anyone.",
-      "sources": ["head", "boss", "admin", "analyst", "projects"],
+      "sources": ["head", "boss", "admin", "analyst", "projects", "associate"],
       "someoneThere": true,
       "topics": {
         "kind": 5,
@@ -60,6 +60,11 @@
       "I've got this on the tracker, in a column nobody opens. {said}",
       "Everything here slips eventually, so you learn who it slips towards. {said}",
       "{said} I'll add that as a risk, but I won't say whose."
+    ],
+    "junior-associate": [
+      "I only started in the spring, so I still notice things. {said}",
+      "We're on the same level, you and me, so I can say this. {said}",
+      "{said} I'm not saying anything. I'm only saying it to you."
     ]
   },
   "influentialCount": 2,

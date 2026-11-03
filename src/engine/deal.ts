@@ -1,5 +1,6 @@
 import type { Content, Kind } from "./content";
-import { drawFor, pick, pickWeighted, shuffle } from "./rng";
+import { couldCompeteAtStart } from "./rivals";
+import { draw, drawFor, pick, pickWeighted, shuffle } from "./rng";
 
 export interface DealtCharacter {
   id: string;
@@ -103,7 +104,7 @@ export function dealCharacters(
   content: Content,
 ): { characters: DealtCharacter[]; next: number } {
   const ids = content.characters.map((c) => c.id);
-  const kinds = dealKinds(rng, ids, content);
+  const kinds = dealKindsWithRivals(rng, ids, content);
   const facts = dealFacts(kinds.next, ids, content);
   return {
     characters: ids.map((id) => ({
@@ -129,6 +130,27 @@ export function dealMotives(
     return { ...character, motive: motive.item.id };
   });
   return { characters: dealt, next };
+}
+
+/**
+ * Kinds, dealt again some of the time if nobody who could compete with the
+ * player is a Practitioner, so that a run with no Rival is rare. Dealing again
+ * leans every role the same way, so no role's kind is a tell.
+ */
+function dealKindsWithRivals(
+  rng: number,
+  ids: readonly string[],
+  content: Content,
+) {
+  const first = dealKinds(rng, ids, content);
+  if (!content.rivals) return first;
+  const could = couldCompeteAtStart(content);
+  const rivalled = could.some((id) => first.dealt.get(id) === "practitioner");
+  const roll = draw(first.next);
+  if (rivalled || roll.value >= content.rivals.dealAgain) {
+    return { ...first, next: roll.next };
+  }
+  return dealKinds(roll.next, ids, content);
 }
 
 /** The first seats go to Practitioners, so there is always something to find. */

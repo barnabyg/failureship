@@ -21,8 +21,8 @@ async function treatmentAfter(page: Page, seed: number, option: string) {
 
 test("the boss treats you differently after a choice", async ({ page }) => {
   const changed: number[] = [];
-  // Seed 2 shows it, so it goes first. The rest are there if the content moves it.
-  for (const seed of [2, 1, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]) {
+  // Seed 4 shows it, so it goes first. The rest are there if the content moves it.
+  for (const seed of [4, 1, 2, 3, 5, 6, 7, 8, 9, 10, 11, 12]) {
     const pleased = await treatmentAfter(page, seed, "back-boss");
     const snubbed = await treatmentAfter(page, seed, "back-head");
     if (pleased !== snubbed) changed.push(seed);
@@ -42,7 +42,7 @@ test("the boss's opinion never appears as a number or label", async ({
   await expect(page.locator(".status")).not.toContainText(/opinion|mood/i);
 });
 
-// The real-content test keeps seed 1's boss a Believer and seed 8's Incompetent.
+// The real-content test keeps seed 106's boss a Believer and seed 283's Incompetent.
 test("the same choice lands differently with a different kind of boss", async ({
   page,
 }) => {
@@ -54,8 +54,8 @@ test("the same choice lands differently with a different kind of boss", async ({
     return page.getByTestId("boss-reaction").innerText();
   };
 
-  const believer = await reactionOnSeed(1);
-  const incompetent = await reactionOnSeed(8);
+  const believer = await reactionOnSeed(106);
+  const incompetent = await reactionOnSeed(283);
 
   expect(believer).not.toEqual(incompetent);
   expect(`${believer} ${incompetent}`).not.toMatch(
@@ -67,7 +67,7 @@ test("the same choice lands differently with a different kind of boss", async ({
 test("the results screen shows the boss's kind and how choices landed", async ({
   page,
 }) => {
-  await page.goto("/?seed=8&month=9");
+  await page.goto("/?seed=283&month=9");
   await answerAnyNotification(page);
   await openMeeting(page);
   await page.getByTestId("scene-option-praise-dennis").click();

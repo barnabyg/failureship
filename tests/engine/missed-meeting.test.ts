@@ -257,7 +257,7 @@ describe("a meeting you do not go to", () => {
   });
 
   it("gives no Demand if no action was left to go with", () => {
-    const run = startRun({ seed: 3, content: gameContent });
+    const run = startRun({ seed: 5, content: gameContent });
     const costly = (view: PlayerView): Choice => {
       const { step } = view;
       if (step.kind !== "notification") {

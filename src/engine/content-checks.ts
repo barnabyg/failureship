@@ -26,6 +26,7 @@ import {
 } from "./content";
 import { findBrokenFloors } from "./floor-checks";
 import { findBrokenReviews } from "./review-checks";
+import { findBrokenRivals, withoutMaker } from "./rival-checks";
 import { bossesAtStart, meantBy } from "./places";
 import {
   dependsOnHiddenTruth,
@@ -63,6 +64,7 @@ function findBrokenReferences(content: Content): string[] {
   const dialogs = new Set(content.dialogs.map((d) => d.id));
   const buzzwords = new Set(content.buzzwords.map((b) => b.id));
   const scenes = new Set(content.scenes.map((s) => s.id));
+  const moves = new Set(content.moves.map((m) => m.id));
   const characters = new Set(content.characters.map((c) => c.id));
   const hiddenFlags = flagsSetByHiddenResults(content);
   const problems: string[] = [];
@@ -100,6 +102,12 @@ function findBrokenReferences(content: Content): string[] {
     if ("not" in condition) checkCondition(owner, condition.not);
     if ("all" in condition) {
       for (const inner of condition.all) checkCondition(owner, inner);
+    }
+    if ("any" in condition) {
+      for (const inner of condition.any) checkCondition(owner, inner);
+    }
+    if ("sawMove" in condition && !moves.has(condition.sawMove)) {
+      problems.push(`${owner} needs unknown Move "${condition.sawMove}".`);
     }
     if ("hasBuzzword" in condition && !buzzwords.has(condition.hasBuzzword)) {
       problems.push(
@@ -163,6 +171,7 @@ function findBrokenReferences(content: Content): string[] {
 
   problems.push(...findBrokenFloors(content));
   problems.push(...findBrokenReviews(content, hiddenFlags));
+  problems.push(...findBrokenRivals(content));
   problems.push(...findBrokenDeal(content, characters));
   problems.push(...findBrokenBehaviours(content));
   problems.push(...findBrokenBossSigns(content));
@@ -170,6 +179,7 @@ function findBrokenReferences(content: Content): string[] {
     ...content.actions,
     ...everyNotification(content).flatMap((n) => n.options),
     ...content.scenes.flatMap((sc) => sc.options),
+    ...content.moves,
   ].some((choice) => choice.family !== undefined);
   if (tagged && !content.families) {
     problems.push("Choices name a family, but no families are written.");
@@ -352,7 +362,7 @@ function findBrokenReferences(content: Content): string[] {
     const owner = `Move "${m.id}"`;
     if (m.repays !== undefined) checkCharacterOrPlace(owner, m.repays);
     checkMonths(owner, m.months);
-    checkParts(owner, m.body);
+    checkParts(owner, withoutMaker(m));
     if (m.when) checkCondition(owner, m.when);
   }
   for (const e of content.officialStory.entries) {

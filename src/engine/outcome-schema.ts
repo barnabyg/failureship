@@ -77,6 +77,26 @@ export const news = z
   })
   .optional();
 
+/**
+ * A false story, which travels the Power Map as news does until someone sees
+ * through it. A Move's is about the player, and starts with whoever made it.
+ * A choice's is the player's, about someone else.
+ */
+export const story = z
+  .strictObject({
+    /** What `remembers` reads. */
+    about: id,
+    /** What the results screen says reached people. */
+    text,
+    /** Whom the player's story is about. */
+    of: id.optional(),
+    /** Whom the player tells it to first. */
+    at: z.array(id).min(1).optional(),
+    /** What reaches whoever sees through the player's story: that the player made it up. */
+    exposed: z.strictObject({ about: id, text }).optional(),
+  })
+  .optional();
+
 /** How an answer settles a commitment that has fallen due. */
 const settles = z.enum(["kept", "broken"]).optional();
 

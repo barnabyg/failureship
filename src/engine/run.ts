@@ -99,6 +99,7 @@ function dealtState(seed: number, content: Content): State {
       risks: [],
       memories: [],
       changes: [],
+      rivals: [],
     },
   };
 }

@@ -22,6 +22,7 @@ import {
   remembers,
   sets,
   stakes,
+  story,
 } from "./outcome-schema";
 
 export const dialog = z.strictObject({
@@ -57,6 +58,8 @@ const sceneResult = z.strictObject({
   mistake: choiceMistake,
   remembers,
   news,
+  /** A false story the player tells about someone else. */
+  falseStory: story,
   /** Says on the results screen that a Hidden Fact caused this. */
   factNote: text.optional(),
   /** Whose Hidden Fact it was, unless the option is `about` one. */
@@ -141,7 +144,15 @@ export const move = z.strictObject({
   when: condition.optional(),
   /** Lands ahead of other Moves whenever its condition holds. */
   priority: z.boolean().default(false),
+  /** Who makes it: a Character, a place, or `{rival}`, one of the player's Rivals. */
+  by: id.optional(),
+  /** Which family of Move it is, as the results screen says of a Rival. */
+  family,
+  /** A false story about the player, which starts with whoever makes the Move. */
+  falseStory: story,
   sets,
+  opinion,
+  headOpinion,
   mistake: bigMistake,
   /** Pays back the favour the player owes this Character. */
   repays: id.optional(),
