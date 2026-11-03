@@ -54,6 +54,8 @@ export function freshMonth(where: Whereabouts, content: Content): MonthRecord {
 
 /** What happens as a month opens, whatever the player has done. */
 export function openMonth(state: State, content: Content): void {
+  // Plans past due fail before anything else this month can complete them.
+  followPlans(state, content);
   spreadNews(state, content);
   changePeople(state, content);
   noteRivals(state, competitionNow(state, content));
@@ -62,7 +64,6 @@ export function openMonth(state: State, content: Content): void {
   dealsFallDue(state, content);
   playThreads(state, content);
   surfaceRisks(state, content);
-  followPlans(state, content);
   blowWhistles(state, content);
   scheduleEvents(state, content);
   const { input } = content.project;

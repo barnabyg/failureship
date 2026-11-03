@@ -41,6 +41,9 @@ import { findBrokenDeals, findBrokenPromises } from "./word-checks";
 
 type SceneResult = SceneData["options"][number]["results"][number];
 
+/** What text in a Scene can name: parts of the Power Map, and the boss's Grand Plan. */
+const PART_TOKENS = ["holder", "ignored", "bystander", "plan", "keeper"];
+
 /** Thrown when a data file breaks the content format, naming what is wrong. */
 export class ContentError extends Error {
   override name = "ContentError";
@@ -125,7 +128,7 @@ function findBrokenReferences(content: Content): string[] {
   const checkParts = (owner: string, written: string, about = false) => {
     for (const [, token] of written.matchAll(/\{(\w+)\}/g)) {
       if (about && token === "subject") continue;
-      if (token !== "holder" && token !== "ignored" && token !== "bystander") {
+      if (!PART_TOKENS.includes(token ?? "")) {
         problems.push(`${owner} uses unknown part "{${token ?? ""}}".`);
       }
     }
@@ -179,14 +182,7 @@ function findBrokenReferences(content: Content): string[] {
   problems.push(...findBrokenFloors(content));
   problems.push(...findBrokenReviews(content, hiddenFlags));
   problems.push(...findBrokenRivals(content));
-  problems.push(...findBrokenPlans(content, hiddenFlags));
-  for (const plan of content.grandPlans?.plans ?? []) {
-    const { sticks } = plan.failed.blame;
-    if (sticks) checkCondition(`Grand Plan "${plan.id}"`, sticks);
-    for (const way of plan.ways) {
-      checkCondition(`Grand Plan "${plan.id}" way "${way.id}"`, way.when);
-    }
-  }
+  problems.push(...findBrokenPlans(content, hiddenFlags, checkCondition));
   problems.push(...findBrokenDeal(content, characters));
   problems.push(...findBrokenBehaviours(content));
   problems.push(...findBrokenBossSigns(content));

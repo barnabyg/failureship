@@ -17,6 +17,7 @@
           "id": "real-figures",
           "how": "reality",
           "when": { "did": "tool-real-figures" },
+          "counts": ["believer", "incompetent"],
           "belief": { "believer": 4, "incompetent": 0, "practitioner": -2 },
           "reaction": {
             "believer": "Your boss opens the tool, finds the real figures in it, and reads them for some time without saying anything. Then your boss says that this is what it was for.",
@@ -33,6 +34,7 @@
           "id": "real-for-boss",
           "how": "reality",
           "when": { "did": "tool-real-for-boss" },
+          "counts": ["believer", "incompetent", "practitioner"],
           "belief": { "believer": 3, "incompetent": 1, "practitioner": 4 },
           "reaction": {
             "believer": "Your boss says that it was a team effort, and names you twice, which is once more than you were expecting.",
@@ -51,6 +53,7 @@
           "when": {
             "any": [{ "did": "tool-icon" }, { "did": "tool-screenshot" }]
           },
+          "counts": ["incompetent", "practitioner"],
           "belief": { "believer": -3, "incompetent": 4, "practitioner": 2 },
           "reaction": {
             "believer": "Your boss clicks the icon, waits, and clicks it again. Your boss says nothing at all, and then asks you, quietly, what it is for.",
@@ -77,9 +80,9 @@
         "onPlayer": {
           "id": "one-tool-blamed-you",
           "as": "move",
-          "from": "From: Your boss, {boss}, copied to your boss's boss",
+          "from": "From: Lessons Learned, copied upstairs",
           "title": "Lessons from the new tool",
-          "body": "Your boss has written up why the new tool is not in use across the floor. The write-up is two pages long, and your name is on both of them. Your boss's boss has replied that they would like to discuss it with you, and has not said when.",
+          "body": "A write-up has gone round of why the new tool is not in use across the floor. It is two pages long, and your name is on both of them. Someone upstairs has replied that they would like to discuss it with you, and has not said when.",
           "opinion": -1,
           "headOpinion": -2,
           "sets": ["blamed-for-the-plan"],
@@ -88,9 +91,9 @@
         "onSomeoneElse": {
           "id": "one-tool-blamed-elsewhere",
           "as": "move",
-          "from": "From: Your boss, {boss}, copied to your boss's boss",
+          "from": "From: Lessons Learned, copied upstairs",
           "title": "Lessons from the new tool",
-          "body": "Your boss has written up why the new tool is not in use across the floor. It was the supplier, who has been asked to leave the building, and has. The tool is now described as a pilot, and the pilot as a success.",
+          "body": "A write-up has gone round of why the new tool is not in use across the floor. It was the supplier, who has been asked to leave the building, and has. The tool is now described as a pilot, and the pilot as a success.",
           "sets": ["plan-blamed-elsewhere"]
         }
       },
@@ -113,6 +116,7 @@
           "id": "booked",
           "how": "reality",
           "when": { "did": "desks-really-booked" },
+          "counts": ["believer", "incompetent"],
           "belief": { "believer": 4, "incompetent": 0, "practitioner": -2 },
           "reaction": {
             "believer": "Your boss books a desk, sits at it, and says that it works, in the voice of someone who did not think anything would.",
@@ -129,6 +133,7 @@
           "id": "booked-for-boss",
           "how": "reality",
           "when": { "did": "desks-booked-for-boss" },
+          "counts": ["believer", "incompetent", "practitioner"],
           "belief": { "believer": 3, "incompetent": 1, "practitioner": 4 },
           "reaction": {
             "believer": "Your boss thanks you for doing the work, in private, and is clearly uncomfortable about the e-mail.",
@@ -145,6 +150,7 @@
           "id": "labels-off",
           "how": "appearance",
           "when": { "did": "desk-labels-off" },
+          "counts": ["incompetent", "practitioner"],
           "belief": { "believer": -3, "incompetent": 4, "practitioner": 2 },
           "reaction": {
             "believer": "Your boss notices that everyone is at the same desk as yesterday, without the label, and asks you what has changed.",
@@ -170,9 +176,9 @@
         "onPlayer": {
           "id": "hot-desks-blamed-you",
           "as": "move",
-          "from": "From: Your boss, {boss}, copied to your boss's boss",
+          "from": "From: Lessons Learned, copied upstairs",
           "title": "Hot-desking: a review",
-          "body": "Your boss has reviewed why everyone still has a desk. The review found that it was you, on page one. Your boss's boss would like a word about it.",
+          "body": "A review has found why everyone still has a desk. It was you, on page one. Someone upstairs would like a word about it.",
           "opinion": -1,
           "headOpinion": -2,
           "sets": ["blamed-for-the-plan"],
@@ -181,9 +187,9 @@
         "onSomeoneElse": {
           "id": "hot-desks-blamed-elsewhere",
           "as": "move",
-          "from": "From: Your boss, {boss}, copied to your boss's boss",
+          "from": "From: Lessons Learned, copied upstairs",
           "title": "Hot-desking: a review",
-          "body": "Your boss has reviewed why everyone still has a desk. It was Facilities, who have been asked to reflect. Hot-desking is now described as a phase two.",
+          "body": "A review has found why everyone still has a desk. It was Facilities, who have been asked to reflect. Hot-desking is now described as a phase two.",
           "sets": ["plan-blamed-elsewhere"]
         }
       },

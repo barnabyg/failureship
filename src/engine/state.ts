@@ -4,6 +4,7 @@ import type {
   Content,
   Kind,
   MoveFamily,
+  PlanHow,
   SceneData,
   Tone,
 } from "./content";
@@ -102,6 +103,8 @@ export interface HiddenTruth extends TruthOfRun {
   bossBelief: number;
   /** The same of the boss's boss, whom the player can also try to impress. */
   headBelief: number;
+  /** Each boss's Grand Plans, with who really had what each needed. */
+  plans: TakenPlan[];
 }
 
 /** Custom behaviour for a Scene: reshapes its data for the current truth. */
@@ -181,9 +184,6 @@ interface BossLanding {
   shift: number;
 }
 
-/** How a Grand Plan was completed: really done, or made to look done. */
-export type PlanHow = "reality" | "appearance";
-
 /** A Grand Plan a boss took on, and what became of it. */
 export interface TakenPlan {
   id: string;
@@ -194,11 +194,14 @@ export interface TakenPlan {
   due: number;
   /** The month the player heard of it. Null until they do. */
   heard: number | null;
-  /** How it ended, by which of its ways, if it has. */
+  /** Who really has what it needs, dealt as it is taken on. Never shown until the end. */
+  keeper: string | null;
+  /** How it ended, by which of its ways, and whether its boss counted it done. */
   ended: {
     month: number;
     how: PlanHow | "failed";
     way: string | null;
+    counted: boolean;
   } | null;
 }
 

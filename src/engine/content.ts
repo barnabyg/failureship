@@ -46,7 +46,7 @@ export {
   type Mood,
   type Nature,
 } from "./basic-schema";
-export { DEMAND_ANSWERS, PLAN_HOWS } from "./boss-schema";
+export { DEMAND_ANSWERS, PLAN_HOWS, type PlanHow } from "./boss-schema";
 export type { Bill } from "./consequence-schema";
 export {
   MOVE_FAMILIES,

@@ -175,6 +175,7 @@ function runOf(state: State, world: World): Run {
     ...structuredClone(state.truth),
     bossBelief: beliefOf(state, bossOf(state, content)),
     headBelief: beliefOf(state, headOf(state, content) ?? ""),
+    plans: structuredClone(state.plans),
   }));
   return run;
 }

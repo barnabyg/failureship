@@ -701,10 +701,19 @@
     "body": "Your boss's Grand Plan is hot-desking: nobody will have a desk of their own, so that everyone has every desk. Your boss would like it done within three months, and asks each month where it has got to.",
     "options": [
       {
+        "id": "being-phased",
+        "family": "deflect",
+        "label": "Say that it is being phased in",
+        "approach": "stall",
+        "result": {
+          "title": "RE: Hot-desking",
+          "body": "Your boss asks which phase it is in. You say the first. Your boss writes that down."
+        }
+      },
+      {
         "id": "book-the-desks",
         "family": "deliver",
         "label": "Set up a real booking system with the Office Co-ordinator, and send the launch e-mail yourself",
-        "cost": "standard",
         "sets": ["desks-really-booked"],
         "approach": "results",
         "result": {
@@ -716,7 +725,6 @@
         "id": "book-them-for-the-boss",
         "family": "impress",
         "label": "Set up the booking system, and let your boss announce it",
-        "cost": "standard",
         "sets": ["desks-booked-for-boss"],
         "approach": "favour",
         "result": {
@@ -733,16 +741,6 @@
         "result": {
           "title": "Hot-desking",
           "body": "In the morning there are no labels, and everyone is at the same desk as yesterday. It is agreed to be a big change."
-        }
-      },
-      {
-        "id": "being-phased",
-        "family": "deflect",
-        "label": "Say that it is being phased in",
-        "approach": "stall",
-        "result": {
-          "title": "RE: Hot-desking",
-          "body": "Your boss asks which phase it is in. You say the first. Your boss writes that down."
         }
       }
     ]

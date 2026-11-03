@@ -1,5 +1,6 @@
 import { z } from "zod";
 import {
+  KINDS,
   condition,
   floor,
   id,
@@ -204,14 +205,25 @@ export const DEMAND_ANSWERS = [
 ] as const;
 
 export const PLAN_HOWS = ["reality", "appearance"] as const;
+/** How a Grand Plan was completed: really done, or made to look done. */
+export type PlanHow = (typeof PLAN_HOWS)[number];
 
 /** One way of completing a Grand Plan, and how each kind of boss takes it. */
 const planWay = z.strictObject({
   id,
   /** Really done, or made to look done. */
   how: z.enum(PLAN_HOWS),
-  /** What the player did that completes it this way. Never the hidden truth. */
-  when: condition,
+  /**
+   * What the player did that completes it this way. Never the hidden truth. Left
+   * out, it is only ever another way's `otherwise`.
+   */
+  when: condition.optional(),
+  /** Whether it needs what the Plan `needs`, from whoever really has it. */
+  needs: z.boolean().default(false),
+  /** The way it is completed instead, without what it needs. */
+  otherwise: id.optional(),
+  /** The kinds of boss who count it done. Others still see it on the record. */
+  counts: z.array(z.enum(KINDS)).min(1),
   /** How far it moves the boss's belief, by their kind. */
   belief: perKind(z.number().int()),
   /** How each kind shows it, which is a sign and never says the kind. */
@@ -236,6 +248,17 @@ const grandPlan = z.strictObject({
   lasts: z.number().int().positive(),
   /** The Scenes and Notifications in which the player hears of it. */
   heardIn: z.array(id).min(1),
+  /**
+   * What doing it for real needs, which one of `from` really has, dealt as the
+   * Plan is taken on. The player has it once they have done `asked` of them.
+   */
+  needs: z
+    .strictObject({
+      from: z.array(z.strictObject({ character: id, asked: id })).min(2),
+      /** What the results screen says of whoever had it. Says {who}. */
+      told: text,
+    })
+    .optional(),
   ways: z.array(planWay).min(2),
   /** If it is not done in time, the boss looks for someone to blame. */
   failed: z.strictObject({

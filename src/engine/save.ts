@@ -5,7 +5,7 @@ import type { State } from "./state";
  * Raise this whenever what a save holds changes its meaning. A save of another
  * version is not migrated: the player is offered a new run instead.
  */
-export const SAVE_VERSION = 8;
+export const SAVE_VERSION = 9;
 
 /** Thrown when a save is old, broken or does not fit the current content. */
 export class UnusableSaveError extends Error {

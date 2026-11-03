@@ -200,6 +200,8 @@ export type StepView =
         title: string;
         plan: string;
         fate: string;
+        /** Who really had what it needed, if it needed anything. */
+        keeper: string | null;
       }[];
       /** The Milestones earned, for comparing with friends. */
       milestones: { month: number; title: string }[];

@@ -86,6 +86,9 @@ export function ResultsPanel({
           <p key={row.plan} data-testid="result-grand-plan">
             <strong>{monthLabel(row.month)}. </strong>
             {row.title}, {row.name}: {row.plan}. {row.fate}
+            {row.keeper !== null && (
+              <span className="results-title">{row.keeper}</span>
+            )}
           </p>
         ))}
       </div>
