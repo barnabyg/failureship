@@ -48,14 +48,14 @@
     "sets": ["attended-meeting"]
   },
   {
-    "id": "meeting-quarterly",
+    "id": "meeting-workshop",
     "floor": "junior-employee",
     "months": [5],
     "label": "Meeting Room 1B",
-    "description": "The Quarterly Business Review, at which every team shows an arrow going up.",
+    "description": "An Ideas Workshop. There are no bad ideas until the prioritisation.",
     "place": "meeting-room",
     "cost": "standard",
-    "scene": "quarterly-review",
+    "scene": "ideas-workshop",
     "oncePerMonth": true,
     "sets": ["attended-meeting"]
   },

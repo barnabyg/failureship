@@ -1,4 +1,5 @@
 import { describe, expect, it } from "vitest";
+import { gameContent } from "../../src/content";
 import {
   parseContent,
   startRun,
@@ -6,6 +7,8 @@ import {
   type PlayerView,
   type Run,
 } from "../../src/engine";
+import { readHiddenTruth } from "../../src/engine/hidden-truth";
+import { plainChoice } from "../../src/ui/later-month";
 import { fixtureRaw } from "./fixture";
 
 /** A review for one quarter, whose choices go on the record or do not. */
@@ -149,6 +152,80 @@ describe("Quarterly reviews", () => {
     const content = parseContent(fixtureRaw());
 
     expect(scenesOf(playOut(startRun({ seed: 1, content })))).toEqual([]);
+  });
+});
+
+const isReview = (view: PlayerView) =>
+  view.step.kind === "scene" &&
+  gameContent.scenes.some(
+    (s) =>
+      s.quarter !== undefined &&
+      view.step.kind === "scene" &&
+      s.id === view.step.id,
+  );
+
+/** Plays the real game plainly until its first review opens. */
+function toFirstReview(run: Run): PlayerView {
+  let view = run.view();
+  while (!isReview(view)) view = run.choose(plainChoice(view));
+  return view;
+}
+
+describe("the real quarterly reviews", () => {
+  it("come in months 3, 6 and 9 of the run, each reading differently", () => {
+    const reviews = gameContent.scenes.filter((s) => s.quarter !== undefined);
+    const run = startRun({ seed: 1, content: gameContent });
+    const views = [run.view()];
+    while (views.at(-1)?.choices.length) {
+      views.push(run.choose(plainChoice(views.at(-1) as PlayerView)));
+    }
+    const held = views.flatMap((v) =>
+      isReview(v) && v.step.kind === "scene"
+        ? [{ month: v.month, id: v.step.id }]
+        : [],
+    );
+
+    expect(gameContent.balance.monthsPerRun).toBe(9);
+    expect(held.map((h) => h.month)).toEqual([3, 6, 9]);
+    expect(new Set(held.map((h) => h.id)).size).toBe(3);
+    const titles = reviews.map((r) => r.title);
+    const narrations = reviews.map((r) => r.narration.join(" "));
+    expect(new Set(titles).size).toBe(reviews.length);
+    expect(new Set(narrations).size).toBe(reviews.length);
+  });
+
+  it("move Official standing the same way on deals with different Power Maps", () => {
+    const first = gameContent.scenes.find((s) => s.quarter === 1);
+    const maps = new Set<string>();
+    const moved = new Map<string, Set<number>>();
+    for (let seed = 1; seed <= 30; seed++) {
+      for (const option of first?.options ?? []) {
+        const run = startRun({ seed, content: gameContent });
+        const opened = toFirstReview(run);
+        if (opened.step.kind !== "scene") throw new Error("No review.");
+        // A Final Warning holds the record down, whatever goes on it.
+        if (opened.finalWarning) continue;
+        maps.add(JSON.stringify(readHiddenTruth(run).powerMap));
+        if (!opened.step.options.some((o) => o.id === option.id)) continue;
+        const after = run.choose({
+          type: "scene",
+          sceneId: opened.step.id,
+          optionId: option.id,
+        });
+        const by = (after.standing?.at ?? 0) - (opened.standing?.at ?? 0);
+        moved.set(
+          option.id,
+          (moved.get(option.id) ?? new Set()).add(Math.round(by * 100)),
+        );
+      }
+    }
+
+    expect(maps.size).toBeGreaterThan(5);
+    for (const [option, by] of moved) expect([...by], option).toHaveLength(1);
+    // The review does move it, one way or the other.
+    const all = [...moved.values()].flatMap((by) => [...by]);
+    expect(all.some((by) => by > 0)).toBe(true);
+    expect(all.some((by) => by < 0)).toBe(true);
   });
 });
 

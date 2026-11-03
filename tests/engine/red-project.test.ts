@@ -223,7 +223,7 @@ describe("the Project Status Review in the game", () => {
     );
 
     expect(scenes).not.toContain("red-project");
-    expect(offered.flat()).toContain("meeting-quarterly");
+    expect(offered.flat()).toContain("meeting-workshop");
   });
 
   it("offers a Deflect option and an honest one, and can change the report", () => {

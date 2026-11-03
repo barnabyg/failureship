@@ -783,12 +783,89 @@
     ]
   },
   {
-    "id": "quarterly-review",
+    "id": "ideas-workshop",
     "floor": "junior-employee",
     "months": [5],
-    "title": "Quarterly Business Review",
+    "title": "Ideas Workshop",
     "location": "Floor 1, Meeting Room 1B",
     "narration": [
+      "An Ideas Workshop, with a wall, a pad of sticky notes each and a facilitator from Floor 3. There are no bad ideas. The ideas will be prioritised afterwards, by your boss, who has brought one."
+    ],
+    "cast": ["boss", "analyst", "admin", "projects"],
+    "signs": [
+      {
+        "label": "Whose note goes to the top",
+        "text": "{bystander} moves {holder}'s note to the top of the wall without being asked, and smooths it down.",
+        "clue": "At the Ideas Workshop, {bystander} moved {holder}'s note to the top of the wall unasked."
+      },
+      {
+        "label": "Whose note is parked",
+        "text": "{ignored}'s note goes in the Parking Lot, which is a flipchart by the door that is wheeled away at the end."
+      }
+    ],
+    "options": [
+      {
+        "id": "back-the-bosss-idea",
+        "family": "impress",
+        "label": "Put three dots on your boss's note",
+        "results": [
+          {
+            "body": "Your boss's idea wins the vote, three dots to two. The facilitator calls it a clear mandate.",
+            "sets": ["dotted-bosss-idea"],
+            "approach": "flatter"
+          }
+        ]
+      },
+      {
+        "id": "a-real-idea",
+        "family": "deliver",
+        "label": "Write a real idea, which would work and cost nothing",
+        "results": [
+          {
+            "body": "Your note says to stop doing the thing that nobody reads. The facilitator calls it brave, and moves it to the Parking Lot so that it can be given the time it deserves.",
+            "sets": ["wrote-a-real-idea"],
+            "approach": "truth"
+          }
+        ]
+      },
+      {
+        "id": "take-the-note",
+        "family": "fabricate",
+        "label": "Copy the Project Co-ordinator's idea onto your own note, in neater writing",
+        "results": [
+          {
+            "body": "Your note is read out first, because it is easier to read. The Project Co-ordinator's is read out second, as building on yours.",
+            "sets": ["took-an-idea"],
+            "approach": "theatre",
+            "remembers": [
+              {
+                "character": "projects",
+                "about": "took-their-idea",
+                "text": "You copied their idea onto your own note at the Ideas Workshop, in neater writing.",
+                "tone": "bad"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "stick-it-anywhere",
+        "label": "Write \"synergy\" and stick it in the middle",
+        "results": [
+          {
+            "body": "Nobody can disagree with it, and nobody does. It is photographed for the newsletter."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "quarterly-review",
+    "quarter": 1,
+    "title": "Quarterly Business Review",
+    "location": "The Auditorium, with every floor on the video link",
+    "narration": [
+      "The first Quarterly Business Review of the year. Attendance is mandatory, and it is held over lunch, so that it takes up nobody's time.",
       "The quarter is reviewed. Each team presents what it has achieved, on a slide with an arrow going up. The arrows have been drawn before the figures, so as not to influence them."
     ],
     "cast": ["head", "boss", "analyst", "admin", "projects"],
@@ -810,20 +887,8 @@
         "label": "Say that your team's arrow is all down to your boss",
         "results": [
           {
-            "when": {
-              "holderIs": "{boss}"
-            },
-            "body": "Several people turn to look at your boss, then write something down. It appears that you have said the right name.",
-            "sets": ["backed-holder", "credited-boss", "gave-credit-upstairs"],
-            "approach": "flatter"
-          },
-          {
-            "body": "You say it clearly, and it is minuted. Nobody else in the room seems to have thought that this was in question.",
-            "sets": [
-              "backed-wrong-person",
-              "credited-boss",
-              "gave-credit-upstairs"
-            ],
+            "body": "You say it clearly, and it is minuted. Several people write something down. Whether it was the right name, the minutes do not say.",
+            "sets": ["credited-boss", "gave-credit-upstairs"],
             "approach": "flatter"
           }
         ]
@@ -834,22 +899,9 @@
         "label": "Say that the arrow is all down to your boss's boss",
         "results": [
           {
-            "when": {
-              "holderIs": "{head}"
-            },
-            "body": "Your boss's boss does not acknowledge it, in the way of someone who has heard it before and expects to again. The next slide is taken more quickly.",
+            "body": "Your boss's boss does not acknowledge it, in the way of someone who has heard it before and expects to again. It is minuted as a team effort, led from the top.",
             "headOpinion": 1,
-            "sets": ["backed-holder", "credited-head", "gave-credit-upstairs"],
-            "approach": "over-head"
-          },
-          {
-            "body": "Your boss's boss looks up, puzzled, and says that it is a team effort. You have gone a long way round to say nothing.",
-            "headOpinion": 1,
-            "sets": [
-              "backed-wrong-person",
-              "credited-head",
-              "gave-credit-upstairs"
-            ],
+            "sets": ["credited-head", "gave-credit-upstairs"],
             "approach": "over-head"
           }
         ]
@@ -913,6 +965,160 @@
           {
             "body": "You pass the Senior Analyst a note under the arrow. They read it twice, and nod once.",
             "sets": ["made-a-deal-for-a-word"]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "half-year-review",
+    "quarter": 2,
+    "title": "Quarterly Business Review: Half Year",
+    "location": "The Auditorium, with every floor on the video link",
+    "narration": [
+      "The second Quarterly Business Review, held over lunch again. The sandwiches are from the first one.",
+      "This quarter, each team's arrow is shown beside last quarter's. Where last quarter's arrow was higher, it has been restated, so that progress can be seen."
+    ],
+    "cast": ["head", "boss", "analyst", "admin", "projects"],
+    "signs": [
+      {
+        "label": "Whose arrow is restated",
+        "text": "{holder}'s arrow is the only one that nobody restates. {ignored} is asked to restate theirs twice, in different directions.",
+        "clue": "At the half-year review, {holder}'s arrow was left as it was, and {ignored} was asked to restate theirs twice."
+      },
+      {
+        "label": "Who holds the clicker",
+        "text": "{bystander} reaches for the clicker, then hands it to {holder} without being asked."
+      }
+    ],
+    "options": [
+      {
+        "id": "restate-last-quarter",
+        "family": "fabricate",
+        "label": "Offer to restate last quarter's arrow lower, so that yours goes up",
+        "results": [
+          {
+            "body": "You are thanked for your rigour. Last quarter is restated, and you are now an arrow ahead of where you were, without having moved.",
+            "sets": ["restated-the-baseline"],
+            "approach": "theatre"
+          }
+        ]
+      },
+      {
+        "id": "own-the-dip",
+        "family": "deliver",
+        "label": "Say that your arrow went down this quarter, and why",
+        "results": [
+          {
+            "body": "You explain the dip. It takes four minutes, and all of it is true. The minutes record that you raised a timing difference, which is to be restated.",
+            "headOpinion": 1,
+            "sets": ["owned-the-dip"],
+            "approach": "truth"
+          }
+        ]
+      },
+      {
+        "id": "blame-the-template",
+        "family": "deflect",
+        "label": "Say that the dip is a known issue with the template",
+        "results": [
+          {
+            "body": "Everyone has had trouble with the template. A working group on the template is formed, and you are not on it, which was the point.",
+            "sets": ["blamed-the-template"],
+            "approach": "theatre"
+          }
+        ]
+      },
+      {
+        "id": "ask-about-the-axis",
+        "family": "attack",
+        "label": "Ask why Finance's arrow has no axis",
+        "results": [
+          {
+            "body": "Finance explains that the axis is commercially sensitive. Your question is minuted as a question, which is rarely good for the person who asked it.",
+            "sets": ["asked-about-the-axis"],
+            "approach": "truth"
+          }
+        ]
+      },
+      {
+        "id": "nod-at-both",
+        "label": "Nod at both arrows",
+        "results": [
+          {
+            "body": "You nod at last quarter's arrow, and then at this one. You have, on the record, agreed with both.",
+            "sets": ["nodded-at-arrow"]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "year-end-review",
+    "quarter": 3,
+    "title": "Quarterly Business Review: Year End",
+    "location": "The Auditorium, with every floor on the video link",
+    "narration": [
+      "The last Quarterly Business Review of the year, held over lunch. Lunch is one biscuit each, because of the forecast.",
+      "This quarter, the year's three arrows have been joined into one, in the shape of a hockey stick. The handle is this year. The blade is next year, and has been drawn already, so that the figures know what is expected of them."
+    ],
+    "cast": ["head", "boss", "analyst", "admin", "projects"],
+    "signs": [
+      {
+        "label": "Who says how steep",
+        "text": "{holder} is asked how steep the blade should be, and the room waits. Nobody asks {ignored}.",
+        "clue": "At the year-end review, the room waited for {holder} to say how steep next year should be, and nobody asked {ignored}."
+      },
+      {
+        "label": "Who laughs first",
+        "text": "{bystander} laughs at a joke a moment after {holder} does, and a moment before anyone else."
+      }
+    ],
+    "options": [
+      {
+        "id": "sign-the-blade",
+        "family": "fabricate",
+        "label": "Put your name to next year's blade",
+        "results": [
+          {
+            "body": "Your name goes on the blade, in the small print, which is where the blade's figures will be when they arrive.",
+            "sets": ["signed-the-blade"],
+            "approach": "theatre"
+          }
+        ]
+      },
+      {
+        "id": "thank-leadership",
+        "family": "impress",
+        "label": "Thank leadership for an incredible year",
+        "results": [
+          {
+            "body": "Leadership thanks you for thanking them. The minutes record a moment of alignment, and the biscuits are passed round again.",
+            "sets": ["thanked-leadership"],
+            "approach": "flatter"
+          }
+        ]
+      },
+      {
+        "id": "point-at-the-handle",
+        "family": "deliver",
+        "label": "Say that the handle is the only part that has happened",
+        "results": [
+          {
+            "body": "You point at the handle. It is flat. There is a silence, and then the slide is moved along to the blade, where things are better.",
+            "headOpinion": 1,
+            "sets": ["pointed-at-the-handle"],
+            "approach": "truth"
+          }
+        ]
+      },
+      {
+        "id": "nod-at-the-blade",
+        "label": "Nod at the blade",
+        "results": [
+          {
+            "body": "You nod at the blade. It is going up, and so, for a moment, are you.",
+            "sets": ["nodded-at-arrow"]
           }
         ]
       }

@@ -236,7 +236,7 @@ describe("the real month", () => {
       return gameContent.hiddenTruth.facts.find((f) => f.id === dealt?.fact?.id)
         ?.nature;
     };
-    const run = startRun({ seed: 74, content: gameContent });
+    const run = startRun({ seed: 22, content: gameContent });
     reachActionsOfMonth(run, "8");
     run.choose({ type: "action", actionId: "inside-info" });
     const told = run.choose({
@@ -247,6 +247,9 @@ describe("the real month", () => {
 
     expect(nature(1, "analyst")).toBe("dangerous");
     expect(JSON.stringify(told.step)).toContain("abolished");
+    // What the Office Co-ordinator says is true, so the results screen shows it.
+    const boss = readHiddenTruth(run).characters.find((c) => c.id === "boss");
+    expect(boss?.fact?.id).toBe("abolished-post");
   });
 
   // The late-input browser test relies on this.

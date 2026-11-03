@@ -82,7 +82,7 @@ describe("nine months that do not feel like one month repeated", () => {
     expect(new Set(everything).size).toBe(everything.length);
   });
 
-  it("opens a different Scene in each month of a real run", () => {
+  it("opens a different Scene in each month of a real run, and a review each quarter", () => {
     const { views } = walk(1, lastsTheRun);
     const titles = views.flatMap((v) =>
       v.step.kind === "scene" && v.step.id !== "red-project"
@@ -90,7 +90,9 @@ describe("nine months that do not feel like one month repeated", () => {
         : [],
     );
 
-    expect(new Set(titles).size).toBe(9);
+    // Nine meetings, and the reviews in months 3, 6 and 9.
+    expect(titles).toHaveLength(12);
+    expect(new Set(titles).size).toBe(12);
   });
 
   it("lands a different Move every month", () => {
