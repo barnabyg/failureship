@@ -8,7 +8,7 @@ import {
   everyDemand,
   type Content,
 } from "./content";
-import { holdersAtStart, resolveOn } from "./places";
+import { bossesAtStart, meantBy } from "./places";
 
 /** The boss's signs must point somewhere without ever settling it. */
 export function findBrokenBossSigns(content: Content): string[] {
@@ -20,7 +20,7 @@ export function findBrokenOverHead(content: Content): string[] {
   const { overHead: written } = content;
   if (!written) return [];
   const problems = findBrokenMoodSigns(written.signs, "Over-head sign");
-  if (holdersAtStart(content).head === undefined) {
+  if (bossesAtStart(content).head === undefined) {
     problems.push(
       "Going over the boss's head needs your boss to answer to someone.",
     );
@@ -183,13 +183,15 @@ export function findBrokenReputation(
     ),
     ...everyBill(content),
   ];
+  const bosses = bossesAtStart(content);
   for (const outcome of outcomes) {
     if (!outcome.news) continue;
     if (!written) {
       problems.push("News is written, but no reputation for it to reach.");
     }
     for (const character of outcome.news.at) {
-      if (!characters.has(resolveOn(holdersAtStart(content), character))) {
+      const id = meantBy(bosses, character);
+      if (id === undefined || !characters.has(id)) {
         problems.push(`News names unknown Character "${character}".`);
       }
     }

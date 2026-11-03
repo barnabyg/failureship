@@ -3,15 +3,16 @@ import { YOU } from "./deal";
 import type { State } from "./state";
 
 /**
- * The places above the player on the Org Chart. Data can name one wherever it
- * says who a choice or a condition concerns, and it means whoever holds it then.
+ * The two places above the player on the Org Chart: their boss, and their boss's
+ * boss. Data can name one wherever it says who a choice or a condition concerns,
+ * and it means whoever is in that place at the time.
  */
 export const PLACES = { boss: "{boss}", head: "{head}" } as const;
 
 export type Place = keyof typeof PLACES;
 
-/** Who holds each place: the player's boss, and the boss's boss if there is one. */
-export interface Holders {
+/** Who is in each place: the player's boss, and the boss's boss if there is one. */
+export interface Bosses {
   boss: string;
   head: string | undefined;
 }
@@ -30,55 +31,63 @@ function managerAtStart(content: Content, id: string): string | undefined {
   return content.characters.find((c) => c.id === id)?.reportsTo;
 }
 
-function holdersOn(answersTo: (id: string) => string | undefined): Holders {
+function bossesOn(answersTo: (id: string) => string | undefined): Bosses {
   const boss = answersTo(YOU);
   if (boss === undefined) throw new Error("The player answers to nobody.");
   return { boss, head: answersTo(boss) };
 }
 
 /** Who is above the player now, read from where they sit on the Org Chart. */
-export function holdersOf(state: State, content: Content): Holders {
-  return holdersOn((id) => managerOf(state, content, id));
+export function bossesOf(state: State, content: Content): Bosses {
+  return bossesOn((id) => managerOf(state, content, id));
 }
 
 /** Who is above the player as a run starts, for checking data before any run. */
-export function holdersAtStart(content: Content): Holders {
-  return holdersOn((id) => managerAtStart(content, id));
+export function bossesAtStart(content: Content): Bosses {
+  return bossesOn((id) => managerAtStart(content, id));
 }
 
 export function bossOf(state: State, content: Content): string {
-  return holdersOf(state, content).boss;
+  return bossesOf(state, content).boss;
 }
 
 export function headOf(state: State, content: Content): string | undefined {
-  return holdersOf(state, content).head;
+  return bossesOf(state, content).head;
 }
 
-/** Which place someone holds now, if any. */
+/** Which place someone is in, among these bosses, if any. */
+export function placeAmong(bosses: Bosses, id: string): Place | undefined {
+  if (id === bosses.boss) return "boss";
+  return id === bosses.head ? "head" : undefined;
+}
+
+/** Which place someone is in now, if any. */
 export function placeOf(
   state: State,
   content: Content,
   id: string,
 ): Place | undefined {
-  const { boss, head } = holdersOf(state, content);
-  if (id === boss) return "boss";
-  return id === head ? "head" : undefined;
+  return placeAmong(bossesOf(state, content), id);
 }
 
 export function isPlace(written: string): boolean {
   return Object.values<string>(PLACES).includes(written);
 }
 
-/** Whom a holder is written in for, from a run's holders or the starting ones. */
-export function resolveOn(holders: Holders, written: string): string {
-  if (written === PLACES.boss) return holders.boss;
-  if (written === PLACES.head) return holders.head ?? written;
+/**
+ * The Character that data means, among these bosses: the one it names, or
+ * whoever is in the place it names. Undefined if nobody is in that place.
+ */
+export function meantBy(bosses: Bosses, written: string): string | undefined {
+  if (written === PLACES.boss) return bosses.boss;
+  if (written === PLACES.head) return bosses.head;
   return written;
 }
 
-/** Whoever data means now: the Character it names, or whoever holds the place. */
+/** The Character that data means now. The checks make sure there is one. */
 export function whoIs(state: State, content: Content, written: string): string {
-  return isPlace(written)
-    ? resolveOn(holdersOf(state, content), written)
-    : written;
+  if (!isPlace(written)) return written;
+  const id = meantBy(bossesOf(state, content), written);
+  if (id === undefined) throw new Error(`Nobody is in the place ${written}.`);
+  return id;
 }

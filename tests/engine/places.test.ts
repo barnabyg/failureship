@@ -182,7 +182,7 @@ describe("your boss, read from your place on the Org Chart", () => {
     expect(treated.every((t) => t === null)).toBe(true);
   });
 
-  it("writes in whoever holds the place where data names it", () => {
+  it("writes in whoever is in the place where data names it", () => {
     const content = parseContent(placesFixtureRaw());
     const backed = (to: string | null) =>
       Array.from({ length: 100 }, (_, i) => {

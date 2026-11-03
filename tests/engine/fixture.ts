@@ -1,5 +1,6 @@
 import { parseContent, type Content } from "../../src/engine";
-import { holdersAtStart } from "../../src/engine/places";
+import { bossesAtStart } from "../../src/engine/places";
+import { calledAmong } from "../../src/engine/say";
 
 interface RawOption {
   id: string;
@@ -496,13 +497,5 @@ export function emptyMonth(): Content {
 
 /** How the game's text calls a Character, while the bosses stay where a run starts them. */
 export function calledAtStart(content: Content, id: string): string {
-  const { boss, head } = holdersAtStart(content);
-  const place =
-    id === boss
-      ? content.places.boss
-      : id === head
-        ? content.places.head
-        : undefined;
-  const character = content.characters.find((c) => c.id === id);
-  return place?.called ?? character?.called ?? character?.name ?? id;
+  return calledAmong(bossesAtStart(content), content, id);
 }

@@ -1,6 +1,6 @@
 import { everyNotification, type Content } from "./content";
 import { findNamedKinds } from "./consequence-checks";
-import { holdersAtStart, resolveOn } from "./places";
+import { bossesAtStart, meantBy } from "./places";
 
 /**
  * What falls due must always be answerable and must say how it ends, so a month
@@ -57,7 +57,7 @@ export function findBrokenPromises(content: Content): string[] {
   if (!written) return problems;
   for (const item of written.items) {
     const owner = `Promise "${item.id}"`;
-    const to = resolveOn(holdersAtStart(content), item.to);
+    const to = meantBy(bossesAtStart(content), item.to);
     if (!content.characters.some((c) => c.id === to)) {
       problems.push(`${owner} is made to unknown "${item.to}".`);
     }
@@ -111,11 +111,11 @@ export function findBrokenDeals(content: Content): string[] {
   for (const item of written.items) {
     const owner = `Deal "${item.id}"`;
     if (promised.has(item.id)) problems.push(`${owner} shares a Promise's id.`);
-    const over = resolveOn(holdersAtStart(content), item.word.over);
+    const over = meantBy(bossesAtStart(content), item.word.over);
     if (!known.has(item.with)) {
       problems.push(`${owner} names unknown "${item.with}".`);
     }
-    if (!known.has(over)) {
+    if (over === undefined || !known.has(over)) {
       problems.push(`${owner} names unknown "${item.word.over}".`);
     }
     if (item.with === over) {

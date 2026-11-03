@@ -1,24 +1,41 @@
 import type { Content } from "./content";
-import { holdersOf, PLACES, placeOf } from "./places";
+import { bossesOf, placeAmong, PLACES, type Bosses } from "./places";
 import type { State } from "./state";
 
+/** The words for whatever place above the player someone is in, if any. */
+function placeWords(bosses: Bosses, content: Content, id: string) {
+  const place = placeAmong(bosses, id);
+  return place === undefined ? undefined : content.places[place];
+}
+
 /**
- * How running text refers to a Character: by the place they hold above the
+ * How running text refers to a Character: by the place they are in above the
  * player, such as "your boss", or by what they do, or else by name.
  */
 export function calledBy(state: State, content: Content, id: string): string {
-  const place = placeOf(state, content, id);
-  const held = place === undefined ? undefined : content.places[place];
-  const character = content.characters.find((c) => c.id === id);
-  return held?.called ?? character?.called ?? character?.name ?? id;
+  return calledAmong(bossesOf(state, content), content, id);
 }
 
-/** A Character's job title, with the place they hold above the player, if any. */
+/** The same, among these bosses, such as those a run starts with. */
+export function calledAmong(
+  bosses: Bosses,
+  content: Content,
+  id: string,
+): string {
+  const character = content.characters.find((c) => c.id === id);
+  return (
+    placeWords(bosses, content, id)?.called ??
+    character?.called ??
+    character?.name ??
+    id
+  );
+}
+
+/** A Character's job title, with the place they are in above the player, if any. */
 export function titleOf(state: State, content: Content, id: string): string {
-  const place = placeOf(state, content, id);
-  const held = place === undefined ? undefined : content.places[place];
   const own = content.characters.find((c) => c.id === id)?.title ?? "";
-  return held ? held.title.replaceAll("{title}", own) : own;
+  const words = placeWords(bossesOf(state, content), content, id);
+  return words ? words.title.replaceAll("{title}", own) : own;
 }
 
 export function capitalised(phrase: string): string {
@@ -43,9 +60,9 @@ export function sayPeople(
   });
 }
 
-/** Writes the name of whoever holds each place into a message's `from` line. */
+/** Writes the name of whoever is in each place into a message's `from` line. */
 export function sayFrom(state: State, content: Content, from: string): string {
-  const { boss, head } = holdersOf(state, content);
+  const { boss, head } = bossesOf(state, content);
   const name = (id: string | undefined) =>
     content.characters.find((c) => c.id === id)?.name ?? "";
   return from

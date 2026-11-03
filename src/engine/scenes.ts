@@ -4,6 +4,7 @@ import { behavioursOpenTo, type ClueVerdict, type Content } from "./content";
 import { applyOutcome, countMove } from "./outcome";
 import { replyToDeal } from "./deals";
 import { treatHead } from "./over-head";
+import { whoIs } from "./places";
 import { replyToPromise } from "./promises";
 import {
   fillParts,
@@ -15,7 +16,6 @@ import {
   sceneData,
 } from "./reads";
 import { regardOf } from "./reputation";
-import { whoIs } from "./places";
 import { draw, pickWeighted } from "./rng";
 import { calledBy, sayPeople } from "./say";
 import {

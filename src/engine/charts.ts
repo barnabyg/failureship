@@ -6,7 +6,7 @@ import type { State } from "./state";
 
 /**
  * Who moves on the Org Chart, and who rises or falls on the Power Map. Each can
- * name a place above the player, meaning whoever holds it as it happens.
+ * name a place above the player, meaning whoever is in it as it happens.
  */
 export interface Reshuffle {
   reports: readonly { character: string; to: string }[];

@@ -6,7 +6,7 @@ import {
   type Content,
 } from "./content";
 import { YOU } from "./deal";
-import { holdersAtStart, resolveOn } from "./places";
+import { bossesAtStart, meantBy } from "./places";
 import { flagsSetByHiddenResults } from "./truth-checks";
 
 /** Every flag anything can set, which is all that a Thread can start from. */
@@ -50,7 +50,7 @@ export function findBrokenChanging(content: Content): string[] {
   if (!written) return [];
   const problems: string[] = [];
   const known = new Set(content.characters.map((c) => c.id));
-  const { boss, head } = holdersAtStart(content);
+  const { boss, head } = bossesAtStart(content);
   const bosses = [boss, head];
   for (const id of Object.keys(written.leaving)) {
     if (!known.has(id)) problems.push(`Leaving names unknown "${id}".`);
@@ -203,10 +203,11 @@ function findBrokenBills(content: Content): string[] {
 export function findBrokenEvents(content: Content): string[] {
   const problems: string[] = [];
   const known = new Set(content.characters.map((c) => c.id));
-  const holders = holdersAtStart(content);
+  const { boss, head } = bossesAtStart(content);
   // Moving the player would change their boss as surely as moving the boss.
-  const bosses = [YOU, holders.boss, holders.head];
-  const who = (written: string) => resolveOn(holders, written);
+  const staying = [YOU, boss, ...(head === undefined ? [] : [head])];
+  const who = (written: string) => meantBy({ boss, head }, written);
+  const isKnown = (written: string) => known.has(who(written) ?? "");
   const ids = new Set<string>();
   const fromRisks = new Set(content.risks.flatMap((r) => r.event ?? []));
   for (const event of content.events) {
@@ -231,17 +232,17 @@ export function findBrokenEvents(content: Content): string[] {
     const { reports, rises, falls } = event.reshuffle;
     for (const { character, to } of reports) {
       // Vacancies, and a change of boss, wait for the next phase.
-      if (bosses.includes(who(character))) {
+      if (staying.includes(who(character) ?? "")) {
         problems.push(`${owner} moves "${character}", who has to stay put.`);
-      } else if (!known.has(who(character))) {
+      } else if (!isKnown(character)) {
         problems.push(`${owner} names unknown "${character}".`);
       }
-      if (!known.has(who(to))) {
+      if (!isKnown(to)) {
         problems.push(`${owner} names unknown "${to}".`);
       }
     }
     for (const id of [...rises, ...falls]) {
-      if (!known.has(who(id))) {
+      if (!isKnown(id)) {
         problems.push(`${owner} names unknown "${id}".`);
       }
     }

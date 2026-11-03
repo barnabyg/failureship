@@ -47,7 +47,7 @@ export function moodOf(state: State, content: Content): Mood {
 }
 
 /**
- * How someone's belief stands. Whoever holds each place above the player has
+ * How someone's belief stands. Whoever is in each place above the player has
  * that place's point at which it shows.
  */
 export function moodOfCharacter(
