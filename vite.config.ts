@@ -37,7 +37,7 @@ export default defineConfig({
   build: {
     // Three.js and the game's text are the bundle, and it has one screen, so a
     // single chunk is fine. Review if hosting is ever added.
-    chunkSizeWarningLimit: 1200,
+    chunkSizeWarningLimit: 1300,
   },
   test: {
     include: ["tests/engine/**/*.test.ts", "tests/tower/**/*.test.ts"],
