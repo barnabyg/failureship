@@ -1,12 +1,12 @@
 import { createHash } from "node:crypto";
 import { beforeAll, describe, expect, it } from "vitest";
-import { gameContent } from "../../src/content";
+import { gameContent, panelText } from "../../src/content";
 import { startRun, type Choice, type PlayerView } from "../../src/engine";
 import { plainChoice } from "../../src/ui/later-month";
 
 /*
- * Whole runs of the real game, played by script on several seeds, and the
- * player view at every step, against a recorded baseline. A refactor that
+ * Whole runs of the real game, played by script on several seeds, and what the
+ * player sees at every step, against a recorded baseline. A refactor that
  * changes nothing for the player passes it untouched.
  *
  * The baseline, player-views.baseline.txt beside this file, has a line for each
@@ -70,8 +70,20 @@ function canonical(value: unknown): string {
   return JSON.stringify(value);
 }
 
+/** What the player sees at a step: the view, their job title and the floor the tower draws. */
+function seen(view: PlayerView) {
+  return {
+    ...view,
+    jobTitle: panelText.jobTitle,
+    floor: gameContent.floor.rooms,
+  };
+}
+
 const hashOf = (view: PlayerView) =>
-  createHash("sha256").update(canonical(view)).digest("hex").slice(0, 8);
+  createHash("sha256")
+    .update(canonical(seen(view)))
+    .digest("hex")
+    .slice(0, 8);
 
 function playWhole(seed: number, script: Script): PlayerView[] {
   const run = startRun({ seed, content: gameContent });
