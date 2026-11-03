@@ -1,4 +1,12 @@
-import { expect, type Locator, type Page } from "@playwright/test";
+import { expect, test, type Locator, type Page } from "@playwright/test";
+
+/**
+ * Walking on to the results screen plays out the rest of an 18-month run, which
+ * takes CI most of a minute, so a test that does it gets the slow test's time.
+ */
+function walkingToTheEnd() {
+  test.slow();
+}
 
 /** Goes to an address as a new player would, with no saved run to come back to. */
 export async function freshRun(page: Page, address: string) {
@@ -61,6 +69,7 @@ export async function answerAnyNotification(page: Page) {
  * until the wanted thing can be pressed.
  */
 export async function playUntil(page: Page, testId: string) {
+  if (testId === "panel-results") walkingToTheEnd();
   const wanted = page.getByTestId(testId);
   const notification = page.getByTestId("panel-notification");
   const scene = page.getByTestId("panel-scene");
@@ -117,6 +126,7 @@ export async function attendAndFinishMonth(page: Page) {
 
 /** Plays out whatever is left of the run, without doing anything in particular. */
 export async function playToResults(page: Page) {
+  walkingToTheEnd();
   const results = page.getByTestId("panel-results");
   while (!(await results.isVisible())) {
     const notification = page.getByTestId("panel-notification");
