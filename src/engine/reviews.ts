@@ -22,7 +22,8 @@ export function reviewOf(content: Content, quarter: number) {
 
 /**
  * Opens the quarter's review, once, in the month that closes it. Nobody can stay
- * away, and it takes none of the player's actions.
+ * away, and it takes none of the player's actions. It is staged: everyone is on
+ * their best behaviour, so it shows who holds influence but not what anyone is.
  */
 export function holdReview(state: State, world: World): Step | null {
   if (state.reviewed) return null;
@@ -31,5 +32,5 @@ export function holdReview(state: State, world: World): Step | null {
     quarter === null ? undefined : reviewOf(world.content, quarter);
   if (!review) return null;
   state.reviewed = true;
-  return openScene(state, world, review.id);
+  return openScene(state, world, review.id, true);
 }

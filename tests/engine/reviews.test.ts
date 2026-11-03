@@ -115,6 +115,25 @@ describe("Quarterly reviews", () => {
     expect(scenesOf(rest)).toEqual([]);
   });
 
+  it("are staged, showing who holds influence but nobody's behaviour", () => {
+    const raw = reviewsRaw(3);
+    raw.behaviours = [
+      {
+        id: "sighs",
+        text: "{who} sighs.",
+        likelihood: { believer: 1, incompetent: 2, practitioner: 3 },
+      },
+    ];
+    const run = startRun({ seed: 1, content: parseContent(raw) });
+    let view = run.view();
+    while (view.step.kind !== "scene") {
+      view = run.choose(view.choices[0] as Choice);
+    }
+
+    expect(view.step.behaviours).toEqual([]);
+    expect(view.step.signs[0]?.text).toMatch(/^\S.*'s slide is skipped\.$/);
+  });
+
   it("put what the player chose on the official record", () => {
     const content = parseContent(reviewsRaw(9));
 
