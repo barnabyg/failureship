@@ -42,8 +42,14 @@ export function ResultsPanel({
           <h3>{panelText.resultsVacanciesHeading}</h3>
           {step.vacancies.map((vacancy) => (
             <p key={vacancy.month} data-testid="result-vacancy">
-              {vacancy.text} <strong>{panelText.decidedOnPaper}: </strong>
-              {vacancy.onPaper}. <strong>{panelText.decidedInFact}: </strong>
+              {vacancy.text}{" "}
+              {vacancy.onPaper !== null && (
+                <>
+                  <strong>{panelText.decidedOnPaper}: </strong>
+                  {vacancy.onPaper}.{" "}
+                </>
+              )}
+              <strong>{panelText.decidedInFact}: </strong>
               {vacancy.inFact}
             </p>
           ))}

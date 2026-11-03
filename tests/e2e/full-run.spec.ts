@@ -34,12 +34,13 @@ test("eighteen months, all the way to the results screen", async ({ page }) => {
     await finishMonth(page);
   }
 
-  // Nine written months, and then Floor 1's pool of three, each in turn.
-  expect(scenes.size).toBe(12);
-  expect(notifications.size).toBe(12);
+  // Nine written months, and then Floor 1's pool of six, each in turn.
+  expect(scenes.size).toBe(15);
+  expect(notifications.size).toBe(15);
   await expect(page.getByTestId("panel-results")).toBeVisible();
   await expect(page.getByTestId("result-family")).toHaveCount(7);
-  await expect(page.getByTestId("result-character")).toHaveCount(8);
+  // Floor 2's cast is never met on Floor 1, so the results leave them out.
+  await expect(page.getByTestId("result-character")).toHaveCount(6);
   await expect(page.getByTestId("results-org-chart")).toContainText(
     "Hugh Lamb",
   );
@@ -49,7 +50,7 @@ test("eighteen months, all the way to the results screen", async ({ page }) => {
   await expect(page.getByTestId("panel-results")).toContainText(
     /Believer|Incompetent|Practitioner/,
   );
-  await expect(page.getByTestId("result-mark")).toHaveCount(8);
+  await expect(page.getByTestId("result-mark")).toHaveCount(6);
   await expect(page.getByTestId("result-clue").first()).toBeVisible();
   await expect(page.locator("body")).not.toContainText(/placeholder|lorem/i);
 });

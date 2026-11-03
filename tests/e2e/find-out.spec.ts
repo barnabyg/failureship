@@ -14,7 +14,7 @@ test("spends an action to find something out, and sees the claim", async ({
 
   // Someone is already there, so the choice is only whom to ask about.
   await expect(page.locator('[data-testid^="source-"]')).toHaveCount(0);
-  await expect(page.locator('[data-testid^="subject-"]')).toHaveCount(7);
+  await expect(page.locator('[data-testid^="subject-"]')).toHaveCount(5);
   const prompt = await page.getByTestId("find-out-prompt").innerText();
   const there = /^(.+?) is at the photocopier/.exec(prompt)?.[1] ?? "nobody";
   await page.locator('[data-testid^="subject-"]').first().click();
