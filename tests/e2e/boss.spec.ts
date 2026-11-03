@@ -21,8 +21,8 @@ async function treatmentAfter(page: Page, seed: number, option: string) {
 
 test("the boss treats you differently after a choice", async ({ page }) => {
   const changed: number[] = [];
-  // Seed 2 shows it, so it goes first. The rest are there if the content moves it.
-  for (const seed of [2, 1, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]) {
+  // Seed 4 shows it, so it goes first. The rest are there if the content moves it.
+  for (const seed of [4, 1, 2, 3, 5, 6, 7, 8, 9, 10, 11, 12]) {
     const pleased = await treatmentAfter(page, seed, "back-boss");
     const snubbed = await treatmentAfter(page, seed, "back-head");
     if (pleased !== snubbed) changed.push(seed);
