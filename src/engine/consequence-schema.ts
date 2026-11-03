@@ -15,7 +15,7 @@ import {
  * What comes back on the player, usually through someone else. It can do anything
  * another outcome can, and a Thread or a hidden risk can send one.
  */
-const bill = z.strictObject({
+export const bill = z.strictObject({
   id,
   /** How it arrives: told at once, as a Notification, or where Moves land. */
   as: z.enum(["notice", "notification", "move"]),

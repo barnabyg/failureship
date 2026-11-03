@@ -1,6 +1,7 @@
 import { treatBoss } from "./boss";
 import { signsOfChange, signsOpenTo } from "./changes";
 import { behavioursOpenTo, type ClueVerdict, type Content } from "./content";
+import { hearOfPlan } from "./grand-plans";
 import { applyOutcome, countMove } from "./outcome";
 import { replyToDeal } from "./deals";
 import { treatHead } from "./over-head";
@@ -57,6 +58,7 @@ export function openScene(state: State, world: World, id: string): Step {
     }
   }
   noteScene(state, world, id, shown, misleading);
+  hearOfPlan(state, content, id);
   return {
     kind: "scene",
     id,

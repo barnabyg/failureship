@@ -1,6 +1,7 @@
 import { chasedIdOf, everyNotification } from "./content";
 import { replyToDeal } from "./deals";
 import { arriveToFindOut, hearClaim } from "./find-out";
+import { hearOfPlan } from "./grand-plans";
 import { leaveStory, nextStep } from "./month";
 import { applyOutcome, countMove } from "./outcome";
 import { goOverHead } from "./over-head";
@@ -74,6 +75,7 @@ function answerNotification(
     });
   }
 
+  hearOfPlan(state, content, choice.notificationId);
   countMove(state, option.family);
   state.spent += costOf(content, option.cost);
   state.unanswered = state.unanswered.filter(

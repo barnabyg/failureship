@@ -6,6 +6,7 @@ import { dealsFallDue } from "./deals";
 import { dealWithAbsence, followUpDemands } from "./demands";
 import { isOn, recurs, startMonthOnFloor, type Whereabouts } from "./floors";
 import { closeGauges } from "./gauges";
+import { followPlans } from "./grand-plans";
 import { applyOutcome } from "./outcome";
 import { bossOf } from "./places";
 import { promisesFallDue } from "./promises";
@@ -61,6 +62,7 @@ export function openMonth(state: State, content: Content): void {
   dealsFallDue(state, content);
   playThreads(state, content);
   surfaceRisks(state, content);
+  followPlans(state, content);
   blowWhistles(state, content);
   scheduleEvents(state, content);
   const { input } = content.project;

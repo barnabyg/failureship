@@ -86,6 +86,7 @@ function dealtState(seed: number, content: Content): State {
     eventsLanded: [],
     promises: [],
     deals: [],
+    plans: [],
     ...startingGauges(content),
     finalWarning: false,
     firedIn: null,

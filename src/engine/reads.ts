@@ -1,6 +1,7 @@
 import type { Condition, Content, Kind, Mood, SceneData } from "./content";
 import { YOU, type PowerMap } from "./deal";
 import { isOn, isOnFloor } from "./floors";
+import { isPlanRunning } from "./grand-plans";
 import { bossOf, placeOf, whoIs } from "./places";
 import { calledBy, capitalised, sayFrom, sayPeople, titleOf } from "./say";
 import type { State, World } from "./state";
@@ -149,6 +150,9 @@ export function matches(
   }
   if ("sawMove" in condition) {
     return state.movesLanded.includes(condition.sawMove);
+  }
+  if ("planRunning" in condition) {
+    return isPlanRunning(state, content, condition.planRunning);
   }
   if ("not" in condition) return !matches(state, content, condition.not, room);
   if ("any" in condition) {

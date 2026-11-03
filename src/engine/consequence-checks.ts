@@ -27,7 +27,18 @@ function flagsThatCanBeSet(content: Content): Set<string> {
     ...(content.demands?.missed?.sets ?? []),
     ...Object.values(content.overHead?.sets ?? {}),
     ...(content.project.input ? [content.project.input.sets] : []),
+    ...planWaysSets(content),
   ]);
+}
+
+/**
+ * What completing a Grand Plan puts on the record. A way never reads the hidden
+ * truth, so these are set by the player's own choices in plain view.
+ */
+function planWaysSets(content: Content): string[] {
+  return (content.grandPlans?.plans ?? []).flatMap((p) =>
+    p.ways.flatMap((w) => w.sets),
+  );
 }
 
 /** A line that names a kind would hand the player the hidden truth. */
@@ -134,6 +145,7 @@ export function findBrokenStanding(content: Content): string[] {
     ...content.scenes.flatMap((s) =>
       s.options.flatMap((o) => o.results.flatMap((r) => r.sets)),
     ),
+    ...planWaysSets(content),
   ]);
   for (const { flag } of written.deeds) {
     if (!chosen.has(flag) || hidden.has(flag)) {

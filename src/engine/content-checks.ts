@@ -25,6 +25,7 @@ import {
   type SceneData,
 } from "./content";
 import { findBrokenFloors } from "./floor-checks";
+import { findBrokenPlans } from "./plan-checks";
 import { findBrokenReviews } from "./review-checks";
 import { findBrokenRivals, withoutMaker } from "./rival-checks";
 import { bossesAtStart, meantBy } from "./places";
@@ -66,6 +67,7 @@ function findBrokenReferences(content: Content): string[] {
   const scenes = new Set(content.scenes.map((s) => s.id));
   const moves = new Set(content.moves.map((m) => m.id));
   const characters = new Set(content.characters.map((c) => c.id));
+  const plans = new Set(content.grandPlans?.plans.map((p) => p.id));
   const hiddenFlags = flagsSetByHiddenResults(content);
   const problems: string[] = [];
   const bosses = bossesAtStart(content);
@@ -108,6 +110,11 @@ function findBrokenReferences(content: Content): string[] {
     }
     if ("sawMove" in condition && !moves.has(condition.sawMove)) {
       problems.push(`${owner} needs unknown Move "${condition.sawMove}".`);
+    }
+    if ("planRunning" in condition && !plans.has(condition.planRunning)) {
+      problems.push(
+        `${owner} needs unknown Grand Plan "${condition.planRunning}".`,
+      );
     }
     if ("hasBuzzword" in condition && !buzzwords.has(condition.hasBuzzword)) {
       problems.push(
@@ -172,6 +179,12 @@ function findBrokenReferences(content: Content): string[] {
   problems.push(...findBrokenFloors(content));
   problems.push(...findBrokenReviews(content, hiddenFlags));
   problems.push(...findBrokenRivals(content));
+  problems.push(...findBrokenPlans(content, hiddenFlags));
+  for (const plan of content.grandPlans?.plans ?? []) {
+    for (const way of plan.ways) {
+      checkCondition(`Grand Plan "${plan.id}" way "${way.id}"`, way.when);
+    }
+  }
   problems.push(...findBrokenDeal(content, characters));
   problems.push(...findBrokenBehaviours(content));
   problems.push(...findBrokenBossSigns(content));
