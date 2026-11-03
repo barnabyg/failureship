@@ -53,7 +53,13 @@ export {
   type Mood,
   type Nature,
 } from "./basic-schema";
-export { DEMAND_ANSWERS, PLAN_HOWS, type PlanHow } from "./boss-schema";
+export {
+  DEMAND_ANSWERS,
+  PLAN_HOWS,
+  VACANCY_REASONS,
+  type PlanHow,
+  type VacancyReason,
+} from "./boss-schema";
 export type { Bill } from "./consequence-schema";
 export {
   MOVE_FAMILIES,
@@ -212,7 +218,7 @@ export const contentSchema = z.strictObject({
     /** Their job, which decides the floor they are on. */
     job: id,
     /** What the Org Chart calls the player, once anyone answers to them. */
-    name: text.optional(),
+    name: text,
   }),
   /** How text refers to whoever holds each place above the player, while they do. */
   places: z.strictObject({ boss: place, head: place }).partial().default({}),

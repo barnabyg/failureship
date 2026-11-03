@@ -20,6 +20,7 @@ import {
   ownReaction,
   projectChange,
   remembers,
+  seatAct,
   sets,
   stakes,
   story,
@@ -58,6 +59,7 @@ const sceneResult = z.strictObject({
   mistake: choiceMistake,
   remembers,
   news,
+  seat: seatAct,
   /** A false story the player tells about someone else. */
   falseStory: story,
   /** Says on the results screen that a Hidden Fact caused this. */
@@ -156,6 +158,8 @@ export const move = z.strictObject({
   mistake: bigMistake,
   /** Pays back the favour the player owes this Character. */
   repays: id.optional(),
+  /** What its maker does for an open seat. */
+  seat: seatAct,
 });
 
 export const storyEntry = z

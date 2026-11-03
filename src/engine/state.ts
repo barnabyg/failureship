@@ -7,8 +7,10 @@ import type {
   PlanHow,
   SceneData,
   Tone,
+  VacancyReason,
 } from "./content";
 import type { DealtCharacter, PowerMap } from "./deal";
+import type { DecidedNotice } from "./view";
 
 export class IllegalChoiceError extends Error {
   override name = "IllegalChoiceError";
@@ -188,12 +190,6 @@ interface BossLanding {
   shift: number;
 }
 
-/** Official standing, set beside who really decided a vacancy. */
-export interface DecidedNotice {
-  onPaper: { label: string; at: number; band: string; text: string } | null;
-  inFact: string;
-}
-
 /** A Grand Plan a boss took on, and what became of it. */
 export interface TakenPlan {
   id: string;
@@ -219,7 +215,7 @@ export interface TakenPlan {
 export interface Candidate {
   who: string;
   /** The reasons that counted for them, by their keys in `vacancies.json`. */
-  reasons: string[];
+  reasons: VacancyReason[];
   strength: number;
 }
 
@@ -232,17 +228,23 @@ export interface Vacancy {
   opened: number;
   /** The month at whose close it is decided. */
   decides: number;
+  /** Whoever has claimed the credit for the Plan that opened it, last. */
+  credit: string | null;
+  /** Whoever has called in a favour from whoever decides. */
+  calledIn: string[];
   decided: {
     month: number;
     /** Whoever really held influence over it on the Power Map. */
     decider: string;
+    /** Their kind then, which is how each reason weighed with them. */
+    kind: Kind;
     /** Who got it: a Character, or `YOU`. */
     winner: string;
     /** Whether it was too close to call, and went by a draw among the best. */
     close: boolean;
     candidates: Candidate[];
     /** Official standing's band then, by its label: what the paperwork said. */
-    onPaper: string;
+    onPaper: string | null;
   } | null;
 }
 
@@ -268,6 +270,8 @@ export interface MonthRecord {
   absenceDealtWith: boolean;
   /** Whether the month's quarterly review, if it has one, has been held. */
   reviewed: boolean;
+  /** Whether the month has closed: the last month's, once its story is told. */
+  closed: boolean;
 }
 
 /**

@@ -6,7 +6,8 @@ import { plansInResults } from "./grand-plans";
 import { bossOf, headOf } from "./places";
 import { promisesInResults } from "./promises";
 import { rivalsInResults } from "./rivals";
-import { bossKindOf, moodOf, moodOfCharacter, personOf } from "./reads";
+import { influencerOf } from "./deal";
+import { bossKindOf, isMet, moodOf, moodOfCharacter, personOf } from "./reads";
 import { calledBy, sayPeople, titleOf } from "./say";
 import { standingAtEnd } from "./standing";
 import type { State } from "./state";
@@ -20,7 +21,17 @@ export function toResultsView(
 ): Extract<StepView, { kind: "results" }> {
   const nameOf = (id: string) =>
     content.characters.find((c) => c.id === id)?.name ?? id;
-  const { order, influence } = state.truth.powerMap;
+  const { order } = state.truth.powerMap;
+  // Anyone of a floor the player never reached was never met, and stays unknown.
+  const met = (id: string) => isMet(state, content, id);
+  const known = state.truth.characters.filter((c) => met(c.id));
+  const above = (id: string) => {
+    let at = influencerOf(state.truth.powerMap, id);
+    while (at !== undefined && !met(at)) {
+      at = influencerOf(state.truth.powerMap, at);
+    }
+    return at;
+  };
   return {
     kind: "results",
     ...(state.firedIn !== null && content.mistakes
@@ -94,7 +105,7 @@ export function toResultsView(
           ]
         : [];
     }),
-    characters: state.truth.characters.map((dealt) => {
+    characters: known.map((dealt) => {
       const known = content.characters.find((c) => c.id === dealt.id);
       return {
         name: known?.name ?? dealt.id,
@@ -104,15 +115,15 @@ export function toResultsView(
         fact: dealt.fact?.text ?? null,
       };
     }),
-    powerMap: order.map((id) => {
-      const above = influence.find((i) => i.over === id);
+    powerMap: order.filter(met).map((id) => {
+      const over = above(id);
       return {
         name: nameOf(id),
         title: titleOf(state, content, id),
-        reportsTo: above ? nameOf(above.who) : null,
+        reportsTo: over === undefined ? null : nameOf(over),
       };
     }),
-    marks: state.truth.characters.map((dealt) => {
+    marks: known.map((dealt) => {
       const mark = state.marks[dealt.id] ?? null;
       const { kinds } = content.hiddenTruth;
       return {
@@ -169,32 +180,34 @@ function toBeliefs(
 ): Extract<StepView, { kind: "results" }>["beliefs"] {
   const written = content.reputation;
   if (!written) return [];
-  return content.characters.map(({ id, name }) => ({
-    name,
-    title: titleOf(state, content, id),
-    believes: written.believes[moodOfCharacter(state, content, id)],
-    reached: state.truth.memories
-      .filter((m) => m.character === id)
-      .map(({ month, text, via, news, foundOut }) => {
-        const stories = written.falseStories;
-        const started = state.truth.news[news ?? -1]?.startedBy === id;
-        const how =
-          typeof via === "string"
-            ? sayPeople(written.how.heardFrom, {
-                "{who}": calledBy(state, content, via),
-              })
-            : written.how.direct;
-        const found =
-          foundOut === null || !stories
-            ? ""
-            : ` ${stories.found.replaceAll("{month}", String(foundOut))}`;
-        return {
-          month,
-          text,
-          how: started && stories ? stories.started : `${how}${found}`,
-        };
-      }),
-  }));
+  return content.characters
+    .filter(({ id }) => isMet(state, content, id))
+    .map(({ id, name }) => ({
+      name,
+      title: titleOf(state, content, id),
+      believes: written.believes[moodOfCharacter(state, content, id)],
+      reached: state.truth.memories
+        .filter((m) => m.character === id)
+        .map(({ month, text, via, news, foundOut }) => {
+          const stories = written.falseStories;
+          const started = state.truth.news[news ?? -1]?.startedBy === id;
+          const how =
+            typeof via === "string"
+              ? sayPeople(written.how.heardFrom, {
+                  "{who}": calledBy(state, content, via),
+                })
+              : written.how.direct;
+          const found =
+            foundOut === null || !stories
+              ? ""
+              : ` ${stories.found.replaceAll("{month}", String(foundOut))}`;
+          return {
+            month,
+            text,
+            how: started && stories ? stories.started : `${how}${found}`,
+          };
+        }),
+    }));
 }
 
 /**

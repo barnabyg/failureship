@@ -13,6 +13,7 @@ import {
   isAvailable,
   isDone,
   isGone,
+  isMet,
   matches,
   methodOf,
   offeredOptions,
@@ -72,7 +73,12 @@ export function legalChoices(state: State, world: World): Choice[] {
     case "find-out":
       return step.sources.flatMap((sourceId) =>
         content.characters
-          .filter((c) => c.id !== sourceId && !isGone(state, c.id))
+          .filter(
+            (c) =>
+              c.id !== sourceId &&
+              !isGone(state, c.id) &&
+              isMet(state, content, c.id),
+          )
           .map((c) => ({
             type: "find-out" as const,
             sourceId,
@@ -196,15 +202,21 @@ function toStoryView(
 
 /** The formal hierarchy, the same in every deal until a Company Event moves it. */
 function toOrgChart(state: State, content: Content): ChartEntry[] {
-  const here = content.characters.filter((c) => !isGone(state, c.id));
-  const you = content.you.name ?? YOU;
+  const here = content.characters.filter(
+    (c) => !isGone(state, c.id) && isMet(state, content, c.id),
+  );
+  const you = content.you.name;
   const nameOf = (id: string | undefined) =>
     id === YOU
       ? you
       : (content.characters.find((m) => m.id === id)?.name ?? null);
   const managerHere = (id: string) => {
     let manager = managerOf(state, content, id);
-    while (manager !== undefined && isGone(state, manager)) {
+    while (
+      manager !== undefined &&
+      manager !== YOU &&
+      (isGone(state, manager) || !isMet(state, content, manager))
+    ) {
       manager = managerOf(state, content, manager);
     }
     return manager;
@@ -271,7 +283,7 @@ function toStepView(state: State, world: World): StepView {
         }),
         sources,
         subjects: content.characters
-          .filter((c) => !isGone(state, c.id))
+          .filter((c) => !isGone(state, c.id) && isMet(state, content, c.id))
           .map((c) => personOf(state, content, c.id)),
       };
     }
@@ -363,10 +375,12 @@ export function toView(state: State, world: World): PlayerView {
         source,
         text,
       })),
-      marks: content.characters.map((c) => ({
-        ...personOf(state, content, c.id),
-        mark: state.marks[c.id] ?? null,
-      })),
+      marks: content.characters
+        .filter((c) => isMet(state, content, c.id))
+        .map((c) => ({
+          ...personOf(state, content, c.id),
+          mark: state.marks[c.id] ?? null,
+        })),
     },
     project: toProjectView(state, content),
     grandPlan: planInView(state, content),

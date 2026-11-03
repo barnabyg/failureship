@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 import { gameContent } from "../../src/content";
 import {
   parseContent,
+  resumeRun,
   startRun,
   type Choice,
   type Content,
@@ -164,6 +165,28 @@ describe("a Believer burned repeatedly", () => {
     }
 
     expect([...ways].sort()).toEqual(["left", "practitioner", "whistleblower"]);
+  });
+
+  it("never leaves while they are the player's boss, though written to be able to", () => {
+    const content = parseContent(raw(["left"]));
+    const seed = SEEDS.find((s) =>
+      kindsAtStart(s, content).every(
+        (c) => c.id === "ana" || c.kind === "believer",
+      ),
+    );
+    const run = startRun({ seed: seed ?? 0, content });
+    run.choose(burnAll);
+    // Ben, who is in `leaving`, becomes the player's boss, as a seat's winner does.
+    const saved = JSON.parse(run.save()) as {
+      state: { reportsTo: Record<string, string> };
+    };
+    saved.state.reportsTo.you = "ben";
+    const moved = resumeRun({ save: JSON.stringify(saved), content });
+    playOut(moved);
+    const { changes } = readHiddenTruth(moved);
+
+    expect(changes.find((c) => c.character === "ben")).toBeUndefined();
+    expect(changes.find((c) => c.character === "cal")?.to).toBe("left");
   });
 
   it("does not change if never burned enough", () => {

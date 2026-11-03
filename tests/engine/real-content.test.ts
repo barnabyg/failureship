@@ -8,6 +8,7 @@ import {
   type PlayerView,
   type Run,
 } from "../../src/engine";
+import { castDealtFirst } from "../../src/engine/deal";
 import { bossesAtStart, meantBy } from "../../src/engine/places";
 import { readHiddenTruth } from "../../src/engine/hidden-truth";
 import { plainChoice, playToMonth } from "../../src/ui/later-month";
@@ -183,11 +184,11 @@ describe("the real month", () => {
 
     expect(view.step).toMatchObject({ kind: "results" });
     if (view.step.kind !== "results") throw new Error(view.step.kind);
-    expect(view.step.characters).toHaveLength(gameContent.characters.length);
-    // Four of the first floor's six, and the floor above's as often.
-    expect(
-      view.step.characters.filter((c) => c.fact !== null).length,
-    ).toBeGreaterThanOrEqual(4);
+    // This run is promoted to Floor 2, so all eight are met: four of Floor 1's
+    // six have a Hidden Fact, and on this deal one of Floor 2's two does.
+    expect(view.job.id).toBe("team-lead");
+    expect(view.step.characters).toHaveLength(8);
+    expect(view.step.characters.filter((c) => c.fact !== null)).toHaveLength(5);
     expect(JSON.stringify(view)).not.toMatch(/\{\w+\}/);
   });
 
@@ -232,10 +233,14 @@ describe("the real month", () => {
     );
   });
 
-  it("gives every Character a place on one Org Chart", () => {
+  it("gives every Character of Floor 1 a place on one Org Chart, and nobody from upstairs", () => {
     const { orgChart } = startRun({ seed: 1, content: gameContent }).view();
 
-    expect(orgChart).toHaveLength(gameContent.characters.length);
+    expect(orgChart.map((e) => e.name).sort()).toEqual(
+      castDealtFirst(gameContent)
+        .map((id) => gameContent.characters.find((c) => c.id === id)?.name)
+        .sort(),
+    );
     expect(orgChart.filter((e) => e.reportsTo === null)).toHaveLength(1);
   });
 

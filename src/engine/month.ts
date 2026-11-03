@@ -50,6 +50,7 @@ export function freshMonth(where: Whereabouts, content: Content): MonthRecord {
     moveLanded: false,
     absenceDealtWith: false,
     reviewed: false,
+    closed: false,
   };
 }
 
@@ -90,7 +91,9 @@ export function leaveStory(state: State, world: World): void {
   // Between months, so that a promotion's new floor counts from the next.
   fillVacancies(state, world.content);
   if (state.month === world.content.balance.monthsPerRun) {
-    state.step = { kind: "results" };
+    // A seat decided as the run ends is still told, before the results.
+    state.closed = true;
+    state.step = nextStep(state, world);
     return;
   }
   state.month += 1;
@@ -120,7 +123,7 @@ export function nextStep(state: State, world: World): Step {
     const from = everyNotification(content).find((n) => n.id === id)?.from;
     return from === undefined || !mentionsGone(state, content, from);
   });
-  if (state.firedIn !== null) return { kind: "results" };
+  if (state.firedIn !== null || state.closed) return { kind: "results" };
   const notifications = everyNotification(content);
   for (const id of state.unanswered) {
     const notification = notifications.find((n) => n.id === id);
@@ -189,6 +192,7 @@ function landMove(state: State, content: Content): Step | null {
   if (item.falseStory && by !== undefined) {
     startStory(state, content, { ...item.falseStory, by });
   }
-  applyOutcome(state, content, item, item.title);
+  // A Move that acts for a seat names its maker, as the checks make sure.
+  applyOutcome(state, content, item, item.title, by ?? "");
   return { kind: "move", id: item.id, by };
 }

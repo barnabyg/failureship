@@ -1,4 +1,80 @@
-import type { Content } from "./content";
+import { everyNotification, type Content } from "./content";
+import { isUnder } from "./deal";
+import { bossesAtStart, meantBy } from "./places";
+
+/** Everything that can act for a seat, and whether a Character's Move makes it. */
+function seatActs(content: Content) {
+  return [
+    ...content.moves.flatMap((m) =>
+      m.seat
+        ? [{ owner: `Move "${m.id}"`, act: m.seat, move: true, by: m.by }]
+        : [],
+    ),
+    ...everyNotification(content).flatMap((n) =>
+      n.options.flatMap((o) =>
+        "seat" in o && o.seat
+          ? [
+              {
+                owner: `Notification "${n.id}" option "${o.id}"`,
+                act: o.seat,
+                move: false,
+                by: undefined,
+              },
+            ]
+          : [],
+      ),
+    ),
+    ...content.scenes.flatMap((s) =>
+      s.options.flatMap((o) =>
+        o.results.flatMap((r) =>
+          r.seat
+            ? [
+                {
+                  owner: `Scene "${s.id}" option "${o.id}"`,
+                  act: r.seat,
+                  move: false,
+                  by: undefined,
+                },
+              ]
+            : [],
+        ),
+      ),
+    ),
+  ];
+}
+
+/**
+ * What is done for a seat: only a Character's Move, made by someone, tells a
+ * story or gets into a diary, only the player approaches someone, and whoever is
+ * approached is there.
+ */
+function findBrokenSeatActs(content: Content): string[] {
+  const problems: string[] = [];
+  const bosses = bossesAtStart(content);
+  const known = new Set(content.characters.map((c) => c.id));
+  for (const { owner, act, move, by } of seatActs(content)) {
+    if (!content.vacancies) {
+      problems.push(`${owner} acts for a seat, but no seats are written.`);
+    }
+    if (move && by === undefined) {
+      problems.push(`${owner} acts for a seat, so it needs a "by".`);
+    }
+    if (!move && (act.story || act.diary)) {
+      problems.push(
+        `${owner} tells a story or gets into a diary, which only a Move does.`,
+      );
+    }
+    if (move && act.approach !== undefined) {
+      problems.push(`${owner} approaches someone, which only the player does.`);
+    }
+    const target =
+      act.approach && (meantBy(bosses, act.approach) ?? act.approach);
+    if (target && !known.has(target)) {
+      problems.push(`${owner} approaches unknown "${act.approach ?? ""}".`);
+    }
+  }
+  return problems;
+}
 
 /**
  * Seats: each is on a known floor and leads to another, what is competed for
@@ -6,22 +82,14 @@ import type { Content } from "./content";
  * is not under that floor's boss. One seat to a floor, since a floor has one boss.
  */
 export function findBrokenVacancies(content: Content): string[] {
+  const problems = findBrokenSeatActs(content);
   const written = content.vacancies;
-  if (!written) return [];
-  const problems: string[] = [];
+  if (!written) return problems;
   const jobs = content.floors.map((f) => f.job);
   const competing = new Set(content.rivals?.competing.map((c) => c.id));
   const characters = new Map(content.characters.map((c) => [c.id, c]));
-  const answersTo = (id: string, above: string): boolean => {
-    const seen = new Set<string>();
-    let at = characters.get(id)?.reportsTo;
-    while (at !== undefined && !seen.has(at)) {
-      if (at === above) return true;
-      seen.add(at);
-      at = characters.get(at)?.reportsTo;
-    }
-    return false;
-  };
+  const answersTo = (id: string, above: string) =>
+    isUnder((at) => characters.get(at)?.reportsTo, id, above);
   const floors = new Set<string>();
   for (const seat of written.seats) {
     const owner = `Seat "${seat.id}"`;

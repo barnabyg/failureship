@@ -51,8 +51,11 @@ describe("a meeting you do not go to", () => {
     const { attended } = gameContent.demands?.missed ?? { attended: "" };
     // Each month a floor is written for, and its pool for any month after.
     for (const { job } of gameContent.floors) {
+      // An action with no floor belongs to every floor.
       const own = gameContent.actions.filter(
-        (a) => a.floor === job && a.sets.includes(attended),
+        (a) =>
+          (a.floor === undefined || a.floor === job) &&
+          a.sets.includes(attended),
       );
       for (let m = 1; m <= writtenMonths(gameContent, job); m++) {
         const meetings = own.filter((a) => a.months?.includes(m));

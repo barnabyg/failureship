@@ -1076,5 +1076,88 @@
         "approach": "theatre"
       }
     ]
+  },
+  {
+    "id": "the-seat",
+    "floor": "junior-employee",
+    "when": {
+      "vacancyOpen": true
+    },
+    "from": "From: People and Culture",
+    "subject": "Expressions of interest: your boss's seat",
+    "body": "Your boss's seat is open, and the process is fair and transparent. Expressions of interest may be made to anyone, since nobody will say who is deciding.",
+    "options": [
+      {
+        "id": "leave-it-to-the-process",
+        "label": "Leave it to the process",
+        "result": {
+          "title": "The seat",
+          "body": "You leave it to the process. The process thanks you for your patience, automatically."
+        }
+      },
+      {
+        "id": "word-with-the-head",
+        "family": "trade",
+        "label": "Have a word with your boss's boss about it",
+        "cost": "standard",
+        "seat": {
+          "approach": "{head}"
+        },
+        "result": {
+          "title": "The seat",
+          "body": "Your boss's boss listens, says that it is not really their call, and writes something down."
+        }
+      },
+      {
+        "id": "word-with-the-coordinator",
+        "family": "trade",
+        "label": "Have a word with the Office Co-ordinator about it",
+        "cost": "standard",
+        "seat": {
+          "approach": "admin"
+        },
+        "result": {
+          "title": "The seat",
+          "body": "The Office Co-ordinator says that they just take the minutes, and takes a note."
+        }
+      },
+      {
+        "id": "word-with-the-analyst",
+        "family": "trade",
+        "label": "Have a word with the Senior Analyst about it",
+        "cost": "standard",
+        "seat": {
+          "approach": "analyst"
+        },
+        "result": {
+          "title": "The seat",
+          "body": "The Senior Analyst says that they could not possibly comment, and looks at the ceiling for a while."
+        }
+      },
+      {
+        "id": "call-in-a-favour",
+        "family": "trade",
+        "label": "Call in a favour you are owed",
+        "seat": {
+          "callIn": true
+        },
+        "result": {
+          "title": "The seat",
+          "body": "You remind someone of what you did for them. They say that they remember, which is not the same as saying yes."
+        }
+      },
+      {
+        "id": "claim-the-credit",
+        "family": "impress",
+        "label": "Reply all, thanking everyone for your Grand Plan",
+        "seat": {
+          "credit": true
+        },
+        "result": {
+          "title": "The seat",
+          "body": "Your reply all thanks everyone who helped with your Grand Plan. Several people reply all to say well done, and one replies all to ask to be removed."
+        }
+      }
+    ]
   }
 ]

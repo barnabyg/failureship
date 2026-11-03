@@ -209,6 +209,9 @@
   },
   {
     "id": "passed-over-analyst",
+    "floor": "team-lead",
+    "months": [2],
+    "priority": true,
     "family": "attack",
     "from": "From: Priya Venn",
     "title": "Figures, as per your request",
@@ -217,12 +220,15 @@
     "when": {
       "remembers": {
         "character": "analyst",
-        "about": "passed-over-for-the-seat"
+        "about": "lost-the-seat-to-you"
       }
     }
   },
   {
     "id": "passed-over-projects",
+    "floor": "team-lead",
+    "months": [4],
+    "priority": true,
     "family": "attack",
     "from": "From: Callum Reed",
     "title": "An update on your dependencies",
@@ -231,12 +237,15 @@
     "when": {
       "remembers": {
         "character": "projects",
-        "about": "passed-over-for-the-seat"
+        "about": "lost-the-seat-to-you"
       }
     }
   },
   {
     "id": "passed-over-associate",
+    "floor": "team-lead",
+    "months": [6],
+    "priority": true,
     "family": "attack",
     "from": "From: Tessa Croft",
     "title": "A quiet word upstairs",
@@ -245,7 +254,7 @@
     "when": {
       "remembers": {
         "character": "associate",
-        "about": "passed-over-for-the-seat"
+        "about": "lost-the-seat-to-you"
       }
     }
   },
@@ -267,5 +276,50 @@
     "from": "From: People and Culture",
     "title": "An update on organisational design",
     "body": "An e-mail explains that the organisation is being redesigned around the customer. There is a diagram with the customer in the middle. Your team is in a box at the edge marked Enablers, which is nearer the customer than it sounds."
+  },
+  {
+    "id": "seat-credit",
+    "by": "{competitor}",
+    "family": "impress",
+    "priority": true,
+    "when": {
+      "vacancyOpen": true
+    },
+    "from": "From: All Staff",
+    "title": "Thanks to everyone who made it happen",
+    "body": "{competitor} has sent round an e-mail thanking everyone who made the Grand Plan happen, at some length, and signing it as its lead. Your name is in the list of everyone.",
+    "seat": {
+      "credit": true
+    }
+  },
+  {
+    "id": "seat-story",
+    "by": "{competitor}",
+    "family": "attack",
+    "priority": true,
+    "when": {
+      "vacancyOpen": true
+    },
+    "from": "From: Overheard in the lift",
+    "title": "Who really did the Grand Plan",
+    "body": "You hear, in the lift, that you had very little to do with the Grand Plan. You hear it from someone who heard it from {competitor}, who was only saying.",
+    "seat": {
+      "story": true
+    }
+  },
+  {
+    "id": "seat-diary",
+    "by": "{competitor}",
+    "family": "trade",
+    "priority": true,
+    "when": {
+      "vacancyOpen": true
+    },
+    "from": "From: The shared calendar",
+    "title": "A long lunch",
+    "body": "{competitor}'s calendar has a two-hour lunch in it, marked Private, at the place upstairs goes to. It is the week the seat is decided.",
+    "seat": {
+      "diary": true
+    }
   }
 ]

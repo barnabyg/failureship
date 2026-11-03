@@ -6,6 +6,7 @@ import {
   type Content,
   type PlayerView,
 } from "../../src/engine";
+import { castDealtFirst } from "../../src/engine/deal";
 import { readHiddenTruth } from "../../src/engine/hidden-truth";
 import { calledAtStart, sceneFixtureRaw } from "./fixture";
 
@@ -287,10 +288,18 @@ describe("what watching can tell the player", () => {
   it("gives real evidence with the game's own signs", () => {
     const { counts, totals } = tally(gameContent, 2000);
 
-    // Only those whose role is at the month's meeting: a later floor's are not.
-    const seen = [...counts].filter(([, count]) =>
-      KINDS.some((k) => count[k] > 0),
+    // Every sign a role of Floor 1's cast can show: a later floor's are not at its meeting.
+    const first = new Set(
+      castDealtFirst(gameContent).map(
+        (id) => gameContent.characters.find((c) => c.id === id)?.role,
+      ),
     );
+    const onFloor1 = new Set(
+      gameContent.behaviours
+        .filter((b) => b.roles?.some((r) => first.has(r)) ?? true)
+        .map((b) => b.text),
+    );
+    const seen = [...counts].filter(([text]) => onFloor1.has(text));
     expect(seen.length).toBeGreaterThanOrEqual(8);
     for (const [text, count] of seen) {
       const rates = KINDS.map((k) => count[k] / totals[k]);

@@ -24,20 +24,36 @@ export interface PowerMap {
 }
 
 /**
+ * Whether `above` is anywhere over `id` in a hierarchy, walking up by `parentOf`:
+ * the Power Map's influence, or the Org Chart's reporting lines. A loop ends it.
+ */
+export function isUnder(
+  parentOf: (id: string) => string | undefined,
+  id: string,
+  above: string,
+): boolean {
+  const seen = new Set<string>();
+  let at = parentOf(id);
+  while (at !== undefined && !seen.has(at)) {
+    if (at === above) return true;
+    seen.add(at);
+    at = parentOf(at);
+  }
+  return false;
+}
+
+/** Whoever has influence over someone on the Power Map, if anyone does. */
+export function influencerOf(map: PowerMap, id: string): string | undefined {
+  return map.influence.find((i) => i.over === id)?.who;
+}
+
+/**
  * Whether someone's word counts with someone else: they are above them on the
  * Power Map, or are owed a favour by them.
  */
 export function hasSway(map: PowerMap, who: string, over: string): boolean {
   if (map.favours.some((f) => f.owes === over && f.to === who)) return true;
-  const seen = new Set<string>();
-  let above = map.influence.find((i) => i.over === over)?.who;
-  while (above !== undefined && !seen.has(above)) {
-    if (above === who) return true;
-    seen.add(above);
-    const next = above;
-    above = map.influence.find((i) => i.over === next)?.who;
-  }
-  return false;
+  return isUnder((id) => influencerOf(map, id), over, who);
 }
 
 /**

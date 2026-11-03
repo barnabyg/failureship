@@ -6,6 +6,7 @@ import { applyOutcome } from "./outcome";
 import { bossOf } from "./places";
 import {
   isGone,
+  isMovingUp,
   kindOf,
   matches,
   moodOfCharacter,
@@ -15,7 +16,6 @@ import {
 import { drawFor } from "./rng";
 import { calledBy, sayPeople } from "./say";
 import type { State, TakenPlan } from "./state";
-import { isMovingUp } from "./vacancies";
 import type { PlayerView, StepView } from "./view";
 
 type Way = GrandPlan["ways"][number];

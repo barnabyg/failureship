@@ -220,7 +220,7 @@ describe("every month leaves a real choice", { timeout: 60_000 }, () => {
       for (let m = 1; m <= gameContent.balance.monthsPerRun; m++) {
         const costly = every.filter(
           (n) =>
-            n.floor === job &&
+            (n.floor === undefined || n.floor === job) &&
             n.months?.includes(m) &&
             n.options.some((o) => costOf(o.cost) > 0),
         );

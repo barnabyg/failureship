@@ -12,6 +12,7 @@ import { shiftBelief } from "./reads";
 import { remember, startNews, startStory } from "./reputation";
 import { startRisks } from "./risks";
 import { startThreads } from "./threads";
+import { actForSeat } from "./vacancies";
 import type { State } from "./state";
 
 /** Everything a consequence can do, whether a choice or something else caused it. */
@@ -49,6 +50,8 @@ export interface Outcome {
   repays?: string | undefined;
   /** Keeps or breaks the commitment that fell due as this Notification. */
   settlesDue?: { id: string; how: "kept" | "broken" } | undefined;
+  /** What whoever acts does for an open seat. */
+  seat?: Parameters<typeof actForSeat>[2] | undefined;
 }
 
 /** Counts a Move the player made, for how they played. */
@@ -65,6 +68,8 @@ export function applyOutcome(
   content: Content,
   outcome: Outcome,
   label: string,
+  /** Who acts: the player, unless a Character's Move does. */
+  actor: string = YOU,
 ): string | undefined {
   const sets = outcome.sets ?? [];
   state.flags.push(...sets);
@@ -110,6 +115,7 @@ export function applyOutcome(
     if (!state.buzzwords.includes(word)) state.buzzwords.push(word);
   }
   if (outcome.reshuffle) reshuffleCharts(state, content, outcome.reshuffle);
+  if (outcome.seat) actForSeat(state, content, outcome.seat, actor);
   const head = headOf(state, content);
   if (head !== undefined && outcome.headOpinion) {
     shiftBelief(state, head, outcome.headOpinion);

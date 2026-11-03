@@ -33,12 +33,12 @@ function playAll(seed: number, choose: string | null): PlayerView[] {
 describe("the first promotion in the game", () => {
   // The browser tests rely on these two deals.
   it("keeps seed 2 a win: the seat is yours, and the lift takes you up", () => {
-    const { view, truth } = playedTo(2, "7");
+    const { view, truth } = playedTo(2, "8");
 
     expect(truth.vacancies).toMatchObject([
-      { holder: "boss", opened: 6, decides: 6, decided: { winner: "you" } },
+      { holder: "boss", opened: 6, decides: 7, decided: { winner: "you" } },
     ]);
-    expect(view.month).toBe(7);
+    expect(view.month).toBe(8);
     expect(view.job).toEqual({ id: "team-lead", title: "Team lead" });
     expect(view.orgChart).toContainEqual({
       name: "You",
@@ -48,7 +48,7 @@ describe("the first promotion in the game", () => {
   });
 
   it("keeps seed 14 a loss to a Rival, who becomes your boss", () => {
-    const { view, truth } = playedTo(14, "7");
+    const { view, truth } = playedTo(14, "8");
     const decided = truth.vacancies[0]?.decided;
 
     expect(decided?.winner).toBe("associate");
@@ -64,7 +64,7 @@ describe("the first promotion in the game", () => {
   it("is won on some deals and lost on others, on the same choices", () => {
     // The same choices, on deals whose bosses all count the Plan done.
     const outcomes = [2, 14, 4, 5, 7, 9, 10, 11, 12].map((seed) => {
-      const { truth } = playedTo(seed, "7");
+      const { truth } = playedTo(seed, "8");
       return truth.vacancies[0]?.decided;
     });
 
@@ -76,24 +76,60 @@ describe("the first promotion in the game", () => {
 });
 
 describe("those passed over", () => {
-  it("remember it, and come back on the player later", () => {
-    const views = playAll(2, FAKED);
-    const passedOver = gameContent.moves.filter(
-      (m) =>
-        m.when !== undefined &&
-        JSON.stringify(m.when).includes("passed-over-for-the-seat"),
-    );
-    const landed = views.flatMap((v) =>
+  const passedOver = gameContent.moves.filter(
+    (m) =>
+      m.when !== undefined &&
+      JSON.stringify(m.when).includes("lost-the-seat-to-you"),
+  );
+  const landedIn = (views: PlayerView[]) =>
+    views.flatMap((v) =>
       v.step.kind === "move" &&
       passedOver.some((m) => v.step.kind === "move" && m.title === v.step.title)
         ? [v.month]
         : [],
     );
 
+  it("remember it, and come back on a player who had the seat", () => {
+    const landed = landedIn(playAll(2, FAKED));
+
     expect(passedOver).toHaveLength(3);
     expect(landed.length).toBeGreaterThan(0);
-    expect(Math.min(...landed)).toBeGreaterThan(6);
+    expect(Math.min(...landed)).toBeGreaterThan(7);
   });
+
+  it("do not come back on a player who was passed over with them", () => {
+    expect(landedIn(playAll(14, FAKED))).toEqual([]);
+  });
+});
+
+describe("the decision, as it is told", () => {
+  it.each([2, 14])(
+    "says who decided and the winner's tie, never anyone's feelings or a Rival, on seed %i",
+    (seed) => {
+      const views = playAll(seed, FAKED);
+      const told = views.find(
+        (v) => v.step.kind === "notice" && v.step.decided !== undefined,
+      );
+      if (told?.step.kind !== "notice") throw new Error("Never told.");
+      const inFact = told.step.decided?.inFact ?? "";
+      const reasons = gameContent.vacancies?.reasons;
+      const secret = [
+        reasons?.warm,
+        reasons?.neutral,
+        reasons?.cold,
+        reasons?.owedYou,
+      ].map((r) => (r?.why ?? "").split("{decider}").at(-1) ?? "");
+
+      expect(inFact).toMatch(/^The seat was in the gift of /);
+      for (const words of secret) expect(inFact).not.toContain(words);
+      expect(inFact).not.toMatch(/Rival|As for you/);
+      const results = views.at(-1)?.step;
+      if (results?.kind !== "results") throw new Error("No results.");
+      expect(results.vacancies[0]?.inFact.length).toBeGreaterThan(
+        inFact.length,
+      );
+    },
+  );
 });
 
 describe("eighteen months on either floor", () => {
@@ -103,7 +139,7 @@ describe("eighteen months on either floor", () => {
 
   it.each([
     ["Floor 1, all the way", 3, null],
-    ["Floor 2 from month 7", 2, FAKED],
+    ["Floor 2 from month 8", 2, FAKED],
   ])("leaves a real choice every month: %s", (_name, seed, choose) => {
     const views = playAll(seed, choose);
 

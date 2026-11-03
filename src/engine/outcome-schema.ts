@@ -97,6 +97,27 @@ export const story = z
   })
   .optional();
 
+/**
+ * What someone does for an open seat. The player can approach someone about it,
+ * call in a favour or claim the Plan's credit; a Rival's Move can also tell a
+ * story about the player to whoever decides, or get into their diary. Each does
+ * something only while a seat is open, and only through what really decides it.
+ */
+export const seatAct = z
+  .strictObject({
+    /** A Character or place: it helps only if they decide, or have sway with whoever does. */
+    approach: id.optional(),
+    /** Calls in a favour owed by whoever decides, or by someone with sway with them. */
+    callIn: z.boolean().optional(),
+    /** Claims the credit for the Grand Plan that opened the seat. */
+    credit: z.boolean().optional(),
+    /** A Move's story about the player, which reaches whoever decides. */
+    story: z.boolean().optional(),
+    /** A Move's maker gets into the diary of whoever decides, who comes to owe them. */
+    diary: z.boolean().optional(),
+  })
+  .optional();
+
 /** How an answer settles a commitment that has fallen due. */
 const settles = z.enum(["kept", "broken"]).optional();
 
@@ -121,6 +142,7 @@ export const notificationOption = z.strictObject({
   mistake: choiceMistake,
   remembers,
   news,
+  seat: seatAct,
   stakes,
   result: notice.optional(),
   /** Leaves a Demand open, as a bet that the boss forgets it. */

@@ -166,6 +166,25 @@ export function matches(
   return condition.all.every((inner) => matches(state, content, inner, room));
 }
 
+/**
+ * Whether the player has come across someone: anyone of the first floor's cast,
+ * and anyone written for a floor the player has reached. Until then a later
+ * floor's cast is on no chart, list or results screen of theirs.
+ */
+export function isMet(state: State, content: Content, id: string): boolean {
+  const floor = content.characters.find((c) => c.id === id)?.floor;
+  return (
+    floor === undefined ||
+    floor === content.you.job ||
+    (state.monthsOnFloor[floor] ?? 0) > 0
+  );
+}
+
+/** Whether someone's seat is open, so that they are on their way up. */
+export function isMovingUp(state: State, id: string): boolean {
+  return state.vacancies.some((v) => v.holder === id && v.decided === null);
+}
+
 /** Whether a seat is open now, and still to be decided. The player is told when one is. */
 export function isVacancyOpen(state: State): boolean {
   return state.vacancies.some(

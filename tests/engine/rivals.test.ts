@@ -375,7 +375,10 @@ describe("the game's Rivals", () => {
       (m) => m.by === "{competitor}",
     );
 
-    expect(families(competitors)).toEqual(new Set(["deflect", "attack"]));
+    // Taking the Plan's credit and a long lunch are for an open seat.
+    expect(families(competitors)).toEqual(
+      new Set(["deflect", "attack", "impress", "trade"]),
+    );
     for (const family of families(competitors)) {
       expect(players).toContain(family);
     }
