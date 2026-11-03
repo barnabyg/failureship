@@ -8,7 +8,6 @@ export type Sent = Extract<
   "notification" | "dialog" | "notice" | "move" | "event"
 >;
 
-/** How a panel looks: an e-mail, or an issue of the staff newsletter. */
 /** An e-mail, sent to the player by their job title, or an issue of the newsletter. */
 export type Look = { sent: Sent; to: string } | { issue: number };
 
