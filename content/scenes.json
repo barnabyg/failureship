@@ -4,8 +4,7 @@
     "title": "Monthly Alignment Meeting",
     "location": "Floor 1, Meeting Room 1B",
     "narration": [
-      "Item one on the agenda is the agenda. The projector shows a slide titled Where We Are. Nobody can say.",
-      "Item two is your boss's Grand Plan, which is called {plan}. The slide is a photograph of a lighthouse. Your boss has not seen it working yet, but has read about it, and is visibly moved."
+      "Item one on the agenda is the agenda. The projector shows a slide titled Where We Are. Nobody can say. Item two is your boss's Grand Plan, {plan}. The slide is a lighthouse."
     ],
     "cast": ["head", "boss", "analyst", "admin", "projects", "associate"],
     "signs": [
