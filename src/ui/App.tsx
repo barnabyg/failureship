@@ -27,6 +27,11 @@ function randomSeed(): number {
   return Math.floor(Math.random() * 1_000_000);
 }
 
+/** A floor's number, counting from the bottom of the tower. */
+function floorNumber(job: string): number {
+  return gameContent.floors.findIndex((f) => f.job === job) + 1;
+}
+
 function begin(seed: number): { run: Run; view: PlayerView } {
   const run = startRun({ seed, content: gameContent });
   return { run, view: run.view() };
@@ -90,6 +95,8 @@ export function App() {
   const [wordOpen, setWordOpen] = useState(false);
   const [gaugesOpen, setGaugesOpen] = useState(false);
   const [buzzwordsOpen, setBuzzwordsOpen] = useState(false);
+  // A change of floor is a ride in the lift, from one to the other.
+  const [ride, setRide] = useState<{ from: number; to: number } | null>(null);
   // Each run's header starts afresh, even on the same seed.
   const [runNumber, setRunNumber] = useState(0);
 
@@ -107,9 +114,16 @@ export function App() {
 
   const choose = useCallback(
     (choice: Choice) => {
-      setGame({ run, view: run.choose(choice) });
+      const next = run.choose(choice);
+      if (next.job.id !== view.job.id) {
+        setRide({
+          from: floorNumber(view.job.id),
+          to: floorNumber(next.job.id),
+        });
+      }
+      setGame({ run, view: next });
     },
-    [run],
+    [run, view.job.id],
   );
 
   const restart = (seed: number) => {
@@ -117,6 +131,7 @@ export function App() {
     setRunNumber((n) => n + 1);
     setMessage(null);
     setLeavingFor(null);
+    setRide(null);
   };
 
   /** Leaving a run still in play needs confirming. A finished one does not. */
@@ -407,6 +422,31 @@ export function App() {
             }}
           >
             {panelText.closeLabel}
+          </button>
+        </Modal>
+      )}
+      {ride !== null && (
+        <Modal
+          testId="lift-ride"
+          title={panelText.liftRideTitle}
+          onClose={() => {
+            setRide(null);
+          }}
+        >
+          <p className="lift-ride" data-testid="lift-ride-floors">
+            {panelText.liftRideBody
+              .replace("{from}", String(ride.from))
+              .replace("{to}", String(ride.to))}
+          </p>
+          <button
+            type="button"
+            className="primary"
+            data-testid="lift-step-out"
+            onClick={() => {
+              setRide(null);
+            }}
+          >
+            {panelText.liftRideStepOut}
           </button>
         </Modal>
       )}

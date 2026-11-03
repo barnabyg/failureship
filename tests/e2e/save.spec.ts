@@ -116,7 +116,7 @@ for (const { what, broken } of [
     await expect(page.getByTestId("save-lost")).toBeVisible();
     await page.getByTestId("save-lost-start-again").click();
     await expect(page.getByTestId("save-lost")).toHaveCount(0);
-    await expect(page.getByTestId("month")).toContainText("1 of 9");
+    await expect(page.getByTestId("month")).toContainText("1 of 18");
     await expect(page.getByTestId("panel-notification")).toBeVisible();
     await expect(page.getByTestId("seed")).toHaveText("8");
   });

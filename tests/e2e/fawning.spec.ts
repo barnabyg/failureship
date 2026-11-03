@@ -13,7 +13,7 @@ test("handing your boss the credit comes back on Fawning", async ({ page }) => {
   await playUntil(page, "panel-story");
   await page.getByTestId("continue").click();
 
-  await expect(page.getByTestId("month")).toContainText("4 of 9");
+  await expect(page.getByTestId("month")).toContainText("4 of 18");
   const before = Number(await fawning.innerText());
 
   // Fawning moves as the month closes, and says which Thread moved it.

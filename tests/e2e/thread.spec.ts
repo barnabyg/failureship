@@ -14,12 +14,12 @@ test("the desk with no window comes back as a Bill in a later month", async ({
   );
 
   // Month 5 passes with no word of it.
-  await expect(page.getByTestId("month")).toContainText("5 of 9");
+  await expect(page.getByTestId("month")).toContainText("5 of 18");
   await expect(page.locator(".panel")).not.toContainText("Health and Safety");
   await answerAnyNotification(page);
   await attendAndFinishMonth(page);
 
-  await expect(page.getByTestId("month")).toContainText("6 of 9");
+  await expect(page.getByTestId("month")).toContainText("6 of 18");
   await expect(page.getByTestId("panel-notification")).toContainText(
     "Health and Safety",
   );

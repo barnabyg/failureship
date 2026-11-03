@@ -51,6 +51,9 @@
   "gaugesNoMoves": "Nothing has come back on you yet, so nothing has moved it. It is your track record, not how safe you are or how anyone feels about you.",
   "milestonesHeading": "Milestones",
   "resultsStandingHeading": "On paper, and in fact",
+  "resultsVacanciesHeading": "Who really decided",
+  "decidedOnPaper": "On paper",
+  "decidedInFact": "In fact",
   "resultsMilestonesHeading": "Milestones earned",
   "resultsNoMilestones": "None. You can compare this with your friends.",
   "resultsRivalsHeading": "Who was competing with you",
@@ -115,7 +118,10 @@
     "story": "The month has closed. Read what was reported, then press Continue to move on.",
     "results": "The run is over. Type its seed to play the same deal again, or start a new run."
   },
-  "actionCount": { "one": "1 action", "other": "{n} actions" },
+  "actionCount": {
+    "one": "1 action",
+    "other": "{n} actions"
+  },
   "claimTitle": "{source} has a word with you",
   "clueVerdicts": {
     "held": "It held up",
@@ -132,5 +138,8 @@
   "results": {
     "title": "Your probation has been extended",
     "intro": "Your review period is over. A form says you are meeting expectations, and that the expectations are under review. Here is what the form leaves out."
-  }
+  },
+  "liftRideTitle": "The lift",
+  "liftRideBody": "Floor {from}. The doors close. There is music, which nobody chose. Floor {to}.",
+  "liftRideStepOut": "Step out"
 }

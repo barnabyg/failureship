@@ -206,6 +206,12 @@ const panelSchema = z.strictObject(
       "saveLostTitle",
       "saveLostBody",
       "saveLostConfirm",
+      "resultsVacanciesHeading",
+      "decidedOnPaper",
+      "decidedInFact",
+      "liftRideTitle",
+      "liftRideBody",
+      "liftRideStepOut",
     ].map((key) => [key, z.string().min(1)]),
   ),
 );

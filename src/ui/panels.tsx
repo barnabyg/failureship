@@ -5,6 +5,7 @@ import { ConfidentialStamp, type Look, type Sent } from "./Intranet";
 import { Continue, Panel, Reaction, Stakes } from "./Panel";
 import { ResultsPanel } from "./ResultsPanel";
 import { ScenePanel } from "./ScenePanel";
+import { StandingBar } from "./StandingBar";
 
 /** The official story, as that month's issue of the staff newsletter. */
 function StoryPanel({
@@ -44,6 +45,31 @@ function StoryPanel({
       )}
       <Continue onChoose={onChoose} />
     </Panel>
+  );
+}
+
+type DecidedView = NonNullable<
+  Extract<StepView, { kind: "notice" }>["decided"]
+>;
+
+/** A vacancy decided: Official standing, beside who really decided and why. */
+function Decided({ decided }: { decided: DecidedView }) {
+  const { onPaper, inFact } = decided;
+  return (
+    <div className="callout" data-testid="decided">
+      {onPaper && (
+        <p data-testid="decided-on-paper">
+          <strong>{panelText.decidedOnPaper}: </strong>
+          {onPaper.label}{" "}
+          <StandingBar standing={onPaper} testId="decided-standing-bar" />{" "}
+          {onPaper.band}. {onPaper.text}
+        </p>
+      )}
+      <p data-testid="decided-in-fact">
+        <strong>{panelText.decidedInFact}: </strong>
+        {inFact}
+      </p>
+    </div>
   );
 }
 
@@ -130,6 +156,7 @@ export function StepPanel({ view, onChoose }: StepPanelProps) {
         <Panel testId="panel-notice" title={step.title} look={mail("notice")}>
           <p>{step.body}</p>
           <Reaction text={step.reaction} />
+          {step.decided && <Decided decided={step.decided} />}
           {step.verdict !== undefined && (
             <p className="callout" data-testid="boss-verdict">
               {step.verdict}

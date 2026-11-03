@@ -13,7 +13,7 @@ const faked = "/?seed=13&choose=do-training,fake&month=";
 
 test("a hidden risk lands on the player", async ({ page }) => {
   await page.goto(`${faked}4`);
-  await expect(page.getByTestId("month")).toContainText("4 of 9");
+  await expect(page.getByTestId("month")).toContainText("4 of 18");
   await expect(page.locator("main")).not.toContainText("correction");
   await answerAnyNotification(page);
   await openMeeting(page);

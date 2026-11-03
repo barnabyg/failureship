@@ -40,7 +40,7 @@ test("the dev server ignores a later month", async ({ page }) => {
   try {
     await page.goto(`${origin}?seed=2&month=6`);
 
-    await expect(page.getByTestId("month")).toContainText("1 of 9");
+    await expect(page.getByTestId("month")).toContainText("1 of 18");
     await expect(page.getByTestId("panel-notification")).toBeVisible();
   } finally {
     await server.close();
