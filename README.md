@@ -60,9 +60,8 @@ about people.
 Press **Notebook** at any step, at no cost. It keeps claims and important signs for
 you, and it never says which to trust. Mark each Character with the kind you suspect.
 
-Press **Org Chart** at any step to see the formal hierarchy, also at no cost. The real
-one is the hidden Power Map, dealt from the seed. A Company Event can change either of them
-mid-run, and later signs and charts follow.
+Press **Org Chart** at any step, at no cost, for the formal hierarchy. The real one is the hidden
+Power Map, dealt from the seed. A Company Event can change either mid-run, and later signs follow.
 
 Your word is yours to give. Some choices offer a **Promise**, whether or not you can deliver it,
 and some a **Deal**, in which each side offers something. Whether you are believed, and whether a
@@ -91,9 +90,8 @@ Hidden Fact is one. The first puts you on a **Final Warning**, shown beside your
 from then on. The second ends the run, at the same results screen. A few choices fire you
 outright, and those say so on the button before you press it.
 
-At any step, **New run** deals a new seed, and typing a seed then pressing
-**Restart from seed** plays that deal from month 1. Leaving a run in progress asks
-first. Swap a seed with a friend and you both get the same deal.
+At any step, **New run** deals a new seed, and **Restart from seed** plays the seed you type from
+month 1. Leaving a run in progress asks first. Swap a seed with a friend for the same deal.
 
 The run is saved in your browser at every step, so reloading the page or coming back later carries
 on exactly where you left off. An address with a different seed starts that deal instead, and

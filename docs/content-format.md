@@ -89,10 +89,9 @@ is in there, counting every month they have spent on it. The first month on a ne
 whatever the run's month, and coming back to a floor picks it up where it was left. Anything with
 `months` must name its `floor`, so nothing written for one floor's months comes again on another.
 Without `months`, something belongs to every month, so the Monthly Status Report recurs on any
-floor, and a stalled Demand follows the player wherever they go. Only Company Events and quarterly
-reviews go by the run's month: Company Events under `schedule` in [`events.json`](#eventsjson), and
-reviews as [Quarterly reviews](#quarterly-reviews) says. The run always ends at `monthsPerRun` in
-[`balance.json`](#balancejson).
+floor, and a stalled Demand follows the player wherever they go. Only Company Events, under
+`schedule` in [`events.json`](#eventsjson), and [quarterly reviews](#quarterly-reviews) go by the
+run's month instead. The run always ends at `monthsPerRun` in [`balance.json`](#balancejson).
 
 A floor is written for as many months as its own Scenes, Notifications and Demands name. Each of
 those months needs at least one of them, and a stay longer than that draws from the floor's
@@ -111,10 +110,9 @@ action to open it on its floor, and a room `id` used more than once in the tower
 
 A quarterly review is a Scene in [`scenes.json`](#scenesjson) with `"quarter": 2`, the quarter of
 the run that it closes. `monthsPerQuarter` in [`balance.json`](#balancejson) says how long a quarter
-is, so with 3 the reviews come in months 3, 6, 9 and so on of the run, whatever its length and
-whichever floor the player is on. Like Company Events, reviews go by the run's month, not the month
-on a floor, so a promotion never moves them. Each quarter has a review of its own, so each reads
-differently: a longer run needs one more review for each quarter it adds, and nothing else.
+is, so with 3 the reviews come in months 3, 6, 9 and so on of the run, not of a floor, whatever the
+run's length and whichever floor the player is on. Each quarter has a review of its own, so each
+reads differently: a longer run needs one more review for each quarter it adds, and nothing else.
 
 A review opens by itself, after the month's Notifications and any flagged Project and before the
 player's actions. Nobody can stay away, and it takes none of the player's actions. It is staged:
@@ -122,9 +120,12 @@ everyone is on their best behaviour, so the cast shows none of the behaviours in
 [`behaviours.json`](#behavioursjson), only the review's own signs, the boss's treatment and
 everyone's regard. Otherwise it is written like any Scene, with a `cast`, `signs` and `options`.
 
-What a review says of the player is what the paperwork says, not what anyone really thinks. Its
-flags go on the official record, in `deeds` in [`standing.json`](#standingjson), and can be told in
-[`official-story.json`](#official-storyjson). It never decides anything by itself.
+A review's verdict on the player is paperwork: its flags go on the official record, in `deeds` in
+[`standing.json`](#standingjson), and can be told in [`official-story.json`](#official-storyjson), so
+the same choices move Official standing the same way on every deal. Those present can still take
+note of how the player behaves, as in any Scene, through a result's `opinion`, `headOpinion`,
+`approach`, `remembers` and `news`, and the Threads its flags start. A review cannot be a big
+mistake, so by itself it never decides how a run goes.
 
 These are refused: a review with `floor`, `months`, `pool` or a `script`, one that an action or the
 Project's flag opens, a result whose `when` reads the hidden truth or that is a `mistake`, a review
