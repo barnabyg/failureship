@@ -89,9 +89,9 @@ is in there, counting every month they have spent on it. The first month on a ne
 whatever the run's month, and coming back to a floor picks it up where it was left. Anything with
 `months` must name its `floor`, so nothing written for one floor's months comes again on another.
 Without `months`, something belongs to every month, so the Monthly Status Report recurs on any
-floor, and a stalled Demand follows the player wherever they go. Only Company Events go by the
-run's month, under `schedule` in [`events.json`](#eventsjson), and the run always ends at
-`monthsPerRun` in [`balance.json`](#balancejson).
+floor, and a stalled Demand follows the player wherever they go. Only Company Events, under
+`schedule` in [`events.json`](#eventsjson), and [quarterly reviews](#quarterly-reviews) go by the
+run's month instead. The run always ends at `monthsPerRun` in [`balance.json`](#balancejson).
 
 A floor is written for as many months as its own Scenes, Notifications and Demands name. Each of
 those months needs at least one of them, and a stay longer than that draws from the floor's
@@ -105,6 +105,32 @@ These are refused: a `floor` that names no floor, `months` with no `floor`, a fl
 Notification or Demand of its own, a written month with none of them, a floor written for fewer
 months than the run with no pool, a pool item with `months` or no `floor`, a pool Scene with no
 action to open it on its floor, and a room `id` used more than once in the tower.
+
+## Quarterly reviews
+
+A quarterly review is a Scene in [`scenes.json`](#scenesjson) with `"quarter": 2`, the quarter of
+the run that it closes. `monthsPerQuarter` in [`balance.json`](#balancejson) says how long a quarter
+is, so with 3 the reviews come in months 3, 6, 9 and so on of the run, not of a floor, whatever the
+run's length and whichever floor the player is on. Each quarter has a review of its own, so each
+reads differently: a longer run needs one more review for each quarter it adds, and nothing else.
+
+A review opens by itself, after the month's Notifications and any flagged Project and before the
+player's actions. Nobody can stay away, and it takes none of the player's actions. It is staged:
+everyone is on their best behaviour, so the cast shows none of the behaviours in
+[`behaviours.json`](#behavioursjson), only the review's own signs, the boss's treatment and
+everyone's regard. Otherwise it is written like any Scene, with a `cast`, `signs` and `options`.
+
+A review's verdict on the player is paperwork: its flags go on the official record, in `deeds` in
+[`standing.json`](#standingjson), and can be told in [`official-story.json`](#official-storyjson), so
+the same choices move Official standing the same way on every deal. Those present can still take
+note of how the player behaves, as in any Scene, through a result's `opinion`, `headOpinion`,
+`approach`, `remembers` and `news`, and the Threads its flags start. A review cannot be a big
+mistake, so by itself it never decides how a run goes.
+
+These are refused: a review with `floor`, `months`, `pool` or a `script`, one that an action or the
+Project's flag opens, a result whose `when` reads the hidden truth or that is a `mistake`, a review
+that nothing in it moves Official standing, a quarter of the run with no review or more than one, a
+review for a quarter the run never reaches, and reviews with no `monthsPerQuarter`.
 
 ## `actions.json`
 
@@ -121,6 +147,9 @@ What can be done on the floor, and the results.
 ## `balance.json`
 
 Actions a month, months in a run and the cost of each choice.
+
+- `monthsPerQuarter` is how many months of the run make a quarter, each closed by a review, as
+  [Quarterly reviews](#quarterly-reviews) says. Without it there are no reviews.
 
 - `disasterChance` is how often a month brings a disaster with no clue, as in
   [`events.json`](#eventsjson).
@@ -509,6 +538,7 @@ meeting has everyone in it.
 - A Scene with a `verdict` adds what the boss finally says, by their mood.
 - A Scene that data cannot express can name a `script`, which is passed to `startRun` in
   `sceneScripts`. This format is a trial, as the spec, issue #1, says.
+- A Scene with a `quarter` is a quarterly review, as [Quarterly reviews](#quarterly-reviews) says.
 
 ## `sources.json`
 

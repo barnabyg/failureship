@@ -175,6 +175,8 @@ export interface MonthRecord {
   moveLanded: boolean;
   /** Whether the month has dealt with the player missing its meeting. */
   absenceDealtWith: boolean;
+  /** Whether the month's quarterly review, if it has one, has been held. */
+  reviewed: boolean;
 }
 
 /**

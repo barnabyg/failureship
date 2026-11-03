@@ -126,6 +126,8 @@ export const contentSchema = z.strictObject({
   balance: z.strictObject({
     actionsPerMonth: z.number().int().positive(),
     monthsPerRun: z.number().int().positive(),
+    /** How many months of the run make a quarter, each closed by a review. None, no reviews. */
+    monthsPerQuarter: z.number().int().positive().optional(),
     actionCosts: z.record(id, z.number().int().nonnegative()),
     /** How often a Scene's signs swap who holds influence with the next person. */
     signsMisleadChance: z.number().min(0).max(1),

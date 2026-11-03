@@ -63,9 +63,9 @@ test("a Project that never goes red still has a meeting in month 5", async ({
   await expect(page.getByTestId("month")).toContainText("5 of 9");
   expect(await reportedStatus(page)).not.toBe("Red");
   await answerAnyNotification(page);
-  await page.getByTestId("hotspot-meeting-quarterly").click();
+  await page.getByTestId("hotspot-meeting-workshop").click();
 
   await expect(page.getByTestId("panel-scene").locator("h2")).toHaveText(
-    "Quarterly Business Review",
+    "Ideas Workshop",
   );
 });

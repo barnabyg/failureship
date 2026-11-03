@@ -25,6 +25,7 @@ import {
   type SceneData,
 } from "./content";
 import { findBrokenFloors } from "./floor-checks";
+import { findBrokenReviews } from "./review-checks";
 import { bossesAtStart, meantBy } from "./places";
 import {
   dependsOnHiddenTruth,
@@ -161,6 +162,7 @@ function findBrokenReferences(content: Content): string[] {
   };
 
   problems.push(...findBrokenFloors(content));
+  problems.push(...findBrokenReviews(content, hiddenFlags));
   problems.push(...findBrokenDeal(content, characters));
   problems.push(...findBrokenBehaviours(content));
   problems.push(...findBrokenBossSigns(content));

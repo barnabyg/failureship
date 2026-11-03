@@ -429,6 +429,69 @@
     },
     {
       "when": {
+        "flag": "took-an-idea"
+      },
+      "reported": "Your idea was taken forward from the Ideas Workshop.",
+      "happened": "It was the Project Co-ordinator's idea."
+    },
+    {
+      "when": {
+        "flag": "wrote-a-real-idea"
+      },
+      "reported": "Several ideas were parked for future consideration.",
+      "happened": "One of them was yours, and would have worked."
+    },
+    {
+      "when": {
+        "flag": "restated-the-baseline"
+      },
+      "reported": "Last quarter's results were restated in line with best practice.",
+      "happened": "You moved last quarter down so that this one went up."
+    },
+    {
+      "when": {
+        "flag": "owned-the-dip"
+      },
+      "reported": "A timing difference was identified at the half-year review.",
+      "happened": "You said that your arrow went down, and why."
+    },
+    {
+      "when": {
+        "flag": "blamed-the-template"
+      },
+      "reported": "A working group has been formed to improve the reporting template.",
+      "happened": "You blamed the template."
+    },
+    {
+      "when": {
+        "flag": "asked-about-the-axis"
+      },
+      "reported": "Finance's approach to axes was discussed.",
+      "happened": "You asked why an arrow had no axis."
+    },
+    {
+      "when": {
+        "flag": "signed-the-blade"
+      },
+      "reported": "You committed to an ambitious trajectory for next year.",
+      "happened": "You signed a line that nobody has the figures for."
+    },
+    {
+      "when": {
+        "flag": "thanked-leadership"
+      },
+      "reported": "Leadership was recognised for an incredible year.",
+      "happened": "You thanked them for it."
+    },
+    {
+      "when": {
+        "flag": "pointed-at-the-handle"
+      },
+      "reported": "Some historical performance was noted at the year-end review.",
+      "happened": "You pointed at the part of the year that had happened."
+    },
+    {
+      "when": {
         "flag": "said-exceeds"
       },
       "reported": "You took ownership of your development.",
