@@ -154,3 +154,32 @@ export const hiddenTruth = z.strictObject({
     )
     .min(1),
 });
+
+/**
+ * Who competes with the player. A Rival is a relationship, not a kind: any
+ * Practitioner who is competing with the player for something, as things stand.
+ */
+export const rivals = z.strictObject({
+  /** What can be competed for, and who can compete for it. */
+  competing: z
+    .array(
+      z.strictObject({
+        id,
+        /** What the results screen says they competed with the player for. */
+        for: text,
+        /** Characters, or a place above the player, meaning whoever is in it. */
+        who: z.array(id).min(1),
+        /** Competed for only while this holds, such as a vacancy being open. */
+        when: condition.optional(),
+      }),
+    )
+    .min(1),
+  /** The most Rivals at once: the most influential of those competing. */
+  most: z.number().int().positive(),
+  /** How often the deal's first Practitioner is one who could compete, so that no Rival is rare. */
+  seatChance: z.number().min(0).max(1),
+  /** How often a month's Character Move is a Rival's, while the player has one. */
+  moveChance: z.number().min(0).max(1),
+  /** What the results screen says of a Rival who did nothing anyone noticed. */
+  didNothing: text,
+});

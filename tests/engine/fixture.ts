@@ -67,6 +67,11 @@ interface RawMove {
   from: string;
   title: string;
   body: string;
+  by?: string;
+  family?: string;
+  story?: { about: string; text: string };
+  opinion?: number;
+  headOpinion?: number;
   when?: RawCondition;
   priority?: boolean;
   sets?: string[];

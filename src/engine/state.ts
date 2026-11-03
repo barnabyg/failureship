@@ -26,6 +26,8 @@ export interface Memory {
   hops: number;
   /** Which piece of news it was, if it was any that can travel. */
   news: number | null;
+  /** The month they found out that it was a false story, if they did. */
+  foundOut: number | null;
 }
 
 export interface TruthOfRun {
@@ -44,6 +46,8 @@ export interface TruthOfRun {
     month: number;
     /** If it is about a broken word: whose, and what was offered. */
     word?: { victim: string; what: string } | undefined;
+    /** Who made it up, if it is a false story. */
+    startedBy?: string | undefined;
   }[];
   /** What the player's decisions have built up. Never shown until the end. */
   risks: {
@@ -62,6 +66,17 @@ export interface TruthOfRun {
   memories: Memory[];
   /** Believers who were burned enough to change. Never shown until the end. */
   changes: Change[];
+  /** Everyone who has been the player's Rival. Never shown until the end. */
+  rivals: Rivalry[];
+}
+
+/** A Rival: since when, for what, and the Moves they made against the player. */
+export interface Rivalry {
+  character: string;
+  since: number;
+  /** What they competed for, by the ids in `competing`. */
+  for: string[];
+  did: { month: number; move: string }[];
 }
 
 /** A Believer who changed: what into, when and why. */
@@ -134,7 +149,12 @@ export type Step =
       /** Shown as written, even naming someone who has gone. */
       asWritten?: boolean | undefined;
     }
-  | { kind: "move"; id: string }
+  | {
+      kind: "move";
+      id: string;
+      /** Who made it, if anyone in particular did. */
+      by?: string | undefined;
+    }
   | { kind: "event"; id: string }
   | { kind: "story" }
   | { kind: "results" };

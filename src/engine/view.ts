@@ -183,6 +183,16 @@ export type StepView =
         to: string;
         why: string[];
       }[];
+      /** Each Rival, what they competed for, and what they did to the player. */
+      rivals: {
+        name: string;
+        title: string;
+        since: number;
+        competed: string[];
+        did: { month: number; text: string; family: string | null }[];
+        /** What is said of a Rival who did nothing the player would notice. */
+        didNothing: string | null;
+      }[];
       /** The Milestones earned, for comparing with friends. */
       milestones: { month: number; title: string }[];
       /** The big mistakes the player made, in order. */

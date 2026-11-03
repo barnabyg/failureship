@@ -15,6 +15,7 @@ export function remember(
     via: null,
     hops: 0,
     news: null,
+    foundOut: null,
     ...memory,
     month: state.month,
   });
@@ -62,6 +63,28 @@ export function startNews(
   return id;
 }
 
+/**
+ * A false story about the player, made up by someone. It starts with them, and
+ * they know better than to believe it, so it moves nobody's belief until it is
+ * passed on, as true news is.
+ */
+export function startStory(
+  state: State,
+  content: Content,
+  story: { about: string; text: string; by: string },
+): void {
+  const { about, text, by } = story;
+  const id = state.truth.news.length;
+  state.truth.news.push({
+    about,
+    tone: "bad",
+    text,
+    month: state.month,
+    startedBy: by,
+  });
+  remember(state, content, { character: by, about, text, news: id });
+}
+
 /** Whoever has a tie of influence to this person, in either direction. */
 export function tiedTo(state: State, id: string): string[] {
   return state.truth.powerMap.influence.flatMap((tie) => {
@@ -71,16 +94,18 @@ export function tiedTo(state: State, id: string): string[] {
 }
 
 /**
- * As a month opens, news moves along the Power Map, by named draws. Only true
- * deeds start news for now, but a false story could be sent down the same route.
+ * As a month opens, news moves along the Power Map, by named draws: true deeds,
+ * and false stories, by the same route. Someone who has seen through a false
+ * story first stops believing it, and passes it on no further.
  */
 export function spreadNews(state: State, content: Content): void {
   const travel = content.reputation?.travel;
   if (!travel) return;
+  findOutStories(state, content);
   for (let step = 0; step < travel.hopsPerMonth; step++) {
     // Those who heard this month have to wait to pass it on, step by step.
     const heard = state.truth.memories.filter(
-      (m) => m.news !== null && m.hops < travel.maxHops,
+      (m) => m.news !== null && m.hops < travel.maxHops && m.foundOut === null,
     );
     for (const from of heard) {
       const { news } = from;
@@ -98,12 +123,50 @@ export function spreadNews(state: State, content: Content): void {
           character: to,
           about: from.about,
           text: from.text,
-          tone: from.tone,
+          tone: state.truth.news[news]?.tone,
           via: from.character,
           hops: from.hops + 1,
           news,
         });
       }
+    }
+  }
+}
+
+/**
+ * Anyone who heard a false story can see through it, by a seeded draw for their
+ * kind, and then believes of the player what they did before they heard it.
+ */
+function findOutStories(state: State, content: Content): void {
+  const written = content.reputation;
+  if (!written?.falseStories) return;
+  for (const memory of state.truth.memories) {
+    const story = state.truth.news[memory.news ?? -1];
+    const told = memory.tone !== undefined && memory.month < state.month;
+    if (story?.startedBy === undefined || memory.foundOut !== null || !told) {
+      continue;
+    }
+    const kind = state.truth.characters.find(
+      (c) => c.id === memory.character,
+    )?.kind;
+    if (kind === undefined) continue;
+    const name = `found-out:${String(memory.news)}:${memory.character}`;
+    if (
+      drawFor(state.seed, name, state.month) >=
+      written.falseStories.foundOut[kind]
+    ) {
+      continue;
+    }
+    memory.foundOut = state.month;
+    const shift = -written.travel.shift[story.tone];
+    shiftBelief(state, memory.character, shift);
+    if (memory.character === bossOf(state, content)) {
+      state.bossLandings.push({
+        month: state.month,
+        boss: memory.character,
+        choice: memory.text,
+        shift,
+      });
     }
   }
 }

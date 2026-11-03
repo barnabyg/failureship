@@ -6,6 +6,7 @@ import {
   type Condition,
   type Content,
 } from "./content";
+import { RIVAL } from "./rivals";
 
 /** Showing or hiding an option on this would tell the player the truth. */
 export function dependsOnHiddenTruth(
@@ -30,6 +31,9 @@ export function dependsOnHiddenTruth(
   if ("all" in condition) {
     return condition.all.some((c) => dependsOnHiddenTruth(c, hiddenFlags));
   }
+  if ("any" in condition) {
+    return condition.any.some((c) => dependsOnHiddenTruth(c, hiddenFlags));
+  }
   return false;
 }
 
@@ -42,8 +46,9 @@ export function flagsSetByHiddenResults(content: Content): Set<string> {
         o.results.some((r) => r.when && dependsOnHiddenTruth(r.when)),
       )
       .flatMap((o) => o.results.flatMap((r) => r.sets)),
+    // A Rival's Move lands only if the player has a Rival.
     ...content.moves
-      .filter((m) => m.when && dependsOnHiddenTruth(m.when))
+      .filter((m) => (m.when && dependsOnHiddenTruth(m.when)) || m.by === RIVAL)
       .flatMap((m) => m.sets),
     // Whether and how a Bill arrives is drawn, and can read the truth.
     ...everyBill(content).flatMap((b) => [

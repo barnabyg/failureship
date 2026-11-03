@@ -306,6 +306,7 @@ describe("what a Character remembers", () => {
         via: null,
         hops: 0,
         news: null,
+        foundOut: null,
       },
     ]);
   });

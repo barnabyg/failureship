@@ -1,5 +1,6 @@
 import type { Content, Kind } from "./content";
-import { drawFor, pick, pickWeighted, shuffle } from "./rng";
+import { couldCompeteAtStart } from "./rivals";
+import { draw, drawFor, pick, pickWeighted, shuffle } from "./rng";
 
 export interface DealtCharacter {
   id: string;
@@ -131,12 +132,25 @@ export function dealMotives(
   return { characters: dealt, next };
 }
 
-/** The first seats go to Practitioners, so there is always something to find. */
+/**
+ * The first seats go to Practitioners, so there is always something to find.
+ * Most deals give the first of them to someone who could compete with the
+ * player, so that a run with no Rival is rare.
+ */
 function dealKinds(rng: number, ids: readonly string[], content: Content) {
   const { kinds, minPractitioners } = content.hiddenTruth;
   const seats = shuffle(rng, ids);
   const dealt = new Map<string, Kind>();
   let next = seats.next;
+  if (content.rivals) {
+    const roll = draw(next);
+    next = roll.next;
+    const could = couldCompeteAtStart(content);
+    const first = seats.items.find((id) => could.includes(id));
+    if (roll.value < content.rivals.seatChance && first !== undefined) {
+      seats.items = [first, ...seats.items.filter((id) => id !== first)];
+    }
+  }
   seats.items.forEach((id, seat) => {
     if (seat < minPractitioners) {
       dealt.set(id, "practitioner");

@@ -141,7 +141,15 @@ export const move = z.strictObject({
   when: condition.optional(),
   /** Lands ahead of other Moves whenever its condition holds. */
   priority: z.boolean().default(false),
+  /** Who makes it: a Character, a place, or `{rival}`, one of the player's Rivals. */
+  by: id.optional(),
+  /** Which family of Move it is, as the results screen says of a Rival. */
+  family,
+  /** A false story about the player, which starts with whoever makes the Move. */
+  story: z.strictObject({ about: id, text }).optional(),
   sets,
+  opinion,
+  headOpinion,
   mistake: bigMistake,
   /** Pays back the favour the player owes this Character. */
   repays: id.optional(),
