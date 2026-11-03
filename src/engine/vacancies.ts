@@ -10,6 +10,7 @@ import {
   personOf,
   shiftBelief,
   teamOf,
+  titleHeld,
 } from "./reads";
 import { remember } from "./reputation";
 import { competitionNow } from "./rivals";
@@ -236,10 +237,11 @@ function pick(
  * protégés, an Incompetent who looks the part. The candidates are the player and
  * whoever competes for it, and the strongest reasons win, with a seeded draw
  * among equals. A big mistake while it was open can rule the player out, and
- * if nobody else stands for it, the holder's team does. The holder moves up,
- * the winner takes the seat, and whoever answered to the holder answers to
- * them. Winning takes the player to the seat's floor. Each Character passed
- * over remembers.
+ * if nobody else stands for it, the holder's team is weighed instead. The
+ * holder moves up, the winner takes the seat, with the title it had, and
+ * whoever answered to the holder answers to them. Winning takes the player to
+ * the seat's floor. Each Character who stood for it and was passed over
+ * remembers; one weighed only because nobody stood does not.
  */
 function decide(
   state: State,
@@ -260,13 +262,14 @@ function decide(
       (c) => c.for.includes(seat.competing) && c.character !== holder,
     )
     .map((c) => c.character);
-  const others = (
-    competing.length > 0 || !isRuledOut(written, kind, you)
-      ? competing
-      : teamOf(state, content, holder)
-  ).map(weighOf);
+  const stood = competing.map(weighOf);
+  const others =
+    stood.length > 0 || !isRuledOut(written, kind, you)
+      ? stood
+      : teamOf(state, content, holder).map(weighOf);
   const { winner, top } = pick(state, written, seat, kind, [you, ...others]);
-  // Who would have had it without the mistake, which says whether it cost the seat.
+  // Who would have had it without the mistake, against those who stood for it,
+  // which says whether it cost the seat.
   const mistaken = you.reasons.includes("mistake");
   const unmistaken: Candidate = {
     ...you,
@@ -274,7 +277,7 @@ function decide(
     strength:
       you.strength - (mistaken ? written.reasons.mistake.weight[kind] : 0),
   };
-  const otherwise = pick(state, written, seat, kind, [unmistaken, ...others]);
+  const otherwise = pick(state, written, seat, kind, [unmistaken, ...stood]);
   const paper = standingOnPaper(state, content);
   const decided: Decided = {
     month: state.month,
@@ -285,6 +288,7 @@ function decide(
     blocked: winner !== YOU && otherwise.winner === YOU,
     candidates: [you, ...others],
     onPaper: paper?.band ?? null,
+    held: titleHeld(state, content, holder),
   };
   vacancy.decided = decided;
   // What everyone is called is read before anyone moves.
@@ -295,10 +299,10 @@ function decide(
     "{decider}": called(decider),
     "{why}": toldOf(written, decided, called),
   });
-  moveUp(state, content, seat, holder, winner);
+  moveUp(state, content, seat, holder, decided);
   const { forYou, forSomeoneElse } = written.passedOver;
   const kept = winner === YOU ? forYou : forSomeoneElse;
-  for (const { who } of decided.candidates) {
+  for (const { who } of stood) {
     if (who === YOU || who === winner) continue;
     remember(state, content, {
       character: who,
@@ -330,14 +334,9 @@ function moveUp(
   content: Content,
   seat: Seat,
   holder: string,
-  winner: string,
+  { winner, held }: Decided,
 ): void {
   const above = managerOf(state, content, holder) ?? seat.movesUp.reportsTo;
-  const written = content.characters.find((c) => c.id === holder);
-  const held = state.titles[holder] ?? {
-    title: written?.title ?? "",
-    called: written?.called ?? written?.name ?? holder,
-  };
   const team = [YOU, ...teamOf(state, content, holder)];
   state.reportsTo[holder] = seat.movesUp.reportsTo;
   state.titles[holder] = {
@@ -352,20 +351,27 @@ function moveUp(
   }
 }
 
-/** A candidate's reasons: whatever cost them the seat, then those that weighed most with this kind. */
+/**
+ * A candidate's reasons, those that weighed most with this kind first. A
+ * mistake counts only when it cost the player the seat, and then comes first.
+ */
 function weighed(
   written: Written,
   decided: Decided,
   who: string,
 ): Written["reasons"][VacancyReason][] {
-  const { kind } = decided;
+  const { kind, blocked } = decided;
   const candidate = decided.candidates.find((c) => c.who === who);
-  const cost = (r: Written["reasons"][VacancyReason]) =>
-    decided.blocked && r === written.reasons.mistake ? 1 : 0;
+  const cost = (r: VacancyReason) => (r === "mistake" ? 1 : 0);
   return (candidate?.reasons ?? [])
-    .map((r) => written.reasons[r])
-    .filter((r) => r.weight[kind] !== 0 || r.rulesOut.includes(kind))
-    .sort((a, b) => cost(b) - cost(a) || b.weight[kind] - a.weight[kind]);
+    .filter((r) => r !== "mistake" || blocked)
+    .filter((r) => written.reasons[r].weight[kind] !== 0 || cost(r) > 0)
+    .sort(
+      (a, b) =>
+        cost(b) - cost(a) ||
+        written.reasons[b].weight[kind] - written.reasons[a].weight[kind],
+    )
+    .map((r) => written.reasons[r]);
 }
 
 /**
@@ -380,7 +386,7 @@ function toldOf(
   const tie = weighed(written, decided, decided.winner).find(
     (r) => r.told !== undefined,
   )?.told;
-  // A seat the player's mistake cost them is told as that, before any tie.
+  // A seat the player's mistake cost them is told as that, instead of any tie.
   const cost = decided.blocked ? written.reasons.mistake.told : undefined;
   const line =
     cost ?? (decided.close ? written.close : (tie ?? written.untold));

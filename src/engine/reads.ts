@@ -204,6 +204,21 @@ export function teamOf(state: State, content: Content, id: string): string[] {
     .filter((c) => !isGone(state, c) && managerOf(state, content, c) === id);
 }
 
+/** Someone's job title now, and what text calls them by it: one taken by moving up, or as written. */
+export function titleHeld(
+  state: State,
+  content: Content,
+  id: string,
+): { title: string; called: string } {
+  const written = content.characters.find((c) => c.id === id);
+  return (
+    state.titles[id] ?? {
+      title: written?.title ?? "",
+      called: written?.called ?? written?.name ?? id,
+    }
+  );
+}
+
 /** Whether text names someone who has left, by name or by what text calls them. */
 export function mentionsGone(
   state: State,

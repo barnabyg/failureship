@@ -247,6 +247,8 @@ export interface Vacancy {
     candidates: Candidate[];
     /** Official standing's band then, by its label: what the paperwork said. */
     onPaper: string | null;
+    /** The seat's job title as its holder held it, which whoever takes it holds. */
+    held: { title: string; called: string };
   } | null;
 }
 

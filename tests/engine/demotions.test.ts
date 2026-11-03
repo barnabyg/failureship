@@ -63,6 +63,16 @@ const winning = SEEDS.find(
   (s) => decidedOn(s, content).decided?.winner === "you",
 );
 
+/** The fixture with nobody competing for the seat. */
+function nobodyCompeting(): Content {
+  const raw = vacancyRaw();
+  for (const c of raw.rivals.competing) {
+    (c as { when: unknown }).when = { flag: "never-set" };
+  }
+  return parseContent(raw);
+}
+const unopposed = nobodyCompeting();
+
 /** That deal, with its seat open, and whoever decides it dealt this kind. */
 function openAs(kind: Kind, using: Content = content): Run {
   if (winning === undefined) throw new Error("Nobody wins.");
@@ -106,26 +116,58 @@ describe("a big mistake while a seat is open", () => {
     const believer = owed(openAs("believer"));
     playAnswering(believer, { "seat-talk": "slip" });
     const practitioner = owed(openAs("practitioner"));
-    playAnswering(practitioner, { "seat-talk": "slip" });
+    const views = playAnswering(practitioner, { "seat-talk": "slip" });
 
     expect(decisionOf(believer)?.winner).not.toBe("you");
-    expect(decisionOf(practitioner)?.winner).toBe("you");
+    expect(decisionOf(practitioner)).toMatchObject({
+      winner: "you",
+      blocked: false,
+    });
     expect(
       decisionOf(practitioner)?.candidates.find((c) => c.who === "you")
         ?.reasons,
     ).toContain("mistake");
+    // A mistake that did not cost the seat is neither told nor listed.
+    const won = toldTitled(views, "SEAT-WON");
+    if (won?.step.kind !== "notice") throw new Error("Never told.");
+    expect(won.step.decided?.inFact).not.toContain("MISTAKE");
+    const results = views.at(-1)?.step;
+    if (results?.kind !== "results") throw new Error("No results.");
+    expect(results.vacancies[0]?.inFact).not.toContain("MISTAKE");
   });
 
-  it("gives the seat to someone from the team when nobody else stands for it", () => {
-    const raw = vacancyRaw();
-    for (const c of raw.rivals.competing) {
-      (c as { when: unknown }).when = { flag: "never-set" };
-    }
-    const alone = parseContent(raw);
-    const run = openAs("believer", alone);
-    playAnswering(run, { "seat-talk": "slip" });
+  it("gives the seat to someone from the team when nobody else stands for it, and says the mistake cost it", () => {
+    const run = openAs("believer", unopposed);
+    const views = playAnswering(run, { "seat-talk": "slip" });
 
     expect(["ben", "cal"]).toContain(decisionOf(run)?.winner);
+    expect(decisionOf(run)?.blocked).toBe(true);
+    expect(toldTitled(views, "SEAT-BLOCKED")).toBeDefined();
+    // Nobody stood for it, so nobody was passed over for it.
+    expect(
+      readHiddenTruth(run).memories.filter((m) =>
+        m.about.startsWith("lost-the-seat"),
+      ),
+    ).toEqual([]);
+  });
+
+  it("says the mistake cost the seat of a player who would have had it unopposed, however strong the team", () => {
+    // An Incompetent, who thinks little of the player, and owes and looks after Ben.
+    const run = edited(openAs("incompetent", unopposed), unopposed, (state) => {
+      const map = state.truth.powerMap;
+      const decider = map.influence.find((i) => i.over === "ana")?.who ?? "ana";
+      map.influence = [
+        ...map.influence.filter((i) => i.over !== "ben"),
+        { who: decider, over: "ben" },
+      ];
+      map.favours = [{ owes: decider, to: "ben", why: "" }];
+      state.truth.beliefs[decider] = -50;
+    });
+    const views = playAnswering(run, { "seat-talk": "slip" });
+
+    expect(decisionOf(run)).toMatchObject({ winner: "ben", blocked: true });
+    expect(toldTitled(views, "SEAT-BLOCKED")).toBeDefined();
+    expect(toldTitled(views, "SEAT-LOST")).toBeUndefined();
   });
 
   it("before the seat opens costs nothing but the Final Warning", () => {
