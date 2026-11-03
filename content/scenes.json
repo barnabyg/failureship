@@ -3244,13 +3244,13 @@
     "title": "Budget Planning",
     "location": "Floor 2, Team Room 2A",
     "narration": [
-      "The leads plan next year's budget, which is this year's, less ten per cent, plus whatever can be argued for."
+      "Next year's budget is this year's, less ten per cent, plus whatever can be argued for."
     ],
     "cast": ["{head}", "{boss}", "admin", "delivery", "analyst", "projects"],
     "signs": [
       {
         "label": "Whose line survives",
-        "text": "{holder}'s line is kept without discussion. {ignored}'s is discussed until it goes.",
+        "text": "{holder}'s line stays. {ignored}'s is discussed until it goes.",
         "clue": "At Budget Planning, {holder}'s line was kept, and {ignored}'s was discussed until it went."
       },
       {
