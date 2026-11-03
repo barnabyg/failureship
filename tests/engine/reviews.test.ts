@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 import { gameContent } from "../../src/content";
 import {
   parseContent,
+  resumeRun,
   startRun,
   type Choice,
   type PlayerView,
@@ -9,7 +10,7 @@ import {
 } from "../../src/engine";
 import { readHiddenTruth } from "../../src/engine/hidden-truth";
 import { plainChoice } from "../../src/ui/later-month";
-import { fixtureRaw } from "./fixture";
+import { action, fixtureRaw, room } from "./fixture";
 
 /** A review for one quarter, whose choices go on the record or do not. */
 function review(quarter: number) {
@@ -135,6 +136,45 @@ describe("Quarterly reviews", () => {
 
     expect(view.step.behaviours).toEqual([]);
     expect(view.step.signs[0]?.text).toMatch(/^\S.*'s slide is skipped\.$/);
+  });
+
+  it("come in their month of the run on whichever floor the player is on", () => {
+    const raw = reviewsRaw(9);
+    raw.floors.push({
+      job: "manager",
+      title: "JOB-MANAGER",
+      rooms: [room("boardroom", 0)],
+    });
+    raw.actions.push(action("boardroom"));
+    raw.notifications.push({
+      id: "manager-own",
+      floor: "manager",
+      pool: true,
+      when: { flag: "never-set" },
+      from: "Facilities",
+      subject: "NEVER-SEEN",
+      body: "Never seen.",
+      options: [{ id: "noted", label: "Noted" }],
+    });
+    const content = parseContent(raw);
+    const first = startRun({ seed: 1, content });
+    let view = first.view();
+    while (view.month < 2 || view.step.kind !== "story") {
+      view = first.choose(view.choices[0] as Choice);
+    }
+    // Promoted at month 2's close: month 3 of the run is month 1 upstairs.
+    const saved = JSON.parse(first.save()) as { state: { job: string } };
+    saved.state.job = "manager";
+    const upstairs = resumeRun({ save: JSON.stringify(saved), content });
+
+    const views = playOut(upstairs);
+
+    expect(scenesOf(views)).toEqual([
+      { month: 3, title: "REVIEW-1" },
+      { month: 6, title: "REVIEW-2" },
+      { month: 9, title: "REVIEW-3" },
+    ]);
+    expect(views.find((v) => v.step.kind === "scene")?.job.id).toBe("manager");
   });
 
   it("put what the player chose on the official record", () => {
