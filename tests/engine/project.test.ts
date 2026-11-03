@@ -227,7 +227,7 @@ describe("a Project in content", () => {
   });
 });
 
-const BOSS = gameContent.boss.character;
+const BOSS = gameContent.you.reportsTo;
 
 function dealtBoss(run: Run): Kind | undefined {
   return readHiddenTruth(run).characters.find((c) => c.id === BOSS)?.kind;

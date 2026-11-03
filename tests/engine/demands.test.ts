@@ -369,7 +369,7 @@ describe("Demands in content", () => {
   });
 });
 
-const BOSS = gameContent.boss.character;
+const BOSS = gameContent.you.reportsTo;
 
 describe("Demands in the game", () => {
   const items = gameContent.demands?.items ?? [];

@@ -15,6 +15,7 @@ import {
   sceneData,
 } from "./reads";
 import { regardOf } from "./reputation";
+import { whoIs } from "./places";
 import { draw, pickWeighted } from "./rng";
 import { calledBy, sayPeople } from "./say";
 import {
@@ -104,7 +105,7 @@ function noteScene(
     );
     if (own?.clue !== undefined) {
       note(
-        sayPeople(own.clue, { "{who}": calledBy(content, character) }),
+        sayPeople(own.clue, { "{who}": calledBy(state, content, character) }),
         "held",
       );
     }
@@ -113,7 +114,7 @@ function noteScene(
     if (written?.clue === undefined || kind === undefined) continue;
     const top = Math.max(...Object.values(written.likelihood));
     note(
-      sayPeople(written.clue, { "{who}": calledBy(content, character) }),
+      sayPeople(written.clue, { "{who}": calledBy(state, content, character) }),
       written.likelihood[kind] === top ? "held" : "wrong",
     );
   }
@@ -151,7 +152,11 @@ export function behaveInScene(
   if (verdict !== undefined) state.verdict = verdict;
   if (result.factNote !== undefined) {
     const dealt = state.truth.characters.find(
-      (c) => c.id === (result.factAt ?? heard?.subject),
+      (c) =>
+        c.id ===
+        (result.factAt === undefined
+          ? heard?.subject
+          : whoIs(state, world.content, result.factAt)),
     )?.fact;
     // Acting on a false claim says nothing about the fact they really have.
     const relevant = option?.about === undefined || dealt?.id === option.about;
@@ -163,7 +168,7 @@ export function behaveInScene(
   }
   const reply =
     replyToPromise(state, world.content, option?.promise) ??
-    replyToDeal(world.content, option?.deal);
+    replyToDeal(state, world.content, option?.deal);
   state.step = {
     kind: "notice",
     title: scene.title,

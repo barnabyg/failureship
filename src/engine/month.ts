@@ -6,6 +6,7 @@ import { dealsFallDue } from "./deals";
 import { dealWithAbsence, followUpDemands } from "./demands";
 import { closeGauges } from "./gauges";
 import { applyOutcome } from "./outcome";
+import { bossOf } from "./places";
 import { promisesFallDue } from "./promises";
 import { spreadNews } from "./reputation";
 import {
@@ -78,7 +79,7 @@ export function leaveStory(state: State, world: World): void {
   state.month += 1;
   // What the boss thinks is mostly about lately, so it stays worth reading.
   // Adding zero turns -0 into 0, which is all that a save can hold.
-  const { character } = world.content.boss;
+  const character = bossOf(state, world.content);
   state.truth.beliefs[character] =
     Math.trunc(
       beliefOf(state, character) * world.content.balance.bossBeliefKeeps,

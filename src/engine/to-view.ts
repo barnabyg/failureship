@@ -1,4 +1,3 @@
-import { managerOf } from "./charts";
 import {
   everyBill,
   everyDemand,
@@ -25,8 +24,9 @@ import {
 } from "./reads";
 import { dealsInView } from "./deals";
 import { gaugesInView, gaugesThisMonth } from "./gauges";
+import { managerOf } from "./places";
 import { promisesInView } from "./promises";
-import { calledBy, sayPeople } from "./say";
+import { calledBy, sayFrom, sayPeople, titleOf } from "./say";
 import { standingInView } from "./standing";
 import type { State, Step, World } from "./state";
 import { toResultsView } from "./to-results";
@@ -131,14 +131,14 @@ function toSceneView(
     cast: scene.cast.flatMap((c) =>
       content.characters
         .filter((x) => x.id === c)
-        .map((x) => ({ name: x.name, title: x.title })),
+        .map((x) => ({ name: x.name, title: titleOf(state, content, x.id) })),
     ),
     signs: scene.signs.map((s) => ({
       label: s.label,
       text: fillParts(state, content, s.text, scene.cast, misleading),
     })),
     behaviours: shown.map(({ character, behaviour }) => {
-      const who = calledBy(content, character);
+      const who = calledBy(state, content, character);
       const written = [
         ...content.behaviours,
         ...(content.changing?.whistleblower.signs ?? []),
@@ -153,7 +153,7 @@ function toSceneView(
       content.overHead?.signs.find((s) => s.id === headTreatment)?.text ?? null,
     regard: regard.map(({ character, sign }) => {
       const written = content.reputation?.signs.find((s) => s.id === sign);
-      const who = calledBy(content, character);
+      const who = calledBy(state, content, character);
       return { who, text: sayPeople(written?.text ?? "", { "{who}": who }) };
     }),
     options: offeredOptions(state, content, scene).map((o) => ({
@@ -201,7 +201,7 @@ function toOrgChart(state: State, content: Content): ChartEntry[] {
     }
     return {
       name: c.name,
-      title: c.title,
+      title: titleOf(state, content, c.id),
       reportsTo: content.characters.find((m) => m.id === manager)?.name ?? null,
     };
   });
@@ -217,7 +217,7 @@ function toStepView(state: State, world: World): StepView {
       return {
         kind: "notification",
         id: n.id,
-        from: n.from,
+        from: sayFrom(state, content, n.from),
         subject: n.subject,
         body: n.body
           .replaceAll("{real}", statusLabel(content, state.project.real))
@@ -243,17 +243,17 @@ function toStepView(state: State, world: World): StepView {
       return toSceneView(state, world, step);
     case "find-out": {
       const method = methodOf(content, step.method);
-      const sources = step.sources.map((id) => personOf(content, id));
+      const sources = step.sources.map((id) => personOf(state, content, id));
       return {
         kind: "find-out",
         title: method.title,
         prompt: sayPeople(method.prompt, {
-          "{source}": calledBy(content, sources[0]?.id ?? ""),
+          "{source}": calledBy(state, content, sources[0]?.id ?? ""),
         }),
         sources,
         subjects: content.characters
           .filter((c) => !isGone(state, c.id))
-          .map((c) => personOf(content, c.id)),
+          .map((c) => personOf(state, content, c.id)),
       };
     }
     case "claim": {
@@ -262,7 +262,7 @@ function toStepView(state: State, world: World): StepView {
       return {
         kind: "claim",
         title: sayPeople(content.ui.claimTitle, {
-          "{source}": calledBy(content, claim.source),
+          "{source}": calledBy(state, content, claim.source),
         }),
         text: claim.text,
       };
@@ -274,7 +274,7 @@ function toStepView(state: State, world: World): StepView {
       if (!move) throw new Error(`Unknown Move "${step.id}".`);
       return {
         kind: "move",
-        from: move.from ?? "",
+        from: sayFrom(state, content, move.from ?? ""),
         title: move.title,
         body: fillParts(state, content, move.body),
       };
@@ -284,7 +284,7 @@ function toStepView(state: State, world: World): StepView {
       if (!event) throw new Error(`Unknown Company Event "${step.id}".`);
       return {
         kind: "event",
-        from: event.from,
+        from: sayFrom(state, content, event.from),
         title: event.title,
         body: event.body,
       };
@@ -341,7 +341,7 @@ export function toView(state: State, world: World): PlayerView {
         text,
       })),
       marks: content.characters.map((c) => ({
-        ...personOf(content, c.id),
+        ...personOf(state, content, c.id),
         mark: state.marks[c.id] ?? null,
       })),
     },

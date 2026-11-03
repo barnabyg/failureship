@@ -5,6 +5,8 @@ import {
   everyNotification,
   type Content,
 } from "./content";
+import { YOU } from "./deal";
+import { holdersAtStart, resolveOn } from "./places";
 import { flagsSetByHiddenResults } from "./truth-checks";
 
 /** Every flag anything can set, which is all that a Thread can start from. */
@@ -97,7 +99,8 @@ export function findBrokenPromises(content: Content): string[] {
   if (!written) return problems;
   for (const item of written.items) {
     const owner = `Promise "${item.id}"`;
-    if (!content.characters.some((c) => c.id === item.to)) {
+    const to = resolveOn(holdersAtStart(content), item.to);
+    if (!content.characters.some((c) => c.id === to)) {
       problems.push(`${owner} is made to unknown "${item.to}".`);
     }
     if (!offered.has(item.id)) {
@@ -150,10 +153,14 @@ export function findBrokenDeals(content: Content): string[] {
   for (const item of written.items) {
     const owner = `Deal "${item.id}"`;
     if (promised.has(item.id)) problems.push(`${owner} shares a Promise's id.`);
-    for (const id of [item.with, item.word.over]) {
-      if (!known.has(id)) problems.push(`${owner} names unknown "${id}".`);
+    const over = resolveOn(holdersAtStart(content), item.word.over);
+    if (!known.has(item.with)) {
+      problems.push(`${owner} names unknown "${item.with}".`);
     }
-    if (item.with === item.word.over) {
+    if (!known.has(over)) {
+      problems.push(`${owner} names unknown "${item.word.over}".`);
+    }
+    if (item.with === over) {
       problems.push(`${owner} has someone put in a word with themselves.`);
     }
     if (!offered.has(item.id)) problems.push(`${owner} is offered by nothing.`);
@@ -182,7 +189,8 @@ export function findBrokenChanging(content: Content): string[] {
   if (!written) return [];
   const problems: string[] = [];
   const known = new Set(content.characters.map((c) => c.id));
-  const bosses = [content.boss.character, content.overHead?.character];
+  const { boss, head } = holdersAtStart(content);
+  const bosses = [boss, head];
   for (const id of Object.keys(written.leaving)) {
     if (!known.has(id)) problems.push(`Leaving names unknown "${id}".`);
     if (bosses.includes(id)) {
@@ -334,7 +342,10 @@ function findBrokenBills(content: Content): string[] {
 export function findBrokenEvents(content: Content): string[] {
   const problems: string[] = [];
   const known = new Set(content.characters.map((c) => c.id));
-  const bosses = [content.boss.character, content.overHead?.character];
+  const holders = holdersAtStart(content);
+  // Moving the player would change their boss as surely as moving the boss.
+  const bosses = [YOU, holders.boss, holders.head];
+  const who = (written: string) => resolveOn(holders, written);
   const ids = new Set<string>();
   const fromRisks = new Set(content.risks.flatMap((r) => r.event ?? []));
   for (const event of content.events) {
@@ -359,15 +370,19 @@ export function findBrokenEvents(content: Content): string[] {
     const { reports, rises, falls } = event.reshuffle;
     for (const { character, to } of reports) {
       // Vacancies, and a change of boss, wait for the next phase.
-      if (bosses.includes(character)) {
+      if (bosses.includes(who(character))) {
         problems.push(`${owner} moves "${character}", who has to stay put.`);
+      } else if (!known.has(who(character))) {
+        problems.push(`${owner} names unknown "${character}".`);
       }
-      for (const id of [character, to]) {
-        if (!known.has(id)) problems.push(`${owner} names unknown "${id}".`);
+      if (!known.has(who(to))) {
+        problems.push(`${owner} names unknown "${to}".`);
       }
     }
     for (const id of [...rises, ...falls]) {
-      if (!known.has(id)) problems.push(`${owner} names unknown "${id}".`);
+      if (!known.has(who(id))) {
+        problems.push(`${owner} names unknown "${id}".`);
+      }
     }
     const moved = reports.length + rises.length + falls.length > 0;
     if (moved !== (event.changed !== undefined)) {

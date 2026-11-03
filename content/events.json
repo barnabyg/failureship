@@ -33,7 +33,7 @@
       "reports": [
         {
           "character": "analyst",
-          "to": "head"
+          "to": "{head}"
         }
       ],
       "rises": ["analyst"]
@@ -63,10 +63,10 @@
       "reports": [
         {
           "character": "projects",
-          "to": "head"
+          "to": "{head}"
         }
       ],
-      "falls": ["boss"]
+      "falls": ["{boss}"]
     },
     "story": {
       "reported": "The company attracted significant external interest, which is a tribute to its people.",
@@ -100,7 +100,7 @@
       "reports": [
         {
           "character": "admin",
-          "to": "boss"
+          "to": "{boss}"
         }
       ]
     },

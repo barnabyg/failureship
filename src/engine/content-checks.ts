@@ -26,6 +26,7 @@ import {
   type Content,
   type SceneData,
 } from "./content";
+import { holdersAtStart, resolveOn } from "./places";
 import {
   dependsOnHiddenTruth,
   findBrokenBehaviours,
@@ -62,8 +63,11 @@ function findBrokenReferences(content: Content): string[] {
   const characters = new Set(content.characters.map((c) => c.id));
   const hiddenFlags = flagsSetByHiddenResults(content);
   const problems: string[] = [];
-  const checkCharacter = (owner: string, character: string) => {
-    if (!characters.has(character)) {
+  const holders = holdersAtStart(content);
+  /** Names a Character, or a place above the player unless it must be someone. */
+  const checkCharacter = (owner: string, character: string, place = true) => {
+    const who = place ? resolveOn(holders, character) : character;
+    if (!characters.has(who)) {
       problems.push(`${owner} names unknown Character "${character}".`);
     }
   };
@@ -267,9 +271,10 @@ function findBrokenReferences(content: Content): string[] {
       problems.push(`Action "${a.id}" uses unknown Find Out "${a.findOut}".`);
     }
   }
+  checkCharacter("The player", content.you.reportsTo, false);
   for (const c of content.characters) {
     const owner = `Character "${c.id}"`;
-    if (c.reportsTo !== undefined) checkCharacter(owner, c.reportsTo);
+    if (c.reportsTo !== undefined) checkCharacter(owner, c.reportsTo, false);
     const seen = new Set([c.id]);
     let above = content.characters.find((m) => m.id === c.reportsTo);
     while (above) {
@@ -285,7 +290,7 @@ function findBrokenReferences(content: Content): string[] {
   for (const s of content.scenes) {
     const owner = `Scene "${s.id}"`;
     checkMonths(owner, s.months);
-    for (const c of s.cast) checkCharacter(owner, c);
+    for (const c of s.cast) checkCharacter(owner, c, false);
     if (
       s.cast.length < 3 &&
       /\{(holder|ignored|bystander)\}/.test(JSON.stringify(s))

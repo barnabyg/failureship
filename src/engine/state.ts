@@ -232,7 +232,7 @@ export interface State extends MonthRecord {
   }[];
   /** Bills waiting to land this month as Character Moves. */
   billsDue: string[];
-  /** Who has been moved on the Org Chart, and who to. */
+  /** Who has been moved on the Org Chart, the player included, and who to. */
   reportsTo: Record<string, string>;
   /** Company Events waiting to land this month. */
   eventsDue: string[];

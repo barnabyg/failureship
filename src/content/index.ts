@@ -4,7 +4,7 @@ import behaviours from "../../content/behaviours.json";
 import boss from "../../content/boss.json";
 import buzzwords from "../../content/buzzwords.json";
 import changing from "../../content/changing.json";
-import characters from "../../content/characters.json";
+import orgChart from "../../content/characters.json";
 import deals from "../../content/deals.json";
 import demands from "../../content/demands.json";
 import dialogs from "../../content/dialogs.json";
@@ -60,7 +60,9 @@ export const gameContent = parseContent({
   notebook,
   project,
   demands,
-  characters,
+  characters: orgChart.characters,
+  you: orgChart.you,
+  places: orgChart.places,
   behaviours,
   scenes,
   notifications,

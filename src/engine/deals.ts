@@ -1,5 +1,6 @@
 import { dueIdOf, type Content } from "./content";
 import { hasSway, YOU } from "./deal";
+import { bossOf, whoIs } from "./places";
 import { breakWord, keepWord } from "./promises";
 import { shiftBelief } from "./reads";
 import { remember } from "./reputation";
@@ -31,6 +32,7 @@ export function makeDeal(state: State, content: Content, id: string): void {
 
 /** What the other side says as they shake on it. */
 export function replyToDeal(
+  state: State,
   content: Content,
   id: string | undefined,
 ): { title: string; body: string } | null {
@@ -38,7 +40,9 @@ export function replyToDeal(
   return item
     ? {
         title: item.title,
-        body: sayPeople(item.agreed, { "{who}": calledBy(content, item.with) }),
+        body: sayPeople(item.agreed, {
+          "{who}": calledBy(state, content, item.with),
+        }),
       }
     : null;
 }
@@ -70,18 +74,19 @@ function giveTheWord(
     return;
   }
   state.noticesDue.push(word.given);
-  if (!hasSway(state.truth.powerMap, item.with, word.over)) {
+  const over = whoIs(state, content, word.over);
+  if (!hasSway(state.truth.powerMap, item.with, over)) {
     made.word = "worthless";
     return;
   }
   made.word = "landed";
-  shiftBelief(state, word.over, word.shift);
+  shiftBelief(state, over, word.shift);
   remember(state, content, {
-    character: word.over,
+    character: over,
     about: "good-word",
     text: item.worth.landed,
   });
-  if (word.over === content.boss.character) {
+  if (over === bossOf(state, content)) {
     state.bossLandings.push({
       month: state.month,
       choice: item.title,
@@ -134,7 +139,7 @@ export function dealsInView(state: State, content: Content) {
       ? [
           {
             month: made.month,
-            with: calledBy(content, item.with),
+            with: calledBy(state, content, item.with),
             what: item.title,
             status: written.statuses[made.status],
           },
@@ -143,11 +148,12 @@ export function dealsInView(state: State, content: Content) {
   });
   const favours = state.truth.powerMap.favours
     .filter((f) => f.owes === YOU || f.to === YOU)
-    .map((f) => favourText(content, written, f));
+    .map((f) => favourText(state, content, written, f));
   return { deals, favours };
 }
 
 function favourText(
+  state: State,
   content: Content,
   written: Written,
   favour: { owes: string; to: string; why: string },
@@ -159,12 +165,16 @@ function favourText(
         ? written.owed.owesYou
         : written.owed.between;
   return sayPeople(line, {
-    "{owes}": calledBy(content, favour.owes),
-    "{to}": calledBy(content, favour.to),
-    "{who}": calledBy(content, favour.owes === YOU ? favour.to : favour.owes),
+    "{owes}": calledBy(state, content, favour.owes),
+    "{to}": calledBy(state, content, favour.to),
+    "{who}": calledBy(
+      state,
+      content,
+      favour.owes === YOU ? favour.to : favour.owes,
+    ),
     "{why}": sayPeople(favour.why, {
-      "{owes}": calledBy(content, favour.owes),
-      "{to}": calledBy(content, favour.to),
+      "{owes}": calledBy(state, content, favour.owes),
+      "{to}": calledBy(state, content, favour.to),
     }),
   });
 }
@@ -180,7 +190,7 @@ export function dealsInResults(state: State, content: Content) {
     return [
       {
         month: made.month,
-        with: calledBy(content, item.with),
+        with: calledBy(state, content, item.with),
         what: item.title,
         status: written.statuses[made.status],
         worth,
@@ -188,7 +198,7 @@ export function dealsInResults(state: State, content: Content) {
     ];
   });
   const favours = state.truth.powerMap.favours.map((f) =>
-    favourText(content, written, f),
+    favourText(state, content, written, f),
   );
   return { deals, favours };
 }

@@ -28,7 +28,7 @@
       "what": "a move to another team",
       "agreed": "{who} shakes on it, a little too hard. They have been seconded to the supplier's project team since the spring, and they would put in a good word with your boss in return for a way out. They say they will have a word this month.",
       "word": {
-        "over": "boss",
+        "over": "{boss}",
         "after": {
           "min": 1,
           "max": 1
@@ -111,7 +111,7 @@
       "what": "their name on the next deck",
       "agreed": "{who} agrees, and says that they will mention you to your boss's boss, whom they see about the figures. In return their name goes on the next deck, at the front, where your boss's name usually is.",
       "word": {
-        "over": "head",
+        "over": "{head}",
         "after": {
           "min": 1,
           "max": 1

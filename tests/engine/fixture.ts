@@ -1,4 +1,5 @@
 import { parseContent, type Content } from "../../src/engine";
+import { holdersAtStart } from "../../src/engine/places";
 
 interface RawOption {
   id: string;
@@ -109,7 +110,6 @@ export function fixtureRaw() {
       mood: { warmAt: 1, coldAt: -1 },
     },
     boss: {
-      character: "ana",
       signs: [] as {
         id: string;
         text: string;
@@ -194,6 +194,7 @@ export function fixtureRaw() {
       role?: string;
       called?: string;
     }[],
+    you: { reportsTo: "ana" },
     behaviours: [] as {
       id: string;
       text: string;
@@ -491,4 +492,17 @@ export function emptyMonthRaw() {
 
 export function emptyMonth(): Content {
   return parseContent(emptyMonthRaw());
+}
+
+/** How the game's text calls a Character, while the bosses stay where a run starts them. */
+export function calledAtStart(content: Content, id: string): string {
+  const { boss, head } = holdersAtStart(content);
+  const place =
+    id === boss
+      ? content.places.boss
+      : id === head
+        ? content.places.head
+        : undefined;
+  const character = content.characters.find((c) => c.id === id);
+  return place?.called ?? character?.called ?? character?.name ?? id;
 }

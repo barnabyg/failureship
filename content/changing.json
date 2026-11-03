@@ -106,7 +106,7 @@
         "bill": {
           "id": "schedule-reported",
           "as": "move",
-          "from": "From: Your boss's boss, Hugh Lamb",
+          "from": "From: Your boss's boss, {head}",
           "title": "The schedule",
           "body": "Your boss's boss would like a word about the schedule you sent upstairs. Somebody has been to see them with a folder, and the folder has the real dates in it. Your boss's boss does not say who. They say that they are not angry, which is how you know.",
           "sets": ["schedule-reported"],
@@ -121,7 +121,7 @@
         "bill": {
           "id": "report-reported",
           "as": "move",
-          "from": "From: Your boss's boss, Hugh Lamb",
+          "from": "From: Your boss's boss, {head}",
           "title": "Your status reports",
           "body": "Your boss's boss has been sent your Monthly Status Reports, side by side with what actually happened, in two colours. They would like you to talk them through the green ones. There are a lot of green ones.",
           "sets": ["reports-reported"],

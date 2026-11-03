@@ -1,4 +1,5 @@
 import type { Content, Kind } from "./content";
+import { bossOf } from "./places";
 import { bossKindOf, inTurn, moodOf, shiftBelief } from "./reads";
 import { remember } from "./reputation";
 import { pickWeighted } from "./rng";
@@ -31,12 +32,13 @@ export function landWithBoss(
   const shift =
     (choice.opinion ?? 0) +
     (overdone?.shift[kind] ?? approach?.shift[kind] ?? 0);
-  shiftBelief(state, content.boss.character, shift);
+  const boss = bossOf(state, content);
+  shiftBelief(state, boss, shift);
   if (approach === undefined && shift === 0) return undefined;
   state.bossLandings.push({ month: state.month, choice: label, shift });
   if (shift !== 0) {
     remember(state, content, {
-      character: content.boss.character,
+      character: boss,
       about: "impression",
       text: label,
     });
@@ -54,8 +56,10 @@ export function treatBoss(
   { content }: World,
   cast: readonly string[],
 ): string | null {
-  const { character, signs } = content.boss;
-  if (signs.length === 0 || !cast.includes(character)) return null;
+  const { signs } = content.boss;
+  if (signs.length === 0 || !cast.includes(bossOf(state, content))) {
+    return null;
+  }
   const mood = moodOf(state, content);
   const chosen = pickWeighted(state.rng, signs, (s) => s.likelihood[mood]);
   state.rng = chosen.next;

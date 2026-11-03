@@ -104,6 +104,14 @@ const project = z.strictObject({
     .optional(),
 });
 
+/** A place above the player on the Org Chart, and the words for whoever holds it. */
+const place = z.strictObject({
+  /** How running text refers to them, such as "your boss". */
+  called: text,
+  /** Their job title while they hold it. Says {title}, their own. */
+  title: text,
+});
+
 export const contentSchema = z.strictObject({
   balance: z.strictObject({
     actionsPerMonth: z.number().int().positive(),
@@ -155,7 +163,7 @@ export const contentSchema = z.strictObject({
         id,
         name: text,
         title: text,
-        /** How running text refers to them, such as "your boss". Left out, their name. */
+        /** How running text refers to them, such as "the Senior Analyst". Left out, their name. */
         called: text.optional(),
         /** What this Character does, which decides the behaviours open to them. */
         role: id.optional(),
@@ -164,6 +172,13 @@ export const contentSchema = z.strictObject({
       }),
     )
     .min(3),
+  /** Where the player sits on the Org Chart as a run starts. */
+  you: z.strictObject({
+    /** Whom the player answers to, who is their boss. */
+    reportsTo: id,
+  }),
+  /** How text refers to whoever holds each place above the player, while they do. */
+  places: z.strictObject({ boss: place, head: place }).partial().default({}),
   behaviours: z.array(behaviour),
   scenes: z.array(scene),
   notifications: z.array(notification),

@@ -4,6 +4,7 @@ import { describe, expect, it } from "vitest";
 import { gameContent } from "../../src/content";
 import { KINDS, startRun, type Kind, type PlayerView } from "../../src/engine";
 import { readHiddenTruth } from "../../src/engine/hidden-truth";
+import { calledAtStart } from "./fixture";
 
 /** Walks a whole run, with a pick made from what is on offer at each step. */
 function walk(
@@ -243,7 +244,9 @@ describe("the balance of the deal", () => {
             b.text.replaceAll("{who}", who).toLowerCase() ===
             text.toLowerCase(),
         );
-        const shownBy = gameContent.characters.find((c) => c.called === who);
+        const shownBy = gameContent.characters.find(
+          (c) => calledAtStart(gameContent, c.id) === who,
+        );
         const held = belief.get(shownBy?.id ?? "");
         if (!written || !held) throw new Error(`Unknown sign: ${text}`);
         const role = shownBy?.role;

@@ -1,4 +1,5 @@
 import type { Content, Tone } from "./content";
+import { bossOf, placeOf } from "./places";
 import { moodOfCharacter, shiftBelief } from "./reads";
 import { drawFor, pickWeighted } from "./rng";
 import type { Memory, State } from "./state";
@@ -21,7 +22,7 @@ export function remember(
   if (memory.tone && travel) {
     const shift = travel.shift[memory.tone];
     shiftBelief(state, memory.character, shift);
-    if (memory.character === content.boss.character) {
+    if (memory.character === bossOf(state, content)) {
       state.bossLandings.push({
         month: state.month,
         choice: memory.text,
@@ -117,9 +118,8 @@ export function regardOf(
 ): { character: string; sign: string }[] {
   const written = content.reputation;
   if (!written) return [];
-  const own = [content.boss.character, content.overHead?.character];
   return cast
-    .filter((character) => !own.includes(character))
+    .filter((character) => placeOf(state, content, character) === undefined)
     .map((character) => {
       const mood = moodOfCharacter(state, content, character);
       const value = drawFor(state.seed, `regard:${character}`, state.month);
