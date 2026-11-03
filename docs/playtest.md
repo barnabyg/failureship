@@ -50,6 +50,18 @@ month 1, where your boss's Grand Plan is announced. From then on it is on the **
 | Seed 37, a Practitioner boss. Watch month 2's Lessons Learned Review for who has the real figures. In month 4 go to the demonstration, in month 5 ask that person for the figures, and at the Ideas Workshop offer to load them so that your boss can launch it | It is completed for real, and your boss is pleased. Launching it yourself instead goes down less well with this boss. Asking anyone else gets you last year's figures: it looks done, and is not. The results screen says who had them.                      |
 | Any seed. In month 4, hand the tool to the Senior Analyst, then play plainly                                                                                                                                                                                    | In month 7 the Plan has failed, and a write-up says who was to blame. On some seeds it is you, and that is a big mistake. Asking your boss which problems it solves keeps you out of it.                                                                     |
 
+## The first promotion
+
+This takes about fifteen minutes. File the report and go to the meeting each month, saying the first
+thing, and in month 5's Ideas Workshop stick a screenshot of the new tool on your boss's note.
+
+| Seed and what to do       | Expect                                                                                                                                                                                                                                                                                                                                                 |
+| ------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| Seed 2                    | Your boss counts the Plan done. Month 6 opens with your boss moving up, and the seat open. As month 6 closes, the lift takes you to Floor 2: you are Team lead, and the e-mail sets Official standing beside who really decided and why. Your boss is now the Head of Operations, and the Org Chart has you on it, with your old colleagues under you. |
+| The same run, month 7 on  | Floor 2's own meetings in Team Room 2A, and your new boss's Grand Plan, a Centre of Excellence. Put people in it for real, or a sign on a door. Your old colleagues may take it out on you.                                                                                                                                                            |
+| Seed 14                   | The same, but the seat goes to the Junior Associate, who had it in their own gift, and who now is your boss. You stay on Floor 1. The results screen lists them as a Rival, and says who really decided.                                                                                                                                               |
+| Seed 106, a Believer boss | Your boss does not count a screenshot done. Book the desks for your boss when Hot-desking comes in month 6, and the seat opens a month later.                                                                                                                                                                                                          |
+
 ## Three kinds of boss
 
 This takes about twenty minutes. Each seed deals a different kind of boss:

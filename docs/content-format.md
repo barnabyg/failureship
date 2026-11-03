@@ -26,6 +26,7 @@ A `when` or `requires` holds one of these:
 | `{ "youOwe": "projects" }`                                             | The player owes that Character a favour                                                 | No                     |
 | `{ "sawMove": "rumour" }`                                              | That Move from [`moves.json`](#movesjson) has landed on the player in this run          | No                     |
 | `{ "planRunning": "one-tool" }`                                        | That is your boss's [Grand Plan](#grand-plansjson) now, and it is still to be done      | No                     |
+| `{ "vacancyOpen": true }`                                              | A [seat](#vacanciesjson) is open now, and still to be decided                           | No                     |
 | `{ "not": ... }`                                                       | The condition inside does not hold                                                      | If the inner one does  |
 | `{ "all": [...] }`                                                     | Every condition inside holds                                                            | If any inner one does  |
 | `{ "any": [...] }`                                                     | At least one condition inside holds                                                     | If any inner one does  |
@@ -41,6 +42,7 @@ Where each can be used. These are all the places that take a condition:
 | A hidden risk's `route.means` and `traced` | All                                                    |
 | A Grand Plan's `blame.sticks`              | All                                                    |
 | A Grand Plan way's `when`                  | Only those that do not read the hidden truth           |
+| What Rivals compete for's `when`           | All                                                    |
 | A whistleblower report's `when`            | All                                                    |
 | A Scene option's `requires`                | Only those that do not read the hidden truth           |
 | A Notification's `when`, a Demand's too    | Only those that do not read the hidden truth           |
@@ -75,9 +77,10 @@ whoever is boss then, and the results screen lists only what came across to the 
 
 Data names them as `{boss}` and `{head}`, wherever it would name a Character to say who a choice
 or a condition concerns: any condition, `remembers`, news `at`, `factAt`, `repays`, a Promise's
-`to`, a Deal's `word.over`, a Company Event's `reshuffle`, a Move's `by` and a Rival's `who`. Name a Character there only when
-it means that person, whatever their place. The Org Chart's own `reportsTo`, a Scene's `cast`,
-Find Out's `sources`, `leaving`, a Hidden Fact's `characters`, a risk's `route.character` and a
+`to`, a Deal's `word.over`, a Company Event's `reshuffle`, a Move's `by`, a Rival's `who` and a Scene's `cast`, which
+puts whoever is in the place in the room once, so that a Scene can be held on more than one floor or
+after a promotion. Name a Character there only when it means that person, whatever their place.
+The Org Chart's own `reportsTo`, Find Out's `sources`, `leaving`, a Hidden Fact's `characters`, a risk's `route.character` and a
 Deal's `with` always name a Character. A `from` line can say `{boss}` or `{head}` for the name of
 whoever is in that place, such as `"From: Your boss, {boss}"`.
 
@@ -243,6 +246,15 @@ Job titles, roles, names, who reports to whom on the Org Chart, and where the pl
   [`floors.json`](#floorsjson) they start on.
 - `places` holds the words for whoever is in each place, `boss` and `head`, while they are:
   `called`, and a `title` that says `{title}`, their own job title.
+- A Character with `floor`, the `job` of a later floor, is written for that floor's cast, such as
+  whoever is above your boss's boss. They are in the company from the start, on the charts, but are
+  dealt after the first floor's cast by draws of their own: a kind, a Hidden Fact as often as the
+  first cast has one, and a place on the Power Map below its `influentialCount` most influential.
+  So adding one leaves every deal of the floors below alone. `charactersWithFact` and
+  `minPractitioners` in [`hidden-truth.json`](#hidden-truthjson) count the first floor's cast only.
+- `you.name` is what the Org Chart calls the player, once anyone answers to them.
+- Moving up gives a Character a new title and `called`, from [`vacancies.json`](#vacanciesjson),
+  and whoever takes a seat takes its holder's.
 
 A Character's `called` is how running text refers to them, such as `the Senior Analyst`, and it
 gets a capital only where a sentence starts. While someone is your boss or your boss's boss, the
@@ -336,7 +348,10 @@ choice with an `approach` should say which family it is, and a test fails if it 
 The floors of the tower, from the bottom up. Each has a `job`, which keys it, the job `title`
 that the header, the e-mails and the official story show, and its `rooms`: positions, sizes,
 colours, `fittings` and, for a place the player can see but not act on, such as the lift, a
-`sign`. Content goes to a floor as [Floors and their months](#floors-and-their-months) says.
+`sign`. Content goes to a floor as [Floors and their months](#floors-and-their-months) says. A room
+without `fittings` is a blocked-out box, as on Floor 2. Room ids are unique across floors, so the
+same kind of place on another floor, such as your desk, is an action of its own, with its own id.
+The player reaches another floor only by a [seat](#vacanciesjson), and the lift is ridden then.
 
 ## `gauges.json`
 
@@ -400,7 +415,9 @@ true` is done in reality only then, and otherwise as its `otherwise`, a way in a
 
 Whatever follows from a Plan being completed, such as its boss moving up, reads `planCompleted` in
 `src/engine/grand-plans.ts`: whether a boss's latest Plan was completed, how, and whether they
-counted it done.
+counted it done. A Plan counted done opens its boss's seat, as [`vacancies.json`](#vacanciesjson)
+says, and a boss on their way up takes on no new Plan. `formerBoss` is the title the player is told
+instead of a way's `done.title` when the Plan's boss is no longer theirs.
 
 ## `hidden-truth.json`
 
@@ -692,7 +709,9 @@ than `finalWarning`, which must be within the first band.
 `bands` start `from` 0 and go up. Each has the `label` said for the bar, and `onPaper`, what the
 results screen says of ending in it. There, `decides` says `{who}`: whoever holds influence over
 your boss on the Power Map, or your boss if nobody does, followed by what they ended up believing
-of you, from [`reputation.json`](#reputationjson). Until vacancies exist, that is who really decides.
+of you, from [`reputation.json`](#reputationjson): who would decide the seat above you, if it fell
+vacant. Each [vacancy](#vacanciesjson) decided is set beside its band at the time, as it is decided
+and again on the results screen.
 
 It reads only the official record. A flag in `deeds` must be set by an action, a Notification's
 answer or a Scene's result, and never by a result, Move, Bill or event that reads the hidden
@@ -701,6 +720,43 @@ since whether it is chased goes by the boss's kind, though they may set a flag t
 answers set. One that is not is refused.
 `label` and `title` are said beside the bar. The results screen's heading is
 `resultsStandingHeading` in [`ui.json`](#uijson).
+
+## `vacancies.json`
+
+Seats: how a boss's seat falls vacant, and who really decides who gets it. As the official story
+closes a month in which your boss completed their [Grand Plan](#grand-plansjson) and counted it
+done, they are on their way up, and their seat is open for `openFor` months from the next. As the
+last of them closes, it is decided, and the next month opens with the decision. Nothing opens that
+the run would end before deciding.
+
+- `seats` has one seat for each floor that has one, keyed by `floor`, the floor it is on: the
+  player's boss holds it while the player's job is that floor's. `job` is the floor that winning it
+  takes the player to. `competing` names what is competed for in [`rivals.json`](#rivalsjson) while
+  it is open, usually with `"when": { "vacancyOpen": true }` and `"who": ["{peers}"]`: they and the
+  player are the candidates. `movesUp` is where its holder goes: whom they now answer to, and their
+  new `title` and `called`. `opened` is told as it opens, and says `{holder}` and `{month}`, the
+  month it is decided in; `won` and `lost` as it is decided, and `lost` says `{winner}`.
+- Whoever holds influence over the holder on the Power Map decides, or the holder if nobody does:
+  never the Org Chart, a score, a Gauge or Official standing. Each candidate's `reasons` add up, and
+  the most wins, with a seeded draw among equals. For a Character: `self`, being the one deciding;
+  `owed`, being owed a favour by them; `protege`, being directly under them on the Power Map, or
+  `circle`, further down; and `rival`, being a Rival. For the player: `owedYou`, and `warm`,
+  `neutral` or `cold`, the mood of the one deciding. Each has a `strength` and a `why`, which says
+  `{decider}` and, for a Character, `{who}`. `close` is said of a winner it was too close to call,
+  or with no reason written, and says `{who}`.
+- The decision is told with Official standing's band beside `inFact`, who really decided, which says
+  `{decider}` and `{why}`, and `asForYou`, what counted for the player, if they lost. `results` is
+  what the results screen says of each, with `{holder}`, `{winner}` and `{month}`.
+- Winning makes the player the floor's new job: they answer to whoever the holder answered to, and
+  the holder's team answers to them. Losing puts the winner in the holder's place, with the
+  holder's title, and the player and the rest of the team answer to them. Each Character passed over
+  keeps a memory with `passedOver.about`, `forYou` if the player won and `forSomeoneElse` if not,
+  which can say `{winner}`. A Move or Thread can read it with `remembers`.
+
+These are refused: two seats on one floor, a `floor` or `job` that names no floor, a seat that leads
+to its own floor, `competing` that names nothing in `rivals.json`, moving its holder up to someone
+who answers to them, a `lost` that does not say `{winner}`, and `vacancyOpen` with no seats. Until
+issue #107, the checks that keep the player's bosses in place still stand: only a seat moves them.
 
 ## `threads.json`
 

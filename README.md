@@ -3,12 +3,12 @@
 A satirical, single-player browser game. You climb a ten-storey office tower by reading people. The
 design is in [failureship-grill-outcome.md](failureship-grill-outcome.md).
 
-This is Phase 4, ready for its steering checkpoint: a run of nine months on a furnished Floor 1,
-with kinds of boss, a Project, the Monthly Status Report, Demands, one-off Budgets, every family of
-Moves and going over your boss's head. Earlier choices come back through Threads, hidden risks and
-what people have heard, things happen to the company, and you can be fired. You can give your word
-and make Deals, Believers you burn can change or leave, Teflon and Fawning move with Threads, a
-quarterly review comes every third month, colleagues compete, bosses have Grand Plans, runs save.
+This is Phase 5 in progress: eighteen months from a furnished Floor 1, with kinds of boss, a
+Project, the Monthly Status Report, Demands, one-off Budgets, every family of Moves and going over
+your boss's head. Earlier choices come back through Threads, hidden risks and what people have heard,
+things happen to the company, and you can be fired. You can give your word and make Deals, Believers
+you burn can change or leave, Teflon and Fawning move with Threads, reviews come every quarter,
+colleagues compete, bosses have Grand Plans, and a first promotion can take you up to Floor 2.
 
 ## Play
 
@@ -26,8 +26,8 @@ Windows, you can double-click `run.bat` in the root of the repository instead.
 
 Every run has a seed, at the top right, and `?seed=8` picks one. Each month has the same shape:
 
-1. **A Notification arrives.** Answer it. The answer may cost one of your 3 actions. In months 3,
-   6 and 9 the **Quarterly Business Review** follows by itself, at no cost, and goes on the record.
+1. **A Notification arrives.** Answer it. The answer may cost one of your 3 actions. Every third
+   month the **Quarterly Business Review** follows by itself, at no cost, and goes on the record.
 2. **Spend your remaining actions** by clicking a place on the floor or its label. The panel at
    the bottom left always says what you can do now.
 3. **Any Company Event, then a Character Move, lands on you.** You do not get a choice.
@@ -49,17 +49,13 @@ There are four ways to spend an action:
 - **The kitchen, the Senior Analyst's desk and your desk** do what they look like.
 
 People are read first as what they do: your boss, your boss's boss, the Office Co-ordinator. Each
-role is held by the same Character in every deal, and each has things only it can be seen doing and
-its own way of talking. Only someone who chairs meetings can overrun one, and only the Office
-Co-ordinator controls the minutes and the stationery. Each of these can still come from more than
-one kind. Names stay in support on the charts, in the cast list and the Notebook's marks, on the
-results screen, on the `from` lines of messages and the Find Out buttons, and in what sources say
-about people.
+role is held by the same Character in every deal, with things only it can be seen doing, such as
+overrunning a meeting, and its own way of talking, though each can come from more than one kind.
+Names stay in support: on the charts, cast lists, marks, results, `from` lines and Find Out.
 
-Press **Notebook** at any step, at no cost. It keeps claims and important signs for you, and it
-never says which to trust. Mark each Character with the kind you suspect. Press **Org Chart**, at no
-cost, for the formal hierarchy. The real one is the hidden Power Map, dealt from the seed. A Company
-Event can change either mid-run, and later signs follow.
+Press **Notebook**, at no cost, for the claims and signs it keeps, which it never says to trust, and
+mark each Character with the kind you suspect. **Org Chart** is the formal hierarchy. The real one
+is the hidden Power Map, dealt from the seed. A Company Event can change either mid-run.
 
 Your word is yours to give. Some choices offer a **Promise**, whether or not you can deliver it, and
 some a **Deal**, in which each side offers something. Whether you are believed, and whether a good
@@ -71,12 +67,11 @@ cost. Nothing tells you what other people owe each other.
 to your managers is paying off, not whether they like you, and plays no part in promotion. Each
 moves only when a Thread plays out, and the official story says which. Some levels earn a Milestone.
 **Official standing** is a bar from red to green, with no number: how you would fare on paper if a
-vacancy arose. It reads only the official record, a Final Warning turns it red, and it decides
-nothing. The results screen sets it beside who really decides.
+vacancy arose. It reads only the official record, a Final Warning turns it red, and decides nothing.
 
 What you do can travel. There is no reputation score: each person believes what has reached them
-along the Power Map, and that shows only in how they are with you. So the same deed is known to some
-and unknown to others, and good news travels too, as do false stories. A **Rival** is any
+along the Power Map, shown only in how they are with you, and good news travels too, as do false
+stories. A **Rival** is any
 Practitioner competing with you, your boss included, and nothing says who. Rivals use your own Moves
 on you, and once you have seen one done, or have other means, you can use it too.
 
@@ -84,29 +79,31 @@ Your boss's **Grand Plan** is on the **Your project** card once you hear of it. 
 needs whoever really has what it takes. Done or faked, it goes on the record, but whether your boss
 counts it goes by who they are, a fake can be found out, and a failed one is blamed on someone.
 
-After nine months the results screen shows who was really who: each Character's kind and Hidden
+A Plan your boss counts done moves them up, and their seat is open for the month after. Whoever
+really holds influence over it on the Power Map gives it out, with Rivals competing, not a score or
+a Gauge, and you are told who and why, beside Official standing. Win, and you are **Team lead**, up
+the lift on Floor 2 under your old boss's boss. Lose, and the winner is your boss. The rest remember.
+
+After eighteen months the results screen shows who was really who: each Character's kind and Hidden
 Fact, each Rival and what they did, your marks against the truth, how you played by family of Move,
 what your bosses made of you, each claim and clue and its worth, and both charts.
 
-You can also be fired. Some choices are big mistakes, and blaming someone with a dangerous Hidden
-Fact is one. The first puts you on a **Final Warning**, shown beside your job title from then on.
-The second ends the run, at the same results screen. A few choices fire you outright, and those say
-so on the button before you press it.
+You can also be fired. Some choices are big mistakes, such as blaming someone with a dangerous
+Hidden Fact. The first puts you on a **Final Warning**, shown beside your job title, and the second
+ends the run. A few choices fire you outright, and say so on the button first.
 
 At any step, **New run** deals a new seed, and **Restart from seed** plays the seed you type from
 month 1. Leaving a run in progress asks first. Swap a seed with a friend for the same deal.
 
-The run is saved in your browser at every step, so reloading the page or coming back later carries
-on exactly where you left off. An address with a different seed starts that deal instead, and
-replaces the saved run. If you have changed anything in `content/` since the save, or the game has
-moved on, you are offered a new run: a save only holds for the data it was dealt from. A save can be
-read in browser storage, hidden truth included, which is accepted while the game is in development.
+The run is saved in your browser at every step, so a reload carries on where you left off. An
+address with a different seed starts that deal instead. If `content/` or the game has changed since
+the save, you are offered a new run, as a save holds only for what dealt it. A save can be read in
+browser storage, hidden truth included, which is accepted while the game is in development.
 
-A month always leaves you something to decide. Every Notification has an answer that costs nothing.
-Beside the report, a month's own Notifications ask for at most one costly answer, though late
-figures or an action from a missed meeting can add another. A meeting you had no action left for
-leaves no Demand behind. [docs/playtest.md](docs/playtest.md) has test scenarios to play by hand,
-which give away some deals.
+A month always leaves you something to decide, on either floor. Every Notification has an answer
+that costs nothing, and beside the report a month asks for at most one costly answer, unless late
+figures or a missed meeting add another. [docs/playtest.md](docs/playtest.md) has test scenarios to
+play by hand, which give away some deals.
 
 ## Change the game
 
@@ -145,6 +142,7 @@ game reloads when you save a file. If an edit breaks the format, the page shows 
 | `hidden-truth.json`   | The rules of the deal: kinds, their weights, and the Hidden Facts                                      |
 | `rivals.json`         | What is competed for and by whom, how many Rivals at once, and who makes a competitor's Move           |
 | `grand-plans.json`    | Each boss's Grand Plan: how long it runs, where you hear of it, how it is done, and who is blamed      |
+| `vacancies.json`      | Each boss's seat: where its holder moves up to, who it is decided between, and why each one wins       |
 | `balance.json`        | Actions a month, months in a run and a quarter, each choice's cost, how signs mislead, the boss's mood |
 | `floors.json`         | Each floor, by the job done on it: the job title, the rooms, their fittings and the lift's sign        |
 
@@ -166,7 +164,8 @@ How to run the checks and tests is in [AGENTS.md](AGENTS.md#verifying).
   `over-head.ts`, `project.ts`, `scenes.ts`, `company-events.ts`, `mistakes.ts`, `reputation.ts`,
   `risks.ts`, `threads.ts` with `bills.ts`, `promises.ts`, `deals.ts`, `changes.ts` for Believers
   changing and leaving, `gauges.ts`, the only module that reads a Gauge, `standing.ts`, `reviews.ts`
-  for quarterly reviews, `rivals.ts` for Rivals and `grand-plans.ts` for Grand Plans. `say.ts` names
+  for quarterly reviews, `rivals.ts` for Rivals, `grand-plans.ts` for Grand Plans and `vacancies.ts`
+  for a seat falling vacant and who really decides it. `say.ts` names
   Characters in text, and `rng.ts` and `seed.ts` hold the seed. `view.ts` is the player view, built
   by `to-view.ts`, with `to-results.ts` its reveal; `hidden-truth.ts` is the tests' read of the
   truth. `save.ts` writes and reads a run. `State` is plain data, so a mechanic gets saving for
@@ -175,15 +174,16 @@ How to run the checks and tests is in [AGENTS.md](AGENTS.md#verifying).
   across files, with each mechanic's checks beside it: `truth-checks.ts` for the hidden truth and
   its signs, `boss-checks.ts` for the boss, going over the head, Demands and reputation,
   `consequence-checks.ts` for what choices lead to, `word-checks.ts` for Promises and Deals, and
-  `floor-checks.ts`, `review-checks.ts`, `rival-checks.ts` and `plan-checks.ts` for floors,
-  reviews, Rivals and Grand Plans.
+  `floor-checks.ts`, `review-checks.ts`, `rival-checks.ts`, `plan-checks.ts` and
+  `vacancy-checks.ts` for floors, reviews, Rivals, Grand Plans and seats.
 - `src/tower/` draws the floor the view names, and holds no rules.
-- `src/ui/` holds the React panels over the tower: `App.tsx` wires them to the run, and
-  `TowerStage.tsx` the tower's hotspots. `panels.tsx` picks each step's panel, the larger being
-  `ScenePanel.tsx`, `FindOutPanel.tsx` and `ResultsPanel.tsx`; `Panel.tsx` holds their frame and
-  buttons, and `Intranet.tsx` styles the e-mails and newsletter. `Header.tsx` draws the header and
-  its cards, with `RunControls.tsx` and `StandingBar.tsx`. `Chart.tsx` and `Notebook.tsx` open in a
-  `Modal.tsx`. `saved-run.ts` saves the run, and `later-month.ts` plays the e2e build to `?month=N`.
+- `src/ui/` holds the React panels over the tower: `App.tsx` wires them to the run, and rides the
+  lift when the floor changes, and `TowerStage.tsx` the tower's hotspots. `panels.tsx` picks each
+  step's panel, the larger being `ScenePanel.tsx`, `FindOutPanel.tsx` and `ResultsPanel.tsx`;
+  `Panel.tsx` holds their frame and buttons, and `Intranet.tsx` styles the e-mails and newsletter.
+  `Header.tsx` draws the header and its cards, with `RunControls.tsx` and `StandingBar.tsx`.
+  `Chart.tsx` and `Notebook.tsx` open in a `Modal.tsx`. `saved-run.ts` saves the run, and
+  `later-month.ts` plays the e2e build to `?month=N`.
 
 ### Checks and exceptions
 
