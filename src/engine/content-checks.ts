@@ -162,7 +162,7 @@ function findBrokenReferences(content: Content): string[] {
   };
 
   problems.push(...findBrokenFloors(content));
-  problems.push(...findBrokenReviews(content));
+  problems.push(...findBrokenReviews(content, hiddenFlags));
   problems.push(...findBrokenDeal(content, characters));
   problems.push(...findBrokenBehaviours(content));
   problems.push(...findBrokenBossSigns(content));

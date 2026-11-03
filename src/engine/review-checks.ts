@@ -1,5 +1,5 @@
 import type { Content, SceneData } from "./content";
-import { dependsOnHiddenTruth, flagsSetByHiddenResults } from "./truth-checks";
+import { dependsOnHiddenTruth } from "./truth-checks";
 
 /** Whether anything a review can lead to goes on the record that Official standing reads. */
 function movesStanding(content: Content, review: SceneData): boolean {
@@ -16,10 +16,13 @@ function movesStanding(content: Content, review: SceneData): boolean {
 }
 
 /** What one review must not be: set any other way, or more than paperwork. */
-function findBrokenReview(content: Content, review: SceneData): string[] {
+function findBrokenReview(
+  content: Content,
+  review: SceneData,
+  hiddenFlags: ReadonlySet<string>,
+): string[] {
   const owner = `Scene "${review.id}"`;
   const problems: string[] = [];
-  const hidden = flagsSetByHiddenResults(content);
   const cannot = (what: string) =>
     problems.push(`${owner} is a review, so it cannot have ${what}.`);
   if (review.floor !== undefined) cannot("a floor");
@@ -38,7 +41,7 @@ function findBrokenReview(content: Content, review: SceneData): string[] {
     const optionOwner = `${owner} option "${option.id}"`;
     for (const result of option.results) {
       // What a review says of the player is what the paperwork says.
-      if (result.when && dependsOnHiddenTruth(result.when, hidden)) {
+      if (result.when && dependsOnHiddenTruth(result.when, hiddenFlags)) {
         problems.push(
           `${optionOwner} reads the hidden truth, which a review's results cannot.`,
         );
@@ -61,12 +64,19 @@ function findBrokenReview(content: Content, review: SceneData): string[] {
  * Each quarter of the run has one review of its own, so that each reads
  * differently, and a review is only ever a review.
  */
-export function findBrokenReviews(content: Content): string[] {
-  const reviews = content.scenes.filter((s) => s.quarter !== undefined);
-  const every = content.balance.monthsPerQuarter;
+export function findBrokenReviews(
+  content: Content,
+  hiddenFlags: ReadonlySet<string>,
+): string[] {
+  const reviews = content.scenes.filter(
+    (s): s is SceneData & { quarter: number } => s.quarter !== undefined,
+  );
+  const { monthsPerQuarter } = content.balance;
   const run = content.balance.monthsPerRun;
-  const problems = reviews.flatMap((r) => findBrokenReview(content, r));
-  if (every === undefined) {
+  const problems = reviews.flatMap((r) =>
+    findBrokenReview(content, r, hiddenFlags),
+  );
+  if (monthsPerQuarter === undefined) {
     return [
       ...problems,
       ...reviews.map(
@@ -75,12 +85,11 @@ export function findBrokenReviews(content: Content): string[] {
       ),
     ];
   }
-  const quarters = Math.floor(run / every);
-  for (const r of reviews) {
-    const quarter = r.quarter ?? 0;
+  const quarters = Math.floor(run / monthsPerQuarter);
+  for (const { id, quarter } of reviews) {
     if (quarter > quarters) {
       problems.push(
-        `Scene "${r.id}" reviews quarter ${String(quarter)}, which a ${String(run)}-month run never reaches.`,
+        `Scene "${id}" reviews quarter ${String(quarter)}, which a ${String(run)}-month run never reaches.`,
       );
     }
   }

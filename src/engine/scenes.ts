@@ -29,19 +29,15 @@ import type { Choice } from "./view";
 
 /**
  * Everyone present shows one behaviour, open to their role and chosen by their
- * dealt kind, unless the Scene is staged, when they show only what is written.
+ * dealt kind. A quarterly review is staged: everyone is on their best behaviour,
+ * so it shows only what is written.
  */
-export function openScene(
-  state: State,
-  world: World,
-  id: string,
-  staged = false,
-): Step {
+export function openScene(state: State, world: World, id: string): Step {
   const { content } = world;
   const shown: ShownBehaviour[] = [];
-  const { cast } = sceneData(state, world, id);
+  const { cast, quarter } = sceneData(state, world, id);
   const misleading = drawMisleading(state, world.content);
-  if (content.behaviours.length > 0 && !staged) {
+  if (content.behaviours.length > 0 && quarter === undefined) {
     for (const character of cast) {
       const kind = state.truth.characters.find((c) => c.id === character)?.kind;
       if (kind === undefined) continue;
