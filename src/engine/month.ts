@@ -21,6 +21,7 @@ import {
   optionsOnOffer,
   remaining,
 } from "./reads";
+import { holdReview } from "./reviews";
 import { drawFor, pick } from "./rng";
 import { openScene } from "./scenes";
 import type { MonthRecord, State, Step, World } from "./state";
@@ -38,6 +39,7 @@ export function freshMonth(where: Whereabouts, content: Content): MonthRecord {
     flags: [],
     moveLanded: false,
     absenceDealtWith: false,
+    reviewed: false,
   };
 }
 
@@ -91,8 +93,8 @@ export function leaveStory(state: State, world: World): void {
 }
 
 /**
- * The month's order: Notifications, actions, any Company Event, a Move, and then
- * the month closes.
+ * The month's order: Notifications, any review, actions, any Company Event, a
+ * Move, and then the month closes.
  */
 export function nextStep(state: State, world: World): Step {
   const { content } = world;
@@ -126,6 +128,8 @@ export function nextStep(state: State, world: World): Step {
     );
     return openScene(state, world, flag.scene);
   }
+  const review = holdReview(state, world);
+  if (review) return review;
   if (
     actionsThisMonth(state, content).some((a) => isAvailable(state, content, a))
   ) {

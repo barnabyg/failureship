@@ -84,6 +84,8 @@ export const scene = z.strictObject({
   floor,
   months,
   pool,
+  /** A quarterly review: the quarter of the run it closes, on whichever floor. */
+  quarter: z.number().int().positive().optional(),
   title: text,
   location: text,
   narration: z.array(text).min(1),

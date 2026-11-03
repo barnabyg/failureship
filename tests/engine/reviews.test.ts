@@ -1,0 +1,235 @@
+import { describe, expect, it } from "vitest";
+import {
+  parseContent,
+  startRun,
+  type Choice,
+  type PlayerView,
+  type Run,
+} from "../../src/engine";
+import { fixtureRaw } from "./fixture";
+
+/** A review for one quarter, whose choices go on the record or do not. */
+function review(quarter: number) {
+  return {
+    id: `review-${String(quarter)}`,
+    quarter,
+    title: `REVIEW-${String(quarter)}`,
+    location: "The auditorium",
+    narration: [`Quarter ${String(quarter)} is reviewed.`],
+    cast: ["ana", "ben", "cal"],
+    signs: [{ label: "Whose slide", text: "{holder}'s slide is skipped." }],
+    options: [
+      {
+        id: "steeper",
+        label: "Make the arrow steeper",
+        results: [{ body: "It is steeper.", sets: ["steeper"] }],
+      },
+      {
+        id: "nod",
+        label: "Nod",
+        results: [{ body: "You nod." }],
+      },
+    ],
+  };
+}
+
+/** A run of so many months, quarters of three, with a review for each quarter. */
+function reviewsRaw(monthsPerRun: number) {
+  const base = fixtureRaw();
+  const quarters = Math.floor(monthsPerRun / 3);
+  return {
+    ...base,
+    balance: { ...base.balance, monthsPerRun, monthsPerQuarter: 3 },
+    scenes: Array.from({ length: quarters }, (_, i) => review(i + 1)),
+    standing: {
+      label: "ON-PAPER",
+      title: "How you would do on paper.",
+      start: 50,
+      reported: { good: 0, fair: 0, bad: 0 },
+      finalWarning: 10,
+      bands: [
+        { from: 0, label: "RED", onPaper: "PAPER-RED" },
+        { from: 34, label: "AMBER", onPaper: "PAPER-AMBER" },
+      ],
+      deeds: [{ flag: "steeper", by: 10 }],
+      decides: "DECIDED-BY {who}",
+    },
+  };
+}
+
+/** Plays a whole run, taking `wanted` in each review and the first choice otherwise. */
+function playOut(run: Run, wanted = "nod"): PlayerView[] {
+  const views = [run.view()];
+  for (let view = run.view(); view.choices.length > 0;) {
+    const choice: Choice =
+      view.step.kind === "scene"
+        ? { type: "scene", sceneId: view.step.id, optionId: wanted }
+        : (view.choices[0] as Choice);
+    view = run.choose(choice);
+    views.push(view);
+  }
+  return views;
+}
+
+/** Which Scene opened in which month. */
+const scenesOf = (views: readonly PlayerView[]) =>
+  views.flatMap((v) =>
+    v.step.kind === "scene" ? [{ month: v.month, title: v.step.title }] : [],
+  );
+
+describe("Quarterly reviews", () => {
+  it("come in months 3, 6 and 9 of a nine-month run, each one its own", () => {
+    const content = parseContent(reviewsRaw(9));
+
+    const scenes = scenesOf(playOut(startRun({ seed: 1, content })));
+
+    expect(scenes).toEqual([
+      { month: 3, title: "REVIEW-1" },
+      { month: 6, title: "REVIEW-2" },
+      { month: 9, title: "REVIEW-3" },
+    ]);
+  });
+
+  it("come every third month of a longer run too", () => {
+    const content = parseContent(reviewsRaw(18));
+
+    const scenes = scenesOf(playOut(startRun({ seed: 1, content })));
+
+    expect(scenes.map((s) => s.month)).toEqual([3, 6, 9, 12, 15, 18]);
+    expect(new Set(scenes.map((s) => s.title)).size).toBe(6);
+  });
+
+  it("open by themselves, take none of the month's actions, and come once", () => {
+    const content = parseContent(reviewsRaw(3));
+    const run = startRun({ seed: 1, content });
+    let view = run.view();
+    while (view.step.kind !== "scene") {
+      view = run.choose(view.choices[0] as Choice);
+    }
+    const before = view.actions.remaining;
+
+    view = run.choose({ type: "scene", sceneId: "review-1", optionId: "nod" });
+
+    expect(view.actions.remaining).toBe(before);
+    const rest = playOut(run);
+    expect(scenesOf(rest)).toEqual([]);
+  });
+
+  it("put what the player chose on the official record", () => {
+    const content = parseContent(reviewsRaw(9));
+
+    const nodded = playOut(startRun({ seed: 1, content })).at(-1);
+    const steeper = playOut(startRun({ seed: 1, content }), "steeper").at(-1);
+
+    expect(nodded?.standing?.at).toBe(0.5);
+    // Ten for each of three reviews.
+    expect(steeper?.standing?.at).toBe(0.8);
+  });
+
+  it("do not come in a run with no quarters", () => {
+    const content = parseContent(fixtureRaw());
+
+    expect(scenesOf(playOut(startRun({ seed: 1, content })))).toEqual([]);
+  });
+});
+
+describe("the data of quarterly reviews", () => {
+  const refused = (change: (raw: ReturnType<typeof reviewsRaw>) => void) => {
+    const raw = reviewsRaw(9);
+    change(raw);
+    return () => parseContent(raw);
+  };
+  const first = (raw: ReturnType<typeof reviewsRaw>) => {
+    const scene = raw.scenes[0];
+    if (!scene) throw new Error("No review.");
+    return scene as ReturnType<typeof review> & Record<string, unknown>;
+  };
+
+  it("is accepted with a review for each quarter of the run", () => {
+    expect(() => parseContent(reviewsRaw(9))).not.toThrow();
+  });
+
+  it("is refused with a quarter of the run that has no review", () => {
+    expect(
+      refused((raw) => {
+        raw.scenes = raw.scenes.filter((s) => s.quarter !== 2);
+      }),
+    ).toThrow(/Quarter 2 of the run has no review/);
+  });
+
+  it("is refused with two reviews for a quarter, or one the run never reaches", () => {
+    expect(
+      refused((raw) => {
+        raw.scenes.push({ ...review(2), id: "another" });
+      }),
+    ).toThrow(/Quarter 2 has more than one review/);
+    expect(
+      refused((raw) => {
+        raw.scenes.push(review(4));
+      }),
+    ).toThrow(/Scene "review-4" reviews quarter 4, which a 9-month run/);
+  });
+
+  it("is refused with reviews and no quarters in the balance", () => {
+    expect(
+      refused((raw) => {
+        raw.balance = { ...raw.balance, monthsPerQuarter: undefined } as never;
+      }),
+    ).toThrow(/Scene "review-1" is a review, but .*monthsPerQuarter/);
+  });
+
+  it("is refused with a review set by floor, month or pool, or opened another way", () => {
+    expect(
+      refused((raw) => {
+        first(raw).floor = "fixture-job";
+      }),
+    ).toThrow(/Scene "review-1" is a review, so it cannot have a floor/);
+    expect(
+      refused((raw) => {
+        Object.assign(first(raw), { floor: "fixture-job", months: [1] });
+      }),
+    ).toThrow(/cannot have months/);
+    expect(
+      refused((raw) => {
+        raw.actions.push({
+          ...raw.actions[0],
+          id: "go",
+          scene: "review-1",
+        } as never);
+      }),
+    ).toThrow(/Scene "review-1" is a review, so no action opens it/);
+  });
+
+  it("is refused with a result that reads the hidden truth, or is a big mistake", () => {
+    expect(
+      refused((raw) => {
+        first(raw).options[0]?.results.unshift({
+          when: { holderIs: "ana" },
+          body: "Right name.",
+          sets: ["steeper"],
+        } as never);
+      }),
+    ).toThrow(/Scene "review-1" option "steeper" reads the hidden truth/);
+    expect(
+      refused((raw) => {
+        Object.assign(first(raw).options[1]?.results[0] ?? {}, {
+          mistake: "big",
+        });
+      }),
+    ).toThrow(/Scene "review-1" option "nod" is a big mistake/);
+  });
+
+  it("is refused with a review that never moves Official standing", () => {
+    expect(
+      refused((raw) => {
+        for (const option of first(raw).options) {
+          for (const result of option.results) {
+            Object.assign(result, { sets: [] });
+          }
+        }
+      }),
+    ).toThrow(
+      /Scene "review-1" is a review that never moves Official standing/,
+    );
+  });
+});
