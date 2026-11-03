@@ -141,15 +141,15 @@ format, the page shows what is wrong instead of the game.
 | `sources.json`        | Find Out: who can be asked, how each role talks, how reliable each kind is, and every claim            |
 | `notebook.json`       | Events the Notebook keeps a clue of, and what each clue was worth                                      |
 | `changing.json`       | What burns a Believer, how much it takes, what they can become, and who covers for anyone who leaves   |
-| `characters.json`     | Job titles, roles, how text refers to each person, names, the Org Chart and where you sit on it        |
+| `characters.json`     | Job titles, roles, how text refers to each person, names, the Org Chart and where you start on it      |
 | `gauges.json`         | The Gauges, Teflon and Fawning: where each starts, and the Milestones earned along the way             |
 | `standing.json`       | Official standing: what on the official record moves it, its bands, and what the results screen says   |
 | `hidden-truth.json`   | The rules of the deal: kinds, their weights, and the Hidden Facts                                      |
 | `balance.json`        | Actions a month, months in a run, the cost of each choice, how often signs mislead and the boss's mood |
-| `floor-1.json`        | The rooms on the floor: positions, sizes, colours and the lift's sign                                  |
+| `floors.json`         | Each floor, by the job done on it: the job title, the rooms, their fittings and the lift's sign        |
 
-Each file's fields, the conditions they can use, and what to write for a Thread, a Promise,
-a Deal, a Company Event, a hidden risk or a Gauge are in the
+Each file's fields, the conditions they can use, which floor and month content belongs to, and what
+to write for a Thread, a Promise, a Deal, a Company Event, a hidden risk or a Gauge are in the
 [content format reference](docs/content-format.md).
 
 ## Develop
@@ -161,22 +161,22 @@ How to run the checks and tests is in [AGENTS.md](AGENTS.md#verifying).
 - `src/engine/` holds the rules: headless, seeded, and free of Three.js and React. `run.ts` is the
   interface to a run and `deal.ts` deals it; `choices.ts` carries out each choice; `month.ts` holds
   the month's order; `charts.ts` moves people on the charts, and `places.ts` reads your bosses from
-  your place on them; `outcome.ts` is the one place any consequence takes effect; `state.ts` and
-  `reads.ts` are what the mechanics share. The mechanics are `boss.ts`, `demands.ts`, `find-out.ts`
-  with `claims.ts`, `notebook.ts`, `over-head.ts`, `project.ts`, `scenes.ts`, `company-events.ts`,
-  `mistakes.ts`, `reputation.ts`, `risks.ts`, `threads.ts` with `bills.ts`, `promises.ts`,
-  `deals.ts`, `changes.ts` for Believers changing and leaving, `gauges.ts`, the only module that
-  reads a Gauge, and `standing.ts`. `say.ts` names Characters in text, and `rng.ts` and `seed.ts`
-  hold the seed. `view.ts` is the player view, built by `to-view.ts`, with `to-results.ts` its
-  reveal at the end; `hidden-truth.ts` is the tests' read of the truth. `save.ts` writes and reads a
-  run. A run's `State` is plain data, so a mechanic gets saving for free: raise `SAVE_VERSION` if it
-  changes what saved state means. `content.ts` assembles the schema from `basic-schema.ts`,
-  `outcome-schema.ts` for what a choice does, `step-schema.ts` for what a step offers, and
-  `truth-schema.ts`, `boss-schema.ts` and `consequence-schema.ts`. `content-checks.ts` parses and
-  checks data across files, with each mechanic's checks in `truth-checks.ts` for the hidden truth
-  and its signs, `boss-checks.ts` for the boss, going over the head, Demands and reputation, and
-  `consequence-checks.ts` for what choices lead to, with `word-checks.ts` for Promises and Deals.
-- `src/tower/` draws the tower and holds no rules.
+  your place on them; `floors.ts` your floor and what is on there each month; `outcome.ts` is the
+  one place any consequence takes effect; `state.ts` and `reads.ts` are what the mechanics share.
+  The mechanics are `boss.ts`, `demands.ts`, `find-out.ts` with `claims.ts`, `notebook.ts`,
+  `over-head.ts`, `project.ts`, `scenes.ts`, `company-events.ts`, `mistakes.ts`, `reputation.ts`,
+  `risks.ts`, `threads.ts` with `bills.ts`, `promises.ts`, `deals.ts`, `changes.ts` for Believers
+  changing and leaving, `gauges.ts`, the only module that reads a Gauge, and `standing.ts`. `say.ts`
+  names Characters in text, and `rng.ts` and `seed.ts` hold the seed. `view.ts` is the player view,
+  built by `to-view.ts`, with `to-results.ts` its reveal at the end; `hidden-truth.ts` is the tests'
+  read of the truth. `save.ts` writes and reads a run. A run's `State` is plain data, so a mechanic
+  gets saving for free: raise `SAVE_VERSION` if it changes what saved state means. `content.ts`
+  assembles the schema from the `*-schema.ts` files, as [AGENTS.md](AGENTS.md) says.
+  `content-checks.ts` parses and checks data across files, with each mechanic's checks in
+  `truth-checks.ts` for the hidden truth and its signs, `boss-checks.ts` for the boss, going over
+  the head, Demands and reputation, and `consequence-checks.ts` for what choices lead to, with
+  `word-checks.ts` for Promises and Deals and `floor-checks.ts` for floors.
+- `src/tower/` draws the floor the view names, and holds no rules.
 - `src/ui/` holds the React panels over the tower: `App.tsx` wires them to the run, and
   `TowerStage.tsx` the tower's hotspots. `panels.tsx` picks each step's panel, the larger being
   `ScenePanel.tsx`, `FindOutPanel.tsx` and `ResultsPanel.tsx`; `Panel.tsx` holds their frame and

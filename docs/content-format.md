@@ -76,11 +76,34 @@ Find Out's `sources`, `leaving`, a Hidden Fact's `characters`, a risk's `route.c
 Deal's `with` always name a Character. A `from` line can say `{boss}` or `{head}` for the name of
 whoever is in that place, such as `"From: Your boss, {boss}"`.
 
-## `months`, in several files
+## Floors and their months
 
-A Notification, action, Scene, Move, Notebook event or official story entry can list
-`"months": [2, 3]` to belong only to those months. Without it, it belongs to every
-month.
+Each job is done on its own floor, written in [`floors.json`](#floorsjson), and the player's job
+decides which floor they are on. A Scene, Notification, Demand, Move or official story entry can
+say `"floor": "junior-employee"`, a floor's `job`, to belong only to that floor. Without it, it
+comes on any floor. An action is on any floor that has a room of its `place`.
+
+`"months": [2, 3]` makes something belong only to those months **on its floor**: the month the
+player is in there, counting every month they have spent on it, so the first month on a new floor
+is month 1 whatever the run's month, and coming back to a floor picks it up where it was left.
+Without `floor`, it means those months on whichever floor the player is on. Without `months`,
+something belongs to every month, so the Monthly Status Report recurs on any floor, and a stalled
+Demand follows the player wherever they go. Only Company Events go by the run's month, under
+`schedule` in [`events.json`](#eventsjson), and the run always ends at `monthsPerRun` in
+[`balance.json`](#balancejson). The Project's `events` and `input` and the Notebook's events take
+`months` but no `floor`.
+
+A floor is written for as many months as its own Scenes, Notifications and Demands name. Each of
+those months needs at least one of them, and a stay longer than that draws from the floor's
+**pool**: Scenes and Notifications with `"pool": true` and the floor's `floor`, and no `months`.
+Each month past the written ones gets one pool Scene and one pool Notification, if it has them,
+each in a seeded turn, so that every one comes up before any repeats. A pool Scene needs an action
+without `months` to open it, which is offered in the months it is drawn.
+
+These are refused: a `floor` that names no floor, a written month with nothing of its own, a floor
+written for fewer months than the run with no pool, a pool item with `months` or no `floor`, a
+Demand or Move in a pool, and a floor other than the one a run starts on with nothing of its own.
+Floor 1 is written for all nine months, so it has no pool yet.
 
 ## `actions.json`
 
@@ -180,8 +203,9 @@ Job titles, roles, names, who reports to whom on the Org Chart, and where the pl
 
 - `characters` lists the Characters. Each has an `id`, `name`, `title`, `called`, `role`, and
   `reportsTo`, whom they answer to on the Org Chart, except for whoever is at the top.
-- `you` is where the player sits: `reportsTo` names a Character, as in
-  [Your boss and your boss's boss](#your-boss-and-your-bosss-boss).
+- `you` is where the player sits as a run starts: `reportsTo` names a Character, as in
+  [Your boss and your boss's boss](#your-boss-and-your-bosss-boss), and `job` names the floor in
+  [`floors.json`](#floorsjson) they start on.
 - `places` holds the words for whoever is in each place, `boss` and `head`, while they are:
   `called`, and a `title` that says `{title}`, their own job title.
 
@@ -217,7 +241,7 @@ A Scene option or Notification option offers one with `"deal"`, once in a run. D
 
 ## `demands.json`
 
-Demands, listed in `items`, arrive as Notifications with their `months`, and must offer
+Demands, listed in `items`, arrive as Notifications with their `floor` and `months`, and must offer
 `deliver`, `push-back`, `hand-off`, `fake` and `stall`. An answer that needs a colleague
 names them by role.
 
@@ -272,9 +296,12 @@ one of `impress`, `fabricate`, `trade`, `find-out`, `deflect`, `attack` or `deli
 during play shows it. **How you played** counts the Moves the player made in each family. A
 choice with an `approach` should say which family it is, and a test fails if it does not.
 
-## `floor-1.json`
+## `floors.json`
 
-The rooms on the floor: positions, sizes, colours and the lift's sign.
+The floors of the tower, from the bottom up. Each has a `job`, which keys it, the job `title`
+that the header, the e-mails and the official story show, and its `rooms`: positions, sizes,
+colours, `fittings` and, for a place the player can see but not act on, such as the lift, a
+`sign`. Content goes to a floor as [Floors and their months](#floors-and-their-months) says.
 
 ## `gauges.json`
 
@@ -353,8 +380,9 @@ them.
 
 ## `official-story.json`
 
-The official story, assembled from `entries` according to what you did. Each entry has
-`reported` or `happened` text, or both, and can have `when` and `months`.
+The official story, assembled from `entries` according to what you did. Its `title` can say
+`{job}`, the player's job title. Each entry has `reported` or `happened` text, or both, and can
+have `when`, `floor` and `months`.
 
 ## `over-head.json`
 
