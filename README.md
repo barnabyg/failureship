@@ -71,18 +71,18 @@ vacancy arose. It reads only the official record, a Final Warning turns it red, 
 
 What you do can travel. There is no reputation score: each person believes what has reached them
 along the Power Map, shown only in how they are with you, and good news travels too, as do false
-stories. A **Rival** is any
-Practitioner competing with you, your boss included, and nothing says who. Rivals use your own Moves
-on you, and once you have seen one done, or have other means, you can use it too.
+stories. A **Rival** is any Practitioner competing with you, your boss included, and nothing says
+who. Rivals use your own Moves on you, and once you have seen one done, you can use it too.
 
 Your boss's **Grand Plan** is on the **Your project** card once you hear of it. Doing it for real
 needs whoever really has what it takes. Done or faked, it goes on the record, but whether your boss
 counts it goes by who they are, a fake can be found out, and a failed one is blamed on someone.
 
-A Plan your boss counts done moves them up, and their seat is open for the month after. Whoever
-really holds influence over it on the Power Map gives it out, with Rivals competing, not a score or
-a Gauge, and you are told who and why, beside Official standing. Win, and you are **Team lead**, up
-the lift on Floor 2 under your old boss's boss. Lose, and the winner is your boss. The rest remember.
+A Plan your boss counts done moves them up, and their seat is open for two months. Whoever really
+holds influence over it on the Power Map gives it out by what matters to their kind, never a score
+or a Gauge. Rivals work on them, and so can you, if you know whom to approach. You are told who
+decided, beside Official standing. Win, and you are **Team lead**, up the lift on Floor 2, under
+your old boss's boss and someone new. Lose, and the winner is your boss. The passed over remember.
 
 After eighteen months the results screen shows who was really who: each Character's kind and Hidden
 Fact, each Rival and what they did, your marks against the truth, how you played by family of Move,

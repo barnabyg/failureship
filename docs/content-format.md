@@ -182,6 +182,9 @@ chosen by their dealt kind.
   and every Character must have something to show as each kind, or it is refused.
 - `clue` makes the Notebook keep the behaviour. It counts as `held` if its likelihood is
   highest for the kind of the person who showed it, and otherwise as `wrong`.
+- A role's own behaviours are what tell it apart: only someone who chairs meetings, such as
+  the Team Leader, can overrun one, and only the Office Co-ordinator controls the minutes and
+  the stationery.
 
 ## `boss.json`
 
@@ -253,6 +256,9 @@ Job titles, roles, names, who reports to whom on the Org Chart, and where the pl
   So adding one leaves every deal of the floors below alone. `charactersWithFact` and
   `minPractitioners` in [`hidden-truth.json`](#hidden-truthjson) count the first floor's cast only.
 - `you.name` is what the Org Chart calls the player, once anyone answers to them.
+- A later floor's cast is met only when the player reaches its floor. Until then nobody of it is
+  on the Org Chart, in Find Out, in the Notebook's marks or on the results screen, and whoever
+  answers to one of them is shown at the top.
 - Moving up gives a Character a new title and `called`, from [`vacancies.json`](#vacanciesjson),
   and whoever takes a seat takes its holder's.
 
@@ -303,7 +309,8 @@ sets `attended`, and there must be an action written for every month. If you spe
 elsewhere and did not go, then as the month closes you are told about one of its `actions`,
 each given once in a run, and your boss takes the absence according to the `approach`. It
 then stays open, arrives the month after as a Notification with the `options` shared by all
-of them, and goes on like any other Demand.
+of them, and goes on like any other Demand. A meeting you had no action left for leaves no
+Demand behind.
 
 ## `dialogs.json`
 
@@ -726,8 +733,9 @@ answers set. One that is not is refused.
 Seats: how a boss's seat falls vacant, and who really decides who gets it. As the official story
 closes a month in which your boss completed their [Grand Plan](#grand-plansjson) and counted it
 done, they are on their way up, and their seat is open for `openFor` months from the next. As the
-last of them closes, it is decided, and the next month opens with the decision. Nothing opens that
-the run would end before deciding.
+last of them closes, it is decided, and the next month opens with the decision. A seat decided as
+the run's last month closes is told before the results. Nothing opens that the run would end
+before deciding.
 
 - `seats` has one seat for each floor that has one, keyed by `floor`, the floor it is on: the
   player's boss holds it while the player's job is that floor's. `job` is the floor that winning it
@@ -736,27 +744,50 @@ the run would end before deciding.
   player are the candidates. `movesUp` is where its holder goes: whom they now answer to, and their
   new `title` and `called`. `opened` is told as it opens, and says `{holder}` and `{month}`, the
   month it is decided in; `won` and `lost` as it is decided, and `lost` says `{winner}`.
-- Whoever holds influence over the holder on the Power Map decides, or the holder if nobody does:
-  never the Org Chart, a score, a Gauge or Official standing. Each candidate's `reasons` add up, and
-  the most wins, with a seeded draw among equals. For a Character: `self`, being the one deciding;
-  `owed`, being owed a favour by them; `protege`, being directly under them on the Power Map, or
-  `circle`, further down; and `rival`, being a Rival. For the player: `owedYou`, and `warm`,
-  `neutral` or `cold`, the mood of the one deciding. Each has a `strength` and a `why`, which says
-  `{decider}` and, for a Character, `{who}`. `close` is said of a winner it was too close to call,
-  or with no reason written, and says `{who}`.
-- The decision is told with Official standing's band beside `inFact`, who really decided, which says
-  `{decider}` and `{why}`, and `asForYou`, what counted for the player, if they lost. `results` is
-  what the results screen says of each, with `{holder}`, `{winner}` and `{month}`.
+- Whoever holds influence over the holder on the Power Map decides, or the holder if nobody does,
+  and weighs each candidate's `reasons` by their own kind, in `weight`. They add up, and the most
+  wins, with a seeded draw among equals. Every input is hidden truth, never the Org Chart, a Gauge
+  or Official standing. For a Character: `self`, being the one deciding; `owed`, being owed a
+  favour by them; `protege`, being directly under them on the Power Map, or `circle`, further
+  down; and `credited`, having claimed the Plan's credit. For the player: `owedYou` and `calledIn`,
+  a favour they are owed, and one they have called in; `credited`; `delivered`, having completed
+  the Plan for real and had it counted; `results`, having made `resultsAt` Moves of the deliver
+  family; `looks`, `looksAt` of impress and fabricate; and `warm`, `neutral` or `cold`, the mood of
+  the one deciding. So a Believer can weigh what was really done, a Practitioner favours and
+  protégés, and an Incompetent who looks the part.
+- Each reason's `why` is what the results screen says of it, with `{decider}` and, for a Character,
+  `{who}`. Its `told`, if it has one, is what the decision itself says, when it is the winner's
+  strongest tie to whoever decided: it never says how anyone feels about the player, that a favour
+  is owed, or who is a Rival. With nothing to tell, the decision says `untold`, and `close` when it
+  was too close to call. `inFact` says `{decider}` and `{why}`, set beside Official standing's band.
+  The results screen adds `asForYou`, every reason of the player's, if they lost, and `results`,
+  with `{holder}`, `{winner}` and `{month}`. `you` is how all of these call the player.
 - Winning makes the player the floor's new job: they answer to whoever the holder answered to, and
   the holder's team answers to them. Losing puts the winner in the holder's place, with the
   holder's title, and the player and the rest of the team answer to them. Each Character passed over
-  keeps a memory with `passedOver.about`, `forYou` if the player won and `forSomeoneElse` if not,
-  which can say `{winner}`. A Move or Thread can read it with `remembers`.
+  keeps a memory: `passedOver.forYou` if the player won, and `forSomeoneElse` if not, each with its
+  own `about`, which a Move can read with `remembers`, and a `text` that can say `{winner}`.
+
+While a seat is open, a Notification option, a Scene result or a Move can act for it with `seat`:
+
+- `approach`, a Character or a place: the player has a word with them about it. If they decide,
+  whoever decides keeps `acts.approach.decider`, and if they have sway with whoever decides,
+  `acts.approach.sway`: each a memory, with how far it moves that person's `belief` of the player.
+  Anyone else, and nothing comes of it, so knowing the Power Map pays.
+- `callIn`: a favour owed to whoever acts by the one deciding is called in, as `calledIn`, or else
+  one owed by someone with sway with them, who puts in a word, `acts.callIn.sway`. Either is paid.
+- `credit`: whoever acts claims the Plan's credit. Whoever claims it last has it.
+- On a Move only, which must have a `by`: `story`, a story about the player that reaches whoever
+  decides, `acts.story`, and `diary`, after which whoever decides owes the Move's maker a favour,
+  for `acts.diary`. Rivals' Moves for a seat are written as `"by": "{competitor}"`, `"priority":
+true` and `"when": { "vacancyOpen": true }`.
 
 These are refused: two seats on one floor, a `floor` or `job` that names no floor, a seat that leads
 to its own floor, `competing` that names nothing in `rivals.json`, moving its holder up to someone
-who answers to them, a `lost` that does not say `{winner}`, and `vacancyOpen` with no seats. Until
-issue #107, the checks that keep the player's bosses in place still stand: only a seat moves them.
+who answers to them, a `lost` that does not say `{winner}`, `vacancyOpen` or `seat` with no seats,
+`seat` on a Move with no `by`, `story` or `diary` on anything but a Move, `approach` on a Move, and
+an `approach` that names nobody. Until issue #107 the player's boss and boss's boss cannot leave,
+whoever they are, and the checks that keep them in place still stand: only a seat moves them.
 
 ## `threads.json`
 
