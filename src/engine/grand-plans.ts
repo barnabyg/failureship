@@ -15,6 +15,7 @@ import {
 import { drawFor } from "./rng";
 import { calledBy, sayPeople } from "./say";
 import type { State, TakenPlan } from "./state";
+import { isMovingUp } from "./vacancies";
 import type { PlayerView, StepView } from "./view";
 
 type Way = GrandPlan["ways"][number];
@@ -75,7 +76,10 @@ export function followPlans(state: State, content: Content): void {
     }
   }
   const boss = bossOf(state, content);
-  if (planNow(state, content)?.ended === null) return;
+  // A boss on their way up takes on nothing new.
+  if (planNow(state, content)?.ended === null || isMovingUp(state, boss)) {
+    return;
+  }
   const next = written.plans.find(
     (p) =>
       isOn(state, content, p) &&

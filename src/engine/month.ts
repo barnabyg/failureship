@@ -32,6 +32,7 @@ import {
   noteRivals,
 } from "./rivals";
 import { drawFor, pick } from "./rng";
+import { fillVacancies } from "./vacancies";
 import { openScene } from "./scenes";
 import type { MonthRecord, State, Step, World } from "./state";
 
@@ -86,6 +87,8 @@ export function openMonth(state: State, content: Content): void {
 
 /** After the official story: on to the next month, or the end of the run. */
 export function leaveStory(state: State, world: World): void {
+  // Between months, so that a promotion's new floor counts from the next.
+  fillVacancies(state, world.content);
   if (state.month === world.content.balance.monthsPerRun) {
     state.step = { kind: "results" };
     return;

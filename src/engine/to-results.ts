@@ -10,6 +10,7 @@ import { bossKindOf, moodOf, moodOfCharacter, personOf } from "./reads";
 import { calledBy, sayPeople, titleOf } from "./say";
 import { standingAtEnd } from "./standing";
 import type { State } from "./state";
+import { vacanciesInResults } from "./vacancies";
 import type { StepView } from "./view";
 
 /** The reveal. It reaches the player view only here, once the run has ended. */
@@ -27,6 +28,7 @@ export function toResultsView(
       : content.ui.results),
     ending: toEnding(state, content),
     standing: toStandingResults(state, content),
+    vacancies: vacanciesInResults(state, content),
     mistakes: state.mistakes,
     milestones: gaugesInView(state, content).milestones,
     changed: state.truth.changes.flatMap((change) => {

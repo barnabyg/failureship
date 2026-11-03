@@ -13,7 +13,10 @@ function placeWords(bosses: Bosses, content: Content, id: string) {
  * player, such as "your boss", or by what they do, or else by name.
  */
 export function calledBy(state: State, content: Content, id: string): string {
-  return calledAmong(bossesOf(state, content), content, id);
+  const bosses = bossesOf(state, content);
+  const moved = state.titles[id];
+  if (moved && placeAmong(bosses, id) === undefined) return moved.called;
+  return calledAmong(bosses, content, id);
 }
 
 /** The same, among these bosses, such as those a run starts with. */
@@ -33,7 +36,10 @@ export function calledAmong(
 
 /** A Character's job title, with the place they are in above the player, if any. */
 export function titleOf(state: State, content: Content, id: string): string {
-  const own = content.characters.find((c) => c.id === id)?.title ?? "";
+  const own =
+    state.titles[id]?.title ??
+    content.characters.find((c) => c.id === id)?.title ??
+    "";
   const words = placeWords(bossesOf(state, content), content, id);
   return words ? words.title.replaceAll("{title}", own) : own;
 }

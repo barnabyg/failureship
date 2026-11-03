@@ -10,7 +10,7 @@ import {
   text,
 } from "./basic-schema";
 import { bill } from "./consequence-schema";
-import { notificationOption, sets } from "./outcome-schema";
+import { notificationOption, sets, TONES } from "./outcome-schema";
 import { notification } from "./step-schema";
 
 /** A way of coming across, and how each kind of boss takes it. */
@@ -290,4 +290,71 @@ export const grandPlans = z.strictObject({
   /** Where the player's view says it has got to. `running` says {month}. */
   statuses: z.strictObject({ running: text, completed: text, failed: text }),
   plans: z.array(grandPlan).min(1),
+});
+
+/** Why whoever decides a vacancy might pick someone, and how much it weighs. */
+const reason = z.strictObject({
+  strength: z.number().int(),
+  /** What the decision says of it. Says {decider}, and {who} for a Character. */
+  why: text,
+});
+
+/** A boss's seat, which falls vacant when they move up, and who decides it. */
+const seat = z.strictObject({
+  id,
+  /** The floor it is on: the player is under it while their job is this. */
+  floor: id,
+  /** The job the player gets by winning it, which takes them to its floor. */
+  job: id,
+  /** What Rivals compete for while it is open, by its id in `rivals.json`. */
+  competing: id,
+  /** How many months it stays open, from the month after it falls vacant. */
+  openFor: z.number().int().positive(),
+  /** Where whoever held it moves up to: whom they answer to, and as what. */
+  movesUp: z.strictObject({ reportsTo: id, title: text, called: text }),
+  /** Told as it opens. Says {holder} and {month}, the month it is decided in. */
+  opened: notice,
+  /** Told as it is decided, if the player has it. */
+  won: notice,
+  /** Told as it is decided, if someone else has it. Says {winner}. */
+  lost: notice,
+});
+
+export const vacancies = z.strictObject({
+  seats: z.array(seat).min(1),
+  /** What each candidate passed over keeps of it. Says {winner}. */
+  passedOver: z.strictObject({
+    about: id,
+    /** When it was the player who had the seat. */
+    forYou: z.strictObject({ text, tone: z.enum(TONES).optional() }),
+    /** When it was someone else. */
+    forSomeoneElse: z.strictObject({ text, tone: z.enum(TONES).optional() }),
+  }),
+  /** Why the one who decides would pick each candidate. They add up. */
+  reasons: z.strictObject({
+    /** The one deciding is a candidate. */
+    self: reason,
+    /** The one deciding owes them a favour. */
+    owed: reason,
+    /** The one deciding has influence over them directly, on the Power Map. */
+    protege: reason,
+    /** The one deciding is above them on the Power Map, further up. */
+    circle: reason,
+    /** They are a Rival, working for it. */
+    rival: reason,
+    /** The one deciding owes the player a favour. */
+    owedYou: reason,
+    /** How what has reached the one deciding of the player stands. */
+    warm: reason,
+    neutral: reason,
+    cold: reason,
+  }),
+  /** Why it went to someone when it was too close to call. Says {who}. */
+  close: text,
+  /** Beside Official standing: who really decided. Says {decider} and {why}. */
+  inFact: text,
+  /** After it, when the player did not get it: what counted for them. Says {why}. */
+  asForYou: text,
+  /** What the results screen says of each vacancy. Says {holder}, {winner} and {month}. */
+  results: text,
 });

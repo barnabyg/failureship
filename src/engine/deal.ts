@@ -1,4 +1,4 @@
-import type { Content, Kind } from "./content";
+import { KINDS, type Content, type Kind } from "./content";
 import { couldCompeteAtStart } from "./rivals";
 import { draw, drawFor, pick, pickWeighted, shuffle } from "./rng";
 
@@ -40,6 +40,83 @@ export function hasSway(map: PowerMap, who: string, over: string): boolean {
   return false;
 }
 
+/**
+ * The first floor's cast, who are dealt together. A Character written for a
+ * later floor's cast is dealt after them, by draws of their own, so that adding
+ * one leaves every deal of the floors below alone.
+ */
+export function castDealtFirst(content: Content): string[] {
+  return content.characters
+    .filter((c) => c.floor === undefined || c.floor === content.you.job)
+    .map((c) => c.id);
+}
+
+/**
+ * Each Character of a later floor's cast, dealt by draws named for them: a kind
+ * by the usual weights, a Hidden Fact as often as the first cast has one, and a
+ * motive. They join the Power Map below its most influential, since they are new
+ * to the people there, under someone already on it.
+ */
+export function dealNewcomers(
+  seed: number,
+  characters: readonly DealtCharacter[],
+  powerMap: PowerMap,
+  content: Content,
+): { characters: DealtCharacter[]; powerMap: PowerMap } {
+  const { kinds, facts, charactersWithFact } = content.hiddenTruth;
+  const first = castDealtFirst(content);
+  const dealt = [...characters];
+  let map = powerMap;
+  for (const { id } of content.characters.filter(
+    (c) => !first.includes(c.id),
+  )) {
+    const at = (name: string) => drawFor(seed, `newcomer-${name}:${id}`, 0);
+    const kind = pickWeighted(
+      Math.floor(at("kind") * 2 ** 32),
+      KINDS,
+      (k) => kinds[k].weight,
+    ).item;
+    const used = new Set(dealt.flatMap((c) => (c.fact ? [c.fact.id] : [])));
+    const open = facts.filter(
+      (f) => !used.has(f.id) && (f.characters?.includes(id) ?? true),
+    );
+    const written =
+      at("has-fact") < charactersWithFact / first.length
+        ? open[Math.floor(at("fact") * open.length)]
+        : undefined;
+    const motive =
+      content.sources.motives[
+        Math.floor(at("motive") * content.sources.motives.length)
+      ];
+    dealt.push({
+      id,
+      kind,
+      fact: written
+        ? {
+            id: written.id,
+            text: written.text.replaceAll("{name}", nameOf(content, id)),
+          }
+        : null,
+      motive: motive?.id ?? "",
+    });
+    const { order, influence } = map;
+    const lowest = Math.min(
+      Math.max(1, content.sources.influentialCount),
+      order.length,
+    );
+    const index =
+      lowest + Math.floor(at("place") * (order.length - lowest + 1));
+    const above = order[Math.floor(at("above") * index)];
+    if (above === undefined) continue;
+    map = {
+      ...map,
+      order: [...order.slice(0, index), id, ...order.slice(index)],
+      influence: [...influence, { who: above, over: id }],
+    };
+  }
+  return { characters: dealt, powerMap: map };
+}
+
 /** Favours already owed between Characters, by named draws, so the rest of a deal stands. */
 export function dealFavours(
   seed: number,
@@ -49,7 +126,7 @@ export function dealFavours(
   const written = content.deals?.favours;
   if (!written) return map;
   const favours: PowerMap["favours"] = [];
-  const ids = content.characters.map((c) => c.id);
+  const ids = castDealtFirst(content);
   for (let i = 0; i < written.dealt; i++) {
     const at = (name: string, items: readonly string[]) =>
       items[
@@ -84,10 +161,7 @@ export function dealPowerMap(
   rng: number,
   content: Content,
 ): { powerMap: PowerMap; next: number } {
-  const dealt = shuffle(
-    rng,
-    content.characters.map((c) => c.id),
-  );
+  const dealt = shuffle(rng, castDealtFirst(content));
   const influence: PowerMap["influence"] = [];
   let next = dealt.next;
   dealt.items.slice(1).forEach((over, index) => {
@@ -103,7 +177,7 @@ export function dealCharacters(
   rng: number,
   content: Content,
 ): { characters: DealtCharacter[]; next: number } {
-  const ids = content.characters.map((c) => c.id);
+  const ids = castDealtFirst(content);
   const kinds = dealKindsWithRivals(rng, ids, content);
   const facts = dealFacts(kinds.next, ids, content);
   return {

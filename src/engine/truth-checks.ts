@@ -6,6 +6,7 @@ import {
   type Condition,
   type Content,
 } from "./content";
+import { castDealtFirst } from "./deal";
 import { COMPETITOR } from "./rivals";
 
 /** Showing or hiding an option on this would tell the player the truth. */
@@ -78,22 +79,24 @@ export function findBrokenDeal(
   const { kinds, minPractitioners, charactersWithFact, facts } =
     content.hiddenTruth;
   const everyone = content.characters;
+  const first = castDealtFirst(content);
   const problems: string[] = [];
   if (new Set(everyone.map((c) => c.name)).size < everyone.length) {
     problems.push("Two Characters share a name, which the charts cannot show.");
   }
-  if (minPractitioners > everyone.length) {
+  if (minPractitioners > first.length) {
     problems.push(
-      `The deal wants ${String(minPractitioners)} Practitioners from ${String(everyone.length)} Characters.`,
+      `The deal wants ${String(minPractitioners)} Practitioners from ${String(first.length)} Characters.`,
     );
   }
   if (Object.values(kinds).every((k) => k.weight === 0)) {
     problems.push("The deal needs a kind with a weight above zero.");
   }
-  if (charactersWithFact * 2 <= everyone.length) {
+  // A later floor's cast has a fact as often as the first floor's does.
+  if (charactersWithFact * 2 <= first.length) {
     problems.push("The deal must give most Characters a Hidden Fact.");
   }
-  if (charactersWithFact > everyone.length) {
+  if (charactersWithFact > first.length) {
     problems.push("The deal wants more Hidden Facts than Characters.");
   }
   for (const fact of facts) {

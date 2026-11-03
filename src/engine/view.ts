@@ -104,6 +104,18 @@ export type StepView =
       reaction?: string | undefined;
       /** What the boss finally says of the player. */
       verdict?: string | undefined;
+      /** A vacancy decided: Official standing beside who really decided, and why. */
+      decided?:
+        | {
+            onPaper: {
+              label: string;
+              at: number;
+              band: string;
+              text: string;
+            } | null;
+            inFact: string;
+          }
+        | undefined;
     }
   | { kind: "move"; from: string; title: string; body: string }
   | { kind: "event"; from: string; title: string; body: string }
@@ -133,6 +145,13 @@ export type StepView =
         /** What the one who really decides ended up believing of the player. */
         believes: string | null;
       } | null;
+      /** Each vacancy decided: on paper, and who really decided it and why. */
+      vacancies: {
+        month: number;
+        text: string;
+        onPaper: string;
+        inFact: string;
+      }[];
       /** Each Thread that played out, traced back to what started it. */
       threads: {
         startedIn: number;

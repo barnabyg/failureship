@@ -2,7 +2,7 @@ import type { Condition, Content, Kind, Mood, SceneData } from "./content";
 import { YOU, type PowerMap } from "./deal";
 import { isOn, isOnFloor } from "./floors";
 import { isPlanRunning, planWords } from "./grand-plans";
-import { bossOf, placeOf, whoIs } from "./places";
+import { bossOf, bossesOf, meantBy, placeOf, whoIs } from "./places";
 import { calledBy, capitalised, sayFrom, sayPeople, titleOf } from "./say";
 import type { State, World } from "./state";
 import type { Person } from "./view";
@@ -158,11 +158,19 @@ export function matches(
   if ("planRunning" in condition) {
     return isPlanRunning(state, content, condition.planRunning);
   }
+  if ("vacancyOpen" in condition) return isVacancyOpen(state);
   if ("not" in condition) return !matches(state, content, condition.not, room);
   if ("any" in condition) {
     return condition.any.some((inner) => matches(state, content, inner, room));
   }
   return condition.all.every((inner) => matches(state, content, inner, room));
+}
+
+/** Whether a seat is open now, and still to be decided. The player is told when one is. */
+export function isVacancyOpen(state: State): boolean {
+  return state.vacancies.some(
+    (v) => v.decided === null && v.opened <= state.month,
+  );
 }
 
 /** Whether someone has left the company, which is for the rest of the run. */
@@ -259,8 +267,14 @@ export function sceneData(state: State, world: World, id: string): SceneData {
   const shaped = script
     ? script(scene, { powerMap: state.truth.powerMap })
     : scene;
-  // Whoever has left is not in the room, and whoever covers for them never chairs.
-  return { ...shaped, cast: shaped.cast.filter((c) => !isGone(state, c)) };
+  // A place in the cast is whoever is in it. Whoever has left is not in the
+  // room, and whoever covers for them never chairs.
+  const bosses = bossesOf(state, world.content);
+  const cast = shaped.cast.flatMap((c) => meantBy(bosses, c) ?? []);
+  return {
+    ...shaped,
+    cast: [...new Set(cast)].filter((c) => !isGone(state, c)),
+  };
 }
 
 /** Writes the dealt Characters into text that names parts in the Power Map. */

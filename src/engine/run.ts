@@ -1,6 +1,12 @@
 import { applyChoice } from "./choices";
 import { KINDS, type Content, type Kind } from "./content";
-import { dealCharacters, dealFavours, dealMotives, dealPowerMap } from "./deal";
+import {
+  dealCharacters,
+  dealFavours,
+  dealMotives,
+  dealNewcomers,
+  dealPowerMap,
+} from "./deal";
 import { freshMonth, nextStep, openMonth } from "./month";
 import { startingGauges } from "./gauges";
 import { noteEvents } from "./notebook";
@@ -57,6 +63,12 @@ function dealtState(seed: number, content: Content): State {
   const dealt = dealCharacters(seed, content);
   const power = dealPowerMap(dealt.next, content);
   const motives = dealMotives(power.next, dealt.characters, content);
+  const later = dealNewcomers(
+    seed,
+    motives.characters,
+    dealFavours(seed, power.powerMap, content),
+    content,
+  );
   return {
     ...where,
     rng: motives.next,
@@ -87,14 +99,16 @@ function dealtState(seed: number, content: Content): State {
     promises: [],
     deals: [],
     plans: [],
+    vacancies: [],
+    titles: {},
     ...startingGauges(content),
     finalWarning: false,
     firedIn: null,
     mistakes: [],
     step: { kind: "actions" },
     truth: {
-      characters: motives.characters,
-      powerMap: dealFavours(seed, power.powerMap, content),
+      characters: later.characters,
+      powerMap: later.powerMap,
       beliefs: {},
       news: [],
       risks: [],
@@ -176,6 +190,7 @@ function runOf(state: State, world: World): Run {
     bossBelief: beliefOf(state, bossOf(state, content)),
     headBelief: beliefOf(state, headOf(state, content) ?? ""),
     plans: structuredClone(state.plans),
+    vacancies: structuredClone(state.vacancies),
   }));
   return run;
 }

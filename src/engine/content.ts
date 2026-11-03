@@ -1,6 +1,13 @@
 import { z } from "zod";
 import { colour, floor, id, months, perKind, text } from "./basic-schema";
-import { boss, demands, grandPlans, overHead, reputation } from "./boss-schema";
+import {
+  boss,
+  demands,
+  grandPlans,
+  overHead,
+  reputation,
+  vacancies,
+} from "./boss-schema";
 import {
   changing,
   companyEvent,
@@ -177,6 +184,7 @@ export const contentSchema = z.strictObject({
   project,
   demands: demands.optional(),
   grandPlans: grandPlans.optional(),
+  vacancies: vacancies.optional(),
   characters: z
     .array(
       z.strictObject({
@@ -189,6 +197,11 @@ export const contentSchema = z.strictObject({
         role: id.optional(),
         /** Who this Character answers to on the Org Chart. */
         reportsTo: id.optional(),
+        /**
+         * The floor whose cast they are written for, if not the first. They are
+         * in the company from the start, but dealt after the first floor's cast.
+         */
+        floor,
       }),
     )
     .min(3),
@@ -198,6 +211,8 @@ export const contentSchema = z.strictObject({
     reportsTo: id,
     /** Their job, which decides the floor they are on. */
     job: id,
+    /** What the Org Chart calls the player, once anyone answers to them. */
+    name: text.optional(),
   }),
   /** How text refers to whoever holds each place above the player, while they do. */
   places: z.strictObject({ boss: place, head: place }).partial().default({}),
@@ -251,6 +266,7 @@ export type Floor = Content["floors"][number];
 export type Room = Floor["rooms"][number];
 export type SceneData = Content["scenes"][number];
 export type GrandPlan = NonNullable<Content["grandPlans"]>["plans"][number];
+export type Seat = NonNullable<Content["vacancies"]>["seats"][number];
 
 /** The Notification that chases a stalled Demand. */
 export function chasedIdOf(demandId: string): string {
