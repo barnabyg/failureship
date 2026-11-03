@@ -296,6 +296,41 @@
     },
     {
       "when": {
+        "flag": "delivered-grand-plan"
+      },
+      "reported": "Your boss's Grand Plan went live, transforming how the floor works."
+    },
+    {
+      "when": {
+        "any": [{ "flag": "tool-is-hollow" }, { "flag": "desks-are-hollow" }]
+      },
+      "happened": "It looks done from every angle that anyone has looked at it from."
+    },
+    {
+      "when": {
+        "any": [
+          { "flag": "tool-real-figures" },
+          { "flag": "tool-real-for-boss" }
+        ]
+      },
+      "happened": "The new tool now holds the real figures, which are worse than the old ones, and true."
+    },
+    {
+      "when": {
+        "flag": "blamed-for-the-plan"
+      },
+      "reported": "Lessons were learned from your boss's Grand Plan, and attributed.",
+      "happened": "Your boss needed a name, and had yours."
+    },
+    {
+      "when": {
+        "flag": "plan-blamed-elsewhere"
+      },
+      "reported": "Your boss's Grand Plan concluded as a successful pilot.",
+      "happened": "It never happened, and somebody else was to blame."
+    },
+    {
+      "when": {
         "flag": "rolled-out-tool"
       },
       "reported": "You led the successful roll-out of a transformative platform.",

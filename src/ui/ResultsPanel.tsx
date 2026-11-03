@@ -79,6 +79,16 @@ export function ResultsPanel({
           ))}
         </div>
       )}
+      <div className="callout" data-testid="results-grand-plans">
+        <h3>{panelText.resultsGrandPlansHeading}</h3>
+        {step.grandPlans.length === 0 && <p>{panelText.resultsNoGrandPlans}</p>}
+        {step.grandPlans.map((row) => (
+          <p key={row.plan} data-testid="result-grand-plan">
+            <strong>{monthLabel(row.month)}. </strong>
+            {row.title}, {row.name}: {row.plan}. {row.fate}
+          </p>
+        ))}
+      </div>
       <div className="callout" data-testid="results-rivals">
         <h3>{panelText.resultsRivalsHeading}</h3>
         {step.rivals.length === 0 && <p>{panelText.resultsNoRivals}</p>}

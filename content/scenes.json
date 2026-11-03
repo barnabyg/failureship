@@ -4,7 +4,8 @@
     "title": "Monthly Alignment Meeting",
     "location": "Floor 1, Meeting Room 1B",
     "narration": [
-      "Item one on the agenda is the agenda. The projector shows a slide titled Where We Are. Nobody can say."
+      "Item one on the agenda is the agenda. The projector shows a slide titled Where We Are. Nobody can say.",
+      "Item two is your boss's Grand Plan: one tool for everything, in use across the whole floor by the half-year review. The slide is a photograph of a lighthouse. Your boss has not seen the tool yet, but has read about it, and is visibly moved."
     ],
     "cast": ["head", "boss", "analyst", "admin", "projects", "associate"],
     "signs": [
@@ -888,6 +889,49 @@
             "body": "Nobody can disagree with it, and nobody does. It is photographed for the newsletter."
           }
         ]
+      },
+      {
+        "id": "load-the-real-figures",
+        "family": "deliver",
+        "label": "Offer to sit with the Senior Analyst, load the real figures into the new tool, and launch it yourself",
+        "requires": {
+          "all": [{ "planRunning": "one-tool" }, { "did": "rolled-out-tool" }]
+        },
+        "results": [
+          {
+            "body": "The Senior Analyst has the real figures, in a spreadsheet called FINAL final. It takes an afternoon to load them. The launch e-mail goes out under your name, with a chart in it that goes down.",
+            "sets": ["tool-real-figures"],
+            "approach": "results"
+          }
+        ]
+      },
+      {
+        "id": "launch-it-as-theirs",
+        "family": "impress",
+        "label": "Offer to load the real figures, so that your boss can launch the new tool as their own idea",
+        "requires": {
+          "all": [{ "planRunning": "one-tool" }, { "did": "rolled-out-tool" }]
+        },
+        "results": [
+          {
+            "body": "You and the Senior Analyst load the real figures. Your boss's note is moved to the top of the wall, and the launch e-mail goes out from your boss.",
+            "sets": ["tool-real-for-boss"],
+            "approach": "favour"
+          }
+        ]
+      },
+      {
+        "id": "screenshot-on-the-note",
+        "family": "fabricate",
+        "label": "Stick a screenshot of the new tool on your boss's note, and say that it is live",
+        "requires": { "planRunning": "one-tool" },
+        "results": [
+          {
+            "body": "The screenshot is of the tool's home page, which has a welcome message and a picture of a lighthouse. The facilitator writes LIVE beside it, and draws a tick.",
+            "sets": ["tool-screenshot"],
+            "approach": "theatre"
+          }
+        ]
       }
     ]
   },
@@ -1080,6 +1124,34 @@
           {
             "body": "You nod at last quarter's arrow, and then at this one. You have, on the record, agreed with both.",
             "sets": ["nodded-at-arrow"]
+          }
+        ]
+      },
+      {
+        "id": "show-the-tool-live",
+        "family": "deliver",
+        "label": "Put the new tool on the big screen, and load the real figures into it while everyone watches",
+        "requires": {
+          "all": [{ "planRunning": "one-tool" }, { "did": "rolled-out-tool" }]
+        },
+        "results": [
+          {
+            "body": "It takes eleven minutes, during which the video link freezes on your face. Then the real figures appear, and they are worse than the arrows. The minutes record that the tool is in use.",
+            "sets": ["tool-real-figures"],
+            "approach": "results"
+          }
+        ]
+      },
+      {
+        "id": "screenshot-for-the-review",
+        "family": "fabricate",
+        "label": "Show a screenshot of the new tool, which loads faster than the tool",
+        "requires": { "planRunning": "one-tool" },
+        "results": [
+          {
+            "body": "The screenshot goes up beside the arrows. Someone on the video link asks for access. You say that it is being rolled out in waves, and that they are in the next one.",
+            "sets": ["tool-screenshot"],
+            "approach": "theatre"
           }
         ]
       }

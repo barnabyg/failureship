@@ -129,5 +129,63 @@
     "landedOnYou": "It came out in the minutes, with your email attached.",
     "landedElsewhere": "It came out in the minutes, with nobody's name on it, because you had tidied up.",
     "neverCameOut": "It never came out. As far as the minutes know, it was done."
+  },
+  {
+    "id": "tool-hollow",
+    "addedBy": "tool-is-hollow",
+    "after": { "min": 1, "max": 2 },
+    "note": "You made your boss's Grand Plan look done: the new tool is an icon over an empty folder, and the launch e-mail says otherwise.",
+    "route": {
+      "character": "head",
+      "chance": { "believer": 0.9, "incompetent": 0.3, "practitioner": 0.6 },
+      "motive": "The Head of Operations wanted the new tool's figures for the board, and went to get them."
+    },
+    "traced": { "not": { "did": "covered-tracks" } },
+    "onPlayer": {
+      "id": "tool-hollow-landed",
+      "as": "move",
+      "from": "From: The Head of Operations, Hugh Lamb",
+      "title": "The new tool, for the board",
+      "body": "The Head of Operations opened the new tool to take its figures to the board, and found an empty folder with a nice icon. The launch e-mail is from you. The Head of Operations would like a short note on what the tool does. It is to be shorter than the e-mail.",
+      "opinion": -1,
+      "headOpinion": -2,
+      "sets": ["tool-found-hollow"]
+    },
+    "onSomeoneElse": {
+      "id": "tool-hollow-elsewhere",
+      "as": "move",
+      "from": "From: The Head of Operations, Hugh Lamb",
+      "title": "The new tool, for the board",
+      "body": "The Head of Operations opened the new tool for the board, and found an empty folder. The shared drive no longer says who made it. It is now thought to have been a test by IT, and IT has been asked to stop testing things.",
+      "sets": ["tool-hollow-untraced"]
+    },
+    "landedOnYou": "It came out when the board wanted the figures, and the launch e-mail led to you.",
+    "landedElsewhere": "It came out when the board wanted the figures, and with the shared drive tidied, IT took it.",
+    "neverCameOut": "It never came out. The icon is still there, and people still say it saves them time."
+  },
+  {
+    "id": "desks-hollow",
+    "addedBy": "desks-are-hollow",
+    "after": { "min": 1, "max": 2 },
+    "note": "You made your boss's Grand Plan look done: the labels came off the desks, and everyone stayed where they were.",
+    "route": {
+      "character": "admin",
+      "chance": { "believer": 0.8, "incompetent": 0.3, "practitioner": 0.6 },
+      "motive": "The Office Co-ordinator keeps the seating plan, and the seating plan had not changed."
+    },
+    "traced": { "not": { "did": "covered-tracks" } },
+    "onPlayer": {
+      "id": "desks-hollow-landed",
+      "as": "move",
+      "from": "From: The Office Co-ordinator, Marjorie Tull",
+      "title": "The seating plan",
+      "body": "The Office Co-ordinator has sent round the seating plan, before and after hot-desking, side by side. They are the same plan. Yours is the name on the e-mail that said it was done.",
+      "opinion": -1,
+      "headOpinion": -1,
+      "sets": ["desks-found-hollow"]
+    },
+    "landedOnYou": "It came out in the seating plan, which had not changed, beside your e-mail saying it had.",
+    "landedElsewhere": "It came out, but nobody could say who had said it was done.",
+    "neverCameOut": "It never came out. Everyone still sits where they sat, at nobody's desk."
   }
 ]

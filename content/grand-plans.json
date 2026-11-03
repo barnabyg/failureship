@@ -1,0 +1,198 @@
+{
+  "statuses": {
+    "running": "To be done by the end of month {month}",
+    "completed": "Completed",
+    "failed": "Not happening, officially"
+  },
+  "plans": [
+    {
+      "id": "one-tool",
+      "floor": "junior-employee",
+      "title": "One tool for everything",
+      "what": "Your boss's Grand Plan is a single new tool for the whole floor, which will solve all of its problems. Nobody has said which problems. It is to be in use by the half-year review.",
+      "lasts": 6,
+      "heardIn": ["meeting", "new-tool"],
+      "ways": [
+        {
+          "id": "real-figures",
+          "how": "reality",
+          "when": { "did": "tool-real-figures" },
+          "belief": { "believer": 4, "incompetent": 0, "practitioner": -2 },
+          "reaction": {
+            "believer": "Your boss opens the tool, finds the real figures in it, and reads them for some time without saying anything. Then your boss says that this is what it was for.",
+            "incompetent": "Your boss opens the tool, finds a great many numbers in it, and closes it again. Your boss asks whether there is a version with fewer numbers, for people who are busy.",
+            "practitioner": "Your boss opens the tool, sees your name on the launch e-mail, and thanks you in front of everyone. Afterwards your boss asks to be copied in on things in future. Before, ideally."
+          },
+          "sets": ["delivered-grand-plan"],
+          "done": {
+            "title": "Your boss's Grand Plan: done",
+            "body": "The new tool is in use across the floor, with the real figures in it. They are worse than the old figures, because they are the real ones. Your name is on the launch e-mail."
+          }
+        },
+        {
+          "id": "real-for-boss",
+          "how": "reality",
+          "when": { "did": "tool-real-for-boss" },
+          "belief": { "believer": 3, "incompetent": 1, "practitioner": 4 },
+          "reaction": {
+            "believer": "Your boss says that it was a team effort, and names you twice, which is once more than you were expecting.",
+            "incompetent": "Your boss reads out the launch e-mail at the stand-up, slowly, and seems pleased to learn what the tool does.",
+            "practitioner": "Your boss accepts the applause on behalf of the vision. On the way out, your boss holds a door for you, which nobody has seen before."
+          },
+          "sets": ["delivered-grand-plan"],
+          "done": {
+            "title": "Your boss's Grand Plan: done",
+            "body": "The new tool is in use across the floor, with the real figures in it, and it is your boss's idea. The launch e-mail is from your boss. You are thanked in the last line, under the logo."
+          }
+        },
+        {
+          "id": "on-paper",
+          "how": "appearance",
+          "when": {
+            "any": [{ "did": "tool-icon" }, { "did": "tool-screenshot" }]
+          },
+          "belief": { "believer": -3, "incompetent": 4, "practitioner": 2 },
+          "reaction": {
+            "believer": "Your boss clicks the icon, waits, and clicks it again. Your boss says nothing at all, and then asks you, quietly, what it is for.",
+            "incompetent": "Your boss forwards the launch e-mail upstairs with three exclamation marks, and adds the icon to the slide with the lighthouse on it.",
+            "practitioner": "Your boss does not click the icon. Your boss forwards the launch e-mail upstairs under their own name, and tells you that this is exactly the kind of thing."
+          },
+          "sets": ["delivered-grand-plan", "tool-is-hollow"],
+          "done": {
+            "title": "Your boss's Grand Plan: done",
+            "body": "The new tool is live, as far as anyone can see. It has an icon and a launch e-mail. What it does not have yet is anything in it."
+          }
+        }
+      ],
+      "failed": {
+        "blame": {
+          "sticks": { "not": { "did": "asked-which-problems" } },
+          "chance": {
+            "believer": 0.3,
+            "incompetent": 0.5,
+            "practitioner": 0.7
+          },
+          "mood": { "warm": -0.3, "neutral": 0, "cold": 0.3 }
+        },
+        "onPlayer": {
+          "id": "one-tool-blamed-you",
+          "as": "move",
+          "from": "From: Your boss, {boss}, copied to your boss's boss",
+          "title": "Lessons from the new tool",
+          "body": "Your boss has written up why the new tool is not in use across the floor. The write-up is two pages long, and your name is on both of them. Your boss's boss has replied that they would like to discuss it with you, and has not said when.",
+          "opinion": -1,
+          "headOpinion": -2,
+          "sets": ["blamed-for-the-plan"],
+          "mistake": "big"
+        },
+        "onSomeoneElse": {
+          "id": "one-tool-blamed-elsewhere",
+          "as": "move",
+          "from": "From: Your boss, {boss}, copied to your boss's boss",
+          "title": "Lessons from the new tool",
+          "body": "Your boss has written up why the new tool is not in use across the floor. It was the supplier, who has been asked to leave the building, and has. The tool is now described as a pilot, and the pilot as a success.",
+          "sets": ["plan-blamed-elsewhere"]
+        }
+      },
+      "results": {
+        "reality": "It was really done: the tool is in use, with the real figures in it.",
+        "appearance": "It was done in appearance: an icon and a launch e-mail, over an empty folder.",
+        "failed": "It was never done, and someone had to be to blame.",
+        "running": "It was still to be done when the run ended."
+      }
+    },
+    {
+      "id": "hot-desks",
+      "floor": "junior-employee",
+      "title": "Hot-desking",
+      "what": "Your boss's Grand Plan is that nobody has a desk of their own, so that everyone has every desk. It is to be done within three months of being announced, and nobody's desk is to be touched until then.",
+      "lasts": 3,
+      "heardIn": ["hot-desks"],
+      "ways": [
+        {
+          "id": "booked",
+          "how": "reality",
+          "when": { "did": "desks-really-booked" },
+          "belief": { "believer": 4, "incompetent": 0, "practitioner": -2 },
+          "reaction": {
+            "believer": "Your boss books a desk, sits at it, and says that it works, in the voice of someone who did not think anything would.",
+            "incompetent": "Your boss books three desks by mistake, and sits at the old one, which nobody has the heart to book.",
+            "practitioner": "Your boss sees your name at the bottom of the booking system, and says that it is good to see people stepping up. It is not said warmly."
+          },
+          "sets": ["delivered-grand-plan"],
+          "done": {
+            "title": "Your boss's Grand Plan: done",
+            "body": "Every desk can now be booked, and is. The booking system is yours, and says so at the bottom."
+          }
+        },
+        {
+          "id": "booked-for-boss",
+          "how": "reality",
+          "when": { "did": "desks-booked-for-boss" },
+          "belief": { "believer": 3, "incompetent": 1, "practitioner": 4 },
+          "reaction": {
+            "believer": "Your boss thanks you for doing the work, in private, and is clearly uncomfortable about the e-mail.",
+            "incompetent": "Your boss reads the announcement aloud and is surprised by how well it has gone.",
+            "practitioner": "Your boss takes the credit gracefully, and gives you the desk by the window, which can now be booked by anyone, and is booked by you."
+          },
+          "sets": ["delivered-grand-plan"],
+          "done": {
+            "title": "Your boss's Grand Plan: done",
+            "body": "Every desk can now be booked, and the announcement is from your boss. Your part in it is described as support."
+          }
+        },
+        {
+          "id": "labels-off",
+          "how": "appearance",
+          "when": { "did": "desk-labels-off" },
+          "belief": { "believer": -3, "incompetent": 4, "practitioner": 2 },
+          "reaction": {
+            "believer": "Your boss notices that everyone is at the same desk as yesterday, without the label, and asks you what has changed.",
+            "incompetent": "Your boss walks the floor, sees no labels, and declares it a cultural shift.",
+            "practitioner": "Your boss photographs the empty label holders for the newsletter, and does not ask where anyone is sitting."
+          },
+          "sets": ["delivered-grand-plan", "desks-are-hollow"],
+          "done": {
+            "title": "Your boss's Grand Plan: done",
+            "body": "The name labels are off the desks. Everyone is at the desk they had before, which is now nobody's, officially."
+          }
+        }
+      ],
+      "failed": {
+        "blame": {
+          "chance": {
+            "believer": 0.3,
+            "incompetent": 0.5,
+            "practitioner": 0.7
+          },
+          "mood": { "warm": -0.3, "neutral": 0, "cold": 0.3 }
+        },
+        "onPlayer": {
+          "id": "hot-desks-blamed-you",
+          "as": "move",
+          "from": "From: Your boss, {boss}, copied to your boss's boss",
+          "title": "Hot-desking: a review",
+          "body": "Your boss has reviewed why everyone still has a desk. The review found that it was you, on page one. Your boss's boss would like a word about it.",
+          "opinion": -1,
+          "headOpinion": -2,
+          "sets": ["blamed-for-the-plan"],
+          "mistake": "big"
+        },
+        "onSomeoneElse": {
+          "id": "hot-desks-blamed-elsewhere",
+          "as": "move",
+          "from": "From: Your boss, {boss}, copied to your boss's boss",
+          "title": "Hot-desking: a review",
+          "body": "Your boss has reviewed why everyone still has a desk. It was Facilities, who have been asked to reflect. Hot-desking is now described as a phase two.",
+          "sets": ["plan-blamed-elsewhere"]
+        }
+      },
+      "results": {
+        "reality": "It was really done: every desk can be booked.",
+        "appearance": "It was done in appearance: the labels came off, and everyone stayed where they were.",
+        "failed": "It was never done, and someone had to be to blame.",
+        "running": "It was still to be done when the run ended."
+      }
+    }
+  ]
+}

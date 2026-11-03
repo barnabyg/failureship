@@ -12,6 +12,7 @@ import events from "../../content/events.json";
 import families from "../../content/families.json";
 import floors from "../../content/floors.json";
 import gauges from "../../content/gauges.json";
+import grandPlans from "../../content/grand-plans.json";
 import hiddenTruth from "../../content/hidden-truth.json";
 import mistakes from "../../content/mistakes.json";
 import moves from "../../content/moves.json";
@@ -62,6 +63,7 @@ export const gameContent = parseContent({
   notebook,
   project,
   demands,
+  grandPlans,
   characters: orgChart.characters,
   you: orgChart.you,
   places: orgChart.places,
@@ -137,6 +139,7 @@ const panelSchema = z.strictObject(
       "projectRealLabel",
       "projectReportedLabel",
       "openDemandsHeading",
+      "grandPlanHeading",
       "powerMapHeading",
       "closeLabel",
       "standingHeading",
@@ -155,6 +158,8 @@ const panelSchema = z.strictObject(
       "resultsRivalsHeading",
       "resultsNoRivals",
       "resultsRivalSince",
+      "resultsGrandPlansHeading",
+      "resultsNoGrandPlans",
       "resultsChangedHeading",
       "resultsDealsHeading",
       "resultsFavoursHeading",
