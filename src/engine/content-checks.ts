@@ -10,10 +10,8 @@ import {
   findNamedKinds,
   findBrokenEvents,
   findBrokenChanging,
-  findBrokenDeals,
   findBrokenGauges,
   findBrokenMistakes,
-  findBrokenPromises,
   findBrokenRisks,
   findBrokenStanding,
   findBrokenThreads,
@@ -35,6 +33,7 @@ import {
   findBrokenSources,
   flagsSetByHiddenResults,
 } from "./truth-checks";
+import { findBrokenDeals, findBrokenPromises } from "./word-checks";
 
 type SceneResult = SceneData["options"][number]["results"][number];
 

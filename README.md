@@ -175,7 +175,7 @@ How to run the checks and tests is in [AGENTS.md](AGENTS.md#verifying).
   `truth-schema.ts`, `boss-schema.ts` and `consequence-schema.ts`. `content-checks.ts` parses and
   checks data across files, with each mechanic's checks in `truth-checks.ts` for the hidden truth
   and its signs, `boss-checks.ts` for the boss, going over the head, Demands and reputation, and
-  `consequence-checks.ts` for what choices lead to.
+  `consequence-checks.ts` for what choices lead to, with `word-checks.ts` for Promises and Deals.
 - `src/tower/` draws the tower and holds no rules.
 - `src/ui/` holds the React panels over the tower: `App.tsx` wires them to the run, and
   `TowerStage.tsx` the tower's hotspots. `panels.tsx` picks each step's panel, the larger being
