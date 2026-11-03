@@ -325,7 +325,8 @@ function playOut(
       : (meeting ?? first);
     view = run.choose(choice);
   }
-  return { run, view, belief: readHiddenTruth(run).bossBelief };
+  // The boss dealt that kind, even if someone else is the player's boss by the end.
+  return { run, view, belief: readHiddenTruth(run).beliefs.boss ?? 0 };
 }
 
 const adapts = (choices: Choice[], view: PlayerView, kind: Kind): Choice => {

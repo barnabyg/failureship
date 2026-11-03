@@ -58,7 +58,9 @@ function playIn(seed: number, style: Style) {
     const floor = view.choices.find(
       (c) =>
         c.type === "action" &&
-        c.actionId === (style === "straight" ? "work" : "kitchen"),
+        (style === "straight"
+          ? c.actionId.startsWith("work")
+          : ["kitchen", "tea-point"].includes(c.actionId)),
     );
     const best = [...view.choices].sort(
       (a, b) => rank(a, style) - rank(b, style),
@@ -79,7 +81,8 @@ function meanBeliefs(kind: Kind) {
       ).characters.find((c) => c.id === "boss")?.kind === kind,
   ).slice(0, 60);
   const mean = (style: Style) =>
-    seeds.reduce((sum, s) => sum + playIn(s, style).bossBelief, 0) /
+    // The boss dealt that kind, whoever is the player's boss by the end.
+    seeds.reduce((sum, s) => sum + (playIn(s, style).beliefs.boss ?? 0), 0) /
     seeds.length;
   return {
     straight: mean("straight"),
@@ -177,7 +180,12 @@ describe("every month leaves a real choice", { timeout: 60_000 }, () => {
     for (const seed of SEEDS.slice(0, 100)) {
       const months = floorActions(seed, false);
 
-      expect(months.map((m) => m.month)).toEqual([1, 2, 3, 4, 5, 6, 7, 8, 9]);
+      expect(months.map((m) => m.month)).toEqual(
+        Array.from(
+          { length: gameContent.balance.monthsPerRun },
+          (_, i) => i + 1,
+        ),
+      );
       for (const { remaining, open } of months) {
         expect(remaining).toBeGreaterThanOrEqual(2);
         expect(open).toBeGreaterThanOrEqual(2);
@@ -196,7 +204,8 @@ describe("every month leaves a real choice", { timeout: 60_000 }, () => {
         if (remaining > 0) free += 1;
       }
       // A month with nothing left never reaches the floor at all, so it counts too.
-      months += 9 - floorActions(seed, true).length;
+      months +=
+        gameContent.balance.monthsPerRun - floorActions(seed, true).length;
     }
 
     expect(free / months).toBeGreaterThan(0.6);
@@ -207,13 +216,19 @@ describe("every month leaves a real choice", { timeout: 60_000 }, () => {
       ...gameContent.notifications,
       ...(gameContent.demands?.items ?? []),
     ];
-    for (let m = 1; m <= gameContent.balance.monthsPerRun; m++) {
-      const costly = every.filter(
-        (n) =>
-          n.months?.includes(m) && n.options.some((o) => costOf(o.cost) > 0),
-      );
+    for (const { job } of gameContent.floors) {
+      for (let m = 1; m <= gameContent.balance.monthsPerRun; m++) {
+        const costly = every.filter(
+          (n) =>
+            n.floor === job &&
+            n.months?.includes(m) &&
+            n.options.some((o) => costOf(o.cost) > 0),
+        );
 
-      expect(costly.length, `month ${String(m)}`).toBeLessThanOrEqual(1);
+        expect(costly.length, `${job} month ${String(m)}`).toBeLessThanOrEqual(
+          1,
+        );
+      }
     }
   });
 });

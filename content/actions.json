@@ -282,5 +282,212 @@
     "scene": "speak-up-session",
     "oncePerMonth": true,
     "sets": ["attended-meeting"]
+  },
+  {
+    "id": "meeting-stand-up",
+    "floor": "junior-employee",
+    "label": "Meeting Room 1B",
+    "description": "The stand-up, which has been sitting down for some time.",
+    "place": "meeting-room",
+    "cost": "standard",
+    "scene": "stand-up",
+    "oncePerMonth": true,
+    "sets": ["attended-meeting"]
+  },
+  {
+    "id": "meeting-away-day",
+    "floor": "junior-employee",
+    "label": "Meeting Room 1B",
+    "description": "Planning the team's away day, which is to be held here.",
+    "place": "meeting-room",
+    "cost": "standard",
+    "scene": "away-day",
+    "oncePerMonth": true,
+    "sets": ["attended-meeting"]
+  },
+  {
+    "id": "meeting-process",
+    "floor": "junior-employee",
+    "label": "Meeting Room 1B",
+    "description": "A review of how processes are improved, which is itself a process.",
+    "place": "meeting-room",
+    "cost": "standard",
+    "scene": "process-review",
+    "oncePerMonth": true,
+    "sets": ["attended-meeting"]
+  },
+  {
+    "id": "meeting-induction",
+    "floor": "team-lead",
+    "months": [1],
+    "label": "Team Room 2A",
+    "description": "Your Leadership Induction, with pastries.",
+    "place": "team-room",
+    "cost": "standard",
+    "scene": "leadership-induction",
+    "oncePerMonth": true,
+    "sets": ["attended-meeting"]
+  },
+  {
+    "id": "meeting-leads-sync",
+    "floor": "team-lead",
+    "months": [2],
+    "label": "Team Room 2A",
+    "description": "The Team Leads' Sync, at which everyone is at capacity.",
+    "place": "team-room",
+    "cost": "standard",
+    "scene": "leads-sync",
+    "oncePerMonth": true,
+    "sets": ["attended-meeting"]
+  },
+  {
+    "id": "meeting-resourcing",
+    "floor": "team-lead",
+    "months": [3],
+    "label": "Team Room 2A",
+    "description": "A Resourcing Call, about your team, with your team on it.",
+    "place": "team-room",
+    "cost": "standard",
+    "scene": "resourcing-call",
+    "oncePerMonth": true,
+    "sets": ["attended-meeting"]
+  },
+  {
+    "id": "meeting-huddle",
+    "floor": "team-lead",
+    "label": "Team Room 2A",
+    "description": "A Leads' Huddle, standing up.",
+    "place": "team-room",
+    "cost": "standard",
+    "scene": "leads-huddle",
+    "oncePerMonth": true,
+    "sets": ["attended-meeting"]
+  },
+  {
+    "id": "meeting-risks",
+    "floor": "team-lead",
+    "label": "Team Room 2A",
+    "description": "The Risk Register Review. Ninety risks, and all of them owned.",
+    "place": "team-room",
+    "cost": "standard",
+    "scene": "risk-register",
+    "oncePerMonth": true,
+    "sets": ["attended-meeting"]
+  },
+  {
+    "id": "meeting-pre-meet",
+    "floor": "team-lead",
+    "label": "Team Room 2A",
+    "description": "A Planning Pre-Meet, before the meeting that will decide.",
+    "place": "team-room",
+    "cost": "standard",
+    "scene": "planning-pre-meet",
+    "oncePerMonth": true,
+    "sets": ["attended-meeting"]
+  },
+  {
+    "id": "over-head-2",
+    "family": "attack",
+    "label": "Your boss's boss's office",
+    "description": "You could go and tell your boss's boss what is really going on. Your boss need never know.",
+    "place": "programme-office",
+    "cost": "standard",
+    "overHead": true,
+    "oncePerMonth": true
+  },
+  {
+    "id": "tea-point",
+    "label": "The tea point",
+    "description": "Floor 2's kitchen, which has a coffee machine with a name.",
+    "place": "tea-point",
+    "cost": "standard",
+    "sets": ["had-tea"],
+    "result": {
+      "title": "The tea point",
+      "body": "The coffee machine is called Barista and asks how you are. You tell it. It makes you a hot chocolate."
+    },
+    "moreResults": [
+      {
+        "title": "The tea point",
+        "body": "Another lead is at the tea point, and asks how you are finding it up here. You say it is very different. They say that it is not."
+      },
+      {
+        "title": "The tea point",
+        "body": "Someone from your old floor comes up for a meeting and sees you at the tea point. They say congratulations in a way that has a full stop in it."
+      },
+      {
+        "title": "The tea point",
+        "body": "The milk on Floor 2 is labelled by team. Your team's milk is the one that has run out."
+      }
+    ]
+  },
+  {
+    "id": "team-one-to-one",
+    "family": "find-out",
+    "label": "Your team's desks",
+    "description": "A one-to-one with one of your own team, who are obliged to have them now.",
+    "place": "team-desks",
+    "cost": "standard",
+    "sets": ["had-one-to-one"],
+    "result": {
+      "title": "One-to-one",
+      "body": "You ask one of your team how things are going. They say fine, in the voice people use for their boss. You used to use it."
+    },
+    "moreResults": [
+      {
+        "title": "One-to-one",
+        "body": "You have a one-to-one with someone who wanted your job. They are very professional about it, and tell you nothing, very professionally."
+      },
+      {
+        "title": "One-to-one",
+        "body": "You ask whether there is anything you can do. There is: the laptops. You say you will see what you can find out, and hear yourself say it."
+      },
+      {
+        "title": "One-to-one",
+        "body": "Your one-to-one is moved twice by the other person, and then logged as held. It was a very good one-to-one."
+      }
+    ]
+  },
+  {
+    "id": "ask-around-2",
+    "family": "find-out",
+    "label": "The printer",
+    "description": "Floor 2's printer, which is where Floor 2 finds things out.",
+    "place": "printer",
+    "cost": "standard",
+    "findOut": "ask",
+    "oncePerMonth": true,
+    "sets": ["asked-around"]
+  },
+  {
+    "id": "work-2",
+    "family": "deliver",
+    "label": "Your office",
+    "description": "Doing the actual work, which is now mostly other people's.",
+    "place": "your-office",
+    "cost": "standard",
+    "sets": ["did-work"],
+    "result": {
+      "title": "Your office",
+      "body": "You do two hours of real work on the project. It goes well. It does not appear in any report, and now nor do you, except as approver."
+    },
+    "moreResults": [
+      {
+        "title": "Your office",
+        "body": "You clear the approvals queue. There are forty, and each says that the last approver was you."
+      },
+      {
+        "title": "Your office",
+        "body": "You write the plan for next month, and it is good. You file it where plans go."
+      },
+      {
+        "title": "Your office",
+        "body": "You fix the thing your team asked you to fix. They do not know it was you, which is leadership."
+      }
+    ],
+    "approach": "results",
+    "project": {
+      "real": "better"
+    }
   }
 ]

@@ -206,5 +206,66 @@
     "family": "attack",
     "sets": ["asked-a-pointed-question"],
     "headOpinion": -1
+  },
+  {
+    "id": "passed-over-analyst",
+    "family": "attack",
+    "from": "From: Priya Venn",
+    "title": "Figures, as per your request",
+    "body": "Since the seat went the way it did, the Senior Analyst sends you exactly what you ask for, to the letter, and nothing that you needed. It arrives on time. It is all correct, and none of it is any use.",
+    "by": "analyst",
+    "when": {
+      "remembers": {
+        "character": "analyst",
+        "about": "passed-over-for-the-seat"
+      }
+    }
+  },
+  {
+    "id": "passed-over-projects",
+    "family": "attack",
+    "from": "From: Callum Reed",
+    "title": "An update on your dependencies",
+    "body": "The Project Co-ordinator has noticed, since the seat was decided, that your work depends on several things. Each is now on a tracker, red, with your name beside it.",
+    "by": "projects",
+    "when": {
+      "remembers": {
+        "character": "projects",
+        "about": "passed-over-for-the-seat"
+      }
+    }
+  },
+  {
+    "id": "passed-over-associate",
+    "family": "attack",
+    "from": "From: Tessa Croft",
+    "title": "A quiet word upstairs",
+    "body": "Since the seat was filled, the Junior Associate has been having coffee with people from Floor 3. Your name comes up, you hear, as a cautionary example of something.",
+    "by": "associate",
+    "when": {
+      "remembers": {
+        "character": "associate",
+        "about": "passed-over-for-the-seat"
+      }
+    }
+  },
+  {
+    "id": "reply-all",
+    "from": "From: Everyone",
+    "title": "RE: RE: RE: Please remove me from this list",
+    "body": "Someone in another building has replied to everyone in the company asking to be taken off the list. Four hundred people have replied to everyone asking the same. You spend the morning not replying, which takes concentration.",
+    "sets": ["survived-reply-all"]
+  },
+  {
+    "id": "access-card",
+    "from": "From: Facilities",
+    "title": "Your access card has been reset",
+    "body": "Your access card stopped working overnight, as part of a security improvement. You spend the morning in reception, where you are signed in as a visitor to your own desk, and escorted to it."
+  },
+  {
+    "id": "org-design",
+    "from": "From: People and Culture",
+    "title": "An update on organisational design",
+    "body": "An e-mail explains that the organisation is being redesigned around the customer. There is a diagram with the customer in the middle. Your team is in a box at the edge marked Enablers, which is nearer the customer than it sounds."
   }
 ]

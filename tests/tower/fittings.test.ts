@@ -20,6 +20,16 @@ describe("the furniture on the floor", () => {
     }
   });
 
+  it("leaves the floors above blocked out, each with a lift sign of its own", () => {
+    for (const floor of gameContent.floors.slice(1)) {
+      for (const room of floor.rooms) {
+        expect(room.fittings, room.id).toBeUndefined();
+      }
+      expect(floor.rooms.filter((r) => r.sign).length, floor.job).toBe(1);
+    }
+    expect(gameContent.floors.length).toBeGreaterThan(1);
+  });
+
   it.each(rooms.map((room) => [room.id, room] as const))(
     "keeps the %s inside the box that clicks land on",
     (_id, room) => {

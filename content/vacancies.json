@@ -1,0 +1,80 @@
+{
+  "seats": [
+    {
+      "id": "team-leader",
+      "floor": "junior-employee",
+      "job": "team-lead",
+      "competing": "seat",
+      "openFor": 1,
+      "movesUp": {
+        "reportsTo": "programme",
+        "title": "Head of Special Projects",
+        "called": "the Head of Special Projects"
+      },
+      "opened": {
+        "title": "An exciting opportunity",
+        "body": "Following the success of the Grand Plan, {holder} is moving up to lead Special Projects, which has been created for the purpose. {holder} will be greatly missed from the end of month {month}. The seat is open, and will be filled by then through a fair and transparent process. Expressions of interest are welcome, and will be filed."
+      },
+      "won": {
+        "title": "Congratulations: Team lead",
+        "body": "You have the seat. The decision was unanimous, in that one person made it. Your old colleagues now report to you, and have been asked to be pleased. Your new desk is on Floor 2, and the lift will take you there."
+      },
+      "lost": {
+        "title": "Congratulations to {winner}",
+        "body": "After a fair and transparent process, the seat goes to {winner}, who is now your boss. Your application was strong, and has been kept on file, which is where strong applications go. You stay where you are, at the same desk, facing the other way."
+      }
+    }
+  ],
+  "passedOver": {
+    "about": "passed-over-for-the-seat",
+    "forYou": {
+      "text": "Was passed over for the seat, which went to you.",
+      "tone": "bad"
+    },
+    "forSomeoneElse": {
+      "text": "Was passed over for the seat, which went to {winner}."
+    }
+  },
+  "reasons": {
+    "self": {
+      "strength": 3,
+      "why": "{decider} considered every candidate carefully, and then {decider}, and was persuaded."
+    },
+    "owed": {
+      "strength": 4,
+      "why": "{decider} owed {who} a favour, and this was the favour."
+    },
+    "protege": {
+      "strength": 3,
+      "why": "{decider} has looked after {who} for years, mostly from a distance."
+    },
+    "circle": {
+      "strength": 1,
+      "why": "{who} is in {decider}'s circle, if not at its centre."
+    },
+    "rival": {
+      "strength": 1,
+      "why": "{who} had made a point of being in {decider}'s diary, and in the lift whenever {decider} was."
+    },
+    "owedYou": {
+      "strength": 4,
+      "why": "{decider} owed you a favour, and paid it."
+    },
+    "warm": {
+      "strength": 4,
+      "why": "What had reached {decider} of you was good."
+    },
+    "neutral": {
+      "strength": 2,
+      "why": "{decider} had heard of you, and nothing in particular."
+    },
+    "cold": {
+      "strength": 0,
+      "why": "What had reached {decider} of you was not good."
+    }
+  },
+  "close": "It was close, and it went to {who} on grounds that were not minuted.",
+  "inFact": "The seat was in the gift of {decider}. {why}",
+  "asForYou": "As for you: {why}",
+  "results": "In month {month}, {holder} moved up, and the seat went to {winner}."
+}

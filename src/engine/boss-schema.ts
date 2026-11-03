@@ -289,6 +289,8 @@ const grandPlan = z.strictObject({
 export const grandPlans = z.strictObject({
   /** Where the player's view says it has got to. `running` says {month}. */
   statuses: z.strictObject({ running: text, completed: text, failed: text }),
+  /** What a Plan done is titled once its boss is no longer the player's. Left out, its own. */
+  formerBoss: text.optional(),
   plans: z.array(grandPlan).min(1),
 });
 

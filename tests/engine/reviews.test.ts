@@ -212,7 +212,7 @@ function toFirstReview(run: Run): PlayerView {
 }
 
 describe("the real quarterly reviews", () => {
-  it("come in months 3, 6 and 9 of the run, each reading differently", () => {
+  it("come every third month of the run, each reading differently", () => {
     const reviews = gameContent.scenes.filter((s) => s.quarter !== undefined);
     const run = startRun({ seed: 1, content: gameContent });
     const views = [run.view()];
@@ -225,9 +225,9 @@ describe("the real quarterly reviews", () => {
         : [],
     );
 
-    expect(gameContent.balance.monthsPerRun).toBe(9);
-    expect(held.map((h) => h.month)).toEqual([3, 6, 9]);
-    expect(new Set(held.map((h) => h.id)).size).toBe(3);
+    expect(gameContent.balance.monthsPerRun).toBe(18);
+    expect(held.map((h) => h.month)).toEqual([3, 6, 9, 12, 15, 18]);
+    expect(new Set(held.map((h) => h.id)).size).toBe(6);
     const titles = reviews.map((r) => r.title);
     const narrations = reviews.map((r) => r.narration.join(" "));
     expect(new Set(titles).size).toBe(reviews.length);

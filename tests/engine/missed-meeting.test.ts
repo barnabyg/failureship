@@ -7,6 +7,7 @@ import {
   type PlayerView,
   type Run,
 } from "../../src/engine";
+import { writtenMonths } from "../../src/engine/floors";
 import { readHiddenTruth } from "../../src/engine/hidden-truth";
 
 const isMeeting = (c: Choice) =>
@@ -48,11 +49,18 @@ const missedIds = () =>
 describe("a meeting you do not go to", () => {
   it("offers a meeting to skip in every month", () => {
     const { attended } = gameContent.demands?.missed ?? { attended: "" };
-    for (let m = 1; m <= gameContent.balance.monthsPerRun; m++) {
-      const meetings = gameContent.actions.filter(
-        (a) => a.sets.includes(attended) && a.months?.includes(m),
+    // Each month a floor is written for, and its pool for any month after.
+    for (const { job } of gameContent.floors) {
+      const own = gameContent.actions.filter(
+        (a) => a.floor === job && a.sets.includes(attended),
       );
-      expect(meetings, `month ${String(m)}`).toHaveLength(1);
+      for (let m = 1; m <= writtenMonths(gameContent, job); m++) {
+        const meetings = own.filter((a) => a.months?.includes(m));
+        expect(meetings, `${job} month ${String(m)}`).toHaveLength(1);
+      }
+      expect(own.filter((a) => a.months === undefined).length).toBeGreaterThan(
+        0,
+      );
     }
   });
 

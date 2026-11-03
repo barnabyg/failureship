@@ -54,7 +54,7 @@ describe("the browser tests' later-month start", () => {
     );
   });
 
-  it.each([null, "", "0", "-1", "1", "2.5", "10", "soon"])(
+  it.each([null, "", "0", "-1", "1", "2.5", "19", "soon"])(
     "stays in month 1 when asked for %s",
     (written) => {
       expect(playToMonth(newRun(), written).month).toBe(1);

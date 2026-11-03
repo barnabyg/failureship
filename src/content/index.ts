@@ -30,6 +30,7 @@ import sources from "../../content/sources.json";
 import standing from "../../content/standing.json";
 import threads from "../../content/threads.json";
 import ui from "../../content/ui.json";
+import vacancies from "../../content/vacancies.json";
 import { z } from "zod";
 import { ContentError, parseContent } from "../engine";
 
@@ -64,6 +65,7 @@ export const gameContent = parseContent({
   project,
   demands,
   grandPlans,
+  vacancies,
   characters: orgChart.characters,
   you: orgChart.you,
   places: orgChart.places,

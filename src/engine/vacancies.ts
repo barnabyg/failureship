@@ -100,14 +100,17 @@ function weigh(
     if (owes(YOU)) reasons.push("owedYou");
     reasons.push(moodOfCharacter(state, content, decider));
   } else {
+    // Whoever decides needs no other reason to pick themselves.
     if (who === decider) reasons.push("self");
-    if (owes(who)) reasons.push("owed");
-    if (influence.some((i) => i.who === decider && i.over === who)) {
-      reasons.push("protege");
-    } else if (isAbove(state, decider, who)) {
-      reasons.push("circle");
+    else {
+      if (owes(who)) reasons.push("owed");
+      if (influence.some((i) => i.who === decider && i.over === who)) {
+        reasons.push("protege");
+      } else if (isAbove(state, decider, who)) {
+        reasons.push("circle");
+      }
+      if (rivals.has(who)) reasons.push("rival");
     }
-    if (rivals.has(who)) reasons.push("rival");
   }
   const strength = reasons.reduce(
     (sum, r) => sum + written.reasons[r].strength,
@@ -177,7 +180,7 @@ function decide(
   }
   const told = winner === YOU ? seat.won : seat.lost;
   state.noticesDue.push({
-    title: told.title,
+    title: sayPeople(told.title, words),
     body: sayPeople(told.body, words),
     decided: {
       onPaper: paper && {

@@ -1,6 +1,6 @@
 {
   "actionsPerMonth": 3,
-  "monthsPerRun": 9,
+  "monthsPerRun": 18,
   "monthsPerQuarter": 3,
   "actionCosts": {
     "standard": 1,
@@ -9,6 +9,9 @@
   },
   "signsMisleadChance": 0.2,
   "disasterChance": 0.1,
-  "mood": { "warmAt": 5, "coldAt": -5 },
+  "mood": {
+    "warmAt": 5,
+    "coldAt": -5
+  },
   "bossBeliefKeeps": 0.5
 }

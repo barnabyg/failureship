@@ -203,7 +203,14 @@ function complete(
   const shift = way.belief[kind];
   shiftBelief(state, taken.boss, shift);
   noteLanding(state, content, taken.boss, shift, way.done.title);
-  state.noticesDue.push({ ...way.done, reaction: way.reaction[kind] });
+  // A Plan followed to its end after the player moved away is a former boss's.
+  const former = taken.boss !== bossOf(state, content);
+  const title = former ? content.grandPlans?.formerBoss : undefined;
+  state.noticesDue.push({
+    ...way.done,
+    title: title ?? way.done.title,
+    reaction: way.reaction[kind],
+  });
 }
 
 /**

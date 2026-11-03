@@ -29,7 +29,7 @@ export function plainChoice(view: PlayerView): Choice {
   const next =
     action((id) => id.startsWith("meeting")) ??
     choices.find((c) => c.type === "continue") ??
-    action((id) => id === "work");
+    action((id) => id.startsWith("work"));
   if (!next) throw new Error(`Later-month start stuck at ${step.kind}.`);
   return next;
 }

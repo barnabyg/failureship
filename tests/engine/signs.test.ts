@@ -287,8 +287,12 @@ describe("what watching can tell the player", () => {
   it("gives real evidence with the game's own signs", () => {
     const { counts, totals } = tally(gameContent, 2000);
 
-    expect(counts.size).toBeGreaterThanOrEqual(8);
-    for (const [text, count] of counts) {
+    // Only those whose role is at the month's meeting: a later floor's are not.
+    const seen = [...counts].filter(([, count]) =>
+      KINDS.some((k) => count[k] > 0),
+    );
+    expect(seen.length).toBeGreaterThanOrEqual(8);
+    for (const [text, count] of seen) {
       const rates = KINDS.map((k) => count[k] / totals[k]);
       expect(
         KINDS.filter((k) => count[k] > 0).length,

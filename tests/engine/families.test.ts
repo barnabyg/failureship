@@ -148,10 +148,10 @@ describe("the Move families", () => {
 });
 
 describe("the longer run", () => {
-  it("lasts nine months, with Annual Calibration last", () => {
+  it("lasts eighteen months, with Annual Calibration last of Floor 1's written months", () => {
     const calibration = gameContent.scenes.find((s) => s.id === "calibration");
 
-    expect(gameContent.balance.monthsPerRun).toBe(9);
+    expect(gameContent.balance.monthsPerRun).toBe(18);
     expect(calibration?.months).toEqual([9]);
   });
 

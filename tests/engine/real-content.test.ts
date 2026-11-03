@@ -8,6 +8,7 @@ import {
   type PlayerView,
   type Run,
 } from "../../src/engine";
+import { bossesAtStart, meantBy } from "../../src/engine/places";
 import { readHiddenTruth } from "../../src/engine/hidden-truth";
 import { plainChoice, playToMonth } from "../../src/ui/later-month";
 
@@ -54,9 +55,9 @@ function everyPath(seed: number): PlayerView[][] {
 function holderInMeeting(seed: number) {
   const run = startRun({ seed, content: gameContent });
   const meeting = gameContent.scenes.find((s) => s.id === "meeting");
-  return readHiddenTruth(run).powerMap.order.find((id) =>
-    meeting?.cast.includes(id),
-  );
+  const bosses = bossesAtStart(gameContent);
+  const cast = meeting?.cast.map((c) => meantBy(bosses, c));
+  return readHiddenTruth(run).powerMap.order.find((id) => cast?.includes(id));
 }
 
 /** Turns down the pub and files the report, to reach month 1's floor. */
@@ -182,8 +183,11 @@ describe("the real month", () => {
 
     expect(view.step).toMatchObject({ kind: "results" });
     if (view.step.kind !== "results") throw new Error(view.step.kind);
-    expect(view.step.characters).toHaveLength(6);
-    expect(view.step.characters.filter((c) => c.fact !== null)).toHaveLength(4);
+    expect(view.step.characters).toHaveLength(gameContent.characters.length);
+    // Four of the first floor's six, and the floor above's as often.
+    expect(
+      view.step.characters.filter((c) => c.fact !== null).length,
+    ).toBeGreaterThanOrEqual(4);
     expect(JSON.stringify(view)).not.toMatch(/\{\w+\}/);
   });
 
@@ -196,7 +200,15 @@ describe("the real month", () => {
   });
 
   it("lets the player watch every Character, whose kind the results reveal", () => {
-    const present = new Set(gameContent.scenes.flatMap((s) => s.cast));
+    // A place in a cast is whoever is in it, on Floor 1 or the floor above.
+    const { boss, head } = bossesAtStart(gameContent);
+    const places: Record<string, string[]> = {
+      "{boss}": [boss, head ?? ""],
+      "{head}": [head ?? "", "programme"],
+    };
+    const present = new Set(
+      gameContent.scenes.flatMap((s) => s.cast.flatMap((c) => places[c] ?? c)),
+    );
 
     expect(present).toEqual(new Set(gameContent.characters.map((c) => c.id)));
   });
@@ -223,7 +235,7 @@ describe("the real month", () => {
   it("gives every Character a place on one Org Chart", () => {
     const { orgChart } = startRun({ seed: 1, content: gameContent }).view();
 
-    expect(orgChart).toHaveLength(6);
+    expect(orgChart).toHaveLength(gameContent.characters.length);
     expect(orgChart.filter((e) => e.reportsTo === null)).toHaveLength(1);
   });
 

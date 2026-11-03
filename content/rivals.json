@@ -9,6 +9,14 @@
       "id": "favour",
       "for": "Your boss's favour",
       "who": ["{peers}"]
+    },
+    {
+      "id": "seat",
+      "for": "Your boss's seat, when it fell vacant",
+      "who": ["{peers}"],
+      "when": {
+        "vacancyOpen": true
+      }
     }
   ],
   "most": 2,
