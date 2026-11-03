@@ -13,8 +13,9 @@ function burnsOf(state: State, written: Written, character: string) {
   return state.truth.memories.flatMap((memory) => {
     const burn = written.burns.find((b) => b.about === memory.about);
     // Being told of something done to someone else is not being burned by it.
-    const word = state.truth.news[memory.news ?? -1]?.word;
-    const toThem = word === undefined || word.victim === character;
+    const news = state.truth.news[memory.news ?? -1];
+    const victim = news?.word?.victim ?? news?.victim;
+    const toThem = victim === undefined || victim === character;
     if (memory.character !== character || memory.via !== null || !toThem) {
       return [];
     }

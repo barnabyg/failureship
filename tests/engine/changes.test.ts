@@ -445,7 +445,7 @@ describe("the real Believers", () => {
   });
 });
 
-const CHANGE_SEED = 27;
+const CHANGE_SEED = 24;
 
 // The playtest's scenario: the same choices change the Senior Analyst three ways.
 it("keeps the playtest's seeds, on which the Senior Analyst changes each way", () => {
@@ -457,9 +457,9 @@ it("keeps the playtest's seeds, on which the Senior Analyst changes each way", (
     return view.step.changed.map((c) => [c.month, c.to]);
   };
 
-  expect(became(27)).toEqual([[6, gameContent.changing?.became.whistleblower]]);
-  expect(became(15)).toEqual([[5, gameContent.changing?.became.left]]);
-  expect(became(5)).toEqual([[6, gameContent.changing?.became.practitioner]]);
+  expect(became(24)).toEqual([[6, gameContent.changing?.became.whistleblower]]);
+  expect(became(107)).toEqual([[6, gameContent.changing?.became.left]]);
+  expect(became(4)).toEqual([[5, gameContent.changing?.became.practitioner]]);
 });
 
 /** Plays plainly, but blames the Senior Analyst, and lets them down over laptops. */

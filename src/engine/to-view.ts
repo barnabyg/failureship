@@ -26,7 +26,7 @@ import { floorNow, isOn } from "./floors";
 import { gaugesInView, gaugesThisMonth } from "./gauges";
 import { managerOf } from "./places";
 import { promisesInView } from "./promises";
-import { RIVAL } from "./rivals";
+import { COMPETITOR } from "./rivals";
 import { calledBy, sayFrom, sayPeople, titleOf } from "./say";
 import { standingInView } from "./standing";
 import type { State, Step, World } from "./state";
@@ -274,7 +274,8 @@ function toStepView(state: State, world: World): StepView {
       );
       if (!move) throw new Error(`Unknown Move "${step.id}".`);
       const body = sayPeople(move.body, {
-        [RIVAL]: step.by === undefined ? "" : calledBy(state, content, step.by),
+        [COMPETITOR]:
+          step.by === undefined ? "" : calledBy(state, content, step.by),
       });
       return {
         kind: "move",

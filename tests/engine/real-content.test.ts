@@ -236,7 +236,7 @@ describe("the real month", () => {
       return gameContent.hiddenTruth.facts.find((f) => f.id === dealt?.fact?.id)
         ?.nature;
     };
-    const run = startRun({ seed: 87, content: gameContent });
+    const run = startRun({ seed: 57, content: gameContent });
     reachActionsOfMonth(run, "8");
     run.choose({ type: "action", actionId: "inside-info" });
     const told = run.choose({
@@ -245,7 +245,7 @@ describe("the real month", () => {
       subjectId: "boss",
     });
 
-    expect(nature(96, "analyst")).toBe("dangerous");
+    expect(nature(106, "analyst")).toBe("dangerous");
     expect(JSON.stringify(told.step)).toContain("abolished");
     // What the Office Co-ordinator says is true, so the results screen shows it.
     const boss = readHiddenTruth(run).characters.find((c) => c.id === "boss");
@@ -291,7 +291,7 @@ describe("the real month", () => {
   // The Demand browser test relies on these.
   it.each([
     [4, "notification"],
-    [8, "notice"],
+    [283, "notice"],
   ])("keeps what follows a stalled Demand on seed %i", (seed, kind) => {
     // As the browser test plays it: plainly, but skipping the training and
     // stalling the Demand in month 2.
@@ -342,29 +342,55 @@ describe("the real month", () => {
     const meetingSigns = (seed: number) =>
       meeting(seed).behaviours.map((b) => b.text);
 
-    expect(holderInMeeting(8)).toBe("boss");
-    expect(holderInMeeting(96)).toBe("analyst");
-    expect(firstSign(8)).toMatch(/^Your boss talks over/);
-    expect(firstSign(96)).toMatch(/^The Senior Analyst talks over/);
-    expect(of(8).projects?.nature).toBe("dangerous");
-    expect(of(96).projects?.nature).not.toBe("dangerous");
-    expect(of(8).analyst?.nature).toBe("useful");
-    expect(of(96).analyst?.nature).toBe("dangerous");
-    expect(meetingSigns(96)).toContain(
+    expect(holderInMeeting(283)).toBe("boss");
+    expect(holderInMeeting(106)).toBe("analyst");
+    expect(firstSign(283)).toMatch(/^Your boss talks over/);
+    expect(firstSign(106)).toMatch(/^The Senior Analyst talks over/);
+    expect(of(283).projects?.nature).toBe("dangerous");
+    expect(of(106).projects?.nature).toBe("useful");
+    expect(of(283).analyst?.nature).toBe("useful");
+    expect(of(106).analyst?.nature).toBe("dangerous");
+    expect(meetingSigns(58)).toContain(
       "Your boss overruns the meeting by twenty minutes, then schedules another to cover what was missed.",
     );
-    expect(meetingSigns(2)).toContain(
+    expect(meetingSigns(57)).toContain(
       "The Project Co-ordinator marks a late task as complete, and opens a new one with the same name.",
     );
-    expect(of(8).boss?.kind).toBe("incompetent");
-    expect(of(96).boss?.kind).toBe("believer");
+    expect(of(283).boss?.kind).toBe("incompetent");
+    expect(of(106).boss?.kind).toBe("believer");
+  });
+
+  // tests/e2e/risk.spec.ts relies on this.
+  it("keeps a Demand faked in month 2 coming back in month 4 on seed 13", () => {
+    const run = startRun({ seed: 13, content: gameContent });
+    let view = playToMonth(run, "4", "do-training,fake");
+    const moves: string[] = [];
+    while (view.month === 4) {
+      if (view.step.kind === "move") moves.push(view.step.body);
+      view = run.choose(plainChoice(view));
+    }
+
+    expect(moves.join()).toContain("correction to the minutes");
+  });
+
+  // tests/e2e/fired.spec.ts relies on this: blaming and then cutting the Project
+  // Co-ordinator are both big mistakes on this seed.
+  it("keeps seed 9's Project Co-ordinator with a dangerous Hidden Fact", () => {
+    const dealt = readHiddenTruth(
+      startRun({ seed: 9, content: gameContent }),
+    ).characters.find((c) => c.id === "projects");
+    const fact = gameContent.hiddenTruth.facts.find(
+      (f) => f.id === dealt?.fact?.id,
+    );
+
+    expect(fact?.nature).toBe("dangerous");
   });
 
   // docs/playtest.md relies on these.
   it.each([
-    [96, "believer"],
-    [8, "incompetent"],
-    [32, "practitioner"],
+    [106, "believer"],
+    [283, "incompetent"],
+    [37, "practitioner"],
   ])("keeps seed %i dealing a boss who is a %s", (seed, kind) => {
     const { characters } = readHiddenTruth(
       startRun({ seed, content: gameContent }),
@@ -376,7 +402,7 @@ describe("the real month", () => {
   it.each([
     [4, 3, 5, "actions"],
     [13, 3, 1, "actions"],
-    [32, -3, -6, "notice"],
+    [37, -3, -6, "notice"],
   ])(
     "keeps what going over the boss's head does on seed %i",
     (seed, head, boss, then) => {
@@ -393,8 +419,8 @@ describe("the real month", () => {
   );
 
   // The over-head browser test relies on this.
-  it("keeps a trip over the boss's head paying off in month 8 on seed 17", () => {
-    const run = startRun({ seed: 17, content: gameContent });
+  it("keeps a trip over the boss's head paying off in month 8 on seed 58", () => {
+    const run = startRun({ seed: 58, content: gameContent });
     reachActionsOfMonth(run, "8");
 
     const told = run.choose({ type: "action", actionId: "over-head" });
@@ -405,11 +431,11 @@ describe("the real month", () => {
   // Each of these holds influence in the meeting on that seed.
   it.each([
     [8, "boss"],
-    [96, "analyst"],
+    [106, "analyst"],
     [12, "admin"],
     [9, "projects"],
     [6, "head"],
-    [3, "associate"],
+    [5, "associate"],
   ])("keeps the seed %i documented for %s", (seed, holder) => {
     expect(holderInMeeting(seed)).toBe(holder);
   });

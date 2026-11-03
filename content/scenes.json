@@ -1635,6 +1635,9 @@
             },
             {
               "sawMove": "pointed-question"
+            },
+            {
+              "hasBuzzword": "single-source-of-truth"
             }
           ]
         },
@@ -1895,14 +1898,18 @@
             "mistake": "big"
           },
           {
-            "body": "By the time you reach your desk it has come back to you, with details. The Project Co-ordinator's project is in serious trouble, and people are being very kind about it.",
+            "body": "You say it to the Office Co-ordinator, by the biscuits, as something you had assumed everyone knew. By the time you reach your desk it has come back to you, with details. The Project Co-ordinator's project is in serious trouble, and people are being very kind about it.",
             "sets": ["started-a-rumour"],
             "approach": "blame",
-            "news": {
-              "about": "started-a-rumour",
-              "tone": "bad",
-              "text": "You started a rumour about the Project Co-ordinator's project, by the biscuits.",
-              "at": ["projects"]
+            "falseStory": {
+              "about": "their-project-in-trouble",
+              "text": "A story that the Project Co-ordinator's project was in trouble.",
+              "of": "projects",
+              "at": ["admin"],
+              "exposed": {
+                "about": "started-a-rumour",
+                "text": "You started the story that the Project Co-ordinator's project was in trouble."
+              }
             }
           }
         ]

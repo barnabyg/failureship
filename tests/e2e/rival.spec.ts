@@ -23,6 +23,13 @@ test("a Rival's Move lands on you, and later you can make the same Move", async 
   await page.getByTestId("continue").click();
 
   await playToResults(page);
+  // Yours is the same Move as theirs: a false story that travels, from whoever you told.
+  await expect(
+    page
+      .getByTestId("result-belief")
+      .filter({ hasText: "the Project Co-ordinator's project was in trouble" })
+      .filter({ hasText: /heard it from you\./ }),
+  ).toHaveCount(1);
   const rivals = page.getByTestId("results-rivals");
   await expect(rivals).toContainText("Your project is apparently in trouble");
   await expect(rivals).toContainText("Attack");

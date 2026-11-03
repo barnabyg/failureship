@@ -44,7 +44,7 @@ test("a stalled Demand stays open, and a chase follows it into a later month", a
 });
 
 test("a stalled Demand can be forgotten, which closes it", async ({ page }) => {
-  await stallTheDemand(page, 8);
+  await stallTheDemand(page, 283);
   await expect(page.getByTestId("open-demands")).toContainText("1");
   await answerAnyNotification(page);
   await attendAndFinishMonth(page);

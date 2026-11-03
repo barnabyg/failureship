@@ -42,7 +42,7 @@ test("the boss's opinion never appears as a number or label", async ({
   await expect(page.locator(".status")).not.toContainText(/opinion|mood/i);
 });
 
-// The real-content test keeps seed 96's boss a Believer and seed 8's Incompetent.
+// The real-content test keeps seed 106's boss a Believer and seed 283's Incompetent.
 test("the same choice lands differently with a different kind of boss", async ({
   page,
 }) => {
@@ -54,8 +54,8 @@ test("the same choice lands differently with a different kind of boss", async ({
     return page.getByTestId("boss-reaction").innerText();
   };
 
-  const believer = await reactionOnSeed(96);
-  const incompetent = await reactionOnSeed(8);
+  const believer = await reactionOnSeed(106);
+  const incompetent = await reactionOnSeed(283);
 
   expect(believer).not.toEqual(incompetent);
   expect(`${believer} ${incompetent}`).not.toMatch(
@@ -67,7 +67,7 @@ test("the same choice lands differently with a different kind of boss", async ({
 test("the results screen shows the boss's kind and how choices landed", async ({
   page,
 }) => {
-  await page.goto("/?seed=8&month=9");
+  await page.goto("/?seed=283&month=9");
   await answerAnyNotification(page);
   await openMeeting(page);
   await page.getByTestId("scene-option-praise-dennis").click();

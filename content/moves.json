@@ -82,10 +82,10 @@
     "from": "Overheard in the kitchen",
     "title": "Your project is apparently in trouble",
     "body": "Someone from another team asks kindly how you are coping. You did not know that you were coping with anything. It seems to be widely known that your project is in trouble.",
-    "by": "{rival}",
+    "by": "{competitor}",
     "family": "attack",
     "sets": ["rumour-spread"],
-    "story": {
+    "falseStory": {
       "about": "project-in-trouble",
       "text": "A story that your project was in trouble."
     }
@@ -181,8 +181,8 @@
     "id": "credit-claimed",
     "from": "Overheard by the lift",
     "title": "Somebody else's long evenings",
-    "body": "{rival} is telling someone from the floor above about this month's figures, and the long evenings that went into them. They were your figures, and your evenings.",
-    "by": "{rival}",
+    "body": "{competitor} is telling someone from the floor above about this month's figures, and the long evenings that went into them. They were your figures, and your evenings.",
+    "by": "{competitor}",
     "family": "deflect",
     "sets": ["credit-claimed"],
     "opinion": -1
@@ -191,8 +191,8 @@
     "id": "blamed-for-the-delay",
     "from": "From: Meeting minutes (draft)",
     "title": "Action: you",
-    "body": "The draft minutes of a meeting you were not invited to record that the delay to your project began with you. {rival} raised it, with regret, and has kindly offered to help you catch up.",
-    "by": "{rival}",
+    "body": "The draft minutes of a meeting you were not invited to record that the delay to your project began with you. {competitor} raised it, with regret, and has kindly offered to help you catch up.",
+    "by": "{competitor}",
     "family": "deflect",
     "sets": ["blamed-by-a-colleague"],
     "opinion": -1
@@ -201,8 +201,8 @@
     "id": "pointed-question",
     "from": "Your update to the floor above",
     "title": "Just one more question",
-    "body": "You gave a short update to people from upstairs. At the very end {rival} asked, warmly, what the plan was if the dates slipped. You had no plan for that, and now everyone knows that you had no plan for that.",
-    "by": "{rival}",
+    "body": "You gave a short update to people from upstairs. At the very end {competitor} asked, warmly, what the plan was if the dates slipped. You had no plan for that, and now everyone knows that you had no plan for that.",
+    "by": "{competitor}",
     "family": "attack",
     "sets": ["asked-a-pointed-question"],
     "headOpinion": -1

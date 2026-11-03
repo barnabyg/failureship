@@ -9,7 +9,7 @@ import {
 test("a catastrophic choice says so first, and ends at the results screen", async ({
   page,
 }) => {
-  await page.goto("/?seed=96&month=8");
+  await page.goto("/?seed=106&month=8");
   await answerAnyNotification(page);
   await openMeeting(page);
   const choice = page.getByTestId("scene-option-tell-them-everything");
@@ -34,7 +34,7 @@ test("a catastrophic choice says so first, and ends at the results screen", asyn
 test("a Final Warning shows, and a second big mistake gets the player fired", async ({
   page,
 }) => {
-  await page.goto("/?seed=3&month=2");
+  await page.goto("/?seed=9&month=2");
   await answerAnyNotification(page);
   await page.getByTestId("hotspot-meeting-lessons").click();
   await page.getByTestId("scene-option-blame-callum").click();
@@ -63,7 +63,7 @@ test("a Final Warning shows, and a second big mistake gets the player fired", as
 test("a whole run from month 1 to being fired, reloaded on a Final Warning", async ({
   page,
 }) => {
-  await page.goto("/?seed=3");
+  await page.goto("/?seed=9");
   await answerAnyNotification(page);
   await attendAndFinishMonth(page);
 

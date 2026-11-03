@@ -46,8 +46,14 @@ export interface TruthOfRun {
     month: number;
     /** If it is about a broken word: whose, and what was offered. */
     word?: { victim: string; what: string } | undefined;
-    /** Who made it up, if it is a false story. */
+    /** Who made it up, if it is a false story: a Character, or the player. */
     startedBy?: string | undefined;
+    /** Whom a false story is about. Left out, the player. */
+    of?: string | undefined;
+    /** What is said of the player once a story they made up is seen through. */
+    exposed?: { about: string; text: string } | undefined;
+    /** Whom the deed was done to, who alone is burned by it at first hand. */
+    victim?: string | undefined;
   }[];
   /** What the player's decisions have built up. Never shown until the end. */
   risks: {

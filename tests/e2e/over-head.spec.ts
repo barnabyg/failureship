@@ -4,7 +4,7 @@ import { answerAnyNotification, openMeeting, playToResults } from "./play";
 test("goes over your boss's head, and reads the outcome and the reveal", async ({
   page,
 }) => {
-  await page.goto("/?seed=17&month=8");
+  await page.goto("/?seed=58&month=8");
   await answerAnyNotification(page);
 
   await page.getByTestId("hotspot-over-head").click();

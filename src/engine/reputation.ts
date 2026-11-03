@@ -1,4 +1,5 @@
 import type { Content, Tone } from "./content";
+import { YOU } from "./deal";
 import { bossOf, placeOf } from "./places";
 import { moodOfCharacter, shiftBelief } from "./reads";
 import { drawFor, pickWeighted } from "./rng";
@@ -21,16 +22,32 @@ export function remember(
   });
   const travel = content.reputation?.travel;
   if (memory.tone && travel) {
-    const shift = travel.shift[memory.tone];
-    shiftBelief(state, memory.character, shift);
-    if (memory.character === bossOf(state, content)) {
-      state.bossLandings.push({
-        month: state.month,
-        boss: memory.character,
-        choice: memory.text,
-        shift,
-      });
-    }
+    moveBelief(
+      state,
+      content,
+      memory.character,
+      travel.shift[memory.tone],
+      memory.text,
+    );
+  }
+}
+
+/** Moves what someone believes of the player, which the boss's results list. */
+function moveBelief(
+  state: State,
+  content: Content,
+  character: string,
+  shift: number,
+  text: string,
+): void {
+  shiftBelief(state, character, shift);
+  if (character === bossOf(state, content)) {
+    state.bossLandings.push({
+      month: state.month,
+      boss: character,
+      choice: text,
+      shift,
+    });
   }
 }
 
@@ -44,11 +61,20 @@ export function startNews(
     text: string;
     at: readonly string[];
     word?: { victim: string; what: string };
+    /** Whom it was done to, who alone is burned by hearing it first-hand. */
+    victim?: string | undefined;
   },
 ): number {
   const id = state.truth.news.length;
-  const { about, tone, text, word } = news;
-  state.truth.news.push({ about, tone, text, month: state.month, word });
+  const { about, tone, text, word, victim } = news;
+  state.truth.news.push({
+    about,
+    tone,
+    text,
+    month: state.month,
+    word,
+    victim,
+  });
   for (const character of news.at) {
     remember(state, content, {
       character,
@@ -64,16 +90,28 @@ export function startNews(
 }
 
 /**
- * A false story about the player, made up by someone. It starts with them, and
- * they know better than to believe it, so it moves nobody's belief until it is
- * passed on, as true news is.
+ * A false story, made up by someone. A Character's story is about the player,
+ * starts with them and moves nobody's belief until it is passed on, as true
+ * news is. The player's is about someone else, and starts with whoever they
+ * tell. The same story, about the same thing, is only ever started once.
  */
 export function startStory(
   state: State,
   content: Content,
-  story: { about: string; text: string; by: string },
+  story: {
+    about: string;
+    text: string;
+    by: string;
+    of?: string | undefined;
+    at?: readonly string[] | undefined;
+    exposed?: { about: string; text: string } | undefined;
+  },
 ): void {
-  const { about, text, by } = story;
+  const { about, text, by, of, exposed } = story;
+  const told = state.truth.news.some(
+    (n) => n.startedBy !== undefined && n.about === about && n.of === of,
+  );
+  if (told) return;
   const id = state.truth.news.length;
   state.truth.news.push({
     about,
@@ -81,8 +119,21 @@ export function startStory(
     text,
     month: state.month,
     startedBy: by,
+    of,
+    exposed,
   });
-  remember(state, content, { character: by, about, text, news: id });
+  if (by !== YOU) {
+    remember(state, content, { character: by, about, text, news: id });
+    return;
+  }
+  for (const character of story.at ?? []) {
+    remember(state, content, { character, about, text, via: YOU, news: id });
+  }
+}
+
+/** How far news moves belief in the player: a story about someone else, not at all. */
+function toneOf(news: State["truth"]["news"][number] | undefined) {
+  return news?.of === undefined ? news?.tone : undefined;
 }
 
 /** Whoever has a tie of influence to this person, in either direction. */
@@ -123,7 +174,7 @@ export function spreadNews(state: State, content: Content): void {
           character: to,
           about: from.about,
           text: from.text,
-          tone: state.truth.news[news]?.tone,
+          tone: toneOf(state.truth.news[news]),
           via: from.character,
           hops: from.hops + 1,
           news,
@@ -134,15 +185,16 @@ export function spreadNews(state: State, content: Content): void {
 }
 
 /**
- * Anyone who heard a false story can see through it, by a seeded draw for their
- * kind, and then believes of the player what they did before they heard it.
+ * Anyone who was told a false story can see through it, by a seeded draw for
+ * their kind. A story about the player stops counting against them. One the
+ * player made up is traced back to them, which is news of its own.
  */
 function findOutStories(state: State, content: Content): void {
   const written = content.reputation;
   if (!written?.falseStories) return;
-  for (const memory of state.truth.memories) {
+  for (const memory of [...state.truth.memories]) {
     const story = state.truth.news[memory.news ?? -1];
-    const told = memory.tone !== undefined && memory.month < state.month;
+    const told = memory.via !== null && memory.month < state.month;
     if (story?.startedBy === undefined || memory.foundOut !== null || !told) {
       continue;
     }
@@ -158,14 +210,22 @@ function findOutStories(state: State, content: Content): void {
       continue;
     }
     memory.foundOut = state.month;
-    const shift = -written.travel.shift[story.tone];
-    shiftBelief(state, memory.character, shift);
-    if (memory.character === bossOf(state, content)) {
-      state.bossLandings.push({
-        month: state.month,
-        boss: memory.character,
-        choice: memory.text,
-        shift,
+    const tone = toneOf(story);
+    if (tone) {
+      moveBelief(
+        state,
+        content,
+        memory.character,
+        -written.travel.shift[tone],
+        memory.text,
+      );
+    }
+    if (story.startedBy === YOU && story.exposed) {
+      startNews(state, content, {
+        ...story.exposed,
+        tone: "bad",
+        at: [memory.character],
+        victim: story.of,
       });
     }
   }

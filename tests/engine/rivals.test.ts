@@ -1,34 +1,21 @@
 import { describe, expect, it } from "vitest";
+import { gameContent, panelText } from "../../src/content";
 import {
   parseContent,
   startRun,
   type Content,
   type PlayerView,
-  type Run,
 } from "../../src/engine";
-import { gameContent, panelText } from "../../src/content";
-import { readHiddenTruth, type PowerMap } from "../../src/engine/hidden-truth";
-import { capitalised } from "../../src/engine/say";
+import { readHiddenTruth } from "../../src/engine/hidden-truth";
 import { plainChoice } from "../../src/ui/later-month";
-import { calledAtStart, floorOwn, sceneFixtureRaw } from "./fixture";
-
-const SEEDS = Array.from({ length: 200 }, (_, i) => i + 1);
-
-/** Ana is the boss, and the boss and Ben compete for the credit. Cal never does. */
-function rivalsRaw() {
-  return {
-    ...sceneFixtureRaw(),
-    rivals: {
-      competing: [
-        { id: "credit", for: "FOR-CREDIT", who: ["{boss}", "ben"] },
-      ] as { id: string; for: string; who: string[]; when?: unknown }[],
-      most: 2,
-      seatChance: 0,
-      moveChance: 0.5,
-      didNothing: "DID-NOTHING",
-    },
-  };
-}
+import { floorOwn } from "./fixture";
+import {
+  competitorMovesRaw,
+  playOut,
+  resultsOf,
+  rivalsRaw,
+  SEEDS,
+} from "./rival-fixture";
 
 function rivalsOf(seed: number, content: Content) {
   const truth = readHiddenTruth(startRun({ seed, content }));
@@ -39,6 +26,18 @@ function rivalsOf(seed: number, content: Content) {
     practitioners,
     rivals: truth.rivals.map((r) => r.character).sort(),
   };
+}
+
+/** Plays the first month with the first choice each time, after one chosen first. */
+function playMonth(content: Content, seed: number, first: object) {
+  const run = startRun({ seed, content });
+  run.choose(first as Parameters<typeof run.choose>[0]);
+  while (run.view().month === 1) {
+    const next = run.view().choices[0];
+    if (!next) break;
+    run.choose(next);
+  }
+  return run;
 }
 
 describe("who is a Rival", () => {
@@ -75,6 +74,63 @@ describe("who is a Rival", () => {
     }
   });
 
+  it("can be anyone at all, for something open to everyone", () => {
+    const raw = rivalsRaw();
+    raw.rivals.most = 3;
+    raw.rivals.competing = [{ id: "any", for: "FOR-ANY", who: ["{everyone}"] }];
+    const content = parseContent(raw);
+
+    for (const seed of SEEDS) {
+      const { practitioners, rivals } = rivalsOf(seed, content);
+      expect(rivals).toEqual([...practitioners].sort());
+    }
+  });
+
+  it("follows the Org Chart: whoever comes to share your boss can compete", () => {
+    const raw = rivalsRaw();
+    raw.rivals.competing = [
+      { id: "favour", for: "FOR-FAVOUR", who: ["{peers}"] },
+    ];
+    raw.characters = raw.characters.map((c) =>
+      c.id === "cal" ? { ...c, reportsTo: "ben" } : c,
+    );
+    const content = parseContent({
+      ...raw,
+      events: [
+        {
+          id: "reorganised",
+          from: "The Board",
+          title: "REORGANISED",
+          body: "Cal moves.",
+          story: { reported: "R", happened: "H" },
+          schedule: { months: [1], chance: 1 },
+          reshuffle: { reports: [{ character: "cal", to: "ana" }] },
+          changed: "CAL-MOVED",
+        },
+      ],
+    });
+    let moved = 0;
+
+    for (const seed of SEEDS) {
+      const run = startRun({ seed, content });
+      const before = readHiddenTruth(run).rivals.map((r) => r.character);
+      expect(before).not.toContain("cal");
+      while (run.view().month === 1) {
+        const next = run.view().choices[0];
+        if (!next) break;
+        run.choose(next);
+      }
+      const truth = readHiddenTruth(run);
+      const cal = truth.characters.find((c) => c.id === "cal");
+      const record = truth.rivals.find((r) => r.character === "cal");
+      if (cal?.kind !== "practitioner") continue;
+      moved += 1;
+      expect(record?.since).toBe(2);
+    }
+
+    expect(moved).toBeGreaterThan(0);
+  });
+
   it("can be competing for something only while it is open, such as a seat", () => {
     const raw = rivalsRaw();
     raw.rivals.most = 3;
@@ -91,20 +147,16 @@ describe("who is a Rival", () => {
     let rivalled = 0;
 
     for (const seed of SEEDS) {
-      const run = startRun({ seed, content });
-      const cal = readHiddenTruth(run).characters.find((c) => c.id === "cal");
-      expect(readHiddenTruth(run).rivals.map((r) => r.character)).not.toContain(
-        "cal",
-      );
-      run.choose({ type: "action", actionId: "kettle" });
-      while (run.view().month === 1) {
-        const next = run.view().choices[0];
-        if (!next) break;
-        run.choose(next);
-      }
+      const start = readHiddenTruth(startRun({ seed, content }));
+      expect(start.rivals.map((r) => r.character)).not.toContain("cal");
+      const run = playMonth(content, seed, {
+        type: "action",
+        actionId: "kettle",
+      });
       const seat = readHiddenTruth(run).rivals.find(
         (r) => r.character === "cal",
       );
+      const cal = start.characters.find((c) => c.id === "cal");
       if (cal?.kind === "practitioner") {
         rivalled += 1;
         expect(seat).toMatchObject({ since: 2, for: ["seat"] });
@@ -118,12 +170,7 @@ describe("who is a Rival", () => {
 
   it("can be a Believer who has changed into a Practitioner", () => {
     const raw = rivalsRaw();
-    const burn = {
-      character: "ben",
-      about: "burn",
-      text: "BURNED",
-      tone: "bad",
-    };
+    const burn = { character: "ben", about: "burn", text: "B", tone: "bad" };
     raw.notifications = [
       {
         id: "burns",
@@ -167,20 +214,15 @@ describe("who is a Rival", () => {
     let changed = 0;
 
     for (const seed of SEEDS) {
-      const run = startRun({ seed, content });
       const believer =
-        readHiddenTruth(run).characters.find((c) => c.id === "ben")?.kind ===
-        "believer";
-      run.choose({
+        readHiddenTruth(startRun({ seed, content })).characters.find(
+          (c) => c.id === "ben",
+        )?.kind === "believer";
+      const run = playMonth(content, seed, {
         type: "notification",
         notificationId: "burns",
         optionId: "burn",
       });
-      while (run.view().month === 1) {
-        const next = run.view().choices[0];
-        if (!next) break;
-        run.choose(next);
-      }
       if (!believer) continue;
       changed += 1;
       expect(readHiddenTruth(run).rivals).toContainEqual(
@@ -192,65 +234,37 @@ describe("who is a Rival", () => {
   });
 });
 
-/** Plays on with the first choice each time, keeping every view. */
-function playOut(run: Run): PlayerView[] {
-  const views = [run.view()];
-  for (;;) {
-    const next = views.at(-1)?.choices[0];
-    if (!next) return views;
-    views.push(run.choose(next));
-  }
-}
-
-function resultsOf(views: readonly PlayerView[]) {
-  const step = views.at(-1)?.step;
-  if (step?.kind !== "results") throw new Error(step?.kind);
-  return step;
-}
-
-/** A Rival claims the credit whenever they can, and someone else does something else. */
-function rivalMovesRaw() {
-  const raw = rivalsRaw();
-  raw.rivals.moveChance = 1;
-  raw.moves = [
-    {
-      id: "claimed",
-      by: "{rival}",
-      family: "deflect",
-      from: "Overheard",
-      title: "MOVE-CLAIMED",
-      body: "{rival} CLAIMED your work.",
-      sets: ["credit-claimed"],
-    },
-    { id: "plain", from: "Facilities", title: "MOVE-PLAIN", body: "Plain." },
-  ];
-  const family = (label: string) => ({ label, note: "NOTE" });
-  return {
-    ...raw,
-    families: {
-      impress: family("IMPRESS"),
-      fabricate: family("FABRICATE"),
-      trade: family("TRADE"),
-      "find-out": family("FIND-OUT"),
-      deflect: family("DEFLECT"),
-      attack: family("ATTACK"),
-      deliver: family("DELIVER"),
-    },
-  };
-}
-
 describe("the deal", () => {
-  it("can make a run with no Rival as rare as the data says", () => {
-    const withChance = (seatChance: number) => {
-      const raw = rivalsRaw();
-      raw.rivals.seatChance = seatChance;
-      const content = parseContent(raw);
-      return SEEDS.filter((seed) => rivalsOf(seed, content).rivals.length === 0)
-        .length;
-    };
+  const MANY = Array.from({ length: 1000 }, (_, i) => i + 1);
 
-    expect(withChance(0)).toBeGreaterThan(0);
-    expect(withChance(1)).toBe(0);
+  /** How often no Rival is dealt, and how often each Character is a Practitioner. */
+  function rates(dealAgain: number) {
+    const raw = rivalsRaw();
+    raw.rivals.dealAgain = dealAgain;
+    const content = parseContent(raw);
+    const practitioner: Record<string, number> = {};
+    let none = 0;
+    for (const seed of MANY) {
+      const { practitioners, rivals } = rivalsOf(seed, content);
+      if (rivals.length === 0) none += 1;
+      for (const id of practitioners) {
+        practitioner[id] = (practitioner[id] ?? 0) + 1 / MANY.length;
+      }
+    }
+    return { none: none / MANY.length, practitioner };
+  }
+
+  it("deals again sometimes when nobody competing is a Practitioner, so no Rival is rarer", () => {
+    expect(rates(1).none).toBeLessThan(rates(0).none / 2);
+    expect(rates(0).none).toBeGreaterThan(0);
+  });
+
+  it("leaves someone who never competes about as likely to be a Practitioner", () => {
+    const [plain, again] = [rates(0), rates(1)];
+
+    expect(
+      Math.abs((again.practitioner.cal ?? 0) - (plain.practitioner.cal ?? 0)),
+    ).toBeLessThan(0.08);
   });
 });
 
@@ -262,314 +276,48 @@ describe("Rivals in content", () => {
     expect(() => parseContent(raw)).toThrow(/names unknown "bne"/);
   });
 
-  it("rejects {rival} in a Move that no Rival makes", () => {
-    const raw = rivalMovesRaw();
-    const plain = raw.moves[1];
-    if (plain) plain.body = "{rival} did it.";
+  it("takes groups read from the Org Chart", () => {
+    const raw = rivalsRaw();
+    raw.rivals.competing[0]?.who.push("{peers}", "{everyone}");
 
-    expect(() => parseContent(raw)).toThrow(/says \{rival\}, but is not made/);
+    expect(() => parseContent(raw)).not.toThrow();
   });
 
-  it("rejects a false story that nobody tells", () => {
-    const raw = storyRaw(1);
-    const rumour = raw.moves[0];
-    if (rumour) delete rumour.by;
+  it("rejects odds of who makes a Move that say nothing of their kind", () => {
+    const raw = rivalsRaw();
+    raw.rivals.makers = { believer: 2, incompetent: 2, practitioner: 2 };
 
-    expect(() => parseContent(raw)).toThrow(/needs a "by"/);
-  });
-});
-
-describe("a Rival's Move", () => {
-  it("lands on the player only while they have a Rival, and is made by one", () => {
-    const content = parseContent(rivalMovesRaw());
-    let landed = 0;
-    let none = 0;
-
-    for (const seed of SEEDS) {
-      const run = startRun({ seed, content });
-      const views = playOut(run);
-      const { rivals } = readHiddenTruth(run);
-      const moves = views.flatMap((v) =>
-        v.step.kind === "move" ? [v.step] : [],
-      );
-      if (rivals.length === 0) {
-        none += 1;
-        expect(moves.map((m) => m.title)).not.toContain("MOVE-CLAIMED");
-        continue;
-      }
-      landed += 1;
-      const claimed = moves.find((m) => m.title === "MOVE-CLAIMED");
-      const makers = rivals.filter((r) => r.did.length > 0);
-      expect(makers).toHaveLength(1);
-      const maker = makers[0]?.character ?? "";
-      expect(claimed?.body).toBe(
-        `${capitalised(calledAtStart(content, maker))} CLAIMED your work.`,
-      );
-      expect(makers[0]?.did).toEqual([{ month: 1, move: "claimed" }]);
-      expect(resultsOf(views).rivals).toContainEqual(
-        expect.objectContaining({
-          competed: ["FOR-CREDIT"],
-          did: [{ month: 1, text: "MOVE-CLAIMED", family: "DEFLECT" }],
-          didNothing: null,
-        }),
-      );
-    }
-
-    expect(landed).toBeGreaterThan(0);
-    expect(none).toBeGreaterThan(0);
+    expect(() => parseContent(raw)).toThrow(/no evidence of a kind/);
   });
 });
 
 describe("the player view", () => {
-  it("never says who is a Rival: only the results screen does", () => {
-    const competingWith = (who: string) => {
-      const raw = rivalsRaw();
-      raw.rivals.competing = [{ id: "credit", for: "FOR-CREDIT", who: [who] }];
+  it("never says who is a Rival, even when competitors' Moves name who made them", () => {
+    // With room for one Rival or two, the same Practitioners compete and the same
+    // Moves land, but who is a Rival differs. Only the results screen shows it.
+    const withMost = (most: number) => {
+      const raw = competitorMovesRaw();
+      raw.rivals.most = most;
       return parseContent(raw);
     };
-    const [ben, cal] = [competingWith("ben"), competingWith("cal")];
+    const [one, two] = [withMost(1), withMost(2)];
     let differ = 0;
 
-    for (const seed of SEEDS.slice(0, 60)) {
-      const one = playOut(startRun({ seed, content: ben }));
-      const other = playOut(startRun({ seed, content: cal }));
+    for (const seed of SEEDS.slice(0, 80)) {
+      const first = playOut(startRun({ seed, content: one }));
+      const second = playOut(startRun({ seed, content: two }));
       const rivals = (views: PlayerView[]) => resultsOf(views).rivals;
-      if (JSON.stringify(rivals(one)) !== JSON.stringify(rivals(other))) {
+      if (JSON.stringify(rivals(first)) !== JSON.stringify(rivals(second))) {
         differ += 1;
       }
       const shown = (views: PlayerView[]) => JSON.stringify(views.slice(0, -1));
 
-      expect(shown(one)).toBe(shown(other));
-      expect(shown(one)).not.toContain("FOR-CREDIT");
+      expect(shown(first)).toBe(shown(second));
+      expect(shown(first)).toMatch(/CLAIMED your work/);
+      expect(shown(first)).not.toContain("FOR-CREDIT");
     }
 
     expect(differ).toBeGreaterThan(0);
-  });
-});
-
-/** Everyone within so many ties of influence of where something started. */
-function within(map: PowerMap, from: string, hops: number): Set<string> {
-  let reached = new Set([from]);
-  for (let i = 0; i < hops; i++) {
-    const next = new Set(reached);
-    for (const { who, over } of map.influence) {
-      if (reached.has(who)) next.add(over);
-      if (reached.has(over)) next.add(who);
-    }
-    reached = next;
-  }
-  return reached;
-}
-
-/**
- * Six people, a Rival's false story in the first month, and news that goes one
- * tie a month, as far as `maxHops`, and that nobody sees through unless told to.
- */
-function storyRaw(maxHops: number, foundOut = 0) {
-  const raw = rivalMovesRaw();
-  raw.balance.monthsPerRun = 4;
-  raw.hiddenTruth.charactersWithFact = 4;
-  raw.hiddenTruth.facts.push({
-    id: "fact-d",
-    text: "SECRET-DELTA about {name}",
-  });
-  raw.characters.push(
-    { id: "dan", name: "Dan Dee", title: "Clerk", reportsTo: "ana" },
-    { id: "eve", name: "Eve Ely", title: "Clerk", reportsTo: "ana" },
-    { id: "fay", name: "Fay Fox", title: "Clerk", reportsTo: "ana" },
-  );
-  raw.moves = [
-    {
-      id: "rumour",
-      by: "{rival}",
-      family: "attack",
-      from: "Overheard",
-      title: "MOVE-RUMOUR",
-      body: "Your project is in trouble, apparently.",
-      story: { about: "in-trouble", text: "STORY-IN-TROUBLE" },
-    },
-    // Enough of these that the story is told only once.
-    ...[1, 2, 3].map((n) => ({
-      id: `plain-${String(n)}`,
-      from: "Facilities",
-      title: `MOVE-PLAIN-${String(n)}`,
-      body: "Plain.",
-    })),
-  ];
-  const sign = (id: string, warm: number, neutral: number, cold: number) => ({
-    id,
-    text: `{who} SIGN-${id}`,
-    likelihood: { warm, neutral, cold },
-  });
-  return {
-    ...raw,
-    reputation: {
-      travel: {
-        hopsPerMonth: 1,
-        maxHops,
-        passOnChance: 1,
-        shift: { good: 1, bad: -1 },
-      },
-      mood: { warmAt: 1, coldAt: -1 },
-      signs: [sign("warm", 9, 1, 0), sign("cold", 0, 1, 9)],
-      believes: {
-        warm: "THINKS-WELL",
-        neutral: "NO-VIEW",
-        cold: "THINKS-BADLY",
-      },
-      how: { direct: "WAS-THERE", heardFrom: "HEARD-FROM {who}" },
-      falseStories: {
-        foundOut: { believer: foundOut, incompetent: 0, practitioner: 0 },
-        started: "STARTED-IT",
-        found: "FOUND-OUT-IN {month}",
-      },
-    },
-  };
-}
-
-describe("a false story", () => {
-  it("reaches only those it can travel to on the Power Map, and moves what they believe", () => {
-    const content = parseContent(storyRaw(1));
-    let told = 0;
-    let missed = 0;
-
-    for (const seed of SEEDS) {
-      const run = startRun({ seed, content });
-      playOut(run);
-      const { memories, powerMap, news, beliefs } = readHiddenTruth(run);
-      const story = news.findIndex((n) => n.text === "STORY-IN-TROUBLE");
-      if (story < 0) continue;
-      const teller = news[story]?.startedBy ?? "";
-      const heard = memories.filter((m) => m.news === story);
-      const reachable = within(powerMap, teller, 1);
-
-      // Passed on at every chance, it reaches all of them and nobody else.
-      expect(new Set(heard.map((m) => m.character))).toEqual(reachable);
-      for (const memory of heard) {
-        if (memory.character === teller) continue;
-        told += 1;
-        expect(memory.via).toBe(teller);
-        // Bosses' beliefs carry on moving with the month, so look at everyone else.
-        if (memory.character !== "ana") {
-          expect(beliefs[memory.character]).toBe(-1);
-        }
-      }
-      // The one who made it up knows better.
-      expect(beliefs[teller] ?? 0).toBe(0);
-      missed += content.characters.length - reachable.size;
-    }
-
-    expect(told).toBeGreaterThan(0);
-    expect(missed).toBeGreaterThan(0);
-  });
-
-  it("travels further where the data lets it, along the same ties", () => {
-    const content = parseContent(storyRaw(2));
-    for (const seed of SEEDS.slice(0, 60)) {
-      const run = startRun({ seed, content });
-      playOut(run);
-      const { memories, powerMap, news } = readHiddenTruth(run);
-      const story = news.findIndex((n) => n.text === "STORY-IN-TROUBLE");
-      if (story < 0) continue;
-      const reachable = within(powerMap, news[story]?.startedBy ?? "", 2);
-      for (const memory of memories.filter((m) => m.news === story)) {
-        expect(reachable.has(memory.character)).toBe(true);
-      }
-    }
-  });
-
-  it("can be found out, which undoes what it did to that person", () => {
-    const content = parseContent(storyRaw(1, 1));
-    let found = 0;
-
-    for (const seed of SEEDS) {
-      const run = startRun({ seed, content });
-      const views = playOut(run);
-      const { memories, news, beliefs, characters } = readHiddenTruth(run);
-      const story = news.findIndex((n) => n.text === "STORY-IN-TROUBLE");
-      for (const memory of memories.filter((m) => m.news === story)) {
-        const kind = characters.find((c) => c.id === memory.character)?.kind;
-        const believer = kind === "believer";
-        const teller = memory.via === null;
-        expect(memory.foundOut !== null).toBe(believer && !teller);
-        if (!believer || teller || memory.character === "ana") continue;
-        found += 1;
-        expect(beliefs[memory.character]).toBe(0);
-        const reached = resultsOf(views).beliefs.find(
-          (b) =>
-            b.name ===
-            content.characters.find((c) => c.id === memory.character)?.name,
-        )?.reached;
-        expect(reached).toContainEqual(
-          expect.objectContaining({
-            text: "STORY-IN-TROUBLE",
-            how: expect.stringContaining("FOUND-OUT-IN 3") as unknown,
-          }),
-        );
-      }
-    }
-
-    expect(found).toBeGreaterThan(0);
-  });
-});
-
-describe("using a Move a Rival used on you", () => {
-  function usingRaw() {
-    const raw = rivalMovesRaw();
-    raw.scenes[0]?.options.push({
-      id: "claim-it-back",
-      label: "CLAIM-IT-BACK",
-      requires: { sawMove: "claimed" },
-      results: [{ body: "CLAIMED-BACK" }],
-    });
-    return raw;
-  }
-
-  function meetingOptions(view: PlayerView) {
-    return view.step.kind === "scene" ? view.step.options.map((o) => o.id) : [];
-  }
-
-  it("is on offer once the player has seen it done to them, and not before", () => {
-    const content = parseContent(usingRaw());
-    let offered = 0;
-
-    for (const seed of SEEDS) {
-      const run = startRun({ seed, content });
-      const views = playOut(run);
-      const meetings = views.filter((v) => v.step.kind === "scene");
-      const landed = views.some(
-        (v) => v.step.kind === "move" && v.step.title === "MOVE-CLAIMED",
-      );
-      expect(meetingOptions(meetings[0] as PlayerView)).not.toContain(
-        "claim-it-back",
-      );
-      expect(
-        meetingOptions(meetings[1] as PlayerView).includes("claim-it-back"),
-      ).toBe(landed);
-      if (landed) offered += 1;
-    }
-
-    expect(offered).toBeGreaterThan(0);
-  });
-
-  it("can be gated on a Move that a Rival made, which the player has seen", () => {
-    expect(() => parseContent(usingRaw())).not.toThrow();
-  });
-
-  it("cannot be gated on what the Rival's Move set, which says there is a Rival", () => {
-    const raw = usingRaw();
-    const option = raw.scenes[0]?.options.at(-1);
-    if (option) option.requires = { did: "credit-claimed" };
-
-    expect(() => parseContent(raw)).toThrow(/gated on the hidden truth/);
-  });
-
-  it("must name a Move there is", () => {
-    const raw = usingRaw();
-    const option = raw.scenes[0]?.options.at(-1);
-    if (option) option.requires = { sawMove: "clamied" };
-
-    expect(() => parseContent(raw)).toThrow(/unknown Move "clamied"/);
   });
 });
 
@@ -588,25 +336,30 @@ describe("the game's Rivals", () => {
     return { run, views };
   }
 
-  it("deals a run with no Rival rarely, and never more than two at once", () => {
+  it("deals a run with no Rival rarely, never more than two, and no role's kind fixed", () => {
     const counts = [0, 0, 0];
+    const practitioner: Record<string, number> = {};
     for (const seed of MANY) {
-      const { rivals } = readHiddenTruth(
+      const { rivals, characters } = readHiddenTruth(
         startRun({ seed, content: gameContent }),
       );
       counts[rivals.length] = (counts[rivals.length] ?? 0) + 1;
+      for (const c of characters.filter((x) => x.kind === "practitioner")) {
+        practitioner[c.id] = (practitioner[c.id] ?? 0) + 1 / MANY.length;
+      }
     }
     const [none = 0, one = 0, two = 0] = counts;
 
-    // 36 runs in 1000 have none, as the deal stands.
-    expect(none / MANY.length).toBeLessThan(0.06);
+    expect(none / MANY.length).toBeLessThan(0.1);
     expect(none).toBeGreaterThan(0);
     expect(one).toBeGreaterThan(0);
     expect(two).toBeGreaterThan(0);
     expect(none + one + two).toBe(MANY.length);
+    const shares = gameContent.characters.map((c) => practitioner[c.id] ?? 0);
+    expect(Math.max(...shares) - Math.min(...shares)).toBeLessThan(0.12);
   });
 
-  it("makes Rivals' Moves from the families the player has", () => {
+  it("makes competitors' Moves from the families the player has", () => {
     const families = (items: readonly { family?: string | undefined }[]) =>
       new Set(items.flatMap((i) => i.family ?? []));
     const players = families([
@@ -614,11 +367,75 @@ describe("the game's Rivals", () => {
       ...gameContent.notifications.flatMap((n) => n.options),
       ...gameContent.scenes.flatMap((s) => s.options),
     ]);
-    const rivals = gameContent.moves.filter((m) => m.by === "{rival}");
+    const competitors = gameContent.moves.filter(
+      (m) => m.by === "{competitor}",
+    );
 
-    expect(families(rivals)).toEqual(new Set(["deflect", "attack"]));
-    for (const family of families(rivals)) expect(players).toContain(family);
-    expect(rivals.some((m) => m.story !== undefined)).toBe(true);
+    expect(families(competitors)).toEqual(new Set(["deflect", "attack"]));
+    for (const family of families(competitors)) {
+      expect(players).toContain(family);
+    }
+    expect(competitors.some((m) => m.falseStory !== undefined)).toBe(true);
+  });
+
+  it("names a maker who is sometimes a Rival and sometimes not", () => {
+    const made = { rival: 0, other: 0 };
+    const otherKinds = new Set<string>();
+    for (const seed of SEEDS.slice(0, 120)) {
+      const { run, views } = playPlainly(seed);
+      const truth = readHiddenTruth(run);
+      for (const view of views) {
+        if (view.step.kind !== "move") continue;
+        const { body } = view.step;
+        const named = gameContent.characters.find(
+          (c) =>
+            body.toLowerCase().includes((c.called ?? c.name).toLowerCase()) ||
+            (c.id === "boss" && /\byour boss\b(?!'s)/i.test(body)),
+        );
+        const written = gameContent.moves.find(
+          (m) => m.title === (view.step as { title: string }).title,
+        );
+        if (written?.by !== "{competitor}" || !named) continue;
+        const credited = truth.rivals.some((r) =>
+          r.did.some((d) => d.month === view.month && d.move === written.id),
+        );
+        if (credited) made.rival += 1;
+        else {
+          made.other += 1;
+          const kind = truth.characters.find((c) => c.id === named.id)?.kind;
+          if (kind) otherKinds.add(kind);
+        }
+      }
+    }
+
+    expect(made.rival).toBeGreaterThan(made.other / 3);
+    expect(made.other).toBeGreaterThan(10);
+    expect(otherKinds.size).toBeGreaterThanOrEqual(2);
+  });
+
+  // tests/e2e/rival.spec.ts plays these: a competitor's false story lands in month 1
+  // of seed 39, and in month 8 the player tells one too, to the Office
+  // Co-ordinator. On seed 22 nobody tells one, so the player cannot either.
+  it("keeps the seeds the browser test uses", () => {
+    const { run, views } = playPlainly(39);
+    const offered = (all: readonly PlayerView[]) =>
+      all.some(
+        (v) =>
+          v.step.kind === "scene" &&
+          v.step.options.some((o) => o.id === "start-a-rumour"),
+      );
+    const rumour = views.find(
+      (v) => v.step.kind === "move" && v.step.title.includes("in trouble"),
+    );
+    const { news, memories } = readHiddenTruth(run);
+    const story = news.findIndex((n) => n.startedBy !== undefined);
+
+    expect(rumour?.month).toBe(1);
+    expect(offered(views)).toBe(true);
+    expect(
+      memories.filter((m) => m.news === story && m.via !== null).length,
+    ).toBeGreaterThan(0);
+    expect(offered(playPlainly(22).views)).toBe(false);
   });
 
   it("never says who is a Rival before the results screen", () => {
@@ -637,30 +454,5 @@ describe("the game's Rivals", () => {
         for (const word of words) expect(seen).not.toContain(word);
       }
     }
-  });
-
-  // tests/e2e/rival.spec.ts plays these: a Rival's false story lands in month 1 of
-  // seed 39 and has travelled by month 8, when the player can tell one too. On
-  // seed 22 nobody tells one, so the player cannot either.
-  it("keeps the seeds the browser test uses", () => {
-    const { run, views } = playPlainly(39);
-    const offered = (all: readonly PlayerView[]) =>
-      all.some(
-        (v) =>
-          v.step.kind === "scene" &&
-          v.step.options.some((o) => o.id === "start-a-rumour"),
-      );
-    const rumour = views.find(
-      (v) => v.step.kind === "move" && v.step.title.includes("in trouble"),
-    );
-    const truth = readHiddenTruth(run);
-    const story = truth.news.findIndex((n) => n.startedBy !== undefined);
-
-    expect(rumour?.month).toBe(1);
-    expect(offered(views)).toBe(true);
-    expect(
-      truth.memories.filter((m) => m.news === story && m.via !== null).length,
-    ).toBeGreaterThan(0);
-    expect(offered(playPlainly(22).views)).toBe(false);
   });
 });

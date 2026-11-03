@@ -22,7 +22,14 @@ import {
   remaining,
 } from "./reads";
 import { holdReview } from "./reviews";
-import { canMake, makerOf, noteMoveMade, noteRivals, RIVAL } from "./rivals";
+import {
+  canMake,
+  competitionNow,
+  COMPETITOR,
+  makerOf,
+  noteMoveMade,
+  noteRivals,
+} from "./rivals";
 import { drawFor, pick } from "./rng";
 import { openScene } from "./scenes";
 import type { MonthRecord, State, Step, World } from "./state";
@@ -48,7 +55,7 @@ export function freshMonth(where: Whereabouts, content: Content): MonthRecord {
 export function openMonth(state: State, content: Content): void {
   spreadNews(state, content);
   changePeople(state, content);
-  noteRivals(state, content);
+  noteRivals(state, competitionNow(state, content));
   followUpDemands(state, content);
   promisesFallDue(state);
   dealsFallDue(state, content);
@@ -150,30 +157,31 @@ export function nextStep(state: State, world: World): Step {
 function landMove(state: State, content: Content): Step | null {
   if (state.moveLanded) return null;
   state.moveLanded = true;
+  const competition = competitionNow(state, content);
   const eligible = content.moves.filter(
     (m) =>
       isOn(state, content, m) &&
-      canMake(state, content, m.by) &&
+      canMake(state, content, m.by, competition) &&
       !mentionsGone(state, content, m.from) &&
       matches(state, content, m.when),
   );
   if (eligible.length === 0) return null;
   const fresh = eligible.filter((m) => !state.movesLanded.includes(m.id));
   const urgent = fresh.filter((m) => m.priority);
-  // While the player has a Rival, some months' Move is theirs.
-  const rivals = fresh.filter((m) => m.by === RIVAL);
-  const rivalsTurn =
-    rivals.length > 0 &&
+  // While anyone competes with the player, some months' Move is one of theirs.
+  const competed = fresh.filter((m) => m.by === COMPETITOR);
+  const competitorsTurn =
+    competed.length > 0 &&
     drawFor(state.seed, "rival-move", state.month) <
       (content.rivals?.moveChance ?? 0);
-  const pool = urgent.length > 0 ? urgent : rivalsTurn ? rivals : fresh;
+  const pool = urgent.length > 0 ? urgent : competitorsTurn ? competed : fresh;
   const { item, next } = pick(state.rng, pool.length > 0 ? pool : eligible);
   state.rng = next;
   state.movesLanded.push(item.id);
-  const by = makerOf(state, content, item);
-  noteMoveMade(state, content, by, item);
-  if (item.story && by !== undefined) {
-    startStory(state, content, { ...item.story, by });
+  const by = makerOf(state, content, item, competition);
+  noteMoveMade(state, by, item, competition);
+  if (item.falseStory && by !== undefined) {
+    startStory(state, content, { ...item.falseStory, by });
   }
   applyOutcome(state, content, item, item.title);
   return { kind: "move", id: item.id, by };

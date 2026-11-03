@@ -6,7 +6,7 @@ import {
   type Condition,
   type Content,
 } from "./content";
-import { RIVAL } from "./rivals";
+import { COMPETITOR } from "./rivals";
 
 /** Showing or hiding an option on this would tell the player the truth. */
 export function dependsOnHiddenTruth(
@@ -40,15 +40,22 @@ export function dependsOnHiddenTruth(
 /** Flags that say which way something hidden went, so they carry the truth too. */
 export function flagsSetByHiddenResults(content: Content): Set<string> {
   const options = content.scenes.flatMap((s) => s.options);
+  // Who competes is read from the Org Chart, unless a competition waits on the truth.
+  const competingHidden = (content.rivals?.competing ?? []).some(
+    (c) => c.when !== undefined && dependsOnHiddenTruth(c.when),
+  );
   return new Set([
     ...options
       .filter((o) =>
         o.results.some((r) => r.when && dependsOnHiddenTruth(r.when)),
       )
       .flatMap((o) => o.results.flatMap((r) => r.sets)),
-    // A Rival's Move lands only if the player has a Rival.
     ...content.moves
-      .filter((m) => (m.when && dependsOnHiddenTruth(m.when)) || m.by === RIVAL)
+      .filter(
+        (m) =>
+          (m.when && dependsOnHiddenTruth(m.when)) ||
+          (m.by === COMPETITOR && competingHidden),
+      )
       .flatMap((m) => m.sets),
     // Whether and how a Bill arrives is drawn, and can read the truth.
     ...everyBill(content).flatMap((b) => [

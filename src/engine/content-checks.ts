@@ -26,8 +26,7 @@ import {
 } from "./content";
 import { findBrokenFloors } from "./floor-checks";
 import { findBrokenReviews } from "./review-checks";
-import { findBrokenRivals } from "./rival-checks";
-import { RIVAL } from "./rivals";
+import { findBrokenRivals, withoutMaker } from "./rival-checks";
 import { bossesAtStart, meantBy } from "./places";
 import {
   dependsOnHiddenTruth,
@@ -116,15 +115,9 @@ function findBrokenReferences(content: Content): string[] {
       );
     }
   };
-  const checkParts = (
-    owner: string,
-    written: string,
-    about = false,
-    rival = false,
-  ) => {
+  const checkParts = (owner: string, written: string, about = false) => {
     for (const [, token] of written.matchAll(/\{(\w+)\}/g)) {
       if (about && token === "subject") continue;
-      if (rival && `{${token ?? ""}}` === RIVAL) continue;
       if (token !== "holder" && token !== "ignored" && token !== "bystander") {
         problems.push(`${owner} uses unknown part "{${token ?? ""}}".`);
       }
@@ -369,7 +362,7 @@ function findBrokenReferences(content: Content): string[] {
     const owner = `Move "${m.id}"`;
     if (m.repays !== undefined) checkCharacterOrPlace(owner, m.repays);
     checkMonths(owner, m.months);
-    checkParts(owner, m.body, false, true);
+    checkParts(owner, withoutMaker(m));
     if (m.when) checkCondition(owner, m.when);
   }
   for (const e of content.officialStory.entries) {

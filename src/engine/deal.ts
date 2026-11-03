@@ -104,7 +104,7 @@ export function dealCharacters(
   content: Content,
 ): { characters: DealtCharacter[]; next: number } {
   const ids = content.characters.map((c) => c.id);
-  const kinds = dealKinds(rng, ids, content);
+  const kinds = dealKindsWithRivals(rng, ids, content);
   const facts = dealFacts(kinds.next, ids, content);
   return {
     characters: ids.map((id) => ({
@@ -133,24 +133,32 @@ export function dealMotives(
 }
 
 /**
- * The first seats go to Practitioners, so there is always something to find.
- * Most deals give the first of them to someone who could compete with the
- * player, so that a run with no Rival is rare.
+ * Kinds, dealt again some of the time if nobody who could compete with the
+ * player is a Practitioner, so that a run with no Rival is rare. Dealing again
+ * leans every role the same way, so no role's kind is a tell.
  */
+function dealKindsWithRivals(
+  rng: number,
+  ids: readonly string[],
+  content: Content,
+) {
+  const first = dealKinds(rng, ids, content);
+  if (!content.rivals) return first;
+  const could = couldCompeteAtStart(content);
+  const rivalled = could.some((id) => first.dealt.get(id) === "practitioner");
+  const roll = draw(first.next);
+  if (rivalled || roll.value >= content.rivals.dealAgain) {
+    return { ...first, next: roll.next };
+  }
+  return dealKinds(roll.next, ids, content);
+}
+
+/** The first seats go to Practitioners, so there is always something to find. */
 function dealKinds(rng: number, ids: readonly string[], content: Content) {
   const { kinds, minPractitioners } = content.hiddenTruth;
   const seats = shuffle(rng, ids);
   const dealt = new Map<string, Kind>();
   let next = seats.next;
-  if (content.rivals) {
-    const roll = draw(next);
-    next = roll.next;
-    const could = couldCompeteAtStart(content);
-    const first = seats.items.find((id) => could.includes(id));
-    if (roll.value < content.rivals.seatChance && first !== undefined) {
-      seats.items = [first, ...seats.items.filter((id) => id !== first)];
-    }
-  }
   seats.items.forEach((id, seat) => {
     if (seat < minPractitioners) {
       dealt.set(id, "practitioner");

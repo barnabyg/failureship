@@ -6,9 +6,10 @@ import {
   playUntil,
 } from "./play";
 
-// On this seed the Office Co-ordinator acts on a Demand faked in month 2, in month 4.
+// tests/engine/real-content.test.ts keeps this seed true: the Office Co-ordinator
+// acts on a Demand faked in month 2, in month 4.
 // The start does the training and fakes the Demand.
-const faked = "/?seed=2&choose=do-training,fake&month=";
+const faked = "/?seed=13&choose=do-training,fake&month=";
 
 test("a hidden risk lands on the player", async ({ page }) => {
   await page.goto(`${faked}4`);
