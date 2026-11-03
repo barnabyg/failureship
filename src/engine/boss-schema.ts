@@ -240,6 +240,8 @@ const grandPlan = z.strictObject({
   /** If it is not done in time, the boss looks for someone to blame. */
   failed: z.strictObject({
     blame: z.strictObject({
+      /** Whether blame can stick to the player at all. Left out, it can. */
+      sticks: condition.optional(),
       /** The seeded chance the player is blamed, by the boss's kind. */
       chance: perKind(z.number().min(0).max(1)),
       /** Added for how the boss stands with the player. */

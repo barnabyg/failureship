@@ -76,8 +76,9 @@ export function followPlans(state: State, content: Content): void {
 }
 
 /**
- * Not done in time, the Plan fails, and the boss looks for someone to blame: the
- * player at a seeded chance by the boss's kind and how they stand with them.
+ * Not done in time, the Plan fails, and the boss looks for someone to blame. If
+ * it can stick to the player, it lands on them at a seeded chance by the boss's
+ * kind and how they stand with them.
  */
 function failPlan(state: State, content: Content, taken: TakenPlan): void {
   const plan = writtenPlan(content, taken.id);
@@ -89,6 +90,7 @@ function failPlan(state: State, content: Content, taken: TakenPlan): void {
     blame.chance[bossKindOf(state, content)] +
     blame.mood[moodOf(state, content)];
   const blamed =
+    matches(state, content, blame.sticks) &&
     drawFor(state.seed, `plan-blame:${plan.id}`, state.month) < chance;
   sendBill(state, content, blamed ? onPlayer : onSomeoneElse);
 }

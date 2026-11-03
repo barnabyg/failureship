@@ -181,6 +181,8 @@ function findBrokenReferences(content: Content): string[] {
   problems.push(...findBrokenRivals(content));
   problems.push(...findBrokenPlans(content, hiddenFlags));
   for (const plan of content.grandPlans?.plans ?? []) {
+    const { sticks } = plan.failed.blame;
+    if (sticks) checkCondition(`Grand Plan "${plan.id}"`, sticks);
     for (const way of plan.ways) {
       checkCondition(`Grand Plan "${plan.id}" way "${way.id}"`, way.when);
     }

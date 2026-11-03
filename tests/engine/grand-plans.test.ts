@@ -63,7 +63,11 @@ function plan(id: string, heardIn: string, blame = certain) {
       },
     ],
     failed: {
-      blame: { chance: blame, mood: evenly },
+      blame: {
+        sticks: { not: { did: "kept-a-paper-trail" } },
+        chance: blame,
+        mood: evenly,
+      },
       onPlayer: {
         id: `${id}-blamed-you`,
         as: "notice",
@@ -119,6 +123,11 @@ function raw(blame = certain) {
           { id: "really", label: "Do it", sets: ["really-done"] },
           { id: "on-paper", label: "Say it is done", sets: ["looks-done"] },
           { id: "leave", label: "Leave it" },
+          {
+            id: "paper-trail",
+            label: "Ask what it is for, in writing",
+            sets: ["kept-a-paper-trail"],
+          },
         ],
       },
       {
@@ -206,7 +215,11 @@ const answer = (notificationId: string, optionId: string): Choice => ({
 });
 
 const titled = (views: PlayerView[], title: string) =>
-  views.find((v) => v.step.kind === "notice" && v.step.title === title);
+  views.find(
+    (v) =>
+      (v.step.kind === "notice" || v.step.kind === "move") &&
+      v.step.title === title,
+  );
 
 /** The boss, whom the fixture makes Ana, dealt as this kind on some seed. */
 function seedWhereBossIs(kind: Kind, content: Content): number {
@@ -336,6 +349,13 @@ describe("the boss's Grand Plan", () => {
     expect(titled(views, "BLAMED-YOU")).toBeUndefined();
     expect(titled(views, "BLAMED-THEM")?.month).toBe(3);
     expect(views.at(-1)?.finalWarning).toBe(false);
+  });
+
+  it("is never blamed on the player when the blame cannot stick", () => {
+    const views = play(startRun({ seed: 1, content }), "noted", "paper-trail");
+
+    expect(titled(views, "BLAMED-YOU")).toBeUndefined();
+    expect(titled(views, "BLAMED-THEM")?.month).toBe(3);
   });
 
   it("never fails once completed", () => {
