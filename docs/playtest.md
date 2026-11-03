@@ -38,6 +38,18 @@ This takes about ten minutes. Nobody is ever called a Rival until the results sc
 | Any seed. Play plainly and watch the Moves that land on you                    | Some months, a colleague takes your credit, puts a delay on you in the minutes or asks a pointed question upstairs, and is named. Your boss can be the one. A Practitioner is likeliest, but anyone competing can do it, so the results screen credits only the Rivals. |
 | Seed 5. In month 4, go to the tool demonstration, then play plainly to month 6 | You learn "single source of truth", and the New Metric review lets you ask the Senior Analyst how their number was arrived at. Without it, or seeing such a question asked, you cannot.                                                                                 |
 
+## Grand Plans
+
+This takes about ten minutes. Each row starts at the address shown, and goes to the meeting in
+month 1, where your boss's Grand Plan is announced. From then on it is on the **Your project** card.
+
+| Seed and what to do                                                                                                                                              | Expect                                                                                                                                                                                               |
+| ---------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Seed 106, a Believer boss. In month 4, tell your boss the tool is rolled out                                                                                     | The Plan is completed at once, in appearance, and your boss takes it badly. Official standing still goes up. A month or two later the Head of Operations may go looking for the figures in the tool. |
+| Seed 283, an Incompetent boss. The same                                                                                                                          | Your boss is delighted, and forwards the launch e-mail upstairs.                                                                                                                                     |
+| Seed 37, a Practitioner boss. In month 4 go to the demonstration, and at month 5's Ideas Workshop offer to load the real figures so that your boss can launch it | It is completed for real, and your boss is pleased. Launching it yourself instead goes down less well with this boss, and better with a Believer.                                                    |
+| Any seed. In month 4, hand the tool to the Senior Analyst, then play plainly                                                                                     | In month 7 the Plan has failed, and your boss writes up who was to blame. On some seeds it is you, and that is a big mistake. Asking your boss which problems it solves keeps you out of it.         |
+
 ## Three kinds of boss
 
 This takes about twenty minutes. Each seed deals a different kind of boss:

@@ -8,7 +8,8 @@ with kinds of boss, a Project, the Monthly Status Report, Demands, one-off Budge
 Moves and going over your boss's head. Earlier choices come back through Threads, hidden risks and
 what people have heard, things happen to the company, and you can be fired. You can give your word
 and make Deals, a Believer you burn can change or leave, Teflon and Fawning move when a Thread plays
-out, a quarterly review comes round every third month, colleagues compete with you, and runs save.
+out, a quarterly review comes round every third month, colleagues compete, bosses have Grand
+Plans, and runs save.
 
 ## Play
 
@@ -82,6 +83,10 @@ and unknown to others, and good news travels too, as do false stories. A **Rival
 Practitioner competing with you, your boss included, and nothing says who. Rivals use your own Moves
 on you, and once you have seen one done, or have other means, you can use it too.
 
+Your boss's **Grand Plan** is on the **Your project** card once you hear of it. Really doing it and
+making it look done both go on the record, but which pleases your boss depends on who they are, and
+a fake can be found out. Not done in time, your boss looks for someone to blame, possibly you.
+
 After nine months the results screen shows who was really who: each Character's kind and Hidden
 Fact, each Rival and what they did, your marks against the truth, how you played by family of Move,
 what your bosses made of you, each claim and clue and its worth, and both charts.
@@ -102,16 +107,15 @@ read in browser storage, hidden truth included, which is accepted while the game
 
 A month always leaves you something to decide. Every Notification has an answer that costs nothing.
 Beside the report, a month's own Notifications ask for at most one costly answer, though late
-figures or an action from a missed meeting can add another. A meeting you had no action left for
-leaves no Demand behind.
+figures, a missed meeting's action or a new boss's Grand Plan can add another. A meeting you had no
+action left for leaves no Demand behind.
 
 [docs/playtest.md](docs/playtest.md) has test scenarios to play by hand. They give away some deals.
 
 ## Change the game
 
-All the text and numbers are in `content/`, and editing them needs no code
-change. The running game reloads when you save a file. If an edit breaks the
-format, the page shows what is wrong instead of the game.
+All the text and numbers are in `content/`, and editing them needs no code change. The running
+game reloads when you save a file. If an edit breaks the format, the page shows what is wrong.
 
 | File                  | What it holds                                                                                          |
 | --------------------- | ------------------------------------------------------------------------------------------------------ |
@@ -144,6 +148,7 @@ format, the page shows what is wrong instead of the game.
 | `standing.json`       | Official standing: what on the official record moves it, its bands, and what the results screen says   |
 | `hidden-truth.json`   | The rules of the deal: kinds, their weights, and the Hidden Facts                                      |
 | `rivals.json`         | What is competed for and by whom, how many Rivals at once, and who makes a competitor's Move           |
+| `grand-plans.json`    | Each boss's Grand Plan: how long it runs, where you hear of it, how it is done, and who is blamed      |
 | `balance.json`        | Actions a month, months in a run and a quarter, each choice's cost, how signs mislead, the boss's mood |
 | `floors.json`         | Each floor, by the job done on it: the job title, the rooms, their fittings and the lift's sign        |
 
@@ -166,16 +171,16 @@ How to run the checks and tests is in [AGENTS.md](AGENTS.md#verifying).
   `over-head.ts`, `project.ts`, `scenes.ts`, `company-events.ts`, `mistakes.ts`, `reputation.ts`,
   `risks.ts`, `threads.ts` with `bills.ts`, `promises.ts`, `deals.ts`, `changes.ts` for Believers
   changing and leaving, `gauges.ts`, the only module that reads a Gauge, `standing.ts`, `reviews.ts`
-  for the quarterly reviews, and `rivals.ts` for Rivals. `say.ts` names Characters in text, and
-  `rng.ts` and `seed.ts` hold the seed. `view.ts` is the player view, built by `to-view.ts`, with
+  for quarterly reviews, `rivals.ts` for Rivals and `grand-plans.ts` for Grand Plans. `say.ts` names
+  Characters in text, and `rng.ts` and `seed.ts` hold the seed. `view.ts` is the player view, built by `to-view.ts`, with
   `to-results.ts` its reveal at the end; `hidden-truth.ts` is the tests' read of the truth.
   `save.ts` writes and reads a run. A run's `State` is plain data, so a mechanic gets saving for
   free: raise `SAVE_VERSION` if it changes what saved state means. `content.ts` assembles the schema
   from the `*-schema.ts` files, as [AGENTS.md](AGENTS.md) says. `content-checks.ts` parses and
   checks data across files, with each mechanic's checks in `truth-checks.ts` for the hidden truth
   and its signs, `boss-checks.ts` for the boss, going over the head, Demands and reputation, and
-  `consequence-checks.ts` for what choices lead to, with `word-checks.ts` for Promises and Deals and
-  `floor-checks.ts` for floors, `review-checks.ts` for reviews and `rival-checks.ts` for Rivals.
+  `consequence-checks.ts` for what choices lead to, with `word-checks.ts` for Promises and Deals,
+  `floor-checks.ts`, `review-checks.ts`, `rival-checks.ts` and `plan-checks.ts` for Grand Plans.
 - `src/tower/` draws the floor the view names, and holds no rules.
 - `src/ui/` holds the React panels over the tower: `App.tsx` wires them to the run, and
   `TowerStage.tsx` the tower's hotspots. `panels.tsx` picks each step's panel, the larger being

@@ -25,6 +25,7 @@ A `when` or `requires` holds one of these:
 | `{ "factNature": { "character": "projects", "nature": "dangerous" } }` | That Character's Hidden Fact has that `nature`                                          | Yes                    |
 | `{ "youOwe": "projects" }`                                             | The player owes that Character a favour                                                 | No                     |
 | `{ "sawMove": "rumour" }`                                              | That Move from [`moves.json`](#movesjson) has landed on the player in this run          | No                     |
+| `{ "planRunning": "one-tool" }`                                        | That is your boss's [Grand Plan](#grand-plansjson) now, and it is still to be done      | No                     |
 | `{ "not": ... }`                                                       | The condition inside does not hold                                                      | If the inner one does  |
 | `{ "all": [...] }`                                                     | Every condition inside holds                                                            | If any inner one does  |
 | `{ "any": [...] }`                                                     | At least one condition inside holds                                                     | If any inner one does  |
@@ -38,6 +39,8 @@ Where each can be used. These are all the places that take a condition:
 | An official story's `when`                 | All                                                    |
 | A Thread outcome's `when`                  | All                                                    |
 | A hidden risk's `route.means` and `traced` | All                                                    |
+| A Grand Plan's `blame.sticks`              | All                                                    |
+| A Grand Plan way's `when`                  | Only those that do not read the hidden truth           |
 | A whistleblower report's `when`            | All                                                    |
 | A Scene option's `requires`                | Only those that do not read the hidden truth           |
 | A Notification's `when`, a Demand's too    | Only those that do not read the hidden truth           |
@@ -350,6 +353,43 @@ A Thread that moves Fawning starts from a choice aimed at your boss or your boss
 result of that choice sets its flag. Its outcomes' `when` read only what the player did, and no
 Bill's `from` names a Character, since nothing comes back through someone who has left, and who
 leaves is dealt. `tests/engine/fawning.test.ts` holds the content to this.
+
+## `grand-plans.json`
+
+Grand Plans: each boss's big ambition, which the player can complete in reality or in appearance.
+A Plan belongs to [your boss](#your-boss-and-your-bosss-boss): as each month opens, a boss without
+one takes on the first in `plans` for the player's floor that nobody has had in this run, so a new
+boss brings a new one. A boss has one Plan, and keeps it if the player moves away.
+
+- `floor` is the floor whose bosses take it on, as in [Floors and their months](#floors-and-their-months).
+  A Plan has no `months`: it runs for `lasts` months from the month the boss takes it on, the first
+  of them included, and it must be done by the end of the last. That is at least 2, and no longer
+  than the run.
+- `heardIn` names the Scenes and Notifications in which the player hears of it: on opening the
+  Scene, or answering the Notification. Until then it is not in view. Once heard of, the **Your
+  project** card shows its `title`, and its details its `what`, with where it has got to from
+  `statuses`, of which `running` says `{month}`, the month it is due by.
+- `ways` are how it can be completed, each `how` it is done: `reality` or `appearance`. Every Plan
+  needs at least one of each. The first way whose `when` holds completes it, at once. A `when`
+  reads what the player did, usually a flag set by a choice offered with `planRunning`, and never
+  the hidden truth. Completing it does three things. Its `sets` go on the official record, the same
+  on every deal, so a flag there can move Official standing in [`standing.json`](#standingjson). It
+  moves your boss's belief by `belief` for their kind, so the same completion can please one boss
+  and put another off: a Believer wants it really done, an Incompetent wants it to look done, and
+  a Practitioner wants it to make them look good. And the player is told `done`, with the
+  `reaction` written for your boss's kind, which is a sign and must not name a kind.
+- A way done in appearance must add a [hidden risk](#risksjson), by a flag in its `sets` that is a
+  risk's `addedBy`, and one done in reality must not. A way that every kind takes alike is refused.
+- `failed` is what happens if it is not done in time, as the month after it was due opens: your
+  boss looks for someone to blame. If `blame.sticks` holds, or is left out, it is the player at
+  the seeded `chance` for your boss's kind, plus `mood` for how they stand with the player, and
+  `onPlayer` is sent, which can be `"mistake": "big"`. Otherwise `onSomeoneElse` is. Both are Bills,
+  as in [`threads.json`](#threadsjson). A Plan done in time never fails.
+- `results` is what the results screen says became of each boss's Plan: `reality`, `appearance`,
+  `failed`, or `running` if the run ended first, or the player moved away.
+
+Whatever follows from a Plan being completed reads `planCompleted` in `src/engine/grand-plans.ts`,
+which says whether, and how, a boss's Plan was completed.
 
 ## `hidden-truth.json`
 
