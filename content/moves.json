@@ -321,5 +321,17 @@
     "seat": {
       "diary": true
     }
+  },
+  {
+    "id": "fire-alarm-test",
+    "from": "From: Facilities",
+    "title": "Weekly fire alarm test",
+    "body": "The weekly fire alarm test goes off during your one important call of the month. It is followed by an announcement that it was only a test, and then by the alarm again, to be sure."
+  },
+  {
+    "id": "meeting-about-meetings",
+    "from": "From: Your boss's boss's assistant",
+    "title": "A meeting about meetings",
+    "body": "You are invited to a meeting about having fewer meetings. It is recurring. The first one overruns, and a follow-up is booked to discuss why."
   }
 ]

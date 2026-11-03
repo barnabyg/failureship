@@ -1159,5 +1159,146 @@
         }
       }
     ]
+  },
+  {
+    "id": "password-reset",
+    "floor": "junior-employee",
+    "pool": true,
+    "from": "From: IT Security",
+    "subject": "Your password expires today",
+    "body": "Your password expires today. Your new password must be different from your last twelve, contain a symbol, and be memorable, though not written down.",
+    "options": [
+      {
+        "id": "add-a-number",
+        "label": "Add a number to the end of your old one",
+        "result": {
+          "title": "Your password",
+          "body": "Your password is now the old one, with a 4 on the end. It is accepted, securely."
+        }
+      },
+      {
+        "id": "ask-it",
+        "label": "Ask IT what counts as a symbol",
+        "sets": ["asked-it"],
+        "result": {
+          "title": "Your password",
+          "body": "IT replies that the question has been logged. A ticket number arrives, which you could use."
+        }
+      }
+    ]
+  },
+  {
+    "id": "desk-audit",
+    "floor": "junior-employee",
+    "pool": true,
+    "from": "From: Facilities",
+    "subject": "Clear desk audit, Friday",
+    "body": "There will be a clear desk audit on Friday. Anything left on a desk will be removed for your convenience, and kept in a place nobody will tell you.",
+    "options": [
+      {
+        "id": "clear-it",
+        "label": "Clear your desk into a drawer",
+        "result": {
+          "title": "Clear desk audit",
+          "body": "Your desk is clear. Your drawer does not close."
+        }
+      },
+      {
+        "id": "leave-the-plant",
+        "label": "Leave the plant where it is",
+        "sets": ["lost-the-plant"],
+        "result": {
+          "title": "Clear desk audit",
+          "body": "The plant is removed for your convenience. It is not seen again."
+        }
+      }
+    ]
+  },
+  {
+    "id": "charity-bake",
+    "floor": "junior-employee",
+    "pool": true,
+    "from": "From: The Office Co-ordinator, Marjorie Tull",
+    "subject": "Charity bake sale: volunteers wanted",
+    "body": "There is a charity bake sale on Thursday, and the Office Co-ordinator is looking for volunteers to bake. Buying is also welcome, and compulsory.",
+    "options": [
+      {
+        "id": "buy-a-cake",
+        "label": "Buy a cake on the day",
+        "result": {
+          "title": "The bake sale",
+          "body": "You buy a lemon slice. It is from a supermarket, with the label taken off."
+        }
+      },
+      {
+        "id": "bake-something",
+        "family": "trade",
+        "label": "Bake something yourself",
+        "cost": "standard",
+        "sets": ["baked-for-charity"],
+        "result": {
+          "title": "The bake sale",
+          "body": "You bake flapjacks the night before. They sell out by ten, which the Office Co-ordinator notes."
+        },
+        "approach": "favour"
+      }
+    ]
+  },
+  {
+    "id": "restructure-consultation",
+    "floor": "team-lead",
+    "pool": true,
+    "from": "From: People and Culture",
+    "subject": "Consultation: your team's structure",
+    "body": "As part of an ongoing review, team leads are invited to propose their team's ideal structure. Proposals will be considered alongside the structure that has already been decided.",
+    "options": [
+      {
+        "id": "propose-the-same",
+        "label": "Propose the structure you have",
+        "result": {
+          "title": "Consultation",
+          "body": "Your proposal is noted as aligned."
+        }
+      },
+      {
+        "id": "propose-a-new-one",
+        "family": "deliver",
+        "label": "Propose a better one, with a diagram",
+        "cost": "standard",
+        "sets": ["proposed-a-structure"],
+        "result": {
+          "title": "Consultation",
+          "body": "Your diagram is admired, and filed under Future State."
+        },
+        "approach": "truth"
+      }
+    ]
+  },
+  {
+    "id": "offsite-invite",
+    "floor": "team-lead",
+    "pool": true,
+    "from": "From: The Programme Manager, Gwen Ashdown",
+    "subject": "Leadership offsite: save the date",
+    "body": "Team leads are invited to a leadership offsite, at a hotel with a lake, to discuss cost control. Please confirm your dietary requirements and your commitment.",
+    "options": [
+      {
+        "id": "confirm",
+        "label": "Confirm, with no dietary requirements",
+        "result": {
+          "title": "The offsite",
+          "body": "You are confirmed. The hotel has a lake, and an agenda, and only one of them is long."
+        }
+      },
+      {
+        "id": "decline-for-the-team",
+        "label": "Decline, as your team has a deadline that week",
+        "sets": ["declined-the-offsite"],
+        "result": {
+          "title": "The offsite",
+          "body": "You decline. Your absence is noted as commitment to delivery, by one person, and as absence by the rest."
+        }
+      }
+    ]
   }
 ]

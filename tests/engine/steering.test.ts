@@ -44,6 +44,21 @@ function attendsEverything(view: PlayerView, turn: number) {
   return choice;
 }
 
+/** Takes this option the first time it is offered, and otherwise picks as given. */
+function takingOnce(
+  optionId: string,
+  pick: (view: PlayerView, turn: number) => PlayerView["choices"][number],
+) {
+  let taken = false;
+  return (view: PlayerView, turn: number) => {
+    const named = taken
+      ? undefined
+      : view.choices.find((c) => "optionId" in c && c.optionId === optionId);
+    if (named) taken = true;
+    return named ?? pick(view, turn);
+  };
+}
+
 /** The same, but lasts the whole run: the first thing said in a meeting is safe. */
 function lastsTheRun(view: PlayerView, turn: number) {
   return attendsEverything(view, view.step.kind === "scene" ? 0 : turn);
@@ -60,7 +75,9 @@ describe("months that do not feel like one month repeated", () => {
       item: { floor?: string | undefined; months?: number[] | undefined },
       job: string,
       month: number,
-    ) => item.floor === job && (item.months?.includes(month) ?? false);
+    ) =>
+      (item.floor === undefined || item.floor === job) &&
+      (item.months?.includes(month) ?? false);
     const presented = gameContent.floors.flatMap(({ job }) =>
       Array.from({ length: writtenMonths(gameContent, job) }, (_, i) => {
         const month = i + 1;
@@ -105,44 +122,56 @@ describe("months that do not feel like one month repeated", () => {
     expect(reviewed.map((h) => h.month)).toEqual([3, 6, 9, 12, 15, 18]);
     expect(new Set(reviewed.map((h) => h.title)).size).toBe(6);
     // Nine written meetings, then Floor 1's pool, each before any comes again.
+    const inPool = gameContent.scenes.filter(
+      (s) => s.pool && s.floor === "junior-employee",
+    ).length;
     expect(meetings).toHaveLength(18);
     expect(new Set(meetings.slice(0, 9)).size).toBe(9);
     const pooled = meetings.slice(9);
-    const turn = pooled.slice(0, 3);
-    expect(new Set(turn).size).toBe(3);
+    const turn = pooled.slice(0, inPool);
+    expect(new Set(turn).size).toBe(inPool);
     pooled.forEach((title, i) => {
-      expect(title).toBe(turn[i % 3]);
+      expect(title).toBe(turn[i % inPool]);
     });
   });
 
-  it("lands a different Move every month", () => {
+  // Every month differs on either floor, as in the nine-month run. Seed 2 is
+  // promoted to Floor 2 in month 8, by faking the Plan in month 5.
+  const RUNS: [string, number][] = [
+    ["seed 1, on Floor 1", 1],
+    ["seed 2, promoted", 2],
+  ];
+  const pickOn = (seed: number) =>
+    seed === 2
+      ? takingOnce("screenshot-on-the-note", lastsTheRun)
+      : lastsTheRun;
+
+  it.each(RUNS)("lands a different Move every month: %s", (_, seed) => {
     // A Bill can land as a Move as well, beside the month's own.
     const written = new Set(gameContent.moves.map((m) => m.title));
-    for (const seed of [1, 2, 3, 4, 5]) {
-      const { views } = walk(seed, lastsTheRun);
-      const moves = views.flatMap((v) =>
-        v.step.kind === "move" && written.has(v.step.title)
-          ? [v.step.title]
-          : [],
-      );
-
-      // Over eighteen months a few come again, once those that can land have.
-      expect(moves).toHaveLength(gameContent.balance.monthsPerRun);
-      expect(new Set(moves.slice(0, 9)).size).toBe(9);
-      expect(new Set(moves).size).toBeGreaterThanOrEqual(15);
-    }
-  });
-
-  it("tells a different official story every month", () => {
-    const { views } = walk(1, lastsTheRun);
-    const stories = views.flatMap((v) =>
-      v.step.kind === "story" ? [JSON.stringify(v.step.reported)] : [],
+    const { views } = walk(seed, pickOn(seed));
+    const moves = views.flatMap((v) =>
+      v.step.kind === "move" && written.has(v.step.title) ? [v.step.title] : [],
     );
 
-    // Every one of the first nine, and nearly every one of all eighteen.
-    expect(new Set(stories.slice(0, 9)).size).toBe(9);
-    expect(new Set(stories).size).toBeGreaterThanOrEqual(16);
+    expect(moves).toHaveLength(gameContent.balance.monthsPerRun);
+    expect(new Set(moves).size).toBe(moves.length);
   });
+
+  it.each(RUNS)(
+    "tells a different official story every month: %s",
+    (_, seed) => {
+      const { views } = walk(seed, pickOn(seed));
+      const stories = views.flatMap((v) =>
+        v.step.kind === "story" ? [JSON.stringify(v.step.reported)] : [],
+      );
+
+      expect(views.at(-2)?.job.id).toBe(
+        seed === 2 ? "team-lead" : "junior-employee",
+      );
+      expect(new Set(stories).size).toBe(gameContent.balance.monthsPerRun);
+    },
+  );
 
   it("gives you an action at any meeting you do not go to", () => {
     const { views } = walk(3, (view) => {

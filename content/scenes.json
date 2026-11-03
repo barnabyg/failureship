@@ -2908,5 +2908,350 @@
         ]
       }
     ]
+  },
+  {
+    "id": "retrospective",
+    "floor": "junior-employee",
+    "pool": true,
+    "title": "The Retrospective",
+    "location": "Floor 1, Meeting Room 1B",
+    "narration": [
+      "A retrospective, on what went well and what did not. The one action is to hold another."
+    ],
+    "cast": ["{head}", "{boss}", "analyst", "admin", "projects", "associate"],
+    "signs": [
+      {
+        "label": "Whose sticky note stays up",
+        "text": "{holder}'s note under What Went Well stays up. {ignored}'s falls off, and stays off.",
+        "clue": "At the Retrospective, {holder}'s note stayed up, and {ignored}'s fell off and stayed down."
+      },
+      {
+        "label": "Who reads them out",
+        "text": "{bystander} reads the notes aloud, and pauses at {holder}'s."
+      }
+    ],
+    "options": [
+      {
+        "id": "say-what-went-wrong",
+        "family": "deliver",
+        "label": "Say what actually went wrong",
+        "results": [
+          {
+            "body": "You say it. It is written under What Did Not Go Well, in a smaller pen.",
+            "sets": ["said-what-went-wrong"],
+            "approach": "truth"
+          }
+        ]
+      },
+      {
+        "id": "say-it-went-well",
+        "family": "impress",
+        "label": "Say that everything went well",
+        "results": [
+          {
+            "body": "Everyone agrees, with relief. The retrospective ends early, which is minuted as a success.",
+            "sets": ["said-it-went-well"],
+            "approach": "flatter"
+          }
+        ]
+      },
+      {
+        "id": "blame-the-process",
+        "family": "deflect",
+        "label": "Say that the process let everyone down",
+        "results": [
+          {
+            "body": "The process is blamed, unanimously. It is not present, and takes it well.",
+            "sets": ["blamed-the-process"],
+            "approach": "theatre"
+          }
+        ]
+      },
+      {
+        "id": "draw-a-sailboat",
+        "label": "Draw the sailboat with the anchors",
+        "results": [
+          {
+            "body": "You draw the sailboat. The anchors are the things holding the team back. There are a lot of anchors."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "wellbeing-hour",
+    "floor": "junior-employee",
+    "pool": true,
+    "title": "Wellbeing Hour",
+    "location": "Floor 1, Meeting Room 1B",
+    "narration": [
+      "A mandatory Wellbeing Hour, in the hour before the deadline. There is a breathing exercise, a slide about burnout, and a reminder that the deadline has not moved."
+    ],
+    "cast": ["{head}", "{boss}", "analyst", "admin", "projects", "associate"],
+    "signs": [
+      {
+        "label": "Who leaves early",
+        "text": "{holder} leaves halfway through, for a call, and nobody minds. {ignored} checks a phone, and is asked to be present.",
+        "clue": "At the Wellbeing Hour, {holder} left early unremarked, and {ignored} was asked to be present."
+      },
+      {
+        "label": "Who leads the breathing",
+        "text": "{bystander} breathes in when {holder} does."
+      }
+    ],
+    "options": [
+      {
+        "id": "breathe",
+        "label": "Breathe in for four, and out for four",
+        "results": [
+          {
+            "body": "You breathe. The deadline does not."
+          }
+        ]
+      },
+      {
+        "id": "mention-the-deadline",
+        "family": "deliver",
+        "label": "Point out that the deadline is in an hour",
+        "results": [
+          {
+            "body": "There is a silence, which the facilitator calls a mindful pause.",
+            "sets": ["mentioned-the-deadline"],
+            "approach": "truth"
+          }
+        ]
+      },
+      {
+        "id": "work-under-the-table",
+        "family": "deliver",
+        "label": "Finish your work on your knee, under the table",
+        "results": [
+          {
+            "body": "You finish it. The facilitator thanks everyone for being so present.",
+            "sets": ["worked-under-the-table"],
+            "approach": "results"
+          }
+        ]
+      },
+      {
+        "id": "thank-for-the-hour",
+        "family": "impress",
+        "label": "Thank your boss for making the time",
+        "results": [
+          {
+            "body": "Your boss says that wellbeing is a priority, and asks whether the deadline is in hand.",
+            "sets": ["thanked-for-wellbeing"],
+            "approach": "flatter"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "supplier-pitch",
+    "floor": "junior-employee",
+    "pool": true,
+    "title": "Supplier Pitch",
+    "location": "Floor 1, Meeting Room 1B",
+    "narration": [
+      "A supplier has come to pitch a platform that does what the new tool does, and what the old tool did. There is a free lanyard each."
+    ],
+    "cast": ["{head}", "{boss}", "analyst", "admin", "projects", "associate"],
+    "signs": [
+      {
+        "label": "Who the supplier talks to",
+        "text": "The supplier addresses every slide to {holder}, having asked at reception who decides. {ignored} is handed the brochure.",
+        "clue": "At the Supplier Pitch, the supplier spoke only to {holder}, and gave {ignored} the brochure."
+      },
+      {
+        "label": "Who asks the price",
+        "text": "{bystander} asks the price, and looks at {holder} when it is said."
+      }
+    ],
+    "options": [
+      {
+        "id": "ask-what-it-replaces",
+        "family": "deliver",
+        "label": "Ask which of the tools it replaces",
+        "results": [
+          {
+            "body": "All of them, says the supplier, and none of them, in phase one.",
+            "sets": ["asked-what-it-replaces"],
+            "approach": "truth"
+          }
+        ]
+      },
+      {
+        "id": "ask-for-a-trial",
+        "family": "impress",
+        "label": "Ask for a free trial for the whole floor",
+        "results": [
+          {
+            "body": "The supplier is delighted. The trial is free for thirty days, after which it is not.",
+            "sets": ["asked-for-a-trial"],
+            "approach": "theatre"
+          }
+        ]
+      },
+      {
+        "id": "wear-the-lanyard",
+        "label": "Put on the lanyard",
+        "results": [
+          {
+            "body": "You put on the lanyard. It says Partner on it."
+          }
+        ]
+      },
+      {
+        "id": "agree-with-your-boss",
+        "family": "impress",
+        "label": "Agree with whatever your boss says",
+        "results": [
+          {
+            "body": "Your boss says it looks interesting. You say it looks very interesting.",
+            "sets": ["agreed-with-the-boss"],
+            "approach": "flatter"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "one-team-day",
+    "floor": "team-lead",
+    "pool": true,
+    "title": "One Team Day",
+    "location": "Floor 2, Team Room 2A",
+    "narration": [
+      "A day for the whole of Floor 2 to feel like one team. The teams sit at separate tables, by team, and compete."
+    ],
+    "cast": ["{head}", "{boss}", "admin", "delivery", "analyst", "projects"],
+    "signs": [
+      {
+        "label": "Whose table wins",
+        "text": "{holder}'s table wins the quiz. Nobody had told the others there was a prize.",
+        "clue": "At One Team Day, {holder}'s table won the quiz, and only they knew of the prize."
+      },
+      {
+        "label": "Who keeps score",
+        "text": "{bystander} keeps the score, and checks each total with {holder}."
+      }
+    ],
+    "options": [
+      {
+        "id": "let-your-team-win",
+        "family": "trade",
+        "label": "Let your team win the quiz",
+        "results": [
+          {
+            "body": "Your team wins. The prize is a voucher, which is shared, and is for one.",
+            "sets": ["let-the-team-win"],
+            "approach": "favour"
+          }
+        ]
+      },
+      {
+        "id": "mix-the-tables",
+        "family": "deliver",
+        "label": "Suggest mixing the tables",
+        "results": [
+          {
+            "body": "The tables are mixed. Everyone talks to someone new for ten minutes, and then moves back.",
+            "sets": ["mixed-the-tables"],
+            "approach": "truth"
+          }
+        ]
+      },
+      {
+        "id": "keep-score",
+        "label": "Offer to keep the score",
+        "results": [
+          {
+            "body": "You keep the score. It is close, and then it is not."
+          }
+        ]
+      },
+      {
+        "id": "give-a-speech",
+        "family": "impress",
+        "label": "Give a short speech about being one team",
+        "results": [
+          {
+            "body": "Your speech is short, and is applauded by your own table.",
+            "sets": ["gave-a-speech"],
+            "approach": "theatre"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "budget-planning",
+    "floor": "team-lead",
+    "pool": true,
+    "title": "Budget Planning",
+    "location": "Floor 2, Team Room 2A",
+    "narration": [
+      "The leads plan next year's budget, which is this year's, less ten per cent, plus whatever can be argued for."
+    ],
+    "cast": ["{head}", "{boss}", "admin", "delivery", "analyst", "projects"],
+    "signs": [
+      {
+        "label": "Whose line survives",
+        "text": "{holder}'s line is kept without discussion. {ignored}'s is discussed until it goes.",
+        "clue": "At Budget Planning, {holder}'s line was kept, and {ignored}'s was discussed until it went."
+      },
+      {
+        "label": "Who holds the spreadsheet",
+        "text": "{bystander} has the spreadsheet open, and scrolls when {holder} nods."
+      }
+    ],
+    "options": [
+      {
+        "id": "argue-for-your-team",
+        "family": "deliver",
+        "label": "Argue for your team's real costs",
+        "results": [
+          {
+            "body": "You argue. Your line is kept, at ninety per cent, as a compromise with itself.",
+            "sets": ["argued-for-the-team"],
+            "approach": "truth"
+          }
+        ]
+      },
+      {
+        "id": "offer-the-cut",
+        "family": "impress",
+        "label": "Offer to take the ten per cent from your team",
+        "results": [
+          {
+            "body": "You are thanked for your leadership. Your team is told by the spreadsheet.",
+            "sets": ["offered-the-cut"],
+            "approach": "flatter"
+          }
+        ]
+      },
+      {
+        "id": "pad-the-line",
+        "family": "fabricate",
+        "label": "Add twenty per cent to your line, to be cut back",
+        "results": [
+          {
+            "body": "Your line is cut by ten per cent, and comes out ahead.",
+            "sets": ["padded-the-line"],
+            "approach": "theatre"
+          }
+        ]
+      },
+      {
+        "id": "watch-the-spreadsheet",
+        "label": "Watch the spreadsheet",
+        "results": [
+          {
+            "body": "Cells turn red, then amber, then green, then red."
+          }
+        ]
+      }
+    ]
   }
 ]

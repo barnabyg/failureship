@@ -489,5 +489,60 @@
     "project": {
       "real": "better"
     }
+  },
+  {
+    "id": "meeting-retro",
+    "floor": "junior-employee",
+    "label": "Meeting Room 1B",
+    "description": "A Retrospective, looking back so as not to look forward.",
+    "place": "meeting-room",
+    "cost": "standard",
+    "scene": "retrospective",
+    "oncePerMonth": true,
+    "sets": ["attended-meeting"]
+  },
+  {
+    "id": "meeting-wellbeing",
+    "floor": "junior-employee",
+    "label": "Meeting Room 1B",
+    "description": "A Wellbeing Hour, which is mandatory.",
+    "place": "meeting-room",
+    "cost": "standard",
+    "scene": "wellbeing-hour",
+    "oncePerMonth": true,
+    "sets": ["attended-meeting"]
+  },
+  {
+    "id": "meeting-supplier",
+    "floor": "junior-employee",
+    "label": "Meeting Room 1B",
+    "description": "A Supplier Pitch. There are lanyards.",
+    "place": "meeting-room",
+    "cost": "standard",
+    "scene": "supplier-pitch",
+    "oncePerMonth": true,
+    "sets": ["attended-meeting"]
+  },
+  {
+    "id": "meeting-one-team",
+    "floor": "team-lead",
+    "label": "Team Room 2A",
+    "description": "One Team Day, by team.",
+    "place": "team-room",
+    "cost": "standard",
+    "scene": "one-team-day",
+    "oncePerMonth": true,
+    "sets": ["attended-meeting"]
+  },
+  {
+    "id": "meeting-budget-planning",
+    "floor": "team-lead",
+    "label": "Team Room 2A",
+    "description": "Budget Planning: this year's, less ten per cent.",
+    "place": "team-room",
+    "cost": "standard",
+    "scene": "budget-planning",
+    "oncePerMonth": true,
+    "sets": ["attended-meeting"]
   }
 ]
