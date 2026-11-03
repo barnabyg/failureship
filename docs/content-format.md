@@ -79,31 +79,32 @@ whoever is in that place, such as `"From: Your boss, {boss}"`.
 ## Floors and their months
 
 Each job is done on its own floor, written in [`floors.json`](#floorsjson), and the player's job
-decides which floor they are on. A Scene, Notification, Demand, Move or official story entry can
-say `"floor": "junior-employee"`, a floor's `job`, to belong only to that floor. Without it, it
-comes on any floor. An action is on any floor that has a room of its `place`.
+decides which floor they are on. A Scene, Notification, Demand, action, Move, Notebook event,
+official story entry, Project event or the Project's `input` can say `"floor": "junior-employee"`,
+a floor's `job`, to belong only to that floor. Without it, it comes on any floor. An action is
+offered only on a floor that has a room of its `place`.
 
-`"months": [2, 3]` makes something belong only to those months **on its floor**: the month the
-player is in there, counting every month they have spent on it, so the first month on a new floor
-is month 1 whatever the run's month, and coming back to a floor picks it up where it was left.
-Without `floor`, it means those months on whichever floor the player is on. Without `months`,
-something belongs to every month, so the Monthly Status Report recurs on any floor, and a stalled
-Demand follows the player wherever they go. Only Company Events go by the run's month, under
-`schedule` in [`events.json`](#eventsjson), and the run always ends at `monthsPerRun` in
-[`balance.json`](#balancejson). The Project's `events` and `input` and the Notebook's events take
-`months` but no `floor`.
+`"months": [2, 3]` makes something belong only to those months on its floor: the month the player
+is in there, counting every month they have spent on it. The first month on a new floor is month 1
+whatever the run's month, and coming back to a floor picks it up where it was left. Anything with
+`months` must name its `floor`, so nothing written for one floor's months comes again on another.
+Without `months`, something belongs to every month, so the Monthly Status Report recurs on any
+floor, and a stalled Demand follows the player wherever they go. Only Company Events go by the
+run's month, under `schedule` in [`events.json`](#eventsjson), and the run always ends at
+`monthsPerRun` in [`balance.json`](#balancejson).
 
 A floor is written for as many months as its own Scenes, Notifications and Demands name. Each of
 those months needs at least one of them, and a stay longer than that draws from the floor's
 **pool**: Scenes and Notifications with `"pool": true` and the floor's `floor`, and no `months`.
 Each month past the written ones gets one pool Scene and one pool Notification, if it has them,
 each in a seeded turn, so that every one comes up before any repeats. A pool Scene needs an action
-without `months` to open it, which is offered in the months it is drawn.
+without `months` in a room on its floor, which is offered in the months it is drawn. Only Scenes and
+Notifications can be in a pool.
 
-These are refused: a `floor` that names no floor, a written month with nothing of its own, a floor
-written for fewer months than the run with no pool, a pool item with `months` or no `floor`, a
-Demand or Move in a pool, and a floor other than the one a run starts on with nothing of its own.
-Floor 1 is written for all nine months, so it has no pool yet.
+These are refused: a `floor` that names no floor, `months` with no `floor`, a floor with no Scene,
+Notification or Demand of its own, a written month with none of them, a floor written for fewer
+months than the run with no pool, a pool item with `months` or no `floor`, a pool Scene with no
+action to open it on its floor, and a room `id` used more than once in the tower.
 
 ## `actions.json`
 
