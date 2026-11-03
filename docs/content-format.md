@@ -56,12 +56,17 @@ them for the rest of the run. Buzzwords carry over for the whole run.
 
 ## Your boss and your boss's boss
 
-Your boss is whoever the player reports to on the Org Chart, and your boss's boss is whoever your
-boss reports to. Where the player sits is `you` in [`characters.json`](#charactersjson), and a run
-keeps it from there. Everything written for your boss or your boss's boss goes to whoever holds
-that place at the time: the signs and approaches in [`boss.json`](#bossjson), going over the head
-in [`over-head.json`](#over-headjson), `opinion` and `headOpinion`, their `mood`, and the words
-for them in `places`.
+There are two places above the player on the Org Chart. Your boss is whoever the player reports
+to, and your boss's boss is whoever your boss reports to. A place is not a Character: whoever is
+in it can change when someone moves on the Org Chart. Where the player sits is `you` in
+[`characters.json`](#charactersjson), and a run keeps it from there. If your boss reports to
+nobody, there is no boss's boss, and data that names one is refused.
+
+Everything written for your boss or your boss's boss goes to whoever is in that place at the time:
+the signs and approaches in [`boss.json`](#bossjson), going over the head in
+[`over-head.json`](#over-headjson), `opinion` and `headOpinion`, their `mood`, and the words for
+them in `places`. What was done with one boss stays with them: a Promise to `{boss}` is made to
+whoever is boss then, and the results screen lists only what came across to the boss at the end.
 
 Data names them as `{boss}` and `{head}`, wherever it would name a Character to say who a choice
 or a condition concerns: any condition, `remembers`, news `at`, `factAt`, `repays`, a Promise's
@@ -69,7 +74,7 @@ or a condition concerns: any condition, `remembers`, news `at`, `factAt`, `repay
 it means that person, whatever their place. The Org Chart's own `reportsTo`, a Scene's `cast`,
 Find Out's `sources`, `leaving`, a Hidden Fact's `characters`, a risk's `route.character` and a
 Deal's `with` always name a Character. A `from` line can say `{boss}` or `{head}` for the name of
-whoever holds that place, such as `"From: Your boss, {boss}"`.
+whoever is in that place, such as `"From: Your boss, {boss}"`.
 
 ## `months`, in several files
 
@@ -119,8 +124,8 @@ chosen by their dealt kind.
 
 ## `boss.json`
 
-The signs of how your boss treats you, and what impresses each kind. Your boss is whoever the player
-reports to on the Org Chart, as [above](#your-boss-and-your-bosss-boss).
+The signs of how [your boss](#your-boss-and-your-bosss-boss) treats you, and what impresses each
+kind.
 
 A choice can carry `"opinion": 1` or `-1` to move your boss's hidden belief about you. The
 belief has no number on screen. It shows only through `signs`: when the boss is in a
@@ -175,9 +180,10 @@ Job titles, roles, names, who reports to whom on the Org Chart, and where the pl
 
 - `characters` lists the Characters. Each has an `id`, `name`, `title`, `called`, `role`, and
   `reportsTo`, whom they answer to on the Org Chart, except for whoever is at the top.
-- `you` is the player's own place: `reportsTo` is their boss, a Character.
-- `places` holds the words for whoever is your boss, `boss`, and your boss's boss, `head`, while
-  they are: `called`, and a `title` that says `{title}`, their own job title.
+- `you` is where the player sits: `reportsTo` names a Character, as in
+  [Your boss and your boss's boss](#your-boss-and-your-bosss-boss).
+- `places` holds the words for whoever is in each place, `boss` and `head`, while they are:
+  `called`, and a `title` that says `{title}`, their own job title.
 
 A Character's `called` is how running text refers to them, such as `the Senior Analyst`, and it
 gets a capital only where a sentence starts. While someone is your boss or your boss's boss, the
@@ -352,8 +358,8 @@ The official story, assembled from `entries` according to what you did. Each ent
 
 ## `over-head.json`
 
-Going over your boss's head, which an action with `"overHead": true` does. It goes to your boss's
-boss, whoever your boss reports to on the Org Chart, and is refused if your boss reports to nobody.
+Going over your boss's head, to [your boss's boss](#your-boss-and-your-bosss-boss), which an action
+with `"overHead": true` does. It is refused if there is no boss's boss.
 
 Your boss's boss has a hidden belief of their own, which `signs` show whenever they are in a
 Scene, and which a choice can move with `"headOpinion": 1`. Its own `mood` here says when
