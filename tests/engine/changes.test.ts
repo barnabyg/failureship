@@ -10,7 +10,7 @@ import {
 } from "../../src/engine";
 import { readHiddenTruth } from "../../src/engine/hidden-truth";
 import { plainChoice } from "../../src/ui/later-month";
-import { sceneFixtureRaw } from "./fixture";
+import { sceneFixtureRaw, floorOwn } from "./fixture";
 
 const SEEDS = Array.from({ length: 200 }, (_, i) => i);
 type Way = "practitioner" | "whistleblower" | "left";
@@ -49,6 +49,7 @@ function raw(ways: Way[] = ["practitioner", "whistleblower", "left"]) {
         from: "Someone",
         subject: "BURNS",
         body: "Burn them.",
+        floor: "fixture-job",
         months: [1],
         options: [
           {
@@ -60,6 +61,7 @@ function raw(ways: Way[] = ["practitioner", "whistleblower", "left"]) {
           { id: "spare", label: "Spare them" },
         ],
       },
+      ...floorOwn(),
     ],
     risks: [
       {
@@ -326,6 +328,7 @@ function leavingContent(...who: string[]): Content {
   ];
   content.notifications.unshift({
     id: "test-burn",
+    floor: "junior-employee",
     months: [1],
     from: "A test",
     subject: "A test",

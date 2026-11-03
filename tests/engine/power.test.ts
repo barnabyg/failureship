@@ -6,7 +6,12 @@ import {
   type PlayerView,
 } from "../../src/engine";
 import { readHiddenTruth } from "../../src/engine/hidden-truth";
-import { emptyMonth, emptyMonthRaw, sceneFixtureRaw } from "./fixture";
+import {
+  emptyMonth,
+  emptyMonthRaw,
+  sceneFixtureRaw,
+  floorOwn,
+} from "./fixture";
 
 const SEEDS = Array.from({ length: 200 }, (_, i) => i + 1);
 
@@ -108,7 +113,7 @@ describe("a Scene under the Power Map", () => {
     const raw = sceneFixtureRaw();
     raw.characters.push({ id: "dee", name: "Dee Dunn", title: "Director" });
     raw.hiddenTruth.charactersWithFact = 3;
-    raw.notifications = [];
+    raw.notifications = floorOwn();
     const scene = raw.scenes[0];
     if (!scene) throw new Error("The fixture has no Scene.");
     scene.signs = [

@@ -10,7 +10,6 @@ import {
   coverForGone,
   fillParts,
   fillSubject,
-  inMonth,
   isAvailable,
   isDone,
   isGone,
@@ -23,6 +22,7 @@ import {
   sceneData,
 } from "./reads";
 import { dealsInView } from "./deals";
+import { floorNow, isOn } from "./floors";
 import { gaugesInView, gaugesThisMonth } from "./gauges";
 import { managerOf } from "./places";
 import { promisesInView } from "./promises";
@@ -171,7 +171,7 @@ function toStoryView(
   const { title, reportedHeading, happenedHeading, entries } =
     content.officialStory;
   const told = entries.filter(
-    (e) => inMonth(e, state.month) && matches(state, content, e.when),
+    (e) => isOn(state, content, e) && matches(state, content, e.when),
   );
   const fill = (written: string | undefined) =>
     written === undefined ? [] : [fillParts(state, content, written)];
@@ -182,7 +182,7 @@ function toStoryView(
     .map((e) => e.story);
   return {
     kind: "story",
-    title,
+    title: title.replaceAll("{job}", floorNow(state, content).title),
     reportedHeading,
     happenedHeading,
     reported: [...events, ...told].flatMap((e) => fill(e.reported)),
@@ -355,6 +355,7 @@ export function toView(state: State, world: World): PlayerView {
     ...gaugesInView(state, content),
     standing: standingInView(state, content),
     finalWarning: state.finalWarning,
+    job: { id: state.job, title: floorNow(state, content).title },
     seed: state.seed,
     month: state.month,
     totalMonths: content.balance.monthsPerRun,

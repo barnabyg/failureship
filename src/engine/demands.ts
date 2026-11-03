@@ -1,4 +1,5 @@
 import { chasedIdOf, everyDemand, type Content } from "./content";
+import { recurs } from "./floors";
 import { applyOutcome } from "./outcome";
 import { actionsThisMonth, bossKindOf } from "./reads";
 import { drawFor } from "./rng";
@@ -17,7 +18,7 @@ export function followUpDemands(state: State, content: Content): void {
       open.due = false;
       // After what belongs to this month, and ahead of what recurs.
       const recurring = state.unanswered.findIndex((id) =>
-        content.notifications.some((n) => n.id === id && !n.months),
+        content.notifications.some((n) => n.id === id && recurs(n)),
       );
       state.unanswered.splice(
         recurring < 0 ? state.unanswered.length : recurring,

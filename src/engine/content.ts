@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { colour, id, months, perKind, text } from "./basic-schema";
+import { colour, floor, id, months, perKind, text } from "./basic-schema";
 import { boss, demands, overHead, reputation } from "./boss-schema";
 import {
   changing,
@@ -87,7 +87,7 @@ const project = z.strictObject({
   start: z.strictObject({ real: id, reported: id }),
   /** What happens to the Project whatever the player does, as a month opens. */
   events: z
-    .array(z.strictObject({ months, text, project: projectChange }))
+    .array(z.strictObject({ floor, months, text, project: projectChange }))
     .default([]),
   /** Reported as this, the Project is flagged, and has to be explained. */
   flagged: z.strictObject({ at: id, scene: id, cost: id }).optional(),
@@ -95,6 +95,7 @@ const project = z.strictObject({
   input: z
     .strictObject({
       character: id,
+      floor,
       /** The months in which they can be late. Left out, any month. */
       months,
       chance: perKind(z.number().min(0).max(1)),
@@ -102,6 +103,15 @@ const project = z.strictObject({
       sets: id,
     })
     .optional(),
+});
+
+/** A floor of the tower, which is where one job is done. */
+const floorData = z.strictObject({
+  /** The job done on this floor, which keys it. */
+  job: id,
+  /** The job title, as the header and the official story show it. */
+  title: text,
+  rooms: z.array(room).min(1),
 });
 
 /** A place above the player on the Org Chart, and the words for whoever holds it. */
@@ -176,6 +186,8 @@ export const contentSchema = z.strictObject({
   you: z.strictObject({
     /** Whom the player answers to, who is their boss. */
     reportsTo: id,
+    /** Their job, which decides the floor they are on. */
+    job: id,
   }),
   /** How text refers to whoever holds each place above the player, while they do. */
   places: z.strictObject({ boss: place, head: place }).partial().default({}),
@@ -190,12 +202,14 @@ export const contentSchema = z.strictObject({
   risks: z.array(risk).default([]),
   events: z.array(companyEvent).default([]),
   officialStory: z.strictObject({
+    /** Can say {job}, the player's job title. */
     title: text,
     reportedHeading: text.optional(),
     happenedHeading: text.optional(),
     entries: z.array(storyEntry).min(1),
   }),
-  floor: z.strictObject({ rooms: z.array(room).min(1) }),
+  /** The floors of the tower, from the bottom up, each keyed by its job. */
+  floors: z.array(floorData).min(1),
   ui: z.strictObject({
     hints: z.strictObject({
       notification: text,
@@ -223,7 +237,8 @@ export const contentSchema = z.strictObject({
 });
 
 export type Content = z.infer<typeof contentSchema>;
-export type Room = Content["floor"]["rooms"][number];
+export type Floor = Content["floors"][number];
+export type Room = Floor["rooms"][number];
 export type SceneData = Content["scenes"][number];
 
 /** The Notification that chases a stalled Demand. */

@@ -8,7 +8,7 @@ import {
 } from "../../src/engine";
 import { readHiddenTruth } from "../../src/engine/hidden-truth";
 import { plainChoice } from "../../src/ui/later-month";
-import { emptyMonthRaw } from "./fixture";
+import { emptyMonthRaw, floorOwn } from "./fixture";
 
 const SEEDS = Array.from({ length: 400 }, (_, i) => i);
 const line = (who: string) => `{who} ${who} {what}`;
@@ -95,6 +95,7 @@ function raw(chance = 1) {
         from: "Someone",
         subject: "Offers",
         body: "Say something.",
+        floor: "fixture-job",
         months: [1],
         options: [
           { id: "nothing", label: "Say nothing" },
@@ -107,12 +108,14 @@ function raw(chance = 1) {
         from: "Someone",
         subject: "More offers",
         body: "Say something else.",
+        floor: "fixture-job",
         months: [3],
         options: [
           { id: "nothing-more", label: "Say nothing" },
           { id: "offer-second", label: "Offer", promise: "second" },
         ],
       },
+      ...floorOwn(2),
     ],
   };
 }

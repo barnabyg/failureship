@@ -39,7 +39,7 @@ export function Panel({
       aria-label={title}
     >
       {look && "sent" in look ? (
-        <MailHead sent={look.sent} from={eyebrow} subject={h2} />
+        <MailHead sent={look.sent} to={look.to} from={eyebrow} subject={h2} />
       ) : (
         <>
           {look && <Masthead issue={look.issue} />}

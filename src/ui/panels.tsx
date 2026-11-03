@@ -1,7 +1,7 @@
 import { panelText } from "../content";
 import type { Choice, PlayerView, StepView } from "../engine";
 import { FindOutPanel } from "./FindOutPanel";
-import { ConfidentialStamp } from "./Intranet";
+import { ConfidentialStamp, type Look, type Sent } from "./Intranet";
 import { Continue, Panel, Reaction, Stakes } from "./Panel";
 import { ResultsPanel } from "./ResultsPanel";
 import { ScenePanel } from "./ScenePanel";
@@ -55,6 +55,8 @@ interface StepPanelProps {
 /** The panel for the current step of the month, if it needs one. */
 export function StepPanel({ view, onChoose }: StepPanelProps) {
   const { step } = view;
+  /** An e-mail to the player, by their job title. */
+  const mail = (sent: Sent): Look => ({ sent, to: view.job.title });
   switch (step.kind) {
     case "actions":
       return null;
@@ -64,7 +66,7 @@ export function StepPanel({ view, onChoose }: StepPanelProps) {
           testId="panel-notification"
           eyebrow={step.from}
           title={step.subject}
-          look={{ sent: "notification" }}
+          look={mail("notification")}
         >
           <p>{step.body}</p>
           <div className="options">
@@ -106,11 +108,7 @@ export function StepPanel({ view, onChoose }: StepPanelProps) {
       );
     case "dialog":
       return (
-        <Panel
-          testId="panel-dialog"
-          title={step.title}
-          look={{ sent: "dialog" }}
-        >
+        <Panel testId="panel-dialog" title={step.title} look={mail("dialog")}>
           {step.lines.map((line) => (
             <p key={line.text}>
               {line.speaker !== undefined && <strong>{line.speaker}: </strong>}
@@ -129,11 +127,7 @@ export function StepPanel({ view, onChoose }: StepPanelProps) {
       );
     case "notice":
       return (
-        <Panel
-          testId="panel-notice"
-          title={step.title}
-          look={{ sent: "notice" }}
-        >
+        <Panel testId="panel-notice" title={step.title} look={mail("notice")}>
           <p>{step.body}</p>
           <Reaction text={step.reaction} />
           {step.verdict !== undefined && (
@@ -150,7 +144,7 @@ export function StepPanel({ view, onChoose }: StepPanelProps) {
           testId="panel-move"
           eyebrow={step.from}
           title={step.title}
-          look={{ sent: "move" }}
+          look={mail("move")}
         >
           <p>{step.body}</p>
           <Continue onChoose={onChoose} />
@@ -162,7 +156,7 @@ export function StepPanel({ view, onChoose }: StepPanelProps) {
           testId="panel-event"
           eyebrow={step.from}
           title={step.title}
-          look={{ sent: "event" }}
+          look={mail("event")}
         >
           <p>{step.body}</p>
           <Continue onChoose={onChoose} />

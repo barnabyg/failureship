@@ -22,6 +22,9 @@ interface RawNotification {
   body: string;
   options: RawOption[];
   months?: number[];
+  floor?: string;
+  pool?: boolean;
+  when?: RawCondition;
 }
 
 type RawCondition = Record<string, unknown>;
@@ -54,6 +57,8 @@ interface RawScene {
   options: RawSceneOption[];
   script?: string;
   months?: number[];
+  floor?: string;
+  pool?: boolean;
   verdict?: { warm: string; neutral: string; cold: string };
 }
 
@@ -65,13 +70,44 @@ interface RawMove {
   when?: RawCondition;
   priority?: boolean;
   sets?: string[];
+  floor?: string;
   months?: number[];
 }
 
 interface RawStoryEntry {
+  floor?: string;
   when?: RawCondition;
   reported?: string;
   happened?: string;
+}
+
+/** A Notification of the fixture's floor that never arrives. */
+function unseen(id: string): RawNotification {
+  return {
+    id,
+    floor: "fixture-job",
+    when: { flag: "never-set" },
+    from: "Facilities",
+    subject: "NEVER-SEEN",
+    body: "Never seen.",
+    options: [{ id: "noted", label: "Noted" }],
+  };
+}
+
+/**
+ * What every floor needs of its own, for the fixture's floor, made of
+ * Notifications that never arrive, so that a test sees only those it adds: a
+ * pool, and one for each month given that a test's own months leave out. A test
+ * that replaces the Notifications keeps these.
+ */
+export function floorOwn(...leftOut: number[]): RawNotification[] {
+  return [
+    { ...unseen("fixture-floor-own"), pool: true },
+    ...leftOut.map((month) => ({
+      ...unseen(`fixture-floor-month-${String(month)}`),
+      months: [month],
+    })),
+  ];
 }
 
 /**
@@ -151,6 +187,7 @@ export function fixtureRaw() {
       ],
       start: { real: "fair", reported: "good" },
       events: [] as {
+        floor: string;
         months: number[];
         text: string;
         project?: { real?: string; reported?: string };
@@ -195,7 +232,7 @@ export function fixtureRaw() {
       role?: string;
       called?: string;
     }[],
-    you: { reportsTo: "ana" },
+    you: { reportsTo: "ana", job: "fixture-job" },
     behaviours: [] as {
       id: string;
       text: string;
@@ -207,7 +244,7 @@ export function fixtureRaw() {
       };
     }[],
     scenes: [] as RawScene[],
-    notifications,
+    notifications: [...notifications, ...floorOwn()],
     dialogs: [
       {
         id: "pub",
@@ -229,7 +266,13 @@ export function fixtureRaw() {
       title: "Official story",
       entries: [{ reported: "All is well." }] as RawStoryEntry[],
     },
-    floor: { rooms: ["kettle", "desk", "copier", "plant"].map(room) },
+    floors: [
+      {
+        job: "fixture-job",
+        title: "FIXTURE-JOB",
+        rooms: ["kettle", "desk", "copier", "plant"].map(room),
+      },
+    ] as RawFloor[],
     ui: {
       hints: {
         notification: "Answer the Notification.",
@@ -331,6 +374,22 @@ export function action(id: string) {
   };
 }
 
+interface RawFloor {
+  job: string;
+  title: string;
+  rooms: ReturnType<typeof room>[];
+}
+
+/** The floors, with one more room on the first. */
+export function withRoom(
+  floors: readonly RawFloor[],
+  added: ReturnType<typeof room>,
+): RawFloor[] {
+  return floors.map((f, i) =>
+    i === 0 ? { ...f, rooms: [...f.rooms, added] } : f,
+  );
+}
+
 export function room(id: string, index: number) {
   return {
     id,
@@ -390,7 +449,7 @@ export function sceneFixtureRaw() {
       },
       ...raw.actions,
     ],
-    floor: { rooms: [...raw.floor.rooms, room("meeting", 9)] },
+    floors: withRoom(raw.floors, room("meeting", 9)),
   };
 }
 
@@ -488,7 +547,7 @@ export function fixture(): Content {
 
 /** A month with no Notifications, for tests about spending actions. */
 export function emptyMonthRaw() {
-  return { ...fixtureRaw(), notifications: [] };
+  return { ...fixtureRaw(), notifications: floorOwn() };
 }
 
 export function emptyMonth(): Content {

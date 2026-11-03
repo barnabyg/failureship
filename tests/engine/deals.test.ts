@@ -9,7 +9,7 @@ import {
 } from "../../src/engine";
 import { readHiddenTruth, type PowerMap } from "../../src/engine/hidden-truth";
 import { plainChoice } from "../../src/ui/later-month";
-import { emptyMonthRaw } from "./fixture";
+import { emptyMonthRaw, floorOwn } from "./fixture";
 
 const SEEDS = Array.from({ length: 200 }, (_, i) => i);
 const lines = (written: string) => ({
@@ -109,12 +109,14 @@ function raw({ gives = 1, favours = 0 } = {}) {
         from: "Ben",
         subject: "A deal",
         body: "Ben wants a deal.",
+        floor: "fixture-job",
         months: [1],
         options: [
           { id: "no", label: "No" },
           { id: "shake", label: "Shake on it", deal: "word" },
         ],
       },
+      ...floorOwn(),
     ],
   };
 }

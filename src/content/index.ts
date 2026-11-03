@@ -10,7 +10,7 @@ import demands from "../../content/demands.json";
 import dialogs from "../../content/dialogs.json";
 import events from "../../content/events.json";
 import families from "../../content/families.json";
-import floor from "../../content/floor-1.json";
+import floors from "../../content/floors.json";
 import gauges from "../../content/gauges.json";
 import hiddenTruth from "../../content/hidden-truth.json";
 import mistakes from "../../content/mistakes.json";
@@ -74,7 +74,7 @@ export const gameContent = parseContent({
   risks,
   events,
   officialStory,
-  floor,
+  floors,
   ui: {
     hints,
     actionCount,
@@ -100,7 +100,6 @@ const panelSchema = z.strictObject(
       "title",
       "tagline",
       "jobHeading",
-      "jobTitle",
       "monthHeading",
       "monthLabel",
       "actionsHeading",

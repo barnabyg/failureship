@@ -7,7 +7,7 @@ import {
   type PlayerView,
 } from "../../src/engine";
 import { readHiddenTruth } from "../../src/engine/hidden-truth";
-import { sceneFixtureRaw } from "./fixture";
+import { sceneFixtureRaw, floorOwn } from "./fixture";
 
 function bossFixtureRaw() {
   const raw = sceneFixtureRaw();
@@ -155,6 +155,7 @@ describe("the boss's belief", () => {
             { id: "no", label: "No", opinion: -1, result: notice },
           ],
         },
+        ...floorOwn(),
       ],
     };
     const run = startRun({ seed: 1, content: parseContent(raw) });

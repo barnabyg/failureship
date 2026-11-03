@@ -52,14 +52,16 @@ function checkScripts({ content, sceneScripts }: World): void {
 
 /** A deal with nothing yet done in it, before its first month opens. */
 function dealtState(seed: number, content: Content): State {
+  const { job } = content.you;
+  const where = { seed, job, monthsOnFloor: { [job]: 1 } };
   const dealt = dealCharacters(seed, content);
   const power = dealPowerMap(dealt.next, content);
   const motives = dealMotives(power.next, dealt.characters, content);
   return {
-    seed,
+    ...where,
     rng: motives.next,
     month: 1,
-    ...freshMonth(content, 1),
+    ...freshMonth(where, content),
     buzzwords: [],
     claims: [],
     movesLanded: [],

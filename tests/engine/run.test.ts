@@ -14,6 +14,7 @@ import {
   emptyMonth,
   emptyMonthRaw,
   fixtureRaw,
+  floorOwn,
 } from "./fixture";
 
 const next: Choice = { type: "continue" };
@@ -115,7 +116,7 @@ describe("a run of months", () => {
     const raw = buzzwordFixtureRaw();
     raw.balance.monthsPerRun = 4;
     const invite = raw.notifications[0];
-    if (invite) invite.months = [1];
+    if (invite) Object.assign(invite, { floor: "fixture-job", months: [1] });
     const run = startRun({ seed: 1, content: parseContent(raw) });
     run.choose(pub);
     for (const month of [2, 3, 4]) {
@@ -185,7 +186,8 @@ describe("content restricted to particular months", () => {
   it("delivers a Notification only in its months", () => {
     const raw = fixtureRaw();
     const invite = raw.notifications[0];
-    if (invite) invite.months = [2];
+    if (invite) Object.assign(invite, { floor: "fixture-job", months: [2] });
+    raw.notifications.push(...floorOwn(1));
     const run = startRun({ seed: 1, content: parseContent(raw) });
 
     expect(run.view().step.kind).toBe("actions");
@@ -197,7 +199,7 @@ describe("content restricted to particular months", () => {
   it("offers an action only in its months", () => {
     const raw = emptyMonthRaw();
     const kettle = raw.actions[0] as { months?: number[] };
-    kettle.months = [2];
+    Object.assign(kettle, { floor: "fixture-job", months: [2] });
     const run = startRun({ seed: 1, content: parseContent(raw) });
 
     expect(hasHotspot(run.view(), "kettle")).toBe(false);
@@ -211,9 +213,9 @@ describe("content restricted to particular months", () => {
 
   it("opens a Scene only in its months", () => {
     const raw = closingFixtureRaw();
-    raw.notifications = [];
+    raw.notifications = floorOwn(1);
     const scene = raw.scenes[0];
-    if (scene) scene.months = [2];
+    if (scene) Object.assign(scene, { floor: "fixture-job", months: [2] });
     const run = startRun({ seed: 1, content: parseContent(raw) });
 
     expect(hasHotspot(run.view(), "meeting")).toBe(false);
@@ -224,9 +226,16 @@ describe("content restricted to particular months", () => {
 
   it("lands a Move only in its months", () => {
     const raw = closingFixtureRaw();
-    raw.notifications = [];
+    raw.notifications = floorOwn();
     raw.moves = [
-      { id: "later", from: "Ben", title: "LATER", body: "Later.", months: [2] },
+      {
+        id: "later",
+        from: "Ben",
+        title: "LATER",
+        body: "Later.",
+        floor: "fixture-job",
+        months: [2],
+      },
     ];
     const run = startRun({ seed: 1, content: parseContent(raw) });
     const stepsUntilStory = () => {
@@ -249,27 +258,38 @@ describe("content restricted to particular months", () => {
       "a Notification",
       (raw: Raw) => {
         const invite = raw.notifications[0];
-        if (invite) invite.months = [9];
+        if (invite)
+          Object.assign(invite, { floor: "fixture-job", months: [9] });
       },
     ],
     [
       "an action",
       (raw: Raw) => {
-        (raw.actions[1] as { months?: number[] }).months = [9];
+        Object.assign(raw.actions[1] ?? {}, {
+          floor: "fixture-job",
+          months: [9],
+        });
       },
     ],
     [
       "a Scene",
       (raw: Raw) => {
         const scene = raw.scenes[0];
-        if (scene) scene.months = [9];
+        if (scene) Object.assign(scene, { floor: "fixture-job", months: [9] });
       },
     ],
     [
       "a Move",
       (raw: Raw) => {
         raw.moves = [
-          { id: "m", from: "F", title: "T", body: "B", months: [9] },
+          {
+            id: "m",
+            from: "F",
+            title: "T",
+            body: "B",
+            floor: "fixture-job",
+            months: [9],
+          },
         ];
       },
     ],
@@ -283,8 +303,8 @@ describe("content restricted to particular months", () => {
   it("rejects an action set in months when its Scene never opens", () => {
     const raw = closingFixtureRaw();
     const scene = raw.scenes[0];
-    if (scene) scene.months = [1];
-    (raw.actions[0] as { months?: number[] }).months = [2];
+    if (scene) Object.assign(scene, { floor: "fixture-job", months: [1] });
+    Object.assign(raw.actions[0] ?? {}, { floor: "fixture-job", months: [2] });
 
     expect(() => parseContent(raw)).toThrow(/never opens/);
   });

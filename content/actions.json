@@ -8,10 +8,12 @@
     "scene": "meeting",
     "oncePerMonth": true,
     "sets": ["attended-meeting"],
+    "floor": "junior-employee",
     "months": [1]
   },
   {
     "id": "meeting-lessons",
+    "floor": "junior-employee",
     "months": [2],
     "label": "Meeting Room 1B",
     "description": "A Lessons Learned Review. Nobody is to be blamed, and your boss would like to know who.",
@@ -23,6 +25,7 @@
   },
   {
     "id": "meeting-town-hall",
+    "floor": "junior-employee",
     "months": [3],
     "label": "Meeting Room 1B",
     "description": "The All-Colleague Town Hall, with the Chief Executive on a large screen.",
@@ -34,6 +37,7 @@
   },
   {
     "id": "meeting-budget",
+    "floor": "junior-employee",
     "months": [4],
     "label": "Meeting Room 1B",
     "description": "The Budget Round. Thirty per cent has to come from somewhere, and you are near somewhere.",
@@ -45,6 +49,7 @@
   },
   {
     "id": "meeting-quarterly",
+    "floor": "junior-employee",
     "months": [5],
     "label": "Meeting Room 1B",
     "description": "The Quarterly Business Review, at which every team shows an arrow going up.",
@@ -56,6 +61,7 @@
   },
   {
     "id": "meeting-calibration",
+    "floor": "junior-employee",
     "months": [9],
     "label": "Meeting Room 1B",
     "description": "Annual Calibration, at which nobody is compared with anybody.",
@@ -243,6 +249,7 @@
   },
   {
     "id": "meeting-metric",
+    "floor": "junior-employee",
     "months": [6],
     "label": "Meeting Room 1B",
     "description": "The first results of your boss's new metric, which nobody has been asked to understand.",
@@ -254,6 +261,7 @@
   },
   {
     "id": "meeting-hiring",
+    "floor": "junior-employee",
     "months": [7],
     "label": "Meeting Room 1B",
     "description": "A Recruitment Panel. You are on it, for balance, and one of the candidates knows you.",
@@ -265,6 +273,7 @@
   },
   {
     "id": "meeting-speak-up",
+    "floor": "junior-employee",
     "months": [8],
     "label": "Meeting Room 1B",
     "description": "A Listening Session, in complete confidence, in front of everybody. There are biscuits.",

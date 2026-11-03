@@ -8,7 +8,7 @@ import {
   type PlayerView,
   type Run,
 } from "../../src/engine";
-import { fixtureRaw } from "./fixture";
+import { fixtureRaw, floorOwn } from "./fixture";
 
 const mistakes = {
   finalWarning: { title: "WARNED", body: "One more." },
@@ -33,6 +33,7 @@ function raw(thread: object = {}, billChange: object = {}) {
   base.notifications = [
     {
       id: "offer",
+      floor: "fixture-job",
       months: [1],
       from: "HR",
       subject: "An offer",
@@ -42,6 +43,7 @@ function raw(thread: object = {}, billChange: object = {}) {
         { id: "leave-it", label: "Leave it" },
       ],
     },
+    ...floorOwn(),
   ];
   return {
     ...base,

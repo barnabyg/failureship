@@ -10,7 +10,7 @@ import {
 } from "../../src/engine";
 import { lowerOnMap, raiseOnMap, type PowerMap } from "../../src/engine/deal";
 import { readHiddenTruth } from "../../src/engine/hidden-truth";
-import { fixtureRaw } from "./fixture";
+import { fixtureRaw, floorOwn } from "./fixture";
 
 const story = { reported: "EVENT-REPORTED", happened: "EVENT-HAPPENED" };
 const certain = { believer: 1, incompetent: 1, practitioner: 1 };
@@ -30,7 +30,7 @@ function outside(extra: object = {}) {
 function raw(events: object[], extra: object = {}) {
   const base = fixtureRaw();
   base.balance.monthsPerRun = 4;
-  base.notifications = [];
+  base.notifications = floorOwn();
   base.moves = [{ id: "m", from: "F", title: "A-MOVE", body: "B" }];
   return { ...base, events, ...extra };
 }
@@ -118,6 +118,7 @@ describe("a Company Event from a hidden risk", () => {
       notifications: [
         {
           id: "budget",
+          floor: "fixture-job",
           months: [1],
           from: "Finance",
           subject: "A budget",
@@ -127,6 +128,7 @@ describe("a Company Event from a hidden risk", () => {
             { id: "keep", label: "Keep it" },
           ],
         },
+        ...floorOwn(),
       ],
       risks: [
         {

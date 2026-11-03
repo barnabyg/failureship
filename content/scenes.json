@@ -163,10 +163,12 @@
         ]
       }
     ],
+    "floor": "junior-employee",
     "months": [1]
   },
   {
     "id": "lessons-learned",
+    "floor": "junior-employee",
     "months": [2],
     "title": "Lessons Learned Review",
     "location": "Floor 1, Meeting Room 1B",
@@ -406,6 +408,7 @@
   },
   {
     "id": "town-hall",
+    "floor": "junior-employee",
     "months": [3],
     "title": "All-Colleague Town Hall",
     "location": "Floor 1, Meeting Room 1B, by video link",
@@ -547,6 +550,7 @@
   },
   {
     "id": "budget-round",
+    "floor": "junior-employee",
     "months": [4],
     "title": "Budget Round",
     "location": "Floor 1, Meeting Room 1B",
@@ -780,6 +784,7 @@
   },
   {
     "id": "quarterly-review",
+    "floor": "junior-employee",
     "months": [5],
     "title": "Quarterly Business Review",
     "location": "Floor 1, Meeting Room 1B",
@@ -1059,6 +1064,7 @@
   },
   {
     "id": "calibration",
+    "floor": "junior-employee",
     "months": [9],
     "title": "Annual Calibration",
     "location": "Floor 1, Meeting Room 1B",
@@ -1284,6 +1290,7 @@
   },
   {
     "id": "metric-review",
+    "floor": "junior-employee",
     "months": [6],
     "title": "The New Metric",
     "location": "Floor 1, Meeting Room 1B",
@@ -1391,6 +1398,7 @@
   },
   {
     "id": "hiring-panel",
+    "floor": "junior-employee",
     "months": [7],
     "title": "Recruitment Panel",
     "location": "Floor 1, Meeting Room 1B",
@@ -1500,6 +1508,7 @@
   },
   {
     "id": "speak-up-session",
+    "floor": "junior-employee",
     "months": [8],
     "title": "Speak Up Listening Session",
     "location": "Floor 1, Meeting Room 1B",

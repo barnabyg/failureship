@@ -1,16 +1,10 @@
 import type { Condition, Content, Kind, Mood, SceneData } from "./content";
 import { YOU, type PowerMap } from "./deal";
+import { isOn, isOnFloor } from "./floors";
 import { bossOf, placeOf, whoIs } from "./places";
 import { calledBy, capitalised, sayFrom, sayPeople, titleOf } from "./say";
 import type { State, World } from "./state";
 import type { Person } from "./view";
-
-export function inMonth(
-  item: { months?: number[] | undefined },
-  month: number,
-) {
-  return item.months === undefined || item.months.includes(month);
-}
 
 export function methodOf(content: Content, id: string) {
   const method = content.sources.methods.find((m) => m.id === id);
@@ -281,8 +275,9 @@ export function actionsThisMonth(state: State, content: Content) {
     const nobodyThere =
       method !== undefined && sourcesHere(state, method.sources).length === 0;
     return (
-      inMonth(a, state.month) &&
-      (!scene || inMonth(scene, state.month)) &&
+      isOnFloor(state, content, a.place) &&
+      isOn(state, content, a) &&
+      (!scene || isOn(state, content, scene)) &&
       !nobodyThere &&
       !mentionsGone(state, content, `${a.label} ${a.description}`)
     );

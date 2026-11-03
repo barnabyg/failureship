@@ -277,6 +277,8 @@ export interface PlayerView {
   } | null;
   /** Whether one more big mistake gets the player fired. */
   finalWarning: boolean;
+  /** The player's job, whose id keys the floor the tower draws. */
+  job: { id: string; title: string };
   seed: number;
   month: number;
   totalMonths: number;

@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useState } from "react";
 import { gameContent, panelText } from "../content";
 import {
+  floorOf,
   parseSeed,
   resumeRun,
   startRun,
@@ -128,7 +129,7 @@ export function App() {
   return (
     <main className="game">
       <TowerStage
-        rooms={gameContent.floor.rooms}
+        rooms={floorOf(gameContent, view.job.id).rooms}
         hotspots={view.hotspots}
         legal={view.choices}
         onChoose={choose}

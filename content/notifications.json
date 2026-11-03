@@ -25,10 +25,12 @@
         }
       }
     ],
+    "floor": "junior-employee",
     "months": [1]
   },
   {
     "id": "training",
+    "floor": "junior-employee",
     "months": [2],
     "from": "From: The Office Co-ordinator, Marjorie Tull",
     "subject": "ACTION REQUIRED: Speaking Up (mandatory, 45 minutes)",
@@ -65,6 +67,7 @@
   },
   {
     "id": "town-hall-seat",
+    "floor": "junior-employee",
     "months": [3],
     "from": "From: Office of the Chief Executive",
     "subject": "All-Colleague Town Hall: seats available",
@@ -94,6 +97,7 @@
   },
   {
     "id": "deck-for-upstairs",
+    "floor": "junior-employee",
     "months": [5],
     "from": "From: Your boss, {boss}",
     "subject": "Slides for upstairs, by tomorrow",
@@ -135,6 +139,7 @@
   },
   {
     "id": "self-assessment",
+    "floor": "junior-employee",
     "months": [9],
     "from": "From: Human Resources",
     "subject": "Your Self-Assessment closes today",
@@ -310,6 +315,7 @@
   },
   {
     "id": "made-up-schedule",
+    "floor": "junior-employee",
     "months": [6],
     "from": "From: Your boss, {boss}",
     "subject": "Schedule for upstairs: dates only, please",
@@ -352,6 +358,7 @@
   },
   {
     "id": "desk-moves",
+    "floor": "junior-employee",
     "months": [4],
     "from": "From: Facilities",
     "subject": "Workplace Refresh: please confirm your team's desks",
@@ -437,6 +444,7 @@
   },
   {
     "id": "word-for-a-word",
+    "floor": "junior-employee",
     "months": [7],
     "from": "From: The Office Co-ordinator, Marjorie Tull",
     "subject": "A quick word, if you have a moment",
@@ -466,6 +474,7 @@
   },
   {
     "id": "shared-drive",
+    "floor": "junior-employee",
     "months": [7],
     "from": "From: IT Services",
     "subject": "The shared drive is 98% full",
@@ -494,6 +503,7 @@
   },
   {
     "id": "bonus-pot",
+    "floor": "junior-employee",
     "months": [6],
     "from": "From: Your boss, {boss}",
     "subject": "Bonus pot: your recommendation, by tonight",
@@ -590,6 +600,7 @@
   },
   {
     "id": "underspend",
+    "floor": "junior-employee",
     "months": [8],
     "from": "From: Finance",
     "subject": "Use it or lose it: your underspend, by Friday",
@@ -657,6 +668,7 @@
   },
   {
     "id": "laptops-request",
+    "floor": "junior-employee",
     "months": [3],
     "from": "From: The Senior Analyst, Priya Venn",
     "subject": "Our laptops, again",

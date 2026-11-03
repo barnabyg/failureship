@@ -8,8 +8,8 @@ export type Sent = Extract<
   "notification" | "dialog" | "notice" | "move" | "event"
 >;
 
-/** How a panel looks: an e-mail, or an issue of the staff newsletter. */
-export type Look = { sent: Sent } | { issue: number };
+/** An e-mail, sent to the player by their job title, or an issue of the newsletter. */
+export type Look = { sent: Sent; to: string } | { issue: number };
 
 /** What each kind of e-mail is stamped, if anything. A Company Event goes to all staff. */
 const stamps: Partial<Record<Sent, string>> = {
@@ -62,13 +62,15 @@ function MailRow({ text }: { text: string }) {
   );
 }
 
-/** An e-mail on the company intranet: letterhead, who it is from, and its subject. */
+/** An e-mail on the company intranet: letterhead, who it is from and to, and its subject. */
 export function MailHead({
   sent,
+  to,
   from,
   subject,
 }: {
   sent: Sent;
+  to: string;
   from: string | undefined;
   subject: ReactNode;
 }) {
@@ -84,7 +86,7 @@ export function MailHead({
         {from !== undefined && <MailRow text={from} />}
         <p className="mail-row">
           <span className="mail-label">{panelText.mailToLabel}</span>
-          <span>{panelText.jobTitle}</span>
+          <span>{to}</span>
         </p>
         <div className="mail-row mail-subject">
           <span className="mail-label">{panelText.mailSubjectLabel}</span>

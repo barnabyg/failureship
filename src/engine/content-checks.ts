@@ -24,6 +24,7 @@ import {
   type Content,
   type SceneData,
 } from "./content";
+import { findBrokenFloors } from "./floor-checks";
 import { bossesAtStart, meantBy } from "./places";
 import {
   dependsOnHiddenTruth,
@@ -55,7 +56,9 @@ export function parseContent(raw: unknown): Content {
 }
 
 function findBrokenReferences(content: Content): string[] {
-  const rooms = new Set(content.floor.rooms.map((r) => r.id));
+  const rooms = new Set(
+    content.floors.flatMap((f) => f.rooms).map((r) => r.id),
+  );
   const dialogs = new Set(content.dialogs.map((d) => d.id));
   const buzzwords = new Set(content.buzzwords.map((b) => b.id));
   const scenes = new Set(content.scenes.map((s) => s.id));
@@ -157,6 +160,7 @@ function findBrokenReferences(content: Content): string[] {
     }
   };
 
+  problems.push(...findBrokenFloors(content));
   problems.push(...findBrokenDeal(content, characters));
   problems.push(...findBrokenBehaviours(content));
   problems.push(...findBrokenBossSigns(content));

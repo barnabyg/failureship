@@ -4,6 +4,7 @@ import { landEvent, scheduleEvents } from "./company-events";
 import { everyNotification, type Content } from "./content";
 import { dealsFallDue } from "./deals";
 import { dealWithAbsence, followUpDemands } from "./demands";
+import { isOn, recurs, startMonthOnFloor, type Whereabouts } from "./floors";
 import { closeGauges } from "./gauges";
 import { applyOutcome } from "./outcome";
 import { bossOf } from "./places";
@@ -13,7 +14,6 @@ import {
   actionsThisMonth,
   beliefOf,
   costOf,
-  inMonth,
   isAvailable,
   isGone,
   matches,
@@ -25,15 +25,15 @@ import { drawFor, pick } from "./rng";
 import { openScene } from "./scenes";
 import type { MonthRecord, State, Step, World } from "./state";
 
-export function freshMonth(content: Content, month: number): MonthRecord {
+export function freshMonth(where: Whereabouts, content: Content): MonthRecord {
   return {
     noted: [],
     spent: 0,
     visited: [],
     // What belongs to this month first, and what recurs, like the report, last.
     unanswered: [...content.notifications, ...(content.demands?.items ?? [])]
-      .filter((n) => inMonth(n, month))
-      .sort((a, b) => Number(!a.months) - Number(!b.months))
+      .filter((n) => isOn(where, content, n))
+      .sort((a, b) => Number(recurs(a)) - Number(recurs(b)))
       .map((n) => n.id),
     flags: [],
     moveLanded: false,
@@ -56,14 +56,14 @@ export function openMonth(state: State, content: Content): void {
   const colleague = state.truth.characters.find(
     (c) => c.id === input?.character && !isGone(state, c.id),
   );
-  if (input && colleague && inMonth(input, state.month)) {
+  if (input && colleague && isOn(state, content, input)) {
     const value = drawFor(state.seed, "report-input", state.month);
     if (value < input.chance[colleague.kind]) {
       applyOutcome(state, content, { sets: [input.sets] }, input.sets);
     }
   }
   for (const event of content.project.events) {
-    if (inMonth(event, state.month)) {
+    if (isOn(state, content, event)) {
       applyOutcome(state, content, { project: event.project }, event.text);
       state.project.news.push({ month: state.month, text: event.text });
     }
@@ -77,6 +77,7 @@ export function leaveStory(state: State, world: World): void {
     return;
   }
   state.month += 1;
+  startMonthOnFloor(state);
   // What the boss thinks is mostly about lately, so it stays worth reading.
   // Adding zero turns -0 into 0, which is all that a save can hold.
   const character = bossOf(state, world.content);
@@ -84,7 +85,7 @@ export function leaveStory(state: State, world: World): void {
     Math.trunc(
       beliefOf(state, character) * world.content.balance.bossBeliefKeeps,
     ) + 0;
-  Object.assign(state, freshMonth(world.content, state.month));
+  Object.assign(state, freshMonth(state, world.content));
   openMonth(state, world.content);
   state.step = nextStep(state, world);
 }
@@ -145,7 +146,7 @@ function landMove(state: State, content: Content): Step | null {
   state.moveLanded = true;
   const eligible = content.moves.filter(
     (m) =>
-      inMonth(m, state.month) &&
+      isOn(state, content, m) &&
       !mentionsGone(state, content, m.from) &&
       matches(state, content, m.when),
   );

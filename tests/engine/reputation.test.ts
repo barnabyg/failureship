@@ -9,7 +9,7 @@ import {
   type Run,
 } from "../../src/engine";
 import { readHiddenTruth, type PowerMap } from "../../src/engine/hidden-truth";
-import { fixtureRaw } from "./fixture";
+import { fixtureRaw, floorOwn } from "./fixture";
 
 const sign = (id: string, warm: number, neutral: number, cold: number) => ({
   id,
@@ -37,6 +37,7 @@ function raw(travel: object = {}, tone = "bad", at = ["ben"]) {
   base.notifications = [
     {
       id: "deed",
+      floor: "fixture-job",
       months: [1],
       from: "F",
       subject: "S",
@@ -50,6 +51,7 @@ function raw(travel: object = {}, tone = "bad", at = ["ben"]) {
         { id: "leave-it", label: "Leave it" },
       ],
     },
+    ...floorOwn(),
   ];
   return { ...base, reputation: reputation(travel) };
 }
