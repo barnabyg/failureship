@@ -13,22 +13,39 @@ function playedTo(seed: number, month: string, choose: string | null = FAKED) {
   return { run, view, truth: readHiddenTruth(run) };
 }
 
-/** Plays a whole run plainly, taking that option once, and keeps every view. */
+/**
+ * Plays a whole run plainly, taking each option named, a comma-separated list,
+ * once and in order, and keeps every view.
+ */
 function playAll(seed: number, choose: string | null): PlayerView[] {
   const run = startRun({ seed, content: gameContent });
   let view = run.view();
   const views = [view];
-  let wanted = choose;
+  const wanted = choose ? choose.split(",") : [];
   while (view.choices.length > 0) {
     const named = view.choices.find(
-      (c) => "optionId" in c && c.optionId === wanted,
+      (c) => "optionId" in c && c.optionId === wanted[0],
     );
-    if (named) wanted = null;
+    if (named) wanted.shift();
     view = run.choose(named ?? plainChoice(view));
     views.push(view);
   }
+  expect(wanted).toEqual([]);
   return views;
 }
+
+/**
+ * On seed 2, the Senior Analyst's Hidden Fact is dangerous, and so is the
+ * Project Co-ordinator's. Playing plainly blames the Project Co-ordinator in
+ * month 2, which is a Final Warning, so these take the blame instead.
+ */
+const CLEAN = `take-the-blame,${FAKED}`;
+const SINK = "sink-the-projects-candidate";
+const EXAMPLE = "blame-your-analyst";
+const REPORT = "report-the-analyst";
+
+const noticed = (views: PlayerView[], title: string) =>
+  views.find((v) => v.step.kind === "notice" && v.step.title === title);
 
 describe("the first promotion in the game", () => {
   // The browser tests rely on these two deals.
@@ -138,15 +155,88 @@ describe("eighteen months on either floor", () => {
     view.step.options.length >= 2;
 
   it.each([
-    ["Floor 1, all the way", 3, null],
-    ["Floor 2 from month 8", 2, FAKED],
-  ])("leaves a real choice every month: %s", (_name, seed, choose) => {
+    ["Floor 1, all the way", 3, null, "junior-employee"],
+    ["Floor 2 from month 8", 2, FAKED, "team-lead"],
+    [
+      "Floor 2 in months 8 and 9, and Floor 1 again from month 10",
+      2,
+      `${CLEAN},${EXAMPLE}`,
+      "junior-employee",
+    ],
+  ])("leaves a real choice every month: %s", (_name, seed, choose, job) => {
     const views = playAll(seed, choose);
 
     const months = new Set(views.filter(choiceIn).map((v) => v.month));
     expect([...months].sort((a, b) => a - b)).toEqual(
       Array.from({ length: gameContent.balance.monthsPerRun }, (_, i) => i + 1),
     );
-    expect(views.at(-1)?.job.id).toBe(choose ? "team-lead" : "junior-employee");
+    expect(views.at(-1)?.job.id).toBe(job);
+  });
+});
+
+describe("a big mistake, in the game", () => {
+  // The browser tests and docs/playtest.md rely on these.
+  it("costs seed 2 the seat it otherwise wins, and the decision says so", () => {
+    expect(playedTo(2, "8", CLEAN).truth.vacancies[0]?.decided?.winner).toBe(
+      "you",
+    );
+    const { truth } = playedTo(2, "8", `${CLEAN},${SINK}`);
+    const views = playAll(2, `${CLEAN},${SINK}`);
+    const told = views.find(
+      (v) => v.step.kind === "notice" && v.step.decided !== undefined,
+    );
+    if (told?.step.kind !== "notice") throw new Error("Never told.");
+    const results = views.at(-1)?.step;
+    if (results?.kind !== "results") throw new Error("No results.");
+
+    expect(truth.vacancies[0]?.decided).toMatchObject({
+      winner: "associate",
+      blocked: true,
+    });
+    expect(views.at(-1)?.job.id).toBe("junior-employee");
+    expect(told.step.body).toContain("until the incident");
+    expect(told.step.decided?.inFact).toContain("until the incident report");
+    expect(results.vacancies[0]?.inFact).toContain(
+      "As for you: There was an incident while the seat was open",
+    );
+  });
+
+  it("demotes seed 2 from Floor 2, under whoever came next for the seat, and the lift takes them down", () => {
+    const { view } = playedTo(2, "10", `${CLEAN},${EXAMPLE}`);
+    const views = playAll(2, `${CLEAN},${EXAMPLE}`);
+
+    expect(noticed(views, "A letter in a plain envelope")?.month).toBe(9);
+    const demoted = noticed(views, "A sideways move, downwards");
+    expect(demoted?.month).toBe(10);
+    expect(demoted?.step.kind === "notice" && demoted.step.body).toContain(
+      "You now report to the Junior Associate,",
+    );
+    expect(view.month).toBe(10);
+    expect(view.job).toEqual({
+      id: "junior-employee",
+      title: "Junior employee",
+    });
+    expect(view.finalWarning).toBe(true);
+    expect(view.hotspots.map((h) => h.id)).toContain("kitchen");
+    expect(view.orgChart).toContainEqual({
+      name: "Tessa Croft",
+      title: "Team Leader, your boss",
+      reportsTo: "Hugh Lamb",
+    });
+    expect(view.orgChart).toContainEqual(
+      expect.objectContaining({
+        name: "Hugh Lamb",
+        title: "Head of Operations, your boss's boss",
+      }),
+    );
+  });
+
+  it("fires seed 2 for a second, back on Floor 1", () => {
+    const views = playAll(2, `${CLEAN},${EXAMPLE},${REPORT}`);
+
+    expect(
+      noticed(views, "You have been released to the wider market")?.month,
+    ).toBe(10);
+    expect(views.at(-1)?.step.kind).toBe("results");
   });
 });

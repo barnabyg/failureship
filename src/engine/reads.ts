@@ -2,7 +2,7 @@ import type { Condition, Content, Kind, Mood, SceneData } from "./content";
 import { YOU, type PowerMap } from "./deal";
 import { isOn, isOnFloor } from "./floors";
 import { isPlanRunning, planWords } from "./grand-plans";
-import { bossOf, bossesOf, meantBy, placeOf, whoIs } from "./places";
+import { bossOf, bossesOf, managerOf, meantBy, placeOf, whoIs } from "./places";
 import { calledBy, capitalised, sayFrom, sayPeople, titleOf } from "./say";
 import type { State, World } from "./state";
 import type { Person } from "./view";
@@ -195,6 +195,13 @@ export function isVacancyOpen(state: State): boolean {
 /** Whether someone has left the company, which is for the rest of the run. */
 export function isGone(state: State, id: string): boolean {
   return state.truth.changes.some((c) => c.character === id && c.to === "left");
+}
+
+/** The Characters who answer to someone on the Org Chart now, in the order written. */
+export function teamOf(state: State, content: Content, id: string): string[] {
+  return content.characters
+    .map((c) => c.id)
+    .filter((c) => !isGone(state, c) && managerOf(state, content, c) === id);
 }
 
 /** Whether text names someone who has left, by name or by what text calls them. */

@@ -16,6 +16,7 @@ const mistakes = {
   finalWarning: { title: "WARNED", body: "One more." },
   fired: { title: "FIRED", body: "That was one more." },
   firedOutright: { title: "FIRED-OUTRIGHT", body: "That was all it took." },
+  demoted: { title: "DEMOTED", body: "{boss} HAS-YOUR-SEAT" },
   results: { title: "ENDED", intro: "It ended." },
   firedIn: "FIRED-IN {month}",
   finished: "LASTED",

@@ -242,6 +242,8 @@ export interface Vacancy {
     winner: string;
     /** Whether it was too close to call, and went by a draw among the best. */
     close: boolean;
+    /** Whether a big mistake while it was open cost the player a seat they would otherwise have had. */
+    blocked: boolean;
     candidates: Candidate[];
     /** Official standing's band then, by its label: what the paperwork said. */
     onPaper: string | null;

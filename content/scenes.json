@@ -2621,6 +2621,32 @@
         "requires": {
           "planRunning": "excellence"
         }
+      },
+      {
+        "id": "blame-your-analyst",
+        "family": "attack",
+        "label": "Say that your team would not be at capacity, but for the Senior Analyst",
+        "results": [
+          {
+            "when": {
+              "factNature": {
+                "character": "analyst",
+                "nature": "dangerous"
+              }
+            },
+            "body": "It is minuted. That afternoon someone from upstairs asks, very politely, to see your own capacity, and who signed it off.",
+            "sets": ["burned-by-a-fact"],
+            "opinion": -2,
+            "factAt": "analyst",
+            "factNote": "You blamed the Senior Analyst for your team's capacity at the Team Leads' Sync. You had not been told why that was a mistake.",
+            "mistake": "big"
+          },
+          {
+            "body": "It is minuted. The Senior Analyst reads the minutes, and replies to everyone that they have been carrying the team, with figures.",
+            "sets": ["blamed-your-analyst"],
+            "approach": "blame"
+          }
+        ]
       }
     ]
   },
@@ -2828,6 +2854,32 @@
         "requires": {
           "planRunning": "excellence"
         }
+      },
+      {
+        "id": "assign-a-risk",
+        "family": "attack",
+        "label": "Assign the reddest risk to the Project Co-ordinator, who is not in the room",
+        "results": [
+          {
+            "when": {
+              "factNature": {
+                "character": "projects",
+                "nature": "dangerous"
+              }
+            },
+            "body": "The risk is reassigned. By the morning it has been reassigned back to you, by someone from upstairs you have never met, with a note asking how you came to choose.",
+            "sets": ["burned-by-a-fact"],
+            "opinion": -2,
+            "factAt": "projects",
+            "factNote": "You gave the Project Co-ordinator the reddest risk on the register. You had not been told why that was a mistake.",
+            "mistake": "big"
+          },
+          {
+            "body": "The Project Co-ordinator finds out from the register, and thanks you for the development opportunity, in a reply all.",
+            "sets": ["assigned-a-risk"],
+            "approach": "blame"
+          }
+        ]
       },
       {
         "id": "read-the-register",

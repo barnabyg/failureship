@@ -11,6 +11,10 @@
     "title": "You have been released to the wider market, today",
     "body": "Nobody needs a second incident. By the time you reach your desk there is a box on it, and someone from Security is holding the lid. An all-staff email thanks you for your contribution, and spells your name wrong."
   },
+  "demoted": {
+    "title": "A sideways move, downwards",
+    "body": "Following the incident, you have been offered the chance to return to your previous role, and have accepted it. You now report to {boss}, who has been asked to be supportive. Your old desk is one floor down, where you left it, and the lift has been told."
+  },
   "results": {
     "title": "Your employment has concluded",
     "intro": "You did not reach the end of your review period. A form says that you left to pursue other opportunities. Here is what the form leaves out."

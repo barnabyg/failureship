@@ -161,6 +161,12 @@ export const mistakes = z.strictObject({
   fired: notice,
   /** After a catastrophic one. */
   firedOutright: notice,
+  /**
+   * As the month of a big mistake closes, on a floor the player won a seat to,
+   * which takes them back down. Says {boss}, whoever they answer to now. The
+   * checks make sure it is written wherever seats are.
+   */
+  demoted: notice.optional(),
   /** The results screen's title and opening, for a run that ended this way. */
   results: z.strictObject({ title: text, intro: text }),
   /** How the results screen says the run ended. This one says {month}. */

@@ -1,4 +1,4 @@
-import type { Content, Seat, VacancyReason } from "./content";
+import type { Content, Kind, Seat, VacancyReason } from "./content";
 import { hasSway, influencerOf, isUnder, YOU } from "./deal";
 import { planCompleted } from "./grand-plans";
 import { bossOf, managerOf, whoIs } from "./places";
@@ -9,6 +9,7 @@ import {
   moodOfCharacter,
   personOf,
   shiftBelief,
+  teamOf,
 } from "./reads";
 import { remember } from "./reputation";
 import { competitionNow } from "./rivals";
@@ -142,7 +143,8 @@ export function actForSeat(
  * being the one deciding, being owed a favour by them, being under them on the
  * Power Map, and holding the Plan's credit. For the player: favours owed and
  * called in, the Plan's credit, the Plan really delivered, real results, looking
- * the part, and what has reached the one deciding of them.
+ * the part, what has reached the one deciding of them, and any big mistake made
+ * while the seat was open.
  */
 function reasonsFor(
   state: State,
@@ -166,6 +168,13 @@ function reasonsFor(
     if ((played.deliver ?? 0) >= written.resultsAt) reasons.push("results");
     if (looks >= written.looksAt) reasons.push("looks");
     reasons.push(moodOfCharacter(state, content, decider));
+    if (
+      state.mistakes.some(
+        (m) => m.month >= vacancy.opened && m.month <= vacancy.decides,
+      )
+    ) {
+      reasons.push("mistake");
+    }
     return reasons;
   }
   // Whoever decides needs no other reason to pick themselves.
@@ -195,14 +204,42 @@ function weigh(
   return { who, reasons, strength };
 }
 
+/** Whether whoever decides, being this kind, will not give the seat to this candidate. */
+function isRuledOut(written: Written, kind: Kind, candidate: Candidate) {
+  return candidate.reasons.some((r) =>
+    written.reasons[r].rulesOut.includes(kind),
+  );
+}
+
+/**
+ * The strongest candidates not ruled out, unless all of them are, and the one
+ * of those drawn, by the seed, to have the seat.
+ */
+function pick(
+  state: State,
+  written: Written,
+  seat: Seat,
+  kind: Kind,
+  candidates: Candidate[],
+): { winner: string; top: Candidate[] } {
+  const standing = candidates.filter((c) => !isRuledOut(written, kind, c));
+  const field = standing.length > 0 ? standing : candidates;
+  const best = Math.max(...field.map((c) => c.strength));
+  const top = field.filter((c) => c.strength === best);
+  const drawn = drawFor(state.seed, `vacancy:${seat.id}`, state.month);
+  return { winner: top[Math.floor(drawn * top.length)]?.who ?? YOU, top };
+}
+
 /**
  * Whoever really holds influence over the seat decides it, each by their own
  * kind: a Believer weighs what was really delivered, a Practitioner favours and
  * protégés, an Incompetent who looks the part. The candidates are the player and
  * whoever competes for it, and the strongest reasons win, with a seeded draw
- * among equals. The holder moves up, the winner takes the seat, and whoever
- * answered to the holder answers to them. Winning takes the player to the
- * seat's floor. Each Character passed over remembers.
+ * among equals. A big mistake while it was open can rule the player out, and
+ * if nobody else stands for it, the holder's team does. The holder moves up,
+ * the winner takes the seat, and whoever answered to the holder answers to
+ * them. Winning takes the player to the seat's floor. Each Character passed
+ * over remembers.
  */
 function decide(
   state: State,
@@ -214,26 +251,39 @@ function decide(
   if (!seat) return;
   const { holder } = vacancy;
   const decider = deciderOf(state, holder);
-  const others = competitionNow(state, content)
+  const kind = kindOf(state, decider);
+  const weighOf = (who: string) =>
+    weigh(state, content, written, vacancy, decider, who);
+  const you = weighOf(YOU);
+  const competing = competitionNow(state, content)
     .competing.filter(
       (c) => c.for.includes(seat.competing) && c.character !== holder,
     )
     .map((c) => c.character);
-  const candidates = [YOU, ...others].map((who) =>
-    weigh(state, content, written, vacancy, decider, who),
-  );
-  const best = Math.max(...candidates.map((c) => c.strength));
-  const top = candidates.filter((c) => c.strength === best);
-  const drawn = drawFor(state.seed, `vacancy:${seat.id}`, state.month);
-  const winner = top[Math.floor(drawn * top.length)]?.who ?? YOU;
+  const others = (
+    competing.length > 0 || !isRuledOut(written, kind, you)
+      ? competing
+      : teamOf(state, content, holder)
+  ).map(weighOf);
+  const { winner, top } = pick(state, written, seat, kind, [you, ...others]);
+  // Who would have had it without the mistake, which says whether it cost the seat.
+  const mistaken = you.reasons.includes("mistake");
+  const unmistaken: Candidate = {
+    ...you,
+    reasons: you.reasons.filter((r) => r !== "mistake"),
+    strength:
+      you.strength - (mistaken ? written.reasons.mistake.weight[kind] : 0),
+  };
+  const otherwise = pick(state, written, seat, kind, [unmistaken, ...others]);
   const paper = standingOnPaper(state, content);
   const decided: Decided = {
     month: state.month,
     decider,
-    kind: kindOf(state, decider),
+    kind,
     winner,
     close: top.length > 1,
-    candidates,
+    blocked: winner !== YOU && otherwise.winner === YOU,
+    candidates: [you, ...others],
     onPaper: paper?.band ?? null,
   };
   vacancy.decided = decided;
@@ -248,7 +298,7 @@ function decide(
   moveUp(state, content, seat, holder, winner);
   const { forYou, forSomeoneElse } = written.passedOver;
   const kept = winner === YOU ? forYou : forSomeoneElse;
-  for (const { who } of candidates) {
+  for (const { who } of decided.candidates) {
     if (who === YOU || who === winner) continue;
     remember(state, content, {
       character: who,
@@ -257,7 +307,8 @@ function decide(
       tone: kept.tone,
     });
   }
-  const told = winner === YOU ? seat.won : seat.lost;
+  const told =
+    winner === YOU ? seat.won : decided.blocked ? seat.blocked : seat.lost;
   state.noticesDue.push({
     title: sayPeople(told.title, words),
     body: sayPeople(told.body, words),
@@ -287,14 +338,7 @@ function moveUp(
     title: written?.title ?? "",
     called: written?.called ?? written?.name ?? holder,
   };
-  const team = [
-    YOU,
-    ...content.characters
-      .map((c) => c.id)
-      .filter(
-        (id) => !isGone(state, id) && managerOf(state, content, id) === holder,
-      ),
-  ];
+  const team = [YOU, ...teamOf(state, content, holder)];
   state.reportsTo[holder] = seat.movesUp.reportsTo;
   state.titles[holder] = {
     title: seat.movesUp.title,
@@ -308,7 +352,7 @@ function moveUp(
   }
 }
 
-/** A candidate's reasons, those that weighed most with this kind first. */
+/** A candidate's reasons: whatever cost them the seat, then those that weighed most with this kind. */
 function weighed(
   written: Written,
   decided: Decided,
@@ -316,10 +360,12 @@ function weighed(
 ): Written["reasons"][VacancyReason][] {
   const { kind } = decided;
   const candidate = decided.candidates.find((c) => c.who === who);
+  const cost = (r: Written["reasons"][VacancyReason]) =>
+    decided.blocked && r === written.reasons.mistake ? 1 : 0;
   return (candidate?.reasons ?? [])
     .map((r) => written.reasons[r])
-    .filter((r) => r.weight[kind] !== 0)
-    .sort((a, b) => b.weight[kind] - a.weight[kind]);
+    .filter((r) => r.weight[kind] !== 0 || r.rulesOut.includes(kind))
+    .sort((a, b) => cost(b) - cost(a) || b.weight[kind] - a.weight[kind]);
 }
 
 /**
@@ -334,7 +380,10 @@ function toldOf(
   const tie = weighed(written, decided, decided.winner).find(
     (r) => r.told !== undefined,
   )?.told;
-  const line = decided.close ? written.close : (tie ?? written.untold);
+  // A seat the player's mistake cost them is told as that, before any tie.
+  const cost = decided.blocked ? written.reasons.mistake.told : undefined;
+  const line =
+    cost ?? (decided.close ? written.close : (tie ?? written.untold));
   return sayPeople(line, {
     "{decider}": called(decided.decider),
     "{who}": called(decided.winner),

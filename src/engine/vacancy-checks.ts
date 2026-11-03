@@ -80,6 +80,7 @@ function findBrokenSeatActs(content: Content): string[] {
  * Seats: each is on a known floor and leads to another, what is competed for
  * while it is open is written, and whoever its holder moves up to is there, and
  * is not under that floor's boss. One seat to a floor, since a floor has one boss.
+ * A big mistake in a seat demotes, so being demoted needs its words.
  */
 export function findBrokenVacancies(content: Content): string[] {
   const problems = findBrokenSeatActs(content);
@@ -90,6 +91,11 @@ export function findBrokenVacancies(content: Content): string[] {
   const characters = new Map(content.characters.map((c) => [c.id, c]));
   const answersTo = (id: string, above: string) =>
     isUnder((at) => characters.get(at)?.reportsTo, id, above);
+  if (content.mistakes && !content.mistakes.demoted) {
+    problems.push(
+      "A seat is written, so mistakes.json needs the words for being demoted.",
+    );
+  }
   const floors = new Set<string>();
   for (const seat of written.seats) {
     const owner = `Seat "${seat.id}"`;
