@@ -1,5 +1,5 @@
 import { createHash } from "node:crypto";
-import { describe, expect, it } from "vitest";
+import { beforeAll, describe, expect, it } from "vitest";
 import { gameContent } from "../../src/content";
 import { startRun, type Choice, type PlayerView } from "../../src/engine";
 import { plainChoice } from "../../src/ui/later-month";
@@ -84,14 +84,22 @@ function playWhole(seed: number, script: Script): PlayerView[] {
   }
 }
 
-const runs = Object.entries(scripts).flatMap(([name, script]) =>
-  SEEDS.map((seed) => ({
-    name: `seed ${String(seed)} ${name}`,
-    views: playWhole(seed, script),
-  })),
-);
+function playEveryScript() {
+  return Object.entries(scripts).flatMap(([name, script]) =>
+    SEEDS.map((seed) => ({
+      name: `seed ${String(seed)} ${name}`,
+      views: playWhole(seed, script),
+    })),
+  );
+}
 
 describe("the player views of whole scripted runs", () => {
+  let runs: ReturnType<typeof playEveryScript> = [];
+
+  beforeAll(() => {
+    runs = playEveryScript();
+  });
+
   it("match the recorded baseline at every step", async () => {
     const lines = runs.flatMap(({ name, views }) => {
       const months = new Map<number, string[]>();
