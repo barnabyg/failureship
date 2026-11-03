@@ -357,9 +357,10 @@ leaves is dealt. `tests/engine/fawning.test.ts` holds the content to this.
 ## `grand-plans.json`
 
 Grand Plans: each boss's big ambition, which the player can complete in reality or in appearance.
-A Plan belongs to [your boss](#your-boss-and-your-bosss-boss): as each month opens, a boss without
-one takes on the first in `plans` for the player's floor that nobody has had in this run, so a new
-boss brings a new one. A boss has one Plan, and keeps it if the player moves away.
+A Plan belongs to its boss, not to the place: as each month opens, [your boss](#your-boss-and-your-bosss-boss),
+if their last Plan has ended or they have none, takes on the first in `plans` for the player's floor
+that they have not had and nobody else is running. So each boss has one at a time, and a new boss
+brings a new one. A Plan is followed to its end whoever the player works for by then.
 
 - `floor` is the floor whose bosses take it on, as in [Floors and their months](#floors-and-their-months).
   A Plan has no `months`: it runs for `lasts` months from the month the boss takes it on, the first
@@ -368,28 +369,38 @@ boss brings a new one. A boss has one Plan, and keeps it if the player moves awa
 - `heardIn` names the Scenes and Notifications in which the player hears of it: on opening the
   Scene, or answering the Notification. Until then it is not in view. Once heard of, the **Your
   project** card shows its `title`, and its details its `what`, with where it has got to from
-  `statuses`, of which `running` says `{month}`, the month it is due by.
+  `statuses`, of which `running` says `{month}`, the month it is due by. Text about a Plan should
+  leave its deadline to that: a Scene can say `{plan}` for the title of your boss's Plan.
 - `ways` are how it can be completed, each `how` it is done: `reality` or `appearance`. Every Plan
-  needs at least one of each. The first way whose `when` holds completes it, at once. A `when`
-  reads what the player did, usually a flag set by a choice offered with `planRunning`, and never
-  the hidden truth. Completing it does three things. Its `sets` go on the official record, the same
-  on every deal, so a flag there can move Official standing in [`standing.json`](#standingjson). It
-  moves your boss's belief by `belief` for their kind, so the same completion can please one boss
-  and put another off: a Believer wants it really done, an Incompetent wants it to look done, and
-  a Practitioner wants it to make them look good. And the player is told `done`, with the
-  `reaction` written for your boss's kind, which is a sign and must not name a kind.
+  needs at least one of each. The first way whose `when` holds, in time, completes it at once. A
+  `when` reads only what the player did while the Plan ran, usually a flag set by a choice offered
+  with `planRunning`, and never the hidden truth. Completing it does four things. Its `sets` go on
+  the official record, the same on every deal, so a flag there can move Official standing in
+  [`standing.json`](#standingjson). It moves its boss's belief by `belief` for their kind. Their
+  kind decides too whether they count it done, by the kinds in `counts`: a Believer wants it really
+  done, an Incompetent wants it to look done, and a Practitioner wants it to make them look good.
+  And the player is told `done`, with the `reaction` for that boss's kind, which is a sign and must
+  not name a kind. Every kind must count some way done, and not every way can be counted by all.
 - A way done in appearance must add a [hidden risk](#risksjson), by a flag in its `sets` that is a
   risk's `addedBy`, and one done in reality must not. A way that every kind takes alike is refused.
-- `failed` is what happens if it is not done in time, as the month after it was due opens: your
-  boss looks for someone to blame. If `blame.sticks` holds, or is left out, it is the player at
-  the seeded `chance` for your boss's kind, plus `mood` for how they stand with the player, and
-  `onPlayer` is sent, which can be `"mistake": "big"`. Otherwise `onSomeoneElse` is. Both are Bills,
-  as in [`threads.json`](#threadsjson). A Plan done in time never fails.
+- `needs` is what doing it for real takes, and who might have it: as the Plan is taken on, one of
+  `from` is dealt to really have it. A Scene's sign can say `{keeper}` for them. The player has it
+  once they have done `asked`, a flag, of that person while the Plan runs. A way with `"needs":
+true` is done in reality only then, and otherwise as its `otherwise`, a way in appearance with no
+  `when` of its own, which must put the same on the official record. `told` says `{who}`, for the
+  results screen.
+- `failed` is what happens if it is not done in time, as the month after it was due opens: its
+  boss looks for someone to blame, even if the player has moved away from them. If `blame.sticks`
+  holds, or is left out, it is the player at the seeded `chance` for that boss's kind, plus `mood`
+  for how they stand with the player, and `onPlayer` is sent, which can be `"mistake": "big"`.
+  Otherwise `onSomeoneElse` is. Both are Bills, as in [`threads.json`](#threadsjson), and may not
+  say `{boss}` or `{head}`, since by then that may be someone else.
 - `results` is what the results screen says became of each boss's Plan: `reality`, `appearance`,
-  `failed`, or `running` if the run ended first, or the player moved away.
+  `failed`, or `running` if the run ended first.
 
-Whatever follows from a Plan being completed reads `planCompleted` in `src/engine/grand-plans.ts`,
-which says whether, and how, a boss's Plan was completed.
+Whatever follows from a Plan being completed, such as its boss moving up, reads `planCompleted` in
+`src/engine/grand-plans.ts`: whether a boss's latest Plan was completed, how, and whether they
+counted it done.
 
 ## `hidden-truth.json`
 
@@ -629,7 +640,8 @@ Each month's Scene: its signs, its choices and their results.
 the least influential and the next most influential of those present, read from the dealt Power
 Map's `order`. `holderIs` reads the same in a Scene's results. A Scene without the whole cast can
 therefore show a holder whom the Power Map's tree does not place above everyone present, so the
-meeting has everyone in it.
+meeting has everyone in it. `{plan}` and `{keeper}` say your boss's [Grand Plan](#grand-plansjson)
+and who really has what it needs.
 
 - A sign can have a `clue`, for the Notebook.
 - An option's `requires` hides it until that holds. See [Conditions](#conditions).
