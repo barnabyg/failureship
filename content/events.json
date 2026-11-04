@@ -75,14 +75,14 @@
     "sets": ["takeover-bid"]
   },
   {
-    "id": "secondment",
+    "id": "boss-seconded",
     "floor": "junior-employee",
     "from": "From: Hugh Lamb, Head of Operations",
     "title": "A secondment",
     "body": "Special Projects has asked for someone with a proven record of being available, and your boss has been seconded to it, upstairs, with immediate effect and a larger chair. Your boss says that it is a great honour, and that it came as a complete surprise, and has already measured the chair.",
     "changed": "A secondment moved your boss up to Special Projects, and left their seat open.",
     "schedule": {
-      "months": [10],
+      "months": [11],
       "chance": 0.25,
       "clue": {
         "before": 1,

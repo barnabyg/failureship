@@ -286,8 +286,7 @@ function deliver(run: Run) {
 
 describe("the Monthly Status Report in the game", () => {
   it("arrives every month, and offers to do it, skip it or lie in it", () => {
-    // Seed 4 plays all eighteen months, not fired on a floor it was moved up to.
-    const run = startRun({ seed: 4, content: gameContent });
+    const run = startRun({ seed: 1, content: gameContent });
     const seen: number[] = [];
     let view = run.view();
     while (view.step.kind !== "results") {

@@ -104,8 +104,7 @@ describe("months that do not feel like one month repeated", () => {
   });
 
   it("opens a different Scene in each written month, a review each quarter, and the pool in turn", () => {
-    // Seed 4 stays on Floor 1: no Company Event opens a seat on it.
-    const { views } = walk(4, lastsTheRun);
+    const { views } = walk(1, lastsTheRun);
     const reviews = new Set(
       gameContent.scenes
         .filter((s) => s.quarter !== undefined)
@@ -137,10 +136,9 @@ describe("months that do not feel like one month repeated", () => {
   });
 
   // Every month differs on either floor, as in the nine-month run. Seed 2 is
-  // promoted to Floor 2 in month 8, by faking the Plan in month 5. Seed 6
-  // stays on Floor 1, with no Company Event to open a seat.
+  // promoted to Floor 2 in month 8, by faking the Plan in month 5.
   const RUNS: [string, number][] = [
-    ["seed 6, on Floor 1", 6],
+    ["seed 1, on Floor 1", 1],
     ["seed 2, promoted", 2],
   ];
   const pickOn = (seed: number) =>

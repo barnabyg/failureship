@@ -82,13 +82,26 @@ describe("two ways up, on the same deal", () => {
 });
 
 describe("other seats in the game", () => {
-  it("open by a secondment, a new post, or a boss's going, on some deals", () => {
-    const ways = new Set<string>();
-    for (const seed of [1, 3, 9]) {
-      const { truth } = playAll(seed, seed === 9 ? REPORT : PLAN);
-      for (const v of truth.vacancies) ways.add(v.way);
-    }
+  // docs/playtest.md relies on these deals.
+  it("open by a secondment, a new post, or a boss leaving, on some deals", () => {
+    const opened = (seed: number, choose: string) =>
+      playAll(seed, choose).truth.vacancies.map((v) => ({
+        way: v.way,
+        opened: v.opened,
+        winner: v.decided?.winner,
+      }));
 
-    expect([...ways].sort()).toEqual(["created", "fired", "movedUp"]);
+    // Seed 11's Plan seat goes to the Junior Associate, who is seconded upstairs.
+    expect(opened(11, PLAN)).toEqual([
+      { way: "plan", opened: 6, winner: "associate" },
+      { way: "movedUp", opened: 12, winner: "you" },
+    ]);
+    expect(opened(3, PLAN)).toEqual([
+      { way: "created", opened: 14, winner: "associate" },
+    ]);
+    // Seed 8's boss, a Believer, survives the line, and leaves over it.
+    expect(opened(8, REPORT)).toEqual([
+      { way: "left", opened: 10, winner: "you" },
+    ]);
   });
 });
