@@ -195,7 +195,21 @@ describe("a big mistake at the top of Floor 3", () => {
     expect(after?.job).toEqual({ id: "team-lead", title: "Team lead" });
     expect(after?.hotspots.map((h) => h.place)).toContain("team-room");
     expect(views.some((v) => v.step.kind === "win")).toBe(false);
-    expect(top?.decided?.winner).not.toBe("you");
+    expect(top?.decided?.winner).toBe("analyst");
+    // Nobody tells them who has the seat they were out of the running for.
+    // Whoever took their own seat is their boss, under whoever has it.
+    expect(
+      views.some(
+        (v) =>
+          v.step.kind === "notice" &&
+          v.step.title.startsWith("Congratulations to"),
+      ),
+    ).toBe(false);
+    expect(views.at(-1)?.orgChart).toContainEqual({
+      name: "Callum Reed",
+      title: "Head of Operations, your boss",
+      reportsTo: "Priya Venn",
+    });
     expect(results.ending.won).toBe(false);
     expect(results.route.map((r) => r.text)).toEqual([
       expect.stringMatching(/^Month 7: Team lead/),

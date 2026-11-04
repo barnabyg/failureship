@@ -353,6 +353,8 @@ function decide(
       tone: kept.tone,
     });
   }
+  // A player taken down a floor meanwhile is not told of it, but at the end.
+  if (!running) return;
   const told =
     winner === YOU ? seat.won : decided.blocked ? seat.blocked : seat.lost;
   state.noticesDue.push({
@@ -384,7 +386,9 @@ function fillSeat(
   { winner, held }: Decided,
 ): void {
   const above = managerHere(state, content, holder) ?? seat.movesUp.reportsTo;
-  const team = [YOU, ...teamOf(state, content, holder)];
+  // A player taken down a floor meanwhile stays where they are.
+  const you = state.job === seat.floor ? [YOU] : [];
+  const team = [...you, ...teamOf(state, content, holder)];
   if (way === "plan" || way === "movedUp") {
     state.reportsTo[holder] = seat.movesUp.reportsTo;
     state.titles[holder] = {
