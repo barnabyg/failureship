@@ -308,30 +308,6 @@
     }
   },
   {
-    "id": "seat-convenient",
-    "by": "{competitor}",
-    "family": "attack",
-    "priority": true,
-    "when": {
-      "all": [
-        {
-          "vacancyOpen": true
-        },
-        {
-          "not": {
-            "vacancyOpen": "plan"
-          }
-        }
-      ]
-    },
-    "from": "From: Overheard by the kettle",
-    "title": "Very convenient",
-    "body": "You hear, by the kettle, that the seat fell vacant very conveniently for some people, and that some people seemed to know before anyone. You hear it from someone who heard it from {competitor}, who was only wondering.",
-    "seat": {
-      "story": true
-    }
-  },
-  {
     "id": "seat-diary",
     "by": "{competitor}",
     "family": "trade",

@@ -78,6 +78,12 @@ export function otherRaw(chance = 1, vacates?: "movedUp" | "created") {
             ousts: "report",
           },
           {
+            id: "ask-about-ana",
+            label: "Ask whether what you heard of your boss is true",
+            requires: { heardOf: { fact: "fact-a", character: "{boss}" } },
+            ousts: "fact",
+          },
+          {
             id: "sour-and-report",
             label: "Sour your boss, and then report them",
             remembers: [sour, sour],
@@ -131,7 +137,15 @@ export function otherRaw(chance = 1, vacates?: "movedUp" | "created") {
     vacancies: {
       ...base.vacancies,
       ousting: {
-        ways: { report: { chance: perKind(chance) } },
+        ways: {
+          report: { chance: perKind(chance) },
+          // A Practitioner above the boss buries it; anyone else acts on it,
+          // if it is true.
+          fact: {
+            chance: { believer: 1, incompetent: 1, practitioner: 0 },
+            when: { heardTrue: "fact-a" },
+          },
+        },
         mood: { warm: 0, neutral: 0, cold: 0 },
         gone: { title: "BOSS-GONE", body: "{holder} HAS-GONE" },
         survived: { title: "BOSS-STAYS", body: "{holder} STAYS" },

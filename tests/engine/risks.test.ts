@@ -356,8 +356,10 @@ describe("the real risks", () => {
       n.options.flatMap((o) => o.sets),
     );
 
+    // By clearing the shared drive, or, for what was done against the boss,
+    // by how the one person who knows stands with them.
     for (const risk of gameContent.risks) {
-      expect(JSON.stringify(risk.traced)).toContain("covered-tracks");
+      expect(JSON.stringify(risk.traced)).toMatch(/covered-tracks|believes/);
     }
     expect(covering).toContain("covered-tracks");
   });

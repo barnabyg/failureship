@@ -1,5 +1,12 @@
 import { describe, expect, it } from "vitest";
-import { parseContent, startRun, type PlayerView } from "../../src/engine";
+import {
+  parseContent,
+  resumeRun,
+  startRun,
+  type Kind,
+  type PlayerView,
+  type Run,
+} from "../../src/engine";
 import { readHiddenTruth } from "../../src/engine/hidden-truth";
 import { answer } from "./grand-plan-fixture";
 import { edited } from "./vacancy-fixture";
@@ -194,6 +201,80 @@ describe("getting rid of your boss", () => {
     Object.assign(option, { ousts: "poison" });
 
     expect(() => parseContent(raw)).toThrow(/unknown way "poison"/);
+  });
+});
+
+describe("helping a Hidden Fact about your boss come out", () => {
+  const content = otherFixture();
+  const SECRET = { id: "fact-a", text: "SECRET-ALPHA about Ana Abel" };
+
+  /**
+   * A new run, saved and resumed with the player told that `subject` has
+   * fact-a, Ana really having it or not, and whoever is above her of this kind.
+   */
+  function heard(subject: string, true_: boolean, kind: Kind = "believer") {
+    const run = startRun({ seed: 1, content });
+    const saved = JSON.parse(run.save()) as {
+      state: {
+        heard: { fact: string; subject: string }[];
+        truth: {
+          characters: { id: string; kind: Kind; fact: unknown }[];
+          powerMap: { influence: { who: string; over: string }[] };
+        };
+      };
+    };
+    const { state } = saved;
+    state.heard = [{ fact: "fact-a", subject }];
+    const above = state.truth.powerMap.influence.find(
+      (i) => i.over === "ana",
+    )?.who;
+    for (const dealt of state.truth.characters) {
+      if (dealt.id === "ana") dealt.fact = true_ ? SECRET : null;
+      else if (dealt.fact !== null && true_) dealt.fact = null;
+      if (dealt.id === above) dealt.kind = kind;
+    }
+    return resumeRun({ save: JSON.stringify(saved), content });
+  }
+
+  const offered = (run: Run) => {
+    const { step } = run.view();
+    if (step.kind !== "notification" || step.id !== "get-rid") {
+      throw new Error(`Not the question: ${step.kind}`);
+    }
+    return step.options.map((o) => o.id);
+  };
+
+  it("is offered only once you have heard it of your boss, true or not", () => {
+    expect(offered(startRun({ seed: 1, content }))).not.toContain(
+      "ask-about-ana",
+    );
+    expect(offered(heard("ben", true))).not.toContain("ask-about-ana");
+    expect(offered(heard("ana", false))).toContain("ask-about-ana");
+  });
+
+  it("gets rid of your boss if it is true, and whoever is above them acts on it", () => {
+    expect(aboveAna(1, content)).toBeDefined();
+    const run = heard("ana", true);
+    playWith(run, "ask-about-ana");
+
+    expect(readHiddenTruth(run).vacancies[0]?.way).toBe("fired");
+  });
+
+  it("does nothing to your boss if it is not true, but they hear of it", () => {
+    const run = heard("ana", false);
+    const views = playWith(run, "ask-about-ana");
+
+    expect(told(views, "BOSS-STAYS")?.month).toBe(1);
+    expect(readHiddenTruth(run).vacancies.map((v) => v.way)).not.toContain(
+      "fired",
+    );
+  });
+
+  it("is buried by a Practitioner above your boss, true or not", () => {
+    const run = heard("ana", true, "practitioner");
+    const views = playWith(run, "ask-about-ana");
+
+    expect(told(views, "BOSS-STAYS")?.month).toBe(1);
   });
 });
 

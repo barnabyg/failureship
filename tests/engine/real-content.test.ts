@@ -188,7 +188,7 @@ describe("the real month", () => {
     if (view.step.kind !== "results") throw new Error(view.step.kind);
     // This run is promoted to Floor 2, so all eight are met: four of Floor 1's
     // six have a Hidden Fact, and on this deal one of Floor 2's two does. It
-    // rang the Speak Up line about its boss, which came out, and demoted it.
+    // need not end there: what it does on the way can send it back down.
     expect(jobs).toContain("team-lead");
     expect(view.step.characters).toHaveLength(8);
     expect(view.step.characters.filter((c) => c.fact !== null)).toHaveLength(5);

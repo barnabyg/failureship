@@ -208,7 +208,7 @@
       }
     },
     "story": {
-      "text": "A story, from someone who also wanted the seat, about what you had really done.",
+      "text": "A story that you had had very little to do with the Grand Plan.",
       "belief": -2
     },
     "diary": "A long lunch about the seat, which somebody paid for."
@@ -228,9 +228,9 @@
     "ways": {
       "report": {
         "chance": {
-          "believer": 0.8,
-          "incompetent": 0.5,
-          "practitioner": 0.3
+          "believer": 0.9,
+          "incompetent": 0.6,
+          "practitioner": 0.4
         }
       },
       "rumour": {
@@ -242,9 +242,9 @@
       },
       "fact": {
         "chance": {
-          "believer": 1,
-          "incompetent": 1,
-          "practitioner": 1
+          "believer": 0.9,
+          "incompetent": 0.6,
+          "practitioner": 0.25
         },
         "when": {
           "heardTrue": "abolished-post"

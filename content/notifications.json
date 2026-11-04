@@ -672,7 +672,7 @@
     "months": [8],
     "from": "From: People and Culture",
     "subject": "Speak Up: our confidential line is open",
-    "body": "Following the Listening Session, a confidential line is open all week for anything you would rather not say in front of everybody. Calls are not recorded, except for training purposes, and nobody will know who called, except the person who answers.",
+    "body": "Following the Listening Session, a confidential line is open all week for anything you would rather not say in front of everybody. Calls are anonymous, except to the Office Co-ordinator, who answers the phone and keeps the log.",
     "options": [
       {
         "id": "delete-it",
@@ -686,11 +686,11 @@
         "id": "ring-about-your-boss",
         "family": "attack",
         "label": "Ring the line about your boss",
-        "sets": ["moved-against-your-boss"],
+        "sets": ["rang-the-line"],
         "ousts": "report",
         "result": {
           "title": "Speak Up",
-          "body": "You ring. A pleasant voice takes your concerns about your boss, reads them back to you, and asks you to spell your surname, for the file."
+          "body": "You ring. The Office Co-ordinator answers, takes your concerns about your boss, reads them back to you, and says that this is completely anonymous, in a voice you both recognise."
         }
       },
       {
@@ -703,7 +703,7 @@
             "character": "{boss}"
           }
         },
-        "sets": ["moved-against-your-boss"],
+        "sets": ["rang-the-line"],
         "ousts": "fact",
         "result": {
           "title": "Speak Up",
