@@ -22,16 +22,26 @@ export async function freshRun(page: Page, address: string) {
   await page.goto(address);
 }
 
-/** Presses Continue, or takes a spare action, until the next month opens. */
+/**
+ * Presses Continue, or takes a spare action, until the next month opens. A seat
+ * won or lost to a mistake on the way rides the lift, and steps out of it, and
+ * the new floor's Notifications are answered as `answerAnyNotification` does.
+ */
 export async function finishMonth(page: Page) {
   const month = page.getByTestId("month");
   const results = page.getByTestId("panel-results");
+  const stepOut = page.getByTestId("lift-step-out");
+  const notification = page.getByTestId("panel-notification");
   const before = await month.innerText();
   while ((await month.innerText()) === before && !(await results.isVisible())) {
     const carryOn = page.getByTestId("continue");
     const spare = page.locator(DESK);
-    await expect(carryOn.or(spare).or(results).first()).toBeVisible();
-    if (await carryOn.isVisible()) await carryOn.click();
+    await expect(
+      carryOn.or(spare).or(results).or(stepOut).first(),
+    ).toBeVisible();
+    if (await stepOut.isVisible()) await stepOut.click();
+    else if (await notification.isVisible()) await answerAnyNotification(page);
+    else if (await carryOn.isVisible()) await carryOn.click();
     else if (await spare.isEnabled()) await spare.click();
   }
 }
@@ -82,6 +92,7 @@ export async function playUntil(page: Page, testId: string) {
   const desk = page.locator(
     DESKS.map((id) => `[data-testid="hotspot-${id}"]:enabled`).join(", "),
   );
+  const stepOut = page.getByTestId("lift-step-out");
   for (;;) {
     await expect(
       wanted
@@ -90,10 +101,13 @@ export async function playUntil(page: Page, testId: string) {
         .or(carryOn)
         .or(meeting)
         .or(desk)
+        .or(stepOut)
         .first(),
     ).toBeVisible();
     if ((await wanted.isVisible()) && (await wanted.isEnabled())) return;
-    if (await notification.isVisible()) {
+    if (await stepOut.isVisible()) {
+      await stepOut.click();
+    } else if (await notification.isVisible()) {
       const report = page.getByTestId("option-report");
       const free = notification.locator("button:enabled", {
         hasText: "Costs nothing",
