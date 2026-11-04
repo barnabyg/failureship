@@ -116,6 +116,7 @@
     "move": "This has happened to you, and there is nothing to choose. Press Continue to see how the month is reported.",
     "event": "This has happened to the whole company, and there is nothing to choose. Press Continue.",
     "story": "The month has closed. Read what was reported, then press Continue to move on.",
+    "win": "You have reached the top. Read what it comes to, then press Continue for the results.",
     "results": "The run is over. Type its seed to play the same deal again, or start a new run."
   },
   "actionCount": {

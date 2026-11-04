@@ -56,6 +56,7 @@ export function demoteForMistakes(state: State, content: Content): void {
     for (const id of [YOU, ...team.slice(1)]) state.reportsTo[id] = successor;
   }
   state.job = seat.floor;
+  state.demotions.push({ month: state.month, job: seat.floor });
   state.noticesDue.push({
     title: words.title,
     body: sayPeople(words.body, { "{boss}": called }),

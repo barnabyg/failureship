@@ -238,6 +238,14 @@ export function vacancyRaw() {
         fired: "{holder} FIRED, SEAT WENT TO {winner} IN {month}",
         created: "{holder} KEPT, POST WENT TO {winner} IN {month}",
       },
+      route: {
+        plan: "UP-TO {job} IN {month}, {holder} MOVED-UP",
+        movedUp: "UP-TO {job} IN {month}, {holder} SECONDED",
+        left: "UP-TO {job} IN {month}, {holder} LEFT",
+        fired: "UP-TO {job} IN {month}, {holder} FIRED",
+        created: "UP-TO {job} IN {month}, A-POST-UNDER {holder}",
+        demoted: "DOWN-TO {job} IN {month}",
+      },
     },
   };
 }

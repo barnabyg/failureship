@@ -297,6 +297,7 @@ export function fixtureRaw() {
         move: "Something has happened to you.",
         event: "Something has happened to the company.",
         story: "The month has closed.",
+        win: "You have won.",
         results: "The run is over.",
       },
       actionCount: { one: "1 action", other: "{n} actions" },

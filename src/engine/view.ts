@@ -124,12 +124,16 @@ export type StepView =
       /** What moved a Gauge as the month closed. */
       gauges: string[];
     }
+  /** The comic stand-in for winning, before the results screen. */
+  | { kind: "win"; title: string; lines: string[] }
   | {
       kind: "results";
       title: string;
       intro: string;
       /** How the run ended. */
-      ending: { fired: boolean; text: string | null };
+      ending: { fired: boolean; won: boolean; text: string | null };
+      /** The route up: each seat the player won, and each time they came down. */
+      route: { month: number; text: string }[];
       /** Official standing at the end, beside who really decides. */
       standing: {
         label: string;

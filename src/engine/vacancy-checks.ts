@@ -123,7 +123,7 @@ function findBrokenOusting(content: Content): string[] {
 }
 
 /**
- * Seats: each is on a known floor and leads to another, what is competed for
+ * Seats: each is on a known floor and leads to another, or wins, what is competed for
  * while it is open is written, and whoever its holder moves up to is there, and
  * is not under that floor's boss. One seat to a floor, since a floor has one boss.
  * A big mistake in a seat demotes, so being demoted needs its words.
@@ -152,9 +152,14 @@ export function findBrokenVacancies(content: Content): string[] {
       problems.push(`${owner} is a second seat on floor "${seat.floor}".`);
     }
     floors.add(seat.floor);
-    for (const job of [seat.floor, seat.job]) {
+    for (const job of [seat.floor, ...(seat.job ? [seat.job] : [])]) {
       if (!jobs.includes(job))
         problems.push(`${owner} names unknown floor "${job}".`);
+    }
+    if ((seat.job === undefined) === (seat.win === undefined)) {
+      problems.push(
+        `${owner} needs either a "job" to lead to or a "win", and not both.`,
+      );
     }
     if (seat.floor === seat.job) {
       problems.push(`${owner} leads to the floor it is on.`);

@@ -33,6 +33,7 @@ import { standingInView } from "./standing";
 import { planInView } from "./grand-plans";
 import type { State, Step, World } from "./state";
 import { toResultsView } from "./to-results";
+import { toWinView } from "./win";
 import type {
   Buzzword,
   ChartEntry,
@@ -89,6 +90,7 @@ export function legalChoices(state: State, world: World): Choice[] {
     case "notice":
     case "move":
     case "event":
+    case "win":
       return [{ type: "continue" }];
     case "story":
       return [{ type: "continue" }];
@@ -325,6 +327,8 @@ function toStepView(state: State, world: World): StepView {
     }
     case "story":
       return toStoryView(state, content);
+    case "win":
+      return toWinView(state, content);
     case "results":
       return toResultsView(state, content);
     case "actions":

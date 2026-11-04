@@ -173,6 +173,8 @@ export type Step =
     }
   | { kind: "event"; id: string }
   | { kind: "story" }
+  /** The comic stand-in for winning, told once, after the seat that won it. */
+  | { kind: "win" }
   | { kind: "results" };
 
 interface Clue {
@@ -407,6 +409,10 @@ export interface State extends MonthRecord {
   finalWarning: boolean;
   /** The month the player was fired in, which ends the run. */
   firedIn: number | null;
+  /** The month the player won the way out of the top floor, which ends the run. */
+  wonIn: number | null;
+  /** Each time a big mistake took the player back down, and to which job. */
+  demotions: { month: number; job: string }[];
   /** The big mistakes so far, for the results screen. */
   mistakes: { month: number; choice: string }[];
   step: Step;

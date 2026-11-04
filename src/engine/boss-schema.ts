@@ -376,8 +376,25 @@ const seat = z.strictObject({
   id,
   /** The floor it is on: the player is under it while their job is this. */
   floor: id,
-  /** The job the player gets by winning it, which takes them to its floor. */
-  job: id,
+  /**
+   * The job the player gets by winning it, which takes them to its floor. A
+   * seat without one is the way out of the first version: winning it is `win`.
+   */
+  job: id.optional(),
+  /** Winning it ends the run, with this comic stand-in for the real thing. */
+  win: z
+    .strictObject({
+      /** The stand-in, told after the decision, in paragraphs. */
+      title: text,
+      lines: z.array(text).min(1),
+      /** What the player reached, for the route up on the results screen. */
+      reached: text,
+      /** The results screen's heading and introduction, after a win. */
+      results: z.strictObject({ title: text, intro: text }),
+      /** How the results screen says the run ended. Says {month}. */
+      ending: text,
+    })
+    .optional(),
   /** What Rivals compete for while it is open, by its id in `rivals.json`. */
   competing: id,
   /** How many months it stays open, from the month after it falls vacant. */
@@ -444,6 +461,11 @@ export const vacancies = z.strictObject({
   asForYou: text,
   /** What the results screen says of each vacancy, by how it fell vacant. Says {holder}, {winner} and {month}. */
   results: byWay(text),
+  /**
+   * The route up, on the results screen: each seat the player won, by how it
+   * fell vacant, and each demotion. Says {month}, {job} and {holder}.
+   */
+  route: z.strictObject({ ...byWay(text).shape, demoted: text }),
   /** Getting rid of the player's boss, which an outcome's `ousts` names a way of. */
   ousting: ousting.optional(),
 });

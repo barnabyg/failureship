@@ -224,6 +224,14 @@
     "fired": "In month {month}, after {holder} had been fired, the seat went to {winner}.",
     "created": "In month {month}, a post was created out of {holder}'s team, and it went to {winner}."
   },
+  "route": {
+    "plan": "Month {month}: {job}, by the main route. {holder} completed a Grand Plan and moved up, and the seat was yours.",
+    "movedUp": "Month {month}: {job}. {holder} was seconded upstairs, and the seat was yours.",
+    "left": "Month {month}: {job}. {holder} left the company, and the seat was yours.",
+    "fired": "Month {month}: {job}, by the engineered route. {holder} was got rid of, and the seat was yours.",
+    "created": "Month {month}: {job}. A post was created out of the team {holder} led, and it was yours.",
+    "demoted": "Month {month}: back down to {job}, after an incident."
+  },
   "ousting": {
     "ways": {
       "report": {
