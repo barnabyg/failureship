@@ -681,9 +681,9 @@ player sees none of it until it does, and the results screen lists the lot.
   clearing the shared drive in month 7 does, letting an old friend go on Floor 2, or putting the
   checks back and correcting the Board's minutes on Floor 3. The flag must be set by a choice in
   plain view, other than the one that adds the risk, and be on offer on the same floor before the
-  risk can first come out, as each month opens, or the player never had the chance. Floor 1's
-  shared drive comes a month too late for the risks of month 4's Budget Round and month 6's metric,
-  which the risks test names. If it holds, `onPlayer` is sent. If not, `onSomeoneElse` is, if it
+  risk can first come out, as each month opens, or the player never had the chance, which the risks
+  test checks: so month 4's Budget Round and month 6's metric wait until after the shared drive. If
+  it holds, `onPlayer` is sent. If not, `onSomeoneElse` is, if it
   is written, and otherwise nothing happens. Either is a Bill, as in [`threads.json`](#threadsjson),
   so a risk that lands can be `"mistake": "big"`.
 - `event` names a Company Event, from [`events.json`](#eventsjson), that lands as it comes out.
