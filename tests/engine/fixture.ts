@@ -244,7 +244,7 @@ export function fixtureRaw() {
       role?: string;
       called?: string;
     }[],
-    you: { reportsTo: "ana", job: "fixture-job" },
+    you: { reportsTo: "ana", job: "fixture-job", name: "YOU-ON-THE-CHART" },
     behaviours: [] as {
       id: string;
       text: string;

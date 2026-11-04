@@ -26,7 +26,7 @@ test("a Company Event lands and the Org Chart changes", async ({ page }) => {
   const event = page.getByTestId("panel-event");
   await continueUntil(page, event);
   await expect(event).toContainText("Simplifying how we work");
-  await expect(page.getByTestId("month")).toContainText("3 of 9");
+  await expect(page.getByTestId("month")).toContainText("3 of 18");
   await page.getByTestId("continue").click();
   expect(await readOrgChart(page)).not.toBe(before);
 

@@ -499,6 +499,78 @@
         "from": "From: The Office Co-ordinator, Marjorie Tull",
         "subject": "ACTION: review the risk register",
         "ask": "You kindly offered to review the risk register. It is due, and it has a new risk on it, which is that nobody has reviewed the risk register."
+      },
+      {
+        "id": "minutes-working-group",
+        "title": "You have been volunteered",
+        "body": "The meeting set up a working group in your absence, and you are its chair, because chairs are chosen from those not there to decline. It meets on Friday.",
+        "from": "From: The Office Co-ordinator, Marjorie Tull",
+        "subject": "ACTION: your working group",
+        "ask": "Your working group has met without you, as you were chairing another meeting. It would like its terms of reference by the end of the month."
+      },
+      {
+        "id": "minutes-lessons",
+        "title": "Lessons have been learned",
+        "body": "The minutes record that lessons were learned at the meeting, and that you are to write them down. Nobody minuted what they were. It is due on Friday.",
+        "from": "From: The Office Co-ordinator, Marjorie Tull",
+        "subject": "ACTION: write down the lessons",
+        "ask": "The lessons you are to write down are still unknown. The Office Co-ordinator suggests you write down some lessons, and see whether anyone objects."
+      },
+      {
+        "id": "minutes-champion",
+        "title": "You are now a champion",
+        "body": "The meeting needed a champion for the new values, and you were the only person not there to look busy. The badge is on your desk. It is due on Friday.",
+        "from": "From: The Office Co-ordinator, Marjorie Tull",
+        "subject": "ACTION: champion the values",
+        "ask": "As a values champion, you are to report on how the values are landing. There are five of them, and nobody can name the fourth."
+      },
+      {
+        "id": "minutes-survey",
+        "title": "The survey is yours",
+        "body": "The meeting agreed to survey everybody about meetings, and that you would run it. The survey has eleven questions, one of which is about this meeting. It is due on Friday.",
+        "from": "From: The Office Co-ordinator, Marjorie Tull",
+        "subject": "ACTION: the survey about meetings",
+        "ask": "Your survey about meetings has had three replies. One of them is a complaint about the survey. The Office Co-ordinator would like the findings."
+      },
+      {
+        "id": "minutes-sign-off",
+        "title": "Awaiting your sign-off",
+        "body": "In your absence, a document was agreed subject to your sign-off. Nobody has told you which document, and the document has gone ahead without you. It is due on Friday.",
+        "from": "From: The Office Co-ordinator, Marjorie Tull",
+        "subject": "ACTION: sign this off",
+        "ask": "The document awaiting your sign-off has already been signed off by someone else, on your behalf. Your sign-off is still awaited, for the record."
+      },
+      {
+        "id": "minutes-parking",
+        "title": "Parked, with your name on it",
+        "body": "The meeting parked an item for later, and you are recorded as the owner of later. It is due on Friday.",
+        "from": "From: The Office Co-ordinator, Marjorie Tull",
+        "subject": "ACTION: the parked item",
+        "ask": "The parked item has been in the car park for a month. It has been asked to move, and you are its owner."
+      },
+      {
+        "id": "minutes-follow-up",
+        "title": "A follow-up has been scheduled",
+        "body": "The meeting scheduled a follow-up meeting to cover what this one did not, and you are to organise it. Nobody knows what this one did not cover. It is due on Friday.",
+        "from": "From: The Office Co-ordinator, Marjorie Tull",
+        "subject": "ACTION: organise the follow-up",
+        "ask": "Your follow-up has been booked into a room that is being refurbished. The Office Co-ordinator would like to know whether to book another, or the same one, later."
+      },
+      {
+        "id": "minutes-risk-owner",
+        "title": "You own a risk",
+        "body": "The meeting found a new risk, and assigned it to the person who was not there to discuss it. The risk is that nobody owns the risks. It is due on Friday.",
+        "from": "From: The Office Co-ordinator, Marjorie Tull",
+        "subject": "ACTION: own the risk",
+        "ask": "As owner of the risk that nobody owns the risks, you are to report on its status. It is now owned."
+      },
+      {
+        "id": "minutes-catch-up",
+        "title": "A catch-up, to catch up",
+        "body": "The minutes suggest that you catch up with the chair, to catch up on what you missed. The chair has suggested that you catch up with the minutes. It is due on Friday.",
+        "from": "From: The Office Co-ordinator, Marjorie Tull",
+        "subject": "ACTION: catch up",
+        "ask": "Your catch-up has been moved twice and then cancelled, and the minutes now say that you have been caught up. You are asked to confirm that you have."
       }
     ]
   }

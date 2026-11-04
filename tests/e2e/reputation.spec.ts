@@ -25,11 +25,11 @@ test("something public reaches a connected Character, who behaves differently", 
     .getByTestId("regard")
     .filter({ hasText: "Office Co-ordinator" });
 
-  await freshRun(page, "/?seed=16&month=2");
+  await freshRun(page, "/?seed=29&month=2");
   await reviewThenNextMeeting(page, "blame-supplier");
   const without = await regard.innerText();
 
-  await freshRun(page, "/?seed=16&month=2");
+  await freshRun(page, "/?seed=29&month=2");
   await reviewThenNextMeeting(page, "blame-priya");
   const after = await regard.innerText();
 

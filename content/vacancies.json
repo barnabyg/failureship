@@ -1,0 +1,185 @@
+{
+  "seats": [
+    {
+      "id": "team-leader",
+      "floor": "junior-employee",
+      "job": "team-lead",
+      "competing": "seat",
+      "openFor": 2,
+      "movesUp": {
+        "reportsTo": "programme",
+        "title": "Head of Special Projects",
+        "called": "the Head of Special Projects"
+      },
+      "opened": {
+        "title": "An exciting opportunity",
+        "body": "Following the success of the Grand Plan, {holder} is moving up to lead Special Projects, which has been created for the purpose. {holder} will be greatly missed from the end of month {month}. The seat is open until then, and will be filled through a fair and transparent process. Expressions of interest are welcome, and will be filed."
+      },
+      "won": {
+        "title": "Congratulations: Team lead",
+        "body": "You have the seat. The decision was unanimous, in that one person made it. Your old colleagues now report to you, and have been asked to be pleased. Your new desk is on Floor 2, and the lift will take you there."
+      },
+      "lost": {
+        "title": "Congratulations to {winner}",
+        "body": "After a fair and transparent process, the seat goes to {winner}, who is now your boss. Your application was strong, and has been kept on file, which is where strong applications go. You stay where you are, at the same desk, facing the other way."
+      }
+    }
+  ],
+  "you": "you",
+  "passedOver": {
+    "forYou": {
+      "about": "lost-the-seat-to-you",
+      "text": "Was passed over for the seat, which went to you.",
+      "tone": "bad"
+    },
+    "forSomeoneElse": {
+      "about": "lost-the-seat",
+      "text": "Was passed over for the seat, which went to {winner}."
+    }
+  },
+  "reasons": {
+    "self": {
+      "weight": {
+        "believer": 2,
+        "incompetent": 3,
+        "practitioner": 4
+      },
+      "why": "{decider} considered every candidate carefully, and then {decider}, and was persuaded.",
+      "told": "{decider} considered every candidate carefully, and then {decider}, and was persuaded."
+    },
+    "owed": {
+      "weight": {
+        "believer": 1,
+        "incompetent": 1,
+        "practitioner": 4
+      },
+      "why": "{decider} owed {who} a favour, and this was the favour.",
+      "told": "{decider} and {who} go back a long way."
+    },
+    "protege": {
+      "weight": {
+        "believer": 2,
+        "incompetent": 2,
+        "practitioner": 3
+      },
+      "why": "{decider} has looked after {who} for years, mostly from a distance.",
+      "told": "{who} has worked under {decider} for some time, in one sense or another."
+    },
+    "circle": {
+      "weight": {
+        "believer": 1,
+        "incompetent": 1,
+        "practitioner": 1
+      },
+      "why": "{who} is in {decider}'s circle, if not at its centre.",
+      "told": "{who} and {decider} are often at the same lunches."
+    },
+    "credited": {
+      "weight": {
+        "believer": 0,
+        "incompetent": 4,
+        "practitioner": 1
+      },
+      "why": "{who} had the credit for the Grand Plan, as far as {decider} could see.",
+      "told": "{decider} had read the launch e-mail, and remembered whose name was on it."
+    },
+    "owedYou": {
+      "weight": {
+        "believer": 1,
+        "incompetent": 1,
+        "practitioner": 3
+      },
+      "why": "{decider} owed you a favour."
+    },
+    "calledIn": {
+      "weight": {
+        "believer": 1,
+        "incompetent": 2,
+        "practitioner": 5
+      },
+      "why": "You called in the favour {decider} owed you.",
+      "told": "{decider} had a debt to settle, and settled it."
+    },
+    "delivered": {
+      "weight": {
+        "believer": 5,
+        "incompetent": 0,
+        "practitioner": 1
+      },
+      "why": "You had really done the Grand Plan, and {decider} knew it.",
+      "told": "{decider} had noticed who really did the work."
+    },
+    "results": {
+      "weight": {
+        "believer": 2,
+        "incompetent": 0,
+        "practitioner": 0
+      },
+      "why": "You did the actual work, month after month, and {decider} had seen it.",
+      "told": "{decider} had noticed who did the actual work."
+    },
+    "looks": {
+      "weight": {
+        "believer": 0,
+        "incompetent": 3,
+        "practitioner": 1
+      },
+      "why": "You looked the part: decks, confidence and the right phrases.",
+      "told": "{decider} thought you looked the part."
+    },
+    "warm": {
+      "weight": {
+        "believer": 3,
+        "incompetent": 3,
+        "practitioner": 2
+      },
+      "why": "What had reached {decider} of you was good."
+    },
+    "neutral": {
+      "weight": {
+        "believer": 1,
+        "incompetent": 1,
+        "practitioner": 1
+      },
+      "why": "{decider} had heard of you, and nothing in particular."
+    },
+    "cold": {
+      "weight": {
+        "believer": -1,
+        "incompetent": 0,
+        "practitioner": -1
+      },
+      "why": "What had reached {decider} of you was not good."
+    }
+  },
+  "resultsAt": 6,
+  "looksAt": 8,
+  "acts": {
+    "approach": {
+      "decider": {
+        "text": "You came to see them about the seat, before it was filled.",
+        "belief": 2
+      },
+      "sway": {
+        "text": "Someone they listen to put in a word for you about the seat.",
+        "belief": 1
+      }
+    },
+    "callIn": {
+      "sway": {
+        "text": "Someone who owed you a favour put in a word for you about the seat.",
+        "belief": 2
+      }
+    },
+    "story": {
+      "text": "A story that you had had very little to do with the Grand Plan.",
+      "belief": -2
+    },
+    "diary": "A long lunch about the seat, which somebody paid for."
+  },
+  "close": "It was close, and it went to {who} on grounds that were not minuted.",
+  "untold": "It was {decider}'s decision, and {decider} made it.",
+  "inFact": "The seat was in the gift of {decider}. {why}",
+  "asForYou": "As for you: {why}",
+  "results": "In month {month}, {holder} moved up, and the seat went to {winner}."
+}

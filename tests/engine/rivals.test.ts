@@ -6,6 +6,7 @@ import {
   type Content,
   type PlayerView,
 } from "../../src/engine";
+import { castDealtFirst } from "../../src/engine/deal";
 import { readHiddenTruth } from "../../src/engine/hidden-truth";
 import { plainChoice } from "../../src/ui/later-month";
 import { floorOwn } from "./fixture";
@@ -355,7 +356,10 @@ describe("the game's Rivals", () => {
     expect(one).toBeGreaterThan(0);
     expect(two).toBeGreaterThan(0);
     expect(none + one + two).toBe(MANY.length);
-    const shares = gameContent.characters.map((c) => practitioner[c.id] ?? 0);
+    // A later floor's cast is dealt by its own draws, with no Rival to ensure.
+    const shares = castDealtFirst(gameContent).map(
+      (id) => practitioner[id] ?? 0,
+    );
     expect(Math.max(...shares) - Math.min(...shares)).toBeLessThan(0.12);
   });
 
@@ -371,7 +375,10 @@ describe("the game's Rivals", () => {
       (m) => m.by === "{competitor}",
     );
 
-    expect(families(competitors)).toEqual(new Set(["deflect", "attack"]));
+    // Taking the Plan's credit and a long lunch are for an open seat.
+    expect(families(competitors)).toEqual(
+      new Set(["deflect", "attack", "impress", "trade"]),
+    );
     for (const family of families(competitors)) {
       expect(players).toContain(family);
     }

@@ -7,8 +7,10 @@ import type {
   PlanHow,
   SceneData,
   Tone,
+  VacancyReason,
 } from "./content";
 import type { DealtCharacter, PowerMap } from "./deal";
+import type { DecidedNotice } from "./view";
 
 export class IllegalChoiceError extends Error {
   override name = "IllegalChoiceError";
@@ -105,6 +107,8 @@ export interface HiddenTruth extends TruthOfRun {
   headBelief: number;
   /** Each boss's Grand Plans, with who really had what each needed. */
   plans: TakenPlan[];
+  /** Each vacancy, with who really decided it and why. */
+  vacancies: Vacancy[];
 }
 
 /** Custom behaviour for a Scene: reshapes its data for the current truth. */
@@ -157,6 +161,8 @@ export type Step =
       verdict?: string | undefined;
       /** Shown as written, even naming someone who has gone. */
       asWritten?: boolean | undefined;
+      /** A vacancy decided: Official standing beside who really decided. */
+      decided?: DecidedNotice | undefined;
     }
   | {
       kind: "move";
@@ -205,6 +211,43 @@ export interface TakenPlan {
   } | null;
 }
 
+/** One candidate for a vacancy: the player is `YOU`, and why they weighed what they did. */
+export interface Candidate {
+  who: string;
+  /** The reasons that counted for them, by their keys in `vacancies.json`. */
+  reasons: VacancyReason[];
+  strength: number;
+}
+
+/** A seat that fell vacant when its holder moved up, and how it was decided. */
+export interface Vacancy {
+  seat: string;
+  /** Whoever held it, and is moving up. */
+  holder: string;
+  /** The first month it is open. */
+  opened: number;
+  /** The month at whose close it is decided. */
+  decides: number;
+  /** Whoever has claimed the credit for the Plan that opened it, last. */
+  credit: string | null;
+  /** Whoever has called in a favour from whoever decides. */
+  calledIn: string[];
+  decided: {
+    month: number;
+    /** Whoever really held influence over it on the Power Map. */
+    decider: string;
+    /** Their kind then, which is how each reason weighed with them. */
+    kind: Kind;
+    /** Who got it: a Character, or `YOU`. */
+    winner: string;
+    /** Whether it was too close to call, and went by a draw among the best. */
+    close: boolean;
+    candidates: Candidate[];
+    /** Official standing's band then, by its label: what the paperwork said. */
+    onPaper: string | null;
+  } | null;
+}
+
 /** Where a commitment has got to. A refused one was never taken up. */
 export type CommitmentStatus =
   "open" | "kept" | "broken" | "refused" | "lapsed";
@@ -227,6 +270,8 @@ export interface MonthRecord {
   absenceDealtWith: boolean;
   /** Whether the month's quarterly review, if it has one, has been held. */
   reviewed: boolean;
+  /** Whether the month has closed: the last month's, once its story is told. */
+  closed: boolean;
 }
 
 /**
@@ -272,6 +317,7 @@ export interface State extends MonthRecord {
     asWritten?: boolean;
     /** How the boss took it. Signs only: it never says the boss's kind. */
     reaction?: string | undefined;
+    decided?: DecidedNotice | undefined;
   }[];
   project: {
     real: string;
@@ -328,6 +374,10 @@ export interface State extends MonthRecord {
   }[];
   /** The Grand Plan each of the player's bosses took on, one each, in order. */
   plans: TakenPlan[];
+  /** Every seat that has fallen vacant, and who really decided it. Never shown until decided. */
+  vacancies: Vacancy[];
+  /** Job titles taken by moving up, which stand in for those written. */
+  titles: Record<string, { title: string; called: string }>;
   /** Each Gauge's value. Only Milestones read these. */
   gauges: Record<string, number>;
   /** What moved each Gauge, for the player to see. */

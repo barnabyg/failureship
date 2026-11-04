@@ -206,5 +206,132 @@
     "family": "attack",
     "sets": ["asked-a-pointed-question"],
     "headOpinion": -1
+  },
+  {
+    "id": "passed-over-analyst",
+    "floor": "team-lead",
+    "months": [2],
+    "priority": true,
+    "family": "attack",
+    "from": "From: Priya Venn",
+    "title": "Figures, as per your request",
+    "body": "Since the seat went the way it did, the Senior Analyst sends you exactly what you ask for, to the letter, and nothing that you needed. It arrives on time. It is all correct, and none of it is any use.",
+    "by": "analyst",
+    "when": {
+      "remembers": {
+        "character": "analyst",
+        "about": "lost-the-seat-to-you"
+      }
+    }
+  },
+  {
+    "id": "passed-over-projects",
+    "floor": "team-lead",
+    "months": [4],
+    "priority": true,
+    "family": "attack",
+    "from": "From: Callum Reed",
+    "title": "An update on your dependencies",
+    "body": "The Project Co-ordinator has noticed, since the seat was decided, that your work depends on several things. Each is now on a tracker, red, with your name beside it.",
+    "by": "projects",
+    "when": {
+      "remembers": {
+        "character": "projects",
+        "about": "lost-the-seat-to-you"
+      }
+    }
+  },
+  {
+    "id": "passed-over-associate",
+    "floor": "team-lead",
+    "months": [6],
+    "priority": true,
+    "family": "attack",
+    "from": "From: Tessa Croft",
+    "title": "A quiet word upstairs",
+    "body": "Since the seat was filled, the Junior Associate has been having coffee with people from Floor 3. Your name comes up, you hear, as a cautionary example of something.",
+    "by": "associate",
+    "when": {
+      "remembers": {
+        "character": "associate",
+        "about": "lost-the-seat-to-you"
+      }
+    }
+  },
+  {
+    "id": "reply-all",
+    "from": "From: Everyone",
+    "title": "RE: RE: RE: Please remove me from this list",
+    "body": "Someone in another building has replied to everyone in the company asking to be taken off the list. Four hundred people have replied to everyone asking the same. You spend the morning not replying, which takes concentration.",
+    "sets": ["survived-reply-all"]
+  },
+  {
+    "id": "access-card",
+    "from": "From: Facilities",
+    "title": "Your access card has been reset",
+    "body": "Your access card stopped working overnight, as part of a security improvement. You spend the morning in reception, where you are signed in as a visitor to your own desk, and escorted to it."
+  },
+  {
+    "id": "org-design",
+    "from": "From: People and Culture",
+    "title": "An update on organisational design",
+    "body": "An e-mail explains that the organisation is being redesigned around the customer. There is a diagram with the customer in the middle. Your team is in a box at the edge marked Enablers, which is nearer the customer than it sounds."
+  },
+  {
+    "id": "seat-credit",
+    "by": "{competitor}",
+    "family": "impress",
+    "priority": true,
+    "when": {
+      "vacancyOpen": true
+    },
+    "from": "From: All Staff",
+    "title": "Thanks to everyone who made it happen",
+    "body": "{competitor} has sent round an e-mail thanking everyone who made the Grand Plan happen, at some length, and signing it as its lead. Your name is in the list of everyone.",
+    "seat": {
+      "credit": true
+    }
+  },
+  {
+    "id": "seat-story",
+    "by": "{competitor}",
+    "family": "attack",
+    "priority": true,
+    "when": {
+      "vacancyOpen": true
+    },
+    "from": "From: Overheard in the lift",
+    "title": "Who really did the Grand Plan",
+    "body": "You hear, in the lift, that you had very little to do with the Grand Plan. You hear it from someone who heard it from {competitor}, who was only saying.",
+    "seat": {
+      "story": true
+    }
+  },
+  {
+    "id": "seat-diary",
+    "by": "{competitor}",
+    "family": "trade",
+    "priority": true,
+    "when": {
+      "vacancyOpen": true
+    },
+    "from": "From: The shared calendar",
+    "title": "A long lunch",
+    "body": "{competitor}'s calendar has a two-hour lunch in it, marked Private, at the place upstairs goes to. It is the week the seat is decided.",
+    "seat": {
+      "diary": true
+    }
+  },
+  {
+    "id": "fire-alarm-test",
+    "from": "From: Facilities",
+    "title": "Weekly fire alarm test",
+    "body": "The weekly fire alarm test goes off during your one important call of the month. It is followed by an announcement that it was only a test, and then by the alarm again, to be sure."
+  },
+  {
+    "id": "meeting-about-meetings",
+    "from": "From: Your boss's boss's assistant",
+    "title": "A meeting about meetings",
+    "body": "You are invited to a meeting about having fewer meetings. It is recurring. The first one overruns, and a follow-up is booked to discuss why."
   }
 ]

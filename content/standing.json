@@ -26,38 +26,166 @@
     }
   ],
   "deeds": [
-    { "flag": "filed-report", "by": 3 },
-    { "flag": "skipped-report", "by": -6 },
-    { "flag": "delivered-demand", "by": 5 },
-    { "flag": "faked-demand", "by": 5 },
-    { "flag": "pushed-back", "by": -4 },
-    { "flag": "handed-off", "by": -1 },
-    { "flag": "stalled-demand", "by": -2 },
-    { "flag": "stalled-tool", "by": -2 },
-    { "flag": "said-exceeds", "by": 6 },
-    { "flag": "said-meets", "by": 2 },
-    { "flag": "animated-deck", "by": 4 },
-    { "flag": "plain-deck", "by": -3 },
-    { "flag": "offered-arrow", "by": 4 },
-    { "flag": "nodded-at-arrow", "by": 2 },
-    { "flag": "showed-figures", "by": -4 },
-    { "flag": "credited-boss", "by": 2 },
-    { "flag": "credited-head", "by": 2 },
-    { "flag": "restated-the-baseline", "by": 5 },
-    { "flag": "owned-the-dip", "by": -5 },
-    { "flag": "blamed-the-template", "by": 1 },
-    { "flag": "asked-about-the-axis", "by": -3 },
-    { "flag": "signed-the-blade", "by": 4 },
-    { "flag": "thanked-leadership", "by": 3 },
-    { "flag": "pointed-at-the-handle", "by": -4 },
-    { "flag": "told-the-truth", "by": -4 },
-    { "flag": "did-training", "by": 1 },
-    { "flag": "skipped-training", "by": 2 },
-    { "flag": "sat-at-front", "by": 2 },
-    { "flag": "watched-recording", "by": -1 },
-    { "flag": "asked-the-question", "by": 2 },
-    { "flag": "took-the-blame", "by": -6 },
-    { "flag": "delivered-grand-plan", "by": 8 }
+    {
+      "flag": "filed-report",
+      "by": 3
+    },
+    {
+      "flag": "skipped-report",
+      "by": -6
+    },
+    {
+      "flag": "delivered-demand",
+      "by": 5
+    },
+    {
+      "flag": "faked-demand",
+      "by": 5
+    },
+    {
+      "flag": "pushed-back",
+      "by": -4
+    },
+    {
+      "flag": "handed-off",
+      "by": -1
+    },
+    {
+      "flag": "stalled-demand",
+      "by": -2
+    },
+    {
+      "flag": "stalled-tool",
+      "by": -2
+    },
+    {
+      "flag": "said-exceeds",
+      "by": 6
+    },
+    {
+      "flag": "said-meets",
+      "by": 2
+    },
+    {
+      "flag": "animated-deck",
+      "by": 4
+    },
+    {
+      "flag": "plain-deck",
+      "by": -3
+    },
+    {
+      "flag": "offered-arrow",
+      "by": 4
+    },
+    {
+      "flag": "nodded-at-arrow",
+      "by": 2
+    },
+    {
+      "flag": "showed-figures",
+      "by": -4
+    },
+    {
+      "flag": "credited-boss",
+      "by": 2
+    },
+    {
+      "flag": "credited-head",
+      "by": 2
+    },
+    {
+      "flag": "restated-the-baseline",
+      "by": 5
+    },
+    {
+      "flag": "owned-the-dip",
+      "by": -5
+    },
+    {
+      "flag": "blamed-the-template",
+      "by": 1
+    },
+    {
+      "flag": "asked-about-the-axis",
+      "by": -3
+    },
+    {
+      "flag": "signed-the-blade",
+      "by": 4
+    },
+    {
+      "flag": "thanked-leadership",
+      "by": 3
+    },
+    {
+      "flag": "pointed-at-the-handle",
+      "by": -4
+    },
+    {
+      "flag": "told-the-truth",
+      "by": -4
+    },
+    {
+      "flag": "did-training",
+      "by": 1
+    },
+    {
+      "flag": "skipped-training",
+      "by": 2
+    },
+    {
+      "flag": "sat-at-front",
+      "by": 2
+    },
+    {
+      "flag": "watched-recording",
+      "by": -1
+    },
+    {
+      "flag": "asked-the-question",
+      "by": 2
+    },
+    {
+      "flag": "took-the-blame",
+      "by": -6
+    },
+    {
+      "flag": "delivered-grand-plan",
+      "by": 8
+    },
+    {
+      "flag": "pivoted-first",
+      "by": 5
+    },
+    {
+      "flag": "asked-where-beyond-is",
+      "by": -3
+    },
+    {
+      "flag": "turned-with-the-pivot",
+      "by": 2
+    },
+    {
+      "flag": "claimed-a-future-win",
+      "by": 5
+    },
+    {
+      "flag": "asked-about-this-year",
+      "by": -3
+    },
+    {
+      "flag": "noted-the-future",
+      "by": 1
+    },
+    {
+      "flag": "presented-it-again",
+      "by": 4
+    },
+    {
+      "flag": "said-it-was-the-same",
+      "by": -4
+    }
   ],
   "decides": "The seat above you was really in the gift of {who}."
 }

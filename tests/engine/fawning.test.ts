@@ -137,6 +137,8 @@ describe("Fawning", () => {
       "sit-by-boss",
       "credit-head",
       "credit-boss",
+      "credit-the-pivot-upstairs",
+      "credit-boss-again",
       "animate",
       "bonus-boss",
       "underspend-chairs",

@@ -6,6 +6,7 @@ import { applyOutcome } from "./outcome";
 import { bossOf } from "./places";
 import {
   isGone,
+  isMovingUp,
   kindOf,
   matches,
   moodOfCharacter,
@@ -75,7 +76,10 @@ export function followPlans(state: State, content: Content): void {
     }
   }
   const boss = bossOf(state, content);
-  if (planNow(state, content)?.ended === null) return;
+  // A boss on their way up takes on nothing new.
+  if (planNow(state, content)?.ended === null || isMovingUp(state, boss)) {
+    return;
+  }
   const next = written.plans.find(
     (p) =>
       isOn(state, content, p) &&
@@ -199,7 +203,14 @@ function complete(
   const shift = way.belief[kind];
   shiftBelief(state, taken.boss, shift);
   noteLanding(state, content, taken.boss, shift, way.done.title);
-  state.noticesDue.push({ ...way.done, reaction: way.reaction[kind] });
+  // A Plan followed to its end after the player moved away is a former boss's.
+  const former = taken.boss !== bossOf(state, content);
+  const title = former ? content.grandPlans?.formerBoss : undefined;
+  state.noticesDue.push({
+    ...way.done,
+    title: title ?? way.done.title,
+    reaction: way.reaction[kind],
+  });
 }
 
 /**

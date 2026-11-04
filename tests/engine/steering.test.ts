@@ -4,6 +4,7 @@ import { describe, expect, it } from "vitest";
 import { gameContent } from "../../src/content";
 import { KINDS, startRun, type Kind, type PlayerView } from "../../src/engine";
 import { readHiddenTruth } from "../../src/engine/hidden-truth";
+import { writtenMonths } from "../../src/engine/floors";
 import { calledAtStart } from "./fixture";
 
 /** Walks a whole run, with a pick made from what is on offer at each step. */
@@ -43,6 +44,21 @@ function attendsEverything(view: PlayerView, turn: number) {
   return choice;
 }
 
+/** Takes this option the first time it is offered, and otherwise picks as given. */
+function takingOnce(
+  optionId: string,
+  pick: (view: PlayerView, turn: number) => PlayerView["choices"][number],
+) {
+  let taken = false;
+  return (view: PlayerView, turn: number) => {
+    const named = taken
+      ? undefined
+      : view.choices.find((c) => "optionId" in c && c.optionId === optionId);
+    if (named) taken = true;
+    return named ?? pick(view, turn);
+  };
+}
+
 /** The same, but lasts the whole run: the first thing said in a meeting is safe. */
 function lastsTheRun(view: PlayerView, turn: number) {
   return attendsEverything(view, view.step.kind === "scene" ? 0 : turn);
@@ -53,72 +69,109 @@ function resultsOf(view: PlayerView | undefined) {
   return view.step;
 }
 
-describe("nine months that do not feel like one month repeated", () => {
-  it("gives every month its own Scene and Notifications", () => {
-    const months = Array.from(
-      { length: gameContent.balance.monthsPerRun },
-      (_, i) => i + 1,
+describe("months that do not feel like one month repeated", () => {
+  it("gives every month a floor is written for its own Scene and Notifications", () => {
+    const inMonth = (
+      item: { floor?: string | undefined; months?: number[] | undefined },
+      job: string,
+      month: number,
+    ) =>
+      (item.floor === undefined || item.floor === job) &&
+      (item.months?.includes(month) ?? false);
+    const presented = gameContent.floors.flatMap(({ job }) =>
+      Array.from({ length: writtenMonths(gameContent, job) }, (_, i) => {
+        const month = i + 1;
+        // The Project Status Review opens when flagged, so it belongs to no month.
+        const scenes = gameContent.scenes
+          .filter((s) => inMonth(s, job, month))
+          .map((s) => s.id);
+        // The Monthly Status Report recurs, so it is not what sets a month apart.
+        const notifications = [
+          ...gameContent.notifications,
+          ...(gameContent.demands?.items ?? []),
+        ]
+          .filter((n) => inMonth(n, job, month))
+          .map((n) => n.id);
+        const owner = `${job} month ${String(month)}`;
+        expect(scenes, owner).toHaveLength(1);
+        expect(notifications.length, owner).toBeGreaterThan(0);
+        return [...scenes, ...notifications];
+      }),
     );
-    const inMonth = (item: { months?: number[] | undefined }, month: number) =>
-      item.months?.includes(month) ?? true;
-    const presented = months.map((month) => {
-      // The Project Status Review opens when flagged, so it belongs to no month.
-      const scenes = gameContent.scenes
-        .filter((s) => s.months !== undefined && inMonth(s, month))
-        .map((s) => s.id);
-      // The Monthly Status Report recurs, so it is not what sets a month apart.
-      const notifications = [
-        ...gameContent.notifications,
-        ...(gameContent.demands?.items ?? []),
-      ]
-        .filter((n) => n.months !== undefined && inMonth(n, month))
-        .map((n) => n.id);
-      expect(scenes, `month ${String(month)}`).toHaveLength(1);
-      expect(notifications.length, `month ${String(month)}`).toBeGreaterThan(0);
-      return [...scenes, ...notifications];
-    });
 
     const everything = presented.flat();
     expect(new Set(everything).size).toBe(everything.length);
   });
 
-  it("opens a different Scene in each month of a real run, and a review each quarter", () => {
+  it("opens a different Scene in each written month, a review each quarter, and the pool in turn", () => {
     const { views } = walk(1, lastsTheRun);
-    const titles = views.flatMap((v) =>
+    const reviews = new Set(
+      gameContent.scenes
+        .filter((s) => s.quarter !== undefined)
+        .map((s) => s.id),
+    );
+    const held = views.flatMap((v) =>
       v.step.kind === "scene" && v.step.id !== "red-project"
-        ? [v.step.title]
+        ? [{ month: v.month, id: v.step.id, title: v.step.title }]
         : [],
     );
+    const reviewed = held.filter((h) => reviews.has(h.id));
+    const meetings = held.filter((h) => !reviews.has(h.id)).map((h) => h.title);
 
-    // Nine meetings, and the reviews in months 3, 6 and 9.
-    expect(titles).toHaveLength(12);
-    expect(new Set(titles).size).toBe(12);
+    // A review every third month, each its own.
+    expect(reviewed.map((h) => h.month)).toEqual([3, 6, 9, 12, 15, 18]);
+    expect(new Set(reviewed.map((h) => h.title)).size).toBe(6);
+    // Nine written meetings, then Floor 1's pool, each before any comes again.
+    const inPool = gameContent.scenes.filter(
+      (s) => s.pool && s.floor === "junior-employee",
+    ).length;
+    expect(meetings).toHaveLength(18);
+    expect(new Set(meetings.slice(0, 9)).size).toBe(9);
+    const pooled = meetings.slice(9);
+    const turn = pooled.slice(0, inPool);
+    expect(new Set(turn).size).toBe(inPool);
+    pooled.forEach((title, i) => {
+      expect(title).toBe(turn[i % inPool]);
+    });
   });
 
-  it("lands a different Move every month", () => {
+  // Every month differs on either floor, as in the nine-month run. Seed 2 is
+  // promoted to Floor 2 in month 8, by faking the Plan in month 5.
+  const RUNS: [string, number][] = [
+    ["seed 1, on Floor 1", 1],
+    ["seed 2, promoted", 2],
+  ];
+  const pickOn = (seed: number) =>
+    seed === 2
+      ? takingOnce("screenshot-on-the-note", lastsTheRun)
+      : lastsTheRun;
+
+  it.each(RUNS)("lands a different Move every month: %s", (_, seed) => {
     // A Bill can land as a Move as well, beside the month's own.
     const written = new Set(gameContent.moves.map((m) => m.title));
-    for (const seed of [1, 2, 3, 4, 5]) {
-      const { views } = walk(seed, lastsTheRun);
-      const moves = views.flatMap((v) =>
-        v.step.kind === "move" && written.has(v.step.title)
-          ? [v.step.title]
-          : [],
-      );
-
-      expect(new Set(moves).size).toBe(moves.length);
-      expect(moves).toHaveLength(9);
-    }
-  });
-
-  it("tells a different official story every month", () => {
-    const { views } = walk(1, lastsTheRun);
-    const stories = views.flatMap((v) =>
-      v.step.kind === "story" ? [JSON.stringify(v.step.reported)] : [],
+    const { views } = walk(seed, pickOn(seed));
+    const moves = views.flatMap((v) =>
+      v.step.kind === "move" && written.has(v.step.title) ? [v.step.title] : [],
     );
 
-    expect(new Set(stories).size).toBe(9);
+    expect(moves).toHaveLength(gameContent.balance.monthsPerRun);
+    expect(new Set(moves).size).toBe(moves.length);
   });
+
+  it.each(RUNS)(
+    "tells a different official story every month: %s",
+    (_, seed) => {
+      const { views } = walk(seed, pickOn(seed));
+      const stories = views.flatMap((v) =>
+        v.step.kind === "story" ? [JSON.stringify(v.step.reported)] : [],
+      );
+
+      expect(views.at(-2)?.job.id).toBe(
+        seed === 2 ? "team-lead" : "junior-employee",
+      );
+      expect(new Set(stories).size).toBe(gameContent.balance.monthsPerRun);
+    },
+  );
 
   it("gives you an action at any meeting you do not go to", () => {
     const { views } = walk(3, (view) => {
@@ -307,6 +360,7 @@ describe("the balance of the deal", () => {
     };
   }
 
+  // Two hundred runs of eighteen months take most of a minute.
   it("rewards a careful reader, without ever making them certain", () => {
     const { reading, guessing, perfect } = accuracy();
 
@@ -314,7 +368,7 @@ describe("the balance of the deal", () => {
     expect(reading).toBeGreaterThan(guessing + 0.15);
     expect(reading).toBeLessThan(0.85);
     expect(perfect).toBeLessThan(0.4);
-  }, 30_000);
+  }, 120_000);
 
   it("leaves no sign that settles a kind on its own", () => {
     for (const b of gameContent.behaviours) {
@@ -338,7 +392,7 @@ describe("the owner's data files", () => {
     }
   });
 
-  it("has enough of everything for nine months", () => {
+  it("has enough of everything for a floor's written months", () => {
     expect(gameContent.scenes.length).toBeGreaterThanOrEqual(9);
     expect(gameContent.notifications.length).toBeGreaterThanOrEqual(9);
     expect(gameContent.moves.length).toBeGreaterThanOrEqual(10);

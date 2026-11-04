@@ -33,7 +33,7 @@ test("a Project flagged red has to be explained, and explaining can change it", 
 
   const scene = page.getByTestId("panel-scene");
   await expect(scene.locator("h2")).toHaveText("Project Status Review");
-  await expect(page.getByTestId("month")).toContainText("2 of 9");
+  await expect(page.getByTestId("month")).toContainText("2 of 18");
   expect(await reportedStatus(page)).toBe("Red");
 
   await page.getByTestId("scene-option-make-it-amber").click();
@@ -60,7 +60,7 @@ test("a Project that never goes red still has a meeting in month 5", async ({
 }) => {
   // Plain play to month 5 files every report, so the Project never goes red.
   await page.goto("/?seed=4&month=5");
-  await expect(page.getByTestId("month")).toContainText("5 of 9");
+  await expect(page.getByTestId("month")).toContainText("5 of 18");
   expect(await reportedStatus(page)).not.toBe("Red");
   await answerAnyNotification(page);
   await page.getByTestId("hotspot-meeting-workshop").click();

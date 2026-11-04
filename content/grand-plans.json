@@ -4,6 +4,7 @@
     "completed": "Completed",
     "failed": "Not happening, officially"
   },
+  "formerBoss": "Your former boss's Grand Plan: done",
   "plans": [
     {
       "id": "one-tool",
@@ -14,9 +15,18 @@
       "heardIn": ["meeting", "new-tool"],
       "needs": {
         "from": [
-          { "character": "analyst", "asked": "asked-analyst-for-figures" },
-          { "character": "admin", "asked": "asked-admin-for-figures" },
-          { "character": "projects", "asked": "asked-projects-for-figures" }
+          {
+            "character": "analyst",
+            "asked": "asked-analyst-for-figures"
+          },
+          {
+            "character": "admin",
+            "asked": "asked-admin-for-figures"
+          },
+          {
+            "character": "projects",
+            "asked": "asked-projects-for-figures"
+          }
         ],
         "told": "{who} had the real figures all along."
       },
@@ -24,11 +34,17 @@
         {
           "id": "real-figures",
           "how": "reality",
-          "when": { "did": "tool-real-figures" },
+          "when": {
+            "did": "tool-real-figures"
+          },
           "needs": true,
           "otherwise": "wrong-figures",
           "counts": ["believer", "incompetent"],
-          "belief": { "believer": 4, "incompetent": 0, "practitioner": -2 },
+          "belief": {
+            "believer": 4,
+            "incompetent": 0,
+            "practitioner": -2
+          },
           "reaction": {
             "believer": "Your boss opens the tool, finds the real figures in it, and reads them for some time without saying anything. Then your boss says that this is what it was for.",
             "incompetent": "Your boss opens the tool, finds a great many numbers in it, and closes it again. Your boss asks whether there is a version with fewer numbers, for people who are busy.",
@@ -43,11 +59,17 @@
         {
           "id": "real-for-boss",
           "how": "reality",
-          "when": { "did": "tool-real-for-boss" },
+          "when": {
+            "did": "tool-real-for-boss"
+          },
           "needs": true,
           "otherwise": "wrong-figures",
           "counts": ["believer", "incompetent", "practitioner"],
-          "belief": { "believer": 3, "incompetent": 1, "practitioner": 4 },
+          "belief": {
+            "believer": 3,
+            "incompetent": 1,
+            "practitioner": 4
+          },
           "reaction": {
             "believer": "Your boss says that it was a team effort, and names you twice, which is once more than you were expecting.",
             "incompetent": "Your boss reads out the launch e-mail at the stand-up, slowly, and seems pleased to learn what the tool does.",
@@ -63,7 +85,11 @@
           "id": "wrong-figures",
           "how": "appearance",
           "counts": ["incompetent"],
-          "belief": { "believer": -2, "incompetent": 2, "practitioner": 0 },
+          "belief": {
+            "believer": -2,
+            "incompetent": 2,
+            "practitioner": 0
+          },
           "reaction": {
             "believer": "Your boss opens the tool, reads the first page of figures, and asks you where they came from. You say. Your boss nods, slowly, as if filing it.",
             "incompetent": "Your boss opens the tool, sees that it is full, and says that this is what a single source of truth looks like.",
@@ -79,10 +105,21 @@
           "id": "on-paper",
           "how": "appearance",
           "when": {
-            "any": [{ "did": "tool-icon" }, { "did": "tool-screenshot" }]
+            "any": [
+              {
+                "did": "tool-icon"
+              },
+              {
+                "did": "tool-screenshot"
+              }
+            ]
           },
           "counts": ["incompetent", "practitioner"],
-          "belief": { "believer": -3, "incompetent": 4, "practitioner": 2 },
+          "belief": {
+            "believer": -3,
+            "incompetent": 4,
+            "practitioner": 2
+          },
           "reaction": {
             "believer": "Your boss clicks the icon, waits, and clicks it again. Your boss says nothing at all, and then asks you, quietly, what it is for.",
             "incompetent": "Your boss forwards the launch e-mail upstairs with three exclamation marks, and adds the icon to the slide with the lighthouse on it.",
@@ -97,13 +134,21 @@
       ],
       "failed": {
         "blame": {
-          "sticks": { "not": { "did": "asked-which-problems" } },
+          "sticks": {
+            "not": {
+              "did": "asked-which-problems"
+            }
+          },
           "chance": {
             "believer": 0.3,
             "incompetent": 0.5,
             "practitioner": 0.7
           },
-          "mood": { "warm": -0.3, "neutral": 0, "cold": 0.3 }
+          "mood": {
+            "warm": -0.3,
+            "neutral": 0,
+            "cold": 0.3
+          }
         },
         "onPlayer": {
           "id": "one-tool-blamed-you",
@@ -143,9 +188,15 @@
         {
           "id": "booked",
           "how": "reality",
-          "when": { "did": "desks-really-booked" },
+          "when": {
+            "did": "desks-really-booked"
+          },
           "counts": ["believer", "incompetent"],
-          "belief": { "believer": 4, "incompetent": 0, "practitioner": -2 },
+          "belief": {
+            "believer": 4,
+            "incompetent": 0,
+            "practitioner": -2
+          },
           "reaction": {
             "believer": "Your boss books a desk, sits at it, and says that it works, in the voice of someone who did not think anything would.",
             "incompetent": "Your boss books three desks by mistake, and sits at the old one, which nobody has the heart to book.",
@@ -160,9 +211,15 @@
         {
           "id": "booked-for-boss",
           "how": "reality",
-          "when": { "did": "desks-booked-for-boss" },
+          "when": {
+            "did": "desks-booked-for-boss"
+          },
           "counts": ["believer", "incompetent", "practitioner"],
-          "belief": { "believer": 3, "incompetent": 1, "practitioner": 4 },
+          "belief": {
+            "believer": 3,
+            "incompetent": 1,
+            "practitioner": 4
+          },
           "reaction": {
             "believer": "Your boss thanks you for doing the work, in private, and is clearly uncomfortable about the e-mail.",
             "incompetent": "Your boss reads the announcement aloud and is surprised by how well it has gone.",
@@ -177,9 +234,15 @@
         {
           "id": "labels-off",
           "how": "appearance",
-          "when": { "did": "desk-labels-off" },
+          "when": {
+            "did": "desk-labels-off"
+          },
           "counts": ["incompetent", "practitioner"],
-          "belief": { "believer": -3, "incompetent": 4, "practitioner": 2 },
+          "belief": {
+            "believer": -3,
+            "incompetent": 4,
+            "practitioner": 2
+          },
           "reaction": {
             "believer": "Your boss notices that everyone is at the same desk as yesterday, without the label, and asks you what has changed.",
             "incompetent": "Your boss walks the floor, sees no labels, and declares it a cultural shift.",
@@ -199,18 +262,21 @@
             "incompetent": 0.5,
             "practitioner": 0.7
           },
-          "mood": { "warm": -0.3, "neutral": 0, "cold": 0.3 }
+          "mood": {
+            "warm": -0.3,
+            "neutral": 0,
+            "cold": 0.3
+          }
         },
         "onPlayer": {
           "id": "hot-desks-blamed-you",
           "as": "move",
           "from": "From: Lessons Learned, copied upstairs",
           "title": "Hot-desking: a review",
-          "body": "A review has found why everyone still has a desk. It was you, on page one. Someone upstairs would like a word about it.",
+          "body": "A review has found why everyone still has a desk. It was you, on page one. Someone upstairs would like a word about it, and has put it in the diary as a catch-up.",
           "opinion": -1,
           "headOpinion": -2,
-          "sets": ["blamed-for-the-plan"],
-          "mistake": "big"
+          "sets": ["blamed-for-the-plan"]
         },
         "onSomeoneElse": {
           "id": "hot-desks-blamed-elsewhere",
@@ -224,6 +290,106 @@
       "results": {
         "reality": "It was really done: every desk can be booked.",
         "appearance": "It was done in appearance: the labels came off, and everyone stayed where they were.",
+        "failed": "It was never done, and someone had to be to blame.",
+        "running": "It was still to be done when the run ended."
+      }
+    },
+    {
+      "id": "excellence",
+      "floor": "team-lead",
+      "title": "A Centre of Excellence",
+      "what": "Your boss's Grand Plan is a Centre of Excellence for the whole floor. Nobody has said what it is to excel at. It needs people in it doing real work, or a sign on a door.",
+      "lasts": 4,
+      "heardIn": ["leadership-induction", "centre-launch"],
+      "ways": [
+        {
+          "id": "staffed",
+          "how": "reality",
+          "when": {
+            "did": "centre-really-staffed"
+          },
+          "counts": ["believer", "incompetent", "practitioner"],
+          "belief": {
+            "believer": 4,
+            "incompetent": 1,
+            "practitioner": 2
+          },
+          "reaction": {
+            "believer": "Your boss walks round the Centre, sees work being done in it, and says nothing for a while. Then your boss says that this is what Excellence was supposed to mean.",
+            "incompetent": "Your boss visits the Centre, and is puzzled that there is no ribbon. You offer to find one.",
+            "practitioner": "Your boss visits the Centre, counts the people in it, and asks you whose budget they are on. They are on yours."
+          },
+          "sets": ["delivered-grand-plan"],
+          "done": {
+            "title": "Your boss's Grand Plan: done",
+            "body": "The Centre of Excellence is open, with your best people in it, doing the work that used to be done at their desks. It is going well. Your team is smaller."
+          }
+        },
+        {
+          "id": "signed",
+          "how": "appearance",
+          "when": {
+            "did": "centre-sign-up"
+          },
+          "counts": ["incompetent", "practitioner"],
+          "belief": {
+            "believer": -3,
+            "incompetent": 4,
+            "practitioner": 2
+          },
+          "reaction": {
+            "believer": "Your boss opens the door with the sign on it, looks at the chair with the cables on it, and closes the door again, quietly.",
+            "incompetent": "Your boss has a photograph taken beside the sign, smiling, and sends it to Floor 3.",
+            "practitioner": "Your boss does not open the door. Your boss forwards the launch e-mail to Floor 3 under their own name, with the word Delivered in the subject."
+          },
+          "sets": ["delivered-grand-plan", "centre-is-a-sign"],
+          "done": {
+            "title": "Your boss's Grand Plan: done",
+            "body": "The Centre of Excellence is open, as far as anyone can see. It has a sign, a launch e-mail and a lanyard. What it does not have yet is anybody in it."
+          }
+        }
+      ],
+      "failed": {
+        "blame": {
+          "sticks": {
+            "not": {
+              "did": "asked-what-it-excels-at"
+            }
+          },
+          "chance": {
+            "believer": 0.3,
+            "incompetent": 0.5,
+            "practitioner": 0.7
+          },
+          "mood": {
+            "warm": -0.3,
+            "neutral": 0,
+            "cold": 0.3
+          }
+        },
+        "onPlayer": {
+          "id": "excellence-blamed-you",
+          "as": "move",
+          "from": "From: Lessons Learned, copied to Floor 3",
+          "title": "Lessons from the Centre of Excellence",
+          "body": "A write-up has gone round of why the Centre of Excellence never opened. It finds that it lacked leadership at team level, and names the team. It is yours.",
+          "opinion": -1,
+          "headOpinion": -2,
+          "sets": ["blamed-for-the-plan"],
+          "mistake": "big"
+        },
+        "onSomeoneElse": {
+          "id": "excellence-blamed-elsewhere",
+          "as": "move",
+          "from": "From: Lessons Learned, copied to Floor 3",
+          "title": "Lessons from the Centre of Excellence",
+          "body": "A write-up has gone round of why the Centre of Excellence never opened. It was Estates, who could not find a room. The Centre is now virtual, which is a kind of open.",
+          "sets": ["plan-blamed-elsewhere"]
+        }
+      },
+      "results": {
+        "reality": "It was really done: the Centre had people in it, doing real work.",
+        "appearance": "It was done in appearance: a sign on a door, a lanyard and nobody inside.",
         "failed": "It was never done, and someone had to be to blame.",
         "running": "It was still to be done when the run ended."
       }

@@ -10,7 +10,7 @@ import {
   text,
 } from "./basic-schema";
 import { bill } from "./consequence-schema";
-import { notificationOption, sets } from "./outcome-schema";
+import { notificationOption, sets, TONES } from "./outcome-schema";
 import { notification } from "./step-schema";
 
 /** A way of coming across, and how each kind of boss takes it. */
@@ -289,5 +289,109 @@ const grandPlan = z.strictObject({
 export const grandPlans = z.strictObject({
   /** Where the player's view says it has got to. `running` says {month}. */
   statuses: z.strictObject({ running: text, completed: text, failed: text }),
+  /** What a Plan done is titled once its boss is no longer the player's. Left out, its own. */
+  formerBoss: text.optional(),
   plans: z.array(grandPlan).min(1),
+});
+
+/** Why whoever decides a vacancy might pick someone, by its key in `vacancies.json`. */
+export const VACANCY_REASONS = [
+  "self",
+  "owed",
+  "protege",
+  "circle",
+  "credited",
+  "owedYou",
+  "calledIn",
+  "delivered",
+  "results",
+  "looks",
+  "warm",
+  "neutral",
+  "cold",
+] as const;
+export type VacancyReason = (typeof VACANCY_REASONS)[number];
+
+const reason = z.strictObject({
+  /** How much it weighs with whoever decides, by their kind. They add up. */
+  weight: perKind(z.number().int()),
+  /** What the results screen says of it. Says {decider}, and {who} for a Character. */
+  why: text,
+  /**
+   * What the decision says of it, when it is the winner's tie to whoever
+   * decided. It never says how anyone feels about the player, or who is a Rival.
+   * Left out, it is not told.
+   */
+  told: text.optional(),
+});
+
+/** What a seat act leaves with whoever decides: a memory, and how far it moves their belief. */
+const kept = z.strictObject({ text, belief: z.number().int() });
+
+/** A boss's seat, which falls vacant when they move up, and who decides it. */
+const seat = z.strictObject({
+  id,
+  /** The floor it is on: the player is under it while their job is this. */
+  floor: id,
+  /** The job the player gets by winning it, which takes them to its floor. */
+  job: id,
+  /** What Rivals compete for while it is open, by its id in `rivals.json`. */
+  competing: id,
+  /** How many months it stays open, from the month after it falls vacant. */
+  openFor: z.number().int().positive(),
+  /** Where whoever held it moves up to: whom they answer to, and as what. */
+  movesUp: z.strictObject({ reportsTo: id, title: text, called: text }),
+  /** Told as it opens. Says {holder} and {month}, the month it is decided in. */
+  opened: notice,
+  /** Told as it is decided, if the player has it. */
+  won: notice,
+  /** Told as it is decided, if someone else has it. Says {winner}. */
+  lost: notice,
+});
+
+/** What a candidate passed over keeps of it. Says {winner}. */
+const passed = z.strictObject({
+  about: id,
+  text,
+  tone: z.enum(TONES).optional(),
+});
+
+export const vacancies = z.strictObject({
+  seats: z.array(seat).min(1),
+  /** How the decision's words call the player. */
+  you: text,
+  /** What each candidate passed over keeps, by whether the player had the seat. */
+  passedOver: z.strictObject({ forYou: passed, forSomeoneElse: passed }),
+  /** Why whoever decides would pick each candidate, weighed by their own kind. */
+  reasons: z.strictObject(
+    Object.fromEntries(VACANCY_REASONS.map((r) => [r, reason])) as Record<
+      VacancyReason,
+      typeof reason
+    >,
+  ),
+  /** How many Moves of the deliver family count as real results. */
+  resultsAt: z.number().int().positive(),
+  /** How many of the impress and fabricate families make the player look the part. */
+  looksAt: z.number().int().positive(),
+  /** What each seat act leaves with whoever decides, while a seat is open. */
+  acts: z.strictObject({
+    /** Approaching whoever decides, or someone with sway with them. */
+    approach: z.strictObject({ decider: kept, sway: kept }),
+    /** A favour called in through someone with sway with whoever decides. */
+    callIn: z.strictObject({ sway: kept }),
+    /** A story about the player that reaches whoever decides. */
+    story: kept,
+    /** Why whoever decides comes to owe a Rival who got into their diary. */
+    diary: text,
+  }),
+  /** Why it went to someone when it was too close to call, or nothing else was written. Says {who}. */
+  close: text,
+  /** The winner's tie to whoever decided, when nothing else is told. Says {decider}. */
+  untold: text,
+  /** Beside Official standing: who really decided. Says {decider} and {why}. */
+  inFact: text,
+  /** On the results screen, after it, when the player did not get it: what counted for them. Says {why}. */
+  asForYou: text,
+  /** What the results screen says of each vacancy. Says {holder}, {winner} and {month}. */
+  results: text,
 });

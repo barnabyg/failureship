@@ -1,0 +1,391 @@
+import type { Content, Seat, VacancyReason } from "./content";
+import { hasSway, influencerOf, isUnder, YOU } from "./deal";
+import { planCompleted } from "./grand-plans";
+import { bossOf, managerOf, whoIs } from "./places";
+import {
+  isGone,
+  isMovingUp,
+  kindOf,
+  moodOfCharacter,
+  personOf,
+  shiftBelief,
+} from "./reads";
+import { remember } from "./reputation";
+import { competitionNow } from "./rivals";
+import { drawFor } from "./rng";
+import { calledBy, sayPeople } from "./say";
+import { standingOnPaper } from "./standing";
+import type { Candidate, State, Vacancy } from "./state";
+import type { StepView } from "./view";
+
+type Written = NonNullable<Content["vacancies"]>;
+type Decided = NonNullable<Vacancy["decided"]>;
+type SeatAct = NonNullable<Content["moves"][number]["seat"]>;
+
+/** What whoever decides keeps of what was done for the seat. */
+const ABOUT_THE_SEAT = "the-seat";
+
+/**
+ * As the official story closes a month: any seat due to be decided now is, and
+ * the seat of a boss who completed their Grand Plan this month, and counted it
+ * done, falls vacant from the next. That is the first promotion. Nothing opens
+ * that the run would end before deciding.
+ */
+export function fillVacancies(state: State, content: Content): void {
+  const written = content.vacancies;
+  if (!written) return;
+  for (const vacancy of state.vacancies) {
+    if (vacancy.decided === null && vacancy.decides === state.month) {
+      decide(state, content, written, vacancy);
+    }
+  }
+  const boss = bossOf(state, content);
+  const seat = written.seats.find((s) => s.floor === state.job);
+  const done = planCompleted(state, content, boss);
+  const decides = state.month + (seat?.openFor ?? 0);
+  if (
+    !seat ||
+    !done?.counted ||
+    done.month !== state.month ||
+    isGone(state, boss) ||
+    isMovingUp(state, boss) ||
+    decides > content.balance.monthsPerRun
+  ) {
+    return;
+  }
+  state.vacancies.push({
+    seat: seat.id,
+    holder: boss,
+    opened: state.month + 1,
+    decides,
+    credit: null,
+    calledIn: [],
+    decided: null,
+  });
+  state.noticesDue.push({
+    title: seat.opened.title,
+    body: sayPeople(seat.opened.body, {
+      "{holder}": calledBy(state, content, boss),
+    }).replaceAll("{month}", String(decides)),
+  });
+}
+
+/** Whoever really holds influence over a seat: the one above its holder on the Power Map. */
+function deciderOf(state: State, holder: string): string {
+  return influencerOf(state.truth.powerMap, holder) ?? holder;
+}
+
+function openVacancy(state: State): Vacancy | undefined {
+  return state.vacancies.find(
+    (v) => v.decided === null && v.opened <= state.month,
+  );
+}
+
+/**
+ * Something done for an open seat, by the player or by a Character's Move. It
+ * counts only through what really decides it: what reaches whoever decides, the
+ * favours owed between them and others, and who has the Plan's credit.
+ */
+export function actForSeat(
+  state: State,
+  content: Content,
+  act: SeatAct,
+  actor: string,
+): void {
+  const written = content.vacancies;
+  const vacancy = openVacancy(state);
+  if (!written || !vacancy) return;
+  const map = state.truth.powerMap;
+  const decider = deciderOf(state, vacancy.holder);
+  const keep = (
+    kept: { text: string; belief: number },
+    via: string | null,
+  ): void => {
+    shiftBelief(state, decider, kept.belief);
+    remember(state, content, {
+      character: decider,
+      about: ABOUT_THE_SEAT,
+      text: kept.text,
+      via,
+    });
+  };
+  if (act.approach !== undefined && actor === YOU) {
+    const target = whoIs(state, content, act.approach);
+    if (target === decider) keep(written.acts.approach.decider, null);
+    else if (hasSway(map, target, decider)) {
+      keep(written.acts.approach.sway, target);
+    }
+  }
+  if (act.callIn) {
+    const owed = (owes: string) =>
+      map.favours.find((f) => f.owes === owes && f.to === actor);
+    const direct = owed(decider);
+    const through = map.favours.find(
+      (f) => f.to === actor && hasSway(map, f.owes, decider),
+    );
+    // A favour called in is paid, so it cannot be called in twice.
+    const paid = direct ?? through;
+    if (paid) map.favours = map.favours.filter((f) => f !== paid);
+    if (direct) vacancy.calledIn.push(actor);
+    else if (through) keep(written.acts.callIn.sway, through.owes);
+  }
+  if (act.credit) vacancy.credit = actor;
+  if (act.story && actor !== YOU) keep(written.acts.story, actor);
+  if (act.diary && actor !== YOU && actor !== decider) {
+    map.favours.push({ owes: decider, to: actor, why: written.acts.diary });
+  }
+}
+
+/**
+ * What counts with whoever decides, for one candidate, all of it hidden truth
+ * and none of it the Org Chart, Official standing or a Gauge. For a Character:
+ * being the one deciding, being owed a favour by them, being under them on the
+ * Power Map, and holding the Plan's credit. For the player: favours owed and
+ * called in, the Plan's credit, the Plan really delivered, real results, looking
+ * the part, and what has reached the one deciding of them.
+ */
+function reasonsFor(
+  state: State,
+  content: Content,
+  written: Written,
+  vacancy: Vacancy,
+  decider: string,
+  who: string,
+): VacancyReason[] {
+  const map = state.truth.powerMap;
+  const owes = map.favours.some((f) => f.owes === decider && f.to === who);
+  const reasons: VacancyReason[] = [];
+  if (vacancy.credit === who) reasons.push("credited");
+  if (vacancy.calledIn.includes(who)) reasons.push("calledIn");
+  if (who === YOU) {
+    const done = planCompleted(state, content, vacancy.holder);
+    const { played } = state;
+    const looks = (played.impress ?? 0) + (played.fabricate ?? 0);
+    if (owes) reasons.push("owedYou");
+    if (done?.counted && done.how === "reality") reasons.push("delivered");
+    if ((played.deliver ?? 0) >= written.resultsAt) reasons.push("results");
+    if (looks >= written.looksAt) reasons.push("looks");
+    reasons.push(moodOfCharacter(state, content, decider));
+    return reasons;
+  }
+  // Whoever decides needs no other reason to pick themselves.
+  if (who === decider) return ["self"];
+  if (owes) reasons.push("owed");
+  if (influencerOf(map, who) === decider) reasons.push("protege");
+  else if (isUnder((id) => influencerOf(map, id), who, decider)) {
+    reasons.push("circle");
+  }
+  return reasons;
+}
+
+function weigh(
+  state: State,
+  content: Content,
+  written: Written,
+  vacancy: Vacancy,
+  decider: string,
+  who: string,
+): Candidate {
+  const kind = kindOf(state, decider);
+  const reasons = reasonsFor(state, content, written, vacancy, decider, who);
+  const strength = reasons.reduce(
+    (sum, r) => sum + written.reasons[r].weight[kind],
+    0,
+  );
+  return { who, reasons, strength };
+}
+
+/**
+ * Whoever really holds influence over the seat decides it, each by their own
+ * kind: a Believer weighs what was really delivered, a Practitioner favours and
+ * protégés, an Incompetent who looks the part. The candidates are the player and
+ * whoever competes for it, and the strongest reasons win, with a seeded draw
+ * among equals. The holder moves up, the winner takes the seat, and whoever
+ * answered to the holder answers to them. Winning takes the player to the
+ * seat's floor. Each Character passed over remembers.
+ */
+function decide(
+  state: State,
+  content: Content,
+  written: Written,
+  vacancy: Vacancy,
+): void {
+  const seat = written.seats.find((s) => s.id === vacancy.seat);
+  if (!seat) return;
+  const { holder } = vacancy;
+  const decider = deciderOf(state, holder);
+  const others = competitionNow(state, content)
+    .competing.filter(
+      (c) => c.for.includes(seat.competing) && c.character !== holder,
+    )
+    .map((c) => c.character);
+  const candidates = [YOU, ...others].map((who) =>
+    weigh(state, content, written, vacancy, decider, who),
+  );
+  const best = Math.max(...candidates.map((c) => c.strength));
+  const top = candidates.filter((c) => c.strength === best);
+  const drawn = drawFor(state.seed, `vacancy:${seat.id}`, state.month);
+  const winner = top[Math.floor(drawn * top.length)]?.who ?? YOU;
+  const paper = standingOnPaper(state, content);
+  const decided: Decided = {
+    month: state.month,
+    decider,
+    kind: kindOf(state, decider),
+    winner,
+    close: top.length > 1,
+    candidates,
+    onPaper: paper?.band ?? null,
+  };
+  vacancy.decided = decided;
+  // What everyone is called is read before anyone moves.
+  const called = (id: string) =>
+    id === YOU ? written.you : calledBy(state, content, id);
+  const words = { "{winner}": called(winner), "{holder}": called(holder) };
+  const inFact = sayPeople(written.inFact, {
+    "{decider}": called(decider),
+    "{why}": toldOf(written, decided, called),
+  });
+  moveUp(state, content, seat, holder, winner);
+  const { forYou, forSomeoneElse } = written.passedOver;
+  const kept = winner === YOU ? forYou : forSomeoneElse;
+  for (const { who } of candidates) {
+    if (who === YOU || who === winner) continue;
+    remember(state, content, {
+      character: who,
+      about: kept.about,
+      text: sayPeople(kept.text, words),
+      tone: kept.tone,
+    });
+  }
+  const told = winner === YOU ? seat.won : seat.lost;
+  state.noticesDue.push({
+    title: sayPeople(told.title, words),
+    body: sayPeople(told.body, words),
+    decided: {
+      onPaper: paper && {
+        label: paper.label,
+        at: paper.at,
+        band: paper.band,
+        text: paper.onPaper,
+      },
+      inFact,
+    },
+  });
+}
+
+/** The holder moves up, and the winner takes their place on the Org Chart. */
+function moveUp(
+  state: State,
+  content: Content,
+  seat: Seat,
+  holder: string,
+  winner: string,
+): void {
+  const above = managerOf(state, content, holder) ?? seat.movesUp.reportsTo;
+  const written = content.characters.find((c) => c.id === holder);
+  const held = state.titles[holder] ?? {
+    title: written?.title ?? "",
+    called: written?.called ?? written?.name ?? holder,
+  };
+  const team = [
+    YOU,
+    ...content.characters
+      .map((c) => c.id)
+      .filter(
+        (id) => !isGone(state, id) && managerOf(state, content, id) === holder,
+      ),
+  ];
+  state.reportsTo[holder] = seat.movesUp.reportsTo;
+  state.titles[holder] = {
+    title: seat.movesUp.title,
+    called: seat.movesUp.called,
+  };
+  state.reportsTo[winner] = above;
+  if (winner === YOU) state.job = seat.job;
+  else state.titles[winner] = held;
+  for (const id of team.filter((t) => t !== winner)) {
+    state.reportsTo[id] = winner;
+  }
+}
+
+/** A candidate's reasons, those that weighed most with this kind first. */
+function weighed(
+  written: Written,
+  decided: Decided,
+  who: string,
+): Written["reasons"][VacancyReason][] {
+  const { kind } = decided;
+  const candidate = decided.candidates.find((c) => c.who === who);
+  return (candidate?.reasons ?? [])
+    .map((r) => written.reasons[r])
+    .filter((r) => r.weight[kind] !== 0)
+    .sort((a, b) => b.weight[kind] - a.weight[kind]);
+}
+
+/**
+ * Said as it is decided: the winner's tie to whoever decided, in words that never
+ * say how anyone feels about the player, or who is a Rival.
+ */
+function toldOf(
+  written: Written,
+  decided: Decided,
+  called: (id: string) => string,
+): string {
+  const tie = weighed(written, decided, decided.winner).find(
+    (r) => r.told !== undefined,
+  )?.told;
+  const line = decided.close ? written.close : (tie ?? written.untold);
+  return sayPeople(line, {
+    "{decider}": called(decided.decider),
+    "{who}": called(decided.winner),
+  });
+}
+
+/** Who really decided, and every reason that weighed, for the results screen. */
+function explain(
+  written: Written,
+  decided: Decided,
+  called: (id: string) => string,
+): string {
+  const whyOf = (who: string) => {
+    const why = weighed(written, decided, who).map((r) => r.why);
+    // A draw among equals, or nothing written for it, went unminuted.
+    const unminuted =
+      why.length === 0 || (decided.close && who === decided.winner);
+    return sayPeople((unminuted ? [...why, written.close] : why).join(" "), {
+      "{decider}": called(decided.decider),
+      "{who}": called(who),
+    });
+  };
+  const inFact = sayPeople(written.inFact, {
+    "{decider}": called(decided.decider),
+    "{why}": whyOf(decided.winner),
+  });
+  if (decided.winner === YOU) return inFact;
+  return `${inFact} ${sayPeople(written.asForYou, { "{why}": whyOf(YOU) })}`;
+}
+
+/** Each vacancy decided: whose seat it was, who had it, on paper and in fact. */
+export function vacanciesInResults(
+  state: State,
+  content: Content,
+): Extract<StepView, { kind: "results" }>["vacancies"] {
+  const written = content.vacancies;
+  if (!written) return [];
+  const nameOf = (id: string) =>
+    id === YOU ? written.you : personOf(state, content, id).name;
+  return state.vacancies.flatMap(({ holder, decided }) => {
+    if (!decided) return [];
+    return [
+      {
+        month: decided.month,
+        text: sayPeople(written.results, {
+          "{holder}": nameOf(holder),
+          "{winner}": nameOf(decided.winner),
+        }).replaceAll("{month}", String(decided.month)),
+        onPaper: decided.onPaper,
+        inFact: explain(written, decided, nameOf),
+      },
+    ];
+  });
+}

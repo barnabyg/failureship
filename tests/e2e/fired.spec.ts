@@ -67,7 +67,7 @@ test("a whole run from month 1 to being fired, reloaded on a Final Warning", asy
   await answerAnyNotification(page);
   await attendAndFinishMonth(page);
 
-  await expect(page.getByTestId("month")).toContainText("2 of 9");
+  await expect(page.getByTestId("month")).toContainText("2 of 18");
   await answerAnyNotification(page);
   await page.getByTestId("hotspot-meeting-lessons").click();
   await page.getByTestId("scene-option-blame-callum").click();
@@ -76,7 +76,7 @@ test("a whole run from month 1 to being fired, reloaded on a Final Warning", asy
   await finishMonth(page);
 
   await page.reload();
-  await expect(page.getByTestId("month")).toContainText("3 of 9");
+  await expect(page.getByTestId("month")).toContainText("3 of 18");
   await expect(page.getByTestId("final-warning")).toBeVisible();
   await answerAnyNotification(page);
   await finishMonth(page);

@@ -227,6 +227,18 @@ describe("your boss, read from your place on the Org Chart", () => {
     ]);
   });
 
+  it("puts whoever is in a place in a cast that names it, once each", () => {
+    const raw = placesFixtureRaw(["{boss}", "{head}", "ben", "cal"]);
+    raw.you.reportsTo = "ben";
+    const run = startRun({ seed: 1, content: parseContent(raw) });
+
+    expect(openMeeting(run).cast).toEqual([
+      { name: "Ben Bird", title: "Analyst, YOUR-BOSS" },
+      { name: "Ana Abel", title: "Boss, YOUR-BOSS'S-BOSS" },
+      { name: "Cal Cope", title: "Clerk" },
+    ]);
+  });
+
   it("changes when the player moves, and the boss's signs and treatment follow", () => {
     const content = parseContent(placesFixtureRaw());
     const treatments = (to: string | null) =>

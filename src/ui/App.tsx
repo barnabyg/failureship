@@ -12,6 +12,7 @@ import {
 } from "../engine";
 import { Chart } from "./Chart";
 import { Header, HeaderCards, monthText } from "./Header";
+import { LiftRide, readRide, writeRide, type Ride } from "./LiftRide";
 import { playToMonth } from "./later-month";
 import { Modal } from "./Modal";
 import { Notebook, monthLabel } from "./Notebook";
@@ -90,6 +91,11 @@ export function App() {
   const [wordOpen, setWordOpen] = useState(false);
   const [gaugesOpen, setGaugesOpen] = useState(false);
   const [buzzwordsOpen, setBuzzwordsOpen] = useState(false);
+  // A change of floor is a ride in the lift, taken once its news has been read.
+  const [ride, setRide] = useState<Ride | null>(() => {
+    const saved = readRide();
+    return saved?.to === first.game.view.job.id ? saved : null;
+  });
   // Each run's header starts afresh, even on the same seed.
   const [runNumber, setRunNumber] = useState(0);
 
@@ -105,11 +111,26 @@ export function App() {
     writeSavedRun(run.save());
   }, [run, view]);
 
+  useEffect(() => {
+    writeRide(ride);
+  }, [ride]);
+
   const choose = useCallback(
     (choice: Choice) => {
-      setGame({ run, view: run.choose(choice) });
+      const next = run.choose(choice);
+      const from = view.job.id;
+      setRide((current) => {
+        // The run's end has no floor to ride to.
+        if (next.step.kind === "results") return null;
+        if (current && !current.riding) return { ...current, riding: true };
+        if (next.job.id !== from) {
+          return { from, to: next.job.id, riding: false };
+        }
+        return current;
+      });
+      setGame({ run, view: next });
     },
-    [run],
+    [run, view.job.id],
   );
 
   const restart = (seed: number) => {
@@ -117,6 +138,7 @@ export function App() {
     setRunNumber((n) => n + 1);
     setMessage(null);
     setLeavingFor(null);
+    setRide(null);
   };
 
   /** Leaving a run still in play needs confirming. A finished one does not. */
@@ -129,7 +151,7 @@ export function App() {
   return (
     <main className="game">
       <TowerStage
-        rooms={floorOf(gameContent, view.job.id).rooms}
+        rooms={floorOf(gameContent, ride?.from ?? view.job.id).rooms}
         hotspots={view.hotspots}
         legal={view.choices}
         onChoose={choose}
@@ -409,6 +431,14 @@ export function App() {
             {panelText.closeLabel}
           </button>
         </Modal>
+      )}
+      {ride?.riding && (
+        <LiftRide
+          ride={ride}
+          onStepOut={() => {
+            setRide(null);
+          }}
+        />
       )}
       {saveLost && (
         <Modal

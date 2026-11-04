@@ -64,10 +64,13 @@ describe("whose Grand Plan it is", () => {
     untilNotification(run, "plan-work");
     const before = readHiddenTruth(run).beliefs.ana ?? 0;
 
-    play(run, "on-paper", "noted-next");
+    const views = play(run, "on-paper", "noted-next");
 
     const [hers] = readHiddenTruth(run).plans;
     expect(hers?.ended).toMatchObject({ how: "appearance", counted: false });
+    // It is told as a former boss's, not as the boss's now.
+    expect(toldIn(views, "FORMER-BOSS-DONE")).toEqual([2]);
+    expect(toldIn(views, "DONE-ON-PAPER")).toEqual([]);
     // Belief moves by Ana's kind, a Believer's, though she is no longer the boss.
     expect((readHiddenTruth(run).beliefs.ana ?? 0) - before).toBe(-2);
   });

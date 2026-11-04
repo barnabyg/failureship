@@ -695,7 +695,9 @@
   {
     "id": "hot-desks",
     "floor": "junior-employee",
-    "when": { "planRunning": "hot-desks" },
+    "when": {
+      "planRunning": "hot-desks"
+    },
     "from": "From: Your boss, {boss}",
     "subject": "Hot-desking: where are we?",
     "body": "Your boss's Grand Plan is hot-desking: nobody will have a desk of their own, so that everyone has every desk. Your boss asks each month where it has got to.",
@@ -750,7 +752,14 @@
     "floor": "junior-employee",
     "months": [5],
     "when": {
-      "all": [{ "planRunning": "one-tool" }, { "did": "rolled-out-tool" }]
+      "all": [
+        {
+          "planRunning": "one-tool"
+        },
+        {
+          "did": "rolled-out-tool"
+        }
+      ]
     },
     "from": "From: The new tool, no-reply",
     "subject": "Welcome! Let's get your figures in",
@@ -792,6 +801,502 @@
         "result": {
           "title": "The real figures",
           "body": "The tool sends you a reminder, and then a reminder about the reminder, which you file with the first."
+        }
+      }
+    ]
+  },
+  {
+    "id": "fire-drill",
+    "floor": "junior-employee",
+    "pool": true,
+    "from": "From: Facilities",
+    "subject": "Fire drill, Thursday, 11:00",
+    "body": "There will be a fire drill on Thursday at 11:00. Please leave by the nearest exit and gather in the car park, where the fire wardens will count you. Last time they counted more people than work here.",
+    "options": [
+      {
+        "id": "leave-with-everyone",
+        "label": "Leave with everyone, and be counted",
+        "result": {
+          "title": "Fire drill",
+          "body": "You are counted twice. The fire wardens agree to call it a rounding error."
+        }
+      },
+      {
+        "id": "stay-and-work",
+        "family": "deliver",
+        "label": "Stay at your desk and get an hour's work done",
+        "cost": "standard",
+        "sets": ["skipped-the-drill"],
+        "result": {
+          "title": "Fire drill",
+          "body": "You get an hour of real work done in an empty building. Nobody notices, which is the same as it not having happened."
+        },
+        "approach": "results"
+      }
+    ]
+  },
+  {
+    "id": "e-learning",
+    "floor": "junior-employee",
+    "pool": true,
+    "from": "From: Learning and Development",
+    "subject": "Mandatory e-learning: Being Mindful of Mandatory E-learning",
+    "body": "A new mandatory module is available. It takes forty minutes and explains why the other modules are mandatory. There is a quiz at the end, and you may take it as many times as it takes.",
+    "options": [
+      {
+        "id": "click-through",
+        "label": "Click through it with the sound off",
+        "sets": ["clicked-through"],
+        "result": {
+          "title": "Mandatory e-learning",
+          "body": "You pass on the fourth attempt. Your certificate is emailed to your boss, who is pleased with your commitment to learning."
+        }
+      },
+      {
+        "id": "do-it-properly",
+        "family": "deliver",
+        "label": "Do it properly, with the sound on",
+        "sets": ["did-the-module"],
+        "result": {
+          "title": "Mandatory e-learning",
+          "body": "You learn that the modules are mandatory because they are recorded. You pass first time. Nobody is told."
+        },
+        "approach": "truth"
+      }
+    ]
+  },
+  {
+    "id": "leaving-card",
+    "floor": "junior-employee",
+    "pool": true,
+    "from": "From: The Office Co-ordinator, Marjorie Tull",
+    "subject": "A card for someone in Accounts",
+    "body": "Someone in Accounts is leaving, and there is a card going round. Nobody on this floor knows them. There is also an envelope, which is heavier than the card.",
+    "options": [
+      {
+        "id": "sign-the-card",
+        "label": "Sign it \"All the best\", like everyone else",
+        "result": {
+          "title": "A card for someone in Accounts",
+          "body": "Your All the best is the ninth on the card. The tenth says All the very best, which looks keen."
+        }
+      },
+      {
+        "id": "write-something-real",
+        "family": "trade",
+        "label": "Write something warm, and put in a fiver",
+        "sets": ["signed-warmly"],
+        "result": {
+          "title": "A card for someone in Accounts",
+          "body": "You write something kind about someone you have never met. The envelope is sealed, and your fiver goes with it to a person you will never see again."
+        },
+        "approach": "favour"
+      }
+    ]
+  },
+  {
+    "id": "welcome-floor-2",
+    "floor": "team-lead",
+    "months": [1],
+    "from": "From: The Programme Manager, Gwen Ashdown",
+    "subject": "Welcome to Floor 2",
+    "body": "Welcome to Floor 2. Your access card now opens one more door, and your calendar has been shared with people you have not met. Please complete your Leadership Profile by Friday, so that we know what kind of leader you are.",
+    "options": [
+      {
+        "id": "profile-honestly",
+        "label": "Fill in the profile honestly",
+        "sets": ["profiled-honestly"],
+        "result": {
+          "title": "Your Leadership Profile",
+          "body": "You are a Completer-Finisher. The profile recommends that you delegate the finishing."
+        }
+      },
+      {
+        "id": "profile-visionary",
+        "family": "impress",
+        "label": "Answer every question as a Visionary would",
+        "cost": "standard",
+        "sets": ["profiled-visionary"],
+        "result": {
+          "title": "Your Leadership Profile",
+          "body": "You are a Visionary. The report has a picture of a mountain on it, and is copied to your boss."
+        },
+        "approach": "theatre"
+      }
+    ]
+  },
+  {
+    "id": "team-objectives",
+    "floor": "team-lead",
+    "months": [2],
+    "from": "From: Your boss, {boss}",
+    "subject": "Your team's objectives",
+    "body": "Your team needs objectives for the year, by Friday. Your boss suggests that they be stretching, and that they be the same as last year's, which were stretching.",
+    "options": [
+      {
+        "id": "copy-last-years",
+        "label": "Copy last year's, and change the year",
+        "sets": ["copied-objectives"],
+        "result": {
+          "title": "Your team's objectives",
+          "body": "Your team's objectives are submitted. They are stretching, and familiar."
+        }
+      },
+      {
+        "id": "write-real-ones",
+        "family": "deliver",
+        "label": "Write real ones, with your team",
+        "cost": "standard",
+        "sets": ["wrote-real-objectives"],
+        "result": {
+          "title": "Your team's objectives",
+          "body": "It takes a morning. The objectives are real, and so are the arguments about them."
+        },
+        "approach": "truth"
+      }
+    ]
+  },
+  {
+    "id": "centre-launch",
+    "floor": "team-lead",
+    "months": [3],
+    "when": {
+      "planRunning": "excellence"
+    },
+    "from": "From: Your boss, {boss}",
+    "subject": "The Centre of Excellence: launch date",
+    "body": "Your boss would like the Centre of Excellence to launch soon. There will be an e-mail, and possibly a lanyard. Your boss would like to know whether your team can be part of it.",
+    "options": [
+      {
+        "id": "not-yet",
+        "label": "Say that your team will join when it is ready",
+        "result": {
+          "title": "The Centre of Excellence",
+          "body": "Your boss says that readiness is a mindset. You are put down as a mindset."
+        }
+      },
+      {
+        "id": "lanyards",
+        "family": "fabricate",
+        "label": "Order the lanyards, and send the launch e-mail",
+        "cost": "standard",
+        "sets": ["centre-sign-up"],
+        "result": {
+          "title": "The Centre of Excellence",
+          "body": "The lanyards arrive. They say Excellence on them, in a font that is excellent. The e-mail goes out, and the Centre is open, on the e-mail."
+        },
+        "approach": "theatre"
+      }
+    ]
+  },
+  {
+    "id": "approve-timesheets",
+    "floor": "team-lead",
+    "pool": true,
+    "from": "From: The Timesheet System",
+    "subject": "4 timesheets awaiting your approval",
+    "body": "Four timesheets from your team are awaiting your approval. One of them says thirty-nine hours on the Centre of Excellence, which does not have a code.",
+    "options": [
+      {
+        "id": "approve-all",
+        "label": "Approve all four without reading them",
+        "result": {
+          "title": "Timesheets",
+          "body": "Approved. The system thanks you for your diligence, which it measures in clicks."
+        }
+      },
+      {
+        "id": "read-them",
+        "family": "deliver",
+        "label": "Read them, and ask about the thirty-nine hours",
+        "cost": "standard",
+        "sets": ["read-the-timesheets"],
+        "result": {
+          "title": "Timesheets",
+          "body": "It was the cables, in the box, on the chair. Someone has been sorting them. They would like a code."
+        },
+        "approach": "truth"
+      }
+    ]
+  },
+  {
+    "id": "headcount-freeze",
+    "floor": "team-lead",
+    "pool": true,
+    "from": "From: The Programme Manager, Gwen Ashdown",
+    "subject": "Headcount freeze: an update",
+    "body": "There is a headcount freeze. It does not apply to essential roles, and all roles are essential, so it applies to vacancies. Please let us know whether your team has any vacancies, and if not, why not.",
+    "options": [
+      {
+        "id": "no-vacancies",
+        "label": "Say that your team has no vacancies",
+        "result": {
+          "title": "Headcount freeze",
+          "body": "You are thanked for your lean team. Lean has been circled."
+        }
+      },
+      {
+        "id": "make-the-case",
+        "family": "deliver",
+        "label": "Make the case for one more person",
+        "sets": ["made-the-case"],
+        "result": {
+          "title": "Headcount freeze",
+          "body": "You make the case. It is a good case, and it is frozen."
+        },
+        "approach": "truth"
+      }
+    ]
+  },
+  {
+    "id": "leadership-survey",
+    "floor": "team-lead",
+    "pool": true,
+    "from": "From: People and Culture",
+    "subject": "How was your leader this quarter?",
+    "body": "Your team has been invited to rate you anonymously. The survey closes on Friday. You may, if you wish, remind them that it is anonymous.",
+    "options": [
+      {
+        "id": "leave-it",
+        "label": "Leave them to it",
+        "result": {
+          "title": "The survey",
+          "body": "The results are in. Your team rates you three out of five, which People and Culture says is very honest."
+        }
+      },
+      {
+        "id": "remind-them",
+        "family": "fabricate",
+        "label": "Remind your team, in person, that it is anonymous",
+        "sets": ["leaned-on-the-survey"],
+        "result": {
+          "title": "The survey",
+          "body": "You remind each of them, one at a time, at their desk. The results are excellent, and unanimous."
+        },
+        "approach": "theatre"
+      }
+    ]
+  },
+  {
+    "id": "the-seat",
+    "floor": "junior-employee",
+    "when": {
+      "vacancyOpen": true
+    },
+    "from": "From: People and Culture",
+    "subject": "Expressions of interest: your boss's seat",
+    "body": "Your boss's seat is open, and the process is fair and transparent. Expressions of interest may be made to anyone, since nobody will say who is deciding.",
+    "options": [
+      {
+        "id": "leave-it-to-the-process",
+        "label": "Leave it to the process",
+        "result": {
+          "title": "The seat",
+          "body": "You leave it to the process. The process thanks you for your patience, automatically."
+        }
+      },
+      {
+        "id": "word-with-the-head",
+        "family": "trade",
+        "label": "Have a word with your boss's boss about it",
+        "cost": "standard",
+        "seat": {
+          "approach": "{head}"
+        },
+        "result": {
+          "title": "The seat",
+          "body": "Your boss's boss listens, says that it is not really their call, and writes something down."
+        }
+      },
+      {
+        "id": "word-with-the-coordinator",
+        "family": "trade",
+        "label": "Have a word with the Office Co-ordinator about it",
+        "cost": "standard",
+        "seat": {
+          "approach": "admin"
+        },
+        "result": {
+          "title": "The seat",
+          "body": "The Office Co-ordinator says that they just take the minutes, and takes a note."
+        }
+      },
+      {
+        "id": "word-with-the-analyst",
+        "family": "trade",
+        "label": "Have a word with the Senior Analyst about it",
+        "cost": "standard",
+        "seat": {
+          "approach": "analyst"
+        },
+        "result": {
+          "title": "The seat",
+          "body": "The Senior Analyst says that they could not possibly comment, and looks at the ceiling for a while."
+        }
+      },
+      {
+        "id": "call-in-a-favour",
+        "family": "trade",
+        "label": "Call in a favour you are owed",
+        "seat": {
+          "callIn": true
+        },
+        "result": {
+          "title": "The seat",
+          "body": "You remind someone of what you did for them. They say that they remember, which is not the same as saying yes."
+        }
+      },
+      {
+        "id": "claim-the-credit",
+        "family": "impress",
+        "label": "Reply all, thanking everyone for your Grand Plan",
+        "seat": {
+          "credit": true
+        },
+        "result": {
+          "title": "The seat",
+          "body": "Your reply all thanks everyone who helped with your Grand Plan. Several people reply all to say well done, and one replies all to ask to be removed."
+        }
+      }
+    ]
+  },
+  {
+    "id": "password-reset",
+    "floor": "junior-employee",
+    "pool": true,
+    "from": "From: IT Security",
+    "subject": "Your password expires today",
+    "body": "Your password expires today. Your new password must be different from your last twelve, contain a symbol, and be memorable, though not written down.",
+    "options": [
+      {
+        "id": "add-a-number",
+        "label": "Add a number to the end of your old one",
+        "result": {
+          "title": "Your password",
+          "body": "Your password is now the old one, with a 4 on the end. It is accepted, securely."
+        }
+      },
+      {
+        "id": "ask-it",
+        "label": "Ask IT what counts as a symbol",
+        "sets": ["asked-it"],
+        "result": {
+          "title": "Your password",
+          "body": "IT replies that the question has been logged. A ticket number arrives, which you could use."
+        }
+      }
+    ]
+  },
+  {
+    "id": "desk-audit",
+    "floor": "junior-employee",
+    "pool": true,
+    "from": "From: Facilities",
+    "subject": "Clear desk audit, Friday",
+    "body": "There will be a clear desk audit on Friday. Anything left on a desk will be removed for your convenience, and kept in a place nobody will tell you.",
+    "options": [
+      {
+        "id": "clear-it",
+        "label": "Clear your desk into a drawer",
+        "result": {
+          "title": "Clear desk audit",
+          "body": "Your desk is clear. Your drawer does not close."
+        }
+      },
+      {
+        "id": "leave-the-plant",
+        "label": "Leave the plant where it is",
+        "sets": ["lost-the-plant"],
+        "result": {
+          "title": "Clear desk audit",
+          "body": "The plant is removed for your convenience. It is not seen again."
+        }
+      }
+    ]
+  },
+  {
+    "id": "charity-bake",
+    "floor": "junior-employee",
+    "pool": true,
+    "from": "From: The Office Co-ordinator, Marjorie Tull",
+    "subject": "Charity bake sale: volunteers wanted",
+    "body": "There is a charity bake sale on Thursday, and the Office Co-ordinator is looking for volunteers to bake. Buying is also welcome, and compulsory.",
+    "options": [
+      {
+        "id": "buy-a-cake",
+        "label": "Buy a cake on the day",
+        "result": {
+          "title": "The bake sale",
+          "body": "You buy a lemon slice. It is from a supermarket, with the label taken off."
+        }
+      },
+      {
+        "id": "bake-something",
+        "family": "trade",
+        "label": "Bake something yourself",
+        "cost": "standard",
+        "sets": ["baked-for-charity"],
+        "result": {
+          "title": "The bake sale",
+          "body": "You bake flapjacks the night before. They sell out by ten, which the Office Co-ordinator notes."
+        },
+        "approach": "favour"
+      }
+    ]
+  },
+  {
+    "id": "restructure-consultation",
+    "floor": "team-lead",
+    "pool": true,
+    "from": "From: People and Culture",
+    "subject": "Consultation: your team's structure",
+    "body": "As part of an ongoing review, team leads are invited to propose their team's ideal structure. Proposals will be considered alongside the structure that has already been decided.",
+    "options": [
+      {
+        "id": "propose-the-same",
+        "label": "Propose the structure you have",
+        "result": {
+          "title": "Consultation",
+          "body": "Your proposal is noted as aligned."
+        }
+      },
+      {
+        "id": "propose-a-new-one",
+        "family": "deliver",
+        "label": "Propose a better one, with a diagram",
+        "cost": "standard",
+        "sets": ["proposed-a-structure"],
+        "result": {
+          "title": "Consultation",
+          "body": "Your diagram is admired, and filed under Future State."
+        },
+        "approach": "truth"
+      }
+    ]
+  },
+  {
+    "id": "offsite-invite",
+    "floor": "team-lead",
+    "pool": true,
+    "from": "From: The Programme Manager, Gwen Ashdown",
+    "subject": "Leadership offsite: save the date",
+    "body": "Team leads are invited to a leadership offsite, at a hotel with a lake, to discuss cost control. Please confirm your dietary requirements and your commitment.",
+    "options": [
+      {
+        "id": "confirm",
+        "label": "Confirm, with no dietary requirements",
+        "result": {
+          "title": "The offsite",
+          "body": "You are confirmed. The hotel has a lake, and an agenda, and only one of them is long."
+        }
+      },
+      {
+        "id": "decline-for-the-team",
+        "label": "Decline, as your team has a deadline that week",
+        "sets": ["declined-the-offsite"],
+        "result": {
+          "title": "The offsite",
+          "body": "You decline. Your absence is noted as commitment to delivery, by one person, and as absence by the rest."
         }
       }
     ]

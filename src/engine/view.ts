@@ -8,6 +8,12 @@ export type Choice =
   | { type: "scene"; sceneId: string; optionId: string }
   | { type: "find-out"; sourceId: string; subjectId: string };
 
+/** A vacancy decided: Official standing, beside who really decided and why. */
+export interface DecidedNotice {
+  onPaper: { label: string; at: number; band: string; text: string } | null;
+  inFact: string;
+}
+
 export interface Hotspot {
   id: string;
   label: string;
@@ -104,6 +110,7 @@ export type StepView =
       reaction?: string | undefined;
       /** What the boss finally says of the player. */
       verdict?: string | undefined;
+      decided?: DecidedNotice | undefined;
     }
   | { kind: "move"; from: string; title: string; body: string }
   | { kind: "event"; from: string; title: string; body: string }
@@ -133,6 +140,14 @@ export type StepView =
         /** What the one who really decides ended up believing of the player. */
         believes: string | null;
       } | null;
+      /** Each vacancy decided: on paper, and who really decided it and why. */
+      vacancies: {
+        month: number;
+        text: string;
+        /** Official standing's band then, if there is Official standing. */
+        onPaper: string | null;
+        inFact: string;
+      }[];
       /** Each Thread that played out, traced back to what started it. */
       threads: {
         startedIn: number;

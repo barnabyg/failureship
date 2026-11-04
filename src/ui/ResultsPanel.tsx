@@ -37,6 +37,24 @@ export function ResultsPanel({
           </p>
         </div>
       )}
+      {step.vacancies.length > 0 && (
+        <div data-testid="result-vacancies">
+          <h3>{panelText.resultsVacanciesHeading}</h3>
+          {step.vacancies.map((vacancy) => (
+            <p key={vacancy.month} data-testid="result-vacancy">
+              {vacancy.text}{" "}
+              {vacancy.onPaper !== null && (
+                <>
+                  <strong>{panelText.decidedOnPaper}: </strong>
+                  {vacancy.onPaper}.{" "}
+                </>
+              )}
+              <strong>{panelText.decidedInFact}: </strong>
+              {vacancy.inFact}
+            </p>
+          ))}
+        </div>
+      )}
       <h3>{panelText.resultsMilestonesHeading}</h3>
       {step.milestones.length === 0 ? (
         <p>{panelText.resultsNoMilestones}</p>

@@ -333,5 +333,49 @@
       "incompetent": 3,
       "practitioner": 2
     }
+  },
+  {
+    "id": "asks-for-a-one-pager",
+    "text": "{who} asks for the whole thing on one page, and then for that page to be shorter.",
+    "clue": "{who} asked for everything on one page, and then for less.",
+    "roles": ["programme-manager"],
+    "likelihood": {
+      "believer": 3,
+      "incompetent": 7,
+      "practitioner": 6
+    }
+  },
+  {
+    "id": "draws-the-dependencies",
+    "text": "{who} draws who depends on whom on the whiteboard, and leaves it up when everyone has gone.",
+    "clue": "{who} drew who depends on whom, and left it on the whiteboard.",
+    "roles": ["programme-manager"],
+    "likelihood": {
+      "believer": 7,
+      "incompetent": 2,
+      "practitioner": 5
+    }
+  },
+  {
+    "id": "has-a-tracker",
+    "text": "{who} has a tracker for this, colour-coded, and offers to add a column for you.",
+    "clue": "{who} offered to add a column for you to their tracker.",
+    "roles": ["service-delivery-lead"],
+    "likelihood": {
+      "believer": 6,
+      "incompetent": 5,
+      "practitioner": 4
+    }
+  },
+  {
+    "id": "quotes-the-service-level",
+    "text": "{who} quotes the service level from memory, to the minute, and then says that it is under review.",
+    "clue": "{who} quoted the service level to the minute, and said it was under review.",
+    "roles": ["service-delivery-lead"],
+    "likelihood": {
+      "believer": 4,
+      "incompetent": 3,
+      "practitioner": 7
+    }
   }
 ]

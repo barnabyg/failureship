@@ -27,6 +27,7 @@ import {
 import { findBrokenFloors } from "./floor-checks";
 import { findBrokenPlans } from "./plan-checks";
 import { findBrokenReviews } from "./review-checks";
+import { findBrokenVacancies, needsVacancies } from "./vacancy-checks";
 import { findBrokenRivals, withoutMaker } from "./rival-checks";
 import { bossesAtStart, meantBy } from "./places";
 import {
@@ -119,6 +120,9 @@ function findBrokenReferences(content: Content): string[] {
         `${owner} needs unknown Grand Plan "${condition.planRunning}".`,
       );
     }
+    if ("vacancyOpen" in condition) {
+      problems.push(...needsVacancies(content, owner));
+    }
     if ("hasBuzzword" in condition && !buzzwords.has(condition.hasBuzzword)) {
       problems.push(
         `${owner} needs unknown Buzzword "${condition.hasBuzzword}".`,
@@ -183,6 +187,7 @@ function findBrokenReferences(content: Content): string[] {
   problems.push(...findBrokenReviews(content, hiddenFlags));
   problems.push(...findBrokenRivals(content));
   problems.push(...findBrokenPlans(content, hiddenFlags, checkCondition));
+  problems.push(...findBrokenVacancies(content));
   problems.push(...findBrokenDeal(content, characters));
   problems.push(...findBrokenBehaviours(content));
   problems.push(...findBrokenBossSigns(content));
@@ -229,6 +234,10 @@ function findBrokenReferences(content: Content): string[] {
       const owner = `Thread "${thread.id}"`;
       if (outcome.when) checkCondition(owner, outcome.when);
     }
+  }
+  for (const entry of content.rivals?.competing ?? []) {
+    const owner = `What Rivals compete for, "${entry.id}",`;
+    if (entry.when) checkCondition(owner, entry.when);
   }
   for (const report of content.changing?.whistleblower.reports ?? []) {
     const owner = `Whistleblower report "${report.bill.id}"`;
@@ -320,7 +329,7 @@ function findBrokenReferences(content: Content): string[] {
   for (const s of content.scenes) {
     const owner = `Scene "${s.id}"`;
     checkMonths(owner, s.months);
-    for (const c of s.cast) checkCharacter(owner, c);
+    for (const c of s.cast) checkCharacterOrPlace(owner, c);
     if (
       s.cast.length < 3 &&
       /\{(holder|ignored|bystander)\}/.test(JSON.stringify(s))

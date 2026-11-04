@@ -133,14 +133,25 @@
   {
     "id": "tool-hollow",
     "addedBy": "tool-is-hollow",
-    "after": { "min": 1, "max": 2 },
+    "after": {
+      "min": 1,
+      "max": 2
+    },
     "note": "You made your boss's Grand Plan look done: the new tool says it is in use, and what is in it is not the real figures, if anything is.",
     "route": {
       "character": "head",
-      "chance": { "believer": 0.9, "incompetent": 0.3, "practitioner": 0.6 },
+      "chance": {
+        "believer": 0.9,
+        "incompetent": 0.3,
+        "practitioner": 0.6
+      },
       "motive": "The Head of Operations wanted the new tool's figures for the board, and went to get them."
     },
-    "traced": { "not": { "did": "covered-tracks" } },
+    "traced": {
+      "not": {
+        "did": "covered-tracks"
+      }
+    },
     "onPlayer": {
       "id": "tool-hollow-landed",
       "as": "move",
@@ -166,14 +177,25 @@
   {
     "id": "desks-hollow",
     "addedBy": "desks-are-hollow",
-    "after": { "min": 1, "max": 2 },
+    "after": {
+      "min": 1,
+      "max": 2
+    },
     "note": "You made your boss's Grand Plan look done: the labels came off the desks, and everyone stayed where they were.",
     "route": {
       "character": "admin",
-      "chance": { "believer": 0.8, "incompetent": 0.3, "practitioner": 0.6 },
+      "chance": {
+        "believer": 0.8,
+        "incompetent": 0.3,
+        "practitioner": 0.6
+      },
       "motive": "The Office Co-ordinator keeps the seating plan, and the seating plan had not changed."
     },
-    "traced": { "not": { "did": "covered-tracks" } },
+    "traced": {
+      "not": {
+        "did": "covered-tracks"
+      }
+    },
     "onPlayer": {
       "id": "desks-hollow-landed",
       "as": "move",
@@ -187,5 +209,49 @@
     "landedOnYou": "It came out in the seating plan, which had not changed, beside your e-mail saying it had.",
     "landedElsewhere": "It came out, but nobody could say who had said it was done.",
     "neverCameOut": "It never came out. Everyone still sits where they sat, at nobody's desk."
+  },
+  {
+    "id": "centre-empty",
+    "addedBy": "centre-is-a-sign",
+    "after": {
+      "min": 1,
+      "max": 3
+    },
+    "note": "You made your boss's Centre of Excellence look open: a sign on a door, with nobody behind it.",
+    "route": {
+      "character": "programme",
+      "chance": {
+        "believer": 0.9,
+        "incompetent": 0.3,
+        "practitioner": 0.6
+      },
+      "motive": "The Programme Manager wanted to show the Centre to Floor 3, and opened the door."
+    },
+    "traced": {
+      "not": {
+        "did": "covered-tracks"
+      }
+    },
+    "onPlayer": {
+      "id": "centre-empty-landed",
+      "as": "move",
+      "from": "From: The Programme Manager, Gwen Ashdown",
+      "title": "A visit to the Centre of Excellence",
+      "body": "The Programme Manager took a visitor from Floor 3 to see the Centre of Excellence, and opened the door. The chair, the cables and the launch e-mail all led back to you. The Programme Manager would like a word, and has booked one.",
+      "opinion": -1,
+      "headOpinion": -2,
+      "sets": ["centre-found-empty"]
+    },
+    "onSomeoneElse": {
+      "id": "centre-empty-elsewhere",
+      "as": "move",
+      "from": "From: The Programme Manager, Gwen Ashdown",
+      "title": "A visit to the Centre of Excellence",
+      "body": "The Programme Manager took a visitor to see the Centre of Excellence, and found it empty. It is now described as hybrid.",
+      "sets": ["centre-empty-untraced"]
+    },
+    "landedOnYou": "It came out when the Programme Manager opened the door for a visitor, and it led to you.",
+    "landedElsewhere": "It came out when a visitor was shown round, and it was put down to hybrid working.",
+    "neverCameOut": "It never came out. The sign is still on the door, and the door is still shut."
   }
 ]

@@ -6,7 +6,7 @@
     "narration": [
       "Item one on the agenda is the agenda. The projector shows a slide titled Where We Are. Nobody can say. Item two is your boss's Grand Plan, {plan}. The slide is a lighthouse."
     ],
-    "cast": ["head", "boss", "analyst", "admin", "projects", "associate"],
+    "cast": ["{head}", "{boss}", "analyst", "admin", "projects", "associate"],
     "signs": [
       {
         "label": "Who interrupts whom",
@@ -175,7 +175,7 @@
     "narration": [
       "A project was delivered late. The purpose of this session is not to find someone to blame, your boss explains, and asks whose fault it was. Everyone looks at you, the most junior person present."
     ],
-    "cast": ["head", "boss", "analyst", "admin", "projects", "associate"],
+    "cast": ["{head}", "{boss}", "analyst", "admin", "projects", "associate"],
     "signs": [
       {
         "label": "Who has prepared",
@@ -451,7 +451,7 @@
     "narration": [
       "The Chief Executive appears on the screen, slightly too large, and says that this has been a year of challenges and that the challenges have been opportunities. The floor has gathered to watch, and to be seen watching."
     ],
-    "cast": ["head", "boss", "analyst", "admin", "projects", "associate"],
+    "cast": ["{head}", "{boss}", "analyst", "admin", "projects", "associate"],
     "signs": [
       {
         "label": "Who sits where",
@@ -593,7 +593,7 @@
     "narration": [
       "The Chief Financial Officer has asked Floor 1 to cut its budget by thirty per cent while delivering everything in the plan. Your boss says this is an exciting conversation, and that someone junior should start it."
     ],
-    "cast": ["head", "boss", "analyst", "admin", "projects", "associate"],
+    "cast": ["{head}", "{boss}", "analyst", "admin", "projects", "associate"],
     "signs": [
       {
         "label": "Whose budget is safe",
@@ -827,7 +827,7 @@
     "narration": [
       "An Ideas Workshop, with a wall, a pad of sticky notes each and a facilitator from Floor 3. There are no bad ideas. The ideas will be prioritised afterwards, by your boss, who has brought one."
     ],
-    "cast": ["boss", "analyst", "admin", "projects", "associate"],
+    "cast": ["{boss}", "analyst", "admin", "projects", "associate"],
     "signs": [
       {
         "label": "Whose note goes to the top",
@@ -898,7 +898,14 @@
         "family": "deliver",
         "label": "Offer to load the figures you were sent into the new tool, and launch it yourself",
         "requires": {
-          "all": [{ "planRunning": "one-tool" }, { "did": "asked-for-figures" }]
+          "all": [
+            {
+              "planRunning": "one-tool"
+            },
+            {
+              "did": "asked-for-figures"
+            }
+          ]
         },
         "results": [
           {
@@ -913,7 +920,14 @@
         "family": "impress",
         "label": "Offer to load the figures you were sent, so that your boss can launch the new tool as their own idea",
         "requires": {
-          "all": [{ "planRunning": "one-tool" }, { "did": "asked-for-figures" }]
+          "all": [
+            {
+              "planRunning": "one-tool"
+            },
+            {
+              "did": "asked-for-figures"
+            }
+          ]
         },
         "results": [
           {
@@ -927,7 +941,9 @@
         "id": "screenshot-on-the-note",
         "family": "fabricate",
         "label": "Stick a screenshot of the new tool on your boss's note, and say that it is live",
-        "requires": { "planRunning": "one-tool" },
+        "requires": {
+          "planRunning": "one-tool"
+        },
         "results": [
           {
             "body": "The screenshot is of the tool's home page, which has a welcome message and a picture of a lighthouse. The facilitator writes LIVE beside it, and draws a tick.",
@@ -947,7 +963,7 @@
       "The first Quarterly Business Review of the year. Attendance is mandatory, and it is held over lunch, so that it takes up nobody's time.",
       "The quarter is reviewed. Each team presents what it has achieved, on a slide with an arrow going up. The arrows have been drawn before the figures, so as not to influence them."
     ],
-    "cast": ["head", "boss", "analyst", "admin", "projects", "associate"],
+    "cast": ["{head}", "{boss}", "analyst", "admin", "projects", "associate"],
     "signs": [
       {
         "label": "Whose slide is skipped",
@@ -1058,7 +1074,7 @@
       "The second Quarterly Business Review, held over lunch again. The sandwiches are from the first one.",
       "This quarter, each team's arrow is shown beside last quarter's. Where last quarter's arrow was higher, it has been restated, so that progress can be seen."
     ],
-    "cast": ["head", "boss", "analyst", "admin", "projects", "associate"],
+    "cast": ["{head}", "{boss}", "analyst", "admin", "projects", "associate"],
     "signs": [
       {
         "label": "Whose arrow is restated",
@@ -1135,7 +1151,14 @@
         "family": "deliver",
         "label": "Put the new tool on the big screen, and load the figures you were sent into it while everyone watches",
         "requires": {
-          "all": [{ "planRunning": "one-tool" }, { "did": "asked-for-figures" }]
+          "all": [
+            {
+              "planRunning": "one-tool"
+            },
+            {
+              "did": "asked-for-figures"
+            }
+          ]
         },
         "results": [
           {
@@ -1149,7 +1172,9 @@
         "id": "screenshot-for-the-review",
         "family": "fabricate",
         "label": "Show a screenshot of the new tool, which loads faster than the tool",
-        "requires": { "planRunning": "one-tool" },
+        "requires": {
+          "planRunning": "one-tool"
+        },
         "results": [
           {
             "body": "The screenshot goes up beside the arrows. Someone on the video link asks for access. You say that it is being rolled out in waves, and that they are in the next one.",
@@ -1169,7 +1194,7 @@
       "The last Quarterly Business Review of the year, held over lunch. Lunch is one biscuit each, because of the forecast.",
       "This quarter, the year's three arrows have been joined into one, in the shape of a hockey stick. The handle is this year. The blade is next year, and has been drawn already, so that the figures know what is expected of them."
     ],
-    "cast": ["head", "boss", "analyst", "admin", "projects", "associate"],
+    "cast": ["{head}", "{boss}", "analyst", "admin", "projects", "associate"],
     "signs": [
       {
         "label": "Who says how steep",
@@ -1238,7 +1263,7 @@
     "narration": [
       "Your project has been flagged red on this morning's chart, and the Project Status Review has been called for you. Your boss has asked you to walk the room through it. There is a chart behind you, and it shows something bad that is actually happening."
     ],
-    "cast": ["head", "boss", "analyst", "admin", "projects", "associate"],
+    "cast": ["{head}", "{boss}", "analyst", "admin", "projects", "associate"],
     "signs": [
       {
         "label": "Who decides the colour",
@@ -1384,7 +1409,7 @@
     "narration": [
       "Ratings are decided here, on a curve, by people who say that nobody is being compared with anybody. Someone must be at the bottom. You have been invited to give your perspective, which is new, and you are told that it is a privilege."
     ],
-    "cast": ["head", "boss", "analyst", "admin", "projects", "associate"],
+    "cast": ["{head}", "{boss}", "analyst", "admin", "projects", "associate"],
     "signs": [
       {
         "label": "Who sets the curve",
@@ -1662,7 +1687,7 @@
     "narration": [
       "Your boss has introduced a new metric, the Stakeholder Delight Index. It will be reported monthly, and it goes up when a form is filled in. The first results are being shown today. Nobody has said who fills in the form."
     ],
-    "cast": ["head", "boss", "analyst", "admin", "projects", "associate"],
+    "cast": ["{head}", "{boss}", "analyst", "admin", "projects", "associate"],
     "signs": [
       {
         "label": "Whose number is not discussed",
@@ -1783,7 +1808,7 @@
     "narration": [
       "The floor has a vacancy for an analyst, and you are on the panel, for balance. There are three candidates. One is excellent, one was recommended, and one is an old friend of yours who has asked you not to mention how you know each other."
     ],
-    "cast": ["head", "boss", "analyst", "admin", "projects", "associate"],
+    "cast": ["{head}", "{boss}", "analyst", "admin", "projects", "associate"],
     "signs": [
       {
         "label": "Whose candidate it is",
@@ -1893,7 +1918,7 @@
     "narration": [
       "Human Resources is holding a Listening Session, in which anyone may raise anything in complete confidence, in this room, in front of everybody. There are biscuits. Someone from Human Resources is writing down who takes one."
     ],
-    "cast": ["head", "boss", "analyst", "admin", "projects", "associate"],
+    "cast": ["{head}", "{boss}", "analyst", "admin", "projects", "associate"],
     "signs": [
       {
         "label": "Who is safe to mention",
@@ -2021,6 +2046,1209 @@
           {
             "body": "It is a good biscuit. It has been noted.",
             "sets": ["took-a-biscuit"]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "pivot-review",
+    "quarter": 4,
+    "title": "Quarterly Business Review: The Pivot",
+    "location": "The Auditorium, with every floor on the video link",
+    "narration": [
+      "A new year's first Quarterly Business Review. Last year's arrow has been turned ninety degrees, and is now called a pivot. It points at a slide that says Beyond."
+    ],
+    "cast": ["{head}", "{boss}", "analyst", "admin", "projects", "associate"],
+    "signs": [
+      {
+        "label": "Who names the pivot",
+        "text": "{holder} is asked what the pivot is towards, and says Beyond, and the room nods. {ignored} asks where Beyond is, and is thanked.",
+        "clue": "At the Pivot review, the room nodded when {holder} said Beyond, and thanked {ignored} for asking where it was."
+      },
+      {
+        "label": "Who sits nearest",
+        "text": "{bystander} has saved the seat beside {holder}, and gives it up only when {holder} sits in it."
+      }
+    ],
+    "options": [
+      {
+        "id": "champion-the-pivot",
+        "family": "impress",
+        "label": "Say that your team pivoted first",
+        "results": [
+          {
+            "body": "You are minuted as an early pivoter. Nobody asks which way.",
+            "sets": ["pivoted-first"],
+            "approach": "theatre"
+          }
+        ]
+      },
+      {
+        "id": "ask-where-beyond-is",
+        "family": "deliver",
+        "label": "Ask where Beyond is, exactly",
+        "results": [
+          {
+            "body": "There is a pause. Someone says that is rather the point. Your question is noted, in a smaller font.",
+            "sets": ["asked-where-beyond-is"],
+            "headOpinion": 1,
+            "approach": "truth"
+          }
+        ]
+      },
+      {
+        "id": "credit-the-pivot-upstairs",
+        "family": "impress",
+        "label": "Thank your boss's boss for the vision",
+        "results": [
+          {
+            "body": "Your boss's boss accepts the thanks on behalf of the vision, which is not present.",
+            "sets": ["credited-head", "gave-credit-upstairs"],
+            "headOpinion": 1,
+            "approach": "over-head"
+          }
+        ]
+      },
+      {
+        "id": "turn-with-it",
+        "label": "Turn your chair ninety degrees, like everyone else",
+        "results": [
+          {
+            "body": "You face Beyond with the rest of the room. It is a wall.",
+            "sets": ["turned-with-the-pivot"]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "future-review",
+    "quarter": 5,
+    "title": "Quarterly Business Review: Lessons From the Future",
+    "location": "The Auditorium, with every floor on the video link",
+    "narration": [
+      "This quarter's review looks back from next year, which has gone well. A consultant reads out what we will have learned, and the room takes notes on its own future."
+    ],
+    "cast": ["{head}", "{boss}", "analyst", "admin", "projects", "associate"],
+    "signs": [
+      {
+        "label": "Whose future is read first",
+        "text": "The consultant reads out what {holder} will have achieved, at length. {ignored}'s future is in the appendix.",
+        "clue": "At the Lessons From the Future review, {holder}'s future came first and {ignored}'s was in the appendix."
+      },
+      {
+        "label": "Who claps first",
+        "text": "{bystander} claps for a future achievement a moment after {holder} does, and a moment before anyone else."
+      }
+    ],
+    "options": [
+      {
+        "id": "claim-a-future-win",
+        "family": "fabricate",
+        "label": "Say that you will have delivered the new tool by then",
+        "results": [
+          {
+            "body": "It is written into next year, in your name. Next year has become a deadline.",
+            "sets": ["claimed-a-future-win"],
+            "approach": "theatre"
+          }
+        ]
+      },
+      {
+        "id": "thank-the-future",
+        "family": "impress",
+        "label": "Thank leadership for next year",
+        "results": [
+          {
+            "body": "Leadership thanks you for thanking them in advance. It is a first, and it is minuted.",
+            "sets": ["thanked-leadership"],
+            "approach": "flatter"
+          }
+        ]
+      },
+      {
+        "id": "ask-about-this-year",
+        "family": "deliver",
+        "label": "Ask what we learned this year",
+        "results": [
+          {
+            "body": "The consultant says that this year is out of scope. It is in next year's lessons, as a risk.",
+            "sets": ["asked-about-this-year"],
+            "headOpinion": 1,
+            "approach": "truth"
+          }
+        ]
+      },
+      {
+        "id": "take-notes",
+        "label": "Take notes on your future",
+        "results": [
+          {
+            "body": "Your notes say that things went well. You underline it.",
+            "sets": ["noted-the-future"]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "same-again-review",
+    "quarter": 6,
+    "title": "Quarterly Business Review: The Year, Again",
+    "location": "The Auditorium, with every floor on the video link",
+    "narration": [
+      "The last review of the period. The slides are last year's, with the year changed, because the slides went well last year. The arrow is back, and is going up again, from where it was."
+    ],
+    "cast": ["{head}", "{boss}", "analyst", "admin", "projects", "associate"],
+    "signs": [
+      {
+        "label": "Who notices the slides",
+        "text": "{holder} says that the slides look familiar, and everyone agrees that this is a strength. {ignored} says the same thing, and is asked to take it offline.",
+        "clue": "At the last review, the room agreed with {holder} that the slides looked familiar, and asked {ignored} to take it offline."
+      },
+      {
+        "label": "Who speaks last",
+        "text": "{bystander} finishes a sentence only once {holder} has nodded at the end of it."
+      }
+    ],
+    "options": [
+      {
+        "id": "present-it-again",
+        "family": "fabricate",
+        "label": "Present last year's slide as this year's",
+        "results": [
+          {
+            "body": "Nobody notices. Someone says it is even better than last year's, which it is not, being the same one.",
+            "sets": ["presented-it-again"],
+            "approach": "theatre"
+          }
+        ]
+      },
+      {
+        "id": "say-it-is-the-same",
+        "family": "deliver",
+        "label": "Say that it is the same slide",
+        "results": [
+          {
+            "body": "There is a silence. The slide is advanced, and the next one is also the same.",
+            "sets": ["said-it-was-the-same"],
+            "headOpinion": 1,
+            "approach": "truth"
+          }
+        ]
+      },
+      {
+        "id": "credit-boss-again",
+        "family": "impress",
+        "label": "Say that the arrow is all down to your boss",
+        "results": [
+          {
+            "body": "It is minuted, as it was last year, in the same words.",
+            "sets": ["credited-boss", "gave-credit-upstairs"],
+            "approach": "flatter"
+          }
+        ]
+      },
+      {
+        "id": "nod-again",
+        "label": "Nod at the arrow",
+        "results": [
+          {
+            "body": "You nod at the arrow. It is going up, and so, for a moment, are you.",
+            "sets": ["nodded-at-arrow"]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "stand-up",
+    "floor": "junior-employee",
+    "pool": true,
+    "title": "The Stand-Up",
+    "location": "Floor 1, Meeting Room 1B",
+    "narration": [
+      "The daily stand-up, which is now monthly, and seated, and an hour. Everyone says what they did, what they will do, and what is blocking them, which is the stand-up."
+    ],
+    "cast": ["{head}", "{boss}", "analyst", "admin", "projects", "associate"],
+    "signs": [
+      {
+        "label": "Who goes first",
+        "text": "{holder} is asked to go first, and says they will go last. Everyone waits for them anyway.",
+        "clue": "At the stand-up, everyone waited for {holder}, who had said they would go last."
+      },
+      {
+        "label": "Who is cut short",
+        "text": "{ignored} is thanked halfway through a sentence, and the meeting moves on."
+      }
+    ],
+    "options": [
+      {
+        "id": "say-what-you-did",
+        "family": "deliver",
+        "label": "Say what you actually did",
+        "results": [
+          {
+            "body": "You say what you did. It takes eleven seconds, and someone asks whether that is everything.",
+            "sets": ["said-what-you-did"],
+            "approach": "truth"
+          }
+        ]
+      },
+      {
+        "id": "name-a-blocker",
+        "family": "deflect",
+        "label": "Say that you are blocked by another team",
+        "results": [
+          {
+            "body": "You are blocked by another team. The other team is not here, and is minuted as a dependency.",
+            "sets": ["named-a-blocker"],
+            "approach": "theatre"
+          }
+        ]
+      },
+      {
+        "id": "praise-the-stand-up",
+        "family": "impress",
+        "label": "Say that the stand-up keeps everyone aligned",
+        "results": [
+          {
+            "body": "Your boss agrees. The stand-up is extended by half an hour, so that it can keep everyone more aligned.",
+            "sets": ["praised-the-stand-up"],
+            "approach": "flatter"
+          }
+        ]
+      },
+      {
+        "id": "stand-up",
+        "label": "Stand up",
+        "results": [
+          {
+            "body": "You stand up. It is a stand-up. Nobody else does, and you sit down again."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "away-day",
+    "floor": "junior-employee",
+    "pool": true,
+    "title": "Away Day Planning",
+    "location": "Floor 1, Meeting Room 1B",
+    "narration": [
+      "A meeting to plan the team's away day, which will be held in this room, to save money. There will be an icebreaker. There is already an ice."
+    ],
+    "cast": ["{head}", "{boss}", "analyst", "admin", "projects", "associate"],
+    "signs": [
+      {
+        "label": "Who chooses the icebreaker",
+        "text": "{holder}'s icebreaker is chosen before the others are read out. {ignored}'s is the one about two truths and a lie.",
+        "clue": "At Away Day Planning, {holder}'s icebreaker was chosen before anyone else's was read."
+      },
+      {
+        "label": "Who books the room",
+        "text": "{bystander} offers to book the room, and checks with {holder} first."
+      }
+    ],
+    "options": [
+      {
+        "id": "volunteer-to-organise",
+        "family": "impress",
+        "label": "Offer to organise it all",
+        "results": [
+          {
+            "body": "You are organising the away day. It is in this room, so the logistics are mostly chairs.",
+            "sets": ["organised-the-away-day"],
+            "approach": "favour"
+          }
+        ]
+      },
+      {
+        "id": "suggest-real-work",
+        "family": "deliver",
+        "label": "Suggest spending the day on the actual work",
+        "results": [
+          {
+            "body": "There is a silence. Your boss says that is what the other days are for, and writes AGILITY on the whiteboard.",
+            "sets": ["suggested-real-work"],
+            "approach": "truth"
+          }
+        ]
+      },
+      {
+        "id": "suggest-a-consultant",
+        "family": "impress",
+        "label": "Suggest bringing in a facilitator",
+        "results": [
+          {
+            "body": "A facilitator is booked. Their fee is the away day's budget, so the away day is the facilitator.",
+            "sets": ["suggested-a-facilitator"],
+            "approach": "theatre"
+          }
+        ]
+      },
+      {
+        "id": "bring-biscuits",
+        "label": "Say you will bring biscuits",
+        "results": [
+          {
+            "body": "You are minuted as Biscuits. It is the clearest action on the page."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "process-review",
+    "floor": "junior-employee",
+    "pool": true,
+    "title": "Process Improvement Review",
+    "location": "Floor 1, Meeting Room 1B",
+    "narration": [
+      "A review of the process for improving processes. The process has a flowchart, and the flowchart has a box that says Improve, with an arrow back to the start."
+    ],
+    "cast": ["{head}", "{boss}", "analyst", "admin", "projects", "associate"],
+    "signs": [
+      {
+        "label": "Who owns the flowchart",
+        "text": "{holder} is asked whether the flowchart is right, and says that it is, and it is.",
+        "clue": "At the Process Improvement Review, {holder} said the flowchart was right, and that settled it."
+      },
+      {
+        "label": "Whose box is removed",
+        "text": "{ignored}'s box is taken off the flowchart to simplify it. Nothing else changes."
+      }
+    ],
+    "options": [
+      {
+        "id": "add-a-box",
+        "family": "fabricate",
+        "label": "Add a box called Review the Review",
+        "results": [
+          {
+            "body": "Your box is added. The flowchart is now longer, which is minuted as maturity.",
+            "sets": ["added-a-box"],
+            "approach": "theatre"
+          }
+        ]
+      },
+      {
+        "id": "remove-a-step",
+        "family": "deliver",
+        "label": "Point out a step that nobody does",
+        "results": [
+          {
+            "body": "Everyone agrees that nobody does it. It is kept, so that it can be not done properly.",
+            "sets": ["pointed-out-a-step"],
+            "approach": "truth"
+          }
+        ]
+      },
+      {
+        "id": "praise-the-flowchart",
+        "family": "impress",
+        "label": "Say that you have never seen a clearer flowchart",
+        "results": [
+          {
+            "body": "Your boss says it took a lot of work. It took a lot of boxes.",
+            "sets": ["praised-the-flowchart"],
+            "approach": "flatter"
+          }
+        ]
+      },
+      {
+        "id": "follow-the-arrow",
+        "label": "Follow the arrow with your finger",
+        "results": [
+          {
+            "body": "Your finger goes round twice and comes back to the start. You are minuted as engaged."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "leadership-induction",
+    "floor": "team-lead",
+    "months": [1],
+    "title": "Leadership Induction",
+    "location": "Floor 2, Team Room 2A",
+    "narration": [
+      "Your induction as a leader. Your boss welcomes you, and announces the Grand Plan, {plan}. Nobody says what it will excel at. There are pastries."
+    ],
+    "cast": ["{head}", "{boss}", "admin", "delivery", "analyst", "projects"],
+    "signs": [
+      {
+        "label": "Who takes the last pastry",
+        "text": "{holder} takes the last pastry without asking, and nobody minds. {ignored} had been looking at it.",
+        "clue": "At your Leadership Induction, {holder} took the last pastry, and nobody minded."
+      },
+      {
+        "label": "Who explains the Plan",
+        "text": "{bystander} explains the Plan to you while looking at {holder}."
+      }
+    ],
+    "options": [
+      {
+        "id": "ask-what-it-excels-at",
+        "family": "deliver",
+        "label": "Ask what it will excel at",
+        "results": [
+          {
+            "body": "There is a pause. Your boss says that is what the Centre is for. Your question is written on a flipchart, under Parked.",
+            "sets": ["asked-what-it-excels-at"],
+            "approach": "truth"
+          }
+        ]
+      },
+      {
+        "id": "sign-the-charter",
+        "family": "impress",
+        "label": "Sign the leadership charter first",
+        "results": [
+          {
+            "body": "Your signature is the first on the charter, above where your boss's will go. It is moved down.",
+            "sets": ["signed-the-charter"],
+            "approach": "flatter"
+          }
+        ]
+      },
+      {
+        "id": "eat-a-pastry",
+        "label": "Take a pastry",
+        "results": [
+          {
+            "body": "It is a pain au chocolat. You are a leader now."
+          }
+        ]
+      },
+      {
+        "id": "say-you-are-humbled",
+        "family": "impress",
+        "label": "Say that you are humbled",
+        "results": [
+          {
+            "body": "You say it. Everyone who has said it before nods, humbly.",
+            "sets": ["said-humbled"],
+            "approach": "theatre"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "leads-sync",
+    "floor": "team-lead",
+    "months": [2],
+    "title": "Team Leads' Sync",
+    "location": "Floor 2, Team Room 2A",
+    "narration": [
+      "The team leads' weekly sync, held monthly. Every team is at capacity."
+    ],
+    "cast": ["{head}", "{boss}", "admin", "delivery", "analyst", "projects"],
+    "signs": [
+      {
+        "label": "Whose capacity counts",
+        "text": "{holder}'s team being at capacity is minuted. {ignored} is asked for evidence.",
+        "clue": "At the Team Leads' Sync, {holder}'s word on capacity was minuted, and {ignored} was asked for evidence."
+      },
+      {
+        "label": "Who sets the agenda",
+        "text": "{bystander} reads out the agenda, which {holder} sent round an hour ago."
+      }
+    ],
+    "options": [
+      {
+        "id": "lend-your-team",
+        "family": "trade",
+        "label": "Lend one of your team to another lead",
+        "results": [
+          {
+            "body": "One of your team is lent to the Service Delivery Lead for a month. They are told this by the Service Delivery Lead.",
+            "sets": ["lent-your-team"],
+            "approach": "favour",
+            "remembers": [
+              {
+                "character": "delivery",
+                "about": "lent-a-hand",
+                "text": "You lent them one of your team at the Team Leads' Sync.",
+                "tone": "good"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "say-at-capacity",
+        "family": "deflect",
+        "label": "Say that your team is at capacity",
+        "results": [
+          {
+            "body": "You say it. It is minuted. Your team is now officially at capacity, which means it can do less.",
+            "sets": ["said-at-capacity"],
+            "approach": "theatre"
+          }
+        ]
+      },
+      {
+        "id": "staff-the-centre",
+        "family": "deliver",
+        "label": "Staff the Centre of Excellence with your best people",
+        "results": [
+          {
+            "body": "Your best people move to the Centre. It has a desk now, and the desk has work on it.",
+            "sets": ["centre-really-staffed"],
+            "approach": "results"
+          }
+        ],
+        "requires": {
+          "planRunning": "excellence"
+        }
+      },
+      {
+        "id": "sign-on-a-door",
+        "family": "fabricate",
+        "label": "Put a Centre of Excellence sign on an empty office",
+        "results": [
+          {
+            "body": "The sign is laminated. The office behind it has a chair, and the chair has a box of old cables on it.",
+            "sets": ["centre-sign-up"],
+            "approach": "theatre"
+          }
+        ],
+        "requires": {
+          "planRunning": "excellence"
+        }
+      }
+    ]
+  },
+  {
+    "id": "resourcing-call",
+    "floor": "team-lead",
+    "months": [3],
+    "title": "Resourcing Call",
+    "location": "Floor 2, Team Room 2A",
+    "narration": [
+      "A call about resourcing, which is a word for people. Your own team is on it, so that it can hear itself resourced. Some of them wanted your job."
+    ],
+    "cast": ["{head}", "{boss}", "admin", "delivery", "analyst", "projects"],
+    "signs": [
+      {
+        "label": "Who speaks for the team",
+        "text": "{holder} answers a question that was put to you, and nobody corrects it.",
+        "clue": "On the Resourcing Call, {holder} answered a question put to you, and nobody corrected it."
+      },
+      {
+        "label": "Who is moved",
+        "text": "{ignored} is moved to another project in the course of a sentence, and finds out at the end of it."
+      }
+    ],
+    "options": [
+      {
+        "id": "back-your-team",
+        "family": "deliver",
+        "label": "Say that your team needs more people, not fewer",
+        "results": [
+          {
+            "body": "You say it. You are thanked for your advocacy, and your team is reduced by one, for balance.",
+            "sets": ["backed-your-team"],
+            "approach": "truth"
+          }
+        ]
+      },
+      {
+        "id": "offer-a-cut",
+        "family": "impress",
+        "label": "Offer to do more with less",
+        "results": [
+          {
+            "body": "Your boss writes MORE WITH LESS on the whiteboard. Your team will be told by the whiteboard.",
+            "sets": ["offered-a-cut"],
+            "approach": "flatter"
+          }
+        ]
+      },
+      {
+        "id": "report-the-centre-open",
+        "family": "fabricate",
+        "label": "Report the Centre of Excellence as open for business",
+        "results": [
+          {
+            "body": "It is minuted as open. Business is welcome, by appointment, which nobody has.",
+            "sets": ["centre-sign-up"],
+            "approach": "theatre"
+          }
+        ],
+        "requires": {
+          "planRunning": "excellence"
+        }
+      },
+      {
+        "id": "stay-on-mute",
+        "label": "Stay on mute",
+        "results": [
+          {
+            "body": "You stay on mute. Your team watches you stay on mute."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "leads-huddle",
+    "floor": "team-lead",
+    "pool": true,
+    "title": "Leads' Huddle",
+    "location": "Floor 2, Team Room 2A",
+    "narration": [
+      "A huddle, which is a meeting that stands up so as to seem shorter. It is not shorter."
+    ],
+    "cast": ["{head}", "{boss}", "admin", "delivery", "analyst", "projects"],
+    "signs": [
+      {
+        "label": "Who ends it",
+        "text": "The huddle ends when {holder} sits down. Nobody had said it would.",
+        "clue": "At a Leads' Huddle, it ended when {holder} sat down."
+      },
+      {
+        "label": "Who is not in the circle",
+        "text": "{ignored} stands slightly outside the circle, and is asked to speak up."
+      }
+    ],
+    "options": [
+      {
+        "id": "share-a-win",
+        "family": "impress",
+        "label": "Share a win from your team",
+        "results": [
+          {
+            "body": "You share a win. Your boss asks whether it can be a case study. It is now a case study, and nobody on your team was asked.",
+            "sets": ["shared-a-win"],
+            "approach": "theatre"
+          }
+        ]
+      },
+      {
+        "id": "share-a-problem",
+        "family": "deliver",
+        "label": "Share a problem from your team",
+        "results": [
+          {
+            "body": "You share a problem. Your boss says it is good that we can be open, and changes the subject.",
+            "sets": ["shared-a-problem"],
+            "approach": "truth"
+          }
+        ]
+      },
+      {
+        "id": "staff-it-now",
+        "family": "deliver",
+        "label": "Move real work into the Centre of Excellence",
+        "results": [
+          {
+            "body": "Real work moves into the Centre. It is quieter there, and people get on with it.",
+            "sets": ["centre-really-staffed"],
+            "approach": "results"
+          }
+        ],
+        "requires": {
+          "planRunning": "excellence"
+        }
+      },
+      {
+        "id": "nod-along",
+        "label": "Nod along",
+        "results": [
+          {
+            "body": "You nod. Huddles run on nodding."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "risk-register",
+    "floor": "team-lead",
+    "pool": true,
+    "title": "Risk Register Review",
+    "location": "Floor 2, Team Room 2A",
+    "narration": [
+      "The risk register is reviewed. It has ninety risks, eight of them red. Each is owned by someone who is not in the room."
+    ],
+    "cast": ["{head}", "{boss}", "admin", "delivery", "analyst", "projects"],
+    "signs": [
+      {
+        "label": "Whose risks go amber",
+        "text": "{holder}'s red risks are agreed to be amber, on reflection. {ignored}'s amber risk is made red.",
+        "clue": "At the Risk Register Review, {holder}'s red risks became amber, and {ignored}'s became red."
+      },
+      {
+        "label": "Who keeps the register",
+        "text": "{bystander} has the spreadsheet, and changes nothing until {holder} has spoken."
+      }
+    ],
+    "options": [
+      {
+        "id": "own-a-risk",
+        "family": "deliver",
+        "label": "Take ownership of a red risk",
+        "results": [
+          {
+            "body": "The risk is yours. It is still red, and now it has your name on it.",
+            "sets": ["owned-a-risk"],
+            "approach": "results"
+          }
+        ]
+      },
+      {
+        "id": "downgrade-a-risk",
+        "family": "fabricate",
+        "label": "Suggest that your red risk is really amber",
+        "results": [
+          {
+            "body": "It is amber now. Nothing about it has changed, except the colour.",
+            "sets": ["downgraded-a-risk"],
+            "approach": "theatre"
+          }
+        ]
+      },
+      {
+        "id": "hang-the-sign",
+        "family": "fabricate",
+        "label": "List the Centre of Excellence as a mitigation for everything",
+        "results": [
+          {
+            "body": "The Centre mitigates thirty risks. It does not yet have anyone in it.",
+            "sets": ["centre-sign-up"],
+            "approach": "theatre"
+          }
+        ],
+        "requires": {
+          "planRunning": "excellence"
+        }
+      },
+      {
+        "id": "read-the-register",
+        "label": "Read all ninety",
+        "results": [
+          {
+            "body": "You read all ninety. The fourth one is the risk that nobody reads the register."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "planning-pre-meet",
+    "floor": "team-lead",
+    "pool": true,
+    "title": "Planning Pre-Meet",
+    "location": "Floor 2, Team Room 2A",
+    "narration": [
+      "A meeting before the planning meeting, to agree what the planning meeting will decide. The planning meeting has been told it is empowered."
+    ],
+    "cast": ["{head}", "{boss}", "admin", "delivery", "analyst", "projects"],
+    "signs": [
+      {
+        "label": "Who decides first",
+        "text": "{holder} says what the planning meeting will decide, and it is written down as a proposal.",
+        "clue": "At the Planning Pre-Meet, {holder} said what would be decided, and it was minuted as a proposal."
+      },
+      {
+        "label": "Who is told afterwards",
+        "text": "{ignored} asks what was agreed, and is told that it will be agreed at the planning meeting."
+      }
+    ],
+    "options": [
+      {
+        "id": "agree-in-advance",
+        "family": "impress",
+        "label": "Agree with whatever is going to be decided",
+        "results": [
+          {
+            "body": "You agree in advance. It saves time later, when you will agree again.",
+            "sets": ["agreed-in-advance"],
+            "approach": "flatter"
+          }
+        ]
+      },
+      {
+        "id": "propose-something",
+        "family": "deliver",
+        "label": "Propose something your team could actually do",
+        "results": [
+          {
+            "body": "It is minuted as an option. Options are what the planning meeting does not choose.",
+            "sets": ["proposed-something"],
+            "approach": "truth"
+          }
+        ]
+      },
+      {
+        "id": "pre-meet-the-pre-meet",
+        "family": "fabricate",
+        "label": "Suggest a pre-meet for the pre-meet",
+        "results": [
+          {
+            "body": "It is booked for Thursday. You will chair it, and it will decide what this one decided.",
+            "sets": ["booked-a-pre-meet"],
+            "approach": "theatre"
+          }
+        ]
+      },
+      {
+        "id": "take-minutes",
+        "label": "Offer to take the minutes",
+        "results": [
+          {
+            "body": "You take the minutes. They record that things were agreed."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "retrospective",
+    "floor": "junior-employee",
+    "pool": true,
+    "title": "The Retrospective",
+    "location": "Floor 1, Meeting Room 1B",
+    "narration": [
+      "A retrospective, on what went well and what did not. The one action is to hold another."
+    ],
+    "cast": ["{head}", "{boss}", "analyst", "admin", "projects", "associate"],
+    "signs": [
+      {
+        "label": "Whose sticky note stays up",
+        "text": "{holder}'s note under What Went Well stays up. {ignored}'s falls off, and stays off.",
+        "clue": "At the Retrospective, {holder}'s note stayed up, and {ignored}'s fell off and stayed down."
+      },
+      {
+        "label": "Who reads them out",
+        "text": "{bystander} reads the notes aloud, and pauses at {holder}'s."
+      }
+    ],
+    "options": [
+      {
+        "id": "say-what-went-wrong",
+        "family": "deliver",
+        "label": "Say what actually went wrong",
+        "results": [
+          {
+            "body": "You say it. It is written under What Did Not Go Well, in a smaller pen.",
+            "sets": ["said-what-went-wrong"],
+            "approach": "truth"
+          }
+        ]
+      },
+      {
+        "id": "say-it-went-well",
+        "family": "impress",
+        "label": "Say that everything went well",
+        "results": [
+          {
+            "body": "Everyone agrees, with relief. The retrospective ends early, which is minuted as a success.",
+            "sets": ["said-it-went-well"],
+            "approach": "flatter"
+          }
+        ]
+      },
+      {
+        "id": "blame-the-process",
+        "family": "deflect",
+        "label": "Say that the process let everyone down",
+        "results": [
+          {
+            "body": "The process is blamed, unanimously. It is not present, and takes it well.",
+            "sets": ["blamed-the-process"],
+            "approach": "theatre"
+          }
+        ]
+      },
+      {
+        "id": "draw-a-sailboat",
+        "label": "Draw the sailboat with the anchors",
+        "results": [
+          {
+            "body": "You draw the sailboat. The anchors are the things holding the team back. There are a lot of anchors."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "wellbeing-hour",
+    "floor": "junior-employee",
+    "pool": true,
+    "title": "Wellbeing Hour",
+    "location": "Floor 1, Meeting Room 1B",
+    "narration": [
+      "A mandatory Wellbeing Hour, in the hour before the deadline. There is a breathing exercise, a slide about burnout, and a reminder that the deadline has not moved."
+    ],
+    "cast": ["{head}", "{boss}", "analyst", "admin", "projects", "associate"],
+    "signs": [
+      {
+        "label": "Who leaves early",
+        "text": "{holder} leaves halfway through, for a call, and nobody minds. {ignored} checks a phone, and is asked to be present.",
+        "clue": "At the Wellbeing Hour, {holder} left early unremarked, and {ignored} was asked to be present."
+      },
+      {
+        "label": "Who leads the breathing",
+        "text": "{bystander} breathes in when {holder} does."
+      }
+    ],
+    "options": [
+      {
+        "id": "breathe",
+        "label": "Breathe in for four, and out for four",
+        "results": [
+          {
+            "body": "You breathe. The deadline does not."
+          }
+        ]
+      },
+      {
+        "id": "mention-the-deadline",
+        "family": "deliver",
+        "label": "Point out that the deadline is in an hour",
+        "results": [
+          {
+            "body": "There is a silence, which the facilitator calls a mindful pause.",
+            "sets": ["mentioned-the-deadline"],
+            "approach": "truth"
+          }
+        ]
+      },
+      {
+        "id": "work-under-the-table",
+        "family": "deliver",
+        "label": "Finish your work on your knee, under the table",
+        "results": [
+          {
+            "body": "You finish it. The facilitator thanks everyone for being so present.",
+            "sets": ["worked-under-the-table"],
+            "approach": "results"
+          }
+        ]
+      },
+      {
+        "id": "thank-for-the-hour",
+        "family": "impress",
+        "label": "Thank your boss for making the time",
+        "results": [
+          {
+            "body": "Your boss says that wellbeing is a priority, and asks whether the deadline is in hand.",
+            "sets": ["thanked-for-wellbeing"],
+            "approach": "flatter"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "supplier-pitch",
+    "floor": "junior-employee",
+    "pool": true,
+    "title": "Supplier Pitch",
+    "location": "Floor 1, Meeting Room 1B",
+    "narration": [
+      "A supplier has come to pitch a platform that does what the new tool does, and what the old tool did. There is a free lanyard each."
+    ],
+    "cast": ["{head}", "{boss}", "analyst", "admin", "projects", "associate"],
+    "signs": [
+      {
+        "label": "Who the supplier talks to",
+        "text": "The supplier addresses every slide to {holder}, having asked at reception who decides. {ignored} is handed the brochure.",
+        "clue": "At the Supplier Pitch, the supplier spoke only to {holder}, and gave {ignored} the brochure."
+      },
+      {
+        "label": "Who asks the price",
+        "text": "{bystander} asks the price, and looks at {holder} when it is said."
+      }
+    ],
+    "options": [
+      {
+        "id": "ask-what-it-replaces",
+        "family": "deliver",
+        "label": "Ask which of the tools it replaces",
+        "results": [
+          {
+            "body": "All of them, says the supplier, and none of them, in phase one.",
+            "sets": ["asked-what-it-replaces"],
+            "approach": "truth"
+          }
+        ]
+      },
+      {
+        "id": "ask-for-a-trial",
+        "family": "impress",
+        "label": "Ask for a free trial for the whole floor",
+        "results": [
+          {
+            "body": "The supplier is delighted. The trial is free for thirty days, after which it is not.",
+            "sets": ["asked-for-a-trial"],
+            "approach": "theatre"
+          }
+        ]
+      },
+      {
+        "id": "wear-the-lanyard",
+        "label": "Put on the lanyard",
+        "results": [
+          {
+            "body": "You put on the lanyard. It says Partner on it."
+          }
+        ]
+      },
+      {
+        "id": "agree-with-your-boss",
+        "family": "impress",
+        "label": "Agree with whatever your boss says",
+        "results": [
+          {
+            "body": "Your boss says it looks interesting. You say it looks very interesting.",
+            "sets": ["agreed-with-the-boss"],
+            "approach": "flatter"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "one-team-day",
+    "floor": "team-lead",
+    "pool": true,
+    "title": "One Team Day",
+    "location": "Floor 2, Team Room 2A",
+    "narration": [
+      "A day for the whole of Floor 2 to feel like one team. The teams sit at separate tables, by team, and compete."
+    ],
+    "cast": ["{head}", "{boss}", "admin", "delivery", "analyst", "projects"],
+    "signs": [
+      {
+        "label": "Whose table wins",
+        "text": "{holder}'s table wins the quiz. Nobody had told the others there was a prize.",
+        "clue": "At One Team Day, {holder}'s table won the quiz, and only they knew of the prize."
+      },
+      {
+        "label": "Who keeps score",
+        "text": "{bystander} keeps the score, and checks each total with {holder}."
+      }
+    ],
+    "options": [
+      {
+        "id": "let-your-team-win",
+        "family": "trade",
+        "label": "Let your team win the quiz",
+        "results": [
+          {
+            "body": "Your team wins. The prize is a voucher, which is shared, and is for one.",
+            "sets": ["let-the-team-win"],
+            "approach": "favour"
+          }
+        ]
+      },
+      {
+        "id": "mix-the-tables",
+        "family": "deliver",
+        "label": "Suggest mixing the tables",
+        "results": [
+          {
+            "body": "The tables are mixed. Everyone talks to someone new for ten minutes, and then moves back.",
+            "sets": ["mixed-the-tables"],
+            "approach": "truth"
+          }
+        ]
+      },
+      {
+        "id": "keep-score",
+        "label": "Offer to keep the score",
+        "results": [
+          {
+            "body": "You keep the score. It is close, and then it is not."
+          }
+        ]
+      },
+      {
+        "id": "give-a-speech",
+        "family": "impress",
+        "label": "Give a short speech about being one team",
+        "results": [
+          {
+            "body": "Your speech is short, and is applauded by your own table.",
+            "sets": ["gave-a-speech"],
+            "approach": "theatre"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "budget-planning",
+    "floor": "team-lead",
+    "pool": true,
+    "title": "Budget Planning",
+    "location": "Floor 2, Team Room 2A",
+    "narration": [
+      "The leads plan next year's budget, which is this year's, less ten per cent, plus whatever can be argued for."
+    ],
+    "cast": ["{head}", "{boss}", "admin", "delivery", "analyst", "projects"],
+    "signs": [
+      {
+        "label": "Whose line survives",
+        "text": "{holder}'s line is kept without discussion. {ignored}'s is discussed until it goes.",
+        "clue": "At Budget Planning, {holder}'s line was kept, and {ignored}'s was discussed until it went."
+      },
+      {
+        "label": "Who holds the spreadsheet",
+        "text": "{bystander} has the spreadsheet open, and scrolls when {holder} nods."
+      }
+    ],
+    "options": [
+      {
+        "id": "argue-for-your-team",
+        "family": "deliver",
+        "label": "Argue for your team's real costs",
+        "results": [
+          {
+            "body": "You argue. Your line is kept, at ninety per cent, as a compromise with itself.",
+            "sets": ["argued-for-the-team"],
+            "approach": "truth"
+          }
+        ]
+      },
+      {
+        "id": "offer-the-cut",
+        "family": "impress",
+        "label": "Offer to take the ten per cent from your team",
+        "results": [
+          {
+            "body": "You are thanked for your leadership. Your team is told by the spreadsheet.",
+            "sets": ["offered-the-cut"],
+            "approach": "flatter"
+          }
+        ]
+      },
+      {
+        "id": "pad-the-line",
+        "family": "fabricate",
+        "label": "Add twenty per cent to your line, to be cut back",
+        "results": [
+          {
+            "body": "Your line is cut by ten per cent, and comes out ahead.",
+            "sets": ["padded-the-line"],
+            "approach": "theatre"
+          }
+        ]
+      },
+      {
+        "id": "watch-the-spreadsheet",
+        "label": "Watch the spreadsheet",
+        "results": [
+          {
+            "body": "Cells turn red, then amber, then green, then red."
           }
         ]
       }

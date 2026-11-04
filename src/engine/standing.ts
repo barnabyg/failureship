@@ -30,6 +30,12 @@ function standingOf(state: State, written: Written) {
   };
 }
 
+/** Where it stands now, on paper, for setting beside who really decides. */
+export function standingOnPaper(state: State, content: Content) {
+  const written = content.standing;
+  return written ? standingOf(state, written) : null;
+}
+
 /** In plain view at every step: a bar, with no number the player sees. */
 export function standingInView(state: State, content: Content) {
   const written = content.standing;

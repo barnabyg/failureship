@@ -65,6 +65,16 @@
       "I only started in the spring, so I still notice things. {said}",
       "We're on the same level, you and me, so I can say this. {said}",
       "{said} I'm not saying anything. I'm only saying it to you."
+    ],
+    "programme-manager": [
+      "I sit across several workstreams, so I hear things in stereo. {said}",
+      "I'll keep this at programme level. {said}",
+      "{said} That's a dependency, by the way, not a criticism."
+    ],
+    "service-delivery-lead": [
+      "It's on my tracker, so it's not gossip, it's a status. {said}",
+      "Within agreed service levels, then. {said}",
+      "{said} I've raised a ticket, so it's official now."
     ]
   },
   "influentialCount": 2,

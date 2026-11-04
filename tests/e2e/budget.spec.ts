@@ -4,7 +4,7 @@ test("decides who gets the bonus pot, and sees how it lands", async ({
   page,
 }) => {
   await page.goto("/?seed=2&month=6");
-  await expect(page.getByTestId("month")).toContainText("6 of 9");
+  await expect(page.getByTestId("month")).toContainText("6 of 18");
 
   await page.getByTestId("option-invent-dates").click();
   await page.getByTestId("continue").click();

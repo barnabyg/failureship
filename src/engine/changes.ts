@@ -2,6 +2,7 @@ import { sendBill } from "./bills";
 import { dueIdOf, type Content, type Kind } from "./content";
 import { leaveMap } from "./deal";
 import { applyOutcome } from "./outcome";
+import { placeOf } from "./places";
 import { mentionsGone, matches } from "./reads";
 import { drawFor, pickWeighted } from "./rng";
 import type { Change, State } from "./state";
@@ -37,7 +38,10 @@ export function changePeople(state: State, content: Content): void {
     const burns = burnsOf(state, written, dealt.id);
     const weight = burns.reduce((sum, b) => sum + b.weight, 0);
     if (weight < written.threshold) continue;
-    const canLeave = dealt.id in written.leaving;
+    // The player's bosses stay until other vacancies exist, whoever holds them.
+    const canLeave =
+      dealt.id in written.leaving &&
+      placeOf(state, content, dealt.id) === undefined;
     const ways = (["practitioner", "whistleblower", "left"] as const).filter(
       (way) => way !== "left" || canLeave,
     );
