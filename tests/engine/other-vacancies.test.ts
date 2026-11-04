@@ -178,6 +178,14 @@ describe("getting rid of your boss", () => {
     expect(truth.vacancies[0]?.decided?.winner).not.toBe("you");
   });
 
+  it("needs a cover for anyone who could be the boss got rid of", () => {
+    const raw = otherRaw();
+    const leaving: Record<string, unknown> = raw.changing.leaving;
+    delete leaving.cal;
+
+    expect(() => parseContent(raw)).toThrow(/"cal" .* needs a cover/);
+  });
+
   it("is refused by a way that is not written", () => {
     const raw = otherRaw();
     const [question] = raw.notifications;

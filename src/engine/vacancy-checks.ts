@@ -1,6 +1,6 @@
 import { everyNotification, type Content } from "./content";
 import { isUnder } from "./deal";
-import { bossesAtStart, meantBy } from "./places";
+import { bossesAtStart, managerAtStart, meantBy } from "./places";
 
 /** Everything that can act for a seat, and whether a Character's Move makes it. */
 function seatActs(content: Content) {
@@ -76,7 +76,10 @@ function findBrokenSeatActs(content: Content): string[] {
   return problems;
 }
 
-/** Every way of getting rid of the boss that a choice names is written. */
+/**
+ * Every way of getting rid of the boss that a choice names is written, and
+ * anyone who could be the boss got rid of has a cover for text to say instead.
+ */
 function findBrokenOusting(content: Content): string[] {
   const named = [
     ...everyNotification(content).flatMap((n) =>
@@ -97,12 +100,26 @@ function findBrokenOusting(content: Content): string[] {
     ),
   ];
   const ways = content.vacancies?.ousting?.ways ?? {};
-  return named
+  const problems = named
     .filter(({ way }) => !(way in ways))
     .map(
       ({ owner, way }) =>
         `${owner} gets rid of the boss by unknown way "${way}" in vacancies.json.`,
     );
+  if (named.length === 0) return problems;
+  // Whoever could be the boss got rid of: the first boss, or one of their
+  // team, who can win the seat. Text says the cover in place of whoever went.
+  const { boss } = bossesAtStart(content);
+  const team = content.characters
+    .filter((c) => managerAtStart(content, c.id) === boss)
+    .map((c) => c.id);
+  const leaving = content.changing?.leaving ?? {};
+  for (const id of [boss, ...team].filter((c) => !(c in leaving))) {
+    problems.push(
+      `"${id}" can be got rid of as the player's boss, so needs a cover in changing.json's leaving.`,
+    );
+  }
+  return problems;
 }
 
 /**
