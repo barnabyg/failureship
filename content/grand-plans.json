@@ -394,6 +394,106 @@
         "failed": "It was never done, and someone had to be to blame.",
         "running": "It was still to be done when the run ended."
       }
+    },
+    {
+      "id": "roadmap",
+      "floor": "middle-manager",
+      "title": "One Roadmap",
+      "what": "Your boss's Grand Plan is One Roadmap: everything Floor 3 is doing, on a single page, in order. It needs someone to decide what stops, or a slide with no dates on it.",
+      "lasts": 3,
+      "heardIn": ["portfolio-review", "welcome-floor-3"],
+      "ways": [
+        {
+          "id": "decided",
+          "how": "reality",
+          "when": {
+            "did": "roadmap-really-decided"
+          },
+          "counts": ["believer", "incompetent", "practitioner"],
+          "belief": {
+            "believer": 4,
+            "incompetent": 1,
+            "practitioner": 2
+          },
+          "reaction": {
+            "believer": "Your boss reads the Roadmap twice, sees what has stopped, and says that this is the first one that could actually be followed.",
+            "incompetent": "Your boss is surprised that it is shorter than last year's, and asks whether shorter is good. You say it is. Your boss says so too, to Floor 4's scaffolding.",
+            "practitioner": "Your boss reads which programmes have stopped, notes whose they were, and sends the Roadmap upstairs with a covering note that does not mention you."
+          },
+          "sets": ["delivered-grand-plan"],
+          "done": {
+            "title": "Your boss's Grand Plan: done",
+            "body": "One Roadmap is done. It is on one page because things were stopped to get it there, and the people whose things were stopped have stopped speaking to you, mostly."
+          }
+        },
+        {
+          "id": "slide",
+          "how": "appearance",
+          "when": {
+            "did": "roadmap-is-a-slide"
+          },
+          "counts": ["incompetent", "practitioner"],
+          "belief": {
+            "believer": -3,
+            "incompetent": 4,
+            "practitioner": 2
+          },
+          "reaction": {
+            "believer": "Your boss looks for a date on the Roadmap, and then for a second one, and closes the laptop, gently.",
+            "incompetent": "Your boss prints the Roadmap on A1 and puts it up outside the lift, where it looks like a Roadmap.",
+            "practitioner": "Your boss sends the Roadmap to the Head of Transformation under their own name, with the subject line Delivered."
+          },
+          "sets": ["delivered-grand-plan", "roadmap-on-a-slide"],
+          "done": {
+            "title": "Your boss's Grand Plan: done",
+            "body": "One Roadmap is done, as far as anyone can see. It is a single slide, and everything is on it, which is how you know that nothing has been decided."
+          }
+        }
+      ],
+      "failed": {
+        "blame": {
+          "sticks": {
+            "not": {
+              "did": "asked-what-stops"
+            }
+          },
+          "chance": {
+            "believer": 0.3,
+            "incompetent": 0.5,
+            "practitioner": 0.7
+          },
+          "mood": {
+            "warm": -0.3,
+            "neutral": 0,
+            "cold": 0.3
+          }
+        },
+        "onPlayer": {
+          "id": "roadmap-blamed-you",
+          "as": "move",
+          "from": "From: The Portfolio Office, copied to the Board Office",
+          "title": "Lessons from One Roadmap",
+          "body": "A review has found that One Roadmap was never delivered because of a lack of clarity at middle-management level. Middle management is a level with you on it.",
+          "opinion": -1,
+          "headOpinion": -2,
+          "sets": ["blamed-for-the-plan"],
+          "mistake": "big"
+        },
+        "onSomeoneElse": {
+          "id": "roadmap-blamed-elsewhere",
+          "as": "move",
+          "from": "From: The Portfolio Office, copied to the Board Office",
+          "title": "Lessons from One Roadmap",
+          "body": "A review has found that One Roadmap was never delivered because the template was too small. A larger template is being procured.",
+          "sets": ["plan-blamed-elsewhere"]
+        }
+      },
+      "results": {
+        "reality": "It was really done: things were stopped, and the Roadmap could be followed.",
+        "appearance": "It was done in appearance: a single slide, with everything on it and no dates.",
+        "failed": "It was never done, and someone had to be to blame.",
+        "running": "It was still to be done when the run ended."
+      }
     }
   ]
 }

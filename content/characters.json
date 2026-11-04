@@ -69,6 +69,7 @@
       "title": "Programme Manager",
       "called": "the Programme Manager",
       "role": "programme-manager",
+      "reportsTo": "transformation",
       "floor": "team-lead"
     },
     {
@@ -79,6 +80,14 @@
       "role": "service-delivery-lead",
       "reportsTo": "head",
       "floor": "team-lead"
+    },
+    {
+      "id": "transformation",
+      "name": "Simone Fairley",
+      "title": "Head of Transformation",
+      "called": "the Head of Transformation",
+      "role": "head-of-transformation",
+      "floor": "middle-manager"
     }
   ]
 }

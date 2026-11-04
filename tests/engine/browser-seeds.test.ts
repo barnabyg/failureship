@@ -58,4 +58,18 @@ describe("the seeds the browser tests walk", () => {
     expect(yourBoss(views[0])).toBe("Hugh Lamb");
     expect(furious?.month).toBe(12);
   });
+
+  it("keeps seed 2 a Team lead in month 11 who wins the way out of Floor 3 in month 15, for win.spec.ts", () => {
+    const { views } = playRun(2, "decide-what-stops", {
+      from: 11,
+      before: `${CLEAN},staff-the-centre`,
+    });
+    const floor3 = views.find((v) => v.job.id === "middle-manager");
+    const results = views.at(-1)?.step;
+
+    expect(views[0]?.job.id).toBe("team-lead");
+    expect(floor3?.month).toBe(12);
+    expect(views.find((v) => v.step.kind === "win")?.month).toBe(15);
+    expect(results).toMatchObject({ kind: "results", ending: { won: true } });
+  });
 });

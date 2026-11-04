@@ -514,16 +514,18 @@ describe("the real Company Events", () => {
     expect(gameContent.balance.disasterChance).toBeGreaterThan(0);
   });
 
-  it("has one that moves your boss up, and one that creates a post, on Floor 1 only", () => {
+  it("has one that moves your boss up and one that creates a post on Floor 1, and others above, each on its own floor", () => {
     const opening = gameContent.events.filter((e) => e.vacates !== undefined);
+    const on = (job: string) =>
+      opening
+        .filter((e) => e.floor === job)
+        .map((e) => e.vacates)
+        .sort();
 
-    expect(opening.map((e) => e.vacates).sort()).toEqual([
-      "created",
-      "movedUp",
-    ]);
-    for (const event of opening) {
-      expect(event.floor).toBe(gameContent.you.job);
-    }
+    expect(on(gameContent.you.job)).toEqual(["created", "movedUp"]);
+    expect(on("team-lead")).toEqual(["movedUp"]);
+    expect(on("middle-manager")).toEqual(["created"]);
+    expect(opening.every((e) => e.floor !== undefined)).toBe(true);
   });
 
   it("lands somewhere on most deals, and not always in the same place", () => {

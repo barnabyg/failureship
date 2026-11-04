@@ -643,5 +643,49 @@
     "landedOnYou": "It came out when the Project Co-ordinator, Floor 2's Health and Safety representative, measured the gap to the fire door.",
     "landedElsewhere": "It came out on the committee's walk round, but you had walked the route yourself, and moved the desk.",
     "neverCameOut": "It never came out. The desk is still beside the fire door, and so is the Project Co-ordinator."
+  },
+  {
+    "id": "roadmap-no-dates",
+    "addedBy": "roadmap-on-a-slide",
+    "after": {
+      "min": 2,
+      "max": 3
+    },
+    "note": "You made your boss's One Roadmap look done: a single slide, with everything on it and nothing decided.",
+    "route": {
+      "character": "transformation",
+      "chance": {
+        "believer": 0.9,
+        "incompetent": 0.3,
+        "practitioner": 0.6
+      },
+      "motive": "The Head of Transformation took the Roadmap to the Board, and the Board asked for one date."
+    },
+    "traced": {
+      "not": {
+        "did": "checked-the-pack"
+      }
+    },
+    "onPlayer": {
+      "id": "roadmap-no-dates-landed",
+      "as": "move",
+      "from": "From: The Head of Transformation, Simone Fairley",
+      "title": "A question from the Board",
+      "body": "The Board asked the Head of Transformation when the first thing on One Roadmap would be finished. There was no date on the slide, and the slide's properties say that you made it. The Head of Transformation would like a date, and a word.",
+      "opinion": -1,
+      "headOpinion": -2,
+      "sets": ["roadmap-found-out"]
+    },
+    "onSomeoneElse": {
+      "id": "roadmap-no-dates-elsewhere",
+      "as": "move",
+      "from": "From: The Head of Transformation, Simone Fairley",
+      "title": "A question from the Board",
+      "body": "The Board asked when the first thing on One Roadmap would be finished. The Board pack had the dates in it, checked, so the question was answered from the pack, and the slide was called a summary.",
+      "sets": ["roadmap-dates-found"]
+    },
+    "landedOnYou": "It came out when the Board asked the Head of Transformation for a date, and the slide led to you.",
+    "landedElsewhere": "It came out when the Board asked for a date, and the checked Board pack had one.",
+    "neverCameOut": "It never came out. The slide is still outside the lift, and nobody has asked it anything."
   }
 ]

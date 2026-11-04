@@ -49,6 +49,120 @@
         "title": "Congratulations to {winner}",
         "body": "After a fair and transparent process, the seat goes to {winner}, who is now your boss. The incident during the process was taken into account, as the process requires. Your application has been kept on file, with the incident report stapled to the front. You stay where you are, at the same desk, facing the other way."
       }
+    },
+    {
+      "id": "head-of-operations",
+      "floor": "team-lead",
+      "job": "middle-manager",
+      "competing": "seat",
+      "openFor": 2,
+      "movesUp": {
+        "reportsTo": "transformation",
+        "title": "Director of Operations",
+        "called": "the Director of Operations"
+      },
+      "created": {
+        "title": "Deputy Head of Operations",
+        "called": "the Deputy Head of Operations"
+      },
+      "opened": {
+        "plan": {
+          "title": "An exciting opportunity",
+          "body": "Following the success of the Grand Plan, {holder} is moving up to be Director of Operations, a post that reports to Floor 3 and sits on it. {holder} will be greatly missed from the end of month {month}. The seat is open until then, and will be filled through a fair and transparent process. Expressions of interest from Team leads are welcome, and will be filed by grade."
+        },
+        "movedUp": {
+          "title": "An exciting opportunity",
+          "body": "{holder} has been seconded to be Director of Operations, a post that reports to Floor 3 and sits on it, which had asked for someone senior and available, and found that these were the same person. {holder} will be greatly missed from the end of month {month}. The seat is open until then, and will be filled through a fair and transparent process. Expressions of interest from Team leads are welcome, and will be filed by grade."
+        },
+        "left": {
+          "title": "An exciting opportunity",
+          "body": "Following the departure of {holder}, the seat is open until the end of month {month}, and will be filled through a fair and transparent process. Until then, whoever {holder} reported to has been asked to be available, and has set an out-of-office. Expressions of interest from Team leads are welcome, and will be filed by grade."
+        },
+        "fired": {
+          "title": "An exciting opportunity",
+          "body": "Following a review of conduct, {holder} is no longer with the company, effective immediately. The seat is open until the end of month {month}, and will be filled through a fair and transparent process. People and Culture would like to thank everyone who raised concerns, in confidence. Expressions of interest from Team leads are welcome, and will be filed by grade."
+        },
+        "created": {
+          "title": "An exciting opportunity",
+          "body": "A new post of Deputy Head of Operations has been created, to lead what {holder} leads, so that {holder} can focus on leading it. It will be filled at the end of month {month}, through a fair and transparent process. {holder} remains in post, with the same title and a larger chart. Expressions of interest from Team leads are welcome, and will be filed by grade."
+        }
+      },
+      "won": {
+        "title": "Congratulations: Middle manager",
+        "body": "You have the seat. It was decided at a level you have not yet been told about, by a process you will now be asked to run. The other leads on the floor now report to you, and have accepted a calendar invitation to say so. Your new office is on Floor 3, and the lift will take you there."
+      },
+      "lost": {
+        "title": "Congratulations to {winner}",
+        "body": "After a fair and transparent process, the seat goes to {winner}, who is now your boss. Your application showed real leadership potential, which is the phrase used for applications that did not get it. You stay where you are, on Floor 2, and are asked to support the transition."
+      },
+      "blocked": {
+        "title": "Congratulations to {winner}",
+        "body": "After a fair and transparent process, the seat goes to {winner}, who is now your boss. The incident during the process was taken into account, as the process requires, and was minuted, as the incident requires. You stay where you are, on Floor 2, and are asked to support the transition."
+      }
+    },
+    {
+      "id": "programme-manager",
+      "floor": "middle-manager",
+      "competing": "seat",
+      "openFor": 2,
+      "movesUp": {
+        "reportsTo": "transformation",
+        "title": "Head of Portfolio",
+        "called": "the Head of Portfolio"
+      },
+      "created": {
+        "title": "Programme Director",
+        "called": "the Programme Director"
+      },
+      "opened": {
+        "plan": {
+          "title": "An exciting opportunity",
+          "body": "Following the success of the Grand Plan, {holder} is moving up to be Head of Portfolio, a post with a view of Floor 4's scaffolding. {holder} will be greatly missed from the end of month {month}. The seat at the top of Floor 3 is open until then, and will be filled through a fair and transparent process. It is the last seat on this floor. Expressions of interest are welcome, and will be filed in the lift."
+        },
+        "movedUp": {
+          "title": "An exciting opportunity",
+          "body": "{holder} has been seconded to be Head of Portfolio, a post with a view of Floor 4's scaffolding, which had asked for someone senior and available, and found that these were the same person. {holder} will be greatly missed from the end of month {month}. The seat at the top of Floor 3 is open until then, and will be filled through a fair and transparent process. It is the last seat on this floor. Expressions of interest are welcome, and will be filed in the lift."
+        },
+        "left": {
+          "title": "An exciting opportunity",
+          "body": "Following the departure of {holder}, the seat at the top of Floor 3 is open until the end of month {month}, and will be filled through a fair and transparent process. Until then, whoever {holder} reported to has been asked to be available, and has set an out-of-office. It is the last seat on this floor. Expressions of interest are welcome, and will be filed in the lift."
+        },
+        "fired": {
+          "title": "An exciting opportunity",
+          "body": "Following a review of conduct, {holder} is no longer with the company, effective immediately. The seat at the top of Floor 3 is open until the end of month {month}, and will be filled through a fair and transparent process. People and Culture would like to thank everyone who raised concerns, in confidence. It is the last seat on this floor. Expressions of interest are welcome, and will be filed in the lift."
+        },
+        "created": {
+          "title": "An exciting opportunity",
+          "body": "A new post of Programme Director has been created, to lead what {holder} leads, so that {holder} can focus on leading it. It will be filled at the end of month {month}, through a fair and transparent process. {holder} remains in post, with the same title and a larger chart. It is the last seat on this floor. Expressions of interest are welcome, and will be filed in the lift."
+        }
+      },
+      "won": {
+        "title": "Congratulations: the top of Floor 3",
+        "body": "You have the seat. Nobody on Floor 3 is left above you, and upwards is closed. Your name has been sent to Facilities for a nameplate, and to the lift."
+      },
+      "lost": {
+        "title": "Congratulations to {winner}",
+        "body": "After a fair and transparent process, the seat at the top of Floor 3 goes to {winner}, who is now your boss. You were a very strong candidate, and remain one, on Floor 3, in your current role. The lift has been told not to wait."
+      },
+      "blocked": {
+        "title": "Congratulations to {winner}",
+        "body": "After a fair and transparent process, the seat at the top of Floor 3 goes to {winner}, who is now your boss. The incident during the process was taken into account at the highest level available on Floor 3. You stay where you are, in your current role, and the lift has been told not to wait."
+      },
+      "win": {
+        "title": "The top of Floor 3",
+        "lines": [
+          "Your pass now opens the lift lobby at the top of Floor 3. In the lift there is a button for Floor 4, with a piece of tape over it. Someone has written Soon on the tape, and dated it.",
+          "Floors 4 to 10 are closed for refurbishment, as they have been since the last refurbishment. Your office up there will be ready when they are. Until then you keep the one you have, with a new nameplate that is slightly too long for the door.",
+          "Your payout has been processed. It is a voucher for the staff restaurant, a framed certificate that says Leadership, and the right to be copied in on everything. The real payout is in the penthouse, with the Chief Executive, behind the tape.",
+          "Somewhere below you, a Junior employee is filling in a Monthly Status Report. You will never read it, and that is the job."
+        ],
+        "reached": "the top of Floor 3",
+        "results": {
+          "title": "You have reached the top of Floor 3",
+          "intro": "The building does not currently go any higher. Here is how you got here, and what the citation leaves out."
+        },
+        "ending": "You reached the top of Floor 3 in month {month}, which is as high as the building goes for now."
+      }
     }
   ],
   "you": "you",

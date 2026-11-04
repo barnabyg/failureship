@@ -4080,5 +4080,469 @@
         ]
       }
     ]
+  },
+  {
+    "id": "portfolio-review",
+    "floor": "middle-manager",
+    "months": [1],
+    "title": "Portfolio Review",
+    "location": "Floor 3, Steering Room 3A",
+    "narration": [
+      "Your first Portfolio Review as a Middle manager. Your boss announces the Grand Plan, {plan}, with a slide of a road. The road has no cars on it, and goes over a hill."
+    ],
+    "cast": ["{head}", "{boss}", "head", "delivery", "analyst"],
+    "signs": [
+      {
+        "label": "Whom the slides face",
+        "text": "The projector is angled at {holder}, and so is everyone's chair.",
+        "clue": "At your first Portfolio Review, the projector and the chairs were angled at {holder}."
+      },
+      {
+        "label": "Whose programme is skipped",
+        "text": "{ignored}'s programme is on slide nine, and the meeting ends on slide eight."
+      }
+    ],
+    "options": [
+      {
+        "id": "ask-what-stops",
+        "family": "deliver",
+        "label": "Ask what the Roadmap will stop",
+        "results": [
+          {
+            "body": "There is a pause, of the kind that gets minuted. Your boss says that nothing needs to stop, because everything is aligned. Your question is written on the whiteboard, and photographed.",
+            "sets": ["asked-what-stops"],
+            "approach": "truth"
+          }
+        ]
+      },
+      {
+        "id": "call-it-bold",
+        "family": "impress",
+        "label": "Say that the vision is bold",
+        "results": [
+          {
+            "body": "You say it. Your boss says that bold is the point. Three other people say bold, in turn, more boldly.",
+            "sets": ["called-it-bold"],
+            "approach": "flatter"
+          }
+        ]
+      },
+      {
+        "id": "own-the-roadmap",
+        "family": "impress",
+        "label": "Volunteer to own the Roadmap",
+        "results": [
+          {
+            "body": "You volunteer. Your boss thanks you for stepping up, and steps back, a long way.",
+            "sets": ["owned-the-roadmap"],
+            "approach": "theatre"
+          }
+        ]
+      },
+      {
+        "id": "read-your-email",
+        "label": "Read your e-mail under the table",
+        "results": [
+          {
+            "body": "Forty e-mails, all of which say they are following up. You follow up on none of them, which is what Floor 3 calls prioritising."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "roadmap-workshop",
+    "floor": "middle-manager",
+    "months": [2],
+    "title": "Roadmap Workshop",
+    "location": "Floor 3, Steering Room 3A",
+    "narration": [
+      "A workshop to build {plan}, with sticky notes in four colours. Everyone was asked to leave their job title at the door. Nobody has."
+    ],
+    "cast": ["{head}", "{boss}", "head", "delivery", "analyst"],
+    "signs": [
+      {
+        "label": "Whose notes stay up",
+        "text": "{holder}'s sticky notes stay up. Everyone else's are moved, gently, to a column called Later.",
+        "clue": "At the Roadmap Workshop, {holder}'s sticky notes were the only ones not moved to Later."
+      },
+      {
+        "label": "Who gets the facilitator",
+        "text": "The facilitator asks {bystander} what {holder} thinks, and writes the answer down."
+      }
+    ],
+    "options": [
+      {
+        "id": "decide-what-stops",
+        "family": "deliver",
+        "label": "Get the room to decide what stops",
+        "requires": {
+          "planRunning": "roadmap"
+        },
+        "results": [
+          {
+            "body": "It takes the whole afternoon. Two programmes are stopped, out loud, and their owners take it badly and then, by six o'clock, with relief. The Roadmap is shorter, and true.",
+            "sets": ["roadmap-really-decided"],
+            "approach": "results"
+          }
+        ]
+      },
+      {
+        "id": "draw-swimlanes",
+        "family": "fabricate",
+        "label": "Turn the notes into swimlanes, with no dates",
+        "requires": {
+          "planRunning": "roadmap"
+        },
+        "results": [
+          {
+            "body": "You photograph the wall and turn it into swimlanes, in the company colours. Everything is on it, nothing is stopped, and nothing has a date. It is the best-looking thing on Floor 3.",
+            "sets": ["roadmap-is-a-slide"],
+            "approach": "theatre"
+          }
+        ]
+      },
+      {
+        "id": "ask-what-is-running",
+        "family": "find-out",
+        "label": "Ask the Senior Analyst what is really running",
+        "results": [
+          {
+            "body": "The Senior Analyst has a list. It is longer than the Roadmap, and includes the Roadmap.",
+            "sets": ["asked-what-is-running"],
+            "approach": "truth"
+          }
+        ]
+      },
+      {
+        "id": "move-your-note-up",
+        "family": "impress",
+        "label": "Move your own sticky note into Now",
+        "results": [
+          {
+            "body": "Your note goes into Now. Nobody stops you, and nobody will be able to say later that they did.",
+            "sets": ["moved-a-note"],
+            "approach": "theatre"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "stakeholder-map",
+    "floor": "middle-manager",
+    "months": [3],
+    "title": "Stakeholder Mapping",
+    "location": "Floor 3, Steering Room 3A",
+    "narration": [
+      "Everyone puts everyone else on a grid of power against interest. It is anonymous, and done on a whiteboard, in front of everyone."
+    ],
+    "cast": ["{head}", "{boss}", "head", "delivery", "admin"],
+    "signs": [
+      {
+        "label": "Who is put top right",
+        "text": "Four pens in four colours put {holder} in the top right corner. Nobody puts themselves there.",
+        "clue": "At Stakeholder Mapping, everyone put {holder} in the top right corner."
+      },
+      {
+        "label": "Who is left off",
+        "text": "{ignored} is not on the grid at all, and notices, and says it is fine."
+      }
+    ],
+    "options": [
+      {
+        "id": "map-it-as-it-is",
+        "family": "find-out",
+        "label": "Put people where you have seen them act, not by title",
+        "results": [
+          {
+            "body": "Your pen moves two people away from their job titles. One of them sees, and looks at the grid for a long time, and then at you.",
+            "sets": ["mapped-it-honestly"],
+            "approach": "truth"
+          }
+        ]
+      },
+      {
+        "id": "head-top-right",
+        "family": "impress",
+        "label": "Put your boss's boss in the top right, large",
+        "results": [
+          {
+            "body": "You draw your boss's boss in the top right, larger than the corner. Your boss's boss pretends not to have seen it, and has it photographed.",
+            "sets": ["flattered-on-the-grid"],
+            "approach": "flatter",
+            "headOpinion": 1
+          }
+        ]
+      },
+      {
+        "id": "analyst-bottom-left",
+        "family": "attack",
+        "label": "Put the Senior Analyst in the bottom left, and say why",
+        "results": [
+          {
+            "when": {
+              "factNature": {
+                "character": "analyst",
+                "nature": "dangerous"
+              }
+            },
+            "body": "You say why. By the afternoon the photograph of the grid has gone upstairs, and come back down with a question about you on it, from someone on a floor that is closed.",
+            "sets": ["burned-by-a-fact"],
+            "opinion": -2,
+            "factAt": "analyst",
+            "factNote": "You put the Senior Analyst at the bottom of Floor 3's grid, out loud. You had not been told why that was a mistake.",
+            "mistake": "big"
+          },
+          {
+            "body": "You say why. The Senior Analyst is not in the room, and hears about it before the meeting ends, from three people, each of whom says they were not going to mention it.",
+            "sets": ["mapped-the-analyst-down"],
+            "approach": "blame",
+            "remembers": [
+              {
+                "character": "analyst",
+                "about": "put-at-the-bottom",
+                "text": "You put them at the bottom of the grid on Floor 3, and said why.",
+                "tone": "bad"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "pass-the-pen",
+        "label": "Say that you are still new, and pass the pen",
+        "results": [
+          {
+            "body": "You pass the pen. It is taken by the person who most wanted it, which tells you more than the grid does."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "steering-group",
+    "floor": "middle-manager",
+    "pool": true,
+    "title": "Steering Group",
+    "location": "Floor 3, Steering Room 3A",
+    "narration": [
+      "The Steering Group, which meets to steer. The minutes of the last one are approved, and nobody can remember what was steered."
+    ],
+    "cast": ["{head}", "{boss}", "head", "delivery", "analyst"],
+    "signs": [
+      {
+        "label": "Who approves the minutes",
+        "text": "The minutes are approved when {holder} nods. Nobody had asked for a nod.",
+        "clue": "At a Steering Group, the minutes were approved when {holder} nodded."
+      },
+      {
+        "label": "Whose action is carried forward",
+        "text": "{ignored}'s action is carried forward again, for the fourth meeting running."
+      }
+    ],
+    "options": [
+      {
+        "id": "raise-a-real-risk",
+        "family": "deliver",
+        "label": "Raise a risk that is actually happening",
+        "results": [
+          {
+            "body": "You raise it. It is noted, given an owner, who is you, and a rating, which is amber, because red would need a meeting.",
+            "sets": ["raised-a-real-risk"],
+            "approach": "truth"
+          }
+        ]
+      },
+      {
+        "id": "stop-one-programme",
+        "family": "deliver",
+        "label": "Propose stopping one programme, so the Roadmap is true",
+        "requires": {
+          "planRunning": "roadmap"
+        },
+        "results": [
+          {
+            "body": "You propose it. There is a long silence and then a vote, which nobody has held here before. The programme stops. The Roadmap has one fewer line and one more date.",
+            "sets": ["roadmap-really-decided"],
+            "approach": "results"
+          }
+        ]
+      },
+      {
+        "id": "add-a-swimlane",
+        "family": "fabricate",
+        "label": "Add a swimlane for everything not on the Roadmap yet",
+        "requires": {
+          "planRunning": "roadmap"
+        },
+        "results": [
+          {
+            "body": "The new swimlane is called Emerging. Everything goes into it, and the Roadmap is now complete, in the sense of having everything on it.",
+            "sets": ["roadmap-is-a-slide"],
+            "approach": "theatre"
+          }
+        ]
+      },
+      {
+        "id": "agree-with-the-chair",
+        "family": "impress",
+        "label": "Agree with whoever is chairing",
+        "results": [
+          {
+            "body": "You agree. The chair agrees with you agreeing, and the meeting ends early, which is minuted as an achievement.",
+            "sets": ["agreed-with-the-chair"],
+            "approach": "flatter"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "benefits-review",
+    "floor": "middle-manager",
+    "pool": true,
+    "title": "Benefits Realisation Review",
+    "location": "Floor 3, Steering Room 3A",
+    "narration": [
+      "A review of the benefits last year's programmes said they would realise. They are in a spreadsheet, in a folder called Archive."
+    ],
+    "cast": ["{head}", "{boss}", "head", "delivery", "analyst"],
+    "signs": [
+      {
+        "label": "Whose benefits are counted",
+        "text": "{holder}'s benefits are counted first, and generously, by {bystander}.",
+        "clue": "At the Benefits Realisation Review, {holder}'s benefits were counted first, and generously."
+      },
+      {
+        "label": "Whose spreadsheet is opened",
+        "text": "{ignored}'s spreadsheet is opened, and closed again, before anyone reads it."
+      }
+    ],
+    "options": [
+      {
+        "id": "count-them-properly",
+        "family": "deliver",
+        "label": "Count your team's benefits properly, missing ones included",
+        "results": [
+          {
+            "body": "Your benefits come to about a third of what was promised. It is the only honest number in the review, and it is circled.",
+            "sets": ["counted-benefits"],
+            "approach": "truth"
+          }
+        ]
+      },
+      {
+        "id": "count-them-twice",
+        "family": "fabricate",
+        "label": "Count the same saving under two programmes",
+        "results": [
+          {
+            "body": "The saving appears twice, once under each name. The total goes up. Nobody adds it up the other way.",
+            "sets": ["double-counted"],
+            "approach": "theatre"
+          }
+        ]
+      },
+      {
+        "id": "tie-it-to-the-roadmap",
+        "family": "deliver",
+        "label": "Tie each benefit to a Roadmap line, and drop lines with none",
+        "requires": {
+          "planRunning": "roadmap"
+        },
+        "results": [
+          {
+            "body": "You tie each benefit to a line. Three lines have none, and you drop them. The Roadmap is shorter, and for the first time it says what it is for.",
+            "sets": ["roadmap-really-decided"],
+            "approach": "results"
+          }
+        ]
+      },
+      {
+        "id": "praise-the-framework",
+        "family": "impress",
+        "label": "Praise the benefits framework",
+        "results": [
+          {
+            "body": "You praise the framework. Its author is in the room, and thanks you, and will remember you, in a meeting you are not in.",
+            "sets": ["praised-the-framework"],
+            "approach": "flatter"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "lessons-forum",
+    "floor": "middle-manager",
+    "pool": true,
+    "title": "Lessons Learned Forum",
+    "location": "Floor 3, Steering Room 3A",
+    "narration": [
+      "A forum for the lessons Floor 3 has learned. They are the same lessons as last year's, on a newer template."
+    ],
+    "cast": ["{head}", "{boss}", "head", "delivery", "analyst"],
+    "signs": [
+      {
+        "label": "Whose lesson it is",
+        "text": "Every lesson names someone who has left. {holder} chose the template.",
+        "clue": "At the Lessons Learned Forum, {holder} had chosen the template."
+      },
+      {
+        "label": "Who is asked to present",
+        "text": "{ignored} is asked to present the lessons, and none of them are {ignored}'s."
+      }
+    ],
+    "options": [
+      {
+        "id": "own-a-lesson",
+        "family": "deliver",
+        "label": "Offer a lesson that is your own fault",
+        "results": [
+          {
+            "body": "You offer one. The room is very quiet, and then very supportive, which on Floor 3 is the same thing said later.",
+            "sets": ["owned-a-lesson"],
+            "approach": "ownership"
+          }
+        ]
+      },
+      {
+        "id": "lesson-for-the-leaver",
+        "family": "deflect",
+        "label": "Put your lesson down to someone who has left",
+        "results": [
+          {
+            "body": "The lesson goes to someone who has left, who cannot attend to accept it. It is accepted on their behalf.",
+            "sets": ["blamed-a-leaver"],
+            "approach": "blame"
+          }
+        ]
+      },
+      {
+        "id": "roadmap-as-a-lesson",
+        "family": "fabricate",
+        "label": "Present the Roadmap as a lesson already learned",
+        "requires": {
+          "planRunning": "roadmap"
+        },
+        "results": [
+          {
+            "body": "You present the Roadmap as what Floor 3 has learned. It has no dates, which you call agility. It is applauded, and filed under Done.",
+            "sets": ["roadmap-is-a-slide"],
+            "approach": "theatre"
+          }
+        ]
+      },
+      {
+        "id": "take-the-notes",
+        "label": "Offer to take the notes",
+        "results": [
+          {
+            "body": "You take the notes. They are the only record of the forum, so you decide what was learned."
+          }
+        ]
+      }
+    ]
   }
 ]

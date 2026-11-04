@@ -9,7 +9,7 @@ function walkingToTheEnd() {
 }
 
 /** The player's own desk, on whichever floor they are, by its action in actions.json. */
-const DESKS = ["work", "work-2"];
+const DESKS = ["work", "work-2", "work-3"];
 const DESK = DESKS.map((id) => `[data-testid="hotspot-${id}"]`).join(", ");
 
 /** Goes to an address as a new player would, with no saved run to come back to. */
