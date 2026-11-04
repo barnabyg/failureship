@@ -20,6 +20,7 @@ A `when` or `requires` holds one of these:
 | `{ "hasBuzzword": "strategic-patience" }`                              | The player has learnt the Buzzword                                                      | No                     |
 | `{ "heardFact": "lost-list" }`                                         | The player has been told that Hidden Fact about someone, true or not                    | No                     |
 | `{ "heardTrue": "lost-list" }`                                         | What the player was told about that Hidden Fact is true                                 | Yes                    |
+| `{ "heardOf": { "fact": "abolished-post", "character": "{boss}" } }`   | The player was last told that this Character has that Hidden Fact, true or not          | No                     |
 | `{ "holderIs": "{boss}" }`                                             | That Character is the most influential of those present, or of everyone outside a Scene | Yes                    |
 | `{ "bossIs": "practitioner" }`                                         | The boss is of that kind                                                                | Yes                    |
 | `{ "factNature": { "character": "projects", "nature": "dangerous" } }` | That Character's Hidden Fact has that `nature`                                          | Yes                    |
@@ -27,6 +28,7 @@ A `when` or `requires` holds one of these:
 | `{ "sawMove": "rumour" }`                                              | That Move from [`moves.json`](#movesjson) has landed on the player in this run          | No                     |
 | `{ "planRunning": "one-tool" }`                                        | That is your boss's [Grand Plan](#grand-plansjson) now, and it is still to be done      | No                     |
 | `{ "vacancyOpen": true }`                                              | A [seat](#vacanciesjson) is open now, and still to be decided                           | No                     |
+| `{ "vacancyOpen": "fired" }`                                           | One is, and it fell vacant that way: `plan`, `movedUp`, `left`, `fired` or `created`    | No                     |
 | `{ "not": ... }`                                                       | The condition inside does not hold                                                      | If the inner one does  |
 | `{ "all": [...] }`                                                     | Every condition inside holds                                                            | If any inner one does  |
 | `{ "any": [...] }`                                                     | At least one condition inside holds                                                     | If any inner one does  |
@@ -45,6 +47,8 @@ Where each can be used. These are all the places that take a condition:
 | What Rivals compete for's `when`           | All                                                    |
 | A whistleblower report's `when`            | All                                                    |
 | A Scene option's `requires`                | Only those that do not read the hidden truth           |
+| A Notification option's `requires`         | Only those that do not read the hidden truth           |
+| A way of getting rid of the boss's `when`  | All                                                    |
 | A Notification's `when`, a Demand's too    | Only those that do not read the hidden truth           |
 | A Notebook event's `when`                  | Only those that do not read the hidden truth, as below |
 
@@ -65,7 +69,8 @@ them for the rest of the run. Buzzwords carry over for the whole run.
 
 There are two places above the player on the Org Chart. Your boss is whoever the player reports
 to, and your boss's boss is whoever your boss reports to. A place is not a Character: whoever is
-in it can change when someone moves on the Org Chart. Where the player sits is `you` in
+in it can change when someone moves on the Org Chart, and nobody who has left is ever in one:
+whoever they answered to covers until their seat is filled. Where the player sits is `you` in
 [`characters.json`](#charactersjson), and a run keeps it from there. If your boss reports to
 nobody, there is no boss's boss, and data that names one is refused.
 
@@ -228,12 +233,14 @@ leaves. The player is not told. The results screen says who changed, from what t
   they know about goes first. Failing that, they bring out the first hidden risk still waiting,
   whatever its own route, or else send the last report, which needs no `when`. `share` is how much of
   what a whistleblower is seen doing is one of their own signs. `motive` says `{who}` and is what the results screen says of a risk they brought out.
-- `leaving` is keyed by Character. Only those listed can leave, and your boss and your boss's boss
-  cannot be. Each has the `cover` text uses for whoever stands in for them, the `notice` that says
-  they have gone, and optional `sets` and `project`.
+- `leaving` is keyed by Character. Only those listed can leave, your boss and your boss's boss
+  included, though nobody leaves whose going would leave no boss's boss above the player. Each has
+  the `cover` text uses for whoever stands in for them, also when they are fired, the `notice` that
+  says they have gone, and optional `sets` and `project`.
 
 Someone who leaves comes off the Power Map, and whoever answered to them answers to whoever was above
-them. Scenes and Find Out go on without them. Any option or action whose words name them, or Notification or Move
+them, on both charts. A boss who leaves leaves their [seat](#vacanciesjson) open, and any Grand Plan of
+theirs ends with them. Scenes and Find Out go on without them. Any option or action whose words name them, or Notification or Move
 from them, is no longer offered, and a Thread's outcome from them is passed over. A risk that would
 come out through them never does. Their open Promises and Deals lapse. If the report's `input` came
 from them, it is never late again.
@@ -337,9 +344,14 @@ Each has exactly one way to land, or it is refused:
 `reshuffle` changes the charts. `reports` moves a Character on the Org Chart, so `character` now
 reports `to` someone else, and a move that would make a loop does not happen. `rises` sends someone
 to the top of the Power Map, and `falls` to the bottom, which changes later signs. Any of them can be
-`{boss}` or `{head}`. Your boss, your boss's boss and the player, `you`, cannot be moved in
-`reports`, since nothing creates a vacancy yet. An event that moves anyone needs `changed`, which the
-results screen shows beside the charts.
+`{boss}` or `{head}`, and `reports` can move the player, `you`, which changes their boss. A move that
+would leave the player with no boss's boss does not happen. An event that moves anyone, or opens a
+seat, needs `changed`, which the results screen shows beside the charts.
+
+`"vacates": "movedUp"` opens your boss's [seat](#vacanciesjson) as they move up, and `"created"` as a
+post is created out of their team. While a seat is already open, such an event passes by. `floor`,
+a floor's `job`, makes an event land only while the player is on that floor: in another floor's
+month it passes by, and a disaster is not drawn.
 
 ## `families.json`
 
@@ -514,6 +526,7 @@ The month's Notifications, their choices and their results.
 - An option with a `bet` has a seeded `chance` of going well, and otherwise uses what `lost`
   says.
 - An option's `sets`, `opinion`, `approach`, `family` and `project` work as for any choice.
+- An option with `requires` is offered only while that holds, as a Scene option's is.
 
 An option's outcome or a Scene result can carry `"remembers"`, a list of what a Character
 keeps of this, each with their `character`, an `about` that the `remembers` condition reads, and
@@ -747,29 +760,44 @@ answers set. One that is not is refused.
 
 ## `vacancies.json`
 
-Seats: how a boss's seat falls vacant, and who really decides who gets it. As the official story
-closes a month in which your boss completed their [Grand Plan](#grand-plansjson) and counted it
-done, they are on their way up, and their seat is open for `openFor` months from the next. As the
-last of them closes, it is decided, and the next month opens with the decision. A seat decided as
-the run's last month closes is told before the results. Nothing opens that the run would end
-before deciding.
+Seats: how a boss's seat falls vacant, and who really decides who gets it. Only the seat of the
+player's floor opens, and only their boss's, one at a time. It is open for `openFor` months from
+the month after it falls vacant. As the last of them closes, it is decided, and the next month
+opens with the decision. A seat decided as the run's last month closes is told before the results.
+Nothing opens that the run would end before deciding. It falls vacant in one of these ways:
+
+- `plan`: as the official story closes a month in which your boss completed their
+  [Grand Plan](#grand-plansjson) and counted it done, they move up.
+- `movedUp` or `created`: a [Company Event](#eventsjson) with `vacates` seconds your boss upstairs,
+  or creates a post out of their team.
+- `left`: your boss, burned enough as a Believer and written in `leaving` in
+  [`changing.json`](#changingjson), leaves.
+- `fired`: the player gets rid of their boss, with `ousts` on a Notification option or a Scene
+  result. See [getting rid of your boss](#getting-rid-of-your-boss).
+
+On Floor 2 no seat is written yet, so nothing opens there; a boss who goes is covered by whoever
+they answered to.
 
 - `seats` has one seat for each floor that has one, keyed by `floor`, the floor it is on: the
   player's boss holds it while the player's job is that floor's. `job` is the floor that winning it
   takes the player to. `competing` names what is competed for in [`rivals.json`](#rivalsjson) while
   it is open, usually with `"when": { "vacancyOpen": true }` and `"who": ["{peers}"]`: they and the
-  player are the candidates. `movesUp` is where its holder goes: whom they now answer to, and their
-  new `title` and `called`. `opened` is told as it opens, and says `{holder}` and `{month}`, the
-  month it is decided in; `won` and `lost` as it is decided, and `lost` says `{winner}`;
+  player are the candidates. `movesUp` is where its holder goes, by `plan` or `movedUp`: whom they
+  now answer to, and their new `title` and `called`. `created` is the `title` and `called` of a post
+  created out of their team, which its winner holds while its holder keeps their own. `opened` has
+  what is told as it opens in each way, and says `{holder}` and `{month}`, the month it is decided
+  in; `won` and `lost` as it is decided, and `lost` says `{winner}`;
   `blocked`, which says `{winner}`, instead of `lost` when a big mistake cost the player the seat.
-- Whoever holds influence over the holder on the Power Map decides, or the holder if nobody does,
-  and weighs each candidate's `reasons` by their own kind, in `weight`. They add up, and the most
+- Whoever holds influence over the holder on the Power Map decides, or the holder if nobody does.
+  For a holder who has left or been fired, it is whoever held influence over them as they went, or
+  with them gone too, the most influential. They weigh each candidate's `reasons` by their own kind,
+  in `weight`. They add up, and the most
   wins, with a seeded draw among equals. Every input is hidden truth, never the Org Chart, a Gauge
   or Official standing. For a Character: `self`, being the one deciding; `owed`, being owed a
   favour by them; `protege`, being directly under them on the Power Map, or `circle`, further
   down; and `credited`, having claimed the Plan's credit. For the player: `owedYou` and `calledIn`,
   a favour they are owed, and one they have called in; `credited`; `delivered`, having completed
-  the Plan for real and had it counted; `results`, having made `resultsAt` Moves of the deliver
+  the Plan for real and had it counted, when the Plan opened the seat; `results`, having made `resultsAt` Moves of the deliver
   family; `looks`, `looksAt` of impress and fabricate; `warm`, `neutral` or `cold`, the mood of
   the one deciding; and `mistake`, a [big mistake](#mistakesjson) made while the seat was open. So
   a Believer can weigh what was really done, a Practitioner favours and protégés, and an
@@ -789,10 +817,10 @@ before deciding.
   is owed, or who is a Rival. With nothing to tell, the decision says `untold`, and `close` when it
   was too close to call. `inFact` says `{decider}` and `{why}`, set beside Official standing's band.
   The results screen adds `asForYou`, every reason of the player's, if they lost, and `results`,
-  with `{holder}`, `{winner}` and `{month}`. `you` is how all of these call the player.
+  for each way, with `{holder}`, `{winner}` and `{month}`. `you` is how all of these call the player.
 - Winning makes the player the floor's new job: they answer to whoever the holder answered to, and
   the holder's team answers to them. Losing puts the winner in the holder's place, with the
-  holder's title, and the player and the rest of the team answer to them. Each Character who stood
+  holder's title, or a created post's, and the player and the rest of the team answer to them. Each Character who stood
   for it and was passed over keeps a memory: `passedOver.forYou` if the player won, and `forSomeoneElse` if not, each with its
   own `about`, which a Move can read with `remembers`, and a `text` that can say `{winner}`.
 
@@ -808,14 +836,29 @@ While a seat is open, a Notification option, a Scene result or a Move can act fo
 - On a Move only, which must have a `by`: `story`, a story about the player that reaches whoever
   decides, `acts.story`, and `diary`, after which whoever decides owes the Move's maker a favour,
   for `acts.diary`. Rivals' Moves for a seat are written as `"by": "{competitor}"`, `"priority":
-true` and `"when": { "vacancyOpen": true }`.
+true` and `"when": { "vacancyOpen": true }`, or `"plan"` for one that is about a Grand Plan.
+
+### Getting rid of your boss
+
+`"ousts": "report"` on a Notification option or a Scene result tries to get rid of the player's
+boss by that way in `ousting.ways`. It is up to whoever holds influence over the boss on the Power
+Map, the same person who decides the seat: the way's seeded `chance` by their kind, plus `mood` for
+how they stand with the player. With nobody above the boss, or a way's `when` that does not hold,
+it never works, so `"when": { "heardTrue": "abolished-post" }` makes a Hidden Fact helped out work
+only if it is true. If it works, the boss is fired, `gone` is told, which says `{holder}`, and
+their seat opens as `fired`. If not, `survived` is told, and the boss keeps `remembered`, a memory
+that a Move or a burn in [`changing.json`](#changingjson) can read, and its `belief`. It should
+always be traceable: give the choice a flag that adds a [hidden risk](#risksjson) whose Bill lands
+on the player, as the game's `boss-undone` does with a big mistake, which can cost the seat it
+opened or demote the player from it.
 
 These are refused: two seats on one floor, a `floor` or `job` that names no floor, a seat that leads
 to its own floor, `competing` that names nothing in `rivals.json`, moving its holder up to someone
 who answers to them, a `lost` that does not say `{winner}`, `vacancyOpen` or `seat` with no seats,
-`seat` on a Move with no `by`, `story` or `diary` on anything but a Move, `approach` on a Move, and
-an `approach` that names nobody. Until issue #107 the player's boss and boss's boss cannot leave,
-whoever they are, and the checks that keep them in place still stand: only a seat moves them.
+`seat` on a Move with no `by`, `story` or `diary` on anything but a Move, `approach` on a Move, an
+`approach` that names nobody, `ousts` naming a way not written, and `vacates` with no seats. The
+checks that kept the player's bosses in place are lifted: either can be written to leave, and a
+Company Event can move them, or the player.
 
 ## `threads.json`
 
