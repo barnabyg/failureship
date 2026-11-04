@@ -114,6 +114,11 @@ each in a seeded turn, so that every one comes up before any repeats. A pool Sce
 without `months` in a room on its floor, which is offered in the months it is drawn. Only Scenes and
 Notifications can be in a pool.
 
+Write a floor for the longest stay a run allows on it. A seat falls vacant in month 1 at the
+earliest and is decided `openFor` months later, so with two months open Floor 2 can start in month
+4, and a stay is at most fifteen months. Its seven written months and a pool of eight Scenes mean
+no Scene comes twice, and `tests/engine/floor-2-moves.test.ts` holds it to that.
+
 These are refused: a `floor` that names no floor, `months` with no `floor`, a floor with no Scene,
 Notification or Demand of its own, a written month with none of them, a floor written for fewer
 months than the run with no pool, a pool item with `months` or no `floor`, a pool Scene with no
@@ -541,7 +546,14 @@ reads who remembers what.
 A Budget is a one-off decision and never a running balance, so it needs nothing of its own:
 the Budget Round is a Scene, and the bonus pot and the underspend are Notifications here,
 with `months`, `approach` and `project` like any other choice. Nothing tracks money between
-them.
+them. A higher floor's are bigger, and only its own, with `"floor": "team-lead"`: Floor 2's Pay
+Review is a Scene in which the player signs their own team's bonus letters, beside the
+transformation budget and the cost codes, as are the Moves only a Team lead has, such as hiring an
+old friend onto their team or seating it at the Floor Plan Walkthrough. Each adds a risk and
+starts a Thread by its flag, and leaves a memory with whoever it was done to. A Move that favours
+the player's allies picks them with `when` on its results, by who really backs the player: a
+`believes` that is `warm`, or `youOwe`. So a Scene result names them, which an option's own
+words never can.
 
 ## `official-story.json`
 
@@ -653,7 +665,11 @@ player sees none of it until it does, and the results screen lists the lot.
   by the kind they were dealt, their `motive`, for the results screen, and optionally their
   `means`, a condition they need. It gets one chance. If that fails, it never comes out.
 - `traced` is read as it comes out. Reading a flag with `did` lets the player change that, as
-  clearing the shared drive in month 7 does. If it holds, `onPlayer` is sent. If not, `onSomeoneElse`
+  clearing the shared drive in month 7 does, or letting an old friend go on Floor 2. The flag must
+  be set by a choice in plain view, other than the one that adds the risk, and be on offer on the
+  same floor before the risk can first come out, as each month opens, or the player never had the
+  chance. Floor 1's shared drive comes a month too late for the risks of month 4's Budget Round and
+  month 6's metric, which the risks test names. If it holds, `onPlayer` is sent. If not, `onSomeoneElse`
   is, if it is written, and otherwise nothing happens. Either is a Bill, as in
   [`threads.json`](#threadsjson), so a risk that lands can be `"mistake": "big"`.
 - `event` names a Company Event, from [`events.json`](#eventsjson), that lands as it comes out.

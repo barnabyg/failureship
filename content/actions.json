@@ -544,5 +544,86 @@
     "scene": "budget-planning",
     "oncePerMonth": true,
     "sets": ["attended-meeting"]
+  },
+  {
+    "id": "meeting-team-hire",
+    "floor": "team-lead",
+    "months": [4],
+    "label": "Team Room 2A",
+    "description": "A Hiring Decision. The post is on your team, so the decision is yours, subject to everyone.",
+    "place": "team-room",
+    "cost": "standard",
+    "scene": "team-hire",
+    "oncePerMonth": true,
+    "sets": ["attended-meeting"]
+  },
+  {
+    "id": "meeting-pay-review",
+    "floor": "team-lead",
+    "months": [5],
+    "label": "Team Room 2A",
+    "description": "The Pay Review, at which your team's bonus pot is yours to divide, and to sign for.",
+    "place": "team-room",
+    "cost": "standard",
+    "scene": "pay-review",
+    "oncePerMonth": true,
+    "sets": ["attended-meeting"]
+  },
+  {
+    "id": "meeting-floor-plan",
+    "floor": "team-lead",
+    "months": [6],
+    "label": "Team Room 2A",
+    "description": "The Floor Plan Walkthrough, at which leads say who sits where.",
+    "place": "team-room",
+    "cost": "standard",
+    "scene": "floor-plan",
+    "oncePerMonth": true,
+    "sets": ["attended-meeting"]
+  },
+  {
+    "id": "meeting-succession",
+    "floor": "team-lead",
+    "months": [7],
+    "label": "Team Room 2A",
+    "description": "Succession Planning, at which each lead names their replacement, in confidence, aloud.",
+    "place": "team-room",
+    "cost": "standard",
+    "scene": "succession",
+    "oncePerMonth": true,
+    "sets": ["attended-meeting"]
+  },
+  {
+    "id": "meeting-recognition",
+    "floor": "team-lead",
+    "label": "Team Room 2A",
+    "description": "The Recognition Panel, for this quarter's Star of the Floor.",
+    "place": "team-room",
+    "cost": "standard",
+    "scene": "recognition-panel",
+    "oncePerMonth": true,
+    "sets": ["attended-meeting"]
+  },
+  {
+    "id": "meeting-org-design",
+    "floor": "team-lead",
+    "label": "Team Room 2A",
+    "description": "An Org Design Workshop, with a whiteboard and no team members.",
+    "place": "team-room",
+    "cost": "standard",
+    "scene": "org-design",
+    "oncePerMonth": true,
+    "sets": ["attended-meeting"]
+  },
+  {
+    "id": "meeting-ways-of-working",
+    "floor": "team-lead",
+    "label": "Team Room 2A",
+    "description": "The Ways of Working Charter, which will be laminated.",
+    "place": "team-room",
+    "cost": "standard",
+    "scene": "ways-of-working",
+    "oncePerMonth": true,
+    "sets": ["attended-meeting"]
   }
 ]

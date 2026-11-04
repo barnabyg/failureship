@@ -66,6 +66,23 @@ the seat is open, its e-mail asks how to go about it: leave it to the process un
 | Seed 2, taking the blame yourself in month 2's Lessons Learned Review. At month 7's Recruitment Panel, raise a concern about the Project Co-ordinator's candidate | A Final Warning. Month 8 opens with the seat going to the Junior Associate: the incident was taken into account, the decision says, and the results screen says what it cost you. Without the concern, the seat is yours.                                                                                 |
 | Seed 2, taking the blame in month 2 and winning the seat. At month 9's Team Leads' Sync, say that your team would not be at capacity but for the Senior Analyst   | A Final Warning. Month 10 opens with a sideways move, downwards: the Junior Associate has your seat, and is your boss. Continue, and the lift takes you down to Floor 1, at its Speak Up Listening Session. Another big mistake there fires you.                                                          |
 
+## Floor 2's bigger Moves
+
+This takes about twenty minutes. File the report and go to the meeting each month, saying the first
+thing and answering for nothing, take the blame yourself in month 2's Lessons Learned Review, and
+stick a screenshot of the new tool on your boss's note in month 5's Ideas Workshop. The seat is
+yours, and Floor 2 starts in month 8. Its fourth month is month 11.
+
+| Seed and what to do                                                                     | Expect                                                                                                                                                                                                                                               |
+| --------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Seed 16. At month 11's Hiring Decision, hire your old friend                            | Your boss asks to see the scoring sheet. In month 12 your boss, appalled, asks to see you about your new hire: say it was your mistake. In month 15 the Senior Analyst sends both your bosses a spreadsheet of who has been doing your friend's work |
+| The same, but at month 14's Succession Planning, let your friend go                     | In month 15 the Senior Analyst sends round only the work your friend left behind                                                                                                                                                                     |
+| Seed 12. In month 11, spend the transformation budget on a consultant                   | Your boss comes out holding a framework. In month 13 the invoice reaches the Programme Manager, and the Senior Analyst sends your boss the version history of the spreadsheet the framework came from                                                |
+| The same, and in month 12 move a few costs onto the Centre of Excellence's code         | In month 13 the Centre of Excellence pays an invoice from a consultant nobody there has met                                                                                                                                                          |
+| Seed 17. At month 12's Pay Review, give it all to whoever really backs you              | In month 14 People and Culture asks about your signed bonus letters, and the Senior Analyst, left out, is Open to Opportunities. On another seed the pot goes to someone else, as each deal decides who backs you                                    |
+| Seed 12. At month 13's Floor Plan Walkthrough, put the Project Co-ordinator by the lift | In month 15 the Health and Safety Committee writes: they are Floor 2's representative, and their desk is beside the fire door. The same month they say good morning to your boss at the lift                                                         |
+| The same, and at month 14's fire routes, walk the route yourself                        | In month 15 the committee finds the route clear, and signed off by you                                                                                                                                                                               |
+
 ## Other routes up
 
 This takes about fifteen minutes. File the report and go to the meeting each month, saying the

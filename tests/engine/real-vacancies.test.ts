@@ -2,11 +2,9 @@ import { describe, expect, it } from "vitest";
 import { gameContent } from "../../src/content";
 import { startRun, type PlayerView } from "../../src/engine";
 import { readHiddenTruth } from "../../src/engine/hidden-truth";
-import { plainChoice, playToMonth } from "../../src/ui/later-month";
+import { playToMonth } from "../../src/ui/later-month";
 import { withoutSeatEvents } from "./fixture";
-
-/** Fakes the Plan at month 5's Ideas Workshop, which a boss who is not a Believer counts. */
-const FAKED = "screenshot-on-the-note";
+import { CLEAN, FAKED, playAll } from "./real-runs";
 
 function playedTo(seed: number, month: string, choose: string | null = FAKED) {
   const run = startRun({ seed, content: gameContent });
@@ -15,36 +13,11 @@ function playedTo(seed: number, month: string, choose: string | null = FAKED) {
 }
 
 /**
- * Plays a whole run plainly, taking each option named, a comma-separated list,
- * once and in order, and keeps every view.
- */
-function playAll(
-  seed: number,
-  choose: string | null,
-  content = gameContent,
-): PlayerView[] {
-  const run = startRun({ seed, content });
-  let view = run.view();
-  const views = [view];
-  const wanted = choose ? choose.split(",") : [];
-  while (view.choices.length > 0) {
-    const named = view.choices.find(
-      (c) => "optionId" in c && c.optionId === wanted[0],
-    );
-    if (named) wanted.shift();
-    view = run.choose(named ?? plainChoice(view));
-    views.push(view);
-  }
-  expect(wanted).toEqual([]);
-  return views;
-}
-
-/**
  * On seed 2, the Senior Analyst's Hidden Fact is dangerous, and so is the
  * Project Co-ordinator's. Playing plainly blames the Project Co-ordinator in
- * month 2, which is a Final Warning, so these take the blame instead.
+ * month 2, which is a Final Warning, so these take the blame instead, as
+ * `CLEAN` does.
  */
-const CLEAN = `take-the-blame,${FAKED}`;
 const SINK = "sink-the-projects-candidate";
 const EXAMPLE = "blame-your-analyst";
 const REPORT = "report-the-analyst";

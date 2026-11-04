@@ -7,6 +7,7 @@ import {
   type PlayerView,
 } from "../../src/engine";
 import { everyNotification } from "../../src/engine/content";
+import { writtenMonths } from "../../src/engine/floors";
 
 const SEEDS = Array.from({ length: 60 }, (_, i) => i + 1);
 const notifications = everyNotification(gameContent);
@@ -155,15 +156,24 @@ describe("the longer run", () => {
     expect(calibration?.months).toEqual([9]);
   });
 
-  it("gives each new month a Scene, a Notification and an official story", () => {
-    for (const month of [6, 7, 8]) {
-      const on = (item: { months?: number[] | undefined }) =>
-        item.months?.includes(month);
-      expect(gameContent.scenes.filter(on), String(month)).toHaveLength(1);
-      expect(gameContent.notifications.filter(on).length).toBeGreaterThan(0);
-      expect(
-        gameContent.officialStory.entries.filter(on).length,
-      ).toBeGreaterThan(0);
+  it("gives each written month of each floor a Scene, a Notification and an official story", () => {
+    for (const { job } of gameContent.floors) {
+      for (let month = 1; month <= writtenMonths(gameContent, job); month++) {
+        const on = (item: {
+          floor?: string | undefined;
+          months?: number[] | undefined;
+        }) => item.floor === job && item.months?.includes(month);
+        const owner = `${job} month ${String(month)}`;
+        expect(gameContent.scenes.filter(on), owner).toHaveLength(1);
+        expect(
+          gameContent.notifications.filter(on).length,
+          owner,
+        ).toBeGreaterThan(0);
+        expect(
+          gameContent.officialStory.entries.filter(on).length,
+          owner,
+        ).toBeGreaterThan(0);
+      }
     }
   });
 });

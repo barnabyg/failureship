@@ -1,28 +1,11 @@
 import { describe, expect, it } from "vitest";
-import { gameContent } from "../../src/content";
-import { startRun, type PlayerView } from "../../src/engine";
-import { plainChoice, playToMonth } from "../../src/ui/later-month";
+import type { PlayerView } from "../../src/engine";
+import { readHiddenTruth } from "../../src/engine/hidden-truth";
+import { CLEAN, playRun } from "./real-runs";
 
-/**
- * Plays the real game as the browser tests' helpers do, from the start of a
- * month, taking an option once where offered, and keeps every view to the end.
- */
-function playFrom(seed: number, month: number, take?: string): PlayerView[] {
-  const run = startRun({ seed, content: gameContent });
-  let view = playToMonth(run, String(month));
-  const views = [view];
-  let wanted = take;
-  while (view.choices.length > 0) {
-    const named = view.choices.find(
-      (c) => "optionId" in c && c.optionId === wanted,
-    );
-    if (named) wanted = undefined;
-    view = run.choose(named ?? plainChoice(view));
-    views.push(view);
-  }
-  expect(wanted).toBeUndefined();
-  return views;
-}
+/** Plays the real game from the start of a month, taking an option once where offered. */
+const playFrom = (seed: number, month: number, take?: string) =>
+  playRun(seed, take ?? null, { from: month }).views;
 
 const yourBoss = (view: PlayerView | undefined) =>
   view?.orgChart.find((e) => e.title.endsWith(", your boss"))?.name;
@@ -54,5 +37,25 @@ describe("the seeds the browser tests walk", () => {
     expect(views[0]?.job.id).toBe("junior-employee");
     expect(yourBoss(views[0])).toBe("Dennis Prowse");
     expect(views.at(-1)?.step.kind).toBe("results");
+  });
+
+  it("keeps seed 16 a Team lead under a Believer from month 8, who hears of the old friend in month 12, for floor-2-moves.spec.ts", () => {
+    const { run, views } = playRun(16, "hire-your-friend", {
+      from: 11,
+      before: CLEAN,
+    });
+    const furious = views.find(
+      (v) =>
+        v.step.kind === "notification" && v.step.id === "friend-boss-furious",
+    );
+    const boss = readHiddenTruth(run).characters.find((c) => c.id === "head");
+
+    expect(views[0]?.month).toBe(11);
+    expect(views.slice(0, -1).every((v) => v.job.id === "team-lead")).toBe(
+      true,
+    );
+    expect(boss?.kind).toBe("believer");
+    expect(yourBoss(views[0])).toBe("Hugh Lamb");
+    expect(furious?.month).toBe(12);
   });
 });

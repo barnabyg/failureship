@@ -338,5 +338,310 @@
     "landedOnYou": "It came out, and the Senior Analyst said where it had started: with you, by the kettle.",
     "landedElsewhere": "It came out, but the Senior Analyst thought well of you, and said that nobody could say where it had started.",
     "neverCameOut": "It never came out. Everyone knew already, apparently."
+  },
+  {
+    "id": "friend-out-of-depth",
+    "addedBy": "hired-your-friend",
+    "after": {
+      "min": 4,
+      "max": 5
+    },
+    "note": "You hired your old friend onto your team. They could not do the job, and somebody else was doing it.",
+    "route": {
+      "character": "analyst",
+      "chance": {
+        "believer": 0.8,
+        "incompetent": 0.3,
+        "practitioner": 0.6
+      },
+      "motive": "The Senior Analyst had been doing your friend's work as well as their own, and kept a spreadsheet of it.",
+      "means": {
+        "remembers": {
+          "character": "analyst",
+          "about": "hired-a-friend"
+        }
+      }
+    },
+    "traced": {
+      "not": {
+        "did": "let-your-friend-go"
+      }
+    },
+    "onPlayer": {
+      "id": "friend-found-out",
+      "as": "move",
+      "from": "From: The Senior Analyst, Priya Venn",
+      "title": "Who has been doing what",
+      "body": "The Senior Analyst has sent your boss and your boss's boss a spreadsheet of who has been doing your friend's work. It has one name in it, and it is not your friend's. It is colour-coded, and the colour is yours.",
+      "sets": ["friend-found-out"],
+      "opinion": -1,
+      "headOpinion": -2,
+      "project": {
+        "real": "worse"
+      }
+    },
+    "onSomeoneElse": {
+      "id": "friend-work-shared-out",
+      "as": "notice",
+      "title": "Unallocated work",
+      "body": "The Senior Analyst sends round a list of the work your old friend left behind, unstarted, and asks who would like it. Nobody would, and nobody asks how it came to be there.",
+      "sets": ["friend-work-shared-out"]
+    },
+    "landedOnYou": "It came out in the Senior Analyst's spreadsheet of who had been doing your friend's job, and it led to you.",
+    "landedElsewhere": "It came out after your friend had gone, as work nobody had started.",
+    "neverCameOut": "It never came out. Somebody is still doing your friend's job, and has stopped saying so."
+  },
+  {
+    "id": "consultant-invoice",
+    "addedBy": "hired-the-consultant",
+    "after": {
+      "min": 2,
+      "max": 4
+    },
+    "note": "You spent the transformation budget on a consultant, whose invoice was always going to arrive.",
+    "route": {
+      "character": "programme",
+      "chance": {
+        "believer": 0.9,
+        "incompetent": 0.3,
+        "practitioner": 0.6
+      },
+      "motive": "The Programme Manager reconciled the transformation budget, and found one invoice and twelve slides."
+    },
+    "traced": {
+      "not": {
+        "did": "billed-the-centre"
+      }
+    },
+    "onPlayer": {
+      "id": "consultant-invoice-landed",
+      "as": "notification",
+      "from": "From: The Programme Manager, Gwen Ashdown",
+      "title": "Transformation budget: one invoice",
+      "body": "The consultant's invoice has reached the Programme Manager. It is for more than the budget, and it includes the consultant's travel to the meeting at which you hired them. The Programme Manager would like to know which of your lines it should come from.",
+      "sets": ["consultant-invoice-landed"],
+      "headOpinion": -1,
+      "options": [
+        {
+          "id": "pay-from-the-team",
+          "label": "Take it out of your team's training budget",
+          "sets": ["paid-the-consultant"],
+          "project": {
+            "real": "worse"
+          },
+          "result": {
+            "title": "The invoice",
+            "body": "It is paid. Your team learns that this year's training has been transformed into the consultant's travel."
+          },
+          "remembers": [
+            {
+              "character": "projects",
+              "about": "paid-for-the-consultant",
+              "text": "Their training budget paid for your consultant's travel.",
+              "tone": "bad"
+            }
+          ]
+        },
+        {
+          "id": "ask-the-sponsor",
+          "family": "deflect",
+          "label": "Ask your boss to sign it, as sponsor",
+          "sets": ["boss-signed-the-invoice"],
+          "opinion": -1,
+          "result": {
+            "title": "The invoice",
+            "body": "Your boss signs it, as sponsor, and asks whose idea the consultant was. You say it was a team decision. Your boss says that is what they will say too."
+          }
+        },
+        {
+          "id": "query-every-line",
+          "family": "deliver",
+          "label": "Query the invoice, line by line",
+          "cost": "standard",
+          "sets": ["queried-the-invoice"],
+          "result": {
+            "title": "The invoice",
+            "body": "The consultant takes off the travel, and adds a fee for answering the query. It comes to the same, and the Programme Manager has seen you try."
+          }
+        }
+      ]
+    },
+    "onSomeoneElse": {
+      "id": "consultant-billed-elsewhere",
+      "as": "notice",
+      "title": "The Centre of Excellence's invoice",
+      "body": "The Programme Manager mentions that the Centre of Excellence has had an invoice from a consultant nobody there has met. It has been paid, as nobody could say what else it was for.",
+      "sets": ["consultant-billed-elsewhere"]
+    },
+    "landedOnYou": "It came out when the Programme Manager reconciled the transformation budget, and the invoice had your team's code on it.",
+    "landedElsewhere": "It came out, on the Centre of Excellence's code, where nobody checks.",
+    "neverCameOut": "It never came out. The invoice is in a queue, accruing."
+  },
+  {
+    "id": "bonus-letters",
+    "addedBy": "team-bonus-to-allies",
+    "after": {
+      "min": 2,
+      "max": 3
+    },
+    "note": "You gave your team's bonus pot to whoever backed you, and signed a letter for every share.",
+    "route": {
+      "character": "analyst",
+      "chance": {
+        "believer": 0.8,
+        "incompetent": 0.3,
+        "practitioner": 0.6
+      },
+      "motive": "The Senior Analyst found the other bonus letters in the printer tray, with your signature on each, and took them to People and Culture.",
+      "means": {
+        "remembers": {
+          "character": "analyst",
+          "about": "left-out-of-the-pot"
+        }
+      }
+    },
+    "traced": {
+      "not": {
+        "believes": {
+          "character": "analyst",
+          "mood": "warm"
+        }
+      }
+    },
+    "onPlayer": {
+      "id": "bonus-letters-landed",
+      "as": "notification",
+      "from": "From: People and Culture",
+      "title": "Your team's bonus letters",
+      "body": "People and Culture has been sent your team's bonus letters, with your signature on each, and would like to understand the reasoning. They stress that this is a conversation, and have booked a room for it with no windows.",
+      "sets": ["bonus-letters-landed"],
+      "headOpinion": -1,
+      "options": [
+        {
+          "id": "rewarded-behaviours",
+          "family": "deflect",
+          "label": "Reply that the split rewarded the right behaviours",
+          "sets": ["rewarded-behaviours"],
+          "opinion": -1,
+          "result": {
+            "title": "Your bonus letters",
+            "body": "People and Culture asks you to name the behaviours. You name loyalty. It is written down, underlined and filed."
+          }
+        },
+        {
+          "id": "backdate-the-note",
+          "family": "fabricate",
+          "label": "Write a note of your reasons now, and date it before the letters",
+          "sets": ["backdated-the-note"],
+          "mistake": "big",
+          "result": {
+            "title": "Your bonus letters",
+            "body": "People and Culture thanks you for the note, and asks why a document dated in the spring was created this morning. The conversation is now a process."
+          }
+        },
+        {
+          "id": "next-years-pot",
+          "family": "trade",
+          "label": "Tell the Senior Analyst that next year's pot is theirs",
+          "sets": ["promised-next-years-pot"],
+          "result": {
+            "title": "Your bonus letters",
+            "body": "The Senior Analyst withdraws the complaint, and forwards your e-mail to their personal address."
+          }
+        }
+      ]
+    },
+    "onSomeoneElse": {
+      "id": "bonus-letters-shredded",
+      "as": "notice",
+      "title": "The printer tray",
+      "body": "The Senior Analyst mentions that they found some letters in the printer tray, with your signature on, and have put them through the shredder. It is the most anyone has ever used the shredder.",
+      "sets": ["bonus-letters-shredded"]
+    },
+    "landedOnYou": "It came out when the Senior Analyst found the other bonus letters in the printer tray, and took them to People and Culture.",
+    "landedElsewhere": "It came out, but the Senior Analyst thought well enough of you to shred the letters.",
+    "neverCameOut": "It never came out. The letters are in three drawers, and the drawers are not talking."
+  },
+  {
+    "id": "fire-door-desk",
+    "addedBy": "moved-the-critic",
+    "after": {
+      "min": 2,
+      "max": 3
+    },
+    "note": "You put the Project Co-ordinator by the lift, beside the fire door, without asking what the fire door was for.",
+    "route": {
+      "character": "projects",
+      "chance": {
+        "believer": 0.8,
+        "incompetent": 0.4,
+        "practitioner": 0.6
+      },
+      "motive": "The Project Co-ordinator turned out to be Floor 2's Health and Safety representative, and measured the gap between their new desk and the fire door. It was eleven centimetres.",
+      "means": {
+        "remembers": {
+          "character": "projects",
+          "about": "moved-by-the-lift"
+        }
+      }
+    },
+    "traced": {
+      "not": {
+        "did": "walked-the-fire-route"
+      }
+    },
+    "onPlayer": {
+      "id": "fire-door-desk-landed",
+      "as": "notification",
+      "from": "From: The Health and Safety Committee",
+      "title": "Your floor plan and the fire door",
+      "body": "The colleague you seated by the lift is, it emerges, Floor 2's Health and Safety representative. They have measured the space between their desk and the fire door, and the committee has copied in both your bosses. Your floor plan is now an incident.",
+      "sets": ["fire-door-desk-landed"],
+      "opinion": -1,
+      "headOpinion": -1,
+      "options": [
+        {
+          "id": "move-them-back",
+          "label": "Move them back, beside the Senior Analyst",
+          "sets": ["moved-them-back"],
+          "result": {
+            "title": "The fire door",
+            "body": "They move back, and the committee closes the incident. The Senior Analyst and the Project Co-ordinator resume talking, and you can guess about what."
+          }
+        },
+        {
+          "id": "blame-facilities",
+          "family": "deflect",
+          "label": "Reply that the plan was Facilities'",
+          "sets": ["blamed-facilities"],
+          "opinion": -1,
+          "result": {
+            "title": "The fire door",
+            "body": "Facilities replies to all, with the plan attached, and your pencil marks on it."
+          }
+        },
+        {
+          "id": "redo-the-plan",
+          "family": "deliver",
+          "label": "Redo the floor plan with the committee, desk by desk",
+          "cost": "standard",
+          "sets": ["redid-the-floor-plan"],
+          "result": {
+            "title": "The fire door",
+            "body": "It takes a day, a tape measure and the committee. The new plan is safe, and everyone sits where they sat in the first place."
+          }
+        }
+      ]
+    },
+    "onSomeoneElse": {
+      "id": "fire-door-cleared",
+      "as": "notice",
+      "title": "The fire door",
+      "body": "The Health and Safety Committee walks Floor 2 and finds every fire route clear, one of them by a desk's width. It notes that the route was walked and signed off by the team's lead.",
+      "sets": ["fire-door-cleared"]
+    },
+    "landedOnYou": "It came out when the Project Co-ordinator, Floor 2's Health and Safety representative, measured the gap to the fire door.",
+    "landedElsewhere": "It came out on the committee's walk round, but you had walked the route yourself, and moved the desk.",
+    "neverCameOut": "It never came out. The desk is still beside the fire door, and so is the Project Co-ordinator."
   }
 ]

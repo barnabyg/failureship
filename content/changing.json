@@ -80,6 +80,76 @@
         "whistleblower": 1,
         "left": 2
       }
+    },
+    {
+      "about": "left-out-of-the-pot",
+      "weight": 1,
+      "why": "You left them out of your team's bonus pot, and signed a letter about resilience.",
+      "leans": {
+        "practitioner": 2,
+        "whistleblower": 1,
+        "left": 1
+      }
+    },
+    {
+      "about": "moved-by-the-lift",
+      "weight": 1,
+      "why": "You sat them by the lift, for questioning your plans.",
+      "leans": {
+        "practitioner": 1,
+        "whistleblower": 2,
+        "left": 1
+      }
+    },
+    {
+      "about": "split-up",
+      "weight": 1,
+      "why": "You split them up from the person they sat with, because they talked.",
+      "leans": {
+        "practitioner": 1,
+        "whistleblower": 1,
+        "left": 2
+      }
+    },
+    {
+      "about": "drawn-out",
+      "weight": 1,
+      "why": "You drew their line out of your team at the Org Design Workshop.",
+      "leans": {
+        "practitioner": 2,
+        "whistleblower": 1,
+        "left": 1
+      }
+    },
+    {
+      "about": "paid-for-the-consultant",
+      "weight": 1,
+      "why": "You paid for your consultant out of their training budget.",
+      "leans": {
+        "practitioner": 1,
+        "whistleblower": 2,
+        "left": 1
+      }
+    },
+    {
+      "about": "consultant-took-my-work",
+      "weight": 1,
+      "why": "Your consultant presented their work back to them, as a framework.",
+      "leans": {
+        "practitioner": 2,
+        "whistleblower": 1,
+        "left": 1
+      }
+    },
+    {
+      "about": "given-the-holiday",
+      "weight": 1,
+      "why": "You put them on call over the bank holiday, for questioning your plans.",
+      "leans": {
+        "practitioner": 1,
+        "whistleblower": 1,
+        "left": 2
+      }
     }
   ],
   "became": {

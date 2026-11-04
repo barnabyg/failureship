@@ -3320,5 +3320,765 @@
         ]
       }
     ]
+  },
+  {
+    "id": "team-hire",
+    "floor": "team-lead",
+    "months": [4],
+    "title": "Hiring Decision",
+    "location": "Floor 2, Team Room 2A",
+    "narration": [
+      "Your req has been approved: one post, on your team, and the hire is yours. The Senior Analyst has recommended a candidate, and your boss has mentioned one. An old friend of yours is between things, and their CV says transformation eleven times."
+    ],
+    "cast": ["{head}", "{boss}", "admin", "delivery", "analyst", "projects"],
+    "signs": [
+      {
+        "label": "Whose candidate it is",
+        "text": "The shortlist goes up. Everyone looks at {holder}, and {holder} looks at nobody.",
+        "clue": "At the Hiring Decision, everyone looked at {holder} when the shortlist went up."
+      },
+      {
+        "label": "Who is consulted",
+        "text": "{bystander} is asked for a view, and gives {holder}'s. {ignored} is asked to book the room."
+      }
+    ],
+    "options": [
+      {
+        "id": "hire-the-recommended",
+        "family": "deliver",
+        "label": "Hire the Senior Analyst's candidate, who is good",
+        "results": [
+          {
+            "body": "The candidate starts on Monday, and by Wednesday has found two things wrong with your project. The Senior Analyst is pleased, and tries not to show it.",
+            "sets": ["hired-on-merit"],
+            "approach": "results",
+            "project": {
+              "real": "better"
+            },
+            "remembers": [
+              {
+                "character": "analyst",
+                "about": "hired-their-candidate",
+                "text": "You hired the candidate they recommended.",
+                "tone": "good"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "hire-your-friend",
+        "family": "trade",
+        "label": "Hire your old friend, who is between things",
+        "results": [
+          {
+            "body": "Your friend starts on Monday, and on Monday asks what the job is. You tell them. By Friday the Senior Analyst is doing it, and your project has slipped a week.",
+            "sets": ["hired-your-friend"],
+            "approach": "cronyism",
+            "project": {
+              "real": "worse"
+            },
+            "reaction": {
+              "believer": "Your boss asks to see the scoring sheet. There is no scoring sheet. Your boss writes something down, and underlines it.",
+              "incompetent": "Your boss says that a lead needs people they can trust, and asks your friend about golf.",
+              "practitioner": "Your boss says that everyone needs their own people, and asks, lightly, how far back the two of you go."
+            },
+            "remembers": [
+              {
+                "character": "analyst",
+                "about": "hired-a-friend",
+                "text": "You hired your old friend over the candidate they recommended, and they do your friend's work.",
+                "tone": "bad"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "hire-the-bosses-pick",
+        "family": "trade",
+        "label": "Hire the candidate your boss mentioned",
+        "results": [
+          {
+            "body": "Your boss's candidate accepts, and mentions your boss twice in their first week. You are now someone who listens.",
+            "sets": ["hired-the-bosses-pick"],
+            "approach": "favour"
+          }
+        ]
+      },
+      {
+        "id": "freeze-the-post",
+        "family": "impress",
+        "label": "Leave the post empty, and report the saving",
+        "results": [
+          {
+            "body": "The saving goes upstairs, with a chart. Your team is told that the post has been reimagined, and shares out its work.",
+            "sets": ["froze-the-post"],
+            "approach": "theatre"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "pay-review",
+    "floor": "team-lead",
+    "months": [5],
+    "title": "Pay Review",
+    "location": "Floor 2, Team Room 2A",
+    "narration": [
+      "Your team's bonus pot is twelve thousand pounds, and this year it is yours to divide. Once your boss signs off the split, each share goes out in a letter with your signature on it."
+    ],
+    "cast": ["{head}", "{boss}", "admin", "delivery", "analyst", "projects"],
+    "signs": [
+      {
+        "label": "Whose split goes through",
+        "text": "{holder}'s split is signed before it is read. {ignored}'s is read twice.",
+        "clue": "At the Pay Review, {holder}'s split was signed before anyone read it."
+      },
+      {
+        "label": "Who holds the pen",
+        "text": "{bystander} passes {holder} the pen, and waits."
+      }
+    ],
+    "options": [
+      {
+        "id": "split-the-pot",
+        "family": "deflect",
+        "label": "Split it equally across your team",
+        "results": [
+          {
+            "body": "Every letter has the same sum on it, and you sign each one. By lunchtime your team has compared them, and found nothing to object to, which it holds against you.",
+            "sets": ["team-bonus-split", "team-bonus-decided"],
+            "approach": "plain-report"
+          }
+        ]
+      },
+      {
+        "id": "pot-to-your-allies",
+        "family": "trade",
+        "label": "Give it all to whoever really backs you",
+        "results": [
+          {
+            "when": {
+              "all": [
+                {
+                  "any": [
+                    {
+                      "believes": {
+                        "character": "analyst",
+                        "mood": "warm"
+                      }
+                    },
+                    {
+                      "youOwe": "analyst"
+                    }
+                  ]
+                },
+                {
+                  "any": [
+                    {
+                      "believes": {
+                        "character": "projects",
+                        "mood": "warm"
+                      }
+                    },
+                    {
+                      "youOwe": "projects"
+                    }
+                  ]
+                }
+              ]
+            },
+            "body": "You sign two letters for six thousand pounds each, to the Senior Analyst and the Project Co-ordinator, who have been on your side all year. Everyone else on your team gets a letter about the value of recognition.",
+            "sets": ["team-bonus-to-allies", "team-bonus-decided"],
+            "approach": "cronyism",
+            "reaction": {
+              "believer": "Your boss reads the split, and asks what each share was for. You say loyalty. Your boss writes the word down, and looks at it.",
+              "incompetent": "Your boss signs the split, and says that loyalty ought to be rewarded, as if it had been.",
+              "practitioner": "Your boss signs the split without reading it, and says that people remember who looked after them."
+            },
+            "remembers": [
+              {
+                "character": "associate",
+                "about": "left-out-of-the-pot",
+                "text": "You gave your team's bonus pot to the two who back you, and sent them a letter about recognition.",
+                "tone": "bad"
+              }
+            ]
+          },
+          {
+            "when": {
+              "any": [
+                {
+                  "believes": {
+                    "character": "analyst",
+                    "mood": "warm"
+                  }
+                },
+                {
+                  "youOwe": "analyst"
+                }
+              ]
+            },
+            "body": "You sign one letter, for twelve thousand pounds, to the Senior Analyst, who has been on your side all year. The Project Co-ordinator gets a letter thanking them for their resilience, and reads it twice.",
+            "sets": ["team-bonus-to-allies", "team-bonus-decided"],
+            "approach": "cronyism",
+            "reaction": {
+              "believer": "Your boss reads the split, and asks what each share was for. You say loyalty. Your boss writes the word down, and looks at it.",
+              "incompetent": "Your boss signs the split, and says that loyalty ought to be rewarded, as if it had been.",
+              "practitioner": "Your boss signs the split without reading it, and says that people remember who looked after them."
+            },
+            "remembers": [
+              {
+                "character": "projects",
+                "about": "left-out-of-the-pot",
+                "text": "You gave your team's whole bonus pot to the Senior Analyst, and sent them a letter about resilience.",
+                "tone": "bad"
+              },
+              {
+                "character": "associate",
+                "about": "left-out-of-the-pot",
+                "text": "You gave your team's bonus pot to one person who backs you, and sent them a letter about resilience.",
+                "tone": "bad"
+              }
+            ]
+          },
+          {
+            "when": {
+              "any": [
+                {
+                  "believes": {
+                    "character": "projects",
+                    "mood": "warm"
+                  }
+                },
+                {
+                  "youOwe": "projects"
+                }
+              ]
+            },
+            "body": "You sign one letter, for twelve thousand pounds, to the Project Co-ordinator, who has been on your side all year. The Senior Analyst gets a letter thanking them for their resilience, and files it.",
+            "sets": ["team-bonus-to-allies", "team-bonus-decided"],
+            "approach": "cronyism",
+            "reaction": {
+              "believer": "Your boss reads the split, and asks what each share was for. You say loyalty. Your boss writes the word down, and looks at it.",
+              "incompetent": "Your boss signs the split, and says that loyalty ought to be rewarded, as if it had been.",
+              "practitioner": "Your boss signs the split without reading it, and says that people remember who looked after them."
+            },
+            "remembers": [
+              {
+                "character": "analyst",
+                "about": "left-out-of-the-pot",
+                "text": "You gave your team's whole bonus pot to the Project Co-ordinator, and sent them a letter about resilience.",
+                "tone": "bad"
+              },
+              {
+                "character": "associate",
+                "about": "left-out-of-the-pot",
+                "text": "You gave your team's bonus pot to one person who backs you, and sent them a letter about resilience.",
+                "tone": "bad"
+              }
+            ]
+          },
+          {
+            "body": "You look down your team for anyone who really backs you, and cannot be sure of one. The pot goes, in one letter, to whoever laughed at your joke on Monday. Everybody else gets a letter about resilience.",
+            "sets": ["team-bonus-to-allies", "team-bonus-decided"],
+            "approach": "cronyism",
+            "reaction": {
+              "believer": "Your boss reads the split, and asks what each share was for. You say loyalty. Your boss writes the word down, and looks at it.",
+              "incompetent": "Your boss signs the split, and says that loyalty ought to be rewarded, as if it had been.",
+              "practitioner": "Your boss signs the split without reading it, and says that people remember who looked after them."
+            },
+            "remembers": [
+              {
+                "character": "analyst",
+                "about": "left-out-of-the-pot",
+                "text": "You gave your team's bonus pot to someone who laughed at your joke, and sent them a letter about resilience.",
+                "tone": "bad"
+              },
+              {
+                "character": "projects",
+                "about": "left-out-of-the-pot",
+                "text": "You gave your team's bonus pot to someone who laughed at your joke, and sent them a letter about resilience.",
+                "tone": "bad"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "pot-by-the-work",
+        "family": "deliver",
+        "label": "Divide it by the year's work, and give the reasons",
+        "results": [
+          {
+            "body": "The biggest share goes to the Senior Analyst, who did most of the year's work. Each letter gives its reasons, with dates. Your boss asks why your split has an appendix.",
+            "sets": ["team-bonus-by-the-work", "team-bonus-decided"],
+            "approach": "results",
+            "project": {
+              "real": "better"
+            },
+            "remembers": [
+              {
+                "character": "analyst",
+                "about": "paid-for-the-work",
+                "text": "You gave them the biggest share of your team's bonus pot, with the reasons in writing.",
+                "tone": "good"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "pot-upstairs",
+        "family": "impress",
+        "label": "Ask your boss how they would split it",
+        "results": [
+          {
+            "body": "Your boss gives you three names, one of whom is not on your team. You make the sums add up, and sign.",
+            "sets": ["team-bonus-asked-up", "team-bonus-decided"],
+            "approach": "flatter"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "floor-plan",
+    "floor": "team-lead",
+    "months": [6],
+    "title": "Floor Plan Walkthrough",
+    "location": "Floor 2, by the lift",
+    "narration": [
+      "Facilities walks the leads round Floor 2 with a plan and a pencil. Each lead seats their own team: who by whom, who by the window, and who by the lift. The Senior Analyst and the Project Co-ordinator sit together, and talk."
+    ],
+    "cast": ["{head}", "{boss}", "admin", "delivery", "analyst", "projects"],
+    "signs": [
+      {
+        "label": "Who chooses first",
+        "text": "{holder} chooses first, and Facilities writes it down at once.",
+        "clue": "On the Floor Plan Walkthrough, {holder} chose first, and Facilities wrote it down at once."
+      },
+      {
+        "label": "Who gets the lift",
+        "text": "{ignored}'s team is given the desks by the lift, in passing."
+      }
+    ],
+    "options": [
+      {
+        "id": "keep-the-team-together",
+        "label": "Leave your team as it sits",
+        "results": [
+          {
+            "body": "Your team stays where it is. Facilities marks it on the plan as Phase Two, in pencil.",
+            "sets": ["kept-the-team-together"]
+          }
+        ]
+      },
+      {
+        "id": "split-the-pair",
+        "family": "attack",
+        "label": "Split up the Senior Analyst and the Project Co-ordinator",
+        "results": [
+          {
+            "body": "You put the length of the floor between them. They now talk by e-mail, which is slower, and copy each other in on everything, which is not.",
+            "sets": ["split-the-pair"],
+            "approach": "blame",
+            "remembers": [
+              {
+                "character": "analyst",
+                "about": "split-up",
+                "text": "You split them up from the Project Co-ordinator on the floor plan, because they talk.",
+                "tone": "bad"
+              },
+              {
+                "character": "projects",
+                "about": "split-up",
+                "text": "You split them up from the Senior Analyst on the floor plan, because they talk.",
+                "tone": "bad"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "move-the-critic",
+        "family": "attack",
+        "label": "Put the Project Co-ordinator, who questions your plans, by the lift",
+        "results": [
+          {
+            "body": "The Project Co-ordinator carries everything to the desk by the lift in one trip, and sets it down beside the fire door. The lift opens, and says Floor 2.",
+            "sets": ["moved-the-critic"],
+            "approach": "blame",
+            "remembers": [
+              {
+                "character": "projects",
+                "about": "moved-by-the-lift",
+                "text": "You sat them by the lift, for questioning your plans.",
+                "tone": "bad"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "take-the-window",
+        "family": "impress",
+        "label": "Take the window yourself, and seat your team facing you",
+        "results": [
+          {
+            "body": "You have the window. Your team faces you, with the light behind you, and sees only your outline.",
+            "sets": ["took-the-window"],
+            "approach": "theatre"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "succession",
+    "floor": "team-lead",
+    "months": [7],
+    "title": "Succession Planning",
+    "location": "Floor 2, Team Room 2A",
+    "narration": [
+      "Each lead writes down who on their team could step into their job tomorrow. The forms are confidential, and are read out, so each lead hears who would replace them."
+    ],
+    "cast": ["{head}", "{boss}", "admin", "delivery", "analyst", "projects"],
+    "signs": [
+      {
+        "label": "Whose name comes up",
+        "text": "{holder}'s name is on two forms that are not {holder}'s own.",
+        "clue": "At Succession Planning, {holder}'s name was on other leads' forms."
+      },
+      {
+        "label": "Who is on nobody's form",
+        "text": "{ignored} is on nobody's form, and writes something down."
+      }
+    ],
+    "options": [
+      {
+        "id": "name-a-successor",
+        "family": "deliver",
+        "label": "Write down the Senior Analyst, who could do it",
+        "results": [
+          {
+            "body": "The Senior Analyst's name is read out. They look across at you, surprised, and then at your job, with interest.",
+            "sets": ["named-a-successor"],
+            "approach": "results",
+            "remembers": [
+              {
+                "character": "analyst",
+                "about": "named-as-successor",
+                "text": "You named them as the one who could do your job.",
+                "tone": "good"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "name-nobody",
+        "family": "impress",
+        "label": "Write that nobody on your team is ready yet",
+        "results": [
+          {
+            "body": "It is read out. Your team hears that it is not ready, and you hear that you are irreplaceable, which upstairs means something else.",
+            "sets": ["named-nobody"],
+            "approach": "theatre"
+          }
+        ]
+      },
+      {
+        "id": "name-your-friend",
+        "family": "fabricate",
+        "label": "Write down your old friend",
+        "requires": {
+          "all": [
+            {
+              "did": "hired-your-friend"
+            },
+            {
+              "not": {
+                "did": "let-your-friend-go"
+              }
+            }
+          ]
+        },
+        "results": [
+          {
+            "body": "Your friend's name is read out. There is a short silence, which the Senior Analyst uses.",
+            "sets": ["named-your-friend"],
+            "approach": "cronyism",
+            "news": {
+              "about": "named-the-friend",
+              "tone": "bad",
+              "text": "You named your old friend as the one who could do your job.",
+              "at": ["analyst"]
+            }
+          }
+        ]
+      },
+      {
+        "id": "let-your-friend-go",
+        "family": "deliver",
+        "label": "Write that your old friend has moved on, and go and tell them",
+        "requires": {
+          "all": [
+            {
+              "did": "hired-your-friend"
+            },
+            {
+              "not": {
+                "did": "let-your-friend-go"
+              }
+            }
+          ]
+        },
+        "results": [
+          {
+            "body": "Your friend takes it well, and asks whether they can keep the laptop. They cannot. The leaving drinks are on your card, and you are not invited.",
+            "sets": ["let-your-friend-go"],
+            "approach": "truth"
+          }
+        ]
+      },
+      {
+        "id": "name-your-boss",
+        "family": "impress",
+        "label": "Write down your boss, as your mentor",
+        "results": [
+          {
+            "body": "It is read out. Your boss is touched, and points out that they already have a job, which is above yours.",
+            "sets": ["named-your-boss"],
+            "approach": "flatter"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "recognition-panel",
+    "floor": "team-lead",
+    "pool": true,
+    "title": "Recognition Panel",
+    "location": "Floor 2, Team Room 2A",
+    "narration": [
+      "The leads choose this quarter's Star of the Floor, from every team on Floor 2. There is a certificate and a parking space for a month, and the leads vote."
+    ],
+    "cast": ["{head}", "{boss}", "admin", "delivery", "analyst", "projects"],
+    "signs": [
+      {
+        "label": "Whose nominee wins",
+        "text": "{holder}'s nominee has won before the vote. {ignored}'s is noted.",
+        "clue": "At the Recognition Panel, {holder}'s nominee had won before the vote."
+      },
+      {
+        "label": "Who seconds",
+        "text": "{bystander} seconds {holder}'s nominee, and then asks who it is."
+      }
+    ],
+    "options": [
+      {
+        "id": "nominate-the-worker",
+        "family": "deliver",
+        "label": "Nominate whoever on your team did the most",
+        "results": [
+          {
+            "body": "You read out what they did. It is a long list, and the leads thank you for its length, and vote for someone else's.",
+            "sets": ["nominated-the-worker"],
+            "approach": "results"
+          }
+        ]
+      },
+      {
+        "id": "trade-your-vote",
+        "family": "trade",
+        "label": "Vote for the Service Delivery Lead's nominee, for their vote next time",
+        "results": [
+          {
+            "body": "The Service Delivery Lead's nominee wins by one vote, yours. The Service Delivery Lead nods to you, once, like a receipt.",
+            "sets": ["traded-a-vote"],
+            "approach": "favour",
+            "remembers": [
+              {
+                "character": "delivery",
+                "about": "traded-a-vote",
+                "text": "You voted for their nominee at the Recognition Panel.",
+                "tone": "good"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "vote-with-the-boss",
+        "family": "impress",
+        "label": "Vote for whoever your boss nominated",
+        "results": [
+          {
+            "body": "Your boss's nominee wins. Your boss notices who voted for them, which is what the vote was for.",
+            "sets": ["voted-with-the-boss"],
+            "approach": "flatter"
+          }
+        ]
+      },
+      {
+        "id": "second-the-first",
+        "label": "Second whichever name is said first",
+        "results": [
+          {
+            "body": "You second it. It was decided already, and now it is unanimous."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "org-design",
+    "floor": "team-lead",
+    "pool": true,
+    "title": "Org Design Workshop",
+    "location": "Floor 2, Team Room 2A",
+    "narration": [
+      "The leads redraw the floor's boxes on a whiteboard. Lines may be moved and boxes merged. Nobody in a box is to be told until the boxes are final."
+    ],
+    "cast": ["{head}", "{boss}", "admin", "delivery", "analyst", "projects"],
+    "signs": [
+      {
+        "label": "Who holds the pen",
+        "text": "{holder} holds the pen, and the boxes move towards {holder}.",
+        "clue": "At the Org Design Workshop, {holder} held the pen, and the boxes moved towards them."
+      },
+      {
+        "label": "Whose box goes",
+        "text": "{ignored}'s box is merged into a box called Shared Services, which is drawn larger."
+      }
+    ],
+    "options": [
+      {
+        "id": "keep-your-box",
+        "label": "Keep your box the shape it is",
+        "results": [
+          {
+            "body": "Your box stays the same shape. Someone draws a dotted line to it, and will not say from where."
+          }
+        ]
+      },
+      {
+        "id": "absorb-a-team",
+        "family": "impress",
+        "label": "Draw another team's line into your box",
+        "results": [
+          {
+            "body": "Your box is bigger. It has a team in it now that has not been told, and a lead who has.",
+            "sets": ["absorbed-a-team"],
+            "approach": "theatre"
+          }
+        ]
+      },
+      {
+        "id": "draw-out-the-critic",
+        "family": "attack",
+        "label": "Draw the Project Co-ordinator's line into someone else's box",
+        "results": [
+          {
+            "body": "The line is moved. The Project Co-ordinator is now in Shared Services, on the whiteboard, until somebody wipes it.",
+            "sets": ["drew-out-the-critic"],
+            "approach": "blame",
+            "remembers": [
+              {
+                "character": "projects",
+                "about": "drawn-out",
+                "text": "You drew their line out of your team at the Org Design Workshop.",
+                "tone": "bad"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "ask-your-team",
+        "family": "deliver",
+        "label": "Ask for a week, so as to ask your team",
+        "results": [
+          {
+            "body": "You are given a week, and the boxes are finalised in the meantime.",
+            "sets": ["asked-the-team-about-boxes"],
+            "approach": "truth"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "ways-of-working",
+    "floor": "team-lead",
+    "pool": true,
+    "title": "Ways of Working Charter",
+    "location": "Floor 2, Team Room 2A",
+    "narration": [
+      "The leads agree a charter for how Floor 2 works: core hours, time without meetings, and the tone of e-mails. Once agreed, it will be laminated."
+    ],
+    "cast": ["{head}", "{boss}", "admin", "delivery", "analyst", "projects"],
+    "signs": [
+      {
+        "label": "Whose hours are core",
+        "text": "{holder}'s working hours become the floor's core hours, without a vote.",
+        "clue": "At the Ways of Working Charter, {holder}'s hours became the core hours without a vote."
+      },
+      {
+        "label": "Who laminates",
+        "text": "{ignored} is asked to laminate it."
+      }
+    ],
+    "options": [
+      {
+        "id": "hours-that-suit",
+        "family": "deliver",
+        "label": "Propose core hours that suit your team",
+        "results": [
+          {
+            "body": "Your team's hours are noted, and the core hours are set at the hours already set.",
+            "sets": ["proposed-core-hours"],
+            "approach": "truth"
+          }
+        ]
+      },
+      {
+        "id": "free-fridays",
+        "family": "impress",
+        "label": "Propose Fridays without meetings",
+        "results": [
+          {
+            "body": "Fridays without meetings are agreed, and a meeting is booked on each one, to protect it.",
+            "sets": ["proposed-free-fridays"],
+            "approach": "theatre"
+          }
+        ]
+      },
+      {
+        "id": "adopt-the-office-charter",
+        "family": "impress",
+        "label": "Propose adopting the Programme Office's charter",
+        "results": [
+          {
+            "body": "It is adopted. It turns out to be last year's, with this year's date on it.",
+            "sets": ["adopted-the-office-charter"],
+            "approach": "flatter"
+          }
+        ]
+      },
+      {
+        "id": "sign-the-charter",
+        "label": "Say nothing, and sign it",
+        "results": [
+          {
+            "body": "You sign it. The charter is laminated, and goes on the wall beside the last one."
+          }
+        ]
+      }
+    ]
   }
 ]

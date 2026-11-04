@@ -84,7 +84,7 @@ have seen one: whoever protects them decides, and it can be traced to you. Whoev
 influence over a seat gives it out by what matters to their kind, never a score or a Gauge. Rivals
 work on them, and so can you, if you know whom to approach. You are told who decided, beside
 Official standing. Win, and you are **Team lead**, on Floor 2. Lose, and the winner is your boss.
-The passed over remember.
+The passed over remember. A Team lead's Moves are bigger, from hiring to bonuses, and so is the Bill.
 
 After eighteen months the results screen shows who was really who: each Character's kind and Hidden
 Fact, each Rival and what they did, your marks against the truth, how you played by family of Move,
