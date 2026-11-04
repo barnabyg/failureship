@@ -14,6 +14,7 @@ import {
   choiceMistake,
   family,
   headOpinion,
+  MOVE_FAMILIES,
   news,
   notificationOption,
   opinion,
@@ -106,6 +107,14 @@ export const scene = z.strictObject({
     }),
   ),
   options: z.array(sceneOption).min(1),
+  /**
+   * Someone competing with the player makes a Move in it, such as a tricky
+   * question: drawn as a competitor's Move is made, and in the room, so text
+   * can say `{competitor}`. If they are a Rival, it is listed as what they did.
+   */
+  competitor: z
+    .strictObject({ title: text, family: z.enum(MOVE_FAMILIES) })
+    .optional(),
   /** Names code in `sceneScripts`, for a Scene that data cannot express. */
   script: id.optional(),
   /** What the boss finally says of the player, by their mood. */

@@ -133,9 +133,15 @@ function findBrokenReferences(content: Content): string[] {
       );
     }
   };
-  const checkParts = (owner: string, written: string, about = false) => {
+  const checkParts = (
+    owner: string,
+    written: string,
+    about = false,
+    asked = false,
+  ) => {
     for (const [, token] of written.matchAll(/\{(\w+)\}/g)) {
       if (about && token === "subject") continue;
+      if (asked && token === "competitor") continue;
       if (!PART_TOKENS.includes(token ?? "")) {
         problems.push(`${owner} uses unknown part "{${token ?? ""}}".`);
       }
@@ -345,19 +351,29 @@ function findBrokenReferences(content: Content): string[] {
     ) {
       problems.push(`${owner} names parts, which need three people present.`);
     }
-    for (const line of s.narration) checkParts(owner, line);
+    // Only a Scene in which someone competing asks can say who did.
+    const asked = s.competitor !== undefined;
+    if (asked && !content.rivals) {
+      problems.push(`${owner} has someone competing ask, but nobody competes.`);
+    }
+    if (asked && moves.has(s.id)) {
+      problems.push(
+        `${owner} has someone competing ask, as Move "${s.id}" does.`,
+      );
+    }
+    for (const line of s.narration) checkParts(owner, line, false, asked);
     for (const sign of s.signs) {
-      checkParts(owner, sign.text);
-      checkParts(owner, sign.clue ?? "");
+      checkParts(owner, sign.text, false, asked);
+      checkParts(owner, sign.clue ?? "", false, asked);
     }
     for (const o of s.options) {
       const optionOwner = `${owner} option "${o.id}"`;
       const about = o.about !== undefined;
       if (o.about !== undefined) checkFact(optionOwner, o.about);
-      checkParts(optionOwner, o.label, about);
+      checkParts(optionOwner, o.label, about, asked);
       for (const r of o.results) {
-        checkParts(optionOwner, r.body, about);
-        checkParts(optionOwner, r.factNote ?? "", about);
+        checkParts(optionOwner, r.body, about, asked);
+        checkParts(optionOwner, r.factNote ?? "", about, asked);
         if (r.factAt !== undefined)
           checkCharacterOrPlace(optionOwner, r.factAt);
         if (r.when) checkCondition(optionOwner, r.when);

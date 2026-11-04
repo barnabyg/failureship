@@ -737,6 +737,13 @@ and who really has what it needs.
   `about` and `text` of the news of the player once someone sees through it. See
   [`reputation.json`](#reputationjson). It moves nobody's belief in the player until it is seen
   through.
+- A Scene with `competitor`, a `title` and a `family`, is one in which someone competing with the
+  player makes a Move, such as Floor 3's tricky question at the Board. Whoever it is is drawn from
+  those competing in [`rivals.json`](#rivalsjson) by its `makers` odds, as a competitor's Move is
+  made, and is in the room, so a Practitioner is likeliest but never sure. Its text can say
+  `{competitor}` for them, which no other Scene can, or the bystander if nobody competes. If they
+  are a Rival, the results screen lists its `title` among what they did. It needs `rivals.json`,
+  and an id no Move has.
 - A Scene with a `verdict` adds what the boss finally says, by their mood.
 - A Scene that data cannot express can name a `script`, which is passed to `startRun` in
   `sceneScripts`. This format is a trial, as the spec, issue #1, says.

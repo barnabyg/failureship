@@ -168,15 +168,39 @@ export function makerOf(
   state: State,
   content: Content,
   move: { id: string; by?: string | undefined },
-  { competing }: Competition,
+  competition: Competition,
 ): string | undefined {
   if (move.by === undefined) return undefined;
   if (move.by !== COMPETITOR) {
     return meantBy(bossesOf(state, content), move.by);
   }
+  return competitorFor(state, content, `maker:${move.id}`, competition);
+}
+
+/**
+ * Who of those competing asks in a Scene that has someone competing in it, as
+ * a competitor's Move is made: the same person each time it is read that month.
+ */
+export function askerIn(
+  state: State,
+  content: Content,
+  scene: { id: string; competitor?: unknown },
+): string | undefined {
+  if (scene.competitor === undefined) return undefined;
+  const competition = competitionNow(state, content);
+  return competitorFor(state, content, `asker:${scene.id}`, competition);
+}
+
+/** One of those competing, drawn by the odds for their kind. */
+function competitorFor(
+  state: State,
+  content: Content,
+  question: string,
+  { competing }: Competition,
+): string | undefined {
   const odds = content.rivals?.makers;
   if (!odds || competing.length === 0) return undefined;
-  const value = drawFor(state.seed, `maker:${move.id}`, state.month);
+  const value = drawFor(state.seed, question, state.month);
   return pickWeighted(
     Math.floor(value * 2 ** 32),
     competing,
@@ -212,7 +236,9 @@ export function rivalsInResults(
   return state.truth.rivals.map((rivalry) => {
     const { name, title } = personOf(state, content, rivalry.character);
     const did = rivalry.did.flatMap(({ month, move }) => {
-      const made = content.moves.find((m) => m.id === move);
+      const made =
+        content.moves.find((m) => m.id === move) ??
+        content.scenes.find((s) => s.id === move)?.competitor;
       if (!made) return [];
       const family = made.family && content.families?.[made.family].label;
       return [{ month, text: made.title, family: family ?? null }];
