@@ -11,9 +11,31 @@
         "title": "Head of Special Projects",
         "called": "the Head of Special Projects"
       },
+      "created": {
+        "title": "Team Leader (Delivery)",
+        "called": "the Delivery Team Leader"
+      },
       "opened": {
-        "title": "An exciting opportunity",
-        "body": "Following the success of the Grand Plan, {holder} is moving up to lead Special Projects, which has been created for the purpose. {holder} will be greatly missed from the end of month {month}. The seat is open until then, and will be filled through a fair and transparent process. Expressions of interest are welcome, and will be filed."
+        "plan": {
+          "title": "An exciting opportunity",
+          "body": "Following the success of the Grand Plan, {holder} is moving up to lead Special Projects, which has been created for the purpose. {holder} will be greatly missed from the end of month {month}. The seat is open until then, and will be filled through a fair and transparent process. Expressions of interest are welcome, and will be filed."
+        },
+        "movedUp": {
+          "title": "An exciting opportunity",
+          "body": "{holder} has been seconded upstairs to Special Projects, which needed someone at short notice and has found them. {holder} will be greatly missed from the end of month {month}. The seat is open until then, and will be filled through a fair and transparent process. Expressions of interest are welcome, and will be filed."
+        },
+        "left": {
+          "title": "An exciting opportunity",
+          "body": "Following the departure of {holder}, the seat is open until the end of month {month}, and will be filled through a fair and transparent process. Until then, the team reports to whoever {holder} reported to, who has been asked to be available. Expressions of interest are welcome, and will be filed."
+        },
+        "fired": {
+          "title": "An exciting opportunity",
+          "body": "Following a review of conduct, {holder} is no longer with the company, effective immediately, and the badge has been collected. The seat is open until the end of month {month}, and will be filled through a fair and transparent process. People and Culture would like to thank everyone who raised concerns, in confidence. Expressions of interest are welcome, and will be filed."
+        },
+        "created": {
+          "title": "An exciting opportunity",
+          "body": "A new post of Team Leader (Delivery) has been created, to lead the team that {holder} leads, so that {holder} can focus on leading it. It will be filled at the end of month {month}, through a fair and transparent process. {holder} remains in post, with the same title and a new chart. Expressions of interest are welcome, and will be filed."
+        }
       },
       "won": {
         "title": "Congratulations: Team lead",
@@ -186,7 +208,7 @@
       }
     },
     "story": {
-      "text": "A story that you had had very little to do with the Grand Plan.",
+      "text": "A story, from someone who also wanted the seat, about what you had really done.",
       "belief": -2
     },
     "diary": "A long lunch about the seat, which somebody paid for."
@@ -195,5 +217,57 @@
   "untold": "It was {decider}'s decision, and {decider} made it.",
   "inFact": "The seat was in the gift of {decider}. {why}",
   "asForYou": "As for you: {why}",
-  "results": "In month {month}, {holder} moved up, and the seat went to {winner}."
+  "results": {
+    "plan": "In month {month}, {holder} moved up, and the seat went to {winner}.",
+    "movedUp": "In month {month}, {holder} was seconded upstairs, and the seat went to {winner}.",
+    "left": "In month {month}, after {holder} had left, the seat went to {winner}.",
+    "fired": "In month {month}, after {holder} had been fired, the seat went to {winner}.",
+    "created": "In month {month}, a post was created out of {holder}'s team, and it went to {winner}."
+  },
+  "ousting": {
+    "ways": {
+      "report": {
+        "chance": {
+          "believer": 0.8,
+          "incompetent": 0.5,
+          "practitioner": 0.3
+        }
+      },
+      "rumour": {
+        "chance": {
+          "believer": 0.3,
+          "incompetent": 0.7,
+          "practitioner": 0.5
+        }
+      },
+      "fact": {
+        "chance": {
+          "believer": 1,
+          "incompetent": 1,
+          "practitioner": 1
+        },
+        "when": {
+          "heardTrue": "abolished-post"
+        }
+      }
+    },
+    "mood": {
+      "warm": 0.2,
+      "neutral": 0,
+      "cold": -0.3
+    },
+    "gone": {
+      "title": "A change in the team",
+      "body": "An all-staff e-mail thanks {holder} for their contribution, and says nothing else, at length. The desk has been cleared by somebody from Security, who took the plant. Nobody has said why, and everybody on the floor is very careful not to look at you while not saying it."
+    },
+    "survived": {
+      "title": "Business as usual",
+      "body": "The concerns raised about {holder} have been looked into, and were found to be concerns. {holder} is staying, and has been told, in confidence, where they came from. {holder} says good morning to you now, every morning, by name, and waits for you to say it back."
+    },
+    "remembered": {
+      "about": "tried-to-get-rid-of-me",
+      "text": "You tried to get them fired, and they know it.",
+      "belief": -3
+    }
+  }
 }

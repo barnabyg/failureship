@@ -5,14 +5,15 @@ import { makeDeal, settleDeal } from "./deals";
 import { YOU } from "./deal";
 import { completePlans } from "./grand-plans";
 import { makeMistake } from "./mistakes";
-import { headOf, whoIs } from "./places";
+import { oust } from "./departures";
+import { bossOf, headOf, whoIs } from "./places";
 import { moveProject, type ProjectChange } from "./project";
 import { makePromise, settlePromise } from "./promises";
 import { shiftBelief } from "./reads";
 import { remember, startNews, startStory } from "./reputation";
 import { startRisks } from "./risks";
 import { startThreads } from "./threads";
-import { actForSeat } from "./vacancies";
+import { actForSeat, openSeat } from "./vacancies";
 import type { State } from "./state";
 
 /** Everything a consequence can do, whether a choice or something else caused it. */
@@ -52,6 +53,10 @@ export interface Outcome {
   settlesDue?: { id: string; how: "kept" | "broken" } | undefined;
   /** What whoever acts does for an open seat. */
   seat?: Parameters<typeof actForSeat>[2] | undefined;
+  /** Tries to get rid of the player's boss, by this way of doing it. */
+  ousts?: string | undefined;
+  /** Opens the player's boss's seat, as they move up or a post is created. */
+  vacates?: "movedUp" | "created" | undefined;
 }
 
 /** Counts a Move the player made, for how they played. */
@@ -116,6 +121,10 @@ export function applyOutcome(
   }
   if (outcome.reshuffle) reshuffleCharts(state, content, outcome.reshuffle);
   if (outcome.seat) actForSeat(state, content, outcome.seat, actor);
+  if (outcome.ousts !== undefined) oust(state, content, outcome.ousts);
+  if (outcome.vacates) {
+    openSeat(state, content, bossOf(state, content), outcome.vacates);
+  }
   const head = headOf(state, content);
   if (head !== undefined && outcome.headOpinion) {
     shiftBelief(state, head, outcome.headOpinion);

@@ -462,11 +462,26 @@ describe("what is written", () => {
     refuses({ disaster: true });
   });
 
-  it("refuses moving the boss on the chart", () => {
-    refuses({
-      changed: "C",
-      reshuffle: { reports: [{ character: "ana", to: "ben" }] },
-    });
+  it("accepts moving the boss, and the player, on the chart", () => {
+    expect(() =>
+      parseContent(
+        raw([
+          outside({
+            changed: "C",
+            reshuffle: {
+              reports: [
+                { character: "ana", to: "ben" },
+                { character: "you", to: "cal" },
+              ],
+            },
+          }),
+        ]),
+      ),
+    ).not.toThrow();
+  });
+
+  it("refuses opening a seat with no words for the results screen", () => {
+    refuses({ vacates: "movedUp" });
   });
 
   it("refuses a chart change with no words for the results screen", () => {

@@ -26,6 +26,30 @@ export function managerOf(
   return state.reportsTo[id] ?? managerAtStart(content, id);
 }
 
+/** Whether someone has left the company, which is for the rest of the run. */
+export function isGone(state: State, id: string): boolean {
+  return state.gone.some((g) => g.character === id);
+}
+
+/**
+ * Who someone answers to now, passing over anyone who has left: whoever was
+ * above them covers until their seat is filled.
+ */
+export function managerHere(
+  state: State,
+  content: Content,
+  id: string,
+  gone: (at: string) => boolean = (at) => isGone(state, at),
+): string | undefined {
+  const seen = new Set<string>();
+  let manager = managerOf(state, content, id);
+  while (manager !== undefined && gone(manager) && !seen.has(manager)) {
+    seen.add(manager);
+    manager = managerOf(state, content, manager);
+  }
+  return manager;
+}
+
 export function managerAtStart(
   content: Content,
   id: string,
@@ -40,9 +64,33 @@ function bossesOn(answersTo: (id: string) => string | undefined): Bosses {
   return { boss, head: answersTo(boss) };
 }
 
-/** Who is above the player now, read from where they sit on the Org Chart. */
+/**
+ * Who is above the player now, read from where they sit on the Org Chart. Nobody
+ * who has left is ever in a place.
+ */
 export function bossesOf(state: State, content: Content): Bosses {
-  return bossesOn((id) => managerOf(state, content, id));
+  return bossesOn((id) => managerHere(state, content, id));
+}
+
+/**
+ * Whether someone leaving would leave a place above the player empty, so that
+ * data naming it would mean nobody. Until a floor's own seat is written, the
+ * one at the top of the player's chain stays.
+ */
+export function wouldEmptyAPlace(
+  state: State,
+  content: Content,
+  id: string,
+): boolean {
+  if (id === YOU) return true;
+  const gone = (at: string) => at === id || isGone(state, at);
+  const after = (at: string) => managerHere(state, content, at, gone);
+  const boss = after(YOU);
+  const head = boss === undefined ? undefined : after(boss);
+  return (
+    boss === undefined ||
+    (head === undefined && headOf(state, content) !== undefined)
+  );
 }
 
 /** Who is above the player as a run starts, for checking data before any run. */

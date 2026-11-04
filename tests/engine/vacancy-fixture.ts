@@ -151,9 +151,28 @@ export function vacancyRaw() {
           competing: "seat",
           openFor: 1,
           movesUp: { reportsTo: "eve", title: "UPSTAIRS", called: "UP-THERE" },
+          created: { title: "NEW-POST", called: "THE-NEW-POST" },
           opened: {
-            title: "SEAT-OPEN",
-            body: "{holder} MOVES-UP, DECIDED-IN-{month}",
+            plan: {
+              title: "SEAT-OPEN",
+              body: "{holder} MOVES-UP, DECIDED-IN-{month}",
+            },
+            movedUp: {
+              title: "SEAT-OPEN-MOVED-UP",
+              body: "{holder} IS-SECONDED, DECIDED-IN-{month}",
+            },
+            left: {
+              title: "SEAT-OPEN-LEFT",
+              body: "{holder} HAS-LEFT, DECIDED-IN-{month}",
+            },
+            fired: {
+              title: "SEAT-OPEN-FIRED",
+              body: "{holder} WAS-FIRED, DECIDED-IN-{month}",
+            },
+            created: {
+              title: "SEAT-OPEN-CREATED",
+              body: "A-POST-UNDER {holder}, DECIDED-IN-{month}",
+            },
           },
           won: { title: "SEAT-WON", body: "You have it, not {winner}." },
           lost: { title: "SEAT-LOST", body: "{winner} HAS-IT" },
@@ -212,7 +231,13 @@ export function vacancyRaw() {
       untold: "UNTOLD:{decider}",
       inFact: "DECIDED-BY:{decider} {why}",
       asForYou: "FOR-YOU: {why}",
-      results: "{holder} SEAT WENT TO {winner} IN {month}",
+      results: {
+        plan: "{holder} SEAT WENT TO {winner} IN {month}",
+        movedUp: "{holder} MOVED-UP, SEAT WENT TO {winner} IN {month}",
+        left: "{holder} LEFT, SEAT WENT TO {winner} IN {month}",
+        fired: "{holder} FIRED, SEAT WENT TO {winner} IN {month}",
+        created: "{holder} KEPT, POST WENT TO {winner} IN {month}",
+      },
     },
   };
 }

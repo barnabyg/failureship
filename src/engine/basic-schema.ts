@@ -34,12 +34,26 @@ export type Mood = (typeof MOODS)[number];
 export const NATURES = ["dangerous", "useful", "idle"] as const;
 export type Nature = (typeof NATURES)[number];
 
+/**
+ * How a seat falls vacant: its holder moves up on a Grand Plan, or otherwise,
+ * leaves, is fired, or has a post created out of their team.
+ */
+export const SEAT_WAYS = [
+  "plan",
+  "movedUp",
+  "left",
+  "fired",
+  "created",
+] as const;
+export type SeatWay = (typeof SEAT_WAYS)[number];
+
 export type Condition =
   | { holderIs: string }
   | { bossIs: Kind }
   | { factNature: { character: string; nature: Nature } }
   | { heardFact: string }
   | { heardTrue: string }
+  | { heardOf: { fact: string; character: string } }
   | { hasBuzzword: string }
   | { flag: string }
   | { did: string }
@@ -48,7 +62,7 @@ export type Condition =
   | { youOwe: string }
   | { sawMove: string }
   | { planRunning: string }
-  | { vacancyOpen: true }
+  | { vacancyOpen: true | SeatWay }
   | { not: Condition }
   | { all: Condition[] }
   | { any: Condition[] };
@@ -65,6 +79,9 @@ export const condition: z.ZodType<Condition> = z.lazy(() =>
     }),
     z.strictObject({ heardFact: id }),
     z.strictObject({ heardTrue: id }),
+    z.strictObject({
+      heardOf: z.strictObject({ fact: id, character: id }),
+    }),
     z.strictObject({ hasBuzzword: id }),
     z.strictObject({ flag: id }),
     z.strictObject({ did: id }),
@@ -77,7 +94,9 @@ export const condition: z.ZodType<Condition> = z.lazy(() =>
     z.strictObject({ youOwe: id }),
     z.strictObject({ sawMove: id }),
     z.strictObject({ planRunning: id }),
-    z.strictObject({ vacancyOpen: z.literal(true) }),
+    z.strictObject({
+      vacancyOpen: z.union([z.literal(true), z.enum(SEAT_WAYS)]),
+    }),
     z.strictObject({ not: condition }),
     z.strictObject({ all: z.array(condition).min(1) }),
     z.strictObject({ any: z.array(condition).min(1) }),

@@ -76,6 +76,35 @@ function findBrokenSeatActs(content: Content): string[] {
   return problems;
 }
 
+/** Every way of getting rid of the boss that a choice names is written. */
+function findBrokenOusting(content: Content): string[] {
+  const named = [
+    ...everyNotification(content).flatMap((n) =>
+      n.options.flatMap((o) =>
+        "ousts" in o && o.ousts !== undefined
+          ? [{ owner: `Notification "${n.id}" option "${o.id}"`, way: o.ousts }]
+          : [],
+      ),
+    ),
+    ...content.scenes.flatMap((s) =>
+      s.options.flatMap((o) =>
+        o.results.flatMap((r) =>
+          r.ousts !== undefined
+            ? [{ owner: `Scene "${s.id}" option "${o.id}"`, way: r.ousts }]
+            : [],
+        ),
+      ),
+    ),
+  ];
+  const ways = content.vacancies?.ousting?.ways ?? {};
+  return named
+    .filter(({ way }) => !(way in ways))
+    .map(
+      ({ owner, way }) =>
+        `${owner} gets rid of the boss by unknown way "${way}" in vacancies.json.`,
+    );
+}
+
 /**
  * Seats: each is on a known floor and leads to another, what is competed for
  * while it is open is written, and whoever its holder moves up to is there, and
@@ -83,7 +112,10 @@ function findBrokenSeatActs(content: Content): string[] {
  * A big mistake in a seat demotes, so being demoted needs its words.
  */
 export function findBrokenVacancies(content: Content): string[] {
-  const problems = findBrokenSeatActs(content);
+  const problems = [
+    ...findBrokenSeatActs(content),
+    ...findBrokenOusting(content),
+  ];
   const written = content.vacancies;
   if (!written) return problems;
   const jobs = content.floors.map((f) => f.job);

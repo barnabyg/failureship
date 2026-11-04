@@ -1,10 +1,9 @@
-import type { Content, Kind, Seat, VacancyReason } from "./content";
+import type { Content, Kind, Seat, SeatWay, VacancyReason } from "./content";
 import { hasSway, influencerOf, isUnder, YOU } from "./deal";
 import { planCompleted } from "./grand-plans";
-import { bossOf, managerOf, whoIs } from "./places";
+import { bossOf, managerHere, whoIs } from "./places";
 import {
   isGone,
-  isMovingUp,
   kindOf,
   moodOfCharacter,
   personOf,
@@ -30,8 +29,7 @@ const ABOUT_THE_SEAT = "the-seat";
 /**
  * As the official story closes a month: any seat due to be decided now is, and
  * the seat of a boss who completed their Grand Plan this month, and counted it
- * done, falls vacant from the next. That is the first promotion. Nothing opens
- * that the run would end before deciding.
+ * done, falls vacant from the next. That is the first promotion.
  */
 export function fillVacancies(state: State, content: Content): void {
   const written = content.vacancies;
@@ -42,39 +40,66 @@ export function fillVacancies(state: State, content: Content): void {
     }
   }
   const boss = bossOf(state, content);
-  const seat = written.seats.find((s) => s.floor === state.job);
   const done = planCompleted(state, content, boss);
+  if (done?.counted && done.month === state.month) {
+    openSeat(state, content, boss, "plan");
+  }
+}
+
+/**
+ * The player's boss's seat falls vacant, in one of the ways a seat can, and is
+ * open from the next month for the seat's `openFor` months. Only the seat of the
+ * player's floor opens, one at a time, and nothing opens that the run would end
+ * before deciding. A boss who goes is told of before they have gone.
+ */
+export function openSeat(
+  state: State,
+  content: Content,
+  holder: string,
+  way: SeatWay,
+): void {
+  const seat = content.vacancies?.seats.find((s) => s.floor === state.job);
   const decides = state.month + (seat?.openFor ?? 0);
   if (
     !seat ||
-    !done?.counted ||
-    done.month !== state.month ||
-    isGone(state, boss) ||
-    isMovingUp(state, boss) ||
+    holder !== bossOf(state, content) ||
+    isGone(state, holder) ||
+    state.vacancies.some((v) => v.decided === null) ||
     decides > content.balance.monthsPerRun
   ) {
     return;
   }
   state.vacancies.push({
     seat: seat.id,
-    holder: boss,
+    holder,
+    way,
+    patron: influencerOf(state.truth.powerMap, holder) ?? null,
     opened: state.month + 1,
     decides,
     credit: null,
     calledIn: [],
     decided: null,
   });
+  const opened = seat.opened[way];
   state.noticesDue.push({
-    title: seat.opened.title,
-    body: sayPeople(seat.opened.body, {
-      "{holder}": calledBy(state, content, boss),
+    title: opened.title,
+    body: sayPeople(opened.body, {
+      "{holder}": calledBy(state, content, holder),
     }).replaceAll("{month}", String(decides)),
   });
 }
 
-/** Whoever really holds influence over a seat: the one above its holder on the Power Map. */
-function deciderOf(state: State, holder: string): string {
-  return influencerOf(state.truth.powerMap, holder) ?? holder;
+/**
+ * Whoever really holds influence over a seat: the one above its holder on the
+ * Power Map, or for a holder who has left, whoever was above them as they went,
+ * while they are still here. With nobody above, whoever is most influential.
+ */
+function deciderOf(state: State, vacancy: Vacancy): string {
+  const map = state.truth.powerMap;
+  const { holder, patron } = vacancy;
+  if (!isGone(state, holder)) return influencerOf(map, holder) ?? holder;
+  if (patron !== null && !isGone(state, patron)) return patron;
+  return map.order[0] ?? holder;
 }
 
 function openVacancy(state: State): Vacancy | undefined {
@@ -98,7 +123,7 @@ export function actForSeat(
   const vacancy = openVacancy(state);
   if (!written || !vacancy) return;
   const map = state.truth.powerMap;
-  const decider = deciderOf(state, vacancy.holder);
+  const decider = deciderOf(state, vacancy);
   const keep = (
     kept: { text: string; belief: number },
     via: string | null,
@@ -161,11 +186,14 @@ function reasonsFor(
   if (vacancy.credit === who) reasons.push("credited");
   if (vacancy.calledIn.includes(who)) reasons.push("calledIn");
   if (who === YOU) {
-    const done = planCompleted(state, content, vacancy.holder);
+    const done =
+      vacancy.way === "plan" && planCompleted(state, content, vacancy.holder);
     const { played } = state;
     const looks = (played.impress ?? 0) + (played.fabricate ?? 0);
     if (owes) reasons.push("owedYou");
-    if (done?.counted && done.how === "reality") reasons.push("delivered");
+    if (done && done.counted && done.how === "reality") {
+      reasons.push("delivered");
+    }
     if ((played.deliver ?? 0) >= written.resultsAt) reasons.push("results");
     if (looks >= written.looksAt) reasons.push("looks");
     reasons.push(moodOfCharacter(state, content, decider));
@@ -238,7 +266,7 @@ function pick(
  * whoever competes for it, and the strongest reasons win, with a seeded draw
  * among equals. A big mistake while it was open can rule the player out, and
  * if nobody else stands for it, the holder's team is weighed instead. The
- * holder moves up, the winner takes the seat, with the title it had, and
+ * winner takes the seat, with the title it had, or a created post's, and
  * whoever answered to the holder answers to them. Winning takes the player to
  * the seat's floor. Each Character who stood for it and was passed over
  * remembers; one weighed only because nobody stood does not.
@@ -252,7 +280,7 @@ function decide(
   const seat = written.seats.find((s) => s.id === vacancy.seat);
   if (!seat) return;
   const { holder } = vacancy;
-  const decider = deciderOf(state, holder);
+  const decider = deciderOf(state, vacancy);
   const kind = kindOf(state, decider);
   const weighOf = (who: string) =>
     weigh(state, content, written, vacancy, decider, who);
@@ -288,7 +316,10 @@ function decide(
     blocked: winner !== YOU && otherwise.winner === YOU,
     candidates: [you, ...others],
     onPaper: paper?.band ?? null,
-    held: titleHeld(state, content, holder),
+    held:
+      vacancy.way === "created"
+        ? seat.created
+        : titleHeld(state, content, holder),
   };
   vacancy.decided = decided;
   // What everyone is called is read before anyone moves.
@@ -299,7 +330,7 @@ function decide(
     "{decider}": called(decider),
     "{why}": toldOf(written, decided, called),
   });
-  moveUp(state, content, seat, holder, decided);
+  fillSeat(state, content, seat, vacancy, decided);
   const { forYou, forSomeoneElse } = written.passedOver;
   const kept = winner === YOU ? forYou : forSomeoneElse;
   for (const { who } of stood) {
@@ -328,21 +359,28 @@ function decide(
   });
 }
 
-/** The holder moves up, and the winner takes their place on the Org Chart. */
-function moveUp(
+/**
+ * The winner takes the seat on the Org Chart: they answer to whoever its holder
+ * answered to, and its holder's team answers to them. A holder moving up goes
+ * where the seat sends them. One who has left is gone already, and one whose
+ * team a post was created out of stays where they are, with nobody under them.
+ */
+function fillSeat(
   state: State,
   content: Content,
   seat: Seat,
-  holder: string,
+  { holder, way }: Vacancy,
   { winner, held }: Decided,
 ): void {
-  const above = managerOf(state, content, holder) ?? seat.movesUp.reportsTo;
+  const above = managerHere(state, content, holder) ?? seat.movesUp.reportsTo;
   const team = [YOU, ...teamOf(state, content, holder)];
-  state.reportsTo[holder] = seat.movesUp.reportsTo;
-  state.titles[holder] = {
-    title: seat.movesUp.title,
-    called: seat.movesUp.called,
-  };
+  if (way === "plan" || way === "movedUp") {
+    state.reportsTo[holder] = seat.movesUp.reportsTo;
+    state.titles[holder] = {
+      title: seat.movesUp.title,
+      called: seat.movesUp.called,
+    };
+  }
   state.reportsTo[winner] = above;
   if (winner === YOU) state.job = seat.job;
   else state.titles[winner] = held;
@@ -429,12 +467,12 @@ export function vacanciesInResults(
   if (!written) return [];
   const nameOf = (id: string) =>
     id === YOU ? written.you : personOf(state, content, id).name;
-  return state.vacancies.flatMap(({ holder, decided }) => {
+  return state.vacancies.flatMap(({ holder, way, decided }) => {
     if (!decided) return [];
     return [
       {
         month: decided.month,
-        text: sayPeople(written.results, {
+        text: sayPeople(written.results[way], {
           "{holder}": nameOf(holder),
           "{winner}": nameOf(decided.winner),
         }).replaceAll("{month}", String(decided.month)),

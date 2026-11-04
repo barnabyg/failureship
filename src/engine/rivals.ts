@@ -7,6 +7,7 @@ import {
   meantBy,
   type Bosses,
 } from "./places";
+import { YOU } from "./deal";
 import { isGone, matches, personOf } from "./reads";
 import { drawFor, pickWeighted } from "./rng";
 import type { State } from "./state";
@@ -18,7 +19,7 @@ import type { StepView } from "./view";
  */
 export const COMPETITOR = "{competitor}";
 
-/** Whoever shares the player's boss on the Org Chart, as things stand. */
+/** Whoever shares the player's manager on the Org Chart, as things stand. */
 export const PEERS = "{peers}";
 
 /** Everyone still in the company, whatever their place. */
@@ -42,8 +43,11 @@ function competitorsOn(chart: Chart, entry: Competing): string[] {
   return entry.who.flatMap((written) => {
     if (written === EVERYONE) return everyone;
     if (written === PEERS) {
+      // Whoever answers to the player's own manager, so that a boss who has
+      // left, whose seat is still open, keeps their team together.
+      const manager = answersTo(YOU);
       return everyone.filter(
-        (id) => id !== bosses.boss && answersTo(id) === bosses.boss,
+        (id) => id !== manager && answersTo(id) === manager,
       );
     }
     const id = meantBy(bosses, written);

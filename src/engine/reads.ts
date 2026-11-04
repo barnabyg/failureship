@@ -1,8 +1,23 @@
-import type { Condition, Content, Kind, Mood, SceneData } from "./content";
+import type {
+  Condition,
+  Content,
+  Kind,
+  Mood,
+  SceneData,
+  SeatWay,
+} from "./content";
 import { YOU, type PowerMap } from "./deal";
 import { isOn, isOnFloor } from "./floors";
 import { isPlanRunning, planWords } from "./grand-plans";
-import { bossOf, bossesOf, managerOf, meantBy, placeOf, whoIs } from "./places";
+import {
+  bossOf,
+  bossesOf,
+  isGone,
+  managerOf,
+  meantBy,
+  placeOf,
+  whoIs,
+} from "./places";
 import { calledBy, capitalised, sayFrom, sayPeople, titleOf } from "./say";
 import type { State, World } from "./state";
 import type { Person } from "./view";
@@ -130,6 +145,10 @@ export function matches(
     const dealt = state.truth.characters.find((c) => c.id === heard?.subject);
     return dealt?.fact?.id === condition.heardTrue;
   }
+  if ("heardOf" in condition) {
+    const { fact, character } = condition.heardOf;
+    return heardAbout(state, fact)?.subject === who(character);
+  }
   if ("hasBuzzword" in condition) {
     return state.buzzwords.includes(condition.hasBuzzword);
   }
@@ -158,7 +177,10 @@ export function matches(
   if ("planRunning" in condition) {
     return isPlanRunning(state, content, condition.planRunning);
   }
-  if ("vacancyOpen" in condition) return isVacancyOpen(state);
+  if ("vacancyOpen" in condition) {
+    const { vacancyOpen } = condition;
+    return isVacancyOpen(state, vacancyOpen === true ? undefined : vacancyOpen);
+  }
   if ("not" in condition) return !matches(state, content, condition.not, room);
   if ("any" in condition) {
     return condition.any.some((inner) => matches(state, content, inner, room));
@@ -168,34 +190,34 @@ export function matches(
 
 /**
  * Whether the player has come across someone: anyone of the first floor's cast,
- * and anyone written for a floor the player has reached. Until then a later
- * floor's cast is on no chart, list or results screen of theirs.
+ * anyone written for a floor the player has reached, and whoever is above them.
+ * Until then a later floor's cast is on no chart, list or results screen of theirs.
  */
 export function isMet(state: State, content: Content, id: string): boolean {
   const floor = content.characters.find((c) => c.id === id)?.floor;
+  // Whoever is above the player has been met, wherever they were written.
   return (
     floor === undefined ||
     floor === content.you.job ||
-    (state.monthsOnFloor[floor] ?? 0) > 0
+    (state.monthsOnFloor[floor] ?? 0) > 0 ||
+    placeOf(state, content, id) !== undefined
   );
 }
 
-/** Whether someone's seat is open, so that they are on their way up. */
-export function isMovingUp(state: State, id: string): boolean {
-  return state.vacancies.some((v) => v.holder === id && v.decided === null);
-}
-
-/** Whether a seat is open now, and still to be decided. The player is told when one is. */
-export function isVacancyOpen(state: State): boolean {
+/**
+ * Whether a seat is open now, and still to be decided, in this way if one is
+ * given. The player is told when one is.
+ */
+export function isVacancyOpen(state: State, way?: SeatWay): boolean {
   return state.vacancies.some(
-    (v) => v.decided === null && v.opened <= state.month,
+    (v) =>
+      v.decided === null &&
+      v.opened <= state.month &&
+      (way === undefined || v.way === way),
   );
 }
 
-/** Whether someone has left the company, which is for the rest of the run. */
-export function isGone(state: State, id: string): boolean {
-  return state.truth.changes.some((c) => c.character === id && c.to === "left");
-}
+export { isGone };
 
 /** The Characters who answer to someone on the Org Chart now, in the order written. */
 export function teamOf(state: State, content: Content, id: string): string[] {
@@ -264,21 +286,24 @@ export function coverForGone<T>(state: State, content: Content, shown: T): T {
 }
 
 /**
- * The player's word on something, or a Deal, is offered once in a run, and nothing
- * is offered that names someone who has left.
+ * The player's word on something, or a Deal, is offered once in a run, nothing
+ * is offered that names someone who has left, and an option that requires
+ * something is offered only while it holds.
  */
 export function optionsOnOffer<
   T extends {
     label: string;
     promise?: string | undefined;
     deal?: string | undefined;
+    requires?: Condition | undefined;
   },
 >(state: State, content: Content, options: readonly T[]): T[] {
   return options.filter(
     (o) =>
       !state.promises.some((made) => made.id === o.promise) &&
       !state.deals.some((made) => made.id === o.deal) &&
-      !mentionsGone(state, content, o.label),
+      !mentionsGone(state, content, o.label) &&
+      matches(state, content, o.requires),
   );
 }
 
@@ -294,9 +319,7 @@ export function offeredOptions(
   scene: SceneData,
 ) {
   return optionsOnOffer(state, content, scene.options).filter(
-    (o) =>
-      (o.about === undefined || isHeardOfSomeoneHere(state, o.about)) &&
-      matches(state, content, o.requires),
+    (o) => o.about === undefined || isHeardOfSomeoneHere(state, o.about),
   );
 }
 

@@ -17,6 +17,7 @@ import {
   news,
   notificationOption,
   opinion,
+  ousts,
   ownReaction,
   projectChange,
   remembers,
@@ -60,6 +61,7 @@ const sceneResult = z.strictObject({
   remembers,
   news,
   seat: seatAct,
+  ousts,
   /** A false story the player tells about someone else. */
   falseStory: story,
   /** Says on the results screen that a Hidden Fact caused this. */

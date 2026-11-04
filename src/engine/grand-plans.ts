@@ -6,7 +6,6 @@ import { applyOutcome } from "./outcome";
 import { bossOf } from "./places";
 import {
   isGone,
-  isMovingUp,
   kindOf,
   matches,
   moodOfCharacter,
@@ -57,7 +56,9 @@ export function planCompleted(
 ): { id: string; how: PlanHow; month: number; counted: boolean } | null {
   const taken = state.plans.findLast((p) => p.boss === boss);
   const ended = taken?.ended;
-  if (!taken || !ended || ended.how === "failed") return null;
+  if (!taken || !ended || ended.how === "failed" || ended.how === "dropped") {
+    return null;
+  }
   const { month, how, counted } = ended;
   return { id: taken.id, how, month, counted };
 }
@@ -76,10 +77,10 @@ export function followPlans(state: State, content: Content): void {
     }
   }
   const boss = bossOf(state, content);
-  // A boss on their way up takes on nothing new.
-  if (planNow(state, content)?.ended === null || isMovingUp(state, boss)) {
-    return;
-  }
+  // While a seat is open, nobody takes on anything new: a boss on their way up,
+  // or whoever covers for one who has gone.
+  const open = state.vacancies.some((v) => v.decided === null);
+  if (planNow(state, content)?.ended === null || open) return;
   const next = written.plans.find(
     (p) =>
       isOn(state, content, p) &&
@@ -133,6 +134,19 @@ function failPlan(state: State, content: Content, taken: TakenPlan): void {
     matches(state, content, blame.sticks) &&
     drawFor(state.seed, `plan-blame:${plan.id}`, state.month) < chance;
   sendBill(state, content, blamed ? onPlayer : onSomeoneElse);
+}
+
+/** A boss who leaves takes their Plan with them, unfinished and unblamed. */
+export function dropPlans(state: State, boss: string): void {
+  for (const taken of state.plans) {
+    if (taken.boss !== boss || taken.ended !== null) continue;
+    taken.ended = {
+      month: state.month,
+      how: "dropped",
+      way: null,
+      counted: false,
+    };
+  }
 }
 
 /** The player hears of the boss's Plan here, if this is where it is told. */
@@ -277,7 +291,10 @@ export function plansInResults(
         name,
         title,
         plan: plan.title,
-        fate: plan.results[taken.ended?.how ?? "running"],
+        fate:
+          taken.ended?.how === "dropped"
+            ? (content.grandPlans?.dropped ?? "")
+            : plan.results[taken.ended?.how ?? "running"],
         keeper,
       },
     ];

@@ -6,6 +6,7 @@ import type {
   MoveFamily,
   PlanHow,
   SceneData,
+  SeatWay,
   Tone,
   VacancyReason,
 } from "./content";
@@ -205,7 +206,8 @@ export interface TakenPlan {
   /** How it ended, by which of its ways, and whether its boss counted it done. */
   ended: {
     month: number;
-    how: PlanHow | "failed";
+    /** Dropped if its boss left before it was done. */
+    how: PlanHow | "failed" | "dropped";
     way: string | null;
     counted: boolean;
   } | null;
@@ -219,11 +221,21 @@ export interface Candidate {
   strength: number;
 }
 
-/** A seat that fell vacant when its holder moved up, and how it was decided. */
+/** A seat that fell vacant, how it did, and how it was decided. */
 export interface Vacancy {
   seat: string;
-  /** Whoever held it, and is moving up. */
+  /**
+   * Whoever held it: moving up, gone, or, for a post created out of their team,
+   * staying where they are.
+   */
   holder: string;
+  /** How it fell vacant. */
+  way: SeatWay;
+  /**
+   * Whoever held influence over the holder on the Power Map as it fell vacant,
+   * who decides a seat whose holder has left, and so is off the map.
+   */
+  patron: string | null;
   /** The first month it is open. */
   opened: number;
   /** The month at whose close it is decided. */
@@ -380,6 +392,8 @@ export interface State extends MonthRecord {
   plans: TakenPlan[];
   /** Every seat that has fallen vacant, and who really decided it. Never shown until decided. */
   vacancies: Vacancy[];
+  /** Everyone who has left the company, for the rest of the run, and how. */
+  gone: { character: string; month: number; how: "left" | "fired" }[];
   /** Job titles taken by moving up, which stand in for those written. */
   titles: Record<string, { title: string; called: string }>;
   /** Each Gauge's value. Only Milestones read these. */

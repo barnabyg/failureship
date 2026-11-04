@@ -48,10 +48,12 @@ export {
   KINDS,
   MOODS,
   NATURES,
+  SEAT_WAYS,
   type Condition,
   type Kind,
   type Mood,
   type Nature,
+  type SeatWay,
 } from "./basic-schema";
 export {
   DEMAND_ANSWERS,

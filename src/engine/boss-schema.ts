@@ -1,6 +1,7 @@
 import { z } from "zod";
 import {
   KINDS,
+  SEAT_WAYS,
   condition,
   floor,
   id,
@@ -8,6 +9,7 @@ import {
   notice,
   perKind,
   text,
+  type SeatWay,
 } from "./basic-schema";
 import { bill } from "./consequence-schema";
 import { notificationOption, sets, TONES } from "./outcome-schema";
@@ -289,6 +291,8 @@ const grandPlan = z.strictObject({
 export const grandPlans = z.strictObject({
   /** Where the player's view says it has got to. `running` says {month}. */
   statuses: z.strictObject({ running: text, completed: text, failed: text }),
+  /** What the results screen says of a Plan whose boss left before it was done. */
+  dropped: text,
   /** What a Plan done is titled once its boss is no longer the player's. Left out, its own. */
   formerBoss: text.optional(),
   plans: z.array(grandPlan).min(1),
@@ -334,7 +338,40 @@ const reason = z.strictObject({
 /** What a seat act leaves with whoever decides: a memory, and how far it moves their belief. */
 const kept = z.strictObject({ text, belief: z.number().int() });
 
-/** A boss's seat, which falls vacant when they move up, and who decides it. */
+/** Something written once for each way a seat can fall vacant. */
+const byWay = <T extends z.ZodType>(value: T) =>
+  z.strictObject(
+    Object.fromEntries(SEAT_WAYS.map((w) => [w, value])) as Record<SeatWay, T>,
+  );
+
+/**
+ * Getting rid of the player's boss: each way's seeded chance, by the kind of
+ * whoever holds influence over the boss, who acts on it, and what is told.
+ */
+const ousting = z.strictObject({
+  ways: z.record(
+    id,
+    z.strictObject({
+      chance: perKind(z.number().min(0).max(1)),
+      /** It can work only while this holds, such as a Hidden Fact being true. */
+      when: condition.optional(),
+    }),
+  ),
+  /** Added to the chance for how whoever acts on it stands with the player. */
+  mood: z.strictObject({
+    warm: z.number(),
+    neutral: z.number(),
+    cold: z.number(),
+  }),
+  /** Told when the boss goes. Says {holder}. */
+  gone: notice,
+  /** Told when the boss stays. Says {holder}. */
+  survived: notice,
+  /** What a boss who stays remembers of it, and how far it moves their belief. */
+  remembered: z.strictObject({ about: id, text, belief: z.number().int() }),
+});
+
+/** A boss's seat, which falls vacant when they move up or go, and who decides it. */
 const seat = z.strictObject({
   id,
   /** The floor it is on: the player is under it while their job is this. */
@@ -347,8 +384,13 @@ const seat = z.strictObject({
   openFor: z.number().int().positive(),
   /** Where whoever held it moves up to: whom they answer to, and as what. */
   movesUp: z.strictObject({ reportsTo: id, title: text, called: text }),
-  /** Told as it opens. Says {holder} and {month}, the month it is decided in. */
-  opened: notice,
+  /** The post created out of its holder's team, which its winner holds as this. */
+  created: z.strictObject({ title: text, called: text }),
+  /**
+   * Told as it opens, in each way it can fall vacant. Says {holder} and
+   * {month}, the month it is decided in.
+   */
+  opened: byWay(notice),
   /** Told as it is decided, if the player has it. */
   won: notice,
   /** Told as it is decided, if someone else has it. Says {winner}. */
@@ -400,6 +442,8 @@ export const vacancies = z.strictObject({
   inFact: text,
   /** On the results screen, after it, when the player did not get it: what counted for them. Says {why}. */
   asForYou: text,
-  /** What the results screen says of each vacancy. Says {holder}, {winner} and {month}. */
-  results: text,
+  /** What the results screen says of each vacancy, by how it fell vacant. Says {holder}, {winner} and {month}. */
+  results: byWay(text),
+  /** Getting rid of the player's boss, which an outcome's `ousts` names a way of. */
+  ousting: ousting.optional(),
 });

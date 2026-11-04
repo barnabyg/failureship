@@ -1,5 +1,13 @@
 import { z } from "zod";
-import { condition, id, lines, notice, perKind, text } from "./basic-schema";
+import {
+  condition,
+  floor,
+  id,
+  lines,
+  notice,
+  perKind,
+  text,
+} from "./basic-schema";
 import {
   bigMistake,
   headOpinion,
@@ -140,6 +148,10 @@ export const companyEvent = z.strictObject({
     .optional(),
   /** Drawn at `balance.disasterChance`, with no clue. */
   disaster: z.boolean().default(false),
+  /** Lands only while the player's job is this floor's. Left out, on any floor. */
+  floor,
+  /** Opens the player's boss's seat: they move up, or a post is created out of their team. */
+  vacates: z.enum(["movedUp", "created"]).optional(),
   /** Who moves on the Org Chart, and who rises or falls on the Power Map. */
   reshuffle: z
     .strictObject({

@@ -156,7 +156,7 @@ describe("a Believer burned repeatedly", () => {
       const { changes } = readHiddenTruth(run);
       for (const dealt of before) {
         const change = changes.find((c) => c.character === dealt.id);
-        // The boss cannot leave, so a Believer boss has only the other two ways.
+        // Ana is not written to leave, so a Believer boss has only the other two ways.
         expect(change !== undefined, `${String(seed)} ${dealt.id}`).toBe(
           dealt.kind === "believer",
         );
@@ -167,7 +167,7 @@ describe("a Believer burned repeatedly", () => {
     expect([...ways].sort()).toEqual(["left", "practitioner", "whistleblower"]);
   });
 
-  it("never leaves while they are the player's boss, though written to be able to", () => {
+  it("never leaves when that would leave the player with no boss's boss, though written to be able to", () => {
     const content = parseContent(raw(["left"]));
     const seed = SEEDS.find((s) =>
       kindsAtStart(s, content).every(
@@ -176,7 +176,9 @@ describe("a Believer burned repeatedly", () => {
     );
     const run = startRun({ seed: seed ?? 0, content });
     run.choose(burnAll);
-    // Ben, who is in `leaving`, becomes the player's boss, as a seat's winner does.
+    // Ben, who is in `leaving`, becomes the player's boss, as a seat's winner
+    // does. Ana, above him, answers to nobody, so without him the player would
+    // have no boss's boss.
     const saved = JSON.parse(run.save()) as {
       state: { reportsTo: Record<string, string> };
     };
@@ -315,15 +317,15 @@ describe("a Believer burned repeatedly", () => {
     }
   });
 
-  it("is refused as a way for either of the player's bosses to leave", () => {
-    const broken = raw();
-    const leaving: Record<string, unknown> = broken.changing.leaving;
+  it("can be written for the player's boss, who may then leave", () => {
+    const written = raw();
+    const leaving: Record<string, unknown> = written.changing.leaving;
     leaving.ana = {
       cover: "the acting boss",
       notice: { title: "ANA-LEFT", body: "Gone." },
     };
 
-    expect(() => parseContent(broken)).toThrow(/cannot leave/);
+    expect(() => parseContent(written)).not.toThrow();
   });
 
   it("refuses a whistleblower report whose condition names an unknown Character", () => {

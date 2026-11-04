@@ -25,7 +25,10 @@ function drawDisaster(
     return undefined;
   }
   const open = content.events.filter(
-    (e) => e.disaster && !state.eventsLanded.some((l) => l.id === e.id),
+    (e) =>
+      e.disaster &&
+      (e.floor === undefined || e.floor === state.job) &&
+      !state.eventsLanded.some((l) => l.id === e.id),
   );
   return open[Math.floor(drawFor(seed, "disaster-which", month) * open.length)];
 }
@@ -34,7 +37,9 @@ function drawDisaster(
 export function scheduleEvents(state: State, content: Content): void {
   for (const event of content.events) {
     const landing = landingMonth(state.seed, event);
-    if (landing === null) continue;
+    // An event for one floor passes by a player on another.
+    const here = event.floor === undefined || event.floor === state.job;
+    if (landing === null || !here) continue;
     if (landing === state.month) state.eventsDue.push(event.id);
     const clue = event.schedule?.clue;
     if (clue && landing - clue.before === state.month) {
@@ -50,8 +55,16 @@ export function scheduleEvents(state: State, content: Content): void {
   if (disaster) state.eventsDue.push(disaster.id);
 }
 
-/** A Company Event lands after the player's actions, before the month closes. */
+/**
+ * A Company Event lands after the player's actions, before the month closes. One
+ * that would open a seat passes by while a seat is already open.
+ */
 export function landEvent(state: State, content: Content): Step | null {
+  const open = state.vacancies.some((v) => v.decided === null);
+  state.eventsDue = state.eventsDue.filter(
+    (due) =>
+      !open || content.events.find((e) => e.id === due)?.vacates === undefined,
+  );
   const id = state.eventsDue.shift();
   const event = content.events.find((e) => e.id === id);
   if (!event) return null;
