@@ -981,5 +981,466 @@
         ]
       }
     ]
+  },
+  {
+    "id": "board-offline",
+    "startedBy": "took-it-offline",
+    "chance": 0.9,
+    "after": {
+      "min": 1,
+      "max": 1
+    },
+    "started": "You took the Board's question about slide seven offline.",
+    "outcomes": [
+      {
+        "playedOut": "The Board wanted its answer offline, in writing, and asked for it.",
+        "bill": {
+          "id": "board-offline-chased",
+          "as": "notification",
+          "from": "From: The Board Office",
+          "title": "Your offline answer",
+          "body": "The Board is still waiting for the answer to the question about slide seven, which you took offline. It would like the answer before the next Board, so that it can be taken offline again if necessary.",
+          "sets": ["board-offline-chased"],
+          "options": [
+            {
+              "id": "still-offline",
+              "label": "Reply that you are still taking it offline",
+              "sets": ["still-offline"],
+              "headOpinion": -1,
+              "result": {
+                "title": "Your offline answer",
+                "body": "The Board Office notes your update, and puts the question on the agenda of the next Board, as item one."
+              }
+            },
+            {
+              "id": "answer-in-writing",
+              "family": "deliver",
+              "label": "Find the real answer, and send it",
+              "cost": "standard",
+              "sets": ["answered-offline"],
+              "result": {
+                "title": "Your offline answer",
+                "body": "It takes two days, and it is a less good figure than anyone hoped. The Board Office thanks you for it, and files it with the question."
+              }
+            }
+          ]
+        },
+        "gauges": [
+          {
+            "gauge": "teflon",
+            "by": -5,
+            "note": "The question you took offline came back, as item one."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "cut-passed-down",
+    "startedBy": "passed-the-cut-down",
+    "chance": 0.9,
+    "after": {
+      "min": 1,
+      "max": 2
+    },
+    "started": "You passed the Chief Financial Officer's thirty per cent down to your team.",
+    "outcomes": [
+      {
+        "when": {
+          "all": [
+            {
+              "remembers": {
+                "character": "analyst",
+                "about": "cut-passed-down"
+              }
+            },
+            {
+              "not": {
+                "believes": {
+                  "character": "analyst",
+                  "mood": "warm"
+                }
+              }
+            }
+          ]
+        },
+        "playedOut": "The Senior Analyst lost a contractor to your cut, and did seventy per cent of everything from then on, labelled.",
+        "bill": {
+          "id": "seventy-per-cent",
+          "as": "move",
+          "from": "From: The Senior Analyst, Priya Venn",
+          "title": "Seventy per cent",
+          "body": "Since the cut, the Senior Analyst does exactly seventy per cent of everything, and labels it: a report seventy per cent long, a meeting left at minute forty-two. It is very precise, and your boss has noticed the labels.",
+          "sets": ["seventy-per-cent"],
+          "opinion": -1,
+          "project": {
+            "real": "worse"
+          }
+        },
+        "gauges": [
+          {
+            "gauge": "teflon",
+            "by": -5,
+            "note": "The cut you passed down came back, at seventy per cent."
+          }
+        ]
+      },
+      {
+        "when": {
+          "remembers": {
+            "character": "projects",
+            "about": "cut-passed-down"
+          }
+        },
+        "playedOut": "The Project Co-ordinator lost their training to your cut, and started a lunchtime session about how budgets are cut.",
+        "bill": {
+          "id": "self-directed-learning",
+          "as": "move",
+          "from": "From: The Project Co-ordinator, Callum Reed",
+          "title": "Self-directed learning",
+          "body": "The Project Co-ordinator, whose training went in your cut, has started a lunchtime session called Self-Directed Learning. It is very well attended. This week's topic is how a cut is passed down, with worked examples.",
+          "sets": ["self-directed-learning"],
+          "headOpinion": -1
+        },
+        "gauges": [
+          {
+            "gauge": "teflon",
+            "by": -5,
+            "note": "The cut you passed down came back, at lunchtime."
+          }
+        ]
+      },
+      {
+        "playedOut": "Your team absorbed the cut, and said nothing, which was noticed upstairs as resilience.",
+        "bill": {
+          "id": "cut-absorbed",
+          "as": "notice",
+          "title": "Absorbed",
+          "body": "Your team has absorbed thirty per cent, and is now described upstairs as lean. Two of them have updated their profiles online.",
+          "sets": ["cut-absorbed"]
+        },
+        "gauges": [
+          {
+            "gauge": "teflon",
+            "by": 5,
+            "note": "The cut you passed down came back, as somebody's resilience."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "overnight-deck",
+    "startedBy": "team-wrote-the-offsite",
+    "chance": 0.9,
+    "after": {
+      "min": 1,
+      "max": 2
+    },
+    "started": "You had your team write the Board's offsite deck overnight.",
+    "outcomes": [
+      {
+        "when": {
+          "remembers": {
+            "character": "associate",
+            "about": "credit-for-the-night"
+          }
+        },
+        "playedOut": "The Junior Associate wrote slide forty overnight, and told your boss's boss so, in the lift.",
+        "bill": {
+          "id": "slide-forty",
+          "as": "move",
+          "from": "From: The Junior Associate, Tessa Croft",
+          "title": "Slide forty",
+          "body": "The Junior Associate has mentioned to your boss's boss, in the lift, that they wrote slide forty of the offsite deck, at five in the morning. Your boss's boss had particularly liked slide forty, and had told you so, and you had said thank you.",
+          "sets": ["slide-forty"],
+          "headOpinion": -2
+        },
+        "gauges": [
+          {
+            "gauge": "teflon",
+            "by": -10,
+            "note": "The deck your team wrote overnight came back, in the lift."
+          }
+        ]
+      },
+      {
+        "when": {
+          "all": [
+            {
+              "remembers": {
+                "character": "associate",
+                "about": "wrote-it-overnight"
+              }
+            },
+            {
+              "not": {
+                "believes": {
+                  "character": "associate",
+                  "mood": "warm"
+                }
+              }
+            }
+          ]
+        },
+        "playedOut": "The Junior Associate wrote the offsite deck overnight, and their out-of-office said so.",
+        "bill": {
+          "id": "recovering-from-the-offsite",
+          "as": "move",
+          "from": "From: The Junior Associate, Tessa Croft",
+          "title": "Out of office",
+          "body": "The Junior Associate's out-of-office says that they are recovering from writing the Board's offsite deck overnight, and that questions about it should go to you. Your boss has had the out-of-office twice.",
+          "sets": ["recovering-from-the-offsite"],
+          "opinion": -1
+        },
+        "gauges": [
+          {
+            "gauge": "teflon",
+            "by": -5,
+            "note": "The deck your team wrote overnight came back, as an out-of-office."
+          }
+        ]
+      },
+      {
+        "playedOut": "Your team's overnight deck became Floor 3's template, and your team the people who write it.",
+        "bill": {
+          "id": "offsite-template",
+          "as": "notice",
+          "title": "The template",
+          "body": "Your team's offsite deck is now the template for every offsite on Floor 3. Your team has been asked to write next year's, by next week.",
+          "sets": ["offsite-template"]
+        },
+        "gauges": [
+          {
+            "gauge": "teflon",
+            "by": 5,
+            "note": "The deck your team wrote overnight came back, as a template."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "cut-in-writing",
+    "startedBy": "cut-said-what-stops",
+    "chance": 0.9,
+    "after": {
+      "min": 1,
+      "max": 2
+    },
+    "started": "You put in writing what the Chief Financial Officer's cut would stop.",
+    "outcomes": [
+      {
+        "playedOut": "The Chief Financial Officer's office sent your list round Floor 3 as an example, and the things on it stopped.",
+        "bill": {
+          "id": "the-two-pages",
+          "as": "notice",
+          "title": "The two pages",
+          "body": "The Chief Financial Officer's office has sent your list of what will stop to every manager on Floor 3, as an example. Three of the things on it have stopped, officially, which nobody on Floor 3 can remember happening before.",
+          "sets": ["the-two-pages"],
+          "headOpinion": 1
+        },
+        "gauges": [
+          {
+            "gauge": "teflon",
+            "by": 5,
+            "note": "The list of what your cut would stop came back, as an example."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "friday-answer",
+    "startedBy": "answered-the-board",
+    "chance": 0.9,
+    "after": {
+      "min": 1,
+      "max": 2
+    },
+    "started": "You told the Board that you did not know, and when you would.",
+    "outcomes": [
+      {
+        "when": {
+          "not": {
+            "bossIs": "practitioner"
+          }
+        },
+        "playedOut": "The Board had its answer when you said it would, and asked for every answer from Floor 3 to come with a date.",
+        "bill": {
+          "id": "every-answer-with-a-date",
+          "as": "move",
+          "from": "From: The Board Office",
+          "title": "Friday",
+          "body": "The Board had your figure on Friday, as you said it would. The Chair of the Board has asked that every answer from Floor 3 come with a date like that one. Floor 3 is not pleased with you about this, and your boss's boss is.",
+          "sets": ["every-answer-with-a-date"],
+          "headOpinion": 1
+        },
+        "gauges": [
+          {
+            "gauge": "teflon",
+            "by": 5,
+            "note": "The answer you gave the Board by Friday came back, as a rule."
+          }
+        ]
+      },
+      {
+        "playedOut": "Your boss sent the Board your figure on Friday, under their own name.",
+        "bill": {
+          "id": "friday-under-their-name",
+          "as": "move",
+          "from": "From: Your boss, {boss}",
+          "title": "Friday",
+          "body": "Your boss has sent the Board your figure on Friday, as promised, from their own address, with a note about how hard Floor 3 has been working on it. You are copied in, at the bottom.",
+          "sets": ["friday-under-their-name"]
+        },
+        "gauges": [
+          {
+            "gauge": "teflon",
+            "by": -5,
+            "note": "The answer you gave the Board came back, under someone else's name."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "forecast-came-true",
+    "startedBy": "forecast-honestly",
+    "chance": 0.8,
+    "after": {
+      "min": 2,
+      "max": 3
+    },
+    "started": "You forecast what you actually expected, which was lower.",
+    "outcomes": [
+      {
+        "playedOut": "Your forecast was the only one on Floor 3 that came true.",
+        "bill": {
+          "id": "the-forecast-that-came-true",
+          "as": "notice",
+          "title": "The forecast that came true",
+          "body": "The quarter is in, and yours was the only forecast on Floor 3 that came true. The Chief Financial Officer's office has asked you to do everyone's next time, and everyone else has heard.",
+          "sets": ["the-forecast-that-came-true"],
+          "headOpinion": 1
+        },
+        "gauges": [
+          {
+            "gauge": "teflon",
+            "by": 5,
+            "note": "The forecast you made honestly came back true."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "team-defended",
+    "startedBy": "defended-the-team",
+    "chance": 0.8,
+    "after": {
+      "min": 1,
+      "max": 2
+    },
+    "started": "You said at the Team Structure Review what each of your team does, and that you need all of them.",
+    "outcomes": [
+      {
+        "playedOut": "Your team heard what you had said at the Team Structure Review.",
+        "bill": {
+          "id": "what-you-said-about-us",
+          "as": "notice",
+          "title": "What you said",
+          "body": "Your team has heard what you said about each of them at the Team Structure Review, from someone who was there. Nobody mentions it. The Senior Analyst brings you a coffee, which has not happened before.",
+          "sets": ["what-you-said-about-us"],
+          "remembers": [
+            {
+              "character": "analyst",
+              "about": "defended-at-the-review",
+              "text": "You said what they do, and that you need them, at the Team Structure Review.",
+              "tone": "good"
+            },
+            {
+              "character": "projects",
+              "about": "defended-at-the-review",
+              "text": "You said what they do, and that you need them, at the Team Structure Review.",
+              "tone": "good"
+            }
+          ]
+        },
+        "gauges": [
+          {
+            "gauge": "teflon",
+            "by": 5,
+            "note": "What you said for your team came back, as a coffee."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "blamed-at-the-board",
+    "startedBy": "blamed-the-analyst-at-the-board",
+    "chance": 0.9,
+    "after": {
+      "min": 1,
+      "max": 2
+    },
+    "started": "You put your figure down to the Senior Analyst, in front of the Board.",
+    "outcomes": [
+      {
+        "when": {
+          "all": [
+            {
+              "remembers": {
+                "character": "analyst",
+                "about": "blamed-at-the-board"
+              }
+            },
+            {
+              "not": {
+                "believes": {
+                  "character": "analyst",
+                  "mood": "warm"
+                }
+              }
+            }
+          ]
+        },
+        "playedOut": "The Senior Analyst sent the Board Office the workings behind the figure you had put down to them, with the date they had sent them to you.",
+        "bill": {
+          "id": "the-workings",
+          "as": "move",
+          "from": "From: The Senior Analyst, Priya Venn",
+          "title": "The workings",
+          "body": "The Senior Analyst has sent the Board Office the workings behind the figure on slide seven, which you said came from them. The workings have a date on them, and the date is three weeks before the Board, and the e-mail they came in was to you.",
+          "sets": ["the-workings"],
+          "headOpinion": -2
+        },
+        "gauges": [
+          {
+            "gauge": "teflon",
+            "by": -10,
+            "note": "The figure you put down to the Senior Analyst came back, with its workings."
+          }
+        ]
+      },
+      {
+        "playedOut": "The Senior Analyst let it go, and kept the e-mail.",
+        "bill": {
+          "id": "the-e-mail-kept",
+          "as": "notice",
+          "title": "Slide seven",
+          "body": "Nobody mentions slide seven again. The Senior Analyst now copies you into everything, with the date in the subject line.",
+          "sets": ["the-e-mail-kept"]
+        },
+        "gauges": [
+          {
+            "gauge": "teflon",
+            "by": 5,
+            "note": "The figure you put down to the Senior Analyst came back, as dates in subject lines."
+          }
+        ]
+      }
+    ]
   }
 ]

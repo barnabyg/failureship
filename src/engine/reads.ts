@@ -9,17 +9,9 @@ import type {
 import { YOU, type PowerMap } from "./deal";
 import { isOn, isOnFloor } from "./floors";
 import { isPlanRunning, planWords } from "./grand-plans";
-import {
-  bossOf,
-  bossesOf,
-  isGone,
-  managerOf,
-  meantBy,
-  placeOf,
-  whoIs,
-} from "./places";
+import { bossOf, isGone, managerOf, placeOf, whoIs } from "./places";
 import { calledBy, capitalised, sayFrom, sayPeople, titleOf } from "./say";
-import type { State, World } from "./state";
+import type { State } from "./state";
 import type { Person } from "./view";
 
 export function methodOf(content: Content, id: string) {
@@ -103,8 +95,11 @@ export function fillSubject(
   });
 }
 
-/** Parts are relative to who is in the room. Left out, that is everyone. */
-function partsIn(powerMap: PowerMap, room?: readonly string[]) {
+/**
+ * Who text calls the holder, the bystander and the ignored, relative to who is
+ * in the room. Left out, that is everyone.
+ */
+export function partsIn(powerMap: PowerMap, room?: readonly string[]) {
   const present = powerMap.order.filter((id) => room?.includes(id) ?? true);
   return {
     holder: present[0],
@@ -324,24 +319,6 @@ export function offeredOptions(
   return optionsOnOffer(state, content, scene.options).filter(
     (o) => o.about === undefined || isHeardOfSomeoneHere(state, o.about),
   );
-}
-
-export function sceneData(state: State, world: World, id: string): SceneData {
-  const scene = world.content.scenes.find((s) => s.id === id);
-  if (!scene) throw new Error(`Unknown Scene "${id}".`);
-  const script =
-    scene.script === undefined ? undefined : world.sceneScripts[scene.script];
-  const shaped = script
-    ? script(scene, { powerMap: state.truth.powerMap })
-    : scene;
-  // A place in the cast is whoever is in it. Whoever has left is not in the
-  // room, and whoever covers for them never chairs.
-  const bosses = bossesOf(state, world.content);
-  const cast = shaped.cast.flatMap((c) => meantBy(bosses, c) ?? []);
-  return {
-    ...shaped,
-    cast: [...new Set(cast)].filter((c) => !isGone(state, c)),
-  };
 }
 
 /** Writes the dealt Characters into text that names parts in the Power Map. */

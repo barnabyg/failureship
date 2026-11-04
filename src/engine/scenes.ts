@@ -5,7 +5,7 @@ import { hearOfPlan } from "./grand-plans";
 import { applyOutcome, countMove } from "./outcome";
 import { replyToDeal } from "./deals";
 import { treatHead } from "./over-head";
-import { whoIs } from "./places";
+import { bossesOf, isGone, meantBy, whoIs } from "./places";
 import { replyToPromise } from "./promises";
 import {
   fillParts,
@@ -14,9 +14,10 @@ import {
   matches,
   moodOf,
   offeredOptions,
-  sceneData,
 } from "./reads";
 import { regardOf } from "./reputation";
+import { askIn, type HeldScene } from "./asking";
+import { competitionNow, noteMoveMade, type Competition } from "./rivals";
 import { draw, pickWeighted } from "./rng";
 import { calledBy, sayPeople } from "./say";
 import {
@@ -29,6 +30,37 @@ import {
 import type { Choice } from "./view";
 
 /**
+ * A Scene as it is held now. A place in the cast is whoever is in it, and in a
+ * Scene in which someone competing asks, they are in the room too.
+ */
+export function sceneData(
+  state: State,
+  world: World,
+  id: string,
+  competition?: Competition,
+): HeldScene {
+  const scene = world.content.scenes.find((s) => s.id === id);
+  if (!scene) throw new Error(`Unknown Scene "${id}".`);
+  const script =
+    scene.script === undefined ? undefined : world.sceneScripts[scene.script];
+  const shaped = script
+    ? script(scene, { powerMap: state.truth.powerMap })
+    : scene;
+  // Whoever has left is not in the room, and whoever covers for them never chairs.
+  const bosses = bossesOf(state, world.content);
+  const cast = shaped.cast.flatMap((c) => meantBy(bosses, c) ?? []);
+  const room = [...new Set(cast)].filter((c) => !isGone(state, c));
+  if (shaped.competitor === undefined) return { ...shaped, cast: room };
+  return askIn(
+    state,
+    world.content,
+    shaped,
+    room,
+    competition ?? competitionNow(state, world.content),
+  );
+}
+
+/**
  * Everyone present shows one behaviour, open to their role and chosen by their
  * dealt kind. A quarterly review is staged: everyone is on their best behaviour,
  * so it shows only what is written.
@@ -36,7 +68,9 @@ import type { Choice } from "./view";
 export function openScene(state: State, world: World, id: string): Step {
   const { content } = world;
   const shown: ShownBehaviour[] = [];
-  const { cast, quarter } = sceneData(state, world, id);
+  const competition = competitionNow(state, content);
+  const scene = sceneData(state, world, id, competition);
+  const { cast, quarter } = scene;
   const misleading = drawMisleading(state, world.content);
   if (content.behaviours.length > 0 && quarter === undefined) {
     for (const character of cast) {
@@ -57,7 +91,15 @@ export function openScene(state: State, world: World, id: string): Step {
       shown.push({ character, behaviour: chosen.item.id });
     }
   }
-  noteScene(state, world, id, shown, misleading);
+  noteScene(state, content, scene, shown, misleading);
+  if (scene.competitor !== undefined) {
+    noteMoveMade(
+      state,
+      scene.asker,
+      { id, family: scene.competitor.family },
+      competition,
+    );
+  }
   hearOfPlan(state, content, id);
   return {
     kind: "scene",
@@ -82,13 +124,11 @@ function drawMisleading(state: State, content: Content): boolean {
 /** The Notebook keeps only the signs written with a clue. */
 function noteScene(
   state: State,
-  world: World,
-  id: string,
+  content: Content,
+  scene: HeldScene,
   shown: readonly ShownBehaviour[],
   misleading: boolean,
 ): void {
-  const { content } = world;
-  const scene = sceneData(state, world, id);
   const note = (text: string, verdict: ClueVerdict) => {
     state.clues.push({
       month: state.month,

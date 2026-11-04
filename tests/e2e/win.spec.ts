@@ -38,10 +38,10 @@ test("ride the lift to Floor 3, do its Grand Plan, and win the way out of it", a
   await expect(page.getByTestId("job-title")).toHaveText("Middle manager");
   await expect(page.getByTestId("month")).toContainText("12 of 18");
 
-  await playUntil(page, "hotspot-meeting-roadmap-workshop");
-  await page.getByTestId("hotspot-meeting-roadmap-workshop").click();
+  await playUntil(page, "hotspot-meeting-board-offsite");
+  await page.getByTestId("hotspot-meeting-board-offsite").click();
   await expect(page.getByTestId("panel-scene")).toContainText(
-    "Roadmap Workshop",
+    "The Board Offsite",
   );
   await page.getByTestId("scene-option-decide-what-stops").click();
   await page.getByTestId("continue").click();

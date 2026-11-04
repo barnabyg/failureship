@@ -401,7 +401,7 @@
       "title": "One Roadmap",
       "what": "Your boss's Grand Plan is One Roadmap: everything Floor 3 is doing, on a single page, in order. It needs someone to decide what stops, or a slide with no dates on it.",
       "lasts": 3,
-      "heardIn": ["portfolio-review", "welcome-floor-3"],
+      "heardIn": ["welcome-floor-3", "board-offsite"],
       "ways": [
         {
           "id": "decided",

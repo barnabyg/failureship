@@ -1,4 +1,4 @@
-import { KINDS, type Content } from "./content";
+import { KINDS, type Content, type Kind } from "./content";
 import { bossesAtStart, meantBy } from "./places";
 import { COMPETITOR, GROUPS } from "./rivals";
 
@@ -91,6 +91,33 @@ export function findBrokenRivals(content: Content): string[] {
     }
     if (`${m.from} ${m.title}`.includes(COMPETITOR)) {
       problems.push(`${owner} can say ${COMPETITOR} only in its body.`);
+    }
+  }
+  return problems;
+}
+
+/**
+ * The signs of how someone competing asked in a Scene: each must be possible
+ * from at least two kinds, with different odds, and every kind must be able to
+ * ask somehow, so that the sign is evidence and never settles a kind.
+ */
+export function findBrokenWaysOfAsking(
+  owner: string,
+  signs: readonly { text: string; likelihood: Record<Kind, number> }[],
+): string[] {
+  if (signs.length === 0) return [];
+  const problems: string[] = [];
+  for (const sign of signs) {
+    const odds = KINDS.map((k) => sign.likelihood[k]);
+    if (odds.filter((o) => o > 0).length < 2 || new Set(odds).size === 1) {
+      problems.push(
+        `${owner}'s way of asking "${sign.text}" must be possible from at least two kinds, with different odds.`,
+      );
+    }
+  }
+  for (const kind of KINDS) {
+    if (!signs.some((s) => s.likelihood[kind] > 0)) {
+      problems.push(`${owner} gives ${kind}s no way of asking.`);
     }
   }
   return problems;

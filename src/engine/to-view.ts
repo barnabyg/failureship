@@ -19,7 +19,6 @@ import {
   optionsOnOffer,
   personOf,
   remaining,
-  sceneData,
 } from "./reads";
 import { YOU } from "./deal";
 import { dealsInView } from "./deals";
@@ -28,6 +27,7 @@ import { gaugesInView, gaugesThisMonth } from "./gauges";
 import { isGone, managerOf } from "./places";
 import { promisesInView } from "./promises";
 import { COMPETITOR } from "./rivals";
+import { sceneData } from "./scenes";
 import { calledBy, sayFrom, sayPeople, titleOf } from "./say";
 import { standingInView } from "./standing";
 import { planInView } from "./grand-plans";

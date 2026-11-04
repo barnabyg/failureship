@@ -995,13 +995,107 @@
     },
     {
       "floor": "middle-manager",
+      "months": [1],
+      "reported": "Floor 3 has met the Chief Financial Officer's challenge in full."
+    },
+    {
+      "floor": "middle-manager",
+      "months": [1],
+      "when": {
+        "flag": "cut-said-what-stops"
+      },
+      "happened": "You put in writing what the cut would stop, and the list was filed behind the plan."
+    },
+    {
+      "floor": "middle-manager",
+      "months": [1],
+      "when": {
+        "flag": "cut-the-checks"
+      },
+      "happened": "The thirty per cent came out of the checks, which nobody sees until they are needed."
+    },
+    {
+      "floor": "middle-manager",
+      "months": [1],
+      "when": {
+        "flag": "moved-costs-downstairs"
+      },
+      "happened": "A third of it went down to Floor 2's codes, and is still being spent there."
+    },
+    {
+      "floor": "middle-manager",
+      "months": [1],
+      "when": {
+        "flag": "passed-the-cut-down"
+      },
+      "happened": "Your team found the thirty per cent, out of its own contractor and training."
+    },
+    {
+      "floor": "middle-manager",
       "months": [2],
-      "reported": "Floor 3 has a single view of its priorities, in progress."
+      "reported": "The Board's offsite heard Floor 3's plan for the year."
+    },
+    {
+      "floor": "middle-manager",
+      "months": [2],
+      "when": {
+        "flag": "wrote-the-offsite"
+      },
+      "happened": "You wrote the two hours yourself, by four in the morning."
+    },
+    {
+      "floor": "middle-manager",
+      "months": [2],
+      "when": {
+        "flag": "recycled-the-offsite"
+      },
+      "happened": "It was last year's plan, with this year's dates on it."
+    },
+    {
+      "floor": "middle-manager",
+      "months": [2],
+      "when": {
+        "flag": "team-wrote-the-offsite"
+      },
+      "happened": "Your team wrote it overnight, and finished at ten past six."
+    },
+    {
+      "floor": "middle-manager",
+      "months": [2],
+      "when": {
+        "flag": "filled-the-offsite"
+      },
+      "reported": "Floor 3's session was the most energising of the offsite.",
+      "happened": "It was a beach ball, and the beach ball is in the lake."
+    },
+    {
+      "floor": "middle-manager",
+      "months": [2],
+      "when": {
+        "flag": "took-the-offsite-credit"
+      },
+      "reported": "You set out a vision for Floor 3, to applause."
+    },
+    {
+      "floor": "middle-manager",
+      "months": [2],
+      "when": {
+        "flag": "signed-the-waiver"
+      },
+      "happened": "You signed the waiver for the checks without turning it over."
+    },
+    {
+      "floor": "middle-manager",
+      "months": [2],
+      "when": {
+        "flag": "put-the-checks-back"
+      },
+      "happened": "You put the checks back, out of the offsite's lanyards."
     },
     {
       "floor": "middle-manager",
       "months": [3],
-      "reported": "Your stakeholders have been mapped, and are engaged."
+      "reported": "Floor 3 presented to the Board, which was engaged."
     },
     {
       "floor": "middle-manager",
@@ -1011,6 +1105,186 @@
       },
       "reported": "Your section of the Board pack was submitted on time.",
       "happened": "You found last year's figures in it, and this year's nobody had checked."
+    },
+    {
+      "floor": "middle-manager",
+      "months": [3],
+      "when": {
+        "flag": "answered-the-board"
+      },
+      "happened": "You told the Board that you did not know yet, and when you would."
+    },
+    {
+      "floor": "middle-manager",
+      "months": [3],
+      "when": {
+        "flag": "made-up-a-board-number"
+      },
+      "reported": "Floor 3 gave the Board a clear figure.",
+      "happened": "You made it up, and the Office Co-ordinator minuted it."
+    },
+    {
+      "floor": "middle-manager",
+      "months": [3],
+      "when": {
+        "flag": "took-it-offline"
+      },
+      "reported": "Floor 3 took an action from the Board.",
+      "happened": "It was the answer to a question you could not answer."
+    },
+    {
+      "floor": "middle-manager",
+      "months": [3],
+      "when": {
+        "flag": "blamed-the-analyst-at-the-board"
+      },
+      "happened": "You put the figure down to the Senior Analyst, who was at the end of the table."
+    },
+    {
+      "floor": "middle-manager",
+      "months": [3],
+      "when": {
+        "flag": "asked-it-back"
+      },
+      "reported": "The Board welcomed a healthy challenge from Floor 3."
+    },
+    {
+      "floor": "middle-manager",
+      "months": [4],
+      "reported": "Your stakeholders have been mapped, and are engaged."
+    },
+    {
+      "floor": "middle-manager",
+      "months": [4],
+      "when": {
+        "flag": "corrected-the-minutes"
+      },
+      "happened": "You corrected the Board's minutes to what was so."
+    },
+    {
+      "floor": "middle-manager",
+      "months": [5],
+      "reported": "Floor 3's portfolio has been reviewed, and is on track."
+    },
+    {
+      "floor": "middle-manager",
+      "months": [5],
+      "when": {
+        "flag": "cancelled-a-meeting"
+      },
+      "reported": "Floor 3 has made a saving in its meetings.",
+      "happened": "Nobody had been going to the meeting you cancelled."
+    },
+    {
+      "floor": "middle-manager",
+      "when": {
+        "flag": "forecast-honestly"
+      },
+      "happened": "Your forecast was the one you expected, and it was lower."
+    },
+    {
+      "floor": "middle-manager",
+      "when": {
+        "flag": "forecast-low"
+      },
+      "reported": "Floor 3 is on course to beat its forecast.",
+      "happened": "You set the forecast low so that you could."
+    },
+    {
+      "floor": "middle-manager",
+      "when": {
+        "flag": "forecast-the-bosses"
+      },
+      "reported": "Floor 3's forecasts are aligned.",
+      "happened": "Yours was your boss's, to the pound."
+    },
+    {
+      "floor": "middle-manager",
+      "when": {
+        "flag": "asked-how-it-works"
+      },
+      "happened": "You asked how the forecast is worked out. Nobody knows."
+    },
+    {
+      "floor": "middle-manager",
+      "when": {
+        "flag": "asked-for-the-hardest"
+      },
+      "happened": "You asked to be given the hardest question in the rehearsal, and got it wrong there."
+    },
+    {
+      "floor": "middle-manager",
+      "when": {
+        "flag": "agreed-an-easy-one"
+      },
+      "happened": "You agreed a friendly question with your boss's boss, in return for anything."
+    },
+    {
+      "floor": "middle-manager",
+      "when": {
+        "flag": "cut-to-one-slide"
+      },
+      "reported": "Floor 3's Board material has been simplified.",
+      "happened": "It is a photograph of a bridge."
+    },
+    {
+      "floor": "middle-manager",
+      "when": {
+        "flag": "defended-the-team"
+      },
+      "happened": "You said what each of your team does, and that you need all of them."
+    },
+    {
+      "floor": "middle-manager",
+      "when": {
+        "flag": "offered-an-empty-post"
+      },
+      "reported": "Floor 3 has taken difficult decisions on its structure.",
+      "happened": "The post you gave up had been empty for a year."
+    },
+    {
+      "floor": "middle-manager",
+      "when": {
+        "flag": "fewer-layers-below"
+      },
+      "reported": "Floor 3 is removing layers.",
+      "happened": "All of them below you."
+    },
+    {
+      "floor": "middle-manager",
+      "when": {
+        "flag": "one-case-for-the-year"
+      },
+      "happened": "You wrote one business case for the year, and it was approved because nobody read it."
+    },
+    {
+      "floor": "middle-manager",
+      "when": {
+        "flag": "took-the-nephew"
+      },
+      "reported": "Floor 3 is supporting young talent.",
+      "happened": "A Board member's nephew has a desk near the window."
+    },
+    {
+      "floor": "middle-manager",
+      "when": {
+        "flag": "board-number-found-out"
+      },
+      "happened": "The Senior Analyst queried the figure you made up for the Board."
+    },
+    {
+      "floor": "middle-manager",
+      "when": {
+        "flag": "checks-incident"
+      },
+      "happened": "Something went wrong that a check would have caught."
+    },
+    {
+      "floor": "middle-manager",
+      "when": {
+        "flag": "costs-found"
+      },
+      "happened": "Floor 3's costs were found on Floor 2's codes."
     },
     {
       "when": {

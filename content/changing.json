@@ -150,6 +150,56 @@
         "whistleblower": 1,
         "left": 2
       }
+    },
+    {
+      "about": "cut-their-checks",
+      "weight": 1,
+      "why": "You cut the checks they run, to meet a cut, and kept the plan as it was.",
+      "leans": {
+        "practitioner": 1,
+        "whistleblower": 2,
+        "left": 1
+      }
+    },
+    {
+      "about": "cut-passed-down",
+      "weight": 1,
+      "why": "You passed the Chief Financial Officer's cut down to them.",
+      "leans": {
+        "practitioner": 1,
+        "whistleblower": 1,
+        "left": 2
+      }
+    },
+    {
+      "about": "wrote-it-overnight",
+      "weight": 1,
+      "why": "You had them write the Board's offsite deck overnight.",
+      "leans": {
+        "practitioner": 1,
+        "whistleblower": 1,
+        "left": 2
+      }
+    },
+    {
+      "about": "credit-for-the-night",
+      "weight": 1,
+      "why": "You presented the deck they wrote overnight as your own.",
+      "leans": {
+        "practitioner": 2,
+        "whistleblower": 1,
+        "left": 1
+      }
+    },
+    {
+      "about": "blamed-at-the-board",
+      "weight": 2,
+      "why": "You put your figure down to them, in front of the Board.",
+      "leans": {
+        "practitioner": 2,
+        "whistleblower": 2,
+        "left": 1
+      }
     }
   ],
   "became": {

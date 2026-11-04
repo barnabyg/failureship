@@ -82,8 +82,9 @@ work on them, and so can you, if you know whom to approach. You are told who dec
 Official standing. Win, and you are **Team lead**, on Floor 2. Lose, and the winner is your boss.
 The passed over remember. A Team lead's Moves are bigger, and so is the Bill. Floor 2's seat, by
 its Plan or Internal Audit, makes you **Middle manager** on Floor 3, under the Programme Manager and
-the Head of Transformation. Floor 3's, by its Plan or a nomination upstairs, is the way out: the
-run ends with a stand-in for the penthouse that goes by how you got there.
+the Head of Transformation, where the Board and the CFO reach down: a cut of 30%, an
+offsite at a day's notice, a tricky question. Floor 3's seat, by its Plan or a nomination upstairs,
+is the way out: the run ends with a stand-in for the penthouse that goes by how you got there.
 
 At the end, the results screen says how you got there, seat by seat, and who was really who: kinds,
 Hidden Facts, Rivals, your marks, your Moves, your bosses' verdicts, every claim and both charts.
@@ -158,16 +159,17 @@ How to run the checks and tests is in [AGENTS.md](AGENTS.md#verifying).
   your place on them; `floors.ts` your floor and what is on there each month; `outcome.ts` is the
   one place any consequence takes effect; `state.ts` and `reads.ts` are what the mechanics share.
   The mechanics are `boss.ts`, `demands.ts`, `find-out.ts` with `claims.ts`, `notebook.ts`,
-  `over-head.ts`, `project.ts`, `scenes.ts`, `company-events.ts`, `mistakes.ts`, `reputation.ts`,
-  `risks.ts`, `threads.ts` with `bills.ts`, `promises.ts`, `deals.ts`, `changes.ts` for Believers
-  changing and leaving, `gauges.ts`, the only module that reads a Gauge, `standing.ts`, `reviews.ts`
-  for quarterly reviews, `rivals.ts` for Rivals, `grand-plans.ts` for Grand Plans, `vacancies.ts`
-  for seats and who really decides them, `departures.ts` for leaving and being got rid of,
-  `demotions.ts` for losing a seat to a mistake, `win.ts` for winning the run and the route up.
-  `say.ts` names Characters in text, and `rng.ts` and `seed.ts` hold the seed. `view.ts` is the player view, built by `to-view.ts`, with `to-results.ts`
-  its reveal; `hidden-truth.ts` is the tests' read of the truth. `save.ts` writes and reads a run.
-  `State` is plain data, so a mechanic gets saving for free: raise `SAVE_VERSION` if it changes what
-  saved state means. `content.ts` assembles the schema from the `*-schema.ts` files, as
+  `over-head.ts`, `project.ts`, `scenes.ts` with `asking.ts`, `company-events.ts`, `mistakes.ts`,
+  `reputation.ts`, `risks.ts`, `threads.ts` with `bills.ts`, `promises.ts`, `deals.ts`, `changes.ts`
+  for Believers changing and leaving, `gauges.ts`, the only module that reads a Gauge,
+  `standing.ts`, `reviews.ts` for quarterly reviews, `rivals.ts` for Rivals, `grand-plans.ts` for
+  Grand Plans, `vacancies.ts` for seats and who really decides them, `departures.ts` for leaving and
+  being got rid of, `demotions.ts` for losing a seat to a mistake, `win.ts` for winning the run and
+  the route up. `say.ts` names Characters in text, and `rng.ts` and `seed.ts` hold the seed.
+  `view.ts` is the player view, built by `to-view.ts`, with `to-results.ts` its reveal;
+  `hidden-truth.ts` is the tests' read of the truth. `save.ts` writes and reads a run. `State` is
+  plain data, so a mechanic gets saving for free: raise `SAVE_VERSION` if it changes what saved
+  state means. `content.ts` assembles the schema from the `*-schema.ts` files, as
   [AGENTS.md](AGENTS.md) says. `content-checks.ts` checks data across files, with each mechanic's
   checks beside it: `truth-checks.ts` for the hidden truth and its signs, `boss-checks.ts` for the
   boss, going over the head, Demands and reputation, `consequence-checks.ts` for what choices lead
