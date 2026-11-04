@@ -1,4 +1,4 @@
-import { everyNotification, type Content } from "./content";
+import { everyNotification, type Condition, type Content } from "./content";
 import { isUnder } from "./deal";
 import { bossesAtStart, managerAtStart, meantBy } from "./places";
 
@@ -123,12 +123,16 @@ function findBrokenOusting(content: Content): string[] {
 }
 
 /**
- * Seats: each is on a known floor and leads to another, what is competed for
+ * Seats: each is on a known floor and leads to another, or wins, what is competed for
  * while it is open is written, and whoever its holder moves up to is there, and
  * is not under that floor's boss. One seat to a floor, since a floor has one boss.
  * A big mistake in a seat demotes, so being demoted needs its words.
  */
-export function findBrokenVacancies(content: Content): string[] {
+export function findBrokenVacancies(
+  content: Content,
+  checkCondition: (owner: string, condition: Condition) => void = () =>
+    undefined,
+): string[] {
   const problems = [
     ...findBrokenSeatActs(content),
     ...findBrokenOusting(content),
@@ -145,6 +149,9 @@ export function findBrokenVacancies(content: Content): string[] {
       "A seat is written, so mistakes.json needs the words for being demoted.",
     );
   }
+  if (written.seats.filter((s) => s.win).length > 1) {
+    problems.push("Only one seat can win the run.");
+  }
   const floors = new Set<string>();
   for (const seat of written.seats) {
     const owner = `Seat "${seat.id}"`;
@@ -152,9 +159,17 @@ export function findBrokenVacancies(content: Content): string[] {
       problems.push(`${owner} is a second seat on floor "${seat.floor}".`);
     }
     floors.add(seat.floor);
-    for (const job of [seat.floor, seat.job]) {
+    for (const job of [seat.floor, ...(seat.job ? [seat.job] : [])]) {
       if (!jobs.includes(job))
         problems.push(`${owner} names unknown floor "${job}".`);
+    }
+    if ((seat.job === undefined) === (seat.win === undefined)) {
+      problems.push(
+        `${owner} needs either a "job" to lead to or a "win", and not both.`,
+      );
+    }
+    for (const [index, variant] of (seat.win?.variants ?? []).entries()) {
+      checkCondition(`${owner} win variant ${String(index + 1)}`, variant.when);
     }
     if (seat.floor === seat.job) {
       problems.push(`${owner} leads to the floor it is on.`);

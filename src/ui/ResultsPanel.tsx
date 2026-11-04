@@ -20,6 +20,16 @@ export function ResultsPanel({
           {step.ending.text}
         </p>
       )}
+      {step.route.length > 0 && (
+        <div className="callout" data-testid="results-route">
+          <h3>{panelText.resultsRouteHeading}</h3>
+          {step.route.map((row, index) => (
+            <p key={index} data-testid="result-route">
+              {row.text}
+            </p>
+          ))}
+        </div>
+      )}
       {step.standing && (
         <div data-testid="result-standing">
           <h3>{panelText.resultsStandingHeading}</h3>

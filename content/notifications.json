@@ -1003,6 +1003,35 @@
     ]
   },
   {
+    "id": "audit-line",
+    "floor": "team-lead",
+    "months": [2],
+    "from": "From: Internal Audit",
+    "subject": "Floor 2 leadership review: your input",
+    "body": "Internal Audit is reviewing Floor 2's leadership, as it does when the expenses are interesting. Concerns can be raised in confidence, with the auditor, who is in Team Room 2A all week with a lever-arch file and the door open.",
+    "options": [
+      {
+        "id": "no-concerns",
+        "label": "Say that you have no concerns",
+        "result": {
+          "title": "Internal Audit",
+          "body": "You have no concerns. The auditor writes that down, and underlines it."
+        }
+      },
+      {
+        "id": "audit-your-boss",
+        "family": "attack",
+        "label": "Tell the auditor about your boss's expenses",
+        "sets": ["told-audit"],
+        "ousts": "audit",
+        "result": {
+          "title": "Internal Audit",
+          "body": "You tell the auditor about the lunches. The auditor writes it all down, says it is completely confidential, and logs it on the service desk, which is where Internal Audit logs everything."
+        }
+      }
+    ]
+  },
+  {
     "id": "centre-launch",
     "floor": "team-lead",
     "months": [3],
@@ -1649,6 +1678,385 @@
         "result": {
           "title": "The reference",
           "body": "They get the post, and send a card that says they owe you one, which is the idea."
+        }
+      }
+    ]
+  },
+  {
+    "id": "welcome-floor-3",
+    "floor": "middle-manager",
+    "months": [1],
+    "from": "From: Your boss, {boss}",
+    "subject": "Welcome to Floor 3",
+    "body": "Welcome to Floor 3, and to middle management, which is where the company keeps its decisions until someone else makes them. Your first task is the Grand Plan, which you will hear about at the Portfolio Review. Please also complete your Stakeholder Register, listing everyone you need to keep happy.",
+    "options": [
+      {
+        "id": "register-honestly",
+        "label": "List the people you actually depend on",
+        "sets": ["registered-honestly"],
+        "result": {
+          "title": "Your Stakeholder Register",
+          "body": "It is a short list. Two of the names on it are on Floor 1, and are not expecting to be kept happy by anyone."
+        }
+      },
+      {
+        "id": "register-upwards",
+        "family": "impress",
+        "label": "List everyone above you, in order, and copy them in",
+        "cost": "standard",
+        "sets": ["registered-upwards"],
+        "result": {
+          "title": "Your Stakeholder Register",
+          "body": "Your register is copied to everyone on it. Your boss's boss replies, to all, to say that this is exactly the kind of engagement Floor 3 needs."
+        },
+        "approach": "flatter"
+      }
+    ]
+  },
+  {
+    "id": "roadmap-template",
+    "floor": "middle-manager",
+    "months": [2],
+    "when": {
+      "planRunning": "roadmap"
+    },
+    "from": "From: Your boss, {boss}",
+    "subject": "One Roadmap: the template",
+    "body": "Please find attached the template for One Roadmap. It is a single slide. Everything Floor 3 is doing needs to be on it, so please keep your font small and your ambitions large.",
+    "options": [
+      {
+        "id": "template-later",
+        "label": "Say that you will fill it in once things are decided",
+        "result": {
+          "title": "One Roadmap",
+          "body": "Your boss replies that waiting for decisions is how Floor 3 got like this, and attaches the template again."
+        }
+      },
+      {
+        "id": "fill-the-template",
+        "family": "fabricate",
+        "label": "Fill in the template tonight, with every programme and no dates",
+        "cost": "standard",
+        "sets": ["roadmap-is-a-slide"],
+        "result": {
+          "title": "One Roadmap",
+          "body": "It takes until nine. Everything fits, in eight-point type, and nothing has a date, so nothing is late. Your boss calls it a milestone, which it does not have."
+        },
+        "approach": "theatre"
+      }
+    ]
+  },
+  {
+    "id": "board-secondment",
+    "floor": "middle-manager",
+    "months": [2],
+    "from": "From: The Board Office",
+    "subject": "Nominations: Refurbishment Programme Lead",
+    "body": "The Board is looking for a senior leader to be seconded to lead the refurbishment of Floors 4 to 10, which has been delayed by the refurbishment. Nominations are confidential, and go to the Head of Transformation.",
+    "options": [
+      {
+        "id": "nominate-nobody",
+        "label": "Nominate nobody",
+        "result": {
+          "title": "Nominations",
+          "body": "You nominate nobody. The Board Office thanks you for engaging with the process."
+        }
+      },
+      {
+        "id": "nominate-your-boss",
+        "family": "attack",
+        "label": "Nominate your boss, with a glowing reference",
+        "sets": ["nominated-your-boss"],
+        "ousts": "upstairs",
+        "result": {
+          "title": "Nominations",
+          "body": "Your reference says that your boss is visionary, tireless and wasted on Floor 3. Every word of it is chosen to be true for long enough."
+        }
+      }
+    ]
+  },
+  {
+    "id": "board-pack",
+    "floor": "middle-manager",
+    "months": [3],
+    "from": "From: The Board Office",
+    "subject": "Board pack: final call",
+    "body": "The Board pack closes on Friday. Anything from Floor 3 that goes in it will be read by the Board, or at least by whoever reads the Board's papers for them. Please send your section as it is, or check it first.",
+    "options": [
+      {
+        "id": "send-the-pack",
+        "label": "Send your section as it is",
+        "result": {
+          "title": "The Board pack",
+          "body": "Sent. The Board Office thanks you, and attaches a read receipt, which is the most the Board has ever said to you."
+        }
+      },
+      {
+        "id": "check-the-pack",
+        "family": "deliver",
+        "label": "Check every date and figure in it first",
+        "cost": "standard",
+        "sets": ["checked-the-pack"],
+        "result": {
+          "title": "The Board pack",
+          "body": "You check it. Three of the figures are last year's, and one of the dates has already passed. You fix them, quietly, and nobody will ever know, which is the point."
+        },
+        "approach": "results"
+      }
+    ]
+  },
+  {
+    "id": "resourcing-matrix",
+    "floor": "middle-manager",
+    "pool": true,
+    "from": "From: Your boss's boss, {head}",
+    "subject": "Resourcing matrix: your input",
+    "body": "Please complete the resourcing matrix, showing each of your people against each programme as a percentage. The percentages for each person should add up to one hundred. Previous returns have averaged a hundred and forty.",
+    "options": [
+      {
+        "id": "matrix-as-asked",
+        "label": "Fill it in so that each column adds up",
+        "result": {
+          "title": "The resourcing matrix",
+          "body": "Each column adds up. Nobody's actual week does, but that was not one of the columns."
+        }
+      },
+      {
+        "id": "matrix-honestly",
+        "family": "deliver",
+        "label": "Fill it in with what people really spend their time on",
+        "cost": "standard",
+        "sets": ["matrix-honestly"],
+        "result": {
+          "title": "The resourcing matrix",
+          "body": "Your matrix shows a hundred and sixty per cent for the Senior Analyst. It is sent back, with a note asking you to make it add up, and a second note asking how it could."
+        },
+        "approach": "truth"
+      }
+    ]
+  },
+  {
+    "id": "status-of-statuses",
+    "floor": "middle-manager",
+    "pool": true,
+    "from": "From: The Portfolio Office",
+    "subject": "A status report on status reports",
+    "body": "The Portfolio Office is reviewing how many status reports Floor 3 produces, and has asked each manager for a status report on their status reports. A template is attached.",
+    "options": [
+      {
+        "id": "report-on-reports",
+        "label": "Fill in the template",
+        "result": {
+          "title": "Status reports",
+          "body": "You report that you produce eleven status reports a month. It is now twelve."
+        }
+      },
+      {
+        "id": "cut-a-report",
+        "family": "deliver",
+        "label": "Stop one of your status reports, and say so",
+        "cost": "standard",
+        "sets": ["cut-a-report"],
+        "result": {
+          "title": "Status reports",
+          "body": "You stop one. For a month nobody notices, and then somebody upstairs asks for it by name, and you start it again, and they never read it."
+        },
+        "approach": "truth"
+      }
+    ]
+  },
+  {
+    "id": "leadership-offsite-poll",
+    "floor": "middle-manager",
+    "pool": true,
+    "from": "From: The Office of the Head of Transformation",
+    "subject": "Quick poll: Floor 3 leadership dinner",
+    "body": "To build connection, Floor 3's managers will have dinner together. Please choose from the options below, and note that the restaurant has been chosen.",
+    "options": [
+      {
+        "id": "any-date",
+        "label": "Say that any date works",
+        "result": {
+          "title": "The dinner",
+          "body": "Any date works, so the date chosen is the one you are on leave."
+        }
+      },
+      {
+        "id": "sit-by-the-head",
+        "family": "impress",
+        "label": "Ask to be seated next to your boss's boss",
+        "cost": "standard",
+        "sets": ["asked-for-the-seat-by-the-head"],
+        "result": {
+          "title": "The dinner",
+          "body": "You are seated next to your boss's boss, who talks to the person on the other side all evening, about you, in a way you cannot quite hear."
+        },
+        "approach": "flatter"
+      }
+    ]
+  },
+  {
+    "id": "the-seat-2",
+    "floor": "team-lead",
+    "when": {
+      "vacancyOpen": true
+    },
+    "from": "From: People and Culture",
+    "subject": "Expressions of interest: your boss's seat",
+    "body": "Your boss's seat is open. The process is fair and transparent, and is overseen from Floor 3, by whoever on Floor 3 oversees these things.",
+    "options": [
+      {
+        "id": "leave-it-team-lead",
+        "label": "Leave it to the process",
+        "result": {
+          "title": "The seat",
+          "body": "You leave it to the process. The process sends you a survey about how it is doing."
+        }
+      },
+      {
+        "id": "word-with-the-programme-manager",
+        "family": "trade",
+        "label": "Have a word with your boss's boss about it",
+        "cost": "standard",
+        "seat": {
+          "approach": "{head}"
+        },
+        "result": {
+          "title": "The seat",
+          "body": "Your boss's boss says that it is not their call, and that they will mention it to whoever's call it is, and writes your name on a sticky note."
+        }
+      },
+      {
+        "id": "word-with-delivery",
+        "family": "trade",
+        "label": "Have a word with the Service Delivery Lead about it",
+        "cost": "standard",
+        "seat": {
+          "approach": "delivery"
+        },
+        "result": {
+          "title": "The seat",
+          "body": "The Service Delivery Lead says that they are not in the running, and adds you to their tracker, in a column of your own."
+        }
+      },
+      {
+        "id": "word-with-the-coordinator-2",
+        "family": "trade",
+        "label": "Have a word with the Office Co-ordinator about it",
+        "cost": "standard",
+        "seat": {
+          "approach": "admin"
+        },
+        "result": {
+          "title": "The seat",
+          "body": "The Office Co-ordinator says that they only book the rooms, and books you one, to wait in."
+        }
+      },
+      {
+        "id": "call-in-team-lead",
+        "family": "trade",
+        "label": "Call in a favour you are owed",
+        "seat": {
+          "callIn": true
+        },
+        "result": {
+          "title": "The seat",
+          "body": "You remind someone of what you did for them. They say that it has not been forgotten, and look at their calendar."
+        }
+      },
+      {
+        "id": "claim-it-team-lead",
+        "family": "impress",
+        "label": "Reply all, thanking your team for your Grand Plan",
+        "seat": {
+          "credit": true
+        },
+        "result": {
+          "title": "The seat",
+          "body": "Your reply all thanks your team for your Grand Plan. Your team replies all to say thank you for the thanks."
+        }
+      }
+    ]
+  },
+  {
+    "id": "the-seat-3",
+    "floor": "middle-manager",
+    "when": {
+      "vacancyOpen": true
+    },
+    "from": "From: People and Culture",
+    "subject": "Expressions of interest: the top of Floor 3",
+    "body": "Your boss's seat is open, and it is the last one on Floor 3. The process is fair and transparent, and is overseen by the Head of Transformation's office, which is the office with the door that does not open.",
+    "options": [
+      {
+        "id": "leave-it-middle-manager",
+        "label": "Leave it to the process",
+        "result": {
+          "title": "The seat",
+          "body": "You leave it to the process. The process sends you a survey about how it is doing."
+        }
+      },
+      {
+        "id": "word-with-transformation",
+        "family": "trade",
+        "label": "Have a word with your boss's boss about it",
+        "cost": "standard",
+        "seat": {
+          "approach": "{head}"
+        },
+        "result": {
+          "title": "The seat",
+          "body": "Your boss's boss says that the decision will be made at the right level, and does not say which level that is, or whether it is this one."
+        }
+      },
+      {
+        "id": "word-with-delivery-3",
+        "family": "trade",
+        "label": "Have a word with the Service Delivery Lead about it",
+        "cost": "standard",
+        "seat": {
+          "approach": "delivery"
+        },
+        "result": {
+          "title": "The seat",
+          "body": "The Service Delivery Lead says that they have raised a ticket about it, and that tickets are how things get done here."
+        }
+      },
+      {
+        "id": "word-with-the-coordinator-3",
+        "family": "trade",
+        "label": "Have a word with the Office Co-ordinator about it",
+        "cost": "standard",
+        "seat": {
+          "approach": "admin"
+        },
+        "result": {
+          "title": "The seat",
+          "body": "The Office Co-ordinator has kept the minutes of every meeting on three floors, and says so, and nothing else."
+        }
+      },
+      {
+        "id": "call-in-middle-manager",
+        "family": "trade",
+        "label": "Call in a favour you are owed",
+        "seat": {
+          "callIn": true
+        },
+        "result": {
+          "title": "The seat",
+          "body": "You remind someone of what you did for them. They say that it has not been forgotten, and look at their calendar."
+        }
+      },
+      {
+        "id": "claim-it-middle-manager",
+        "family": "impress",
+        "label": "Reply all, thanking your team for your Grand Plan",
+        "seat": {
+          "credit": true
+        },
+        "result": {
+          "title": "The seat",
+          "body": "Your reply all thanks your team for your Grand Plan. Your team replies all to say thank you for the thanks."
         }
       }
     ]

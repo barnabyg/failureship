@@ -377,5 +377,27 @@
       "incompetent": 3,
       "practitioner": 7
     }
+  },
+  {
+    "id": "talks-in-horizons",
+    "text": "{who} talks about the next three horizons, and is vague only about the first.",
+    "clue": "{who} talked about three horizons, and was vague about the first.",
+    "roles": ["head-of-transformation"],
+    "likelihood": {
+      "believer": 3,
+      "incompetent": 6,
+      "practitioner": 6
+    }
+  },
+  {
+    "id": "asks-what-stops",
+    "text": "{who} asks what will stop, if all of this starts, and waits for an answer.",
+    "clue": "{who} asked what would stop if it all started, and waited.",
+    "roles": ["head-of-transformation"],
+    "likelihood": {
+      "believer": 7,
+      "incompetent": 2,
+      "practitioner": 4
+    }
   }
 ]

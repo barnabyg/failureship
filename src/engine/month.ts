@@ -92,8 +92,12 @@ export function leaveStory(state: State, world: World): void {
   // first, so that a seat won as a month closes is not lost to its own mistakes.
   demoteForMistakes(state, world.content);
   fillVacancies(state, world.content);
-  if (state.month === world.content.balance.monthsPerRun) {
-    // A seat decided as the run ends is still told, before the results.
+  if (
+    state.wonIn !== null ||
+    state.month === world.content.balance.monthsPerRun
+  ) {
+    // A seat decided as the run ends is still told, before the results, and
+    // so is the one that wins it.
     state.closed = true;
     state.step = nextStep(state, world);
     return;
@@ -125,7 +129,11 @@ export function nextStep(state: State, world: World): Step {
     const from = everyNotification(content).find((n) => n.id === id)?.from;
     return from === undefined || !mentionsGone(state, content, from);
   });
-  if (state.firedIn !== null || state.closed) return { kind: "results" };
+  if (state.firedIn !== null || state.closed) {
+    // The stand-in for winning comes once, after the decision that won it.
+    const won = state.wonIn !== null && state.step.kind !== "win";
+    return won ? { kind: "win" } : { kind: "results" };
+  }
   const notifications = everyNotification(content);
   for (const id of state.unanswered) {
     const notification = notifications.find((n) => n.id === id);

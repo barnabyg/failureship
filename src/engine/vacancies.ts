@@ -34,7 +34,7 @@ const ABOUT_THE_SEAT = "the-seat";
 export function fillVacancies(state: State, content: Content): void {
   const written = content.vacancies;
   if (!written) return;
-  for (const vacancy of state.vacancies) {
+  for (const vacancy of [...state.vacancies]) {
     if (vacancy.decided === null && vacancy.decides === state.month) {
       decide(state, content, written, vacancy);
     }
@@ -57,6 +57,8 @@ export function openSeat(
   content: Content,
   holder: string,
   way: SeatWay,
+  /** Whether the player opened it by getting rid of the holder, as firing always is. */
+  ousted: boolean = way === "fired",
 ): void {
   const seat = content.vacancies?.seats.find((s) => s.floor === state.job);
   const decides = state.month + (seat?.openFor ?? 0);
@@ -64,8 +66,7 @@ export function openSeat(
     !seat ||
     holder !== bossOf(state, content) ||
     isGone(state, holder) ||
-    seatPending(state) ||
-    decides > content.balance.monthsPerRun
+    !canOpenSeat(state, content)
   ) {
     return;
   }
@@ -78,6 +79,7 @@ export function openSeat(
     decides,
     credit: null,
     calledIn: [],
+    ousted,
     decided: null,
   });
   const opened = seat.opened[way];
@@ -87,6 +89,28 @@ export function openSeat(
       "{holder}": calledBy(state, content, holder),
     }).replaceAll("{month}", String(decides)),
   });
+}
+
+/**
+ * Whether the seat of the player's floor can open now: it is written, none is
+ * still to be decided, and the run would not end before deciding it. Winning
+ * one that leads on must leave the player a boss's boss: whoever their boss
+ * answers to needs someone above them.
+ */
+export function canOpenSeat(state: State, content: Content): boolean {
+  const seat = content.vacancies?.seats.find((s) => s.floor === state.job);
+  if (
+    seat === undefined ||
+    seatPending(state) ||
+    state.month + seat.openFor > content.balance.monthsPerRun
+  ) {
+    return false;
+  }
+  if (seat.win) return true;
+  const above =
+    managerHere(state, content, bossOf(state, content)) ??
+    seat.movesUp.reportsTo;
+  return managerHere(state, content, above) !== undefined;
 }
 
 /**
@@ -272,8 +296,9 @@ function pick(
  * if nobody else stands for it, the holder's team is weighed instead. The
  * winner takes the seat, with the title it had, or a created post's, and
  * whoever answered to the holder answers to them. Winning takes the player to
- * the seat's floor. Each Character who stood for it and was passed over
- * remembers; one weighed only because nobody stood does not.
+ * the seat's floor, or for the seat that is the way out of the top floor, wins
+ * the run, which ends there, with nobody moved. Each Character who stood for it
+ * and was passed over remembers; one weighed only because nobody stood does not.
  */
 function decide(
   state: State,
@@ -295,11 +320,20 @@ function decide(
     )
     .map((c) => c.character);
   const stood = competing.map(weighOf);
+  // A player taken down a floor while it was open is no longer in the running.
+  const running = state.job === seat.floor;
   const others =
-    stood.length > 0 || !isRuledOut(written, kind, you)
+    stood.length > 0 || (running && !isRuledOut(written, kind, you))
       ? stood
       : teamOf(state, content, holder).map(weighOf);
-  const { winner, top } = pick(state, written, seat, kind, [you, ...others]);
+  const field = running ? [you, ...others] : others;
+  if (field.length === 0) {
+    // With the player out of the running and nobody else, the seat stays
+    // empty: a holder moving up stays put, and one gone is still covered.
+    state.vacancies = state.vacancies.filter((v) => v !== vacancy);
+    return;
+  }
+  const { winner, top } = pick(state, written, seat, kind, field);
   // Who would have had it without the mistake, against those who stood for it,
   // which says whether it cost the seat.
   const mistaken = you.reasons.includes("mistake");
@@ -309,7 +343,9 @@ function decide(
     strength:
       you.strength - (mistaken ? written.reasons.mistake.weight[kind] : 0),
   };
-  const otherwise = pick(state, written, seat, kind, [unmistaken, ...stood]);
+  const otherwise = running
+    ? pick(state, written, seat, kind, [unmistaken, ...stood])
+    : { winner };
   const paper = standingOnPaper(state, content);
   const decided: Decided = {
     month: state.month,
@@ -318,7 +354,7 @@ function decide(
     winner,
     close: top.length > 1,
     blocked: winner !== YOU && otherwise.winner === YOU,
-    candidates: [you, ...others],
+    candidates: field,
     onPaper: paper?.band ?? null,
     held:
       vacancy.way === "created"
@@ -334,7 +370,8 @@ function decide(
     "{decider}": called(decider),
     "{why}": toldOf(written, decided, called),
   });
-  fillSeat(state, content, seat, vacancy, decided);
+  if (winner === YOU && seat.win) state.wonIn = state.month;
+  else fillSeat(state, content, seat, vacancy, decided);
   const { forYou, forSomeoneElse } = written.passedOver;
   const kept = winner === YOU ? forYou : forSomeoneElse;
   for (const { who } of stood) {
@@ -346,6 +383,8 @@ function decide(
       tone: kept.tone,
     });
   }
+  // A player taken down a floor meanwhile is not told of it, but at the end.
+  if (!running) return;
   const told =
     winner === YOU ? seat.won : decided.blocked ? seat.blocked : seat.lost;
   state.noticesDue.push({
@@ -377,7 +416,9 @@ function fillSeat(
   { winner, held }: Decided,
 ): void {
   const above = managerHere(state, content, holder) ?? seat.movesUp.reportsTo;
-  const team = [YOU, ...teamOf(state, content, holder)];
+  // A player taken down a floor meanwhile stays where they are.
+  const you = state.job === seat.floor ? [YOU] : [];
+  const team = [...you, ...teamOf(state, content, holder)];
   if (way === "plan" || way === "movedUp") {
     state.reportsTo[holder] = seat.movesUp.reportsTo;
     state.titles[holder] = {
@@ -386,8 +427,8 @@ function fillSeat(
     };
   }
   state.reportsTo[winner] = above;
-  if (winner === YOU) state.job = seat.job;
-  else state.titles[winner] = held;
+  if (winner !== YOU) state.titles[winner] = held;
+  else if (seat.job !== undefined) state.job = seat.job;
   for (const id of team.filter((t) => t !== winner)) {
     state.reportsTo[id] = winner;
   }

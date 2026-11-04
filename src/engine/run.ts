@@ -105,6 +105,8 @@ function dealtState(seed: number, content: Content): State {
     ...startingGauges(content),
     finalWarning: false,
     firedIn: null,
+    wonIn: null,
+    demotions: [],
     mistakes: [],
     step: { kind: "actions" },
     truth: {

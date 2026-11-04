@@ -204,11 +204,11 @@ describe("the real month", () => {
   });
 
   it("lets the player watch every Character, whose kind the results reveal", () => {
-    // A place in a cast is whoever is in it, on Floor 1 or the floor above.
+    // A place in a cast is whoever is in it, on Floor 1 or a floor above.
     const { boss, head } = bossesAtStart(gameContent);
     const places: Record<string, string[]> = {
-      "{boss}": [boss, head ?? ""],
-      "{head}": [head ?? "", "programme"],
+      "{boss}": [boss, head ?? "", "programme"],
+      "{head}": [head ?? "", "programme", "transformation"],
     };
     const present = new Set(
       gameContent.scenes.flatMap((s) => s.cast.flatMap((c) => places[c] ?? c)),

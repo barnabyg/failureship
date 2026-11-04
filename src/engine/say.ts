@@ -44,6 +44,11 @@ export function titleOf(state: State, content: Content, id: string): string {
   return words ? words.title.replaceAll("{title}", own) : own;
 }
 
+/** Writes a month into text that says {month}. */
+export function sayMonth(written: string, month: number | null): string {
+  return written.replaceAll("{month}", String(month));
+}
+
 export function capitalised(phrase: string): string {
   return phrase.charAt(0).toUpperCase() + phrase.slice(1);
 }

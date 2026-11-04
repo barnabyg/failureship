@@ -61,6 +61,11 @@ export function otherRaw(chance = 1, vacates?: "movedUp" | "created") {
             ousts: "report",
           },
           {
+            id: "nominate-boss",
+            label: "Nominate your boss for a post upstairs",
+            ousts: "upstairs",
+          },
+          {
             id: "promise-and-report",
             label: "Promise your boss something, and then report them",
             promise: "word-to-boss",
@@ -145,7 +150,13 @@ export function otherRaw(chance = 1, vacates?: "movedUp" | "created") {
             chance: { believer: 1, incompetent: 1, practitioner: 0 },
             when: { heardTrue: "fact-a" },
           },
+          upstairs: {
+            chance: perKind(chance),
+            upstairs: true,
+            gone: { title: "BOSS-UPSTAIRS", body: "{holder} KICKED-UPSTAIRS" },
+          },
         },
+        sets: ["got-rid-of-a-boss"],
         mood: { warm: 0, neutral: 0, cold: 0 },
         gone: { title: "BOSS-GONE", body: "{holder} HAS-GONE" },
         survived: { title: "BOSS-STAYS", body: "{holder} STAYS" },

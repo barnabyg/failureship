@@ -121,6 +121,52 @@
     "sets": ["post-created"]
   },
   {
+    "id": "head-seconded",
+    "floor": "team-lead",
+    "from": "From: Gwen Ashdown, Programme Manager",
+    "title": "A secondment to Floor 3",
+    "body": "Floor 3 has asked for someone who knows how operations really work, and your boss has been seconded there, with immediate effect, to explain it. Your boss says that it is a stretch opportunity, and has already stretched, in the direction of the lift.",
+    "changed": "A secondment moved your boss up to Floor 3, and left their seat open.",
+    "schedule": {
+      "months": [10, 11],
+      "chance": 0.25,
+      "clue": {
+        "before": 1,
+        "source": "By the tea point",
+        "text": "Your boss has started taking the lift up to Floor 3 for coffee, which is free there, and staying for lunch, which is not."
+      }
+    },
+    "vacates": "movedUp",
+    "story": {
+      "reported": "Operational leadership was deployed where it could add most value.",
+      "happened": "Your boss went upstairs to add value, and left the seat downstairs, with its value still in it."
+    },
+    "sets": ["head-seconded"]
+  },
+  {
+    "id": "portfolio-restructure",
+    "floor": "middle-manager",
+    "from": "From: Simone Fairley, Head of Transformation",
+    "title": "A new post at the top of Floor 3",
+    "body": "Following a review of spans and layers, a post of Programme Director is being created to lead your boss's portfolio, so that your boss can focus on leading it. Your boss keeps the title and the view. The new post gets the portfolio, and a chart with a box on it at the top of Floor 3, with nobody in it.",
+    "changed": "A restructure created a post at the top of Floor 3, to lead your boss's portfolio, and your boss kept the title.",
+    "schedule": {
+      "months": [14, 15],
+      "chance": 0.25,
+      "clue": {
+        "before": 1,
+        "source": "By the scanner",
+        "text": "Someone has left a chart in the scanner with a box at the top of Floor 3, and no name in it."
+      }
+    },
+    "vacates": "created",
+    "story": {
+      "reported": "Floor 3 strengthened its leadership of the portfolio.",
+      "happened": "A post was invented above your boss to do your boss's job, and your boss was asked to welcome it."
+    },
+    "sets": ["portfolio-restructured"]
+  },
+  {
     "id": "server-room-flood",
     "disaster": true,
     "from": "From: Facilities, to all staff",

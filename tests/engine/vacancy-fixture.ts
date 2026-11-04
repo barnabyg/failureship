@@ -238,6 +238,17 @@ export function vacancyRaw() {
         fired: "{holder} FIRED, SEAT WENT TO {winner} IN {month}",
         created: "{holder} KEPT, POST WENT TO {winner} IN {month}",
       },
+      route: {
+        plan: {
+          reality: "UP-TO {job} IN {month}, {holder} MOVED-UP",
+          appearance: "UP-TO {job} IN {month}, {holder} MOVED-UP-FOR-SHOW",
+        },
+        movedUp: "UP-TO {job} IN {month}, {holder} SECONDED",
+        left: "UP-TO {job} IN {month}, {holder} LEFT",
+        created: "UP-TO {job} IN {month}, A-POST-UNDER {holder}",
+        ousted: "UP-TO {job} IN {month}, {holder} GOT-RID-OF",
+        demoted: "DOWN-TO {job} IN {month}",
+      },
     },
   };
 }

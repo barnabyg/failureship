@@ -8,10 +8,11 @@ import { promisesInResults } from "./promises";
 import { rivalsInResults } from "./rivals";
 import { influencerOf } from "./deal";
 import { bossKindOf, isMet, moodOf, moodOfCharacter, personOf } from "./reads";
-import { calledBy, sayPeople, titleOf } from "./say";
+import { calledBy, sayMonth, sayPeople, titleOf } from "./say";
 import { standingAtEnd } from "./standing";
 import type { State } from "./state";
 import { vacanciesInResults } from "./vacancies";
+import { routeInResults, wonEnding, wonResults } from "./win";
 import type { StepView } from "./view";
 
 /** The reveal. It reaches the player view only here, once the run has ended. */
@@ -36,8 +37,9 @@ export function toResultsView(
     kind: "results",
     ...(state.firedIn !== null && content.mistakes
       ? content.mistakes.results
-      : content.ui.results),
+      : (wonResults(state, content) ?? content.ui.results)),
     ending: toEnding(state, content),
+    route: routeInResults(state, content),
     standing: toStandingResults(state, content),
     vacancies: vacanciesInResults(state, content),
     mistakes: state.mistakes,
@@ -240,12 +242,15 @@ function toEnding(
   content: Content,
 ): Extract<StepView, { kind: "results" }>["ending"] {
   const fired = state.firedIn !== null;
+  const won = wonEnding(state, content);
+  if (won !== undefined) return { fired, won: true, text: won };
   const written = fired
     ? content.mistakes?.firedIn
     : content.mistakes?.finished;
   return {
     fired,
-    text: written?.replaceAll("{month}", String(state.firedIn)) ?? null,
+    won: false,
+    text: written === undefined ? null : sayMonth(written, state.firedIn),
   };
 }
 

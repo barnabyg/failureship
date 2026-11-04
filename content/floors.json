@@ -161,5 +161,78 @@
         }
       }
     ]
+  },
+  {
+    "job": "middle-manager",
+    "title": "Middle manager",
+    "rooms": [
+      {
+        "id": "steering-room",
+        "x": -5.2,
+        "z": -1.2,
+        "width": 4.4,
+        "depth": 3.6,
+        "height": 1.6,
+        "colour": "#97a4b3"
+      },
+      {
+        "id": "coffee-bar",
+        "x": 5.6,
+        "z": -1.6,
+        "width": 3,
+        "depth": 2.8,
+        "height": 2.2,
+        "colour": "#bfae97"
+      },
+      {
+        "id": "transformation-office",
+        "x": 3,
+        "z": -2,
+        "width": 2.2,
+        "depth": 1.6,
+        "height": 1.5,
+        "colour": "#8a92a6"
+      },
+      {
+        "id": "managers-floor",
+        "x": -1.2,
+        "z": 2.2,
+        "width": 2.4,
+        "depth": 1.4,
+        "height": 1.4,
+        "colour": "#a6a497"
+      },
+      {
+        "id": "corner-office",
+        "x": 3,
+        "z": 2.4,
+        "width": 2.4,
+        "depth": 1.4,
+        "height": 1.4,
+        "colour": "#b3aba0"
+      },
+      {
+        "id": "scanner",
+        "x": -5,
+        "z": 2.5,
+        "width": 1.6,
+        "depth": 1.2,
+        "height": 1,
+        "colour": "#a7afa8"
+      },
+      {
+        "id": "lift-3",
+        "x": 0.4,
+        "z": -2.4,
+        "width": 1.8,
+        "depth": 1.6,
+        "height": 5.6,
+        "colour": "#777c81",
+        "sign": {
+          "title": "Lift",
+          "detail": "To Floor 4. Closed for refurbishment. Down: by arrangement."
+        }
+      }
+    ]
   }
 ]

@@ -190,6 +190,11 @@ export function App() {
         }}
       />
       <aside className="next" aria-live="polite">
+        {view.step.kind !== "results" && (
+          <p className="goal" data-testid="goal">
+            {panelText.goal}
+          </p>
+        )}
         <h2>{panelText.whatNext}</h2>
         <p data-testid="hint">{view.hint}</p>
       </aside>

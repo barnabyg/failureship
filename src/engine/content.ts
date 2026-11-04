@@ -255,6 +255,7 @@ export const contentSchema = z.strictObject({
       move: text,
       event: text,
       story: text,
+      win: text,
       results: text,
     }),
     actionCount: z.strictObject({ one: text, other: text }),

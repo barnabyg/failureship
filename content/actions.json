@@ -625,5 +625,179 @@
     "scene": "ways-of-working",
     "oncePerMonth": true,
     "sets": ["attended-meeting"]
+  },
+  {
+    "id": "meeting-portfolio-review",
+    "floor": "middle-manager",
+    "months": [1],
+    "label": "Steering Room 3A",
+    "description": "Your first Portfolio Review, with a slide of a road.",
+    "place": "steering-room",
+    "cost": "standard",
+    "scene": "portfolio-review",
+    "oncePerMonth": true,
+    "sets": ["attended-meeting"]
+  },
+  {
+    "id": "meeting-roadmap-workshop",
+    "floor": "middle-manager",
+    "months": [2],
+    "label": "Steering Room 3A",
+    "description": "A Roadmap Workshop, with sticky notes in four colours.",
+    "place": "steering-room",
+    "cost": "standard",
+    "scene": "roadmap-workshop",
+    "oncePerMonth": true,
+    "sets": ["attended-meeting"]
+  },
+  {
+    "id": "meeting-stakeholder-map",
+    "floor": "middle-manager",
+    "months": [3],
+    "label": "Steering Room 3A",
+    "description": "Stakeholder Mapping, on a whiteboard, with everyone's own pen.",
+    "place": "steering-room",
+    "cost": "standard",
+    "scene": "stakeholder-map",
+    "oncePerMonth": true,
+    "sets": ["attended-meeting"]
+  },
+  {
+    "id": "meeting-steering-group",
+    "floor": "middle-manager",
+    "label": "Steering Room 3A",
+    "description": "The Steering Group, which meets to steer.",
+    "place": "steering-room",
+    "cost": "standard",
+    "scene": "steering-group",
+    "oncePerMonth": true,
+    "sets": ["attended-meeting"]
+  },
+  {
+    "id": "meeting-benefits-review",
+    "floor": "middle-manager",
+    "label": "Steering Room 3A",
+    "description": "A Benefits Realisation Review, from the Archive folder.",
+    "place": "steering-room",
+    "cost": "standard",
+    "scene": "benefits-review",
+    "oncePerMonth": true,
+    "sets": ["attended-meeting"]
+  },
+  {
+    "id": "meeting-lessons-forum",
+    "floor": "middle-manager",
+    "label": "Steering Room 3A",
+    "description": "A Lessons Learned Forum, on this year's template.",
+    "place": "steering-room",
+    "cost": "standard",
+    "scene": "lessons-forum",
+    "oncePerMonth": true,
+    "sets": ["attended-meeting"]
+  },
+  {
+    "id": "over-head-3",
+    "family": "attack",
+    "label": "Your boss's boss's office",
+    "description": "You could go and tell your boss's boss what is really going on. Your boss need never know.",
+    "place": "transformation-office",
+    "cost": "standard",
+    "overHead": true,
+    "oncePerMonth": true
+  },
+  {
+    "id": "coffee-bar",
+    "label": "The coffee bar",
+    "description": "Floor 3's kitchen, which has a barista, and a queue in order of seniority.",
+    "place": "coffee-bar",
+    "cost": "standard",
+    "sets": ["had-tea"],
+    "result": {
+      "title": "The coffee bar",
+      "body": "The barista knows your order already, which means someone told them. You wonder who, and what else."
+    },
+    "moreResults": [
+      {
+        "title": "The coffee bar",
+        "body": "Another manager is in the queue, and asks how Floor 3 is treating you. You say well. They say that it treats everyone well, at first."
+      },
+      {
+        "title": "The coffee bar",
+        "body": "The coffee on Floor 3 is free. The price is that everyone can see who you are having it with."
+      },
+      {
+        "title": "The coffee bar",
+        "body": "Someone from Floor 2 is up for a meeting, and holds the door for you, and calls you by your title."
+      }
+    ]
+  },
+  {
+    "id": "managers-one-to-one",
+    "family": "find-out",
+    "label": "The managers' floor",
+    "description": "A one-to-one with one of the people who report to you now, which they have to book.",
+    "place": "managers-floor",
+    "cost": "standard",
+    "sets": ["had-one-to-one"],
+    "result": {
+      "title": "One-to-one",
+      "body": "You ask how things are going. They say fine, and then, as they leave, that the thing you asked about last month is still happening, and that they assumed you knew."
+    },
+    "moreResults": [
+      {
+        "title": "One-to-one",
+        "body": "Your one-to-one brings a list. It is a list of things they need you to unblock. You were the block on four of them."
+      },
+      {
+        "title": "One-to-one",
+        "body": "You ask what you could do better. They say that you could be around more, and then that you are around, and that it is fine."
+      },
+      {
+        "title": "One-to-one",
+        "body": "Your one-to-one is about their development. They would like to develop into your job, and are very polite about it."
+      }
+    ]
+  },
+  {
+    "id": "ask-around-3",
+    "family": "find-out",
+    "label": "The scanner",
+    "description": "Floor 3's scanner, which is slow, and so is where Floor 3 talks.",
+    "place": "scanner",
+    "cost": "standard",
+    "findOut": "ask",
+    "oncePerMonth": true,
+    "sets": ["asked-around"]
+  },
+  {
+    "id": "work-3",
+    "family": "deliver",
+    "label": "Your corner office",
+    "description": "Doing the actual work, which is now mostly deciding who does it.",
+    "place": "corner-office",
+    "cost": "standard",
+    "sets": ["did-work"],
+    "result": {
+      "title": "Your corner office",
+      "body": "You spend two hours on the actual work. It is a decision, and you make it, and three people's weeks get easier. Nobody will ever connect the two."
+    },
+    "moreResults": [
+      {
+        "title": "Your corner office",
+        "body": "You read the plan for next quarter properly, all the way through. It contradicts itself on page four, and you fix it."
+      },
+      {
+        "title": "Your corner office",
+        "body": "You clear your inbox down to the e-mails that need a real answer. There are three, and you answer them."
+      },
+      {
+        "title": "Your corner office",
+        "body": "You close a programme that finished a year ago and was still being reported on. Four status reports stop, and nobody misses them."
+      }
+    ],
+    "approach": "results",
+    "project": {
+      "real": "better"
+    }
   }
 ]

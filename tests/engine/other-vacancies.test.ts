@@ -185,6 +185,45 @@ describe("getting rid of your boss", () => {
     expect(truth.vacancies[0]?.decided?.winner).not.toBe("you");
   });
 
+  it("can move the boss up out of the way instead, opening their seat as the player's doing", () => {
+    const content = otherFixture(1);
+    let checked = 0;
+    for (const seed of SEEDS.slice(0, 10)) {
+      if (aboveAna(seed, content) === undefined) continue;
+      const run = startRun({ seed, content });
+      const views = playWith(run, "nominate-boss");
+      const truth = readHiddenTruth(run);
+      const results = views.at(-1)?.step;
+      if (results?.kind !== "results") throw new Error("No results.");
+
+      expect(told(views, "BOSS-UPSTAIRS")?.month).toBe(1);
+      expect(told(views, "SEAT-OPEN-MOVED-UP")?.month).toBe(1);
+      expect(truth.vacancies).toMatchObject([
+        { holder: "ana", way: "movedUp", ousted: true },
+      ]);
+      // Moved up, not gone: she is still in the company.
+      expect(views.at(-1)?.orgChart.map((e) => e.name)).toContain("Ana Abel");
+      if (truth.vacancies[0]?.decided?.winner === "you") {
+        expect(results.route[0]?.text).toMatch(/Ana Abel GOT-RID-OF$/);
+      }
+      checked += 1;
+    }
+    expect(checked).toBeGreaterThan(0);
+  });
+
+  it("sets the flags written for getting rid of a boss only when it works", () => {
+    const works = startRun({ seed: 1, content: otherFixture(1) });
+    const fails = startRun({ seed: 1, content: otherFixture(0) });
+    const deeds = (run: Run) =>
+      (JSON.parse(run.save()) as { state: { deeds: { flag: string }[] } }).state
+        .deeds;
+    playWith(works, "report-boss");
+    playWith(fails, "report-boss");
+
+    expect(deeds(works).map((d) => d.flag)).toContain("got-rid-of-a-boss");
+    expect(deeds(fails).map((d) => d.flag)).not.toContain("got-rid-of-a-boss");
+  });
+
   it("needs a cover for anyone who could be the boss got rid of", () => {
     const raw = otherRaw();
     const leaving: Record<string, unknown> = raw.changing.leaving;

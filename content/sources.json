@@ -75,6 +75,11 @@
       "It's on my tracker, so it's not gossip, it's a status. {said}",
       "Within agreed service levels, then. {said}",
       "{said} I've raised a ticket, so it's official now."
+    ],
+    "head-of-transformation": [
+      "I look at the whole board, so I see who moves when. {said}",
+      "Keep this at the level of the vision, please. {said}",
+      "{said} That is not a decision. It is a direction of travel."
     ]
   },
   "influentialCount": 2,

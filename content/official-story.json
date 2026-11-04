@@ -302,15 +302,26 @@
     },
     {
       "when": {
-        "any": [{ "flag": "tool-is-hollow" }, { "flag": "desks-are-hollow" }]
+        "any": [
+          {
+            "flag": "tool-is-hollow"
+          },
+          {
+            "flag": "desks-are-hollow"
+          }
+        ]
       },
       "happened": "It looks done from every angle that anyone has looked at it from."
     },
     {
       "when": {
         "any": [
-          { "flag": "tool-real-figures" },
-          { "flag": "tool-real-for-boss" }
+          {
+            "flag": "tool-real-figures"
+          },
+          {
+            "flag": "tool-real-for-boss"
+          }
         ]
       },
       "happened": "The new tool now holds the real figures, which are worse than the old ones, and true."
@@ -976,6 +987,30 @@
       "floor": "team-lead",
       "months": [7],
       "reported": "Your team's succession is in hand."
+    },
+    {
+      "floor": "middle-manager",
+      "months": [1],
+      "reported": "You have joined middle management, which has been strengthened."
+    },
+    {
+      "floor": "middle-manager",
+      "months": [2],
+      "reported": "Floor 3 has a single view of its priorities, in progress."
+    },
+    {
+      "floor": "middle-manager",
+      "months": [3],
+      "reported": "Your stakeholders have been mapped, and are engaged."
+    },
+    {
+      "floor": "middle-manager",
+      "months": [3],
+      "when": {
+        "flag": "checked-the-pack"
+      },
+      "reported": "Your section of the Board pack was submitted on time.",
+      "happened": "You found last year's figures in it, and this year's nobody had checked."
     },
     {
       "when": {
