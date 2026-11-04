@@ -5,6 +5,7 @@ import { readHiddenTruth } from "../../src/engine/hidden-truth";
 import { withoutSeatEvents } from "./fixture";
 import {
   CLEAN,
+  CLIMB,
   FOR_REAL,
   FOR_SHOW,
   FOR_THE_SEAT,
@@ -14,12 +15,6 @@ import {
   climb,
   playRun,
 } from "./real-runs";
-
-/**
- * Floor 2's Grand Plan done for real in its second month, and Floor 3's in its
- * own: on seed 2 that wins three seats, as months 7, 11 and 15 close.
- */
-export const CLIMB = `${CLEAN},staff-the-centre,decide-what-stops`;
 
 /**
  * Of 200 deals, which this player wins, and by which route up, seat by seat:

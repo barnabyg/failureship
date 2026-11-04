@@ -20,6 +20,12 @@ export const FAKED = "screenshot-on-the-note";
  */
 export const CLEAN = `take-the-blame,${FAKED}`;
 
+/**
+ * Floor 2's Grand Plan done for real in its second month, and Floor 3's in its
+ * own: on seed 2 that wins three seats, as months 7, 11 and 15 close.
+ */
+export const CLIMB = `${CLEAN},staff-the-centre,decide-what-stops`;
+
 /** A whole run of the real game, played as the browser tests' helpers play. */
 export interface Played {
   run: Run;
