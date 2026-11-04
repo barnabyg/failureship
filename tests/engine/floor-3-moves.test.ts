@@ -274,3 +274,30 @@ describe("the tricky question at the Board", () => {
     expect(asked.other).toBeGreaterThan(0);
   });
 });
+
+describe("One Roadmap's cover, apart from the Cost Challenge", () => {
+  // A Budget Move at the Cost Challenge is not asking in writing what stops,
+  // so with the Roadmap left alone its failure is blamed on the player on
+  // these seeds. Asking in reply to the welcome e-mail covers it instead.
+  const blamed = (views: readonly PlayerView[]) =>
+    views.some(
+      (v) =>
+        v.step.kind === "move" && v.step.body.includes("middle-management"),
+    );
+
+  it.each([24, 28, 37])(
+    "keeps seed %i out of the blame after a Budget Move",
+    (seed) => {
+      const exposed = playAll(seed, `${TO_FLOOR_3},cut-the-checks`);
+      const covered = playAll(
+        seed,
+        `${TO_FLOOR_3},ask-what-the-plan-stops,cut-the-checks`,
+      );
+
+      expect(blamed(exposed)).toBe(true);
+      expect(blamed(covered)).toBe(false);
+      expect(covered.some((v) => v.job.id === "middle-manager")).toBe(true);
+      expect(covered.at(-1)?.job.id).toBe("middle-manager");
+    },
+  );
+});

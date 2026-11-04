@@ -446,7 +446,9 @@ true` is done in reality only then, and otherwise as its `otherwise`, a way in a
   boss looks for someone to blame, even if the player has moved away from them. If `blame.sticks`
   holds, or is left out, it is the player at the seeded `chance` for that boss's kind, plus `mood`
   for how they stand with the player, and `onPlayer` is sent, which can be `"mistake": "big"`.
-  Otherwise `onSomeoneElse` is. Both are Bills, as in [`threads.json`](#threadsjson), and may not
+  Otherwise `onSomeoneElse` is. Offer what breaks `sticks` on its own, apart from the floor's riskier
+  Moves, so that trying one does not cost the cover: Floor 1's Demand to roll out the tool, Floor
+  2's Leadership Induction and Floor 3's welcome e-mail, beside its Cost Challenge. Both are Bills, as in [`threads.json`](#threadsjson), and may not
   say `{boss}` or `{head}`, since by then that may be someone else.
 - `results` is what the results screen says became of each boss's Plan: `reality`, `appearance`,
   `failed`, or `running` if the run ended first.

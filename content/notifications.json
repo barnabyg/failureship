@@ -1710,6 +1710,17 @@
           "body": "Your register is copied to everyone on it. Your boss's boss replies, to all, to say that this is exactly the kind of engagement Floor 3 needs."
         },
         "approach": "flatter"
+      },
+      {
+        "id": "ask-what-the-plan-stops",
+        "family": "deliver",
+        "label": "Reply to ask what the Grand Plan will stop",
+        "sets": ["asked-what-stops"],
+        "result": {
+          "title": "The Grand Plan",
+          "body": "Your boss replies that nothing will stop, and that this is the beauty of it. You file the reply in a folder called Roadmap. It is the only thing in the folder with a date on it."
+        },
+        "approach": "truth"
       }
     ]
   },
