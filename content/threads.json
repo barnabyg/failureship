@@ -649,19 +649,19 @@
           "as": "notification",
           "from": "From: Your boss, {boss}",
           "title": "A word about your new hire",
-          "body": "Your boss would like a word about your new hire, who has been asked three times what they do and has given three answers, all of them transformation. Your boss is not angry. Your boss has used the word appalled, and spelt it out.",
+          "body": "Your boss has asked to see you about your new hire, who has been asked three times what they do and has given three answers, all of them transformation. Your boss is not angry. Your boss has used the word appalled, and spelt it out.",
           "sets": ["friend-angered-the-boss"],
           "opinion": -2,
           "options": [
             {
               "id": "own-the-hire",
               "family": "deliver",
-              "label": "Say that it was your mistake, and let your friend go",
-              "sets": ["let-your-friend-go"],
+              "label": "Say that it was your mistake, and that you will put it right",
+              "sets": ["owned-the-hire"],
               "approach": "truth",
               "result": {
                 "title": "Your new hire",
-                "body": "Your friend leaves to pursue a transformation opportunity. Your boss says that it took something to say so, and does not say what."
+                "body": "Your boss says that it took something to say so, and asks when it will be put right by. The answer your boss wants is soon."
               }
             },
             {
@@ -678,7 +678,7 @@
             {
               "id": "do-the-friends-work",
               "family": "deliver",
-              "label": "Put your friend on a plan, and do their work until it ends",
+              "label": "Do your friend's work yourself until they learn it",
               "cost": "standard",
               "sets": ["covered-for-the-friend"],
               "project": {
@@ -686,7 +686,7 @@
               },
               "result": {
                 "title": "Your new hire",
-                "body": "You do two jobs, one of them in your friend's name. Your friend's work improves markedly, and your friend is pleased with it."
+                "body": "You do two jobs, one of them in your friend's name. Your friend's work improves markedly, and your friend is very pleased with it."
               }
             }
           ]
@@ -695,7 +695,7 @@
           {
             "gauge": "teflon",
             "by": -10,
-            "note": "Your old friend came back on you, with a boss who wanted the job done."
+            "note": "Your old friend came back on you, in your boss's office."
           }
         ]
       },
@@ -709,14 +709,14 @@
           "as": "move",
           "from": "From: Your boss, {boss}",
           "title": "About your new hire",
-          "body": "Your boss mentions, in passing, that they know how your new hire came to be hired, and that it can stay between the two of you. For now. Your boss starts a sentence with you owe me, and does not finish it.",
+          "body": "Your boss lets it be known that they know how your new hire came to be hired, and that it can stay between the two of you. For now. Your boss starts a sentence with you owe me, and leaves it there.",
           "sets": ["friend-held-over-you"]
         },
         "gauges": [
           {
             "gauge": "teflon",
             "by": -5,
-            "note": "Your old friend came back, as something your boss holds over you."
+            "note": "Your old friend came back, as something your boss keeps."
           }
         ]
       },
@@ -777,6 +777,43 @@
         ]
       },
       {
+        "when": {
+          "all": [
+            {
+              "remembers": {
+                "character": "analyst",
+                "about": "consultant-took-my-work"
+              }
+            },
+            {
+              "not": {
+                "believes": {
+                  "character": "analyst",
+                  "mood": "warm"
+                }
+              }
+            }
+          ]
+        },
+        "playedOut": "The Senior Analyst remembered whose spreadsheet the consultant's framework was, and showed your boss the version history.",
+        "bill": {
+          "id": "consultant-work-traced",
+          "as": "move",
+          "from": "From: The Senior Analyst, Priya Venn",
+          "title": "Version history",
+          "body": "The Senior Analyst has sent your boss their spreadsheet from last spring, which is the consultant's framework, with the version history attached. The colours are different. Nothing else is.",
+          "sets": ["consultant-work-traced"],
+          "opinion": -1
+        },
+        "gauges": [
+          {
+            "gauge": "teflon",
+            "by": -5,
+            "note": "The consultant came back, as somebody else's spreadsheet."
+          }
+        ]
+      },
+      {
         "playedOut": "The consultant presented their findings, which were nothing, and your boss was impressed by them.",
         "bill": {
           "id": "consultant-impressed",
@@ -805,22 +842,22 @@
       "min": 1,
       "max": 2
     },
-    "started": "You decided who on your team got the bonus pot, and your team could count.",
+    "started": "You divided your team's bonus pot, and signed every letter.",
     "outcomes": [
       {
         "when": {
           "remembers": {
             "character": "analyst",
-            "about": "passed-over"
+            "about": "left-out-of-the-pot"
           }
         },
-        "playedOut": "The Senior Analyst remembered who had got the team's bonus pot, and began to do exactly what was asked.",
+        "playedOut": "The Senior Analyst remembered their letter about resilience, and began to do exactly what was asked, and no more.",
         "bill": {
           "id": "team-bonus-resented",
           "as": "move",
           "from": "From: The Senior Analyst, Priya Venn",
           "title": "Open to opportunities",
-          "body": "The Senior Analyst's profile now says Open to Opportunities. They are still doing the work, to the letter, and the letter is shorter than it was. The two who had the bonus have asked them how to do it.",
+          "body": "The Senior Analyst's profile now says Open to Opportunities. They are still doing the work, to the letter, and the letter is shorter than it was. Whoever had the bonus has asked them how to do it.",
           "sets": ["team-bonus-resented"],
           "opinion": -1,
           "project": {
@@ -831,7 +868,32 @@
           {
             "gauge": "teflon",
             "by": -5,
-            "note": "Your team's bonus pot came back, and it was remembered who decided it."
+            "note": "Your team's bonus pot came back, and it was remembered who signed the letters."
+          }
+        ]
+      },
+      {
+        "when": {
+          "remembers": {
+            "character": "projects",
+            "about": "left-out-of-the-pot"
+          }
+        },
+        "playedOut": "The Project Co-ordinator pinned their letter about resilience where your boss would read it.",
+        "bill": {
+          "id": "resilience-pinned-up",
+          "as": "move",
+          "from": "From: The Project Co-ordinator, Callum Reed",
+          "title": "Resilience",
+          "body": "The Project Co-ordinator has pinned your letter about resilience above their desk. Your boss has read it there, and asked the Project Co-ordinator how they are, and been told.",
+          "sets": ["resilience-pinned-up"],
+          "opinion": -1
+        },
+        "gauges": [
+          {
+            "gauge": "teflon",
+            "by": -5,
+            "note": "Your team's bonus pot came back, pinned above a desk."
           }
         ]
       },
@@ -842,13 +904,13 @@
             "about": "paid-for-the-work"
           }
         },
-        "playedOut": "The Senior Analyst remembered why they had the largest share of the bonus pot, and finished the part of the project nobody wanted.",
+        "playedOut": "The Senior Analyst remembered why they had the biggest share of the bonus pot, and closed the oldest item on your project's risk log.",
         "bill": {
           "id": "team-bonus-repaid",
           "as": "move",
           "from": "From: The Senior Analyst, Priya Venn",
-          "title": "Done",
-          "body": "The Senior Analyst has finished the part of the project that nobody wanted. The e-mail says done, and nothing else, and your boss is copied in.",
+          "title": "Closed",
+          "body": "The Senior Analyst has closed the oldest item on your project's risk log, which was open before you joined. They mention it to nobody, and your boss hears of it anyway.",
           "sets": ["team-bonus-repaid"],
           "opinion": 1,
           "project": {
@@ -873,7 +935,7 @@
       "min": 1,
       "max": 3
     },
-    "started": "You moved the Project Co-ordinator to the desk by the lift, for asking questions.",
+    "started": "You moved the Project Co-ordinator to the desk by the lift, for questioning your plans.",
     "outcomes": [
       {
         "when": {
@@ -907,7 +969,7 @@
           "id": "lift-desk-settled",
           "as": "notice",
           "title": "The desk by the lift",
-          "body": "The Project Co-ordinator has made the desk by the lift their own. There is a plant, and a sign-in sheet, and visitors ask them where things are. It is the busiest desk on the floor, and it is not on your team's side of it.",
+          "body": "The Project Co-ordinator has made the desk by the lift their own. There is a plant, and a sign-in sheet, and visitors ask them where things are. It is the busiest desk on the floor.",
           "sets": ["lift-desk-settled"]
         },
         "gauges": [

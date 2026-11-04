@@ -4,6 +4,7 @@ import { freshRun, playUntil } from "./play";
 // tests/engine/browser-seeds.test.ts keeps this deal true. On seed 16, taking
 // the blame in month 2 and faking the Plan in month 5 wins the seat, and your
 // boss on Floor 2 is a Believer. Month 11 is Floor 2's fourth month.
+// The same choices as CLEAN in tests/engine/real-runs.ts.
 const CLEAN = "choose=take-the-blame,screenshot-on-the-note";
 
 test("hire an old friend onto your team, and hear from a Believer boss about it", async ({
@@ -30,6 +31,6 @@ test("hire an old friend onto your team, and hear from a Believer boss about it"
   await expect(furious).toContainText("appalled");
   await page.getByTestId("option-own-the-hire").click();
   await expect(page.getByTestId("panel-notice")).toContainText(
-    "Your friend leaves",
+    "it took something to say so",
   );
 });

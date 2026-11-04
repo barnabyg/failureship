@@ -943,6 +943,41 @@
       "happened": "Someone finally read one of your reports."
     },
     {
+      "floor": "team-lead",
+      "months": [1],
+      "reported": "You have begun leading your team, which has been informed."
+    },
+    {
+      "floor": "team-lead",
+      "months": [2],
+      "reported": "Your team has objectives, and each objective has an owner."
+    },
+    {
+      "floor": "team-lead",
+      "months": [3],
+      "reported": "Your team's resourcing is aligned with the floor's priorities."
+    },
+    {
+      "floor": "team-lead",
+      "months": [4],
+      "reported": "Your team's capability is being strengthened."
+    },
+    {
+      "floor": "team-lead",
+      "months": [5],
+      "reported": "Your team's reward was distributed in line with policy."
+    },
+    {
+      "floor": "team-lead",
+      "months": [6],
+      "reported": "Your team's workspace has been optimised for collaboration."
+    },
+    {
+      "floor": "team-lead",
+      "months": [7],
+      "reported": "Your team's succession is in hand."
+    },
+    {
       "when": {
         "flag": "hired-on-merit"
       },
@@ -954,7 +989,7 @@
         "flag": "hired-your-friend"
       },
       "reported": "You brought experienced transformation talent into your team.",
-      "happened": "You hired your old friend, who is still thinking about what the job is."
+      "happened": "You hired your old friend, and the Senior Analyst is doing their job."
     },
     {
       "when": {
@@ -982,7 +1017,7 @@
         "flag": "hired-the-consultant"
       },
       "reported": "External expertise was engaged to accelerate transformation.",
-      "happened": "You spent forty thousand pounds on four quadrants."
+      "happened": "You spent forty thousand pounds on the Senior Analyst's spreadsheet, in new colours."
     },
     {
       "when": {
@@ -990,97 +1025,6 @@
       },
       "reported": "Your team completed a digital transformation.",
       "happened": "You bought your team the tools it needed, and called them transformation."
-    },
-    {
-      "when": {
-        "flag": "kept-the-team-together"
-      },
-      "reported": "Your team's seating was optimised for collaboration.",
-      "happened": "Your team sits where it sat."
-    },
-    {
-      "when": {
-        "flag": "moved-the-critic"
-      },
-      "reported": "Your team's seating was optimised for collaboration.",
-      "happened": "You moved the Project Co-ordinator to the desk by the lift, for asking questions."
-    },
-    {
-      "when": {
-        "flag": "window-for-the-analyst"
-      },
-      "reported": "Desk allocation was carried out fairly.",
-      "happened": "You gave the window to the Senior Analyst, who now owes you."
-    },
-    {
-      "when": {
-        "flag": "team-on-show"
-      },
-      "reported": "Your team increased its visibility to senior stakeholders.",
-      "happened": "Your team works where the Programme Office can see it."
-    },
-    {
-      "when": {
-        "flag": "team-bonus-split"
-      },
-      "reported": "Your team's reward was distributed equitably.",
-      "happened": "You split the bonus pot equally, and everyone resents it equally."
-    },
-    {
-      "when": {
-        "flag": "team-bonus-to-allies"
-      },
-      "reported": "Reward was aligned with behaviours.",
-      "happened": "You gave the bonus pot to the two who back you, and not to the one who did the work."
-    },
-    {
-      "when": {
-        "flag": "team-bonus-by-the-work"
-      },
-      "reported": "Reward was aligned with performance.",
-      "happened": "You gave the bonus pot to whoever did the work, and wrote down why."
-    },
-    {
-      "when": {
-        "flag": "team-bonus-asked-up"
-      },
-      "reported": "Reward was calibrated with senior leadership.",
-      "happened": "You let your boss decide your team's bonuses."
-    },
-    {
-      "when": {
-        "flag": "rated-on-the-evidence"
-      },
-      "reported": "Your team's talent was assessed rigorously.",
-      "happened": "You rated your team honestly, and it looks worse than everybody else's."
-    },
-    {
-      "when": {
-        "flag": "rated-allies-up"
-      },
-      "reported": "Your team's talent was assessed rigorously.",
-      "happened": "You put the two who back you in the top right."
-    },
-    {
-      "when": {
-        "flag": "rated-your-friend-up"
-      },
-      "reported": "High potential was identified on your team.",
-      "happened": "You called your old friend High Potential."
-    },
-    {
-      "when": {
-        "flag": "let-your-friend-go"
-      },
-      "reported": "Your team's capability was rebalanced.",
-      "happened": "You let your old friend go."
-    },
-    {
-      "when": {
-        "flag": "rated-everyone-a-nine"
-      },
-      "reported": "Your team was assessed as exceptional.",
-      "happened": "You put your whole team in one box."
     },
     {
       "when": {
@@ -1095,6 +1039,118 @@
       },
       "reported": "Your team's costs were assured.",
       "happened": "You checked every cost code, which nobody has done before."
+    },
+    {
+      "when": {
+        "flag": "team-bonus-split"
+      },
+      "reported": "Your team's reward was distributed equitably.",
+      "happened": "You split the bonus pot equally, and everyone resents it equally."
+    },
+    {
+      "when": {
+        "flag": "team-bonus-to-allies"
+      },
+      "reported": "Reward was aligned with behaviours.",
+      "happened": "You gave the bonus pot to whoever backs you, and signed the letters."
+    },
+    {
+      "when": {
+        "flag": "team-bonus-by-the-work"
+      },
+      "reported": "Reward was aligned with performance.",
+      "happened": "You divided the bonus pot by the year's work, with an appendix."
+    },
+    {
+      "when": {
+        "flag": "team-bonus-asked-up"
+      },
+      "reported": "Reward was calibrated with senior leadership.",
+      "happened": "You let your boss divide your team's bonus pot."
+    },
+    {
+      "when": {
+        "flag": "kept-the-team-together"
+      },
+      "reported": "Your team's seating was reviewed.",
+      "happened": "Your team sits where it sat."
+    },
+    {
+      "when": {
+        "flag": "split-the-pair"
+      },
+      "reported": "Your team's seating was optimised for focus.",
+      "happened": "You split up the two on your team who talk."
+    },
+    {
+      "when": {
+        "flag": "moved-the-critic"
+      },
+      "reported": "Your team's seating was optimised for collaboration.",
+      "happened": "You put the Project Co-ordinator by the lift, beside the fire door."
+    },
+    {
+      "when": {
+        "flag": "took-the-window"
+      },
+      "reported": "Your team's seating was optimised for visibility.",
+      "happened": "You took the window, and your team faces you."
+    },
+    {
+      "when": {
+        "flag": "cancelled-the-leave"
+      },
+      "reported": "Your team showed focus in the run-up to the deadline.",
+      "happened": "You cancelled your team's leave."
+    },
+    {
+      "when": {
+        "flag": "covered-the-deadline"
+      },
+      "reported": "Your team met its deadline.",
+      "happened": "You met the deadline yourself while your team was on leave."
+    },
+    {
+      "when": {
+        "flag": "named-a-successor"
+      },
+      "reported": "Your team's succession plan names a successor.",
+      "happened": "You named the Senior Analyst, who is now looking at your job."
+    },
+    {
+      "when": {
+        "flag": "named-nobody"
+      },
+      "reported": "Your team's succession is being developed.",
+      "happened": "You said nobody on your team is ready, so nobody can replace you."
+    },
+    {
+      "when": {
+        "flag": "named-your-friend"
+      },
+      "reported": "A successor was identified on your team.",
+      "happened": "You named your old friend as your successor."
+    },
+    {
+      "when": {
+        "flag": "let-your-friend-go"
+      },
+      "reported": "Your team's capability was rebalanced.",
+      "happened": "You let your old friend go, and paid for the drinks."
+    },
+    {
+      "when": {
+        "flag": "walked-the-fire-route"
+      },
+      "reported": "Your team's fire route was assured.",
+      "happened": "You walked the fire route, and moved a desk out of it."
+    },
+    {
+      "when": {
+        "flag": "signed-the-fire-form"
+      },
+      "reported": "Your team's fire route was confirmed.",
+      "happened": "You signed the fire-route form without walking it."
     }
   ]
 }

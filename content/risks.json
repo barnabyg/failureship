@@ -343,8 +343,8 @@
     "id": "friend-out-of-depth",
     "addedBy": "hired-your-friend",
     "after": {
-      "min": 2,
-      "max": 4
+      "min": 4,
+      "max": 5
     },
     "note": "You hired your old friend onto your team. They could not do the job, and somebody else was doing it.",
     "route": {
@@ -424,7 +424,7 @@
       "options": [
         {
           "id": "pay-from-the-team",
-          "label": "Take it out of your team's budget",
+          "label": "Take it out of your team's training budget",
           "sets": ["paid-the-consultant"],
           "project": {
             "real": "worse"
@@ -437,7 +437,7 @@
             {
               "character": "projects",
               "about": "paid-for-the-consultant",
-              "text": "Your team's training budget paid for your consultant.",
+              "text": "Their training budget paid for your consultant's travel.",
               "tone": "bad"
             }
           ]
@@ -478,25 +478,25 @@
     "neverCameOut": "It never came out. The invoice is in a queue, accruing."
   },
   {
-    "id": "bonus-grievance",
+    "id": "bonus-letters",
     "addedBy": "team-bonus-to-allies",
     "after": {
       "min": 2,
       "max": 3
     },
-    "note": "You gave your team's bonus pot to the two who back you in meetings, and the one who did the work could compare letters.",
+    "note": "You gave your team's bonus pot to whoever backed you, and signed a letter for every share.",
     "route": {
       "character": "analyst",
       "chance": {
-        "believer": 0.7,
+        "believer": 0.8,
         "incompetent": 0.3,
         "practitioner": 0.6
       },
-      "motive": "The Senior Analyst compared bonus letters with the two who had them, by the kettle, and took the comparison to People and Culture.",
+      "motive": "The Senior Analyst found the other bonus letters in the printer tray, with your signature on each, and took them to People and Culture.",
       "means": {
         "remembers": {
           "character": "analyst",
-          "about": "passed-over"
+          "about": "left-out-of-the-pot"
         }
       }
     },
@@ -509,57 +509,139 @@
       }
     },
     "onPlayer": {
-      "id": "bonus-grievance-raised",
+      "id": "bonus-letters-landed",
       "as": "notification",
       "from": "From: People and Culture",
-      "title": "Your team's bonus allocation",
-      "body": "People and Culture has had a query about your team's bonus allocation, and would like to see your note of why. They stress that this is not an investigation, and it has a reference number.",
-      "sets": ["bonus-grievance-raised"],
+      "title": "Your team's bonus letters",
+      "body": "People and Culture has been sent your team's bonus letters, with your signature on each, and would like to understand the reasoning. They stress that this is a conversation, and have booked a room for it with no windows.",
+      "sets": ["bonus-letters-landed"],
       "headOpinion": -1,
       "options": [
         {
-          "id": "bonus-reflected-values",
+          "id": "rewarded-behaviours",
           "family": "deflect",
-          "label": "Reply that the allocation reflected the team's values",
-          "sets": ["bonus-reflected-values"],
+          "label": "Reply that the split rewarded the right behaviours",
+          "sets": ["rewarded-behaviours"],
           "opinion": -1,
           "result": {
-            "title": "Your note of why",
-            "body": "People and Culture asks which values. You list them. The reference number is closed as a learning, and the learning is kept on file."
+            "title": "Your bonus letters",
+            "body": "People and Culture asks you to name the behaviours. You name loyalty. It is written down, underlined and filed."
           }
         },
         {
           "id": "backdate-the-note",
           "family": "fabricate",
-          "label": "Write the note of why now, and date it last month",
+          "label": "Write a note of your reasons now, and date it before the letters",
           "sets": ["backdated-the-note"],
           "mistake": "big",
           "result": {
-            "title": "Your note of why",
-            "body": "People and Culture thanks you for the note, and asks why a document dated last month was created this morning. The reference number has been upgraded to a case number."
+            "title": "Your bonus letters",
+            "body": "People and Culture thanks you for the note, and asks why a document dated in the spring was created this morning. The conversation is now a process."
           }
         },
         {
-          "id": "share-next-year",
+          "id": "next-years-pot",
           "family": "trade",
           "label": "Tell the Senior Analyst that next year's pot is theirs",
           "sets": ["promised-next-years-pot"],
           "result": {
-            "title": "Your note of why",
-            "body": "The Senior Analyst withdraws the query, and keeps the e-mail in which you said it."
+            "title": "Your bonus letters",
+            "body": "The Senior Analyst withdraws the complaint, and forwards your e-mail to their personal address."
           }
         }
       ]
     },
     "onSomeoneElse": {
-      "id": "bonus-grievance-kept",
+      "id": "bonus-letters-shredded",
       "as": "notice",
-      "title": "By the kettle",
-      "body": "The Senior Analyst mentions, by the kettle, that they have compared bonus letters with the two who had them, and that they have decided to say nothing to People and Culture, this year.",
-      "sets": ["bonus-grievance-kept"]
+      "title": "The printer tray",
+      "body": "The Senior Analyst mentions that they found some letters in the printer tray, with your signature on, and have put them through the shredder. It is the most anyone has ever used the shredder.",
+      "sets": ["bonus-letters-shredded"]
     },
-    "landedOnYou": "It came out when the Senior Analyst compared bonus letters, and People and Culture asked for your note of why.",
-    "landedElsewhere": "It came out by the kettle, but the Senior Analyst thought well enough of you to take it no further.",
-    "neverCameOut": "It never came out. The bonus letters are in three drawers, and two of them are pleased."
+    "landedOnYou": "It came out when the Senior Analyst found the other bonus letters in the printer tray, and took them to People and Culture.",
+    "landedElsewhere": "It came out, but the Senior Analyst thought well enough of you to shred the letters.",
+    "neverCameOut": "It never came out. The letters are in three drawers, and the drawers are not talking."
+  },
+  {
+    "id": "fire-door-desk",
+    "addedBy": "moved-the-critic",
+    "after": {
+      "min": 2,
+      "max": 3
+    },
+    "note": "You put the Project Co-ordinator by the lift, beside the fire door, without asking what the fire door was for.",
+    "route": {
+      "character": "projects",
+      "chance": {
+        "believer": 0.8,
+        "incompetent": 0.4,
+        "practitioner": 0.6
+      },
+      "motive": "The Project Co-ordinator turned out to be Floor 2's Health and Safety representative, and measured the gap between their new desk and the fire door. It was eleven centimetres.",
+      "means": {
+        "remembers": {
+          "character": "projects",
+          "about": "moved-by-the-lift"
+        }
+      }
+    },
+    "traced": {
+      "not": {
+        "did": "walked-the-fire-route"
+      }
+    },
+    "onPlayer": {
+      "id": "fire-door-desk-landed",
+      "as": "notification",
+      "from": "From: The Health and Safety Committee",
+      "title": "Your floor plan and the fire door",
+      "body": "The colleague you seated by the lift is, it emerges, Floor 2's Health and Safety representative. They have measured the space between their desk and the fire door, and the committee has copied in both your bosses. Your floor plan is now an incident.",
+      "sets": ["fire-door-desk-landed"],
+      "opinion": -1,
+      "headOpinion": -1,
+      "options": [
+        {
+          "id": "move-them-back",
+          "label": "Move them back, beside the Senior Analyst",
+          "sets": ["moved-them-back"],
+          "result": {
+            "title": "The fire door",
+            "body": "They move back, and the committee closes the incident. The Senior Analyst and the Project Co-ordinator resume talking, and you can guess about what."
+          }
+        },
+        {
+          "id": "blame-facilities",
+          "family": "deflect",
+          "label": "Reply that the plan was Facilities'",
+          "sets": ["blamed-facilities"],
+          "opinion": -1,
+          "result": {
+            "title": "The fire door",
+            "body": "Facilities replies to all, with the plan attached, and your pencil marks on it."
+          }
+        },
+        {
+          "id": "redo-the-plan",
+          "family": "deliver",
+          "label": "Redo the floor plan with the committee, desk by desk",
+          "cost": "standard",
+          "sets": ["redid-the-floor-plan"],
+          "result": {
+            "title": "The fire door",
+            "body": "It takes a day, a tape measure and the committee. The new plan is safe, and everyone sits where they sat in the first place."
+          }
+        }
+      ]
+    },
+    "onSomeoneElse": {
+      "id": "fire-door-cleared",
+      "as": "notice",
+      "title": "The fire door",
+      "body": "The Health and Safety Committee walks Floor 2 and finds every fire route clear, one of them by a desk's width. It notes that the route was walked and signed off by the team's lead.",
+      "sets": ["fire-door-cleared"]
+    },
+    "landedOnYou": "It came out when the Project Co-ordinator, Floor 2's Health and Safety representative, measured the gap to the fire door.",
+    "landedElsewhere": "It came out on the committee's walk round, but you had walked the route yourself, and moved the desk.",
+    "neverCameOut": "It never came out. The desk is still beside the fire door, and so is the Project Co-ordinator."
   }
 ]

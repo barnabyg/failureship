@@ -378,6 +378,56 @@ describe("the real risks", () => {
     expect(inPlainView).toContain("covered-tracks");
   });
 
+  it("offers a risk's cover before the risk can come out, on the floor where it is added", () => {
+    interface Placed {
+      floor?: string | undefined;
+      months?: number[] | undefined;
+      pool?: boolean | undefined;
+    }
+    const choices: { item: Placed; sets: readonly string[] }[] = [
+      ...gameContent.notifications.flatMap((n) =>
+        n.options.map((o) => ({ item: n, sets: o.sets })),
+      ),
+      ...gameContent.scenes.flatMap((s) =>
+        s.options.flatMap((o) =>
+          o.results.map((r) => ({ item: s, sets: r.sets })),
+        ),
+      ),
+    ];
+    const placedBy = (flag: string) =>
+      choices.filter((c) => c.sets.includes(flag)).map((c) => c.item);
+
+    // Floor 1's shared drive, in month 7, comes after these two can first come
+    // out. They predate this check, and are left for a ticket of their own.
+    const late = new Set<string>();
+    let checked = 0;
+    for (const risk of gameContent.risks) {
+      const read = JSON.stringify(risk.traced);
+      const covers = [...read.matchAll(/"did":"([^"]+)"/g)].map((m) => m[1]);
+      if (covers.length === 0) continue;
+      for (const adding of placedBy(risk.addedBy)) {
+        // Only what is written for months can be placed in time.
+        for (const month of adding.months ?? []) {
+          // It comes out as a month opens, so the cover is a month earlier.
+          const comesOut = month + risk.after.min;
+          const inTime = covers.some((flag) =>
+            placedBy(flag ?? "").some(
+              (c) =>
+                (c.floor === undefined || c.floor === adding.floor) &&
+                (c.months === undefined
+                  ? c.pool !== true
+                  : c.months.some((m) => m < comesOut)),
+            ),
+          );
+          checked += 1;
+          if (!inTime) late.add(risk.id);
+        }
+      }
+    }
+    expect(checked).toBeGreaterThan(0);
+    expect([...late]).toEqual(["security-skimped", "metric-gamed"]);
+  });
+
   it("can land as a big mistake", () => {
     expect(gameContent.risks.some((r) => r.onPlayer.mistake === "big")).toBe(
       true,

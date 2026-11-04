@@ -558,26 +558,38 @@
     "sets": ["attended-meeting"]
   },
   {
-    "id": "meeting-seating",
+    "id": "meeting-pay-review",
     "floor": "team-lead",
     "months": [5],
     "label": "Team Room 2A",
-    "description": "The Floor Plan Walkthrough, at which leads say who sits where.",
+    "description": "The Pay Review, at which your team's bonus pot is yours to divide, and to sign for.",
     "place": "team-room",
     "cost": "standard",
-    "scene": "seating-plan",
+    "scene": "pay-review",
     "oncePerMonth": true,
     "sets": ["attended-meeting"]
   },
   {
-    "id": "meeting-talent",
+    "id": "meeting-floor-plan",
     "floor": "team-lead",
     "months": [6],
     "label": "Team Room 2A",
-    "description": "The Talent Review, at which your team is put in boxes.",
+    "description": "The Floor Plan Walkthrough, at which leads say who sits where.",
     "place": "team-room",
     "cost": "standard",
-    "scene": "talent-review",
+    "scene": "floor-plan",
+    "oncePerMonth": true,
+    "sets": ["attended-meeting"]
+  },
+  {
+    "id": "meeting-succession",
+    "floor": "team-lead",
+    "months": [7],
+    "label": "Team Room 2A",
+    "description": "Succession Planning, at which each lead names their replacement, in confidence, aloud.",
+    "place": "team-room",
+    "cost": "standard",
+    "scene": "succession",
     "oncePerMonth": true,
     "sets": ["attended-meeting"]
   },
@@ -600,6 +612,17 @@
     "place": "team-room",
     "cost": "standard",
     "scene": "org-design",
+    "oncePerMonth": true,
+    "sets": ["attended-meeting"]
+  },
+  {
+    "id": "meeting-ways-of-working",
+    "floor": "team-lead",
+    "label": "Team Room 2A",
+    "description": "The Ways of Working Charter, which will be laminated.",
+    "place": "team-room",
+    "cost": "standard",
+    "scene": "ways-of-working",
     "oncePerMonth": true,
     "sets": ["attended-meeting"]
   }

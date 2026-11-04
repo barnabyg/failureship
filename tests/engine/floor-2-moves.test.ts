@@ -1,63 +1,20 @@
 import { describe, expect, it } from "vitest";
 import { gameContent } from "../../src/content";
-import {
-  startRun,
-  type Content,
-  type PlayerView,
-  type Run,
-} from "../../src/engine";
-import { readHiddenTruth } from "../../src/engine/hidden-truth";
-import { plainChoice } from "../../src/ui/later-month";
+import { startRun, type PlayerView } from "../../src/engine";
 import { isOn } from "../../src/engine/floors";
+import { readHiddenTruth } from "../../src/engine/hidden-truth";
+import { plainChoice, playToMonth } from "../../src/ui/later-month";
 import { withoutSeatEvents } from "./fixture";
-
-/**
- * On seed 2, taking the blame in month 2 keeps the record clean, and faking the
- * Plan at month 5's Ideas Workshop wins the seat: Floor 2 from month 8.
- */
-const CLEAN = "take-the-blame,screenshot-on-the-note";
+import { CLEAN, playAll, playRun } from "./real-runs";
 
 /** The bigger Moves only a Team lead has, as Scene or Notification and option. */
 const FLOOR_2_MOVES = [
   "team-hire/hire-your-friend",
   "transformation-budget/hire-the-consultant",
-  "seating-plan/move-the-critic",
-  "team-bonus-pot/bonus-allies-only",
+  "pay-review/pot-to-your-allies",
+  "floor-plan/move-the-critic",
+  "floor-plan/split-the-pair",
 ];
-
-/**
- * Plays a whole run plainly, taking each option named, a comma-separated list,
- * once and in order, and keeps every view.
- */
-function playAll(
-  seed: number,
-  choose: string | null,
-  content: Content = gameContent,
-): PlayerView[] {
-  return play(seed, choose, content).views;
-}
-
-/** The same, keeping the run, for its hidden truth. */
-function play(
-  seed: number,
-  choose: string | null,
-  content: Content = gameContent,
-): { run: Run; views: PlayerView[] } {
-  const run = startRun({ seed, content });
-  let view = run.view();
-  const views = [view];
-  const wanted = choose ? choose.split(",") : [];
-  while (view.choices.length > 0) {
-    const named = view.choices.find(
-      (c) => "optionId" in c && c.optionId === wanted[0],
-    );
-    if (named) wanted.shift();
-    view = run.choose(named ?? plainChoice(view));
-    views.push(view);
-  }
-  expect(wanted).toEqual([]);
-  return { run, views };
-}
 
 /** Every option offered on the given floor, as Scene or Notification and option. */
 function offeredOn(views: readonly PlayerView[], job: string): Set<string> {
@@ -68,6 +25,26 @@ function offeredOn(views: readonly PlayerView[], job: string): Set<string> {
         : [],
     ),
   );
+}
+
+/** The month a Bill or Move with this id or title reached the player, on Floor 2. */
+function arrived(views: readonly PlayerView[], idOrTitle: string) {
+  return views.find(
+    (v) =>
+      v.job.id === "team-lead" &&
+      ((v.step.kind === "notification" && v.step.id === idOrTitle) ||
+        (v.step.kind === "move" && v.step.title === idOrTitle)),
+  )?.month;
+}
+
+/** Plays seed `seed` to Floor 2 and takes the Move, and reads what came of it. */
+function taking(seed: number, move: string) {
+  const { run, views, took } = playRun(seed, `${CLEAN},${move}`);
+  const truth = readHiddenTruth(run);
+  const risk = (id: string) => truth.risks.find((r) => r.id === id)?.cameOut;
+  const kept = (character: string, about: string) =>
+    truth.memories.some((m) => m.character === character && m.about === about);
+  return { views, taken: took.get(move) ?? Infinity, risk, kept };
 }
 
 describe("Floor 2's bigger Moves", () => {
@@ -87,102 +64,108 @@ describe("Floor 2's bigger Moves", () => {
   });
 
   it("are all on offer to a Team lead", () => {
-    const views = playAll(2, CLEAN);
-    const offered = offeredOn(views, "team-lead");
+    const offered = offeredOn(playAll(2, CLEAN), "team-lead");
 
     for (const move of FLOOR_2_MOVES) expect(offered, move).toContain(move);
   });
 });
 
-/** The month a Bill or Move with this id or title reached the player, on Floor 2. */
-function arrived(views: readonly PlayerView[], idOrTitle: string) {
-  return views.find(
-    (v) =>
-      v.job.id === "team-lead" &&
-      ((v.step.kind === "notification" && v.step.id === idOrTitle) ||
-        (v.step.kind === "move" && v.step.title === idOrTitle)),
-  )?.month;
-}
-
-/** The month the player took this option. */
-function tookIn(views: readonly PlayerView[], optionId: string) {
-  const at = views.findIndex(
-    (v) =>
-      (v.step.kind === "scene" || v.step.kind === "notification") &&
-      v.step.options.some((o) => o.id === optionId),
-  );
-  return views[at]?.month;
-}
-
+// Floor 2's fourth month is the run's month 11 on these deals, which reach it
+// in month 8. Each Move comes back through a hidden risk that lands on the
+// player, and through what someone remembers of it.
 describe("what comes back of them, later on Floor 2", () => {
-  // Floor 2 month 4 is the run's month 11 on these deals. On seed 16 your boss
-  // on Floor 2 is a Believer, and on seed 2 a Practitioner.
-  it("brings a Believer boss back furious that you hired an old friend", () => {
-    const views = playAll(16, `${CLEAN},hire-your-friend`);
-    const hired = tookIn(views, "hire-your-friend") ?? Infinity;
+  it("brings back an old friend you hired: your Believer boss, and the Senior Analyst doing their work", () => {
+    // On seed 16 your boss on Floor 2 is a Believer.
+    const { views, taken, risk, kept } = taking(16, "hire-your-friend");
 
-    expect(arrived(views, "friend-boss-furious")).toBeGreaterThan(hired);
+    expect(kept("analyst", "hired-a-friend")).toBe(true);
+    expect(arrived(views, "friend-boss-furious")).toBeGreaterThan(taken);
+    expect(risk("friend-out-of-depth")).toMatchObject({ onPlayer: true });
+    expect(arrived(views, "Who has been doing what")).toBeGreaterThan(taken);
   });
 
-  it("brings your old friend's failure out through the Senior Analyst, who remembers", () => {
-    const { run, views } = play(2, `${CLEAN},hire-your-friend`);
-    const truth = readHiddenTruth(run);
+  it("brings back the consultant: the invoice, and the Senior Analyst's own spreadsheet", () => {
+    const { views, taken, risk, kept } = taking(12, "hire-the-consultant");
 
-    expect(truth.memories).toContainEqual(
-      expect.objectContaining({
-        character: "analyst",
-        about: "hired-a-friend",
-      }),
-    );
-    expect(truth.risks).toContainEqual(
-      expect.objectContaining({
-        id: "friend-out-of-depth",
-        cameOut: expect.objectContaining({ onPlayer: true }) as unknown,
-      }),
-    );
-    expect(arrived(views, "Who has been doing what")).toBeGreaterThan(11);
+    expect(kept("analyst", "consultant-took-my-work")).toBe(true);
+    expect(arrived(views, "Version history")).toBeGreaterThan(taken);
+    expect(risk("consultant-invoice")).toMatchObject({ onPlayer: true });
+    expect(arrived(views, "consultant-invoice-landed")).toBeGreaterThan(taken);
   });
 
-  it("lets the Senior Analyst remember being passed over for your allies' bonus", () => {
-    const { run, views } = play(2, `${CLEAN},bonus-allies-only`);
-    const truth = readHiddenTruth(run);
+  it("brings back the bonus pot you gave your allies: the one left out, and their letter", () => {
+    const { views, taken, risk, kept } = taking(17, "pot-to-your-allies");
 
-    expect(truth.memories).toContainEqual(
-      expect.objectContaining({ character: "analyst", about: "passed-over" }),
-    );
-    expect(truth.risks.map((r) => r.id)).toContain("bonus-grievance");
-    expect(arrived(views, "Open to opportunities")).toBeGreaterThan(12);
+    expect(kept("analyst", "left-out-of-the-pot")).toBe(true);
+    expect(arrived(views, "Open to opportunities")).toBeGreaterThan(taken);
+    expect(risk("bonus-letters")).toMatchObject({ onPlayer: true });
+    expect(arrived(views, "bonus-letters-landed")).toBeGreaterThan(taken);
   });
 
-  it("adds the consultant's invoice to the hidden risks, and lets the boss be impressed", () => {
-    const { run, views } = play(2, `${CLEAN},hire-the-consultant`);
+  it("brings back the desk by the lift: the one you moved, and the fire door", () => {
+    const { views, taken, risk, kept } = taking(12, "move-the-critic");
 
-    expect(readHiddenTruth(run).risks.map((r) => r.id)).toContain(
-      "consultant-invoice",
-    );
-    const readout = views.find(
-      (v) =>
-        v.step.kind === "move" && v.step.title === "The consultant's readout",
-    );
-    expect(readout?.step.kind === "move" && readout.step.body).toContain(
-      "Your boss would like to sponsor it",
-    );
+    expect(kept("projects", "moved-by-the-lift")).toBe(true);
+    expect(arrived(views, "Good morning")).toBeGreaterThan(taken);
+    expect(risk("fire-door-desk")).toMatchObject({ onPlayer: true });
+    expect(arrived(views, "fire-door-desk-landed")).toBeGreaterThan(taken);
   });
+});
 
-  it("brings the desk by the lift back through the one you moved", () => {
-    const views = playAll(2, `${CLEAN},move-the-critic`);
+describe("the bonus pot given to your allies", () => {
+  const team = ["analyst", "projects"];
+  const { warmAt } = gameContent.reputation?.mood ?? { warmAt: 1 };
 
-    expect(arrived(views, "Good morning")).toBeGreaterThan(12);
+  it("goes to whoever really backs you, and leaves out only those who do not", () => {
+    const leftOut = new Set<string>();
+    for (const seed of [2, 12, 16, 17, 24, 28, 30, 34, 37]) {
+      const run = startRun({ seed, content: gameContent });
+      let view = playToMonth(run, "12", CLEAN);
+      const isPot = (v: PlayerView) =>
+        v.step.kind === "scene" && v.step.id === "pay-review";
+      while (!isPot(view)) view = run.choose(plainChoice(view));
+      const before = readHiddenTruth(run);
+      const backs = team.filter(
+        (c) =>
+          (before.beliefs[c] ?? 0) >= warmAt ||
+          before.powerMap.favours.some((f) => f.owes === "you" && f.to === c),
+      );
+      run.choose({
+        type: "scene",
+        sceneId: "pay-review",
+        optionId: "pot-to-your-allies",
+      });
+      const after = readHiddenTruth(run).memories.filter(
+        (m) => m.about === "left-out-of-the-pot",
+      );
+      const out = after.map((m) => m.character);
+
+      for (const c of team) {
+        expect(out.includes(c), `${c} on seed ${String(seed)}`).toBe(
+          !backs.includes(c),
+        );
+        if (out.includes(c)) leftOut.add(c);
+      }
+    }
+    // Not the same person left out on every deal.
+    expect(leftOut).toEqual(new Set(team));
   });
 });
 
 describe("the longest stay on Floor 2", () => {
-  // Floor 2 is reached in month 8 at the earliest, so a stay is at most eleven months.
-  const LONGEST = gameContent.balance.monthsPerRun - 7;
+  // A seat falls vacant in month 1 at the earliest, is open from the month after
+  // for `openFor` months, and is decided as the last of them closes. So with two
+  // months open, Floor 2 can start in month 4: a stay of up to fifteen months.
+  const openFor = gameContent.vacancies?.seats[0]?.openFor ?? 0;
+  const LONGEST = gameContent.balance.monthsPerRun - (1 + openFor + 1) + 1;
   const own = <T extends { floor?: string | undefined }>(items: readonly T[]) =>
     items.filter((i) => i.floor === "team-lead");
   const scenes = own(gameContent.scenes);
   const actions = own(gameContent.actions);
+
+  it("is fifteen months", () => {
+    expect(LONGEST).toBe(15);
+  });
 
   it("holds a meeting of its own, with a choice in it, every month, and no Scene twice", () => {
     for (let seed = 1; seed <= 200; seed++) {

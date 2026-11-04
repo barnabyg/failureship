@@ -1374,13 +1374,21 @@
         "approach": "theatre",
         "reaction": {
           "believer": "Your boss asks what the consultant will actually do. You read out the proposal. Your boss asks again.",
-          "incompetent": "Your boss meets the consultant, comes out holding a framework, and says that this is exactly the thinking the floor has been missing.",
+          "incompetent": "Your boss meets the consultant, comes out holding a framework, and has started saying quadrant.",
           "practitioner": "Your boss asks to be named as sponsor on the first slide, and to be left off the invoice."
         },
         "result": {
           "title": "The consultant",
-          "body": "The consultant arrives with a laptop and a colleague, who is there to watch. By Friday there is a framework with four quadrants, and all of them are your team."
-        }
+          "body": "The consultant spends a week interviewing your team about their jobs. By Friday there is a framework with four quadrants, and the Senior Analyst recognises it as their own spreadsheet, in new colours."
+        },
+        "remembers": [
+          {
+            "character": "analyst",
+            "about": "consultant-took-my-work",
+            "text": "Your consultant presented their own spreadsheet back to them, as a framework.",
+            "tone": "bad"
+          }
+        ]
       },
       {
         "id": "spend-on-the-tooling",
@@ -1394,86 +1402,7 @@
         },
         "result": {
           "title": "Transformation budget",
-          "body": "It takes a day of forms, each with transformation in the first line. Your team gets the tools it has been asking for, and they are transformational, on the forms."
-        }
-      }
-    ]
-  },
-  {
-    "id": "team-bonus-pot",
-    "floor": "team-lead",
-    "months": [5],
-    "from": "From: Your boss, {boss}",
-    "subject": "Your team's bonus pot",
-    "body": "This year team leads hold their own team's bonus pot. It is bigger than the floor's pot used to be, and still not big. You decide who on your team gets what. Please keep a note of why, in case anybody asks why.",
-    "options": [
-      {
-        "id": "bonus-equal-shares",
-        "family": "deflect",
-        "label": "Split it equally across the team",
-        "sets": ["team-bonus-split", "team-bonus-decided"],
-        "approach": "plain-report",
-        "result": {
-          "title": "Your team's bonus pot",
-          "body": "Everyone on your team gets the same. Everyone on your team has worked out what everyone else got, and what that means."
-        }
-      },
-      {
-        "id": "bonus-allies-only",
-        "family": "trade",
-        "label": "Award it only to the two who back you in meetings",
-        "sets": ["team-bonus-to-allies", "team-bonus-decided"],
-        "approach": "cronyism",
-        "reaction": {
-          "believer": "Your boss reads your note of why, and asks you to read it out. You read it out. It does not take long.",
-          "incompetent": "Your boss signs it off, and says that it is good to see a lead who backs their people.",
-          "practitioner": "Your boss reads the two names, and nods, and says that loyalty is a kind of performance."
-        },
-        "result": {
-          "title": "Your team's bonus pot",
-          "body": "The Project Co-ordinator and the Junior Associate share the pot, and are very supportive in the next meeting. The Senior Analyst, who did most of the work, is told that it was a difficult year, and asks for whom."
-        },
-        "remembers": [
-          {
-            "character": "analyst",
-            "about": "passed-over",
-            "text": "You gave your team's bonus pot to the two who back you in meetings, and they did the work.",
-            "tone": "bad"
-          }
-        ]
-      },
-      {
-        "id": "bonus-by-the-work",
-        "family": "deliver",
-        "label": "Award it by who did the work, and write down why",
-        "cost": "standard",
-        "sets": ["team-bonus-by-the-work", "team-bonus-decided"],
-        "approach": "results",
-        "project": {
-          "real": "better"
-        },
-        "result": {
-          "title": "Your team's bonus pot",
-          "body": "It takes an evening to write down who did what. The Senior Analyst reads the letter twice, and puts it in a drawer that locks."
-        },
-        "remembers": [
-          {
-            "character": "analyst",
-            "about": "paid-for-the-work",
-            "text": "You gave them the largest share of your team's bonus pot, and wrote down why.",
-            "tone": "good"
-          }
-        ]
-      },
-      {
-        "id": "bonus-ask-upstairs",
-        "family": "impress",
-        "label": "Ask your boss whom they would like to see rewarded",
-        "sets": ["team-bonus-asked-up", "team-bonus-decided"],
-        "approach": "flatter",
-        "result": {
-          "title": "Your team's bonus pot",
-          "body": "Your boss gives you three names, one of whom is not on your team. You make it work."
+          "body": "There are four forms, each with transformation in the first line. Your team gets the tools it has been asking for, and they are transformational, on the forms."
         }
       }
     ]
@@ -1481,7 +1410,7 @@
   {
     "id": "cost-codes",
     "floor": "team-lead",
-    "months": [6],
+    "months": [5],
     "from": "From: Finance",
     "subject": "Year-end: please confirm your cost codes",
     "body": "Finance would like each team lead to confirm that their team's costs are on the right codes. There are a great many codes. One of them belongs to the Centre of Excellence, and nobody has ever checked it.",
@@ -1492,7 +1421,7 @@
         "sets": ["confirmed-the-codes"],
         "result": {
           "title": "Cost codes",
-          "body": "Finance thanks you. Your costs are confirmed, which is not the same as correct."
+          "body": "Finance thanks you. Your costs are confirmed. Whether they are right is a separate workstream."
         }
       },
       {
@@ -1502,7 +1431,7 @@
         "sets": ["billed-the-centre"],
         "result": {
           "title": "Cost codes",
-          "body": "You move three costs and an invoice onto a code that nobody checks. The Centre of Excellence now has a budget, which is more than it had."
+          "body": "You move three costs, and anything still to be invoiced, onto a code that nobody checks. The Centre of Excellence now has a budget, which is more than it had."
         }
       },
       {
@@ -1514,95 +1443,212 @@
         "approach": "truth",
         "result": {
           "title": "Cost codes",
-          "body": "It takes a day. You find a printer lease from 2019 and a subscription to a magazine about leadership. Finance thanks you, and asks you not to do it again."
+          "body": "It takes a day. You find a printer lease from 2019 and a subscription to a magazine about leadership. Finance thanks you, and would prefer it to be a one-off."
         }
       }
     ]
   },
   {
-    "id": "spot-award",
+    "id": "leave-requests",
+    "floor": "team-lead",
+    "months": [6],
+    "from": "From: The Leave System",
+    "subject": "3 leave requests for the same week",
+    "body": "Three people on your team have asked for the same week off. It is the week of your project's deadline. The system has approved none of them, and asks you to, by Friday.",
+    "options": [
+      {
+        "id": "leave-in-order",
+        "label": "Approve them in the order they asked",
+        "sets": ["approved-leave-in-order"],
+        "result": {
+          "title": "Leave requests",
+          "body": "Two are approved and one is not. The one who is not asks to see the order, and it is a fair order, and that does not help."
+        }
+      },
+      {
+        "id": "cancel-the-leave",
+        "family": "impress",
+        "label": "Refuse all leave until the deadline, for focus",
+        "sets": ["cancelled-the-leave"],
+        "approach": "theatre",
+        "result": {
+          "title": "Leave requests",
+          "body": "Your whole team works the week of the deadline. It is minuted as focus, and remembered as something else."
+        }
+      },
+      {
+        "id": "cover-the-deadline",
+        "family": "deliver",
+        "label": "Approve all three, and cover the deadline yourself",
+        "cost": "standard",
+        "sets": ["covered-the-deadline"],
+        "approach": "results",
+        "project": {
+          "real": "better"
+        },
+        "result": {
+          "title": "Leave requests",
+          "body": "You spend the week doing three jobs, and the deadline is met. Your team comes back rested, and cannot work out how."
+        }
+      }
+    ]
+  },
+  {
+    "id": "fire-routes",
+    "floor": "team-lead",
+    "months": [7],
+    "from": "From: Facilities",
+    "subject": "Fire routes: please confirm your team's",
+    "body": "Following the new floor plan, each lead is asked to confirm that their team's fire route is clear. A form is attached. Facilities stresses that the form is not a substitute for walking the route, and that most leads use it as one.",
+    "options": [
+      {
+        "id": "sign-the-fire-form",
+        "label": "Sign the form",
+        "sets": ["signed-the-fire-form"],
+        "result": {
+          "title": "Fire routes",
+          "body": "Signed. Your team's fire route is clear, on the form."
+        }
+      },
+      {
+        "id": "walk-the-route",
+        "family": "deliver",
+        "label": "Walk the route yourself, desk by desk",
+        "cost": "standard",
+        "sets": ["walked-the-fire-route"],
+        "approach": "results",
+        "result": {
+          "title": "Fire routes",
+          "body": "You walk it with a tape measure. You move a bin, a plant and a desk, and the route is clear, in fact."
+        }
+      }
+    ]
+  },
+  {
+    "id": "exit-interview",
     "floor": "team-lead",
     "pool": true,
     "from": "From: People and Culture",
-    "subject": "Spot award: one person, by Friday",
-    "body": "You may give one spot award this month, of a hundred pounds in vouchers, for going above and beyond. Please choose one person on your team, and say what they went above and beyond.",
+    "subject": "Exit report: a lead's view",
+    "body": "Someone on Floor 2 is leaving, and their own lead is on leave, so People and Culture would like your view of why, for the exit report. The exit report is read by nobody, and quoted by everybody.",
     "options": [
       {
-        "id": "spot-to-the-worker",
-        "family": "deliver",
-        "label": "Give it to whoever stayed late",
-        "sets": ["spot-to-the-worker"],
-        "approach": "results",
+        "id": "personal-reasons",
+        "label": "Put personal reasons",
         "result": {
-          "title": "Spot award",
-          "body": "The vouchers are for a shop that closed in the spring. The thought is appreciated, and has to be."
+          "title": "The exit report",
+          "body": "Personal reasons. The report is filed, and agrees with every other report."
         }
       },
       {
-        "id": "spot-to-an-ally",
-        "family": "trade",
-        "label": "Give it to whoever backs you in meetings",
-        "sets": ["spot-to-an-ally"],
-        "approach": "cronyism",
+        "id": "the-real-reason",
+        "family": "deliver",
+        "label": "Put the real reason, which is the workload",
+        "sets": ["wrote-the-real-reason"],
+        "approach": "truth",
         "result": {
-          "title": "Spot award",
-          "body": "The award goes to someone who agrees with you. The citation says above and beyond, and does not say what."
-        },
-        "remembers": [
-          {
-            "character": "analyst",
-            "about": "passed-over",
-            "text": "You gave the spot award to someone who backs you in meetings, and they stayed late.",
-            "tone": "bad"
-          }
-        ]
+          "title": "The exit report",
+          "body": "People and Culture is grateful for your honesty, and asks whether they could put personal reasons."
+        }
       },
       {
-        "id": "let-it-lapse",
-        "label": "Let it lapse",
+        "id": "claim-the-leaver",
+        "family": "impress",
+        "label": "Put that they outgrew the floor, thanks to your coaching",
+        "sets": ["claimed-the-leaver"],
+        "approach": "theatre",
         "result": {
-          "title": "Spot award",
-          "body": "The award lapses. People and Culture records your team as having nobody above and beyond."
+          "title": "The exit report",
+          "body": "The report says that they left to grow. Your coaching is in the summary, and the summary goes upstairs."
         }
       }
     ]
   },
   {
-    "id": "desk-request",
+    "id": "holiday-cover",
     "floor": "team-lead",
     "pool": true,
-    "from": "From: Facilities",
-    "subject": "Desk change request (1)",
-    "body": "Someone on your team has asked to move to the desk by the window, which has come free. Facilities needs the request approved by their team lead, and has attached a form for the approval, and a form for the form.",
+    "from": "From: The Service Desk",
+    "subject": "Bank holiday cover: one name, please",
+    "body": "Someone on your team must be on call over the bank holiday weekend, with a laptop and a phone that will ring. The Service Desk needs a name by Friday, and would prefer it was not theirs.",
     "options": [
       {
-        "id": "approve-the-desk",
-        "label": "Approve it",
-        "sets": ["approved-a-desk"],
+        "id": "ask-for-a-volunteer",
+        "label": "Ask for a volunteer",
         "result": {
-          "title": "Desk change request",
-          "body": "Approved. The move takes place in six to eight weeks, subject to the window."
+          "title": "Bank holiday cover",
+          "body": "Nobody volunteers. The newest person on your team is volunteered by everybody else, and accepts."
         }
       },
       {
-        "id": "window-as-a-favour",
+        "id": "cover-it-yourself",
+        "family": "deliver",
+        "label": "Do it yourself",
+        "cost": "standard",
+        "sets": ["covered-the-holiday"],
+        "approach": "results",
+        "result": {
+          "title": "Bank holiday cover",
+          "body": "The phone rings once, on Sunday, to ask whether anyone is there. You say yes. Your team hears that you did it, and does not know what to do with that."
+        }
+      },
+      {
+        "id": "holiday-for-the-critic",
+        "family": "attack",
+        "label": "Give it to the Project Co-ordinator, who questions your plans",
+        "sets": ["gave-the-critic-the-holiday"],
+        "approach": "blame",
+        "result": {
+          "title": "Bank holiday cover",
+          "body": "The Project Co-ordinator takes the laptop home, answers the phone on the first ring all weekend, and writes up every call."
+        },
+        "remembers": [
+          {
+            "character": "projects",
+            "about": "given-the-holiday",
+            "text": "You put them on call over the bank holiday, for questioning your plans.",
+            "tone": "bad"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "reference-request",
+    "floor": "team-lead",
+    "pool": true,
+    "from": "From: Floor 3 Recruitment",
+    "subject": "Reference request: a former colleague",
+    "body": "Someone who used to work with you has applied for a post on Floor 3, and has given your name as a referee. The form asks for strengths, weaknesses, and whether you would employ them again.",
+    "options": [
+      {
+        "id": "dates-only",
+        "label": "Confirm their dates, and nothing else",
+        "result": {
+          "title": "The reference",
+          "body": "You confirm the dates. Floor 3 reads it as you meant it, and as you did not."
+        }
+      },
+      {
+        "id": "honest-reference",
+        "family": "deliver",
+        "label": "Write an honest reference",
+        "sets": ["wrote-an-honest-reference"],
+        "approach": "truth",
+        "result": {
+          "title": "The reference",
+          "body": "You give one weakness, which is honest. Floor 3 appoints someone whose referee gave none."
+        }
+      },
+      {
+        "id": "glowing-reference",
         "family": "trade",
-        "label": "Give the window to someone else, who will remember it",
-        "sets": ["window-as-a-favour"],
+        "label": "Write a glowing one, so that they owe you",
+        "sets": ["wrote-a-glowing-reference"],
         "approach": "favour",
         "result": {
-          "title": "Desk change request",
-          "body": "Someone else has the window, and remembers. So does the person who asked."
-        }
-      },
-      {
-        "id": "take-the-window",
-        "family": "fabricate",
-        "label": "Say that the window is held for visitors, and sit there yourself",
-        "sets": ["took-the-window"],
-        "result": {
-          "title": "Desk change request",
-          "body": "You sit by the window, for visitors. No visitors come. The view is very good."
+          "title": "The reference",
+          "body": "They get the post, and send a card that says they owe you one, which is the idea."
         }
       }
     ]
