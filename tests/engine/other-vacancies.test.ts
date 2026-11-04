@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 import { parseContent, startRun, type PlayerView } from "../../src/engine";
 import { readHiddenTruth } from "../../src/engine/hidden-truth";
 import { answer } from "./grand-plan-fixture";
+import { edited } from "./vacancy-fixture";
 import {
   aboveAna,
   allOfKind,
@@ -110,6 +111,34 @@ describe("getting rid of your boss", () => {
     expect(views.at(-2)?.promises).toEqual([
       expect.objectContaining({ status: "LAPSED" }),
     ]);
+  });
+
+  it("is decided by whoever was above the one who fired them, if they have gone too", () => {
+    const content = otherFixture(1);
+    // Ben has influence over Ana, and Dee over Ben, though Eve is the most
+    // influential of all. Ben and Cal are burned until they leave.
+    const run = edited(startRun({ seed: 1, content }), content, (state) => {
+      for (const dealt of state.truth.characters) dealt.kind = "believer";
+      state.truth.powerMap = {
+        order: ["eve", "dee", "ben", "ana", "cal"],
+        influence: [
+          { who: "eve", over: "dee" },
+          { who: "dee", over: "ben" },
+          { who: "ben", over: "ana" },
+          { who: "ben", over: "cal" },
+        ],
+        favours: [],
+      };
+    });
+    playWith(run, "burn-peers-and-report");
+    const truth = readHiddenTruth(run);
+
+    expect(truth.vacancies[0]).toMatchObject({ way: "fired", patron: "dee" });
+    expect(truth.changes.map((c) => [c.character, c.to])).toEqual([
+      ["ben", "left"],
+      ["cal", "left"],
+    ]);
+    expect(truth.vacancies[0]?.decided?.decider).toBe("dee");
   });
 
   it("is up to whoever holds influence over the boss: at no chance, the boss stays and remembers", () => {

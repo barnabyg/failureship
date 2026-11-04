@@ -67,6 +67,17 @@ export function otherRaw(chance = 1, vacates?: "movedUp" | "created") {
             ousts: "report",
           },
           {
+            id: "burn-peers-and-report",
+            label: "Burn your peers, and then report your boss",
+            remembers: [
+              { ...burn, character: "ben" },
+              { ...burn, character: "ben" },
+              { ...burn, character: "cal" },
+              { ...burn, character: "cal" },
+            ],
+            ousts: "report",
+          },
+          {
             id: "sour-and-report",
             label: "Sour your boss, and then report them",
             remembers: [sour, sour],
@@ -192,6 +203,14 @@ export function otherRaw(chance = 1, vacates?: "movedUp" | "created") {
         ana: {
           cover: "the acting boss",
           notice: { title: "ANA-LEFT", body: "The boss has gone." },
+        },
+        ben: {
+          cover: "the temp",
+          notice: { title: "BEN-LEFT", body: "The analyst has gone." },
+        },
+        cal: {
+          cover: "the interim",
+          notice: { title: "CAL-LEFT", body: "The clerk has gone." },
         },
       },
     },

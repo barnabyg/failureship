@@ -91,15 +91,19 @@ export function openSeat(
 
 /**
  * Whoever really holds influence over a seat: the one above its holder on the
- * Power Map, or for a holder who has left, whoever was above them as they went,
- * while they are still here. With nobody above, whoever is most influential.
+ * Power Map, or for a holder who has gone, whoever was above them as they went,
+ * or, if that person has gone too, whoever was above them in turn. With nobody
+ * above, whoever is most influential of those still here.
  */
 function deciderOf(state: State, vacancy: Vacancy): string {
   const map = state.truth.powerMap;
   const { holder, patron } = vacancy;
   if (!isGone(state, holder)) return influencerOf(map, holder) ?? holder;
-  if (patron !== null && !isGone(state, patron)) return patron;
-  return map.order[0] ?? holder;
+  // Nobody gone is on the Power Map, so its most influential is here.
+  const top = map.order[0];
+  if (patron !== null) return patron;
+  if (top === undefined) throw new Error("Nobody is left to decide.");
+  return top;
 }
 
 function openVacancy(state: State): Vacancy | undefined {

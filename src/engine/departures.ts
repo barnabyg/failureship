@@ -33,6 +33,13 @@ export function depart(
   // Opened first, while whoever held influence over them is still known.
   if (id === bossOf(state, content)) openSeat(state, content, id, how);
   state.gone.push({ character: id, month: state.month, how });
+  // A seat whose decider goes passes up to whoever had influence over them.
+  const above = influencerOf(state.truth.powerMap, id) ?? null;
+  for (const vacancy of state.vacancies) {
+    if (vacancy.decided === null && vacancy.patron === id) {
+      vacancy.patron = above;
+    }
+  }
   state.truth.powerMap = leaveMap(state.truth.powerMap, id);
   const lapsed: string[] = [];
   for (const made of state.promises) {
