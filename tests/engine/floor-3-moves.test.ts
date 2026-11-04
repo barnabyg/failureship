@@ -10,6 +10,7 @@ import { CLEAN, playAll, playRun } from "./real-runs";
 const FLOOR_3_MOVES = [
   "the-board/give-a-number",
   "the-board/take-it-offline",
+  "the-board/blame-the-analyst",
   "cost-challenge/cut-the-checks",
   "cost-challenge/pass-the-cut-down",
   "cost-challenge/move-the-costs",
@@ -45,11 +46,12 @@ function arrived(views: readonly PlayerView[], idOrTitle: string) {
   )?.month;
 }
 
-/** Plays seed `seed` to Floor 3 and takes the Move, and reads what came of it. */
+/**
+ * Plays the real game, seat events and all, on seed `seed` to Floor 3, takes
+ * the Move, and reads what came of it.
+ */
 function taking(seed: number, move: string) {
-  const { run, views, took } = playRun(seed, `${TO_FLOOR_3},${move}`, {
-    content: staying,
-  });
+  const { run, views, took } = playRun(seed, `${TO_FLOOR_3},${move}`);
   const truth = readHiddenTruth(run);
   const risk = (id: string) => truth.risks.find((r) => r.id === id)?.cameOut;
   const kept = (character: string, about: string) =>
@@ -128,15 +130,79 @@ describe("the longest stay on Floor 3", () => {
   });
 });
 
-// Floor 3's fourth month is the run's month 15 on these deals, which reach it
-// in month 12. Each Move comes back, through a hidden risk that lands on the
-// player, a Thread, or what someone remembers of it.
-describe("what comes back of them, later on Floor 3", () => {
+// These deals reach Floor 3 in month 12, with the Company Events that open
+// seats, so that it is the real game. Its first three months are the run's
+// months 12 to 14. Each Move comes back before the run ends, through a hidden
+// risk that lands on the player, a Thread, or what someone remembers of it.
+describe("what comes back of them, within the run", () => {
+  const { monthsPerRun } = gameContent.balance;
+  /** Whether a Bill came after the Move and before the run ended. */
+  const inTime = (taken: number, back: number | undefined) =>
+    back !== undefined && back > taken && back <= monthsPerRun;
+
+  it("brings back the checks cut for the Chief Financial Officer: the Service Delivery Lead, and the incident", () => {
+    const { views, taken, risk, kept } = taking(24, "cut-the-checks");
+
+    expect(taken).toBe(12);
+    expect(kept("delivery", "cut-their-checks")).toBe(true);
+    expect(risk("checks-cut")).toMatchObject({ onPlayer: true });
+    expect(
+      inTime(taken, arrived(views, "Incident review: why it happened")),
+    ).toBe(true);
+  });
+
+  it("leaves the checks elsewhere once they are put back", () => {
+    const { risk } = taking(24, "cut-the-checks,put-the-checks-back");
+
+    expect(risk("checks-cut")).toMatchObject({ onPlayer: false });
+  });
+
+  it("brings back the cut passed down to your team, through those who lost by it", () => {
+    const { views, taken, kept } = taking(28, "pass-the-cut-down");
+
+    expect(kept("analyst", "cut-passed-down")).toBe(true);
+    expect(kept("projects", "cut-passed-down")).toBe(true);
+    const back = [
+      arrived(views, "Seventy per cent"),
+      arrived(views, "Self-directed learning"),
+    ].find((m) => m !== undefined);
+    expect(inTime(taken, back)).toBe(true);
+  });
+
+  it("brings back the costs moved downstairs, through the Office Co-ordinator's reconciliation", () => {
+    const { views, taken, risk } = taking(37, "move-the-costs");
+
+    expect(risk("costs-downstairs")).toMatchObject({ onPlayer: true });
+    expect(inTime(taken, arrived(views, "costs-found"))).toBe(true);
+  });
+
+  it("brings back the cut put in writing, as an example", () => {
+    const { views, taken } = taking(24, "ask-what-stops");
+
+    expect(inTime(taken, arrived(views, "The two pages"))).toBe(true);
+  });
+
+  it("brings back the offsite deck your team wrote overnight, through the Junior Associate", () => {
+    const { views, taken, kept } = taking(24, "team-writes-it");
+
+    expect(taken).toBe(13);
+    expect(kept("associate", "wrote-it-overnight")).toBe(true);
+    expect(inTime(taken, arrived(views, "Out of office"))).toBe(true);
+  });
+
+  it("brings back last year's offsite deck, through your boss's boss", () => {
+    const { views, taken, risk } = taking(28, "last-years-offsite");
+
+    expect(risk("offsite-recycled")).toMatchObject({ onPlayer: true });
+    expect(inTime(taken, arrived(views, "Last year's offsite"))).toBe(true);
+  });
+
   it("brings back a figure made up for the Board: the Senior Analyst, and the minutes", () => {
     const { views, taken, risk } = taking(24, "give-a-number");
 
+    expect(taken).toBe(14);
     expect(risk("board-number")).toMatchObject({ onPlayer: true });
-    expect(arrived(views, "board-number-landed")).toBeGreaterThan(taken);
+    expect(inTime(taken, arrived(views, "board-number-landed"))).toBe(true);
   });
 
   it("leaves a figure made up for the Board elsewhere once the minutes are corrected", () => {
@@ -151,47 +217,17 @@ describe("what comes back of them, later on Floor 3", () => {
     expect(arrived(views, "board-offline-chased")).toBe(taken + 1);
   });
 
-  it("brings back the checks cut for the Chief Financial Officer: the Service Delivery Lead, and the incident", () => {
-    const { views, taken, risk, kept } = taking(24, "cut-the-checks");
+  it("brings back an answer the Board was promised by Friday", () => {
+    const { views, taken } = taking(24, "say-you-will-find-out");
 
-    expect(kept("delivery", "cut-their-checks")).toBe(true);
-    expect(risk("checks-cut")).toMatchObject({ onPlayer: true });
-    expect(arrived(views, "Incident review: root cause")).toBeGreaterThan(
-      taken,
-    );
+    expect(inTime(taken, arrived(views, "Friday"))).toBe(true);
   });
 
-  it("brings back the cut passed down to your team, through those who lost by it", () => {
-    const { views, taken, kept } = taking(24, "pass-the-cut-down");
+  it("brings back a figure put down to the Senior Analyst, with its workings", () => {
+    const { views, taken, kept } = taking(24, "blame-the-analyst");
 
-    expect(kept("analyst", "cut-passed-down")).toBe(true);
-    expect(kept("projects", "cut-passed-down")).toBe(true);
-    const back = [
-      arrived(views, "Seventy per cent"),
-      arrived(views, "Self-directed learning"),
-    ].find((m) => m !== undefined);
-    expect(back).toBeGreaterThan(taken);
-  });
-
-  it("brings back the costs moved downstairs, through the Office Co-ordinator's reconciliation", () => {
-    const { views, taken, risk } = taking(2, "move-the-costs");
-
-    expect(risk("costs-downstairs")).toMatchObject({ onPlayer: true });
-    expect(arrived(views, "costs-found")).toBeGreaterThan(taken);
-  });
-
-  it("brings back the offsite deck your team wrote overnight, through the Junior Associate", () => {
-    const { views, taken, kept } = taking(24, "team-writes-it");
-
-    expect(kept("associate", "wrote-it-overnight")).toBe(true);
-    expect(arrived(views, "Out of office")).toBeGreaterThan(taken);
-  });
-
-  it("brings back last year's offsite deck, through your boss's boss", () => {
-    const { views, taken, risk } = taking(24, "last-years-offsite");
-
-    expect(risk("offsite-recycled")).toMatchObject({ onPlayer: true });
-    expect(arrived(views, "Last year's offsite")).toBeGreaterThan(taken);
+    expect(kept("analyst", "blamed-at-the-board")).toBe(true);
+    expect(inTime(taken, arrived(views, "The workings"))).toBe(true);
   });
 });
 

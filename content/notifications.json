@@ -1688,7 +1688,7 @@
     "months": [1],
     "from": "From: Your boss, {boss}",
     "subject": "Welcome to Floor 3",
-    "body": "Welcome to Floor 3, and to middle management, which is where the company keeps its decisions until someone else makes them. Your first task is the Grand Plan, which you will hear about at the Portfolio Review. Please also complete your Stakeholder Register, listing everyone you need to keep happy.",
+    "body": "Welcome to Floor 3, and to middle management, which is where the company keeps its decisions until someone else makes them. Your first task is the Grand Plan, which goes to the Board's offsite next month. Please also complete your Stakeholder Register, listing everyone you need to keep happy.",
     "options": [
       {
         "id": "register-honestly",
@@ -1710,39 +1710,6 @@
           "body": "Your register is copied to everyone on it. Your boss's boss replies, to all, to say that this is exactly the kind of engagement Floor 3 needs."
         },
         "approach": "flatter"
-      }
-    ]
-  },
-  {
-    "id": "roadmap-template",
-    "floor": "middle-manager",
-    "months": [2],
-    "when": {
-      "planRunning": "roadmap"
-    },
-    "from": "From: Your boss, {boss}",
-    "subject": "One Roadmap: the template",
-    "body": "Please find attached the template for One Roadmap. It is a single slide. Everything Floor 3 is doing needs to be on it, so please keep your font small and your ambitions large.",
-    "options": [
-      {
-        "id": "template-later",
-        "label": "Say that you will fill it in once things are decided",
-        "result": {
-          "title": "One Roadmap",
-          "body": "Your boss replies that waiting for decisions is how Floor 3 got like this, and attaches the template again."
-        }
-      },
-      {
-        "id": "fill-the-template",
-        "family": "fabricate",
-        "label": "Fill in the template tonight, with every programme and no dates",
-        "cost": "standard",
-        "sets": ["roadmap-is-a-slide"],
-        "result": {
-          "title": "One Roadmap",
-          "body": "It takes until nine. Everything fits, in eight-point type, and nothing has a date, so nothing is late. Your boss calls it a milestone, which it does not have."
-        },
-        "approach": "theatre"
       }
     ]
   },
@@ -1781,7 +1748,7 @@
     "months": [3],
     "from": "From: The Board Office",
     "subject": "Board pack: final call",
-    "body": "The Board pack closes on Friday. Anything from Floor 3 that goes in it will be read by the Board, or at least by whoever reads the Board's papers for them. Please send your section as it is, or check it first.",
+    "body": "Floor 3 has fifteen minutes at the Board this month, between the pension scheme and lunch, and the Board pack closes on Friday. Anything from Floor 3 in it will be read by the Board, or by whoever reads the Board's papers for them. Please send your section as it is, or check it first.",
     "options": [
       {
         "id": "send-the-pack",
@@ -1806,39 +1773,9 @@
     ]
   },
   {
-    "id": "board-deck",
-    "floor": "middle-manager",
-    "months": [4],
-    "from": "From: The Board Office",
-    "subject": "The Board: your fifteen minutes",
-    "body": "Floor 3 has fifteen minutes at this month's Board, between the pension scheme and lunch. Please bring twelve slides. The Board will have read them, in the sense of having been sent them.",
-    "options": [
-      {
-        "id": "send-the-slides",
-        "label": "Send the twelve slides as they are",
-        "result": {
-          "title": "Your fifteen minutes",
-          "body": "The Board Office confirms receipt, and moves you to between lunch and the pension scheme."
-        }
-      },
-      {
-        "id": "rehearse-the-numbers",
-        "family": "deliver",
-        "label": "Go through every figure with the Senior Analyst first",
-        "cost": "standard",
-        "sets": ["rehearsed-for-the-board"],
-        "approach": "results",
-        "result": {
-          "title": "Your fifteen minutes",
-          "body": "It takes an afternoon. The Senior Analyst finds the figure on slide seven that nobody could explain, and explains it to you twice, until you can."
-        }
-      }
-    ]
-  },
-  {
     "id": "board-minutes",
     "floor": "middle-manager",
-    "months": [5],
+    "months": [4],
     "from": "From: The Board Office",
     "subject": "Minutes of the Board: for approval",
     "body": "The minutes of last month's Board are attached, for approval. Floor 3's fifteen minutes are minuted in four lines. Comments are welcome by Thursday, and will be minuted.",
@@ -1866,12 +1803,42 @@
     ]
   },
   {
+    "id": "board-question",
+    "floor": "middle-manager",
+    "from": "From: The Board Office",
+    "subject": "A question from a member of the Board",
+    "body": "A member of the Board has asked why Floor 3 needs so many meetings. The member would like a one-page answer by Monday, and to know who will be at the meeting to discuss it.",
+    "options": [
+      {
+        "id": "one-page",
+        "label": "Send a page saying that each meeting is essential",
+        "result": {
+          "title": "The question",
+          "body": "You send it. The Board Office replies that a meeting has been set up to discuss it."
+        }
+      },
+      {
+        "id": "cancel-a-meeting",
+        "family": "deliver",
+        "label": "Cancel one of your own meetings, and say which",
+        "cost": "standard",
+        "sets": ["cancelled-a-meeting"],
+        "approach": "truth",
+        "result": {
+          "title": "The question",
+          "body": "You cancel Tuesday's. It turns out that nobody else had been going to it either, for a year, and the cancellation is minuted as a saving."
+        }
+      }
+    ],
+    "months": [5]
+  },
+  {
     "id": "offsite-brief",
     "floor": "middle-manager",
-    "months": [6],
+    "months": [2],
     "from": "From: The Board Office",
     "subject": "The Board's offsite: tomorrow, two hours",
-    "body": "The Board holds its offsite tomorrow, at a hotel with a lake. Floor 3 has the two hours after lunch, to present its plan for the year. The Board apologises for the short notice, which it has only just given.",
+    "body": "The Board holds its offsite tomorrow, at a hotel with a lake. Your boss has the morning, and Floor 3 the two hours after lunch, to present its plan for the year. The Board apologises for the short notice, which it has only just given.",
     "options": [
       {
         "id": "bring-what-you-have",
@@ -1927,13 +1894,27 @@
           "title": "The offsite",
           "body": "Last year's deck has two hours in it already. You change the year on every slide, and the photograph of last year's Chief Executive, mostly."
         }
+      },
+      {
+        "id": "fill-the-template",
+        "family": "fabricate",
+        "label": "Fill the two hours with One Roadmap: every programme, and no dates",
+        "requires": {
+          "planRunning": "roadmap"
+        },
+        "sets": ["roadmap-is-a-slide"],
+        "approach": "theatre",
+        "result": {
+          "title": "The offsite",
+          "body": "It takes until nine. Everything fits, in eight-point type, and nothing has a date, so nothing is late. Your boss calls it a milestone, which it does not have."
+        }
       }
     ]
   },
   {
     "id": "checks-waiver",
     "floor": "middle-manager",
-    "months": [6],
+    "months": [2],
     "when": {
       "did": "cut-the-checks"
     },
@@ -2084,36 +2065,6 @@
     ]
   },
   {
-    "id": "board-question",
-    "floor": "middle-manager",
-    "pool": true,
-    "from": "From: The Board Office",
-    "subject": "A question from a member of the Board",
-    "body": "A member of the Board has asked why Floor 3 needs so many meetings. The member would like a one-page answer by Monday, and to know who will be at the meeting to discuss it.",
-    "options": [
-      {
-        "id": "one-page",
-        "label": "Send a page saying that each meeting is essential",
-        "result": {
-          "title": "The question",
-          "body": "You send it. The Board Office replies that a meeting has been set up to discuss it."
-        }
-      },
-      {
-        "id": "cancel-a-meeting",
-        "family": "deliver",
-        "label": "Cancel one of your own meetings, and say which",
-        "cost": "standard",
-        "sets": ["cancelled-a-meeting"],
-        "approach": "truth",
-        "result": {
-          "title": "The question",
-          "body": "You cancel Tuesday's. It turns out that nobody else had been going to it either, for a year, and the cancellation is minuted as a saving."
-        }
-      }
-    ]
-  },
-  {
     "id": "summer-placement",
     "floor": "middle-manager",
     "pool": true,
@@ -2137,7 +2088,7 @@
         "approach": "favour",
         "result": {
           "title": "The placement",
-          "body": "He arrives on Monday, in a suit, and asks to see the strategy. You show him the Roadmap. He asks where the rest of it is, and you give him a desk near the window."
+          "body": "He arrives on Monday, in a suit, and asks to see the strategy. You show him a slide. He asks where the rest of it is, and you give him a desk near the window."
         }
       }
     ]

@@ -190,6 +190,16 @@
         "whistleblower": 1,
         "left": 1
       }
+    },
+    {
+      "about": "blamed-at-the-board",
+      "weight": 2,
+      "why": "You put your figure down to them, in front of the Board.",
+      "leans": {
+        "practitioner": 2,
+        "whistleblower": 2,
+        "left": 1
+      }
     }
   ],
   "became": {

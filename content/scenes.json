@@ -4082,118 +4082,214 @@
     ]
   },
   {
-    "id": "portfolio-review",
+    "id": "cost-challenge",
     "floor": "middle-manager",
     "months": [1],
-    "title": "Portfolio Review",
+    "title": "Cost Challenge",
     "location": "Floor 3, Steering Room 3A",
     "narration": [
-      "Your first Portfolio Review as a Middle manager. Your boss announces the Grand Plan, {plan}, with a slide of a road. The road has no cars on it, and goes over a hill."
+      "Your first week as a Middle manager, and the Chief Financial Officer wants thirty per cent off every budget on Floor 3, with everything in the plan still delivered. The Chief Financial Officer has joined by phone, from a car, to say that this is not a cut but a challenge."
     ],
-    "cast": ["{head}", "{boss}", "head", "delivery", "analyst"],
+    "cast": ["{head}", "{boss}", "delivery", "analyst", "projects"],
     "signs": [
       {
-        "label": "Whom the slides face",
-        "text": "The projector is angled at {holder}, and so is everyone's chair.",
-        "clue": "At your first Portfolio Review, the projector and the chairs were angled at {holder}."
+        "label": "Whose budget is challenged first",
+        "text": "{ignored}'s budget is challenged first, and hardest. {holder}'s is challenged last, and briefly.",
+        "clue": "At the Cost Challenge, {holder}'s budget was challenged last, and briefly."
       },
       {
-        "label": "Whose programme is skipped",
-        "text": "{ignored}'s programme is on slide nine, and the meeting ends on slide eight."
+        "label": "Who rings back",
+        "text": "When the line drops, {bystander} rings the car back, and hands the phone to {holder}."
       }
     ],
     "options": [
       {
         "id": "ask-what-stops",
         "family": "deliver",
-        "label": "Ask what the Roadmap will stop",
+        "label": "Make the cut, and ask in writing what will stop because of it",
         "results": [
           {
-            "body": "There is a pause, of the kind that gets minuted. Your boss says that nothing needs to stop, because everything is aligned. Your question is written on the whiteboard, and photographed.",
-            "sets": ["asked-what-stops"],
+            "body": "Your list of what will stop is two pages long, and the first line is the Roadmap's. The Chief Financial Officer says that it is very helpful, and that the plan has not changed. The list is filed with the plan, behind it.",
+            "sets": ["asked-what-stops", "cut-said-what-stops"],
             "approach": "truth"
           }
         ]
       },
       {
-        "id": "call-it-bold",
-        "family": "impress",
-        "label": "Say that the vision is bold",
+        "id": "cut-the-checks",
+        "family": "fabricate",
+        "label": "Cut the testing and the second checks, which nobody sees",
         "results": [
           {
-            "body": "You say it. Your boss says that bold is the point. Three other people say bold, in turn, more boldly.",
-            "sets": ["called-it-bold"],
-            "approach": "flatter"
+            "body": "It comes to thirty per cent exactly, and nothing in the plan moves. The Service Delivery Lead reads what has gone, and asks who will check things now. You say that everyone will, a bit.",
+            "sets": ["cut-the-checks"],
+            "approach": "theatre",
+            "remembers": [
+              {
+                "character": "delivery",
+                "about": "cut-their-checks",
+                "text": "You cut the checks they run, to meet the thirty per cent, and kept the plan as it was.",
+                "tone": "bad"
+              }
+            ]
           }
         ]
       },
       {
-        "id": "own-the-roadmap",
-        "family": "impress",
-        "label": "Volunteer to own the Roadmap",
+        "id": "pass-the-cut-down",
+        "family": "deflect",
+        "label": "Pass the cut down to your team, and keep the plan",
         "results": [
           {
-            "body": "You volunteer. Your boss thanks you for stepping up, and steps back, a long way.",
-            "sets": ["owned-the-roadmap"],
+            "body": "Each of your team is asked to find thirty per cent of their own, by Friday. The Senior Analyst loses a contractor and the Project Co-ordinator a training course, and both are told that it is a challenge.",
+            "sets": ["passed-the-cut-down"],
+            "approach": "blame",
+            "project": {
+              "real": "worse"
+            },
+            "remembers": [
+              {
+                "character": "analyst",
+                "about": "cut-passed-down",
+                "text": "You passed the Chief Financial Officer's cut down to them, and they lost their contractor.",
+                "tone": "bad"
+              },
+              {
+                "character": "projects",
+                "about": "cut-passed-down",
+                "text": "You passed the Chief Financial Officer's cut down to them, and they lost their training.",
+                "tone": "bad"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "move-the-costs",
+        "family": "fabricate",
+        "label": "Move a third of your costs onto Floor 2's codes",
+        "results": [
+          {
+            "body": "A third of your costs go downstairs, to codes on Floor 2 that nobody on Floor 3 owns. Floor 3's budget is thirty per cent lower. The company's is the same.",
+            "sets": ["moved-costs-downstairs"],
             "approach": "theatre"
-          }
-        ]
-      },
-      {
-        "id": "read-your-email",
-        "label": "Read your e-mail under the table",
-        "results": [
-          {
-            "body": "Forty e-mails, all of which say they are following up. You follow up on none of them, which is what Floor 3 calls prioritising."
           }
         ]
       }
     ]
   },
   {
-    "id": "roadmap-workshop",
+    "id": "board-offsite",
     "floor": "middle-manager",
     "months": [2],
-    "title": "Roadmap Workshop",
-    "location": "Floor 3, Steering Room 3A",
+    "title": "The Board Offsite",
+    "location": "A hotel with a lake, the Orangery",
     "narration": [
-      "A workshop to build {plan}, with sticky notes in four colours. Everyone was asked to leave their job title at the door. Nobody has."
+      "The Board's offsite, in an orangery with no oranges. Your boss has the morning. Floor 3 has the two hours after lunch, which overran, so they are now an hour and three quarters."
     ],
     "cast": ["{head}", "{boss}", "head", "delivery", "analyst"],
     "signs": [
       {
-        "label": "Whose notes stay up",
-        "text": "{holder}'s sticky notes stay up. Everyone else's are moved, gently, to a column called Later.",
-        "clue": "At the Roadmap Workshop, {holder}'s sticky notes were the only ones not moved to Later."
+        "label": "Whom the Board turns to",
+        "text": "Whenever a slide changes, the Board turns to {holder}, to see what to think of it.",
+        "clue": "At the Board Offsite, the Board turned to {holder} whenever a slide changed."
       },
       {
-        "label": "Who gets the facilitator",
-        "text": "The facilitator asks {bystander} what {holder} thinks, and writes the answer down."
+        "label": "Who is not offered a pastry",
+        "text": "{ignored} is the only one not offered a pastry, and says they did not want one."
       }
     ],
     "options": [
       {
-        "id": "ask-what-is-running",
-        "family": "find-out",
-        "label": "Ask the Senior Analyst what is really running",
+        "id": "present-it-straight",
+        "family": "deliver",
+        "label": "Present the plan as it is, and stop when it runs out",
         "results": [
           {
-            "body": "The Senior Analyst has a list. It is longer than the Roadmap, and includes the Roadmap.",
-            "sets": ["asked-what-is-running"],
+            "when": {
+              "did": "wrote-the-offsite"
+            },
+            "body": "It runs to the minute, because you wrote it to. The Board asks four questions, all of them about the plan, which nobody on Floor 3 can remember happening before. Your boss's boss eats the pastry.",
+            "approach": "results",
+            "headOpinion": 1
+          },
+          {
+            "when": {
+              "did": "team-wrote-the-offsite"
+            },
+            "body": "It is very good, and you are seeing most of it for the first time. The Board asks who wrote slide forty. You say your team, and the Board writes down your team.",
+            "approach": "results"
+          },
+          {
+            "when": {
+              "did": "recycled-the-offsite"
+            },
+            "body": "It is last year's plan, and runs to the minute, as it did last year. Some of the Board remember it, and are too polite to say so in the room.",
+            "approach": "theatre"
+          },
+          {
+            "when": {
+              "did": "roadmap-is-a-slide"
+            },
+            "body": "It is One Roadmap, on one slide, with everything on it. You talk to it for as long as the Board can look at it, which is twenty minutes, and the Board says that it can see the shape of it.",
+            "approach": "theatre"
+          },
+          {
+            "body": "It runs out after forty minutes. The Board takes an early coffee, and thanks you for the time back, which it says is the most useful thing anyone has given it all day.",
             "approach": "truth"
+          }
+        ]
+      },
+      {
+        "id": "fill-the-two-hours",
+        "family": "impress",
+        "label": "Fill the two hours, whatever it takes",
+        "results": [
+          {
+            "body": "There is a breakout, a live poll and an exercise with a beach ball, which ends up in the lake. The two hours are filled. Nobody can say afterwards with what, and everyone says it was energising.",
+            "sets": ["filled-the-offsite"],
+            "approach": "theatre"
+          }
+        ]
+      },
+      {
+        "id": "present-it-as-yours",
+        "family": "deflect",
+        "label": "Present it as your own work, and take the applause",
+        "results": [
+          {
+            "when": {
+              "did": "team-wrote-the-offsite"
+            },
+            "body": "You present your team's night as your own vision. The Board applauds. The Junior Associate, who wrote slide forty, is in the car park, waiting to drive the deck back.",
+            "sets": ["took-the-offsite-credit"],
+            "approach": "theatre",
+            "remembers": [
+              {
+                "character": "associate",
+                "about": "credit-for-the-night",
+                "text": "You presented the deck they wrote overnight to the Board as your own.",
+                "tone": "bad"
+              }
+            ]
+          },
+          {
+            "body": "You present it as your own vision, which it is, in that nobody else will put their name to it. The Board applauds the vision, and asks for the detail by Monday.",
+            "sets": ["took-the-offsite-credit"],
+            "approach": "theatre"
           }
         ]
       },
       {
         "id": "decide-what-stops",
         "family": "deliver",
-        "label": "Get the room to decide what stops",
+        "label": "Use the two hours to have the Board decide what stops",
         "requires": {
           "planRunning": "roadmap"
         },
         "results": [
           {
-            "body": "It takes the whole afternoon. Two programmes are stopped, out loud, and their owners take it badly and then, by six o'clock, with relief. The Roadmap is shorter, and true.",
+            "body": "It takes both hours. Two programmes are stopped, out loud, and their owners take it badly and then, by the coffee, with relief. {plan} is shorter, and true.",
             "sets": ["roadmap-really-decided"],
             "approach": "results"
           }
@@ -4202,27 +4298,167 @@
       {
         "id": "draw-swimlanes",
         "family": "fabricate",
-        "label": "Turn the notes into swimlanes, with no dates",
+        "label": "Show {plan} as swimlanes, with everything on it and no dates",
         "requires": {
           "planRunning": "roadmap"
         },
         "results": [
           {
-            "body": "You photograph the wall and turn it into swimlanes, in the company colours. Everything is on it, nothing is stopped, and nothing has a date. It is the best-looking thing on Floor 3.",
+            "body": "Everything is on it, nothing is stopped, and nothing has a date, so nothing is late. It is the best-looking slide of the offsite, and the Board photographs it.",
             "sets": ["roadmap-is-a-slide"],
+            "approach": "theatre"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "the-board",
+    "floor": "middle-manager",
+    "months": [3],
+    "title": "The Board",
+    "location": "Floor 3, Steering Room 3A, with the Board on the screen",
+    "narration": [
+      "Floor 3's fifteen minutes at the Board. The Board is on the screen, in a room with better chairs. You are on slide nine of twelve when {competitor} asks, warmly, why the figure on slide seven is lower than last year's."
+    ],
+    "cast": ["{head}", "{boss}", "admin", "analyst"],
+    "competitor": {
+      "title": "A particularly tricky question, at the Board",
+      "family": "attack",
+      "label": "How the question is asked",
+      "signs": [
+        {
+          "text": "{competitor} asks it as a favour to the Board, and has slide seven open already.",
+          "likelihood": {
+            "believer": 1,
+            "incompetent": 1,
+            "practitioner": 4
+          }
+        },
+        {
+          "text": "{competitor} asks it as if it had only just occurred to them, and seems surprised by it.",
+          "likelihood": {
+            "believer": 2,
+            "incompetent": 4,
+            "practitioner": 2
+          }
+        },
+        {
+          "text": "{competitor} asks it apologetically, and says that somebody had to.",
+          "likelihood": {
+            "believer": 4,
+            "incompetent": 1,
+            "practitioner": 2
+          }
+        }
+      ]
+    },
+    "signs": [
+      {
+        "label": "Whom the screen watches",
+        "text": "While the question hangs there, the Board watches {holder}, to see how to take it.",
+        "clue": "At the Board, the screen watched {holder} while the question about slide seven hung there."
+      }
+    ],
+    "options": [
+      {
+        "id": "say-you-will-find-out",
+        "family": "deliver",
+        "label": "Say that you do not know yet, and when you will",
+        "results": [
+          {
+            "when": {
+              "did": "checked-the-pack"
+            },
+            "body": "You do know, as it turns out, because you checked every figure in the pack on Friday. You say it once. The Board moves on to lunch, and {competitor} closes slide seven.",
+            "sets": ["answered-the-board"],
+            "approach": "results",
+            "headOpinion": 1
+          },
+          {
+            "body": "You say that you do not have it to hand, and that the Board will have it by Friday. The Board writes Friday down. So does {competitor}, in a different colour.",
+            "sets": ["answered-the-board"],
+            "approach": "truth"
+          }
+        ]
+      },
+      {
+        "id": "give-a-number",
+        "family": "fabricate",
+        "label": "Give a figure that sounds about right",
+        "results": [
+          {
+            "body": "You say eleven per cent, firmly, and the Board nods. The Office Co-ordinator, who is taking the minutes, writes eleven per cent down. The Senior Analyst, who knows the figure, looks at the table.",
+            "sets": ["made-up-a-board-number"],
             "approach": "theatre"
           }
         ]
       },
       {
-        "id": "move-your-note-up",
-        "family": "impress",
-        "label": "Move your own sticky note into Now",
+        "id": "take-it-offline",
+        "family": "deflect",
+        "label": "Say that it is a great question, and take it offline",
         "results": [
           {
-            "body": "Your note goes into Now. Nobody stops you, and nobody will be able to say later that they did.",
-            "sets": ["moved-a-note"],
-            "approach": "theatre"
+            "body": "You say that it is a great question. The Board agrees that it is, and would like the answer offline, in writing, before the next Board. {competitor} offers to help, and is thanked.",
+            "sets": ["took-it-offline"],
+            "approach": "stall"
+          }
+        ]
+      },
+      {
+        "id": "blame-the-analyst",
+        "family": "deflect",
+        "label": "Say that the figure came from the Senior Analyst",
+        "results": [
+          {
+            "when": {
+              "factNature": {
+                "character": "analyst",
+                "nature": "dangerous"
+              }
+            },
+            "body": "You say it. By the afternoon the recording of the Board has gone upstairs, and come back down with a question about you on it, from someone on a floor that is closed.",
+            "sets": ["burned-by-a-fact"],
+            "opinion": -2,
+            "factAt": "analyst",
+            "factNote": "At the Board, you put a figure down to the Senior Analyst. You had not been told why that was a mistake.",
+            "mistake": "big"
+          },
+          {
+            "body": "You say it. The Board writes down the Senior Analyst's name, and the Senior Analyst, at the end of the table, writes down yours.",
+            "sets": ["blamed-the-analyst-at-the-board"],
+            "approach": "blame",
+            "remembers": [
+              {
+                "character": "analyst",
+                "about": "blamed-at-the-board",
+                "text": "You put your figure down to them, in front of the Board.",
+                "tone": "bad"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "ask-it-back",
+        "family": "attack",
+        "label": "Ask {competitor} the same about their own figures",
+        "requires": {
+          "any": [
+            {
+              "sawMove": "pointed-question"
+            },
+            {
+              "sawMove": "tricky-question"
+            }
+          ]
+        },
+        "results": [
+          {
+            "body": "You ask it warmly, as a favour to the Board. {competitor} does not have their own figures open, and says so, at length. The Board minutes it as healthy challenge.",
+            "sets": ["asked-it-back"],
+            "approach": "blame"
           }
         ]
       }
@@ -4231,7 +4467,7 @@
   {
     "id": "stakeholder-map",
     "floor": "middle-manager",
-    "months": [3],
+    "months": [4],
     "title": "Stakeholder Mapping",
     "location": "Floor 3, Steering Room 3A",
     "narration": [
@@ -4321,351 +4557,69 @@
     ]
   },
   {
-    "id": "the-board",
-    "floor": "middle-manager",
-    "months": [4],
-    "title": "The Board",
-    "location": "Floor 3, Steering Room 3A, with the Board on the screen",
-    "narration": [
-      "Floor 3's fifteen minutes at the Board. The Board is on the screen, in a room with better chairs. You are on slide nine of twelve when {competitor} asks, warmly, why the figure on slide seven is lower than last year's."
-    ],
-    "cast": ["{head}", "{boss}", "admin", "analyst"],
-    "competitor": {
-      "title": "A particularly tricky question, at the Board",
-      "family": "attack",
-      "label": "How the question is asked",
-      "signs": [
-        {
-          "text": "{competitor} asks it as a favour to the Board, and has slide seven open already.",
-          "likelihood": {
-            "believer": 1,
-            "incompetent": 1,
-            "practitioner": 4
-          }
-        },
-        {
-          "text": "{competitor} asks it as if it had only just occurred to them, and seems surprised by it.",
-          "likelihood": {
-            "believer": 2,
-            "incompetent": 4,
-            "practitioner": 2
-          }
-        },
-        {
-          "text": "{competitor} asks it apologetically, and says that somebody had to.",
-          "likelihood": {
-            "believer": 4,
-            "incompetent": 1,
-            "practitioner": 2
-          }
-        }
-      ]
-    },
-    "signs": [
-      {
-        "label": "Whom the screen watches",
-        "text": "While the question hangs there, the Board watches {holder}, to see how to take it.",
-        "clue": "At the Board, the screen watched {holder} while the question about slide seven hung there."
-      }
-    ],
-    "options": [
-      {
-        "id": "say-you-will-find-out",
-        "family": "deliver",
-        "label": "Say that you do not know yet, and when you will",
-        "results": [
-          {
-            "when": {
-              "did": "rehearsed-for-the-board"
-            },
-            "body": "You do know, as it turns out, because the Senior Analyst made you say it twice on Tuesday. You say it once. The Board moves on to lunch, and {competitor} closes slide seven.",
-            "sets": ["answered-the-board"],
-            "approach": "results",
-            "headOpinion": 1
-          },
-          {
-            "body": "You say that you do not have it to hand, and that the Board will have it by Friday. The Board writes Friday down. So does {competitor}, in a different colour.",
-            "sets": ["answered-the-board"],
-            "approach": "truth"
-          }
-        ]
-      },
-      {
-        "id": "give-a-number",
-        "family": "fabricate",
-        "label": "Give a figure that sounds about right",
-        "results": [
-          {
-            "body": "You say eleven per cent, firmly, and the Board nods. The Office Co-ordinator, who is taking the minutes, writes eleven per cent down. The Senior Analyst, who knows the figure, looks at the table.",
-            "sets": ["made-up-a-board-number"],
-            "approach": "theatre"
-          }
-        ]
-      },
-      {
-        "id": "take-it-offline",
-        "family": "deflect",
-        "label": "Say that it is a great question, and take it offline",
-        "results": [
-          {
-            "body": "You say that it is a great question. The Board agrees that it is, and would like the answer offline, in writing, before the next Board. {competitor} offers to help, and is thanked.",
-            "sets": ["took-it-offline"],
-            "approach": "stall"
-          }
-        ]
-      },
-      {
-        "id": "ask-it-back",
-        "family": "attack",
-        "label": "Ask {competitor} the same about their own figures",
-        "requires": {
-          "any": [
-            {
-              "sawMove": "pointed-question"
-            },
-            {
-              "sawMove": "tricky-question"
-            }
-          ]
-        },
-        "results": [
-          {
-            "body": "You ask it warmly, as a favour to the Board. {competitor} does not have their own figures open, and says so, at length. The Board minutes it as healthy challenge.",
-            "sets": ["asked-it-back"],
-            "approach": "blame"
-          }
-        ]
-      }
-    ]
-  },
-  {
-    "id": "cost-challenge",
+    "id": "portfolio-review",
     "floor": "middle-manager",
     "months": [5],
-    "title": "Cost Challenge",
+    "title": "Portfolio Review",
     "location": "Floor 3, Steering Room 3A",
     "narration": [
-      "The Chief Financial Officer wants thirty per cent off every budget on Floor 3, with everything in the plan still delivered. The Chief Financial Officer has joined by phone, from a car, to say that this is not a cut but a challenge. Your answer is due by Friday."
-    ],
-    "cast": ["{head}", "{boss}", "delivery", "analyst", "projects"],
-    "signs": [
-      {
-        "label": "Whose budget is challenged first",
-        "text": "{ignored}'s budget is challenged first, and hardest. {holder}'s is challenged last, and briefly.",
-        "clue": "At the Cost Challenge, {holder}'s budget was challenged last, and briefly."
-      },
-      {
-        "label": "Who rings back",
-        "text": "When the line drops, {bystander} rings the car back, and hands the phone to {holder}."
-      }
-    ],
-    "options": [
-      {
-        "id": "cut-and-say-what-stops",
-        "family": "deliver",
-        "label": "Cut thirty per cent, and list what will no longer be delivered",
-        "results": [
-          {
-            "body": "Your list is two pages long. The Chief Financial Officer says that it is very helpful, and that the plan has not changed. The list is filed with the plan, behind it.",
-            "sets": ["cut-said-what-stops"],
-            "approach": "truth"
-          }
-        ]
-      },
-      {
-        "id": "cut-the-checks",
-        "family": "fabricate",
-        "label": "Cut the testing and the second checks, which nobody sees",
-        "results": [
-          {
-            "body": "It comes to thirty per cent exactly, and nothing in the plan moves. The Service Delivery Lead reads what has gone, and asks who will check things now. You say that everyone will, a bit.",
-            "sets": ["cut-the-checks"],
-            "approach": "theatre",
-            "remembers": [
-              {
-                "character": "delivery",
-                "about": "cut-their-checks",
-                "text": "You cut the checks they run, to meet the thirty per cent, and kept the plan as it was.",
-                "tone": "bad"
-              }
-            ]
-          }
-        ]
-      },
-      {
-        "id": "pass-the-cut-down",
-        "family": "deflect",
-        "label": "Pass the cut down to your team, and keep the plan",
-        "results": [
-          {
-            "body": "Each of your team is asked to find thirty per cent of their own, by Friday. The Senior Analyst loses a contractor and the Project Co-ordinator a training course, and both are told that it is a challenge.",
-            "sets": ["passed-the-cut-down"],
-            "approach": "blame",
-            "project": {
-              "real": "worse"
-            },
-            "remembers": [
-              {
-                "character": "analyst",
-                "about": "cut-passed-down",
-                "text": "You passed the Chief Financial Officer's cut down to them, and they lost their contractor.",
-                "tone": "bad"
-              },
-              {
-                "character": "projects",
-                "about": "cut-passed-down",
-                "text": "You passed the Chief Financial Officer's cut down to them, and they lost their training.",
-                "tone": "bad"
-              }
-            ]
-          }
-        ]
-      },
-      {
-        "id": "move-the-costs",
-        "family": "fabricate",
-        "label": "Move a third of your costs onto Floor 2's codes",
-        "results": [
-          {
-            "body": "A third of your costs go downstairs, to codes on Floor 2 that nobody on Floor 3 owns. Floor 3's budget is thirty per cent lower. The company's is the same.",
-            "sets": ["moved-costs-downstairs"],
-            "approach": "theatre"
-          }
-        ]
-      },
-      {
-        "id": "stop-roadmap-lines",
-        "family": "deliver",
-        "label": "Find the thirty per cent by stopping lines of {plan}",
-        "requires": {
-          "planRunning": "roadmap"
-        },
-        "results": [
-          {
-            "body": "You stop four lines, which comes to thirty per cent and a bit. Their owners are told by Friday. {plan} is shorter, and the Chief Financial Officer calls it a plan.",
-            "sets": ["roadmap-really-decided", "cut-said-what-stops"],
-            "approach": "results"
-          }
-        ]
-      }
-    ]
-  },
-  {
-    "id": "board-offsite",
-    "floor": "middle-manager",
-    "months": [6],
-    "title": "The Board Offsite",
-    "location": "A hotel with a lake, the Orangery",
-    "narration": [
-      "The Board's offsite, in an orangery with no oranges. Floor 3's two hours begin after lunch, which overran, so they are now an hour and three quarters. Each member of the Board has a coffee and a pastry they have not touched."
+      "A Portfolio Review, with a slide of a road. The road has no cars on it, and goes over a hill, and everything Floor 3 is doing is somewhere on it."
     ],
     "cast": ["{head}", "{boss}", "head", "delivery", "analyst"],
     "signs": [
       {
-        "label": "Whom the Board turns to",
-        "text": "Whenever a slide changes, the Board turns to {holder}, to see what to think of it.",
-        "clue": "At the Board Offsite, the Board turned to {holder} whenever a slide changed."
+        "label": "Whom the slides face",
+        "text": "The projector is angled at {holder}, and so is everyone's chair.",
+        "clue": "At a Portfolio Review, the projector and the chairs were angled at {holder}."
       },
       {
-        "label": "Who is not offered a pastry",
-        "text": "{ignored} is the only one not offered a pastry, and says they did not want one."
+        "label": "Whose programme is skipped",
+        "text": "{ignored}'s programme is on slide nine, and the meeting ends on slide eight."
       }
     ],
     "options": [
       {
-        "id": "present-it-straight",
+        "id": "ask-what-it-stops",
         "family": "deliver",
-        "label": "Present the plan as it is, and stop when it runs out",
+        "label": "Ask what the portfolio will stop",
         "results": [
           {
-            "when": {
-              "did": "wrote-the-offsite"
-            },
-            "body": "It runs to the minute, because you wrote it to. The Board asks four questions, all of them about the plan, which nobody on Floor 3 can remember happening before. Your boss's boss eats the pastry.",
-            "sets": ["presented-the-offsite"],
-            "approach": "results",
-            "headOpinion": 1
-          },
-          {
-            "when": {
-              "did": "team-wrote-the-offsite"
-            },
-            "body": "It is very good, and you are seeing most of it for the first time. The Board asks who wrote slide forty. You say your team, and the Board writes down your team.",
-            "sets": ["presented-the-offsite"],
-            "approach": "results"
-          },
-          {
-            "body": "It runs out after forty minutes. The Board takes an early coffee, and thanks you for the time back, which it says is the most useful thing anyone has given it all day.",
-            "sets": ["presented-the-offsite"],
+            "body": "There is a pause, of the kind that gets minuted. Your boss says that nothing needs to stop, because everything is aligned. Your question is written on the whiteboard, and photographed.",
+            "sets": ["asked-what-stops"],
             "approach": "truth"
           }
         ]
       },
       {
-        "id": "fill-the-two-hours",
+        "id": "call-it-bold",
         "family": "impress",
-        "label": "Fill the two hours, whatever it takes",
+        "label": "Say that the vision is bold",
         "results": [
           {
-            "body": "There is a breakout, a live poll and an exercise with a beach ball, which ends up in the lake. The two hours are filled. Nobody can say afterwards with what, and everyone says it was energising.",
-            "sets": ["filled-the-offsite"],
-            "approach": "theatre"
+            "body": "You say it. Your boss says that bold is the point. Three other people say bold, in turn, more boldly.",
+            "sets": ["called-it-bold"],
+            "approach": "flatter"
           }
         ]
       },
       {
-        "id": "present-it-as-yours",
-        "family": "deflect",
-        "label": "Present it as your own work, and take the applause",
-        "results": [
-          {
-            "when": {
-              "did": "team-wrote-the-offsite"
-            },
-            "body": "You present your team's night as your own vision. The Board applauds. The Junior Associate, who wrote slide forty, is in the car park, waiting to drive the deck back.",
-            "sets": ["took-the-offsite-credit"],
-            "approach": "theatre",
-            "remembers": [
-              {
-                "character": "associate",
-                "about": "credit-for-the-night",
-                "text": "You presented the deck they wrote overnight to the Board as your own.",
-                "tone": "bad"
-              }
-            ]
-          },
-          {
-            "body": "You present it as your own vision, which it is, in that nobody else will put their name to it. The Board applauds the vision, and asks for the detail by Monday.",
-            "sets": ["took-the-offsite-credit"],
-            "approach": "theatre"
-          }
-        ]
-      },
-      {
-        "id": "hand-the-slot-up",
+        "id": "own-the-portfolio",
         "family": "impress",
-        "label": "Hand the two hours to your boss, and sit at the back",
+        "label": "Volunteer to own the portfolio",
         "results": [
           {
-            "body": "Your boss takes the two hours, gratefully, and keeps them. You sit at the back, by the coffee, where the Chair of the Board asks you who you are.",
-            "sets": ["handed-the-slot-up"],
-            "approach": "flatter",
-            "opinion": 1
+            "body": "You volunteer. Your boss thanks you for stepping up, and steps back, a long way.",
+            "sets": ["owned-the-portfolio"],
+            "approach": "theatre"
           }
         ]
       },
       {
-        "id": "present-the-roadmap",
-        "family": "fabricate",
-        "label": "Present {plan} as the plan for the year",
-        "requires": {
-          "planRunning": "roadmap"
-        },
+        "id": "read-your-email",
+        "label": "Read your e-mail under the table",
         "results": [
           {
-            "body": "You put {plan} on the screen, all of it, on one slide, and talk to it for two hours. The Board cannot read it, and says that it can see the shape of it.",
-            "sets": ["roadmap-is-a-slide"],
-            "approach": "theatre"
+            "body": "Forty e-mails, all of which say they are following up. You follow up on none of them, which is what Floor 3 calls prioritising."
           }
         ]
       }
@@ -4897,6 +4851,84 @@
     ]
   },
   {
+    "id": "roadmap-workshop",
+    "floor": "middle-manager",
+    "title": "Roadmap Workshop",
+    "location": "Floor 3, Steering Room 3A",
+    "narration": [
+      "A workshop on what Floor 3 is doing, with sticky notes in four colours. Everyone was asked to leave their job title at the door. Nobody has."
+    ],
+    "cast": ["{head}", "{boss}", "head", "delivery", "analyst"],
+    "signs": [
+      {
+        "label": "Whose notes stay up",
+        "text": "{holder}'s sticky notes stay up. Everyone else's are moved, gently, to a column called Later.",
+        "clue": "At the Roadmap Workshop, {holder}'s sticky notes were the only ones not moved to Later."
+      },
+      {
+        "label": "Who gets the facilitator",
+        "text": "The facilitator asks {bystander} what {holder} thinks, and writes the answer down."
+      }
+    ],
+    "options": [
+      {
+        "id": "ask-what-is-running",
+        "family": "find-out",
+        "label": "Ask the Senior Analyst what is really running",
+        "results": [
+          {
+            "body": "The Senior Analyst has a list. It is longer than the Roadmap, and includes the Roadmap.",
+            "sets": ["asked-what-is-running"],
+            "approach": "truth"
+          }
+        ]
+      },
+      {
+        "id": "decide-in-the-workshop",
+        "family": "deliver",
+        "label": "Get the room to decide what stops",
+        "requires": {
+          "planRunning": "roadmap"
+        },
+        "results": [
+          {
+            "body": "It takes the whole afternoon. Two programmes are stopped, out loud, and their owners take it badly and then, by six o'clock, with relief. The Roadmap is shorter, and true.",
+            "sets": ["roadmap-really-decided"],
+            "approach": "results"
+          }
+        ]
+      },
+      {
+        "id": "swimlanes-in-the-workshop",
+        "family": "fabricate",
+        "label": "Turn the notes into swimlanes, with no dates",
+        "requires": {
+          "planRunning": "roadmap"
+        },
+        "results": [
+          {
+            "body": "You photograph the wall and turn it into swimlanes, in the company colours. Everything is on it, nothing is stopped, and nothing has a date. It is the best-looking thing on Floor 3.",
+            "sets": ["roadmap-is-a-slide"],
+            "approach": "theatre"
+          }
+        ]
+      },
+      {
+        "id": "move-your-note-up",
+        "family": "impress",
+        "label": "Move your own sticky note into Now",
+        "results": [
+          {
+            "body": "Your note goes into Now. Nobody stops you, and nobody will be able to say later that they did.",
+            "sets": ["moved-a-note"],
+            "approach": "theatre"
+          }
+        ]
+      }
+    ],
+    "pool": true
+  },
+  {
     "id": "reforecast",
     "floor": "middle-manager",
     "pool": true,
@@ -4913,8 +4945,8 @@
         "clue": "At a Reforecast, {holder}'s number became the forecast, and everyone else's a range."
       },
       {
-        "label": "Who explains a variance",
-        "text": "{ignored} is asked to explain a variance, which turns out to be the gap between what {ignored} said and what {holder} wanted."
+        "label": "Who explains a difference",
+        "text": "{ignored} is asked to explain a difference, which turns out to be the gap between what {ignored} said and what {holder} wanted."
       }
     ],
     "options": [

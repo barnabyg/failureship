@@ -1135,7 +1135,7 @@
     "chance": 0.9,
     "after": {
       "min": 1,
-      "max": 1
+      "max": 2
     },
     "started": "You had your team write the Board's offsite deck overnight.",
     "outcomes": [
@@ -1215,6 +1215,229 @@
             "gauge": "teflon",
             "by": 5,
             "note": "The deck your team wrote overnight came back, as a template."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "cut-in-writing",
+    "startedBy": "cut-said-what-stops",
+    "chance": 0.9,
+    "after": {
+      "min": 1,
+      "max": 2
+    },
+    "started": "You put in writing what the Chief Financial Officer's cut would stop.",
+    "outcomes": [
+      {
+        "playedOut": "The Chief Financial Officer's office sent your list round Floor 3 as an example, and the things on it stopped.",
+        "bill": {
+          "id": "the-two-pages",
+          "as": "notice",
+          "title": "The two pages",
+          "body": "The Chief Financial Officer's office has sent your list of what will stop to every manager on Floor 3, as an example. Three of the things on it have stopped, officially, which nobody on Floor 3 can remember happening before.",
+          "sets": ["the-two-pages"],
+          "headOpinion": 1
+        },
+        "gauges": [
+          {
+            "gauge": "teflon",
+            "by": 5,
+            "note": "The list of what your cut would stop came back, as an example."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "friday-answer",
+    "startedBy": "answered-the-board",
+    "chance": 0.9,
+    "after": {
+      "min": 1,
+      "max": 2
+    },
+    "started": "You told the Board that you did not know, and when you would.",
+    "outcomes": [
+      {
+        "when": {
+          "not": {
+            "bossIs": "practitioner"
+          }
+        },
+        "playedOut": "The Board had its answer when you said it would, and asked for every answer from Floor 3 to come with a date.",
+        "bill": {
+          "id": "every-answer-with-a-date",
+          "as": "move",
+          "from": "From: The Board Office",
+          "title": "Friday",
+          "body": "The Board had your figure on Friday, as you said it would. The Chair of the Board has asked that every answer from Floor 3 come with a date like that one. Floor 3 is not pleased with you about this, and your boss's boss is.",
+          "sets": ["every-answer-with-a-date"],
+          "headOpinion": 1
+        },
+        "gauges": [
+          {
+            "gauge": "teflon",
+            "by": 5,
+            "note": "The answer you gave the Board by Friday came back, as a rule."
+          }
+        ]
+      },
+      {
+        "playedOut": "Your boss sent the Board your figure on Friday, under their own name.",
+        "bill": {
+          "id": "friday-under-their-name",
+          "as": "move",
+          "from": "From: Your boss, {boss}",
+          "title": "Friday",
+          "body": "Your boss has sent the Board your figure on Friday, as promised, from their own address, with a note about how hard Floor 3 has been working on it. You are copied in, at the bottom.",
+          "sets": ["friday-under-their-name"]
+        },
+        "gauges": [
+          {
+            "gauge": "teflon",
+            "by": -5,
+            "note": "The answer you gave the Board came back, under someone else's name."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "forecast-came-true",
+    "startedBy": "forecast-honestly",
+    "chance": 0.8,
+    "after": {
+      "min": 2,
+      "max": 3
+    },
+    "started": "You forecast what you actually expected, which was lower.",
+    "outcomes": [
+      {
+        "playedOut": "Your forecast was the only one on Floor 3 that came true.",
+        "bill": {
+          "id": "the-forecast-that-came-true",
+          "as": "notice",
+          "title": "The forecast that came true",
+          "body": "The quarter is in, and yours was the only forecast on Floor 3 that came true. The Chief Financial Officer's office has asked you to do everyone's next time, and everyone else has heard.",
+          "sets": ["the-forecast-that-came-true"],
+          "headOpinion": 1
+        },
+        "gauges": [
+          {
+            "gauge": "teflon",
+            "by": 5,
+            "note": "The forecast you made honestly came back true."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "team-defended",
+    "startedBy": "defended-the-team",
+    "chance": 0.8,
+    "after": {
+      "min": 1,
+      "max": 2
+    },
+    "started": "You said at the Team Structure Review what each of your team does, and that you need all of them.",
+    "outcomes": [
+      {
+        "playedOut": "Your team heard what you had said at the Team Structure Review.",
+        "bill": {
+          "id": "what-you-said-about-us",
+          "as": "notice",
+          "title": "What you said",
+          "body": "Your team has heard what you said about each of them at the Team Structure Review, from someone who was there. Nobody mentions it. The Senior Analyst brings you a coffee, which has not happened before.",
+          "sets": ["what-you-said-about-us"],
+          "remembers": [
+            {
+              "character": "analyst",
+              "about": "defended-at-the-review",
+              "text": "You said what they do, and that you need them, at the Team Structure Review.",
+              "tone": "good"
+            },
+            {
+              "character": "projects",
+              "about": "defended-at-the-review",
+              "text": "You said what they do, and that you need them, at the Team Structure Review.",
+              "tone": "good"
+            }
+          ]
+        },
+        "gauges": [
+          {
+            "gauge": "teflon",
+            "by": 5,
+            "note": "What you said for your team came back, as a coffee."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "blamed-at-the-board",
+    "startedBy": "blamed-the-analyst-at-the-board",
+    "chance": 0.9,
+    "after": {
+      "min": 1,
+      "max": 2
+    },
+    "started": "You put your figure down to the Senior Analyst, in front of the Board.",
+    "outcomes": [
+      {
+        "when": {
+          "all": [
+            {
+              "remembers": {
+                "character": "analyst",
+                "about": "blamed-at-the-board"
+              }
+            },
+            {
+              "not": {
+                "believes": {
+                  "character": "analyst",
+                  "mood": "warm"
+                }
+              }
+            }
+          ]
+        },
+        "playedOut": "The Senior Analyst sent the Board Office the workings behind the figure you had put down to them, with the date they had sent them to you.",
+        "bill": {
+          "id": "the-workings",
+          "as": "move",
+          "from": "From: The Senior Analyst, Priya Venn",
+          "title": "The workings",
+          "body": "The Senior Analyst has sent the Board Office the workings behind the figure on slide seven, which you said came from them. The workings have a date on them, and the date is three weeks before the Board, and the e-mail they came in was to you.",
+          "sets": ["the-workings"],
+          "headOpinion": -2
+        },
+        "gauges": [
+          {
+            "gauge": "teflon",
+            "by": -10,
+            "note": "The figure you put down to the Senior Analyst came back, with its workings."
+          }
+        ]
+      },
+      {
+        "playedOut": "The Senior Analyst let it go, and kept the e-mail.",
+        "bill": {
+          "id": "the-e-mail-kept",
+          "as": "notice",
+          "title": "Slide seven",
+          "body": "Nobody mentions slide seven again. The Senior Analyst now copies you into everything, with the date in the subject line.",
+          "sets": ["the-e-mail-kept"]
+        },
+        "gauges": [
+          {
+            "gauge": "teflon",
+            "by": 5,
+            "note": "The figure you put down to the Senior Analyst came back, as dates in subject lines."
           }
         ]
       }

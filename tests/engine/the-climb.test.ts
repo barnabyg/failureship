@@ -226,7 +226,7 @@ describe("a big mistake at the top of Floor 3", () => {
   // On seed 2 the Senior Analyst has a dangerous Hidden Fact, and Floor 3's
   // seat is open from month 14, after its Plan is done in month 13.
   it("demotes seed 2 to Floor 2, under whoever came next for its seat, and out of the running for the one above", () => {
-    const { run, views } = playRun(2, `${CLIMB},analyst-bottom-left`);
+    const { run, views } = playRun(2, `${CLIMB},blame-the-analyst`);
     const demoted = views.find(
       (v) =>
         v.step.kind === "notice" &&
