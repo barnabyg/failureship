@@ -2,6 +2,7 @@ import { sendBill } from "./bills";
 import type { Content, Kind } from "./content";
 import { canGo, depart } from "./departures";
 import { applyOutcome } from "./outcome";
+import { isGone } from "./places";
 import { mentionsGone, matches } from "./reads";
 import { drawFor, pickWeighted } from "./rng";
 import type { Change, State } from "./state";
@@ -33,7 +34,10 @@ export function changePeople(state: State, content: Content): void {
   if (!written) return;
   for (const dealt of state.truth.characters) {
     const changed = state.truth.changes.some((c) => c.character === dealt.id);
-    if (dealt.kind !== "believer" || changed) continue;
+    // Whoever has gone, by leaving or being fired, is past changing.
+    if (dealt.kind !== "believer" || changed || isGone(state, dealt.id)) {
+      continue;
+    }
     const burns = burnsOf(state, written, dealt.id);
     const weight = burns.reduce((sum, b) => sum + b.weight, 0);
     if (weight < written.threshold) continue;
@@ -87,7 +91,9 @@ export function blowWhistles(state: State, content: Content): void {
   const written = content.changing;
   if (!written) return;
   for (const change of state.truth.changes) {
-    if (change.to !== "whistleblower" || change.acted) continue;
+    // A whistleblower who has since gone takes what they know with them.
+    const gone = isGone(state, change.character);
+    if (change.to !== "whistleblower" || change.acted || gone) continue;
     if (change.month >= state.month) continue;
     // What they know about first, then whatever is buried, then anything at all.
     change.acted =

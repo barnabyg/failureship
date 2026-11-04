@@ -92,6 +92,16 @@ describe("getting rid of your boss", () => {
     }
   });
 
+  it("ends them for good: someone fired never changes after, nor blows a whistle", () => {
+    const content = otherFixture(1);
+    const run = allOfKind(1, content, "believer");
+    playWith(run, "sour-and-report");
+    const truth = readHiddenTruth(run);
+
+    expect(truth.vacancies[0]?.way).toBe("fired");
+    expect(truth.changes.filter((c) => c.character === "ana")).toEqual([]);
+  });
+
   it("lapses whatever the player had promised them", () => {
     const content = otherFixture(1);
     const run = startRun({ seed: 1, content });

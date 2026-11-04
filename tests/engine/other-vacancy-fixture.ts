@@ -39,6 +39,8 @@ export function otherRaw(chance = 1, vacates?: "movedUp" | "created") {
     text: "BURNED",
     tone: "bad",
   };
+  // Burns that would make a whistleblower of a Believer, not someone who leaves.
+  const sour = { ...burn, about: "sour", text: "SOURED" };
   return {
     ...base,
     notifications: [
@@ -62,6 +64,12 @@ export function otherRaw(chance = 1, vacates?: "movedUp" | "created") {
             id: "promise-and-report",
             label: "Promise your boss something, and then report them",
             promise: "word-to-boss",
+            ousts: "report",
+          },
+          {
+            id: "sour-and-report",
+            label: "Sour your boss, and then report them",
+            remembers: [sour, sour],
             ousts: "report",
           },
         ],
@@ -152,6 +160,12 @@ export function otherRaw(chance = 1, vacates?: "movedUp" | "created") {
           weight: 1,
           why: "WHY-BURNED",
           leans: { practitioner: 0, whistleblower: 0, left: 1 },
+        },
+        {
+          about: "sour",
+          weight: 1,
+          why: "WHY-SOURED",
+          leans: { practitioner: 0, whistleblower: 1, left: 0 },
         },
       ],
       became: {
