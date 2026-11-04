@@ -3320,5 +3320,434 @@
         ]
       }
     ]
+  },
+  {
+    "id": "team-hire",
+    "floor": "team-lead",
+    "months": [4],
+    "title": "Hiring Decision",
+    "location": "Floor 2, Team Room 2A",
+    "narration": [
+      "The headcount freeze has thawed for one post on your team, so the decision is yours. The Senior Analyst has recommended a candidate, and your boss has mentioned one. An old friend of yours is between things, and their CV says transformation eleven times."
+    ],
+    "cast": ["{head}", "{boss}", "admin", "delivery", "analyst", "projects"],
+    "signs": [
+      {
+        "label": "Whose candidate it is",
+        "text": "The shortlist goes up. Everyone looks at {holder}, and {holder} looks at nobody.",
+        "clue": "At the Hiring Decision, everyone looked at {holder} when the shortlist went up."
+      },
+      {
+        "label": "Who is consulted",
+        "text": "{bystander} is asked for a view, and gives {holder}'s. {ignored} is asked to book the room."
+      }
+    ],
+    "options": [
+      {
+        "id": "hire-the-recommended",
+        "family": "deliver",
+        "label": "Hire the Senior Analyst's candidate, who is good",
+        "results": [
+          {
+            "body": "The candidate is good, and starts on Monday, and by Wednesday has found two things that were wrong. The Senior Analyst says nothing, in a pleased way.",
+            "sets": ["hired-on-merit"],
+            "approach": "results",
+            "remembers": [
+              {
+                "character": "analyst",
+                "about": "hired-their-candidate",
+                "text": "You hired the candidate they recommended.",
+                "tone": "good"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "hire-your-friend",
+        "family": "trade",
+        "label": "Hire your old friend, who is between things",
+        "results": [
+          {
+            "body": "Your friend starts on Monday, and asks on Monday what the job is. You tell them. They say that they will take it away and think about it.",
+            "sets": ["hired-your-friend"],
+            "approach": "cronyism",
+            "reaction": {
+              "believer": "Your boss asks to see the scoring sheet. There is no scoring sheet. Your boss writes something down, and underlines it.",
+              "incompetent": "Your boss says that it is great to have people you trust around you, and asks your friend about golf.",
+              "practitioner": "Your boss says that everyone needs their own people, and asks, lightly, how far back the two of you go."
+            },
+            "remembers": [
+              {
+                "character": "analyst",
+                "about": "hired-a-friend",
+                "text": "You hired your old friend over the candidate they recommended.",
+                "tone": "bad"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "hire-the-bosses-pick",
+        "family": "trade",
+        "label": "Hire the candidate your boss mentioned",
+        "results": [
+          {
+            "body": "Your boss's candidate accepts, and mentions your boss twice at the induction. You are now someone who listens.",
+            "sets": ["hired-the-bosses-pick"],
+            "approach": "favour"
+          }
+        ]
+      },
+      {
+        "id": "freeze-the-post",
+        "family": "impress",
+        "label": "Leave the post empty, and report the saving",
+        "results": [
+          {
+            "body": "The saving is reported upstairs, with a chart. Your team is told that the post has been reimagined.",
+            "sets": ["froze-the-post"],
+            "approach": "theatre"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "seating-plan",
+    "floor": "team-lead",
+    "months": [5],
+    "title": "Floor Plan Walkthrough",
+    "location": "Floor 2, by the lift",
+    "narration": [
+      "Facilities walks the leads round Floor 2 with the seating plan. Each lead says where their team sits. One desk is by the window, and one by the lift, which says Floor 2 every forty seconds."
+    ],
+    "cast": ["{head}", "{boss}", "admin", "delivery", "analyst", "projects"],
+    "signs": [
+      {
+        "label": "Who chooses first",
+        "text": "{holder} chooses first, and Facilities writes it down mid-point.",
+        "clue": "On the Floor Plan Walkthrough, {holder} chose first, and Facilities wrote it down at once."
+      },
+      {
+        "label": "Who gets the lift",
+        "text": "{ignored}'s team is given the desks by the lift, in passing."
+      }
+    ],
+    "options": [
+      {
+        "id": "keep-the-team-together",
+        "label": "Keep your team together, where they are",
+        "results": [
+          {
+            "body": "Your team stays where it is. Facilities marks it on the plan as Phase Two.",
+            "sets": ["kept-the-team-together"]
+          }
+        ]
+      },
+      {
+        "id": "move-the-critic",
+        "family": "attack",
+        "label": "Put the Project Co-ordinator, who asks questions, by the lift",
+        "results": [
+          {
+            "body": "The Project Co-ordinator carries everything to the desk by the lift in one trip. The lift opens, and says Floor 2. It will say it all afternoon.",
+            "sets": ["moved-the-critic"],
+            "approach": "blame",
+            "remembers": [
+              {
+                "character": "projects",
+                "about": "moved-by-the-lift",
+                "text": "You moved them to the desk by the lift, for asking questions.",
+                "tone": "bad"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "window-for-the-analyst",
+        "family": "trade",
+        "label": "Give the Senior Analyst the window, as a favour",
+        "results": [
+          {
+            "body": "The Senior Analyst moves to the window, and thanks you, and you both know what for.",
+            "sets": ["window-for-the-analyst"],
+            "approach": "favour",
+            "remembers": [
+              {
+                "character": "analyst",
+                "about": "given-the-window",
+                "text": "You gave them the desk by the window.",
+                "tone": "good"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "team-on-show",
+        "family": "impress",
+        "label": "Seat your team by the Programme Office, to be seen working",
+        "results": [
+          {
+            "body": "Your team now works where the Programme Office can see it. It works harder at looking as if it is working.",
+            "sets": ["team-on-show"],
+            "approach": "theatre"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "talent-review",
+    "floor": "team-lead",
+    "months": [6],
+    "title": "Talent Review",
+    "location": "Floor 2, Team Room 2A",
+    "narration": [
+      "The leads put their teams on the nine-box grid, from Low Potential to Talent. Nobody is told which box they are in, and everybody finds out."
+    ],
+    "cast": ["{head}", "{boss}", "admin", "delivery", "analyst", "projects"],
+    "signs": [
+      {
+        "label": "Whose team is top right",
+        "text": "All of {holder}'s team is in the top right. Nobody asks how.",
+        "clue": "At the Talent Review, all of {holder}'s team went in the top right, and nobody asked how."
+      },
+      {
+        "label": "Who moves the sticky notes",
+        "text": "{bystander} moves the sticky notes. {ignored}'s keep falling off."
+      }
+    ],
+    "options": [
+      {
+        "id": "rate-on-the-evidence",
+        "family": "deliver",
+        "label": "Place your team where the evidence puts them",
+        "results": [
+          {
+            "body": "You go through the evidence. Your team is spread across the grid like a real team, and looks worse than everybody else's.",
+            "sets": ["rated-on-the-evidence"],
+            "approach": "results"
+          }
+        ]
+      },
+      {
+        "id": "rate-allies-up",
+        "family": "trade",
+        "label": "Put the two who back you in the top right",
+        "results": [
+          {
+            "body": "Two sticky notes go in the top right. The Project Co-ordinator's goes in the middle row, where it is described as solid.",
+            "sets": ["rated-allies-up"],
+            "approach": "cronyism",
+            "remembers": [
+              {
+                "character": "projects",
+                "about": "rated-down",
+                "text": "You put them in the middle of the nine-box grid, below the two who back you.",
+                "tone": "bad"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "rate-your-friend-up",
+        "family": "fabricate",
+        "label": "Put your old friend in the top right, as High Potential",
+        "requires": {
+          "did": "hired-your-friend"
+        },
+        "results": [
+          {
+            "body": "Your friend is High Potential. Asked for an example, you say that it is early days, which is true.",
+            "sets": ["rated-your-friend-up"],
+            "approach": "cronyism",
+            "news": {
+              "about": "rated-the-friend-up",
+              "tone": "bad",
+              "text": "You put your old friend in the top right of the nine-box grid.",
+              "at": ["analyst"]
+            }
+          }
+        ]
+      },
+      {
+        "id": "let-your-friend-go",
+        "family": "deliver",
+        "label": "Put your old friend in the bottom left, and let them go quietly",
+        "requires": {
+          "did": "hired-your-friend"
+        },
+        "results": [
+          {
+            "body": "Your friend takes it well, and leaves to pursue a transformation opportunity. You will not be going for a drink.",
+            "sets": ["let-your-friend-go"],
+            "approach": "truth"
+          }
+        ]
+      },
+      {
+        "id": "everyone-is-a-nine",
+        "family": "impress",
+        "label": "Say that everyone on your team is a nine",
+        "results": [
+          {
+            "body": "Your whole team goes in one box. The grid is redrawn to make room for it.",
+            "sets": ["rated-everyone-a-nine"],
+            "approach": "theatre"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "recognition-panel",
+    "floor": "team-lead",
+    "pool": true,
+    "title": "Recognition Panel",
+    "location": "Floor 2, Team Room 2A",
+    "narration": [
+      "The leads choose this quarter's Star of the Floor, who gets a certificate and a parking space for a month. Each lead nominates one person, and is asked not to nominate themselves."
+    ],
+    "cast": ["{head}", "{boss}", "admin", "delivery", "analyst", "projects"],
+    "signs": [
+      {
+        "label": "Whose nominee wins",
+        "text": "{holder}'s nominee has won before the discussion. {ignored}'s is noted.",
+        "clue": "At the Recognition Panel, {holder}'s nominee had won before the discussion began."
+      },
+      {
+        "label": "Who seconds",
+        "text": "{bystander} seconds {holder}'s nominee, and then asks who it is."
+      }
+    ],
+    "options": [
+      {
+        "id": "nominate-the-worker",
+        "family": "deliver",
+        "label": "Nominate whoever on your team did the most",
+        "results": [
+          {
+            "body": "You read out what they did. It is a long list, and the panel thanks you for its length.",
+            "sets": ["nominated-the-worker"],
+            "approach": "results"
+          }
+        ]
+      },
+      {
+        "id": "nominate-an-ally",
+        "family": "trade",
+        "label": "Nominate whoever has backed you most",
+        "results": [
+          {
+            "body": "Your nominee gets the parking space. They wave to you from it every morning.",
+            "sets": ["nominated-an-ally"],
+            "approach": "cronyism"
+          }
+        ]
+      },
+      {
+        "id": "nominate-your-boss",
+        "family": "impress",
+        "label": "Nominate your boss, for leadership",
+        "results": [
+          {
+            "body": "Your boss is ruled out, being a lead, and thanks you for the thought, which is minuted.",
+            "sets": ["nominated-your-boss"],
+            "approach": "flatter"
+          }
+        ]
+      },
+      {
+        "id": "second-the-first",
+        "label": "Second whichever name is said first",
+        "results": [
+          {
+            "body": "You second it. It was already decided, and now it is unanimous."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "org-design",
+    "floor": "team-lead",
+    "pool": true,
+    "title": "Org Design Workshop",
+    "location": "Floor 2, Team Room 2A",
+    "narration": [
+      "The leads redraw the floor's boxes on a whiteboard. Lines may be moved and boxes merged. Nobody in a box is to be told until the boxes are final."
+    ],
+    "cast": ["{head}", "{boss}", "admin", "delivery", "analyst", "projects"],
+    "signs": [
+      {
+        "label": "Who holds the pen",
+        "text": "{holder} holds the pen, and the boxes move towards {holder}.",
+        "clue": "At the Org Design Workshop, {holder} held the pen, and the boxes moved towards them."
+      },
+      {
+        "label": "Whose box goes",
+        "text": "{ignored}'s box is merged into a box called Shared Services, which is drawn larger."
+      }
+    ],
+    "options": [
+      {
+        "id": "keep-your-box",
+        "label": "Keep your box the shape it is",
+        "results": [
+          {
+            "body": "Your box stays the same shape. Someone draws a dotted line to it, and will not say from where."
+          }
+        ]
+      },
+      {
+        "id": "absorb-a-team",
+        "family": "impress",
+        "label": "Draw another team's line into your box",
+        "results": [
+          {
+            "body": "Your box is bigger. It has a team in it now that has not been told, and a lead who has.",
+            "sets": ["absorbed-a-team"],
+            "approach": "theatre"
+          }
+        ]
+      },
+      {
+        "id": "draw-out-the-critic",
+        "family": "attack",
+        "label": "Draw the Project Co-ordinator's line into someone else's box",
+        "results": [
+          {
+            "body": "The line is moved. The Project Co-ordinator is now in Shared Services, on the whiteboard, until somebody wipes it.",
+            "sets": ["drew-out-the-critic"],
+            "approach": "blame",
+            "remembers": [
+              {
+                "character": "projects",
+                "about": "drawn-out",
+                "text": "You drew their line out of your team at the Org Design Workshop.",
+                "tone": "bad"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "ask-your-team",
+        "family": "deliver",
+        "label": "Ask for a week, so as to ask your team",
+        "results": [
+          {
+            "body": "You are given a week, and the boxes are finalised in the meantime.",
+            "sets": ["asked-the-team-about-boxes"],
+            "approach": "truth"
+          }
+        ]
+      }
+    ]
   }
 ]

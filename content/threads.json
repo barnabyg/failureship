@@ -628,5 +628,296 @@
         ]
       }
     ]
+  },
+  {
+    "id": "friend-on-the-team",
+    "startedBy": "hired-your-friend",
+    "chance": 0.9,
+    "after": {
+      "min": 1,
+      "max": 2
+    },
+    "started": "You hired your old friend onto your team, over the candidate the Senior Analyst recommended.",
+    "outcomes": [
+      {
+        "when": {
+          "bossIs": "believer"
+        },
+        "playedOut": "Your boss believed in doing the job, and found out that your old friend could not. They were furious, and said so, slowly.",
+        "bill": {
+          "id": "friend-boss-furious",
+          "as": "notification",
+          "from": "From: Your boss, {boss}",
+          "title": "A word about your new hire",
+          "body": "Your boss would like a word about your new hire, who has been asked three times what they do and has given three answers, all of them transformation. Your boss is not angry. Your boss has used the word appalled, and spelt it out.",
+          "sets": ["friend-angered-the-boss"],
+          "opinion": -2,
+          "options": [
+            {
+              "id": "own-the-hire",
+              "family": "deliver",
+              "label": "Say that it was your mistake, and let your friend go",
+              "sets": ["let-your-friend-go"],
+              "approach": "truth",
+              "result": {
+                "title": "Your new hire",
+                "body": "Your friend leaves to pursue a transformation opportunity. Your boss says that it took something to say so, and does not say what."
+              }
+            },
+            {
+              "id": "defend-the-friend",
+              "family": "deflect",
+              "label": "Say that your friend is still onboarding",
+              "sets": ["defended-the-friend"],
+              "opinion": -1,
+              "result": {
+                "title": "Your new hire",
+                "body": "Your boss asks how long onboarding takes. You say that it varies. Your boss writes down the date."
+              }
+            },
+            {
+              "id": "do-the-friends-work",
+              "family": "deliver",
+              "label": "Put your friend on a plan, and do their work until it ends",
+              "cost": "standard",
+              "sets": ["covered-for-the-friend"],
+              "project": {
+                "real": "better"
+              },
+              "result": {
+                "title": "Your new hire",
+                "body": "You do two jobs, one of them in your friend's name. Your friend's work improves markedly, and your friend is pleased with it."
+              }
+            }
+          ]
+        },
+        "gauges": [
+          {
+            "gauge": "teflon",
+            "by": -10,
+            "note": "Your old friend came back on you, with a boss who wanted the job done."
+          }
+        ]
+      },
+      {
+        "when": {
+          "bossIs": "practitioner"
+        },
+        "playedOut": "Your boss worked out how your old friend had been hired, and kept it, for later.",
+        "bill": {
+          "id": "friend-held-over-you",
+          "as": "move",
+          "from": "From: Your boss, {boss}",
+          "title": "About your new hire",
+          "body": "Your boss mentions, in passing, that they know how your new hire came to be hired, and that it can stay between the two of you. For now. Your boss starts a sentence with you owe me, and does not finish it.",
+          "sets": ["friend-held-over-you"]
+        },
+        "gauges": [
+          {
+            "gauge": "teflon",
+            "by": -5,
+            "note": "Your old friend came back, as something your boss holds over you."
+          }
+        ]
+      },
+      {
+        "playedOut": "Your boss could not tell what your old friend did, and liked them for agreeing with everything.",
+        "bill": {
+          "id": "friend-a-great-hire",
+          "as": "move",
+          "from": "From: Your boss, {boss}",
+          "title": "Great hire",
+          "body": "Your boss has noticed your new hire, who agrees with everything your boss says, often before your boss has finished saying it. Your boss calls it a great hire. Your team is doing your friend's work.",
+          "sets": ["friend-liked-upstairs"],
+          "opinion": 1,
+          "project": {
+            "real": "worse"
+          }
+        },
+        "gauges": [
+          {
+            "gauge": "teflon",
+            "by": 5,
+            "note": "Your old friend came back, as a great hire, and the work went elsewhere."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "consultant-readout",
+    "startedBy": "hired-the-consultant",
+    "chance": 0.9,
+    "after": {
+      "min": 1,
+      "max": 2
+    },
+    "started": "You spent your team's transformation budget on an expensive consultant.",
+    "outcomes": [
+      {
+        "when": {
+          "bossIs": "believer"
+        },
+        "playedOut": "The consultant presented their findings. Your boss asked what they meant, and then what they had cost.",
+        "bill": {
+          "id": "consultant-unconvincing",
+          "as": "move",
+          "from": "From: Your boss, {boss}",
+          "title": "The consultant's readout",
+          "body": "The consultant presents their findings: that your team should keep doing what it was doing, but transformationally. Your boss asks what that means, twice, and then asks what it cost.",
+          "sets": ["consultant-unconvincing"],
+          "opinion": -1
+        },
+        "gauges": [
+          {
+            "gauge": "teflon",
+            "by": -5,
+            "note": "The consultant came back, as a question about what it cost."
+          }
+        ]
+      },
+      {
+        "playedOut": "The consultant presented their findings, which were nothing, and your boss was impressed by them.",
+        "bill": {
+          "id": "consultant-impressed",
+          "as": "move",
+          "from": "From: Your boss, {boss}",
+          "title": "The consultant's readout",
+          "body": "Your boss was in the room for the consultant's readout, and has asked for a copy of the deck and the consultant's number. The consultant recommends a second phase. Your boss would like to sponsor it.",
+          "sets": ["consultant-impressed"],
+          "opinion": 1
+        },
+        "gauges": [
+          {
+            "gauge": "teflon",
+            "by": 5,
+            "note": "The consultant came back, and your boss was impressed by it."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "team-bonus-remembered",
+    "startedBy": "team-bonus-decided",
+    "chance": 0.85,
+    "after": {
+      "min": 1,
+      "max": 2
+    },
+    "started": "You decided who on your team got the bonus pot, and your team could count.",
+    "outcomes": [
+      {
+        "when": {
+          "remembers": {
+            "character": "analyst",
+            "about": "passed-over"
+          }
+        },
+        "playedOut": "The Senior Analyst remembered who had got the team's bonus pot, and began to do exactly what was asked.",
+        "bill": {
+          "id": "team-bonus-resented",
+          "as": "move",
+          "from": "From: The Senior Analyst, Priya Venn",
+          "title": "Open to opportunities",
+          "body": "The Senior Analyst's profile now says Open to Opportunities. They are still doing the work, to the letter, and the letter is shorter than it was. The two who had the bonus have asked them how to do it.",
+          "sets": ["team-bonus-resented"],
+          "opinion": -1,
+          "project": {
+            "real": "worse"
+          }
+        },
+        "gauges": [
+          {
+            "gauge": "teflon",
+            "by": -5,
+            "note": "Your team's bonus pot came back, and it was remembered who decided it."
+          }
+        ]
+      },
+      {
+        "when": {
+          "remembers": {
+            "character": "analyst",
+            "about": "paid-for-the-work"
+          }
+        },
+        "playedOut": "The Senior Analyst remembered why they had the largest share of the bonus pot, and finished the part of the project nobody wanted.",
+        "bill": {
+          "id": "team-bonus-repaid",
+          "as": "move",
+          "from": "From: The Senior Analyst, Priya Venn",
+          "title": "Done",
+          "body": "The Senior Analyst has finished the part of the project that nobody wanted. The e-mail says done, and nothing else, and your boss is copied in.",
+          "sets": ["team-bonus-repaid"],
+          "opinion": 1,
+          "project": {
+            "real": "better"
+          }
+        },
+        "gauges": [
+          {
+            "gauge": "teflon",
+            "by": 5,
+            "note": "Your team's bonus pot came back, as work done."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "desk-by-the-lift",
+    "startedBy": "moved-the-critic",
+    "chance": 0.9,
+    "after": {
+      "min": 1,
+      "max": 3
+    },
+    "started": "You moved the Project Co-ordinator to the desk by the lift, for asking questions.",
+    "outcomes": [
+      {
+        "when": {
+          "believes": {
+            "character": "projects",
+            "mood": "cold"
+          }
+        },
+        "playedOut": "From the desk by the lift, the Project Co-ordinator met everyone who came up, your boss included, and told them how your team was doing.",
+        "bill": {
+          "id": "lift-desk-talks",
+          "as": "move",
+          "from": "From: The Project Co-ordinator, Callum Reed",
+          "title": "Good morning",
+          "body": "From the desk by the lift, the Project Co-ordinator says good morning to everyone who comes up to Floor 2, your boss included. Your boss now hears how your team is doing before you do, and in more detail.",
+          "sets": ["lift-desk-talks"],
+          "opinion": -1,
+          "headOpinion": -1
+        },
+        "gauges": [
+          {
+            "gauge": "teflon",
+            "by": -5,
+            "note": "The desk by the lift came back, every morning, at the lift."
+          }
+        ]
+      },
+      {
+        "playedOut": "The Project Co-ordinator made the desk by the lift their own, and became the person the floor asks.",
+        "bill": {
+          "id": "lift-desk-settled",
+          "as": "notice",
+          "title": "The desk by the lift",
+          "body": "The Project Co-ordinator has made the desk by the lift their own. There is a plant, and a sign-in sheet, and visitors ask them where things are. It is the busiest desk on the floor, and it is not on your team's side of it.",
+          "sets": ["lift-desk-settled"]
+        },
+        "gauges": [
+          {
+            "gauge": "teflon",
+            "by": 5,
+            "note": "The desk by the lift came back, as a plant and a sign-in sheet."
+          }
+        ]
+      }
+    ]
   }
 ]

@@ -1346,5 +1346,265 @@
         }
       }
     ]
+  },
+  {
+    "id": "transformation-budget",
+    "floor": "team-lead",
+    "months": [4],
+    "from": "From: The Programme Manager, Gwen Ashdown",
+    "subject": "Transformation budget: please commit by month end",
+    "body": "Your team has been allocated forty thousand pounds of transformation budget. It cannot be spent on people, equipment or training, which are business as usual. It must be committed by the end of the month, on transformation.",
+    "options": [
+      {
+        "id": "give-it-back",
+        "family": "deliver",
+        "label": "Reply that your team has nothing to transform",
+        "sets": ["returned-transformation"],
+        "approach": "truth",
+        "result": {
+          "title": "Transformation budget",
+          "body": "Finance thanks you, and gives the forty thousand pounds to another team, which has a consultant."
+        }
+      },
+      {
+        "id": "hire-the-consultant",
+        "family": "impress",
+        "label": "Bring in a consultant, the expensive kind",
+        "sets": ["hired-the-consultant"],
+        "approach": "theatre",
+        "reaction": {
+          "believer": "Your boss asks what the consultant will actually do. You read out the proposal. Your boss asks again.",
+          "incompetent": "Your boss meets the consultant, comes out holding a framework, and says that this is exactly the thinking the floor has been missing.",
+          "practitioner": "Your boss asks to be named as sponsor on the first slide, and to be left off the invoice."
+        },
+        "result": {
+          "title": "The consultant",
+          "body": "The consultant arrives with a laptop and a colleague, who is there to watch. By Friday there is a framework with four quadrants, and all of them are your team."
+        }
+      },
+      {
+        "id": "spend-on-the-tooling",
+        "family": "deliver",
+        "label": "Buy the tooling your team needs, filed as Digital Transformation",
+        "cost": "standard",
+        "sets": ["transformed-the-tooling"],
+        "approach": "results",
+        "project": {
+          "real": "better"
+        },
+        "result": {
+          "title": "Transformation budget",
+          "body": "It takes a day of forms, each with transformation in the first line. Your team gets the tools it has been asking for, and they are transformational, on the forms."
+        }
+      }
+    ]
+  },
+  {
+    "id": "team-bonus-pot",
+    "floor": "team-lead",
+    "months": [5],
+    "from": "From: Your boss, {boss}",
+    "subject": "Your team's bonus pot",
+    "body": "This year team leads hold their own team's bonus pot. It is bigger than the floor's pot used to be, and still not big. You decide who on your team gets what. Please keep a note of why, in case anybody asks why.",
+    "options": [
+      {
+        "id": "bonus-equal-shares",
+        "family": "deflect",
+        "label": "Split it equally across the team",
+        "sets": ["team-bonus-split", "team-bonus-decided"],
+        "approach": "plain-report",
+        "result": {
+          "title": "Your team's bonus pot",
+          "body": "Everyone on your team gets the same. Everyone on your team has worked out what everyone else got, and what that means."
+        }
+      },
+      {
+        "id": "bonus-allies-only",
+        "family": "trade",
+        "label": "Award it only to the two who back you in meetings",
+        "sets": ["team-bonus-to-allies", "team-bonus-decided"],
+        "approach": "cronyism",
+        "reaction": {
+          "believer": "Your boss reads your note of why, and asks you to read it out. You read it out. It does not take long.",
+          "incompetent": "Your boss signs it off, and says that it is good to see a lead who backs their people.",
+          "practitioner": "Your boss reads the two names, and nods, and says that loyalty is a kind of performance."
+        },
+        "result": {
+          "title": "Your team's bonus pot",
+          "body": "The Project Co-ordinator and the Junior Associate share the pot, and are very supportive in the next meeting. The Senior Analyst, who did most of the work, is told that it was a difficult year, and asks for whom."
+        },
+        "remembers": [
+          {
+            "character": "analyst",
+            "about": "passed-over",
+            "text": "You gave your team's bonus pot to the two who back you in meetings, and they did the work.",
+            "tone": "bad"
+          }
+        ]
+      },
+      {
+        "id": "bonus-by-the-work",
+        "family": "deliver",
+        "label": "Award it by who did the work, and write down why",
+        "cost": "standard",
+        "sets": ["team-bonus-by-the-work", "team-bonus-decided"],
+        "approach": "results",
+        "project": {
+          "real": "better"
+        },
+        "result": {
+          "title": "Your team's bonus pot",
+          "body": "It takes an evening to write down who did what. The Senior Analyst reads the letter twice, and puts it in a drawer that locks."
+        },
+        "remembers": [
+          {
+            "character": "analyst",
+            "about": "paid-for-the-work",
+            "text": "You gave them the largest share of your team's bonus pot, and wrote down why.",
+            "tone": "good"
+          }
+        ]
+      },
+      {
+        "id": "bonus-ask-upstairs",
+        "family": "impress",
+        "label": "Ask your boss whom they would like to see rewarded",
+        "sets": ["team-bonus-asked-up", "team-bonus-decided"],
+        "approach": "flatter",
+        "result": {
+          "title": "Your team's bonus pot",
+          "body": "Your boss gives you three names, one of whom is not on your team. You make it work."
+        }
+      }
+    ]
+  },
+  {
+    "id": "cost-codes",
+    "floor": "team-lead",
+    "months": [6],
+    "from": "From: Finance",
+    "subject": "Year-end: please confirm your cost codes",
+    "body": "Finance would like each team lead to confirm that their team's costs are on the right codes. There are a great many codes. One of them belongs to the Centre of Excellence, and nobody has ever checked it.",
+    "options": [
+      {
+        "id": "confirm-the-codes",
+        "label": "Confirm them as they are",
+        "sets": ["confirmed-the-codes"],
+        "result": {
+          "title": "Cost codes",
+          "body": "Finance thanks you. Your costs are confirmed, which is not the same as correct."
+        }
+      },
+      {
+        "id": "bill-the-centre",
+        "family": "fabricate",
+        "label": "Move a few awkward costs onto the Centre of Excellence's code",
+        "sets": ["billed-the-centre"],
+        "result": {
+          "title": "Cost codes",
+          "body": "You move three costs and an invoice onto a code that nobody checks. The Centre of Excellence now has a budget, which is more than it had."
+        }
+      },
+      {
+        "id": "check-every-line",
+        "family": "deliver",
+        "label": "Go through every line",
+        "cost": "standard",
+        "sets": ["checked-the-codes"],
+        "approach": "truth",
+        "result": {
+          "title": "Cost codes",
+          "body": "It takes a day. You find a printer lease from 2019 and a subscription to a magazine about leadership. Finance thanks you, and asks you not to do it again."
+        }
+      }
+    ]
+  },
+  {
+    "id": "spot-award",
+    "floor": "team-lead",
+    "pool": true,
+    "from": "From: People and Culture",
+    "subject": "Spot award: one person, by Friday",
+    "body": "You may give one spot award this month, of a hundred pounds in vouchers, for going above and beyond. Please choose one person on your team, and say what they went above and beyond.",
+    "options": [
+      {
+        "id": "spot-to-the-worker",
+        "family": "deliver",
+        "label": "Give it to whoever stayed late",
+        "sets": ["spot-to-the-worker"],
+        "approach": "results",
+        "result": {
+          "title": "Spot award",
+          "body": "The vouchers are for a shop that closed in the spring. The thought is appreciated, and has to be."
+        }
+      },
+      {
+        "id": "spot-to-an-ally",
+        "family": "trade",
+        "label": "Give it to whoever backs you in meetings",
+        "sets": ["spot-to-an-ally"],
+        "approach": "cronyism",
+        "result": {
+          "title": "Spot award",
+          "body": "The award goes to someone who agrees with you. The citation says above and beyond, and does not say what."
+        },
+        "remembers": [
+          {
+            "character": "analyst",
+            "about": "passed-over",
+            "text": "You gave the spot award to someone who backs you in meetings, and they stayed late.",
+            "tone": "bad"
+          }
+        ]
+      },
+      {
+        "id": "let-it-lapse",
+        "label": "Let it lapse",
+        "result": {
+          "title": "Spot award",
+          "body": "The award lapses. People and Culture records your team as having nobody above and beyond."
+        }
+      }
+    ]
+  },
+  {
+    "id": "desk-request",
+    "floor": "team-lead",
+    "pool": true,
+    "from": "From: Facilities",
+    "subject": "Desk change request (1)",
+    "body": "Someone on your team has asked to move to the desk by the window, which has come free. Facilities needs the request approved by their team lead, and has attached a form for the approval, and a form for the form.",
+    "options": [
+      {
+        "id": "approve-the-desk",
+        "label": "Approve it",
+        "sets": ["approved-a-desk"],
+        "result": {
+          "title": "Desk change request",
+          "body": "Approved. The move takes place in six to eight weeks, subject to the window."
+        }
+      },
+      {
+        "id": "window-as-a-favour",
+        "family": "trade",
+        "label": "Give the window to someone else, who will remember it",
+        "sets": ["window-as-a-favour"],
+        "approach": "favour",
+        "result": {
+          "title": "Desk change request",
+          "body": "Someone else has the window, and remembers. So does the person who asked."
+        }
+      },
+      {
+        "id": "take-the-window",
+        "family": "fabricate",
+        "label": "Say that the window is held for visitors, and sit there yourself",
+        "sets": ["took-the-window"],
+        "result": {
+          "title": "Desk change request",
+          "body": "You sit by the window, for visitors. No visitors come. The view is very good."
+        }
+      }
+    ]
   }
 ]

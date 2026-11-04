@@ -155,10 +155,12 @@ describe("the longer run", () => {
     expect(calibration?.months).toEqual([9]);
   });
 
-  it("gives each new month a Scene, a Notification and an official story", () => {
+  it("gives each new month of Floor 1 a Scene, a Notification and an official story", () => {
     for (const month of [6, 7, 8]) {
-      const on = (item: { months?: number[] | undefined }) =>
-        item.months?.includes(month);
+      const on = (item: {
+        floor?: string | undefined;
+        months?: number[] | undefined;
+      }) => item.floor === "junior-employee" && item.months?.includes(month);
       expect(gameContent.scenes.filter(on), String(month)).toHaveLength(1);
       expect(gameContent.notifications.filter(on).length).toBeGreaterThan(0);
       expect(

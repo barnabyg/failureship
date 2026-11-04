@@ -941,6 +941,160 @@
       },
       "reported": "A reporting discrepancy was identified, and has been recorded as a learning.",
       "happened": "Someone finally read one of your reports."
+    },
+    {
+      "when": {
+        "flag": "hired-on-merit"
+      },
+      "reported": "A post on your team was filled following due process.",
+      "happened": "You hired the best candidate, who is already finding things."
+    },
+    {
+      "when": {
+        "flag": "hired-your-friend"
+      },
+      "reported": "You brought experienced transformation talent into your team.",
+      "happened": "You hired your old friend, who is still thinking about what the job is."
+    },
+    {
+      "when": {
+        "flag": "hired-the-bosses-pick"
+      },
+      "reported": "Your hiring was aligned with leadership.",
+      "happened": "You hired your boss's candidate, and your boss knows it."
+    },
+    {
+      "when": {
+        "flag": "froze-the-post"
+      },
+      "reported": "Your team delivered a headcount saving.",
+      "happened": "You left a post empty, and your team is doing it."
+    },
+    {
+      "when": {
+        "flag": "returned-transformation"
+      },
+      "reported": "Your team's transformation is being reprofiled.",
+      "happened": "You handed back the transformation budget. Another team has a consultant."
+    },
+    {
+      "when": {
+        "flag": "hired-the-consultant"
+      },
+      "reported": "External expertise was engaged to accelerate transformation.",
+      "happened": "You spent forty thousand pounds on four quadrants."
+    },
+    {
+      "when": {
+        "flag": "transformed-the-tooling"
+      },
+      "reported": "Your team completed a digital transformation.",
+      "happened": "You bought your team the tools it needed, and called them transformation."
+    },
+    {
+      "when": {
+        "flag": "kept-the-team-together"
+      },
+      "reported": "Your team's seating was optimised for collaboration.",
+      "happened": "Your team sits where it sat."
+    },
+    {
+      "when": {
+        "flag": "moved-the-critic"
+      },
+      "reported": "Your team's seating was optimised for collaboration.",
+      "happened": "You moved the Project Co-ordinator to the desk by the lift, for asking questions."
+    },
+    {
+      "when": {
+        "flag": "window-for-the-analyst"
+      },
+      "reported": "Desk allocation was carried out fairly.",
+      "happened": "You gave the window to the Senior Analyst, who now owes you."
+    },
+    {
+      "when": {
+        "flag": "team-on-show"
+      },
+      "reported": "Your team increased its visibility to senior stakeholders.",
+      "happened": "Your team works where the Programme Office can see it."
+    },
+    {
+      "when": {
+        "flag": "team-bonus-split"
+      },
+      "reported": "Your team's reward was distributed equitably.",
+      "happened": "You split the bonus pot equally, and everyone resents it equally."
+    },
+    {
+      "when": {
+        "flag": "team-bonus-to-allies"
+      },
+      "reported": "Reward was aligned with behaviours.",
+      "happened": "You gave the bonus pot to the two who back you, and not to the one who did the work."
+    },
+    {
+      "when": {
+        "flag": "team-bonus-by-the-work"
+      },
+      "reported": "Reward was aligned with performance.",
+      "happened": "You gave the bonus pot to whoever did the work, and wrote down why."
+    },
+    {
+      "when": {
+        "flag": "team-bonus-asked-up"
+      },
+      "reported": "Reward was calibrated with senior leadership.",
+      "happened": "You let your boss decide your team's bonuses."
+    },
+    {
+      "when": {
+        "flag": "rated-on-the-evidence"
+      },
+      "reported": "Your team's talent was assessed rigorously.",
+      "happened": "You rated your team honestly, and it looks worse than everybody else's."
+    },
+    {
+      "when": {
+        "flag": "rated-allies-up"
+      },
+      "reported": "Your team's talent was assessed rigorously.",
+      "happened": "You put the two who back you in the top right."
+    },
+    {
+      "when": {
+        "flag": "rated-your-friend-up"
+      },
+      "reported": "High potential was identified on your team.",
+      "happened": "You called your old friend High Potential."
+    },
+    {
+      "when": {
+        "flag": "let-your-friend-go"
+      },
+      "reported": "Your team's capability was rebalanced.",
+      "happened": "You let your old friend go."
+    },
+    {
+      "when": {
+        "flag": "rated-everyone-a-nine"
+      },
+      "reported": "Your team was assessed as exceptional.",
+      "happened": "You put your whole team in one box."
+    },
+    {
+      "when": {
+        "flag": "billed-the-centre"
+      },
+      "reported": "Your team's costs were reallocated to strategic programmes.",
+      "happened": "You hid some costs on the Centre of Excellence's code."
+    },
+    {
+      "when": {
+        "flag": "checked-the-codes"
+      },
+      "reported": "Your team's costs were assured.",
+      "happened": "You checked every cost code, which nobody has done before."
     }
   ]
 }

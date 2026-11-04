@@ -338,5 +338,228 @@
     "landedOnYou": "It came out, and the Senior Analyst said where it had started: with you, by the kettle.",
     "landedElsewhere": "It came out, but the Senior Analyst thought well of you, and said that nobody could say where it had started.",
     "neverCameOut": "It never came out. Everyone knew already, apparently."
+  },
+  {
+    "id": "friend-out-of-depth",
+    "addedBy": "hired-your-friend",
+    "after": {
+      "min": 2,
+      "max": 4
+    },
+    "note": "You hired your old friend onto your team. They could not do the job, and somebody else was doing it.",
+    "route": {
+      "character": "analyst",
+      "chance": {
+        "believer": 0.8,
+        "incompetent": 0.3,
+        "practitioner": 0.6
+      },
+      "motive": "The Senior Analyst had been doing your friend's work as well as their own, and kept a spreadsheet of it.",
+      "means": {
+        "remembers": {
+          "character": "analyst",
+          "about": "hired-a-friend"
+        }
+      }
+    },
+    "traced": {
+      "not": {
+        "did": "let-your-friend-go"
+      }
+    },
+    "onPlayer": {
+      "id": "friend-found-out",
+      "as": "move",
+      "from": "From: The Senior Analyst, Priya Venn",
+      "title": "Who has been doing what",
+      "body": "The Senior Analyst has sent your boss and your boss's boss a spreadsheet of who has been doing your friend's work. It has one name in it, and it is not your friend's. It is colour-coded, and the colour is yours.",
+      "sets": ["friend-found-out"],
+      "opinion": -1,
+      "headOpinion": -2,
+      "project": {
+        "real": "worse"
+      }
+    },
+    "onSomeoneElse": {
+      "id": "friend-work-shared-out",
+      "as": "notice",
+      "title": "Unallocated work",
+      "body": "The Senior Analyst sends round a list of the work your old friend left behind, unstarted, and asks who would like it. Nobody would, and nobody asks how it came to be there.",
+      "sets": ["friend-work-shared-out"]
+    },
+    "landedOnYou": "It came out in the Senior Analyst's spreadsheet of who had been doing your friend's job, and it led to you.",
+    "landedElsewhere": "It came out after your friend had gone, as work nobody had started.",
+    "neverCameOut": "It never came out. Somebody is still doing your friend's job, and has stopped saying so."
+  },
+  {
+    "id": "consultant-invoice",
+    "addedBy": "hired-the-consultant",
+    "after": {
+      "min": 2,
+      "max": 4
+    },
+    "note": "You spent the transformation budget on a consultant, whose invoice was always going to arrive.",
+    "route": {
+      "character": "programme",
+      "chance": {
+        "believer": 0.9,
+        "incompetent": 0.3,
+        "practitioner": 0.6
+      },
+      "motive": "The Programme Manager reconciled the transformation budget, and found one invoice and twelve slides."
+    },
+    "traced": {
+      "not": {
+        "did": "billed-the-centre"
+      }
+    },
+    "onPlayer": {
+      "id": "consultant-invoice-landed",
+      "as": "notification",
+      "from": "From: The Programme Manager, Gwen Ashdown",
+      "title": "Transformation budget: one invoice",
+      "body": "The consultant's invoice has reached the Programme Manager. It is for more than the budget, and it includes the consultant's travel to the meeting at which you hired them. The Programme Manager would like to know which of your lines it should come from.",
+      "sets": ["consultant-invoice-landed"],
+      "headOpinion": -1,
+      "options": [
+        {
+          "id": "pay-from-the-team",
+          "label": "Take it out of your team's budget",
+          "sets": ["paid-the-consultant"],
+          "project": {
+            "real": "worse"
+          },
+          "result": {
+            "title": "The invoice",
+            "body": "It is paid. Your team learns that this year's training has been transformed into the consultant's travel."
+          },
+          "remembers": [
+            {
+              "character": "projects",
+              "about": "paid-for-the-consultant",
+              "text": "Your team's training budget paid for your consultant.",
+              "tone": "bad"
+            }
+          ]
+        },
+        {
+          "id": "ask-the-sponsor",
+          "family": "deflect",
+          "label": "Ask your boss to sign it, as sponsor",
+          "sets": ["boss-signed-the-invoice"],
+          "opinion": -1,
+          "result": {
+            "title": "The invoice",
+            "body": "Your boss signs it, as sponsor, and asks whose idea the consultant was. You say it was a team decision. Your boss says that is what they will say too."
+          }
+        },
+        {
+          "id": "query-every-line",
+          "family": "deliver",
+          "label": "Query the invoice, line by line",
+          "cost": "standard",
+          "sets": ["queried-the-invoice"],
+          "result": {
+            "title": "The invoice",
+            "body": "The consultant takes off the travel, and adds a fee for answering the query. It comes to the same, and the Programme Manager has seen you try."
+          }
+        }
+      ]
+    },
+    "onSomeoneElse": {
+      "id": "consultant-billed-elsewhere",
+      "as": "notice",
+      "title": "The Centre of Excellence's invoice",
+      "body": "The Programme Manager mentions that the Centre of Excellence has had an invoice from a consultant nobody there has met. It has been paid, as nobody could say what else it was for.",
+      "sets": ["consultant-billed-elsewhere"]
+    },
+    "landedOnYou": "It came out when the Programme Manager reconciled the transformation budget, and the invoice had your team's code on it.",
+    "landedElsewhere": "It came out, on the Centre of Excellence's code, where nobody checks.",
+    "neverCameOut": "It never came out. The invoice is in a queue, accruing."
+  },
+  {
+    "id": "bonus-grievance",
+    "addedBy": "team-bonus-to-allies",
+    "after": {
+      "min": 2,
+      "max": 3
+    },
+    "note": "You gave your team's bonus pot to the two who back you in meetings, and the one who did the work could compare letters.",
+    "route": {
+      "character": "analyst",
+      "chance": {
+        "believer": 0.7,
+        "incompetent": 0.3,
+        "practitioner": 0.6
+      },
+      "motive": "The Senior Analyst compared bonus letters with the two who had them, by the kettle, and took the comparison to People and Culture.",
+      "means": {
+        "remembers": {
+          "character": "analyst",
+          "about": "passed-over"
+        }
+      }
+    },
+    "traced": {
+      "not": {
+        "believes": {
+          "character": "analyst",
+          "mood": "warm"
+        }
+      }
+    },
+    "onPlayer": {
+      "id": "bonus-grievance-raised",
+      "as": "notification",
+      "from": "From: People and Culture",
+      "title": "Your team's bonus allocation",
+      "body": "People and Culture has had a query about your team's bonus allocation, and would like to see your note of why. They stress that this is not an investigation, and it has a reference number.",
+      "sets": ["bonus-grievance-raised"],
+      "headOpinion": -1,
+      "options": [
+        {
+          "id": "bonus-reflected-values",
+          "family": "deflect",
+          "label": "Reply that the allocation reflected the team's values",
+          "sets": ["bonus-reflected-values"],
+          "opinion": -1,
+          "result": {
+            "title": "Your note of why",
+            "body": "People and Culture asks which values. You list them. The reference number is closed as a learning, and the learning is kept on file."
+          }
+        },
+        {
+          "id": "backdate-the-note",
+          "family": "fabricate",
+          "label": "Write the note of why now, and date it last month",
+          "sets": ["backdated-the-note"],
+          "mistake": "big",
+          "result": {
+            "title": "Your note of why",
+            "body": "People and Culture thanks you for the note, and asks why a document dated last month was created this morning. The reference number has been upgraded to a case number."
+          }
+        },
+        {
+          "id": "share-next-year",
+          "family": "trade",
+          "label": "Tell the Senior Analyst that next year's pot is theirs",
+          "sets": ["promised-next-years-pot"],
+          "result": {
+            "title": "Your note of why",
+            "body": "The Senior Analyst withdraws the query, and keeps the e-mail in which you said it."
+          }
+        }
+      ]
+    },
+    "onSomeoneElse": {
+      "id": "bonus-grievance-kept",
+      "as": "notice",
+      "title": "By the kettle",
+      "body": "The Senior Analyst mentions, by the kettle, that they have compared bonus letters with the two who had them, and that they have decided to say nothing to People and Culture, this year.",
+      "sets": ["bonus-grievance-kept"]
+    },
+    "landedOnYou": "It came out when the Senior Analyst compared bonus letters, and People and Culture asked for your note of why.",
+    "landedElsewhere": "It came out by the kettle, but the Senior Analyst thought well enough of you to take it no further.",
+    "neverCameOut": "It never came out. The bonus letters are in three drawers, and two of them are pleased."
   }
 ]

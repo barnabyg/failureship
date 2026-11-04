@@ -352,16 +352,30 @@ describe("the real risks", () => {
   });
 
   it("lets the player change whether a risk can be traced", () => {
-    const covering = gameContent.notifications.flatMap((n) =>
-      n.options.flatMap((o) => o.sets),
-    );
+    const inPlainView = new Set([
+      ...gameContent.notifications.flatMap((n) =>
+        n.options.flatMap((o) => o.sets),
+      ),
+      ...gameContent.scenes.flatMap((s) =>
+        s.options.flatMap((o) =>
+          o.results.flatMap((r) => (r.when ? [] : r.sets)),
+        ),
+      ),
+    ]);
 
-    // By clearing the shared drive, or, for what was done against the boss,
-    // by how the one person who knows stands with them.
+    // By something the player does afterwards, such as clearing the shared
+    // drive or letting a friend go, or by how the one person who knows stands
+    // with them.
     for (const risk of gameContent.risks) {
-      expect(JSON.stringify(risk.traced)).toMatch(/covered-tracks|believes/);
+      const read = JSON.stringify(risk.traced);
+      const did = [...read.matchAll(/"did":"([^"]+)"/g)].map((m) => m[1]);
+      expect(did.length > 0 || read.includes("believes"), risk.id).toBe(true);
+      for (const flag of did) {
+        expect(flag, risk.id).not.toBe(risk.addedBy);
+        expect(inPlainView, risk.id).toContain(flag);
+      }
     }
-    expect(covering).toContain("covered-tracks");
+    expect(inPlainView).toContain("covered-tracks");
   });
 
   it("can land as a big mistake", () => {

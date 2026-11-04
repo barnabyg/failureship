@@ -544,5 +544,63 @@
     "scene": "budget-planning",
     "oncePerMonth": true,
     "sets": ["attended-meeting"]
+  },
+  {
+    "id": "meeting-team-hire",
+    "floor": "team-lead",
+    "months": [4],
+    "label": "Team Room 2A",
+    "description": "A Hiring Decision. The post is on your team, so the decision is yours, subject to everyone.",
+    "place": "team-room",
+    "cost": "standard",
+    "scene": "team-hire",
+    "oncePerMonth": true,
+    "sets": ["attended-meeting"]
+  },
+  {
+    "id": "meeting-seating",
+    "floor": "team-lead",
+    "months": [5],
+    "label": "Team Room 2A",
+    "description": "The Floor Plan Walkthrough, at which leads say who sits where.",
+    "place": "team-room",
+    "cost": "standard",
+    "scene": "seating-plan",
+    "oncePerMonth": true,
+    "sets": ["attended-meeting"]
+  },
+  {
+    "id": "meeting-talent",
+    "floor": "team-lead",
+    "months": [6],
+    "label": "Team Room 2A",
+    "description": "The Talent Review, at which your team is put in boxes.",
+    "place": "team-room",
+    "cost": "standard",
+    "scene": "talent-review",
+    "oncePerMonth": true,
+    "sets": ["attended-meeting"]
+  },
+  {
+    "id": "meeting-recognition",
+    "floor": "team-lead",
+    "label": "Team Room 2A",
+    "description": "The Recognition Panel, for this quarter's Star of the Floor.",
+    "place": "team-room",
+    "cost": "standard",
+    "scene": "recognition-panel",
+    "oncePerMonth": true,
+    "sets": ["attended-meeting"]
+  },
+  {
+    "id": "meeting-org-design",
+    "floor": "team-lead",
+    "label": "Team Room 2A",
+    "description": "An Org Design Workshop, with a whiteboard and no team members.",
+    "place": "team-room",
+    "cost": "standard",
+    "scene": "org-design",
+    "oncePerMonth": true,
+    "sets": ["attended-meeting"]
   }
 ]

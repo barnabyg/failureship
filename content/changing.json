@@ -80,6 +80,26 @@
         "whistleblower": 1,
         "left": 2
       }
+    },
+    {
+      "about": "moved-by-the-lift",
+      "weight": 1,
+      "why": "You moved them to the desk by the lift, for asking questions.",
+      "leans": {
+        "practitioner": 1,
+        "whistleblower": 2,
+        "left": 1
+      }
+    },
+    {
+      "about": "rated-down",
+      "weight": 1,
+      "why": "You put them below the two who back you on the nine-box grid.",
+      "leans": {
+        "practitioner": 2,
+        "whistleblower": 1,
+        "left": 1
+      }
     }
   ],
   "became": {
