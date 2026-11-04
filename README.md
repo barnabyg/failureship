@@ -77,14 +77,14 @@ Your boss's **Grand Plan** is on the **Your project** card once you hear of it. 
 needs whoever really has what it takes. Done or faked, it goes on the record, but whether your boss
 counts it goes by who they are, a fake can be found out, and a failed one is blamed on someone.
 
-A Plan your boss counts done moves them up, and their seat is open for two months, as it is if they
-are seconded, leave or are fired, or a restructure makes a post of their team. Get rid of them
-yourself by ringing the Speak Up line in month 8, asking it about the post if you know why, or a
-rumour once you have seen one: whoever protects them decides, and it can be traced to you. Whoever
-really holds influence over a seat on the Power Map gives it out by what matters to their kind,
-never a score or a Gauge. Rivals work on them, and so can you, if you know whom to approach. You are
-told who decided, beside Official standing. Win, and you are **Team lead**, on Floor 2. Lose, and
-the winner is your boss. The passed over remember.
+A Plan your boss counts done moves them up, and opens their seat for two months, as does a boss
+seconded, leaving or fired, or a restructure making a post of their team. Get rid of yours by
+ringing the Speak Up line in month 8, asking it about the post if you know why, or a rumour once you
+have seen one: whoever protects them decides, and it can be traced to you. Whoever really holds
+influence over a seat gives it out by what matters to their kind, never a score or a Gauge. Rivals
+work on them, and so can you, if you know whom to approach. You are told who decided, beside
+Official standing. Win, and you are **Team lead**, on Floor 2. Lose, and the winner is your boss.
+The passed over remember.
 
 After eighteen months the results screen shows who was really who: each Character's kind and Hidden
 Fact, each Rival and what they did, your marks against the truth, how you played by family of Move,
@@ -95,9 +95,9 @@ Hidden Fact. The first puts you on a **Final Warning**, shown beside your job ti
 ends the run. One made while a seat is open can cost you it, and one on Floor 2 takes you down the
 lift, under whoever takes your seat. A few fire you outright, and say so on the button first.
 
-**New run** deals a new seed, **Restart from seed** replays one from month 1, and leaving a run asks
-first. The run is saved in your browser at every step, hidden truth included, so a reload carries
-on. Another seed in the address starts that deal, and a change to `content/` offers a new run.
+**New run** deals a new seed, **Restart from seed** replays one, and leaving a run asks first. A
+friend on your seed gets your deal. Each step is saved in your browser, hidden truth and all, so a
+reload carries on, and a change to `content/` or the game offers a new run.
 
 A month always leaves you something to decide, on either floor. Every Notification has an answer
 that costs nothing, and beside the report a month asks for at most one costly answer, unless late
