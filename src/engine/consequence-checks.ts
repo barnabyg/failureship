@@ -55,19 +55,17 @@ export function findNamedKinds(
     .map((line) => `${owner} names a kind: "${line}"`);
 }
 
-/** Only Believers change, and both of the player's bosses stay, until vacancies exist. */
+/**
+ * Only Believers change. Anyone can be written to leave, the player's bosses
+ * included: a boss who leaves leaves their seat open.
+ */
 export function findBrokenChanging(content: Content): string[] {
   const written = content.changing;
   if (!written) return [];
   const problems: string[] = [];
   const known = new Set(content.characters.map((c) => c.id));
-  const { boss, head } = bossesAtStart(content);
-  const bosses = [boss, head];
   for (const id of Object.keys(written.leaving)) {
     if (!known.has(id)) problems.push(`Leaving names unknown "${id}".`);
-    if (bosses.includes(id)) {
-      problems.push(`"${id}" cannot leave: nothing creates a vacancy yet.`);
-    }
   }
   for (const burn of written.burns) {
     const { practitioner, whistleblower, left } = burn.leans;
@@ -211,14 +209,17 @@ function findBrokenBills(content: Content): string[] {
   return problems;
 }
 
-/** An event must have a way to land, and must leave the player's bosses alone. */
+/**
+ * An event must have a way to land. It can move anyone on the charts, the
+ * player and their bosses included, and open the boss's seat if seats are
+ * written.
+ */
 export function findBrokenEvents(content: Content): string[] {
   const problems: string[] = [];
   const known = new Set(content.characters.map((c) => c.id));
-  const { boss, head } = bossesAtStart(content);
-  // Moving the player would change their boss as surely as moving the boss.
-  const staying = [YOU, boss, ...(head === undefined ? [] : [head])];
-  const who = (written: string) => meantBy({ boss, head }, written);
+  const jobs = new Set(content.floors.map((f) => f.job));
+  const bosses = bossesAtStart(content);
+  const who = (written: string) => meantBy(bosses, written);
   const isKnown = (written: string) => known.has(who(written) ?? "");
   const ids = new Set<string>();
   const fromRisks = new Set(content.risks.flatMap((r) => r.event ?? []));
@@ -243,10 +244,8 @@ export function findBrokenEvents(content: Content): string[] {
     }
     const { reports, rises, falls } = event.reshuffle;
     for (const { character, to } of reports) {
-      // Vacancies, and a change of boss, wait for the next phase.
-      if (staying.includes(who(character) ?? "")) {
-        problems.push(`${owner} moves "${character}", who has to stay put.`);
-      } else if (!isKnown(character)) {
+      // Moving the player changes their boss, which is allowed.
+      if (character !== YOU && !isKnown(character)) {
         problems.push(`${owner} names unknown "${character}".`);
       }
       if (!isKnown(to)) {
@@ -258,11 +257,19 @@ export function findBrokenEvents(content: Content): string[] {
         problems.push(`${owner} names unknown "${id}".`);
       }
     }
-    const moved = reports.length + rises.length + falls.length > 0;
+    const moved =
+      reports.length + rises.length + falls.length > 0 ||
+      event.vacates !== undefined;
     if (moved !== (event.changed !== undefined)) {
       problems.push(
-        `${owner} needs "changed" if and only if it moves anyone on the charts.`,
+        `${owner} needs "changed" if and only if it moves anyone on the charts or opens a seat.`,
       );
+    }
+    if (event.vacates !== undefined && !content.vacancies) {
+      problems.push(`${owner} opens a seat, but no seats are written.`);
+    }
+    if (event.floor !== undefined && !jobs.has(event.floor)) {
+      problems.push(`${owner} names unknown floor "${event.floor}".`);
     }
   }
   // A surprise is never a big mistake by itself, even by way of what it starts.

@@ -1,9 +1,10 @@
 import { everyBill, type Bill, type Content } from "./content";
 import { gaugesFromThread } from "./gauges";
 import { applyOutcome } from "./outcome";
-import { isGone, matches, mentionsGone } from "./reads";
+import { matches, mentionsGone } from "./reads";
 import { drawFor } from "./rng";
 import type { State, Step } from "./state";
+import { isGone } from "./places";
 
 /** A Bill reaches the player: told at once, sent as a message, or kept for the Move. */
 export function sendBill(state: State, content: Content, bill: Bill): void {

@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { id, notice, perKind, text } from "./basic-schema";
+import { condition, id, notice, perKind, text } from "./basic-schema";
 
 /** Flags record what the player did, for later conditions to read. */
 export const sets = z.array(id).default([]);
@@ -118,6 +118,9 @@ export const seatAct = z
   })
   .optional();
 
+/** Tries to get rid of the player's boss, by a way in `vacancies.json`'s `ousting`. */
+export const ousts = id.optional();
+
 /** How an answer settles a commitment that has fallen due. */
 const settles = z.enum(["kept", "broken"]).optional();
 
@@ -143,6 +146,9 @@ export const notificationOption = z.strictObject({
   remembers,
   news,
   seat: seatAct,
+  ousts,
+  /** The option is offered only while this holds, which never reads the hidden truth. */
+  requires: condition.optional(),
   stakes,
   result: notice.optional(),
   /** Leaves a Demand open, as a bet that the boss forgets it. */

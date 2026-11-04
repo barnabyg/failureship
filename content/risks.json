@@ -253,5 +253,90 @@
     "landedOnYou": "It came out when the Programme Manager opened the door for a visitor, and it led to you.",
     "landedElsewhere": "It came out when a visitor was shown round, and it was put down to hybrid working.",
     "neverCameOut": "It never came out. The sign is still on the door, and the door is still shut."
+  },
+  {
+    "id": "line-call",
+    "addedBy": "rang-the-line",
+    "after": {
+      "min": 2,
+      "max": 4
+    },
+    "note": "You rang the Speak Up line about your boss. It is anonymous, except to the Office Co-ordinator, who answers it and keeps the log.",
+    "route": {
+      "character": "admin",
+      "chance": {
+        "believer": 0.8,
+        "incompetent": 0.3,
+        "practitioner": 0.6
+      },
+      "motive": "The Office Co-ordinator keeps the log of the line, and the log had your name in it, spelt correctly."
+    },
+    "traced": {
+      "not": {
+        "believes": {
+          "character": "admin",
+          "mood": "warm"
+        }
+      }
+    },
+    "onPlayer": {
+      "id": "line-call-landed",
+      "as": "move",
+      "from": "From: The Office Co-ordinator, Marjorie Tull",
+      "title": "A note for the file",
+      "body": "The Office Co-ordinator has sent Human Resources a note for the file, with the line's log attached, about who it was that raised the concerns about your old boss, and when. Human Resources would like to discuss your approach to collaboration. They have booked the room with the box of tissues in it.",
+      "sets": ["line-call-traced"],
+      "headOpinion": -1,
+      "mistake": "big"
+    },
+    "onSomeoneElse": {
+      "id": "line-call-kept",
+      "as": "notice",
+      "title": "The log",
+      "body": "The Office Co-ordinator mentions, while refilling the stapler, that the Speak Up log has been archived, and that nobody will be reading it, and that you are welcome.",
+      "sets": ["line-call-kept"]
+    },
+    "landedOnYou": "It came out in the line's log, which said who had rung, and about whom.",
+    "landedElsewhere": "It came out, but the Office Co-ordinator thought well of you, and the log was archived unread.",
+    "neverCameOut": "It never came out. The log is in a cupboard, with your name in it."
+  },
+  {
+    "id": "boss-rumour",
+    "addedBy": "rumoured-your-boss",
+    "after": {
+      "min": 2,
+      "max": 4
+    },
+    "note": "You told the Senior Analyst that your boss was on the way out, by the kettle, as something everyone knew.",
+    "route": {
+      "character": "analyst",
+      "chance": {
+        "believer": 0.8,
+        "incompetent": 0.3,
+        "practitioner": 0.6
+      },
+      "motive": "The Senior Analyst was asked where it had started, and remembered the kettle."
+    },
+    "traced": {
+      "not": {
+        "believes": {
+          "character": "analyst",
+          "mood": "warm"
+        }
+      }
+    },
+    "onPlayer": {
+      "id": "boss-rumour-landed",
+      "as": "move",
+      "from": "From: The Senior Analyst, Priya Venn",
+      "title": "Where it started",
+      "body": "Human Resources has asked the Senior Analyst where the story about your old boss started. The Senior Analyst said the kettle, and then, when pressed, you. Human Resources would like a word about the kettle.",
+      "sets": ["boss-rumour-traced"],
+      "headOpinion": -1,
+      "mistake": "big"
+    },
+    "landedOnYou": "It came out, and the Senior Analyst said where it had started: with you, by the kettle.",
+    "landedElsewhere": "It came out, but the Senior Analyst thought well of you, and said that nobody could say where it had started.",
+    "neverCameOut": "It never came out. Everyone knew already, apparently."
   }
 ]

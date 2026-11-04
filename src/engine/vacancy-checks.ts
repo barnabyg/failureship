@@ -1,6 +1,6 @@
 import { everyNotification, type Content } from "./content";
 import { isUnder } from "./deal";
-import { bossesAtStart, meantBy } from "./places";
+import { bossesAtStart, managerAtStart, meantBy } from "./places";
 
 /** Everything that can act for a seat, and whether a Character's Move makes it. */
 function seatActs(content: Content) {
@@ -77,13 +77,62 @@ function findBrokenSeatActs(content: Content): string[] {
 }
 
 /**
+ * Every way of getting rid of the boss that a choice names is written, and
+ * anyone who could be the boss got rid of has a cover for text to say instead.
+ */
+function findBrokenOusting(content: Content): string[] {
+  const named = [
+    ...everyNotification(content).flatMap((n) =>
+      n.options.flatMap((o) =>
+        "ousts" in o && o.ousts !== undefined
+          ? [{ owner: `Notification "${n.id}" option "${o.id}"`, way: o.ousts }]
+          : [],
+      ),
+    ),
+    ...content.scenes.flatMap((s) =>
+      s.options.flatMap((o) =>
+        o.results.flatMap((r) =>
+          r.ousts !== undefined
+            ? [{ owner: `Scene "${s.id}" option "${o.id}"`, way: r.ousts }]
+            : [],
+        ),
+      ),
+    ),
+  ];
+  const ways = content.vacancies?.ousting?.ways ?? {};
+  const problems = named
+    .filter(({ way }) => !(way in ways))
+    .map(
+      ({ owner, way }) =>
+        `${owner} gets rid of the boss by unknown way "${way}" in vacancies.json.`,
+    );
+  if (named.length === 0) return problems;
+  // Whoever could be the boss got rid of: the first boss, or one of their
+  // team, who can win the seat. Text says the cover in place of whoever went.
+  const { boss } = bossesAtStart(content);
+  const team = content.characters
+    .filter((c) => managerAtStart(content, c.id) === boss)
+    .map((c) => c.id);
+  const leaving = content.changing?.leaving ?? {};
+  for (const id of [boss, ...team].filter((c) => !(c in leaving))) {
+    problems.push(
+      `"${id}" can be got rid of as the player's boss, so needs a cover in changing.json's leaving.`,
+    );
+  }
+  return problems;
+}
+
+/**
  * Seats: each is on a known floor and leads to another, what is competed for
  * while it is open is written, and whoever its holder moves up to is there, and
  * is not under that floor's boss. One seat to a floor, since a floor has one boss.
  * A big mistake in a seat demotes, so being demoted needs its words.
  */
 export function findBrokenVacancies(content: Content): string[] {
-  const problems = findBrokenSeatActs(content);
+  const problems = [
+    ...findBrokenSeatActs(content),
+    ...findBrokenOusting(content),
+  ];
   const written = content.vacancies;
   if (!written) return problems;
   const jobs = content.floors.map((f) => f.job);

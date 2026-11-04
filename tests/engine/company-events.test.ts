@@ -462,11 +462,26 @@ describe("what is written", () => {
     refuses({ disaster: true });
   });
 
-  it("refuses moving the boss on the chart", () => {
-    refuses({
-      changed: "C",
-      reshuffle: { reports: [{ character: "ana", to: "ben" }] },
-    });
+  it("accepts moving the boss, and the player, on the chart", () => {
+    expect(() =>
+      parseContent(
+        raw([
+          outside({
+            changed: "C",
+            reshuffle: {
+              reports: [
+                { character: "ana", to: "ben" },
+                { character: "you", to: "cal" },
+              ],
+            },
+          }),
+        ]),
+      ),
+    ).not.toThrow();
+  });
+
+  it("refuses opening a seat with no words for the results screen", () => {
+    refuses({ vacates: "movedUp" });
   });
 
   it("refuses a chart change with no words for the results screen", () => {
@@ -499,12 +514,16 @@ describe("the real Company Events", () => {
     expect(gameContent.balance.disasterChance).toBeGreaterThan(0);
   });
 
-  it("never moves your boss off the chart", () => {
-    const character = gameContent.you.reportsTo;
-    const moved = gameContent.events.flatMap((e) =>
-      e.reshuffle.reports.map((r) => r.character),
-    );
-    expect(moved).not.toContain(character);
+  it("has one that moves your boss up, and one that creates a post, on Floor 1 only", () => {
+    const opening = gameContent.events.filter((e) => e.vacates !== undefined);
+
+    expect(opening.map((e) => e.vacates).sort()).toEqual([
+      "created",
+      "movedUp",
+    ]);
+    for (const event of opening) {
+      expect(event.floor).toBe(gameContent.you.job);
+    }
   });
 
   it("lands somewhere on most deals, and not always in the same place", () => {

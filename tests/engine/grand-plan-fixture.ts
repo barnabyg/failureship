@@ -218,6 +218,7 @@ export function raw(blame = certain) {
         completed: "COMPLETED",
         failed: "FAILED",
       },
+      dropped: "DROPPED",
       formerBoss: "FORMER-BOSS-DONE",
       plans: [
         plan("big-plan", "plan-told", "", blame),

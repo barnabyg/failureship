@@ -70,6 +70,16 @@
         "whistleblower": 2,
         "left": 1
       }
+    },
+    {
+      "about": "tried-to-get-rid-of-me",
+      "weight": 3,
+      "why": "You tried to get them fired, and they found out.",
+      "leans": {
+        "practitioner": 2,
+        "whistleblower": 1,
+        "left": 2
+      }
     }
   ],
   "became": {
@@ -143,6 +153,14 @@
     ]
   },
   "leaving": {
+    "boss": {
+      "cover": "the former Team Leader",
+      "notice": {
+        "title": "Dennis Prowse has left",
+        "body": "The Team Leader has left, after a long and frank conversation with nobody in particular. An all-staff e-mail thanks Dennis for his leadership and says he is leaving to spend more time with his principles. His mug has been left on his desk, which nobody will sit at until the seat is filled."
+      },
+      "sets": ["the-boss-left"]
+    },
     "analyst": {
       "cover": "the acting Senior Analyst",
       "notice": {

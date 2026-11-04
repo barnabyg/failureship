@@ -1,8 +1,8 @@
 import { sendBill } from "./bills";
-import { dueIdOf, type Content, type Kind } from "./content";
-import { leaveMap } from "./deal";
+import type { Content, Kind } from "./content";
+import { canGo, depart } from "./departures";
 import { applyOutcome } from "./outcome";
-import { placeOf } from "./places";
+import { isGone } from "./places";
 import { mentionsGone, matches } from "./reads";
 import { drawFor, pickWeighted } from "./rng";
 import type { Change, State } from "./state";
@@ -34,14 +34,17 @@ export function changePeople(state: State, content: Content): void {
   if (!written) return;
   for (const dealt of state.truth.characters) {
     const changed = state.truth.changes.some((c) => c.character === dealt.id);
-    if (dealt.kind !== "believer" || changed) continue;
+    // Whoever has gone, by leaving or being fired, is past changing.
+    if (dealt.kind !== "believer" || changed || isGone(state, dealt.id)) {
+      continue;
+    }
     const burns = burnsOf(state, written, dealt.id);
     const weight = burns.reduce((sum, b) => sum + b.weight, 0);
     if (weight < written.threshold) continue;
-    // The player's bosses stay until other vacancies exist, whoever holds them.
+    // Anyone written to can leave, a boss included, unless it would leave
+    // nobody in a place above the player.
     const canLeave =
-      dealt.id in written.leaving &&
-      placeOf(state, content, dealt.id) === undefined;
+      dealt.id in written.leaving && canGo(state, content, dealt.id);
     const ways = (["practitioner", "whistleblower", "left"] as const).filter(
       (way) => way !== "left" || canLeave,
     );
@@ -63,7 +66,7 @@ export function changePeople(state: State, content: Content): void {
   }
 }
 
-/** Gone for the rest of the run: off the Power Map, and out of every commitment. */
+/** Gone for the rest of the run, with the notice that says so. */
 function leave(
   state: State,
   content: Content,
@@ -72,23 +75,9 @@ function leave(
 ): void {
   const leaving = written.leaving[id];
   if (!leaving) return;
-  state.truth.powerMap = leaveMap(state.truth.powerMap, id);
-  const lapsed: string[] = [];
-  for (const made of state.promises) {
-    if (made.status === "open" && made.to === id) {
-      made.status = "lapsed";
-      lapsed.push(dueIdOf(made.id));
-    }
-  }
-  for (const made of state.deals) {
-    const item = content.deals?.items.find((d) => d.id === made.id);
-    if (made.status === "open" && item?.with === id) {
-      made.status = "lapsed";
-      lapsed.push(dueIdOf(made.id));
-    }
-  }
-  state.unanswered = state.unanswered.filter((n) => !lapsed.includes(n));
+  // Told before the seat it may leave open.
   state.noticesDue.push({ ...leaving.notice, asWritten: true });
+  depart(state, content, id, "left");
   applyOutcome(
     state,
     content,
@@ -102,7 +91,9 @@ export function blowWhistles(state: State, content: Content): void {
   const written = content.changing;
   if (!written) return;
   for (const change of state.truth.changes) {
-    if (change.to !== "whistleblower" || change.acted) continue;
+    // A whistleblower who has since gone takes what they know with them.
+    const gone = isGone(state, change.character);
+    if (change.to !== "whistleblower" || change.acted || gone) continue;
     if (change.month >= state.month) continue;
     // What they know about first, then whatever is buried, then anything at all.
     change.acted =

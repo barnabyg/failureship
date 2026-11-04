@@ -1,7 +1,6 @@
 import type { Content } from "./content";
 import { lowerOnMap, raiseOnMap } from "./deal";
-import { managerOf, whoIs } from "./places";
-import { isGone } from "./reads";
+import { emptiesAPlace, isGone, managerHere, managerOf, whoIs } from "./places";
 import type { State } from "./state";
 
 /**
@@ -14,7 +13,10 @@ export interface Reshuffle {
   falls: readonly string[];
 }
 
-/** Moves people on the charts. A move that would make a loop does not happen. */
+/**
+ * Moves people on the charts, the player and their bosses included. A move that
+ * would make a loop, or leave the player with no boss's boss, does not happen.
+ */
 export function reshuffleCharts(
   state: State,
   content: Content,
@@ -32,7 +34,14 @@ export function reshuffleCharts(
     const answersTo = (id: string | undefined): boolean =>
       id !== undefined &&
       (id === character || answersTo(managerOf(state, content, id)));
-    if (!answersTo(to)) state.reportsTo[character] = to;
+    if (answersTo(to)) continue;
+    // Nor does one that would leave a place above the player with nobody in it.
+    const moved = { ...state.reportsTo, [character]: to };
+    const after = { ...state, reportsTo: moved };
+    const empties = emptiesAPlace(state, content, (at) =>
+      managerHere(after, content, at),
+    );
+    if (!empties) state.reportsTo = moved;
   }
   const { truth } = state;
   for (const id of reshuffle.rises.map(who).filter(here)) {

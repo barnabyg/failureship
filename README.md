@@ -8,7 +8,7 @@ Project, the Monthly Status Report, Demands, one-off Budgets, every family of Mo
 your boss's head. Earlier choices come back through Threads, hidden risks and what people have heard,
 things happen to the company, and you can be fired. You can give your word and make Deals, Believers
 you burn can change or leave, Teflon and Fawning move with Threads, reviews come every quarter,
-colleagues compete, bosses have Grand Plans, and a first promotion can take you up to Floor 2.
+colleagues compete, bosses have Grand Plans, and more than one route up takes you to Floor 2.
 
 ## Play
 
@@ -77,11 +77,14 @@ Your boss's **Grand Plan** is on the **Your project** card once you hear of it. 
 needs whoever really has what it takes. Done or faked, it goes on the record, but whether your boss
 counts it goes by who they are, a fake can be found out, and a failed one is blamed on someone.
 
-A Plan your boss counts done moves them up, and their seat is open for two months. Whoever really
-holds influence over it on the Power Map gives it out by what matters to their kind, never a score
-or a Gauge. Rivals work on them, and so can you, if you know whom to approach. You are told who
-decided, beside Official standing. Win, and you are **Team lead**, up the lift on Floor 2, under
-your old boss's boss and someone new. Lose, and the winner is your boss. The passed over remember.
+A Plan your boss counts done moves them up, and opens their seat for two months, as does a boss
+seconded, leaving or fired, or a restructure making a post of their team. Get rid of yours by
+ringing the Speak Up line in month 8, asking it about the post if you know why, or a rumour once you
+have seen one: whoever protects them decides, and it can be traced to you. Whoever really holds
+influence over a seat gives it out by what matters to their kind, never a score or a Gauge. Rivals
+work on them, and so can you, if you know whom to approach. You are told who decided, beside
+Official standing. Win, and you are **Team lead**, on Floor 2. Lose, and the winner is your boss.
+The passed over remember.
 
 After eighteen months the results screen shows who was really who: each Character's kind and Hidden
 Fact, each Rival and what they did, your marks against the truth, how you played by family of Move,
@@ -92,13 +95,9 @@ Hidden Fact. The first puts you on a **Final Warning**, shown beside your job ti
 ends the run. One made while a seat is open can cost you it, and one on Floor 2 takes you down the
 lift, under whoever takes your seat. A few fire you outright, and say so on the button first.
 
-At any step, **New run** deals a new seed, and **Restart from seed** plays the seed you type from
-month 1. Leaving a run in progress asks first. Swap a seed with a friend for the same deal.
-
-The run is saved in your browser at every step, so a reload carries on where you left off. An
-address with a different seed starts that deal instead. If `content/` or the game has changed since
-the save, you are offered a new run, as a save holds only for what dealt it. A save can be read in
-browser storage, hidden truth included, which is accepted while the game is in development.
+**New run** deals a new seed, **Restart from seed** replays one, and leaving a run asks first. A
+friend on your seed gets your deal. Each step is saved in your browser, hidden truth and all, so a
+reload carries on, and a change to `content/` or the game offers a new run.
 
 A month always leaves you something to decide, on either floor. Every Notification has an answer
 that costs nothing, and beside the report a month asks for at most one costly answer, unless late
@@ -122,7 +121,7 @@ game reloads when you save a file. If an edit breaks the format, the page shows 
 | `scenes.json`         | Each month's Scene and each quarter's review: signs, choices, results                                  |
 | `moves.json`          | Character Moves, and when each can land                                                                |
 | `threads.json`        | What comes back months later: what starts each Thread, and the Bill it sends                           |
-| `events.json`         | Company Events: where each comes from, how it moves the charts, and the official story's words         |
+| `events.json`         | Company Events: where each comes from, how it moves the charts or opens a seat, and the story's words  |
 | `reputation.json`     | How far and how fast news travels, and the signs of what each Character believes of you                |
 | `risks.json`          | Hidden risks: what adds each, who it comes out through, and whether it can be traced to you            |
 | `deals.json`          | Deals: what each side offers, whether a good word counts, and the favours owed between people          |
@@ -142,7 +141,7 @@ game reloads when you save a file. If an edit breaks the format, the page shows 
 | `hidden-truth.json`   | The rules of the deal: kinds, their weights, and the Hidden Facts                                      |
 | `rivals.json`         | What is competed for and by whom, how many Rivals at once, and who makes a competitor's Move           |
 | `grand-plans.json`    | Each boss's Grand Plan: how long it runs, where you hear of it, how it is done, and who is blamed      |
-| `vacancies.json`      | Each boss's seat: where its holder moves up to, who it is decided between, and why each one wins       |
+| `vacancies.json`      | Each boss's seat: how it falls vacant, who it is decided between and why, and getting rid of a boss    |
 | `balance.json`        | Actions a month, months in a run and a quarter, each choice's cost, how signs mislead, the boss's mood |
 | `floors.json`         | Each floor, by the job done on it: the job title, the rooms, their fittings and the lift's sign        |
 
@@ -165,17 +164,18 @@ How to run the checks and tests is in [AGENTS.md](AGENTS.md#verifying).
   `risks.ts`, `threads.ts` with `bills.ts`, `promises.ts`, `deals.ts`, `changes.ts` for Believers
   changing and leaving, `gauges.ts`, the only module that reads a Gauge, `standing.ts`, `reviews.ts`
   for quarterly reviews, `rivals.ts` for Rivals, `grand-plans.ts` for Grand Plans, `vacancies.ts`
-  for seats and who really decides them, `demotions.ts` for losing one to a mistake. `say.ts` names
-  Characters in text, and `rng.ts` and `seed.ts` hold the seed. `view.ts` is the player view, built
-  by `to-view.ts`, with `to-results.ts` its reveal; `hidden-truth.ts` is the tests' read of the
-  truth. `save.ts` writes and reads a run. `State` is plain data, so a mechanic gets saving for
-  free: raise `SAVE_VERSION` if it changes what saved state means. `content.ts` assembles the schema
-  from the `*-schema.ts` files, as [AGENTS.md](AGENTS.md) says. `content-checks.ts` checks data
-  across files, with each mechanic's checks beside it: `truth-checks.ts` for the hidden truth and
-  its signs, `boss-checks.ts` for the boss, going over the head, Demands and reputation,
-  `consequence-checks.ts` for what choices lead to, `word-checks.ts` for Promises and Deals, and
-  `floor-checks.ts`, `review-checks.ts`, `rival-checks.ts`, `plan-checks.ts` and
-  `vacancy-checks.ts` for floors, reviews, Rivals, Grand Plans and seats.
+  for seats and who really decides them, `departures.ts` for leaving and being got rid of,
+  `demotions.ts` for losing a seat to a mistake. `say.ts` names Characters in text, and `rng.ts` and
+  `seed.ts` hold the seed. `view.ts` is the player view, built by `to-view.ts`, with `to-results.ts`
+  its reveal; `hidden-truth.ts` is the tests' read of the truth. `save.ts` writes and reads a run.
+  `State` is plain data, so a mechanic gets saving for free: raise `SAVE_VERSION` if it changes what
+  saved state means. `content.ts` assembles the schema from the `*-schema.ts` files, as
+  [AGENTS.md](AGENTS.md) says. `content-checks.ts` checks data across files, with each mechanic's
+  checks beside it: `truth-checks.ts` for the hidden truth and its signs, `boss-checks.ts` for the
+  boss, going over the head, Demands and reputation, `consequence-checks.ts` for what choices lead
+  to, `word-checks.ts` for Promises and Deals, and `floor-checks.ts`, `review-checks.ts`,
+  `rival-checks.ts`, `plan-checks.ts` and `vacancy-checks.ts` for floors, reviews, Rivals, Grand
+  Plans and seats.
 - `src/tower/` draws the floor the view names, and holds no rules.
 - `src/ui/` holds the React panels over the tower: `App.tsx` wires them to the run, and rides the
   lift when the floor changes, and `TowerStage.tsx` the tower's hotspots. `panels.tsx` picks each

@@ -3,6 +3,7 @@ import { gameContent } from "../../src/content";
 import { startRun, type PlayerView } from "../../src/engine";
 import { readHiddenTruth } from "../../src/engine/hidden-truth";
 import { plainChoice, playToMonth } from "../../src/ui/later-month";
+import { withoutSeatEvents } from "./fixture";
 
 /** Fakes the Plan at month 5's Ideas Workshop, which a boss who is not a Believer counts. */
 const FAKED = "screenshot-on-the-note";
@@ -17,8 +18,12 @@ function playedTo(seed: number, month: string, choose: string | null = FAKED) {
  * Plays a whole run plainly, taking each option named, a comma-separated list,
  * once and in order, and keeps every view.
  */
-function playAll(seed: number, choose: string | null): PlayerView[] {
-  const run = startRun({ seed, content: gameContent });
+function playAll(
+  seed: number,
+  choose: string | null,
+  content = gameContent,
+): PlayerView[] {
+  const run = startRun({ seed, content });
   let view = run.view();
   const views = [view];
   const wanted = choose ? choose.split(",") : [];
@@ -155,23 +160,36 @@ describe("eighteen months on either floor", () => {
     view.step.options.length >= 2;
 
   it.each([
-    ["Floor 1, all the way", 3, null, "junior-employee"],
-    ["Floor 2 from month 8", 2, FAKED, "team-lead"],
+    // Seed 3 is offered a post by a restructure in month 13, so this one runs
+    // with no Company Event that opens a seat.
+    ["Floor 1, all the way", 3, null, "junior-employee", true],
+    ["Floor 2 from month 8", 2, FAKED, "team-lead", false],
     [
       "Floor 2 in months 8 and 9, and Floor 1 again from month 10",
       2,
       `${CLEAN},${EXAMPLE}`,
       "junior-employee",
+      false,
     ],
-  ])("leaves a real choice every month: %s", (_name, seed, choose, job) => {
-    const views = playAll(seed, choose);
+  ])(
+    "leaves a real choice every month: %s",
+    (_name, seed, choose, job, still: boolean) => {
+      const views = playAll(
+        seed,
+        choose,
+        still ? withoutSeatEvents(gameContent) : gameContent,
+      );
 
-    const months = new Set(views.filter(choiceIn).map((v) => v.month));
-    expect([...months].sort((a, b) => a - b)).toEqual(
-      Array.from({ length: gameContent.balance.monthsPerRun }, (_, i) => i + 1),
-    );
-    expect(views.at(-1)?.job.id).toBe(job);
-  });
+      const months = new Set(views.filter(choiceIn).map((v) => v.month));
+      expect([...months].sort((a, b) => a - b)).toEqual(
+        Array.from(
+          { length: gameContent.balance.monthsPerRun },
+          (_, i) => i + 1,
+        ),
+      );
+      expect(views.at(-1)?.job.id).toBe(job);
+    },
+  );
 });
 
 describe("a big mistake, in the game", () => {

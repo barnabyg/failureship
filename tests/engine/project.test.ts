@@ -10,7 +10,7 @@ import {
   type Run,
 } from "../../src/engine";
 import { readHiddenTruth } from "../../src/engine/hidden-truth";
-import { action, emptyMonthRaw, floorOwn } from "./fixture";
+import { action, emptyMonthRaw, floorOwn, withoutSeatEvents } from "./fixture";
 
 const SEEDS = Array.from({ length: 200 }, (_, i) => i + 1);
 const notice = { title: "Done", body: "Done." };
@@ -286,7 +286,12 @@ function deliver(run: Run) {
 
 describe("the Monthly Status Report in the game", () => {
   it("arrives every month, and offers to do it, skip it or lie in it", () => {
-    const run = startRun({ seed: 1, content: gameContent });
+    // Seed 1, by the first choice each time, is never fired. A Company Event
+    // that opened a seat could take it to Floor 2, where it is, so there are none.
+    const run = startRun({
+      seed: 1,
+      content: withoutSeatEvents(gameContent),
+    });
     const seen: number[] = [];
     let view = run.view();
     while (view.step.kind !== "results") {

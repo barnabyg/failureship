@@ -12,7 +12,6 @@ import {
   fillSubject,
   isAvailable,
   isDone,
-  isGone,
   isMet,
   matches,
   methodOf,
@@ -26,7 +25,7 @@ import { YOU } from "./deal";
 import { dealsInView } from "./deals";
 import { floorNow, isOn } from "./floors";
 import { gaugesInView, gaugesThisMonth } from "./gauges";
-import { managerOf } from "./places";
+import { isGone, managerOf } from "./places";
 import { promisesInView } from "./promises";
 import { COMPETITOR } from "./rivals";
 import { calledBy, sayFrom, sayPeople, titleOf } from "./say";

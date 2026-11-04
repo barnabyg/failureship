@@ -105,6 +105,10 @@ function findBrokenReferences(content: Content): string[] {
     if ("youOwe" in condition) checkCharacterOrPlace(owner, condition.youOwe);
     if ("heardFact" in condition) checkFact(owner, condition.heardFact);
     if ("heardTrue" in condition) checkFact(owner, condition.heardTrue);
+    if ("heardOf" in condition) {
+      checkFact(owner, condition.heardOf.fact);
+      checkCharacterOrPlace(owner, condition.heardOf.character);
+    }
     if ("not" in condition) checkCondition(owner, condition.not);
     if ("all" in condition) {
       for (const inner of condition.all) checkCondition(owner, inner);
@@ -217,6 +221,11 @@ function findBrokenReferences(content: Content): string[] {
   problems.push(...findBrokenReputation(content, characters));
   for (const event of content.events) {
     checkProject(`Company Event "${event.id}"`, event.project);
+  }
+  for (const [way, written] of Object.entries(
+    content.vacancies?.ousting?.ways ?? {},
+  )) {
+    if (written.when) checkCondition(`Ousting way "${way}"`, written.when);
   }
   for (const risk of content.risks) {
     const owner = `Risk "${risk.id}"`;
@@ -409,6 +418,12 @@ function findBrokenReferences(content: Content): string[] {
     }
     for (const o of n.options) {
       const owner = `Notification "${n.id}" option "${o.id}"`;
+      if (o.requires) {
+        checkCondition(owner, o.requires);
+        if (dependsOnHiddenTruth(o.requires, hiddenFlags)) {
+          problems.push(`${owner} is gated on the hidden truth.`);
+        }
+      }
       checkCost(owner, o.cost);
       checkApproach(owner, o);
       checkProject(owner, o.project);

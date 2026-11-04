@@ -9,7 +9,7 @@ import { isOn, recurs, startMonthOnFloor, type Whereabouts } from "./floors";
 import { closeGauges } from "./gauges";
 import { followPlans } from "./grand-plans";
 import { applyOutcome } from "./outcome";
-import { bossOf } from "./places";
+import { bossOf, isGone } from "./places";
 import { promisesFallDue } from "./promises";
 import { spreadNews, startStory } from "./reputation";
 import {
@@ -17,7 +17,6 @@ import {
   beliefOf,
   costOf,
   isAvailable,
-  isGone,
   matches,
   mentionsGone,
   optionsOnOffer,

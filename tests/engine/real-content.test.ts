@@ -176,17 +176,20 @@ describe("the real month", () => {
   it("reveals every Character at the end of a run", () => {
     const run = startRun({ seed: 2, content: gameContent });
     let view = run.view();
+    const jobs = new Set<string>();
     for (;;) {
       const choice = view.choices.at(-1);
       if (!choice) break;
       view = run.choose(choice);
+      jobs.add(view.job.id);
     }
 
     expect(view.step).toMatchObject({ kind: "results" });
     if (view.step.kind !== "results") throw new Error(view.step.kind);
     // This run is promoted to Floor 2, so all eight are met: four of Floor 1's
-    // six have a Hidden Fact, and on this deal one of Floor 2's two does.
-    expect(view.job.id).toBe("team-lead");
+    // six have a Hidden Fact, and on this deal one of Floor 2's two does. It
+    // need not end there: what it does on the way can send it back down.
+    expect(jobs).toContain("team-lead");
     expect(view.step.characters).toHaveLength(8);
     expect(view.step.characters.filter((c) => c.fact !== null)).toHaveLength(5);
     expect(JSON.stringify(view)).not.toMatch(/\{\w+\}/);

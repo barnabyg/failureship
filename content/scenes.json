@@ -3020,6 +3020,21 @@
         ]
       },
       {
+        "id": "rumour-about-your-boss",
+        "family": "attack",
+        "label": "Tell the Senior Analyst by the kettle that your boss is on the way out",
+        "requires": {
+          "sawMove": "rumour"
+        },
+        "results": [
+          {
+            "body": "You tell the Senior Analyst, as something everyone already knows. By the afternoon everyone does. People start bringing your boss decisions to sign before your boss can stop being able to sign them.",
+            "sets": ["rumoured-your-boss"],
+            "ousts": "rumour"
+          }
+        ]
+      },
+      {
         "id": "draw-a-sailboat",
         "label": "Draw the sailboat with the anchors",
         "results": [
