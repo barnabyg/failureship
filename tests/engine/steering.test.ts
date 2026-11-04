@@ -2,25 +2,52 @@ import { readdirSync, readFileSync } from "node:fs";
 import path from "node:path";
 import { describe, expect, it } from "vitest";
 import { gameContent } from "../../src/content";
-import { KINDS, startRun, type Kind, type PlayerView } from "../../src/engine";
+import {
+  KINDS,
+  startRun,
+  type Content,
+  type Kind,
+  type PlayerView,
+} from "../../src/engine";
+import type { State } from "../../src/engine/state";
+import { calledBy } from "../../src/engine/say";
 import { readHiddenTruth } from "../../src/engine/hidden-truth";
 import { writtenMonths } from "../../src/engine/floors";
-import { calledAtStart } from "./fixture";
+import { withoutSeatEvents } from "./fixture";
 
-/** Walks a whole run, with a pick made from what is on offer at each step. */
+/**
+ * Walks a whole run, with a pick made from what is on offer at each step. At
+ * each Scene it notes whom each Character is called, as things stand.
+ */
 function walk(
   seed: number,
   pickFrom: (view: PlayerView, turn: number) => PlayerView["choices"][number],
+  content: Content = gameContent,
 ) {
-  const run = startRun({ seed, content: gameContent });
+  const run = startRun({ seed, content });
   const views = [run.view()];
+  const named = new Map<PlayerView, Map<string, string>>();
   let view = views[0] as PlayerView;
   for (let turn = 0; view.choices.length > 0; turn++) {
     view = run.choose(pickFrom(view, turn));
     views.push(view);
+    if (view.step.kind === "scene") {
+      const { state } = JSON.parse(run.save()) as { state: State };
+      named.set(
+        view,
+        new Map(
+          content.characters.map((c) => [
+            calledBy(state, content, c.id).toLowerCase(),
+            c.id,
+          ]),
+        ),
+      );
+    }
   }
-  return { run, views };
+  return { run, views, named };
 }
+
+const stayingPut = withoutSeatEvents(gameContent);
 
 /** Answers for nothing, so as to keep an action for the meeting room, and goes. */
 function attendsEverything(view: PlayerView, turn: number) {
@@ -104,7 +131,9 @@ describe("months that do not feel like one month repeated", () => {
   });
 
   it("opens a different Scene in each written month, a review each quarter, and the pool in turn", () => {
-    const { views } = walk(1, lastsTheRun);
+    // Seed 1 stays on Floor 1 when no Company Event opens a seat for it.
+    const { views } = walk(1, lastsTheRun, stayingPut);
+    expect(views.every((v) => v.job.id === "junior-employee")).toBe(true);
     const reviews = new Set(
       gameContent.scenes
         .filter((s) => s.quarter !== undefined)
@@ -136,7 +165,8 @@ describe("months that do not feel like one month repeated", () => {
   });
 
   // Every month differs on either floor, as in the nine-month run. Seed 2 is
-  // promoted to Floor 2 in month 8, by faking the Plan in month 5.
+  // promoted to Floor 2 in month 8, by faking the Plan in month 5. Seed 1
+  // stays on Floor 1, with no Company Event to open a seat for it.
   const RUNS: [string, number][] = [
     ["seed 1, on Floor 1", 1],
     ["seed 2, promoted", 2],
@@ -149,7 +179,7 @@ describe("months that do not feel like one month repeated", () => {
   it.each(RUNS)("lands a different Move every month: %s", (_, seed) => {
     // A Bill can land as a Move as well, beside the month's own.
     const written = new Set(gameContent.moves.map((m) => m.title));
-    const { views } = walk(seed, pickOn(seed));
+    const { views } = walk(seed, pickOn(seed), stayingPut);
     const moves = views.flatMap((v) =>
       v.step.kind === "move" && written.has(v.step.title) ? [v.step.title] : [],
     );
@@ -161,7 +191,7 @@ describe("months that do not feel like one month repeated", () => {
   it.each(RUNS)(
     "tells a different official story every month: %s",
     (_, seed) => {
-      const { views } = walk(seed, pickOn(seed));
+      const { views } = walk(seed, pickOn(seed), stayingPut);
       const stories = views.flatMap((v) =>
         v.step.kind === "story" ? [JSON.stringify(v.step.reported)] : [],
       );
@@ -280,7 +310,10 @@ describe("the balance of the deal", () => {
   const SEEDS = Array.from({ length: 200 }, (_, i) => i + 1);
 
   /** The kind a careful reader would guess from the signs seen in a run. */
-  function readerGuesses(views: readonly PlayerView[]) {
+  function readerGuesses(
+    views: readonly PlayerView[],
+    named: ReadonlyMap<PlayerView, ReadonlyMap<string, string>>,
+  ) {
     const { kinds } = gameContent.hiddenTruth;
     const total = Object.values(kinds).reduce((sum, k) => sum + k.weight, 0);
     const belief = new Map<string, Record<Kind, number>>();
@@ -299,9 +332,9 @@ describe("the balance of the deal", () => {
             b.text.replaceAll("{who}", who).toLowerCase() ===
             text.toLowerCase(),
         );
-        const shownBy = gameContent.characters.find(
-          (c) => calledAtStart(gameContent, c.id) === who,
-        );
+        // Whoever is called this now, which follows a place or a seat's title.
+        const id = named.get(view)?.get(who.toLowerCase());
+        const shownBy = gameContent.characters.find((c) => c.id === id);
         const held = belief.get(shownBy?.id ?? "");
         // A whistleblower's own signs say nothing of the kind they were dealt.
         const whistled = gameContent.changing?.whistleblower.signs.some(
@@ -310,9 +343,6 @@ describe("the balance of the deal", () => {
             text.toLowerCase(),
         );
         if (whistled) continue;
-        // Someone who has since taken a seat is called by its title, which
-        // this reader does not follow, so what they show goes unread.
-        if (written && !shownBy) continue;
         if (!written || !held) throw new Error(`Unknown sign: ${text}`);
         const role = shownBy?.role;
         const open = gameContent.behaviours.filter(
@@ -341,8 +371,8 @@ describe("the balance of the deal", () => {
       practitioner: 0,
     };
     for (const seed of SEEDS) {
-      const { run, views } = walk(seed, attendsEverything);
-      const belief = readerGuesses(views);
+      const { run, views, named } = walk(seed, attendsEverything);
+      const belief = readerGuesses(views, named);
       const truth = readHiddenTruth(run).characters;
       let allRight = true;
       for (const dealt of truth) {

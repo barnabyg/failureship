@@ -570,3 +570,14 @@ export function emptyMonth(): Content {
 export function calledAtStart(content: Content, id: string): string {
   return calledAmong(bossesAtStart(content), content, id);
 }
+
+/**
+ * The content without the Company Events that open a seat, for a test that
+ * walks a seed to the end on Floor 1: such an event could promote it on the way.
+ */
+export function withoutSeatEvents(content: Content): Content {
+  return {
+    ...content,
+    events: content.events.filter((e) => e.vacates === undefined),
+  };
+}
