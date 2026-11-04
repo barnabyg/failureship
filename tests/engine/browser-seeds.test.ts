@@ -72,4 +72,19 @@ describe("the seeds the browser tests walk", () => {
     expect(views.find((v) => v.step.kind === "win")?.month).toBe(15);
     expect(results).toMatchObject({ kind: "results", ending: { won: true } });
   });
+  it("keeps seed 24 a Middle manager in month 15, who hears of a question taken offline at the Board in month 16, for floor-3-moves.spec.ts", () => {
+    const { views } = playRun(24, "take-it-offline", {
+      from: 15,
+      before: `${CLEAN},staff-the-centre`,
+    });
+    const chased = views.find(
+      (v) =>
+        v.step.kind === "notification" && v.step.id === "board-offline-chased",
+    );
+
+    expect(views[0]?.month).toBe(15);
+    expect(views[0]?.job.id).toBe("middle-manager");
+    expect(chased?.month).toBe(16);
+    expect(chased?.job.id).toBe("middle-manager");
+  });
 });
