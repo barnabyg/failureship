@@ -1,4 +1,4 @@
-import { everyNotification, type Content } from "./content";
+import { everyNotification, type Condition, type Content } from "./content";
 import { isUnder } from "./deal";
 import { bossesAtStart, managerAtStart, meantBy } from "./places";
 
@@ -128,7 +128,11 @@ function findBrokenOusting(content: Content): string[] {
  * is not under that floor's boss. One seat to a floor, since a floor has one boss.
  * A big mistake in a seat demotes, so being demoted needs its words.
  */
-export function findBrokenVacancies(content: Content): string[] {
+export function findBrokenVacancies(
+  content: Content,
+  checkCondition: (owner: string, condition: Condition) => void = () =>
+    undefined,
+): string[] {
   const problems = [
     ...findBrokenSeatActs(content),
     ...findBrokenOusting(content),
@@ -163,6 +167,9 @@ export function findBrokenVacancies(content: Content): string[] {
       problems.push(
         `${owner} needs either a "job" to lead to or a "win", and not both.`,
       );
+    }
+    for (const [index, variant] of (seat.win?.variants ?? []).entries()) {
+      checkCondition(`${owner} win variant ${String(index + 1)}`, variant.when);
     }
     if (seat.floor === seat.job) {
       problems.push(`${owner} leads to the floor it is on.`);

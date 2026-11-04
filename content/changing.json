@@ -265,6 +265,14 @@
         "body": "The Junior Associate has left for a role with a longer title at a smaller company. A new Junior Associate starts on Monday, and has already asked for the figures, and how you did them."
       },
       "sets": ["a-colleague-left"]
+    },
+    "head": {
+      "cover": "the acting Head of Operations",
+      "notice": {
+        "title": "Hugh Lamb has left",
+        "body": "The Head of Operations has left, after a review of priorities in which Operations was not one. An all-staff e-mail thanks Hugh for his stewardship, and says he is leaving to take up a portfolio career. An acting Head of Operations has been found, and has been told it is acting."
+      },
+      "sets": ["the-head-left"]
     }
   }
 }

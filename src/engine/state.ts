@@ -246,6 +246,8 @@ export interface Vacancy {
   credit: string | null;
   /** Whoever has called in a favour from whoever decides. */
   calledIn: string[];
+  /** Whether the player opened it, by getting rid of its holder. */
+  ousted: boolean;
   decided: {
     month: number;
     /** Whoever really held influence over it on the Power Map. */

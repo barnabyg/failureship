@@ -396,18 +396,21 @@ function namesSomeoneGone(view: PlayerView, gone: readonly string[]): boolean {
 describe("a run in which someone leaves", { timeout: 120_000 }, () => {
   const leavers = Object.keys(gameContent.changing?.leaving ?? {});
 
-  it("can lose anyone but the boss's boss", () => {
+  // The Head of Operations, your boss's boss on Floor 1 and your boss on Floor
+  // 2, can go, covered by the Programme Manager; those above cannot.
+  it("can lose anyone on Floor 1, your boss's boss included, and nobody above", () => {
     expect(leavers.sort()).toEqual([
       "admin",
       "analyst",
       "associate",
       "boss",
+      "head",
       "projects",
     ]);
   });
 
   // Five Believers at once are too rare to find, so all at once is the boss's team.
-  const team = leavers.filter((id) => id !== "boss");
+  const team = leavers.filter((id) => id !== "boss" && id !== "head");
   for (const who of [...leavers.map((id) => [id]), team]) {
     it(`completes, Scenes, report and Find Out included, when ${who.join(" and ")} leave`, () => {
       const content = leavingContent(...who);

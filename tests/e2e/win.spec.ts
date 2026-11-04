@@ -14,7 +14,7 @@ test("says the goal on the first screen", async ({ page }) => {
 
   await expect(page.getByTestId("panel-notification")).toBeVisible();
   await expect(page.getByTestId("goal")).toHaveText(
-    "Your goal: climb by reading people, and reach the top of Floor 3.",
+    "Your goal: get promoted, seat by seat, to the top of Floor 3. Work out who really decides.",
   );
 });
 
@@ -65,6 +65,9 @@ test("ride the lift to Floor 3, do its Grand Plan, and win the way out of it", a
   await expect(route).toHaveCount(3);
   await expect(route.nth(0)).toContainText("Month 7: Team lead");
   await expect(route.nth(1)).toContainText("Month 11: Middle manager");
-  await expect(route.nth(2)).toContainText("Month 15: the top of Floor 3");
+  await expect(route.nth(2)).toContainText(
+    "Month 15: the top of Floor 3, when Gwen Ashdown's Grand Plan was really done",
+  );
   await expect(page.getByTestId("lift-ride")).toHaveCount(0);
+  await expect(page.getByTestId("goal")).toHaveCount(0);
 });

@@ -194,8 +194,8 @@ export function StepPanel({ view, onChoose }: StepPanelProps) {
     case "win":
       return (
         <Panel testId="panel-win" title={step.title}>
-          {step.lines.map((line) => (
-            <p key={line}>{line}</p>
+          {step.lines.map((line, index) => (
+            <p key={index}>{line}</p>
           ))}
           <Continue onChoose={onChoose} />
         </Panel>

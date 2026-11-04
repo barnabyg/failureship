@@ -1003,6 +1003,35 @@
     ]
   },
   {
+    "id": "audit-line",
+    "floor": "team-lead",
+    "months": [2],
+    "from": "From: Internal Audit",
+    "subject": "Floor 2 leadership review: your input",
+    "body": "Internal Audit is reviewing Floor 2's leadership, as it does when the expenses are interesting. Concerns can be raised in confidence, with the auditor, who is in Team Room 2A all week with a lever-arch file and the door open.",
+    "options": [
+      {
+        "id": "no-concerns",
+        "label": "Say that you have no concerns",
+        "result": {
+          "title": "Internal Audit",
+          "body": "You have no concerns. The auditor writes that down, and underlines it."
+        }
+      },
+      {
+        "id": "audit-your-boss",
+        "family": "attack",
+        "label": "Tell the auditor about your boss's expenses",
+        "sets": ["told-audit"],
+        "ousts": "audit",
+        "result": {
+          "title": "Internal Audit",
+          "body": "You tell the auditor about the lunches. The auditor writes it all down, says it is completely confidential, and logs it on the service desk, which is where Internal Audit logs everything."
+        }
+      }
+    ]
+  },
+  {
     "id": "centre-launch",
     "floor": "team-lead",
     "months": [3],
@@ -1714,6 +1743,35 @@
           "body": "It takes until nine. Everything fits, in eight-point type, and nothing has a date, so nothing is late. Your boss calls it a milestone, which it does not have."
         },
         "approach": "theatre"
+      }
+    ]
+  },
+  {
+    "id": "board-secondment",
+    "floor": "middle-manager",
+    "months": [2],
+    "from": "From: The Board Office",
+    "subject": "Nominations: Refurbishment Programme Lead",
+    "body": "The Board is looking for a senior leader to be seconded to lead the refurbishment of Floors 4 to 10, which has been delayed by the refurbishment. Nominations are confidential, and go to the Head of Transformation.",
+    "options": [
+      {
+        "id": "nominate-nobody",
+        "label": "Nominate nobody",
+        "result": {
+          "title": "Nominations",
+          "body": "You nominate nobody. The Board Office thanks you for engaging with the process."
+        }
+      },
+      {
+        "id": "nominate-your-boss",
+        "family": "attack",
+        "label": "Nominate your boss, with a glowing reference",
+        "sets": ["nominated-your-boss"],
+        "ousts": "upstairs",
+        "result": {
+          "title": "Nominations",
+          "body": "Your reference says that your boss is visionary, tireless and wasted on Floor 3. Every word of it is chosen to be true for long enough."
+        }
       }
     ]
   },

@@ -355,8 +355,18 @@ const ousting = z.strictObject({
       chance: perKind(z.number().min(0).max(1)),
       /** It can work only while this holds, such as a Hidden Fact being true. */
       when: condition.optional(),
+      /**
+       * The boss is moved up out of the way, and stays in the company, so
+       * their seat opens as `movedUp`. Otherwise they are fired.
+       */
+      upstairs: z.literal(true).optional(),
+      /** Told instead of the shared `gone` and `survived`, for this way. */
+      gone: notice.optional(),
+      survived: notice.optional(),
     }),
   ),
+  /** Set when a boss is got rid of, which only the end of a run should read. */
+  sets,
   /** Added to the chance for how whoever acts on it stands with the player. */
   mood: z.strictObject({
     warm: z.number(),
@@ -387,6 +397,16 @@ const seat = z.strictObject({
       /** The stand-in, told after the decision, in paragraphs. */
       title: text,
       lines: z.array(text).min(1),
+      /** Told instead, the first whose `when` holds: by how the player got there. */
+      variants: z
+        .array(
+          z.strictObject({
+            when: condition,
+            title: text.optional(),
+            lines: z.array(text).min(1),
+          }),
+        )
+        .default([]),
       /** What the player reached, for the route up on the results screen. */
       reached: text,
       /** The results screen's heading and introduction, after a win. */
@@ -463,9 +483,18 @@ export const vacancies = z.strictObject({
   results: byWay(text),
   /**
    * The route up, on the results screen: each seat the player won, by how it
-   * fell vacant, and each demotion. Says {month}, {job} and {holder}.
+   * fell vacant, a Plan by how it was done, and `ousted` for a seat the player
+   * opened by getting rid of its holder; and each demotion. Says {month},
+   * {job} and {holder}.
    */
-  route: z.strictObject({ ...byWay(text).shape, demoted: text }),
+  route: z.strictObject({
+    plan: z.strictObject({ reality: text, appearance: text }),
+    movedUp: text,
+    left: text,
+    created: text,
+    ousted: text,
+    demoted: text,
+  }),
   /** Getting rid of the player's boss, which an outcome's `ousts` names a way of. */
   ousting: ousting.optional(),
 });

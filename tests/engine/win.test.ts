@@ -109,6 +109,35 @@ describe("winning the way out of the top floor", () => {
       expect(results.route).toEqual([]);
     }
   });
+
+  it("tells the first stand-in whose condition holds, by how the player got there", () => {
+    const varied = parseContent(
+      winRaw({
+        ...WIN,
+        variants: [
+          { when: { did: "never-set" }, lines: ["NEVER-TOLD"] },
+          {
+            when: { did: "really-done" },
+            title: "WON-FOR-REAL",
+            lines: ["DONE-FOR-REAL"],
+          },
+          { when: { did: "really-done" }, lines: ["TOO-LATE"] },
+        ],
+      }),
+    );
+    const seeds = SEEDS.filter((s) => decidedOn(s, varied).winner === "you");
+    expect(seeds.length).toBeGreaterThan(0);
+
+    for (const seed of seeds) {
+      const { views } = decidedOn(seed, varied);
+
+      expect(views.find((v) => v.step.kind === "win")?.step).toEqual({
+        kind: "win",
+        title: "WON-FOR-REAL",
+        lines: ["DONE-FOR-REAL"],
+      });
+    }
+  });
 });
 
 describe("seats that win, as written", () => {

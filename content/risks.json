@@ -687,5 +687,98 @@
     "landedOnYou": "It came out when the Board asked the Head of Transformation for a date, and the slide led to you.",
     "landedElsewhere": "It came out when the Board asked for a date, and the checked Board pack had one.",
     "neverCameOut": "It never came out. The slide is still outside the lift, and nobody has asked it anything."
+  },
+  {
+    "id": "audit-call",
+    "addedBy": "told-audit",
+    "after": {
+      "min": 3,
+      "max": 5
+    },
+    "note": "You told Internal Audit about your boss's expenses. It was confidential, and logged on the service desk.",
+    "route": {
+      "character": "delivery",
+      "chance": {
+        "believer": 0.6,
+        "incompetent": 0.3,
+        "practitioner": 0.5
+      },
+      "motive": "The Service Delivery Lead reads every ticket on the service desk, including Internal Audit's, which had your name in the requester field."
+    },
+    "traced": {
+      "not": {
+        "believes": {
+          "character": "delivery",
+          "mood": "warm"
+        }
+      }
+    },
+    "onPlayer": {
+      "id": "audit-call-landed",
+      "as": "move",
+      "from": "From: The Service Delivery Lead, Owen Hale",
+      "title": "Ticket closed",
+      "body": "The Service Delivery Lead has closed Internal Audit's ticket, and copied the closure note to People and Culture. It says who raised the concern about your old boss, and when, and has a satisfaction survey attached. People and Culture would like to discuss your approach to collaboration.",
+      "headOpinion": -1,
+      "sets": ["audit-call-traced"],
+      "mistake": "big"
+    },
+    "onSomeoneElse": {
+      "id": "audit-call-kept",
+      "as": "notice",
+      "title": "Ticket closed",
+      "body": "The Service Delivery Lead mentions that an old Internal Audit ticket has been closed with no further action, and the requester field cleared, as a courtesy.",
+      "sets": ["audit-call-kept"]
+    },
+    "landedOnYou": "It came out on the service desk, where Internal Audit's ticket said who had raised it.",
+    "landedElsewhere": "It came out, but the Service Delivery Lead thought well of you, and cleared the requester field.",
+    "neverCameOut": "It never came out. The ticket is closed, with your name in it."
+  },
+  {
+    "id": "nomination-traced",
+    "addedBy": "nominated-your-boss",
+    "after": {
+      "min": 3,
+      "max": 4
+    },
+    "note": "You nominated your boss for a secondment to a floor with no lights. The nomination was confidential, and went to the Head of Transformation.",
+    "route": {
+      "character": "transformation",
+      "chance": {
+        "believer": 0.7,
+        "incompetent": 0.4,
+        "practitioner": 0.7
+      },
+      "motive": "The Head of Transformation kept the nominations, and mentioned yours to your old boss, as a kindness."
+    },
+    "traced": {
+      "not": {
+        "believes": {
+          "character": "transformation",
+          "mood": "warm"
+        }
+      }
+    },
+    "onPlayer": {
+      "id": "nomination-traced-landed",
+      "as": "move",
+      "from": "From: The Head of Transformation, Simone Fairley",
+      "title": "About your nomination",
+      "body": "The Head of Transformation has mentioned to your old boss who nominated them for the refurbishment, and your old boss has written to everyone on Floor 3 to thank you, by name, for thinking of them. Several people have asked to be told if you ever think of them.",
+      "opinion": -1,
+      "headOpinion": -2,
+      "sets": ["nomination-traced"],
+      "mistake": "big"
+    },
+    "onSomeoneElse": {
+      "id": "nomination-kept",
+      "as": "notice",
+      "title": "The nominations",
+      "body": "The Head of Transformation mentions, in the lift, that the nominations have been shredded, all of them, and looks at you for slightly too long.",
+      "sets": ["nomination-kept"]
+    },
+    "landedOnYou": "It came out when the Head of Transformation told your old boss who had nominated them.",
+    "landedElsewhere": "It came out, but the Head of Transformation thought well of you, and shredded the nominations.",
+    "neverCameOut": "It never came out. Your nomination is in a drawer on Floor 3, signed."
   }
 ]

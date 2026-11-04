@@ -57,6 +57,8 @@ export function openSeat(
   content: Content,
   holder: string,
   way: SeatWay,
+  /** Whether the player opened it by getting rid of the holder, as firing always is. */
+  ousted: boolean = way === "fired",
 ): void {
   const seat = content.vacancies?.seats.find((s) => s.floor === state.job);
   const decides = state.month + (seat?.openFor ?? 0);
@@ -64,8 +66,7 @@ export function openSeat(
     !seat ||
     holder !== bossOf(state, content) ||
     isGone(state, holder) ||
-    seatPending(state) ||
-    decides > content.balance.monthsPerRun
+    !canOpenSeat(state, content)
   ) {
     return;
   }
@@ -78,6 +79,7 @@ export function openSeat(
     decides,
     credit: null,
     calledIn: [],
+    ousted,
     decided: null,
   });
   const opened = seat.opened[way];
@@ -87,6 +89,28 @@ export function openSeat(
       "{holder}": calledBy(state, content, holder),
     }).replaceAll("{month}", String(decides)),
   });
+}
+
+/**
+ * Whether the seat of the player's floor can open now: it is written, none is
+ * still to be decided, and the run would not end before deciding it. Winning
+ * one that leads on must leave the player a boss's boss: whoever their boss
+ * answers to needs someone above them.
+ */
+export function canOpenSeat(state: State, content: Content): boolean {
+  const seat = content.vacancies?.seats.find((s) => s.floor === state.job);
+  if (
+    seat === undefined ||
+    seatPending(state) ||
+    state.month + seat.openFor > content.balance.monthsPerRun
+  ) {
+    return false;
+  }
+  if (seat.win) return true;
+  const above =
+    managerHere(state, content, bossOf(state, content)) ??
+    seat.movesUp.reportsTo;
+  return managerHere(state, content, above) !== undefined;
 }
 
 /**

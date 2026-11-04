@@ -69,6 +69,8 @@ export function flagsSetByHiddenResults(content: Content): Set<string> {
     ...Object.values(content.demands?.sets ?? {}),
     // Whether the boss finds out goes by the boss's kind too.
     ...(content.overHead ? [content.overHead.sets.caught] : []),
+    // Whether getting rid of the boss works goes by whoever protects them.
+    ...(content.vacancies?.ousting?.sets ?? []),
   ]);
 }
 

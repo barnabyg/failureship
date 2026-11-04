@@ -1,9 +1,15 @@
 import { describe, expect, it } from "vitest";
 import { gameContent } from "../../src/content";
-import { startRun, type Choice, type PlayerView } from "../../src/engine";
+import {
+  startRun,
+  type Choice,
+  type Content,
+  type PlayerView,
+} from "../../src/engine";
 import { isOn } from "../../src/engine/floors";
 import { readHiddenTruth } from "../../src/engine/hidden-truth";
 import { plainChoice } from "../../src/ui/later-month";
+import { withoutSeatEvents } from "./fixture";
 import { CLEAN, playRun } from "./real-runs";
 
 /**
@@ -12,8 +18,14 @@ import { CLEAN, playRun } from "./real-runs";
  */
 export const CLIMB = `${CLEAN},staff-the-centre,decide-what-stops`;
 
-/** Rings the Speak Up line about your boss, in month 8: the engineered route. */
+/** Rings the Speak Up line about your boss, in month 8, which gets rid of them on some deals. */
 const REPORT = "ring-about-your-boss";
+
+/** Asks the Senior Analyst for the figures in month 5, and really loads them: every Plan for real. */
+const HONEST = "take-the-blame,ask-analyst-for-figures,load-the-real-figures";
+
+/** Getting rid of your boss on Floor 2, by Internal Audit, and on Floor 3, upstairs. */
+const GET_RID = ["audit-your-boss", "nominate-your-boss"];
 
 /** What a player who means to climb does for real on Floors 2 and 3, whenever it is offered. */
 const FOR_REAL = [
@@ -24,6 +36,7 @@ const FOR_REAL = [
   "tie-it-to-the-roadmap",
   "ask-what-stops",
   "check-the-pack",
+  "book-the-desks",
 ];
 
 /** The same player's word about each open seat, with whoever is above their boss. */
@@ -50,8 +63,13 @@ const FOR_SHOW = [
  * in order, the first time it is offered, then each of `always` whenever it
  * is offered, and plays plainly otherwise.
  */
-function climb(seed: number, once: string, always: readonly string[]) {
-  const run = startRun({ seed, content: gameContent });
+function climb(
+  seed: number,
+  once: string,
+  always: readonly string[],
+  content: Content,
+) {
+  const run = startRun({ seed, content });
   let view = run.view();
   const views: PlayerView[] = [view];
   const first = once.split(",");
@@ -68,16 +86,22 @@ function climb(seed: number, once: string, always: readonly string[]) {
   return { views, truth: readHiddenTruth(run) };
 }
 
-/** Of 200 deals, which this player wins, and by which route up, seat by seat. */
+/**
+ * Of 200 deals, which this player wins, and by which route up, seat by seat:
+ * how each seat fell vacant, or `ousted` where the player got rid of its
+ * holder. Without the Company Events that open seats, the routes are only
+ * what the player did.
+ */
 function survey(once: string, always: readonly string[]) {
+  const content = withoutSeatEvents(gameContent);
   const routes = new Map<string, number[]>();
   for (let seed = 1; seed <= 200; seed++) {
-    const { views, truth } = climb(seed, once, always);
+    const { views, truth } = climb(seed, once, always, content);
     const end = views.at(-1)?.step;
     if (end?.kind !== "results" || !end.ending.won) continue;
     const route = truth.vacancies
       .filter((v) => v.decided?.winner === "you")
-      .map((v) => v.way)
+      .map((v) => (v.ousted ? "ousted" : v.way))
       .join(" > ");
     routes.set(route, [...(routes.get(route) ?? []), seed]);
   }
@@ -103,12 +127,25 @@ describe("the climb to the top of Floor 3", () => {
     expect(results.ending).toMatchObject({ fired: false, won: true });
     expect(results.ending.text).toContain("month 15");
     expect(results.route.map((r) => r.text)).toEqual([
-      expect.stringMatching(/^Month 7: Team lead, by the main route\./),
-      expect.stringMatching(/^Month 11: Middle manager, by the main route\./),
-      expect.stringMatching(
-        /^Month 15: the top of Floor 3, by the main route\./,
-      ),
+      "Month 7: Team lead, when Dennis Prowse's Grand Plan was done for show, and Dennis Prowse moved up anyway.",
+      "Month 11: Middle manager, when Hugh Lamb's Grand Plan was really done, and Hugh Lamb moved up.",
+      "Month 15: the top of Floor 3, when Gwen Ashdown's Grand Plan was really done, and Gwen Ashdown moved up.",
     ]);
+  });
+
+  // CLIMB fakes Floor 1's Plan. Seed 67 gets rid of both bosses above Floor 1.
+  it("tells a stand-in for winning that goes by how the player got there", () => {
+    const standIn = (views: readonly PlayerView[]) => {
+      const step = views.find((v) => v.step.kind === "win")?.step;
+      return step?.kind === "win" ? step.lines.join(" ") : "";
+    };
+    const forShow = standIn(playRun(2, CLIMB).views);
+    const gotRid = standIn(
+      climb(67, CLEAN, [...GET_RID, ...FOR_THE_SEAT], gameContent).views,
+    );
+
+    expect(forShow).toContain("a sign on a door");
+    expect(gotRid).toContain("got rid of their friends");
   });
 
   it("rides the lift to Floor 3, to its own bosses, and its own rooms", () => {
@@ -153,23 +190,35 @@ describe("the climb to the top of Floor 3", () => {
 
   // A seat falls vacant in a month at the earliest, so the climb is a race
   // against eighteen months, which a player who knows the game wins on some
-  // deals and not others, by more than one route. Faking every Plan wins less.
+  // deals and not others. Doing the Plans and getting rid of bosses are
+  // different routes up, each the player's own doing, on every floor. Getting
+  // rid of them is the riskier, and faking every Plan wins far less.
   it(
-    "is reachable within the run on some deals, by more than one route, and less often for show",
-    { timeout: 180_000 },
+    "is reachable within the run by different ways of playing, and much less often for show",
+    { timeout: 300_000 },
     () => {
-      const real = survey(CLEAN, [...FOR_REAL, ...FOR_THE_SEAT]);
-      const engineered = survey(`take-the-blame,${REPORT}`, [
-        ...FOR_REAL,
+      const planner = survey(CLEAN, [...FOR_REAL, ...FOR_THE_SEAT]);
+      const honest = survey(HONEST, [...FOR_REAL, ...FOR_THE_SEAT]);
+      const ridder = survey(CLEAN, [...GET_RID, ...FOR_THE_SEAT]);
+      const engineer = survey(`take-the-blame,${REPORT}`, [
+        ...GET_RID,
         ...FOR_THE_SEAT,
       ]);
       const forShow = survey(CLEAN, [...FOR_SHOW, ...FOR_THE_SEAT]);
 
-      expect(real.wins).toBeGreaterThanOrEqual(30);
-      expect(real.wins).toBeLessThanOrEqual(80);
-      expect(real.routes.size).toBeGreaterThan(1);
-      expect([...engineered.routes.keys()]).toContain("fired > plan > plan");
-      expect(forShow.wins).toBeLessThan(real.wins);
+      expect(planner.wins).toBeGreaterThanOrEqual(30);
+      expect(planner.wins).toBeLessThanOrEqual(80);
+      expect([...planner.routes.keys()]).toEqual(["plan > plan > plan"]);
+      expect(honest.wins).toBeGreaterThanOrEqual(15);
+      expect(
+        ridder.routes.get("plan > ousted > ousted")?.length,
+      ).toBeGreaterThan(0);
+      for (const route of ridder.routes.keys())
+        expect(route).toMatch(/ousted$/);
+      expect(
+        engineer.routes.get("ousted > ousted > ousted")?.length,
+      ).toBeGreaterThan(0);
+      expect(forShow.wins).toBeLessThanOrEqual(planner.wins / 2);
     },
   );
 });

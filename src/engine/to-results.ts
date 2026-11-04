@@ -8,7 +8,7 @@ import { promisesInResults } from "./promises";
 import { rivalsInResults } from "./rivals";
 import { influencerOf } from "./deal";
 import { bossKindOf, isMet, moodOf, moodOfCharacter, personOf } from "./reads";
-import { calledBy, sayPeople, titleOf } from "./say";
+import { calledBy, sayMonth, sayPeople, titleOf } from "./say";
 import { standingAtEnd } from "./standing";
 import type { State } from "./state";
 import { vacanciesInResults } from "./vacancies";
@@ -250,7 +250,7 @@ function toEnding(
   return {
     fired,
     won: false,
-    text: written?.replaceAll("{month}", String(state.firedIn)) ?? null,
+    text: written === undefined ? null : sayMonth(written, state.firedIn),
   };
 }
 

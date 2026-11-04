@@ -161,7 +161,54 @@
           "title": "You have reached the top of Floor 3",
           "intro": "The building does not currently go any higher. Here is how you got here, and what the citation leaves out."
         },
-        "ending": "You reached the top of Floor 3 in month {month}, which is as high as the building goes for now."
+        "ending": "You reached the top of Floor 3 in month {month}, which is as high as the building goes for now.",
+        "variants": [
+          {
+            "when": {
+              "did": "got-rid-of-a-boss"
+            },
+            "lines": [
+              "Your pass now opens the lift lobby at the top of Floor 3. In the lift there is a button for Floor 4, with a piece of tape over it. Someone has written Soon on the tape, and dated it.",
+              "Floors 4 to 10 are closed for refurbishment. Your office up there will be ready when they are, and so, you are told, will a number of people who would like a word with whoever got rid of their friends on the way up.",
+              "Your payout has been processed. It is a voucher for the staff restaurant, a framed certificate that says Integrity, and a seat on the Speak Up Steering Group. The real payout is in the penthouse, with the Chief Executive, behind the tape.",
+              "Nobody on Floor 3 will have a coffee with you, in case it is a meeting. It is lonely at the top of Floor 3, and it was quicker this way."
+            ]
+          },
+          {
+            "when": {
+              "did": "portfolio-restructured"
+            },
+            "lines": [
+              "Your pass now opens the lift lobby at the top of Floor 3. In the lift there is a button for Floor 4, with a piece of tape over it. Someone has written Soon on the tape, and dated it.",
+              "The post was created for whoever got it, and that was you. Your predecessor still has the title, the view and the plant, and now reports to a box on a chart with your name in it.",
+              "Your payout has been processed. It is a voucher for the staff restaurant, a framed copy of the chart, and the right to be copied in on everything. The real payout is in the penthouse, with the Chief Executive, behind the tape."
+            ]
+          },
+          {
+            "when": {
+              "any": [
+                {
+                  "did": "tool-is-hollow"
+                },
+                {
+                  "did": "desks-are-hollow"
+                },
+                {
+                  "did": "centre-is-a-sign"
+                },
+                {
+                  "did": "roadmap-on-a-slide"
+                }
+              ]
+            },
+            "lines": [
+              "Your pass now opens the lift lobby at the top of Floor 3. In the lift there is a button for Floor 4, with a piece of tape over it. Someone has written Soon on the tape, and dated it, which is more than your Plans had.",
+              "Floors 4 to 10 are closed for refurbishment. On the way up you left a sign on a door, a slide with no dates, and a tool with a lighthouse on it. None of them has been opened since, and all of them are on your CV.",
+              "Your payout has been processed. It is a voucher for the staff restaurant, a framed certificate that says Delivered, and the right to be copied in on everything. The real payout is in the penthouse, with the Chief Executive, behind the tape.",
+              "Somewhere below you, someone has just opened a door with Excellence on it, and found a chair. You will be at a conference when they ask."
+            ]
+          }
+        ]
       }
     }
   ],
@@ -339,11 +386,14 @@
     "created": "In month {month}, a post was created out of {holder}'s team, and it went to {winner}."
   },
   "route": {
-    "plan": "Month {month}: {job}, by the main route. {holder} completed a Grand Plan and moved up, and the seat was yours.",
-    "movedUp": "Month {month}: {job}. {holder} was seconded upstairs, and the seat was yours.",
-    "left": "Month {month}: {job}. {holder} left the company, and the seat was yours.",
-    "fired": "Month {month}: {job}, by the engineered route. {holder} was got rid of, and the seat was yours.",
-    "created": "Month {month}: {job}. A post was created out of the team {holder} led, and it was yours.",
+    "plan": {
+      "reality": "Month {month}: {job}, when {holder}'s Grand Plan was really done, and {holder} moved up.",
+      "appearance": "Month {month}: {job}, when {holder}'s Grand Plan was done for show, and {holder} moved up anyway."
+    },
+    "movedUp": "Month {month}: {job}, when {holder} was seconded upstairs.",
+    "left": "Month {month}: {job}, when {holder} left the company.",
+    "created": "Month {month}: {job}, in a post created out of the team {holder} led.",
+    "ousted": "Month {month}: {job}, by getting rid of {holder}.",
     "demoted": "Month {month}: back down to {job}, after an incident."
   },
   "ousting": {
@@ -371,6 +421,37 @@
         "when": {
           "heardTrue": "abolished-post"
         }
+      },
+      "audit": {
+        "chance": {
+          "believer": 0.8,
+          "incompetent": 0.5,
+          "practitioner": 0.4
+        },
+        "gone": {
+          "title": "A change of leadership",
+          "body": "Internal Audit has completed its review of Floor 2's leadership, and {holder} is no longer with the company. The expenses have been reclaimed, including a lunch that turned out to have been yours. Everyone on Floor 2 is very busy, all at once, in the other direction from you."
+        },
+        "survived": {
+          "title": "Audit complete",
+          "body": "Internal Audit has completed its review of Floor 2's leadership, and found nothing that a policy did not already allow. {holder} has been told the review is closed, and roughly where it came from."
+        }
+      },
+      "upstairs": {
+        "chance": {
+          "believer": 0.6,
+          "incompetent": 0.9,
+          "practitioner": 0.7
+        },
+        "upstairs": true,
+        "gone": {
+          "title": "A secondment to the refurbishment",
+          "body": "Your nomination has been successful. {holder} is seconded to lead the Floors 4 to 10 Refurbishment Programme, which has an office on a floor with no lights, and is thrilled. The nomination was confidential, and {holder} has written to thank whoever it was."
+        },
+        "survived": {
+          "title": "Nominations closed",
+          "body": "The Board has thanked everyone for their nominations, and decided that {holder} is too valuable where they are. {holder} has been told about the nomination, by name."
+        }
       }
     },
     "mood": {
@@ -390,6 +471,7 @@
       "about": "tried-to-get-rid-of-me",
       "text": "You tried to get them fired, and they know it.",
       "belief": -3
-    }
+    },
+    "sets": ["got-rid-of-a-boss"]
   }
 }

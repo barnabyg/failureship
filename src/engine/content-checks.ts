@@ -191,7 +191,7 @@ function findBrokenReferences(content: Content): string[] {
   problems.push(...findBrokenReviews(content, hiddenFlags));
   problems.push(...findBrokenRivals(content));
   problems.push(...findBrokenPlans(content, hiddenFlags, checkCondition));
-  problems.push(...findBrokenVacancies(content));
+  problems.push(...findBrokenVacancies(content, checkCondition));
   problems.push(...findBrokenDeal(content, characters));
   problems.push(...findBrokenBehaviours(content));
   problems.push(...findBrokenBossSigns(content));

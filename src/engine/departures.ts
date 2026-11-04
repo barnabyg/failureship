@@ -7,7 +7,7 @@ import { remember } from "./reputation";
 import { drawFor } from "./rng";
 import { calledBy, sayPeople } from "./say";
 import type { State } from "./state";
-import { openSeat } from "./vacancies";
+import { canOpenSeat, openSeat } from "./vacancies";
 
 /**
  * Whether someone can go: they are still here, and going would not leave a
@@ -63,8 +63,10 @@ export function depart(
  * The player tries to get rid of their boss, in one of the ways written. It is
  * up to whoever holds influence over the boss on the Power Map, at a seeded
  * chance by their kind and how they stand with the player. Nobody above the
- * boss, or a way whose `when` does not hold, and nobody acts on it. If it works, the boss is fired and their seat is
- * open; if not, the boss stays, and remembers.
+ * boss, or a way whose `when` does not hold, and nobody acts on it. If it
+ * works, the boss is fired, or for a way `upstairs`, moved up out of the way,
+ * which works only while their seat can open; either way the seat is open, and
+ * the ousting's flags are set. If not, the boss stays, and remembers.
  */
 export function oust(state: State, content: Content, way: string): void {
   const written = content.vacancies?.ousting;
@@ -77,19 +79,29 @@ export function oust(state: State, content: Content, way: string): void {
       ? 0
       : chances.chance[kindOf(state, above)] +
         written.mood[moodOfCharacter(state, content, above)];
+  const possible = chances.upstairs
+    ? canOpenSeat(state, content)
+    : canGo(state, content, boss);
   const works =
-    canGo(state, content, boss) &&
-    drawFor(state.seed, `oust:${way}`, state.month) < chance;
+    possible && drawFor(state.seed, `oust:${way}`, state.month) < chance;
   // What the boss is called is read before they go.
   const words = { "{holder}": calledBy(state, content, boss) };
-  const told = works ? written.gone : written.survived;
+  const told = works
+    ? (chances.gone ?? written.gone)
+    : (chances.survived ?? written.survived);
   // Told before the seat it opens.
   state.noticesDue.push({
     title: sayPeople(told.title, words),
     body: sayPeople(told.body, words),
   });
   if (works) {
-    depart(state, content, boss, "fired");
+    // Only the end of a run reads these, so they start nothing.
+    state.flags.push(...written.sets);
+    state.deeds.push(
+      ...written.sets.map((flag) => ({ flag, month: state.month })),
+    );
+    if (chances.upstairs) openSeat(state, content, boss, "movedUp", true);
+    else depart(state, content, boss, "fired");
     return;
   }
   const { about, text, belief } = written.remembered;
