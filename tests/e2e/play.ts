@@ -3,6 +3,7 @@ import { expect, test, type Locator, type Page } from "@playwright/test";
 /**
  * Walking on to the results screen plays out the rest of an 18-month run, which
  * takes CI most of a minute, so a test that does it gets the slow test's time.
+ * Ending the run early with `&last=N` in the address saves most of the walk.
  */
 function walkingToTheEnd() {
   test.slow();

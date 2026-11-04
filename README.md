@@ -183,7 +183,7 @@ How to run the checks and tests is in [AGENTS.md](AGENTS.md#verifying).
   `Panel.tsx` holds their frame and buttons, and `Intranet.tsx` styles the e-mails and newsletter.
   `Header.tsx` draws the header and its cards, with `RunControls.tsx` and `StandingBar.tsx`.
   `Chart.tsx` and `Notebook.tsx` open in a `Modal.tsx`. `saved-run.ts` saves the run, and
-  `later-month.ts` plays the e2e build to `?month=N`.
+  `later-month.ts` plays the e2e build to `?month=N` and ends it at `&last=N`.
 
 ### Checks and exceptions
 

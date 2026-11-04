@@ -2,7 +2,7 @@ import { build, type Rolldown } from "vite";
 import { describe, expect, it } from "vitest";
 import { gameContent } from "../../src/content";
 import { startRun } from "../../src/engine";
-import { plainChoice, playToMonth } from "../../src/ui/later-month";
+import { endingAt, plainChoice, playToMonth } from "../../src/ui/later-month";
 
 const newRun = (seed = 1) => startRun({ seed, content: gameContent });
 
@@ -60,6 +60,39 @@ describe("the browser tests' later-month start", () => {
       expect(playToMonth(newRun(), written).month).toBe(1);
     },
   );
+});
+
+describe("the browser tests' early end", () => {
+  /** Plays a run plainly to the end, and gives its last month and its last step. */
+  const toTheEnd = (written: string | null) => {
+    const run = startRun({ seed: 1, content: endingAt(gameContent, written) });
+    let view = run.view();
+    let last = view;
+    while (view.choices.length > 0) {
+      last = view;
+      view = run.choose(plainChoice(view));
+    }
+    return { month: last.month, total: view.totalMonths, end: view.step.kind };
+  };
+
+  it("ends the run at the results screen as the month written closes", () => {
+    expect(toTheEnd("10")).toEqual({ month: 10, total: 10, end: "results" });
+  });
+
+  it.each([null, "", "0", "18", "19", "2.5", "soon"])(
+    "leaves the run its eighteen months when asked for %s",
+    (written) => {
+      expect(toTheEnd(written)).toEqual({
+        month: 18,
+        total: 18,
+        end: "results",
+      });
+    },
+  );
+
+  it("is the game's own content when it changes nothing", () => {
+    expect(endingAt(gameContent, "18")).toBe(gameContent);
+  });
 });
 
 /** The JavaScript `vite build` makes in a mode, in memory, unminified to be quick. */

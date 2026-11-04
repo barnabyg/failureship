@@ -30,7 +30,7 @@ test("a hidden risk lands on the player", async ({ page }) => {
 
 // #50 asks to see the risk on the results screen here.
 test("a hidden risk that landed is on the results screen", async ({ page }) => {
-  await page.goto(`${faked}9`);
+  await page.goto(`${faked}9&last=9`);
   await expect(page.getByTestId("final-warning")).toBeVisible();
 
   await playUntil(page, "panel-results");

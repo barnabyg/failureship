@@ -29,7 +29,7 @@ test("Official standing moves when the report goes unfiled", async ({
 test("the results screen sets Official standing beside who really decides", async ({
   page,
 }) => {
-  await page.goto("/?seed=1&month=9");
+  await page.goto("/?seed=1&month=9&last=9");
   await playToResults(page);
 
   const standing = page.getByTestId("result-standing");

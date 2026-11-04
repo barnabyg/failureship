@@ -13,7 +13,7 @@ import {
 import { Chart } from "./Chart";
 import { Header, HeaderCards, monthText } from "./Header";
 import { LiftRide, readRide, writeRide, type Ride } from "./LiftRide";
-import { playToMonth } from "./later-month";
+import { endingAt, playToMonth } from "./later-month";
 import { Modal } from "./Modal";
 import { Notebook, monthLabel } from "./Notebook";
 import { StepPanel } from "./panels";
@@ -28,8 +28,20 @@ function randomSeed(): number {
   return Math.floor(Math.random() * 1_000_000);
 }
 
+/**
+ * The game as written. Only Playwright's build reads `?last=N`, which ends a
+ * run as month N closes, and every other build drops it, as it does below.
+ */
+const content =
+  import.meta.env.MODE === "e2e"
+    ? endingAt(
+        gameContent,
+        new URLSearchParams(window.location.search).get("last"),
+      )
+    : gameContent;
+
 function begin(seed: number): { run: Run; view: PlayerView } {
-  const run = startRun({ seed, content: gameContent });
+  const run = startRun({ seed, content });
   return { run, view: run.view() };
 }
 
@@ -41,7 +53,7 @@ function resumeSaved(seed: number | null): {
   const save = readSavedRun();
   if (save === null) return { game: null, saveLost: false };
   try {
-    const run = resumeRun({ save, content: gameContent });
+    const run = resumeRun({ save, content });
     const view = run.view();
     return {
       game: seed === null || seed === view.seed ? { run, view } : null,

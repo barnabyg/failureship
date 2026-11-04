@@ -8,7 +8,7 @@ test("a Believer burned twice changes, and only the results screen says so", asy
   page,
 }) => {
   await page.goto(
-    "/?seed=24&month=9&choose=blame-priya,promise-laptops-analyst,next-quarter",
+    "/?seed=24&month=9&last=9&choose=blame-priya,promise-laptops-analyst,next-quarter",
   );
   await expect(page.locator("body")).not.toContainText("whistleblower");
 

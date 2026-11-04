@@ -1,5 +1,5 @@
 import { gameContent } from "../content";
-import type { Choice, PlayerView, Run } from "../engine";
+import type { Choice, Content, PlayerView, Run } from "../engine";
 
 /**
  * One step of the plain player in the browser tests' helpers: files the report,
@@ -60,4 +60,17 @@ export function playToMonth(
     throw new Error(`Later-month start was never offered "${toChoose[0]}".`);
   }
   return view;
+}
+
+/**
+ * The content, with the run ending as the month written closes, if that is a
+ * month before the run's own last, so that a test of the results screen need
+ * not walk the months after what it tests. Otherwise the content as it is.
+ */
+export function endingAt(content: Content, written: string | null): Content {
+  const month = Number(written);
+  const { monthsPerRun } = content.balance;
+  if (written === null || !Number.isInteger(month)) return content;
+  if (month < 1 || month >= monthsPerRun) return content;
+  return { ...content, balance: { ...content.balance, monthsPerRun: month } };
 }

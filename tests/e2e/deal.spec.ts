@@ -28,7 +28,7 @@ for (const [seed, worth] of [
     page,
   }) => {
     await page.goto(
-      `/?seed=${String(seed)}&month=9&choose=deal-with-the-coordinator`,
+      `/?seed=${String(seed)}&month=9&last=9&choose=deal-with-the-coordinator`,
     );
     await playUntil(page, "panel-results");
     await expect(page.getByTestId("result-deal")).toContainText(worth);
