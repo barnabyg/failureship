@@ -8,6 +8,10 @@ function walkingToTheEnd() {
   test.slow();
 }
 
+/** The player's own desk, on whichever floor they are, by its action in actions.json. */
+const DESKS = ["work", "work-2"];
+const DESK = DESKS.map((id) => `[data-testid="hotspot-${id}"]`).join(", ");
+
 /** Goes to an address as a new player would, with no saved run to come back to. */
 export async function freshRun(page: Page, address: string) {
   if (page.url() !== "about:blank") {
@@ -25,7 +29,7 @@ export async function finishMonth(page: Page) {
   const before = await month.innerText();
   while ((await month.innerText()) === before && !(await results.isVisible())) {
     const carryOn = page.getByTestId("continue");
-    const spare = page.getByTestId("hotspot-work");
+    const spare = page.locator(DESK);
     await expect(carryOn.or(spare).or(results).first()).toBeVisible();
     if (await carryOn.isVisible()) await carryOn.click();
     else if (await spare.isEnabled()) await spare.click();
@@ -35,7 +39,7 @@ export async function finishMonth(page: Page) {
 /** Presses Continue, or takes a spare action, until the panel shows. */
 export async function continueUntil(page: Page, panel: Locator) {
   const carryOn = page.getByTestId("continue");
-  const spare = page.getByTestId("hotspot-work");
+  const spare = page.locator(DESK);
   await expect(async () => {
     if (await carryOn.isVisible()) await carryOn.click();
     else if (await spare.isEnabled()) await spare.click();
@@ -75,7 +79,9 @@ export async function playUntil(page: Page, testId: string) {
   const scene = page.getByTestId("panel-scene");
   const carryOn = page.getByTestId("continue");
   const meeting = page.locator('[data-testid^="hotspot-meeting"]:enabled');
-  const desk = page.locator('[data-testid="hotspot-work"]:enabled');
+  const desk = page.locator(
+    DESKS.map((id) => `[data-testid="hotspot-${id}"]:enabled`).join(", "),
+  );
   for (;;) {
     await expect(
       wanted

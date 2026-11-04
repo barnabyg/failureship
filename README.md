@@ -38,8 +38,7 @@ There are four ways to spend an action:
 - **Meeting Room 1B** opens that month's Scene. You can stay away: it saves the action, but you see
   none of its signs, your boss may take it badly, and the minutes give you an action that follows
   you as a Demand. Everyone present behaves according to their role and their dealt kind, and no
-  single sign settles what they are. Your boss's treatment of you shows what they think of you, but
-  only roughly.
+  single sign settles what they are. Your boss's treatment of you shows roughly what they think.
 - **The photocopier** and **the loading bay** are Find Out. At the photocopier, someone is already
   there and you choose whom to ask about. At the loading bay, you also choose who to buy from.
   Either way you get a claim that may be true, mistaken, out of date or deliberately false. Asking
@@ -90,7 +89,8 @@ what your bosses made of you, each claim and clue and its worth, and both charts
 
 You can also be fired. Some choices are big mistakes, such as blaming someone with a dangerous
 Hidden Fact. The first puts you on a **Final Warning**, shown beside your job title, and the second
-ends the run. A few choices fire you outright, and say so on the button first.
+ends the run. One made while a seat is open can cost you it, and one on Floor 2 takes you down the
+lift, under whoever takes your seat. A few fire you outright, and say so on the button first.
 
 At any step, **New run** deals a new seed, and **Restart from seed** plays the seed you type from
 month 1. Leaving a run in progress asks first. Swap a seed with a friend for the same deal.
@@ -127,7 +127,7 @@ game reloads when you save a file. If an edit breaks the format, the page shows 
 | `risks.json`          | Hidden risks: what adds each, who it comes out through, and whether it can be traced to you            |
 | `deals.json`          | Deals: what each side offers, whether a good word counts, and the favours owed between people          |
 | `promises.json`       | Promises: who they are made to, what is said back, and what arrives when they fall due                 |
-| `mistakes.json`       | The words of a Final Warning and of being fired                                                        |
+| `mistakes.json`       | The words of a Final Warning, of being demoted and of being fired                                      |
 | `official-story.json` | The official story, assembled from entries according to what you did                                   |
 | `behaviours.json`     | What Characters can be seen doing, which roles can do it, and how likely each kind is to do it         |
 | `boss.json`           | The signs of how your boss treats you, and what impresses each kind                                    |
@@ -164,8 +164,8 @@ How to run the checks and tests is in [AGENTS.md](AGENTS.md#verifying).
   `over-head.ts`, `project.ts`, `scenes.ts`, `company-events.ts`, `mistakes.ts`, `reputation.ts`,
   `risks.ts`, `threads.ts` with `bills.ts`, `promises.ts`, `deals.ts`, `changes.ts` for Believers
   changing and leaving, `gauges.ts`, the only module that reads a Gauge, `standing.ts`, `reviews.ts`
-  for quarterly reviews, `rivals.ts` for Rivals, `grand-plans.ts` for Grand Plans and `vacancies.ts`
-  for a seat falling vacant and who really decides it. `say.ts` names
+  for quarterly reviews, `rivals.ts` for Rivals, `grand-plans.ts` for Grand Plans, `vacancies.ts`
+  for seats and who really decides them, `demotions.ts` for losing one to a mistake. `say.ts` names
   Characters in text, and `rng.ts` and `seed.ts` hold the seed. `view.ts` is the player view, built
   by `to-view.ts`, with `to-results.ts` its reveal; `hidden-truth.ts` is the tests' read of the
   truth. `save.ts` writes and reads a run. `State` is plain data, so a mechanic gets saving for

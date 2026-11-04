@@ -309,6 +309,7 @@ export const VACANCY_REASONS = [
   "warm",
   "neutral",
   "cold",
+  "mistake",
 ] as const;
 export type VacancyReason = (typeof VACANCY_REASONS)[number];
 
@@ -323,6 +324,11 @@ const reason = z.strictObject({
    * Left out, it is not told.
    */
   told: text.optional(),
+  /**
+   * The kinds of decider who will not give the seat to a candidate with this
+   * reason while anyone else stands for it, however the rest of it weighs.
+   */
+  rulesOut: z.array(z.enum(KINDS)).default([]),
 });
 
 /** What a seat act leaves with whoever decides: a memory, and how far it moves their belief. */
@@ -347,6 +353,8 @@ const seat = z.strictObject({
   won: notice,
   /** Told as it is decided, if someone else has it. Says {winner}. */
   lost: notice,
+  /** Told instead, if a big mistake cost the player a seat they would otherwise have had. Says {winner}. */
+  blocked: notice,
 });
 
 /** What a candidate passed over keeps of it. Says {winner}. */

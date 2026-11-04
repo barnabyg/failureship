@@ -17,10 +17,12 @@ const reason = (
   [believer, incompetent, practitioner]: [number, number, number],
   why: string,
   told?: string,
+  rulesOut?: Kind[],
 ) => ({
   weight: { believer, incompetent, practitioner },
   why,
   ...(told === undefined ? {} : { told }),
+  ...(rulesOut === undefined ? {} : { rulesOut }),
 });
 
 const seatTalk = (id: string, seat: Record<string, unknown>) => ({
@@ -37,7 +39,9 @@ const seatTalk = (id: string, seat: Record<string, unknown>) => ({
  * counts with every kind of boss, so her seat is open in month 3 and decided as
  * it closes. In month 3 the player can talk to someone about it. Warm beats
  * anything but a decider choosing themselves. A Believer weighs a Plan really
- * delivered above a protégé, and a Practitioner a protégé above a Plan.
+ * delivered above a protégé, and a Practitioner a protégé above a Plan. A big
+ * mistake while the seat is open rules the player out with a Believer or an
+ * Incompetent, and only weighs against them with a Practitioner.
  */
 export function vacancyRaw() {
   const base = planRaw();
@@ -92,6 +96,7 @@ export function vacancyRaw() {
           seatTalk("approach-cal", { approach: "cal" }),
           seatTalk("call-in", { callIn: true }),
           seatTalk("claim", { credit: true }),
+          { id: "slip", label: "slip", mistake: "big" },
         ],
       },
     ],
@@ -152,6 +157,7 @@ export function vacancyRaw() {
           },
           won: { title: "SEAT-WON", body: "You have it, not {winner}." },
           lost: { title: "SEAT-LOST", body: "{winner} HAS-IT" },
+          blocked: { title: "SEAT-BLOCKED", body: "{winner} HAS-IT-AFTER-ALL" },
         },
       ],
       you: "YOU-IN-WORDS",
@@ -184,6 +190,12 @@ export function vacancyRaw() {
         warm: reason([6, 6, 6], "WARM:{decider}"),
         neutral: reason([1, 1, 1], "NEUTRAL:{decider}"),
         cold: reason([0, 0, 0], "COLD:{decider}"),
+        mistake: reason(
+          [-1, -1, -2],
+          "MISTAKE:{decider}",
+          "TOLD-MISTAKE:{decider}",
+          ["believer", "incompetent"],
+        ),
       },
       resultsAt: 99,
       looksAt: 99,

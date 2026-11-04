@@ -3,6 +3,7 @@ import { blowWhistles, changePeople } from "./changes";
 import { landEvent, scheduleEvents } from "./company-events";
 import { everyNotification, type Content } from "./content";
 import { dealsFallDue } from "./deals";
+import { demoteForMistakes } from "./demotions";
 import { dealWithAbsence, followUpDemands } from "./demands";
 import { isOn, recurs, startMonthOnFloor, type Whereabouts } from "./floors";
 import { closeGauges } from "./gauges";
@@ -88,7 +89,9 @@ export function openMonth(state: State, content: Content): void {
 
 /** After the official story: on to the next month, or the end of the run. */
 export function leaveStory(state: State, world: World): void {
-  // Between months, so that a promotion's new floor counts from the next.
+  // Between months, so that a new floor counts from the next. A demotion goes
+  // first, so that a seat won as a month closes is not lost to its own mistakes.
+  demoteForMistakes(state, world.content);
   fillVacancies(state, world.content);
   if (state.month === world.content.balance.monthsPerRun) {
     // A seat decided as the run ends is still told, before the results.

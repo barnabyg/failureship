@@ -442,12 +442,29 @@ Dealing again leans every role the same way, so no role's kind is a tell.
 
 ## `mistakes.json`
 
-The words of a Final Warning and of being fired, and what the results screen says of them.
+The words of a Final Warning, of being demoted and of being fired, and what the results screen
+says of them.
 
 A choice's outcome, a Move or a Bill can say `"mistake": "big"`. Nothing else is needed for
 it to count. The first puts the player on a Final Warning, which they are told about and can
 see from then on. The second gets them fired, which ends the run at the results screen. There
 is no meter behind this.
+
+Where a big mistake is made decides what else it costs, so a blocking or demoting mistake is
+written as any other, and offered where it should bite:
+
+- **Blocking:** one made while a seat is open, in content for the months it is open, is the
+  player's `mistake` reason when it is decided. See [`vacancies.json`](#vacanciesjson).
+- **Demoting:** one made on a floor the player won a seat to, in content for that floor, demotes
+  them as the month closes, as well as the Final Warning. This is automatic: any first big mistake
+  in a seat demotes, whoever decided it and whatever their kind, unlike blocking. They go back to
+  the seat's `floor`, its job and its rooms, which pick up at the month on that floor where they
+  left it. Whoever of the team that answered to them came closest to the seat when it was decided
+  takes it, with the title the player's predecessor held in it, and the player and the rest of the
+  team answer to them. With nobody
+  left on the team, the seat stays empty, and the player answers to whoever they answered to.
+  `demoted` is told as the next month opens, and the lift takes the player down after it. It
+  says `{boss}`, whoever the player answers to now, and is required wherever seats are written.
 
 A Notification option's outcome or a Scene result can instead say `"mistake": "catastrophic"`,
 which gets the player fired outright. It is fair only if they are warned, so the option must
@@ -743,7 +760,8 @@ before deciding.
   it is open, usually with `"when": { "vacancyOpen": true }` and `"who": ["{peers}"]`: they and the
   player are the candidates. `movesUp` is where its holder goes: whom they now answer to, and their
   new `title` and `called`. `opened` is told as it opens, and says `{holder}` and `{month}`, the
-  month it is decided in; `won` and `lost` as it is decided, and `lost` says `{winner}`.
+  month it is decided in; `won` and `lost` as it is decided, and `lost` says `{winner}`;
+  `blocked`, which says `{winner}`, instead of `lost` when a big mistake cost the player the seat.
 - Whoever holds influence over the holder on the Power Map decides, or the holder if nobody does,
   and weighs each candidate's `reasons` by their own kind, in `weight`. They add up, and the most
   wins, with a seeded draw among equals. Every input is hidden truth, never the Org Chart, a Gauge
@@ -752,9 +770,19 @@ before deciding.
   down; and `credited`, having claimed the Plan's credit. For the player: `owedYou` and `calledIn`,
   a favour they are owed, and one they have called in; `credited`; `delivered`, having completed
   the Plan for real and had it counted; `results`, having made `resultsAt` Moves of the deliver
-  family; `looks`, `looksAt` of impress and fabricate; and `warm`, `neutral` or `cold`, the mood of
-  the one deciding. So a Believer can weigh what was really done, a Practitioner favours and
-  protégés, and an Incompetent who looks the part.
+  family; `looks`, `looksAt` of impress and fabricate; `warm`, `neutral` or `cold`, the mood of
+  the one deciding; and `mistake`, a [big mistake](#mistakesjson) made while the seat was open. So
+  a Believer can weigh what was really done, a Practitioner favours and protégés, and an
+  Incompetent who looks the part.
+- A reason's `rulesOut` lists the kinds of decider who will not give the seat to a candidate with
+  it while anyone else stands, however the rest weighs. If the player is ruled out and nobody
+  competes, the holder's team is weighed instead, though none of them stood for it. The game's
+  `mistake` rules the player out with a Believer or an Incompetent, and only weighs against them
+  with a Practitioner, who can be owed enough to overlook it. When the player would have had the
+  seat without the mistake, against those who stood, the decision says `blocked` and the mistake's
+  `told`, and the results screen gives its `why` first. A mistake that did not cost the seat is
+  neither told nor listed. Its `told` says that the mistake counted, never how the one deciding
+  had leaned before it.
 - Each reason's `why` is what the results screen says of it, with `{decider}` and, for a Character,
   `{who}`. Its `told`, if it has one, is what the decision itself says, when it is the winner's
   strongest tie to whoever decided: it never says how anyone feels about the player, that a favour
@@ -764,8 +792,8 @@ before deciding.
   with `{holder}`, `{winner}` and `{month}`. `you` is how all of these call the player.
 - Winning makes the player the floor's new job: they answer to whoever the holder answered to, and
   the holder's team answers to them. Losing puts the winner in the holder's place, with the
-  holder's title, and the player and the rest of the team answer to them. Each Character passed over
-  keeps a memory: `passedOver.forYou` if the player won, and `forSomeoneElse` if not, each with its
+  holder's title, and the player and the rest of the team answer to them. Each Character who stood
+  for it and was passed over keeps a memory: `passedOver.forYou` if the player won, and `forSomeoneElse` if not, each with its
   own `about`, which a Move can read with `remembers`, and a `text` that can say `{winner}`.
 
 While a seat is open, a Notification option, a Scene result or a Move can act for it with `seat`:
