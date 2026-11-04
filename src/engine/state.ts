@@ -123,6 +123,11 @@ export type SceneScripts = Readonly<Record<string, SceneScript>>;
 export interface World {
   content: Content;
   sceneScripts: SceneScripts;
+  /**
+   * The month at whose close the run ends instead of the last, for the browser
+   * tests. Only the end of the run reads it: every rule goes by the real run.
+   */
+  endsAfter?: number | undefined;
 }
 
 /** Which behaviour a Character was seen showing when a Scene opened. */

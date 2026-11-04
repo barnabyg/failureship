@@ -126,9 +126,11 @@ export function startRun(options: {
   seed: number;
   content: Content;
   sceneScripts?: SceneScripts;
+  /** Ends the run as this month closes, as World's `endsAfter` says. */
+  endsAfter?: number | undefined;
 }): Run {
-  const { seed, content, sceneScripts = {} } = options;
-  const world: World = { content, sceneScripts };
+  const { seed, content, sceneScripts = {}, endsAfter } = options;
+  const world: World = { content, sceneScripts, endsAfter };
   checkScripts(world);
   const state = dealtState(seed, content);
   openMonth(state, content);
@@ -144,9 +146,10 @@ export function resumeRun(options: {
   save: string;
   content: Content;
   sceneScripts?: SceneScripts;
+  endsAfter?: number | undefined;
 }): Run {
-  const { save, content, sceneScripts = {} } = options;
-  const world: World = { content, sceneScripts };
+  const { save, content, sceneScripts = {}, endsAfter } = options;
+  const world: World = { content, sceneScripts, endsAfter };
   checkScripts(world);
   const state = readSave(save, content, dealtState(0, content));
   const run = runOf(state, world);

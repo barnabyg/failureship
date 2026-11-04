@@ -11,7 +11,7 @@ The [README](README.md) covers playing and steering the game, and the code map. 
 ### Tests
 
 - `tests/engine/` tests the rules headlessly, and a few checks on the builds and lint. `fixture.ts` there builds small content, and `src/engine/hidden-truth.ts` is the test-only read of the hidden truth.
-- `tests/e2e/` holds the browser tests. `play.ts` there has the helpers for playing through a month. Most run against a test-only build, `vite build --mode e2e` in `dist-e2e/`, where `?month=N` starts a run at a later month, so use it when a test only needs walking months as setup. The start plays as `src/ui/later-month.ts` does, and `&choose=a,b` has it take those options, in order, on the way. `&last=N` ends the run as month N closes, so a test of the results screen need not walk the rest of the eighteen months. `npm run build` and `npm run play` ignore both.
+- `tests/e2e/` holds the browser tests. `play.ts` there has the helpers for playing through a month. Most run against a test-only build, `vite build --mode e2e` in `dist-e2e/`, where `?month=N` starts a run at a later month, so use it when a test only needs walking months as setup. The start plays as `src/ui/later-month.ts` does, and `&choose=a,b` has it take those options, in order, on the way. `&last=N` ends the run as month N closes, with every rule still going by the run's eighteen months, so a test of the results screen need not walk the rest of them. `npm run build` and `npm run play` ignore both.
 - `tests/tower/` tests the tower's fittings.
 
 ### Adding a game mechanic

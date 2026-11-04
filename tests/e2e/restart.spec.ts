@@ -113,12 +113,11 @@ test("the end of a run needs no confirmation to leave", async ({ page }) => {
 });
 
 test("a new run can be started from the end", async ({ page }) => {
-  await page.goto("/?seed=1&month=9&last=9");
+  await page.goto("/?seed=1&month=9");
   await playToResults(page);
 
   await page.getByTestId("new-run").click();
 
-  // A new run in the test build keeps the address's early end, at month 9.
   await expect(page.getByTestId("seed")).not.toHaveText("1");
-  await expect(page.getByTestId("month")).toContainText("1 of 9");
+  await expect(page.getByTestId("month")).toContainText("1 of 18");
 });

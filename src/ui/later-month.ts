@@ -63,14 +63,18 @@ export function playToMonth(
 }
 
 /**
- * The content, with the run ending as the month written closes, if that is a
- * month before the run's own last, so that a test of the results screen need
- * not walk the months after what it tests. Otherwise the content as it is.
+ * The month written as the address's `last`, at whose close the run ends, if it
+ * is a month before the run's own last: so that a test of the results screen
+ * need not walk the months after what it tests. Every rule still goes by the
+ * run's real length, so nothing before then plays differently.
  */
-export function endingAt(content: Content, written: string | null): Content {
+export function endsAfter(
+  address: string,
+  content: Content,
+): number | undefined {
+  const written = new URLSearchParams(address).get("last");
   const month = Number(written);
-  const { monthsPerRun } = content.balance;
-  if (written === null || !Number.isInteger(month)) return content;
-  if (month < 1 || month >= monthsPerRun) return content;
-  return { ...content, balance: { ...content.balance, monthsPerRun: month } };
+  if (written === null || written === "" || !Number.isInteger(month))
+    return undefined;
+  return month >= 1 && month < content.balance.monthsPerRun ? month : undefined;
 }
