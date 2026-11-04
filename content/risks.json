@@ -253,5 +253,41 @@
     "landedOnYou": "It came out when the Programme Manager opened the door for a visitor, and it led to you.",
     "landedElsewhere": "It came out when a visitor was shown round, and it was put down to hybrid working.",
     "neverCameOut": "It never came out. The sign is still on the door, and the door is still shut."
+  },
+  {
+    "id": "boss-undone",
+    "addedBy": "moved-against-your-boss",
+    "after": {
+      "min": 2,
+      "max": 4
+    },
+    "note": "You went after your boss: a report, a question or a word in the right ear. Somebody always writes down who said what.",
+    "route": {
+      "character": "admin",
+      "chance": {
+        "believer": 0.7,
+        "incompetent": 0.3,
+        "practitioner": 0.5
+      },
+      "motive": "The Office Co-ordinator keeps the minutes, and the minutes said who had started it."
+    },
+    "traced": {
+      "not": {
+        "did": "covered-tracks"
+      }
+    },
+    "onPlayer": {
+      "id": "boss-undone-landed",
+      "as": "move",
+      "from": "From: The Office Co-ordinator, Marjorie Tull",
+      "title": "A note for the file",
+      "body": "The Office Co-ordinator has sent Human Resources a note for the file, with the minutes attached, about who it was that raised the concerns about your old boss, and when, and in front of whom. Human Resources would like to discuss your approach to collaboration. They have booked the room with the box of tissues in it.",
+      "sets": ["boss-undone-traced"],
+      "headOpinion": -1,
+      "mistake": "big"
+    },
+    "landedOnYou": "It came out in the minutes, which said exactly who had started it, and when.",
+    "landedElsewhere": "It came out, but the minutes had gone, and nobody would say who had started it.",
+    "neverCameOut": "It never came out. As far as anyone will say, your old boss simply left."
   }
 ]

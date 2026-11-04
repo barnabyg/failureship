@@ -75,6 +75,52 @@
     "sets": ["takeover-bid"]
   },
   {
+    "id": "secondment",
+    "floor": "junior-employee",
+    "from": "From: Hugh Lamb, Head of Operations",
+    "title": "A secondment",
+    "body": "Special Projects has asked for someone with a proven record of being available, and your boss has been seconded to it, upstairs, with immediate effect and a larger chair. Your boss says that it is a great honour, and that it came as a complete surprise, and has already measured the chair.",
+    "changed": "A secondment moved your boss up to Special Projects, and left their seat open.",
+    "schedule": {
+      "months": [10],
+      "chance": 0.25,
+      "clue": {
+        "before": 1,
+        "source": "In the lift",
+        "text": "Your boss got out of the lift on the wrong floor, the one above, and stayed there for an hour."
+      }
+    },
+    "vacates": "movedUp",
+    "story": {
+      "reported": "The floor's leadership was recognised with an opportunity to lead elsewhere.",
+      "happened": "Your boss went upstairs. The seat stayed downstairs, empty, with everyone looking at it."
+    },
+    "sets": ["boss-seconded"]
+  },
+  {
+    "id": "restructure",
+    "floor": "junior-employee",
+    "from": "From: Hugh Lamb, Head of Operations",
+    "title": "A new post",
+    "body": "Following a review of spans and layers, a new post is being created to lead your team, so that your boss can focus on leading it. Your boss keeps the title, the office and the plant. The new post gets the team. A chart is attached, and it has a box on it with nobody in it.",
+    "changed": "A restructure created a post to lead your boss's team, and your boss kept the title.",
+    "schedule": {
+      "months": [13],
+      "chance": 0.25,
+      "clue": {
+        "before": 1,
+        "source": "By the photocopier",
+        "text": "Someone has left a chart on the photocopier with an empty box on it, just above your name."
+      }
+    },
+    "vacates": "created",
+    "story": {
+      "reported": "The organisation added leadership capacity at the front line.",
+      "happened": "A post was invented to do your boss's job, and your boss was asked to support it."
+    },
+    "sets": ["post-created"]
+  },
+  {
     "id": "server-room-flood",
     "disaster": true,
     "from": "From: Facilities, to all staff",

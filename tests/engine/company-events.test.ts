@@ -514,12 +514,16 @@ describe("the real Company Events", () => {
     expect(gameContent.balance.disasterChance).toBeGreaterThan(0);
   });
 
-  it("never moves your boss off the chart", () => {
-    const character = gameContent.you.reportsTo;
-    const moved = gameContent.events.flatMap((e) =>
-      e.reshuffle.reports.map((r) => r.character),
-    );
-    expect(moved).not.toContain(character);
+  it("has one that moves your boss up, and one that creates a post, on Floor 1 only", () => {
+    const opening = gameContent.events.filter((e) => e.vacates !== undefined);
+
+    expect(opening.map((e) => e.vacates).sort()).toEqual([
+      "created",
+      "movedUp",
+    ]);
+    for (const event of opening) {
+      expect(event.floor).toBe(gameContent.you.job);
+    }
   });
 
   it("lands somewhere on most deals, and not always in the same place", () => {

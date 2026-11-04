@@ -156,7 +156,7 @@ describe("a Believer burned repeatedly", () => {
       const { changes } = readHiddenTruth(run);
       for (const dealt of before) {
         const change = changes.find((c) => c.character === dealt.id);
-        // Ana is not written to leave, so a Believer boss has only the other two ways.
+        // The boss cannot leave, so a Believer boss has only the other two ways.
         expect(change !== undefined, `${String(seed)} ${dealt.id}`).toBe(
           dealt.kind === "believer",
         );
@@ -396,16 +396,19 @@ function namesSomeoneGone(view: PlayerView, gone: readonly string[]): boolean {
 describe("a run in which someone leaves", { timeout: 120_000 }, () => {
   const leavers = Object.keys(gameContent.changing?.leaving ?? {});
 
-  it("can lose anyone but the player's bosses", () => {
+  it("can lose anyone but the boss's boss", () => {
     expect(leavers.sort()).toEqual([
       "admin",
       "analyst",
       "associate",
+      "boss",
       "projects",
     ]);
   });
 
-  for (const who of [...leavers.map((id) => [id]), leavers]) {
+  // Five Believers at once are too rare to find, so all at once is the boss's team.
+  const team = leavers.filter((id) => id !== "boss");
+  for (const who of [...leavers.map((id) => [id]), team]) {
     it(`completes, Scenes, report and Find Out included, when ${who.join(" and ")} leave`, () => {
       const content = leavingContent(...who);
       // Four Believers at once are rare, so this looks further than the rest.

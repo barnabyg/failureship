@@ -283,7 +283,7 @@
     "family": "impress",
     "priority": true,
     "when": {
-      "vacancyOpen": true
+      "vacancyOpen": "plan"
     },
     "from": "From: All Staff",
     "title": "Thanks to everyone who made it happen",
@@ -298,11 +298,35 @@
     "family": "attack",
     "priority": true,
     "when": {
-      "vacancyOpen": true
+      "vacancyOpen": "plan"
     },
     "from": "From: Overheard in the lift",
     "title": "Who really did the Grand Plan",
     "body": "You hear, in the lift, that you had very little to do with the Grand Plan. You hear it from someone who heard it from {competitor}, who was only saying.",
+    "seat": {
+      "story": true
+    }
+  },
+  {
+    "id": "seat-convenient",
+    "by": "{competitor}",
+    "family": "attack",
+    "priority": true,
+    "when": {
+      "all": [
+        {
+          "vacancyOpen": true
+        },
+        {
+          "not": {
+            "vacancyOpen": "plan"
+          }
+        }
+      ]
+    },
+    "from": "From: Overheard by the kettle",
+    "title": "Very convenient",
+    "body": "You hear, by the kettle, that the seat fell vacant very conveniently for some people, and that some people seemed to know before anyone. You hear it from someone who heard it from {competitor}, who was only wondering.",
     "seat": {
       "story": true
     }

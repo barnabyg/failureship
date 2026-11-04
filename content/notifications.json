@@ -667,6 +667,52 @@
     ]
   },
   {
+    "id": "speak-up-line",
+    "floor": "junior-employee",
+    "months": [8],
+    "from": "From: People and Culture",
+    "subject": "Speak Up: our confidential line is open",
+    "body": "Following the Listening Session, a confidential line is open all week for anything you would rather not say in front of everybody. Calls are not recorded, except for training purposes, and nobody will know who called, except the person who answers.",
+    "options": [
+      {
+        "id": "delete-it",
+        "label": "Delete it",
+        "result": {
+          "title": "Speak Up",
+          "body": "You delete it. It comes back the next day as a reminder, marked important."
+        }
+      },
+      {
+        "id": "ring-about-your-boss",
+        "family": "attack",
+        "label": "Ring the line about your boss",
+        "sets": ["moved-against-your-boss"],
+        "ousts": "report",
+        "result": {
+          "title": "Speak Up",
+          "body": "You ring. A pleasant voice takes your concerns about your boss, reads them back to you, and asks you to spell your surname, for the file."
+        }
+      },
+      {
+        "id": "ask-about-the-post",
+        "family": "attack",
+        "label": "Ask the line whether the post of Team Leader still exists",
+        "requires": {
+          "heardOf": {
+            "fact": "abolished-post",
+            "character": "{boss}"
+          }
+        },
+        "sets": ["moved-against-your-boss"],
+        "ousts": "fact",
+        "result": {
+          "title": "Speak Up",
+          "body": "You ask. There is a long pause, and the sound of a filing cabinet. The pleasant voice says that it will have to get back to you, and that it has your number."
+        }
+      }
+    ]
+  },
+  {
     "id": "laptops-request",
     "floor": "junior-employee",
     "months": [3],
