@@ -114,6 +114,10 @@ each in a seeded turn, so that every one comes up before any repeats. A pool Sce
 without `months` in a room on its floor, which is offered in the months it is drawn. Only Scenes and
 Notifications can be in a pool.
 
+Write a floor for the longest stay a run allows on it. Floor 2 is reached in month 8 at the
+earliest, so a stay is at most eleven months: its six written months and a pool of seven Scenes
+mean no Scene comes twice, and `tests/engine/floor-2-moves.test.ts` holds it to that.
+
 These are refused: a `floor` that names no floor, `months` with no `floor`, a floor with no Scene,
 Notification or Demand of its own, a written month with none of them, a floor written for fewer
 months than the run with no pool, a pool item with `months` or no `floor`, a pool Scene with no
@@ -541,7 +545,10 @@ reads who remembers what.
 A Budget is a one-off decision and never a running balance, so it needs nothing of its own:
 the Budget Round is a Scene, and the bonus pot and the underspend are Notifications here,
 with `months`, `approach` and `project` like any other choice. Nothing tracks money between
-them.
+them. A higher floor's are bigger, and only its own: Floor 2's team bonus pot, transformation
+budget and cost codes say `"floor": "team-lead"`, as do the Moves only a Team lead has, such as
+hiring an old friend at its Hiring Decision or moving a critic's desk at its Floor Plan Walkthrough.
+Each starts a Thread or adds a risk by its flag, and most leave a memory with whoever it was done to.
 
 ## `official-story.json`
 
@@ -653,7 +660,8 @@ player sees none of it until it does, and the results screen lists the lot.
   by the kind they were dealt, their `motive`, for the results screen, and optionally their
   `means`, a condition they need. It gets one chance. If that fails, it never comes out.
 - `traced` is read as it comes out. Reading a flag with `did` lets the player change that, as
-  clearing the shared drive in month 7 does. If it holds, `onPlayer` is sent. If not, `onSomeoneElse`
+  clearing the shared drive in month 7 does, or letting an old friend go on Floor 2. The flag must
+  be set by a choice in plain view, and not be the one that adds the risk. If it holds, `onPlayer` is sent. If not, `onSomeoneElse`
   is, if it is written, and otherwise nothing happens. Either is a Bill, as in
   [`threads.json`](#threadsjson), so a risk that lands can be `"mistake": "big"`.
 - `event` names a Company Event, from [`events.json`](#eventsjson), that lands as it comes out.

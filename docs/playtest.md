@@ -66,6 +66,21 @@ the seat is open, its e-mail asks how to go about it: leave it to the process un
 | Seed 2, taking the blame yourself in month 2's Lessons Learned Review. At month 7's Recruitment Panel, raise a concern about the Project Co-ordinator's candidate | A Final Warning. Month 8 opens with the seat going to the Junior Associate: the incident was taken into account, the decision says, and the results screen says what it cost you. Without the concern, the seat is yours.                                                                                 |
 | Seed 2, taking the blame in month 2 and winning the seat. At month 9's Team Leads' Sync, say that your team would not be at capacity but for the Senior Analyst   | A Final Warning. Month 10 opens with a sideways move, downwards: the Junior Associate has your seat, and is your boss. Continue, and the lift takes you down to Floor 1, at its Speak Up Listening Session. Another big mistake there fires you.                                                          |
 
+## Floor 2's bigger Moves
+
+This takes about twenty minutes. File the report and go to the meeting each month, saying the first
+thing and answering for nothing, take the blame yourself in month 2's Lessons Learned Review, and
+stick a screenshot of the new tool on your boss's note in month 5's Ideas Workshop. The seat is
+yours, and Floor 2 starts in month 8. Its fourth month is month 11.
+
+| Seed and what to do                                                                    | Expect                                                                                                                                                                                                                               |
+| -------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| Seed 16. At month 11's Hiring Decision, hire your old friend                           | Your boss asks to see the scoring sheet. In month 12 your boss writes, appalled, about your new hire. Say it was your mistake, and in month 13 the Senior Analyst sends round only the work your friend left behind                  |
+| Seed 2, the same                                                                       | Your boss asks, lightly, how far back the two of you go. In month 12 your boss says it can stay between you, for now. In month 13 the Senior Analyst's spreadsheet of who has been doing your friend's work reaches both your bosses |
+| Seed 2. At month 12's bonus pot, award it only to the two who back you in meetings     | In month 14 the Senior Analyst, who did the work, is Open to Opportunities. The results screen lists the grievance as a hidden risk that never came out                                                                              |
+| Seed 2. At month 12's Floor Plan Walkthrough, put the Project Co-ordinator by the lift | In month 13 they say good morning to everyone who comes up, your boss included, and your boss hears about your team first                                                                                                            |
+| Seed 16. In month 11, spend the transformation budget on a consultant                  | In month 12 the consultant's readout: your boss asks what it means, and then what it cost. The results screen lists the invoice as a hidden risk                                                                                     |
+
 ## Other routes up
 
 This takes about fifteen minutes. File the report and go to the meeting each month, saying the
