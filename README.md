@@ -4,10 +4,9 @@ A satirical, single-player browser game. You climb a ten-storey office tower by 
 design is in [failureship-grill-outcome.md](failureship-grill-outcome.md).
 
 This is Phase 5 in progress: eighteen months from a furnished Floor 1 to the top of a blocked-out
-Floor 3, with kinds of boss, a Project, the Monthly Status Report, Demands, Budgets, every family of
-Moves, going over your boss's head, Threads, hidden risks, news that travels, Company Events, your
-word and Deals, Believers who change, Gauges, quarterly reviews, Rivals, Grand Plans and more than
-one route up. You can be fired, and you can win, after a fashion.
+Floor 3, with kinds of boss, the Monthly Status Report, Demands, Budgets, every family of Moves,
+Threads, hidden risks, news that travels, Company Events, your word and Deals, Believers who change,
+Gauges, reviews, Rivals, Grand Plans and more than one route up. You can be fired, or win, sort of.
 
 ## Play
 
@@ -51,14 +50,13 @@ overrunning a meeting, and its own way of talking, though each can come from mor
 Names stay in support: on the charts, cast lists, marks, results, `from` lines and Find Out.
 
 Press **Notebook**, at no cost, for the claims and signs it keeps, which it never says to trust, and
-mark each Character with the kind you suspect. **Org Chart** is the formal hierarchy. The real one
-is the hidden Power Map, dealt from the seed. A Company Event can change either mid-run.
+mark each Character with the kind you suspect. **Org Chart** is the formal hierarchy; the real one
+is the hidden Power Map, dealt from the seed, and a Company Event can change either.
 
 Your word is yours to give. Some choices offer a **Promise**, whether or not you can deliver it, and
 some a **Deal**, in which each side offers something. Whether you are believed, and whether a good
-word from someone counts, goes by who they really are and what has reached them. The **Your word
-given** card shows what you have promised, your Deals and the favours you owe or are owed, at no
-cost. Nothing tells you what other people owe each other.
+word from someone counts, goes by who they really are and what has reached them. **Your word
+given** shows your Promises, Deals and favours, at no cost, and nothing of what others owe.
 
 **Teflon**, in the header, is your track record, not your danger. **Fawning** is how well sucking up
 to your managers is paying off, not whether they like you, and plays no part in promotion. Each
@@ -82,13 +80,13 @@ have seen one: whoever protects them decides, and it can be traced to you. Whoev
 influence over a seat gives it out by what matters to their kind, never a score or a Gauge. Rivals
 work on them, and so can you, if you know whom to approach. You are told who decided, beside
 Official standing. Win, and you are **Team lead**, on Floor 2. Lose, and the winner is your boss.
-The passed over remember. A Team lead's Moves are bigger, from hiring to bonuses, and so is the Bill.
-Floor 2's seat makes you **Middle manager**, on Floor 3, under new bosses. Floor 3's is the way out:
-win it, and the run ends with a comic stand-in for the penthouse, as Floors 4 to 10 are not built.
+The passed over remember. A Team lead's Moves are bigger, and so is the Bill. Floor 2's seat, by
+its Plan or Internal Audit, makes you **Middle manager** on Floor 3, under the Programme Manager and
+the Head of Transformation. Floor 3's, by its Plan or a nomination upstairs, is the way out: the
+run ends with a stand-in for the penthouse that goes by how you got there.
 
-At the end, the results screen says how you got there, seat by seat, and who was really who: each
-Character's kind and Hidden Fact, each Rival and what they did, your marks against the truth, how
-you played by family of Move, what your bosses made of you, each claim and clue, and both charts.
+At the end, the results screen says how you got there, seat by seat, and who was really who: kinds,
+Hidden Facts, Rivals, your marks, your Moves, your bosses' verdicts, every claim and both charts.
 
 You can also be fired. Some choices are big mistakes, such as blaming someone with a dangerous
 Hidden Fact. The first puts you on a **Final Warning**, shown beside your job title, and the second
@@ -96,8 +94,8 @@ ends the run. One made while a seat is open can cost you it, and one in a seat y
 down the lift, under whoever takes your seat. A few fire you outright, and say so on the button.
 
 **New run** deals a new seed, **Restart from seed** replays one, and leaving a run asks first. A
-friend on your seed gets your deal. Each step is saved in your browser, so a reload carries on, and
-a change to `content/` or the game offers a new run.
+friend on your seed gets your deal. Each step is saved in your browser, hidden truth and all, so a
+reload carries on, and a change to `content/` or the game offers a new run.
 
 A month always leaves you something to decide, on any floor. Every Notification has an answer
 that costs nothing, and beside the report a month asks for at most one costly answer, unless late

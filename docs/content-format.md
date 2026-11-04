@@ -246,8 +246,9 @@ leaves. The player is not told. The results screen says who changed, from what t
   chart, with nobody to cover, stays. Each has the `cover` text uses for whoever stands in for them,
   also when they are fired, the `notice` that says they have gone, and optional `sets` and
   `project`. Wherever a choice can get rid of the boss, the first boss and their team, who can take
-  the seat, must be listed, so that text has a cover for them. The game leaves out your boss's boss:
-  gone from Floor 1, nobody would be above your boss on Floor 2 once you won the seat.
+  the seat, must be listed, so that text has a cover for them. The game lists the Head of
+  Operations too, your boss's boss on Floor 1 and your boss on Floor 2, whom the Programme Manager
+  covers, so that a boss on Floor 2 can leave and open their seat. Nobody above them is listed.
 
 Someone who leaves, or is fired, comes off the Power Map, and whoever answered to them answers to
 whoever was above them, on both charts. They never change or blow a whistle after. A boss who leaves leaves their [seat](#vacanciesjson) open, and any Grand Plan of
@@ -273,9 +274,9 @@ Job titles, roles, names, who reports to whom on the Org Chart, and where the pl
   first cast has one, and a place on the Power Map below its `influentialCount` most influential.
   So adding one leaves every deal of the floors below alone. `charactersWithFact` and
   `minPractitioners` in [`hidden-truth.json`](#hidden-truthjson) count the first floor's cast only.
-  Floor 2 brings the Programme Manager and the Service Delivery Lead, and Floor 3 the Head of
-  Transformation, at the top of the chart, so that a Middle manager has a boss's boss: nine in
-  all, of whom a Junior employee meets six.
+  Floor 2 brings the Programme Manager and the Service Delivery Lead. On Floor 3 the Programme
+  Manager, met on Floor 2, is your boss, and the one new Character is your boss's boss, the Head
+  of Transformation, at the top of the chart: nine in all, of whom a Junior employee meets six.
 - `you.name` is what the Org Chart calls the player, once anyone answers to them.
 - A later floor's cast is met only when the player reaches its floor. Until then nobody of it is
   on the Org Chart, in Find Out, in the Notebook's marks or on the results screen, and whoever
@@ -383,8 +384,9 @@ The floors of the tower, from the bottom up. Each has a `job`, which keys it, th
 that the header, the e-mails and the official story show, and its `rooms`: positions, sizes,
 colours, `fittings` and, for a place the player can see but not act on, such as the lift, a
 `sign`. Content goes to a floor as [Floors and their months](#floors-and-their-months) says. A room
-without `fittings` is a blocked-out box, as on Floors 2 and 3, whose lift sign says Floor 4 is shut. Room ids are unique across floors, so the
-same kind of place on another floor, such as your desk, is an action of its own, with its own id.
+without `fittings` is a blocked-out box, as on Floors 2 and 3, whose lift sign says Floor 4 is
+shut. Room ids are unique across floors, so the same kind of place on another floor, such as your
+desk, is an action of its own, with its own id.
 The player reaches another floor only by a [seat](#vacanciesjson), and the lift is ridden then.
 
 ## `gauges.json`
@@ -803,17 +805,21 @@ Nothing opens that the run would end before deciding. It falls vacant in one of 
 
 Each floor has its seat: the Team Leader's on Floor 1, which makes the player a Team lead; the
 Head of Operations' on Floor 2, which makes them a Middle manager, under the Programme Manager; and
-the Programme Manager's on Floor 3, the way out of the first version, which wins the run. On Floor 2
-it opens by the Centre of Excellence or a secondment to Floor 3, and on Floor 3 by One Roadmap or a
-restructure. Nobody above the player on Floor 3 can leave or be got rid of, since the Head of
-Transformation is at the top of the chart, with nobody to cover for them.
+the Programme Manager's on Floor 3, the way out of the first version, which wins the run. On each
+floor the player can open it themselves, by their boss's Grand Plan or by getting rid of their
+boss: on Floor 2 through Internal Audit, and on Floor 3 by nominating them upstairs. On Floor 2 the
+boss can also leave, and on Floors 2 and 3 a Company Event can second the boss or create a post.
+Nobody above the player on Floor 3 can leave or be fired, since the Head of Transformation is at
+the top of the chart, with nobody to cover for them. A seat opens only if winning it would leave
+the player a boss's boss, unless it wins the run.
 
 - `seats` has one seat for each floor that has one, keyed by `floor`, the floor it is on: the
   player's boss holds it while the player's job is that floor's. `job` is the floor that winning it
   takes the player to, or it has `win` instead, as in [Winning](#winning). `competing` names what is
   competed for in [`rivals.json`](#rivalsjson) while it is open, usually with
-  `"when": { "vacancyOpen": true }` and `"who": ["{peers}"]`: they and the player are the candidates. `movesUp` is where its holder goes, by `plan` or `movedUp`: whom they
-  now answer to, and their new `title` and `called`. `created` is the `title` and `called` of a post
+  `"when": { "vacancyOpen": true }` and `"who": ["{peers}"]`: they and the player are the
+  candidates. `movesUp` is where its holder goes, by `plan` or `movedUp`: whom they now answer to,
+  and their new `title` and `called`. `created` is the `title` and `called` of a post
   created out of their team, which its winner holds while its holder keeps their own. `opened` has
   what is told as it opens in each way, and says `{holder}` and `{month}`, the month it is decided
   in; `won` and `lost` as it is decided, and `lost` says `{winner}`;
@@ -835,7 +841,9 @@ Transformation is at the top of the chart, with nobody to cover for them.
   Incompetent who looks the part.
 - A reason's `rulesOut` lists the kinds of decider who will not give the seat to a candidate with
   it while anyone else stands, however the rest weighs. If the player is ruled out and nobody
-  competes, the holder's team is weighed instead, though none of them stood for it. The game's
+  competes, the holder's team is weighed instead, though none of them stood for it. A player taken
+  back down a floor while the seat was open is out of the running for it, and is not told of it
+  but on the results screen; with nobody else, the seat stays empty. The game's
   `mistake` rules the player out with a Believer or an Incompetent, and only weighs against them
   with a Practitioner, who can be owed enough to overlook it. When the player would have had the
   seat without the mistake, against those who stood, the decision says `blocked` and the mistake's
@@ -854,10 +862,11 @@ Transformation is at the top of the chart, with nobody to cover for them.
   holder's title, or a created post's, and the player and the rest of the team answer to them. Each Character who stood
   for it and was passed over keeps a memory: `passedOver.forYou` if the player won, and `forSomeoneElse` if not, each with its
   own `about`, which a Move can read with `remembers`, and a `text` that can say `{winner}`.
-- `route` is what the results screen says of each seat the player won, by the way it fell vacant,
-  and `demoted` of each time a big mistake took them back down, in order. Each says `{month}`,
-  `{job}`, the job title won or gone back to, and `{holder}`, by name. A player taken back down a
-  floor while the seat above was open is out of the running for it.
+- `route` is what the results screen says of each seat the player won, in order: `ousted` for one
+  they opened by getting rid of its holder, `plan`'s `reality` or `appearance` for one a Grand
+  Plan opened, by how it was done, or else the way it fell vacant; and `demoted` of each time a
+  big mistake took them back down. Each says `{month}`, `{job}`, the job title won or gone back
+  to, and `{holder}`, by name.
 
 While a seat is open, a Notification option, a Scene result or a Move can act for it with `seat`:
 
@@ -881,14 +890,22 @@ Map, the same person who decides the seat: the way's seeded `chance` by their ki
 how they stand with the player. With nobody above the boss, or a way's `when` that does not hold,
 it never works. So the game's `fact` way, with `"when": { "heardTrue": "abolished-post" }`, can get
 rid of the boss only if what the player heard of them is true, and even then a Practitioner who
-protects them is likely to bury it. If it works, the boss is fired, `gone` is told, which says `{holder}`, and
-their seat opens as `fired`. If not, `survived` is told, and the boss keeps `remembered`, a memory
-that a Move or a burn in [`changing.json`](#changingjson) can read, and its `belief`. It should
+protects them is likely to bury it. If it works, the boss is fired, `gone` is told, which says
+`{holder}`, and their seat opens as `fired`. A way with `"upstairs": true` moves them up out of
+the way instead: they stay in the company, and their seat opens as `movedUp`, so it works only
+while the seat can open, and works even where nobody could cover for a boss who went. Either way
+the ousting's `sets` are set, which only the end of a run should read, and the seat counts as the
+player's doing on the results screen. If not, `survived` is told, and the boss keeps
+`remembered`, a memory that a Move or a burn in [`changing.json`](#changingjson) can read, and its
+`belief`. A way can have its own `gone` and `survived`. It should
 always be traceable: give the choice a flag that adds a [hidden risk](#risksjson) whose Bill lands
 on the player, with a `traced` that reads what they did, not an unrelated choice. The game's
 `line-call` comes out through the Office Co-ordinator, who answers the Speak Up line, and lands as
 a big mistake unless they think well of the player; `boss-rumour` the same through the Senior
 Analyst, who was told the rumour. Either can cost the seat it opened, or demote the player from it.
+Floor 2's `audit` way is traced through the Service Delivery Lead, who logs Internal Audit's
+tickets, and Floor 3's `upstairs` through the Head of Transformation, who keeps the nominations;
+each comes out after the seat is decided, so it demotes rather than blocks.
 
 These are refused: two seats on one floor, a `floor` or `job` that names no floor, a seat that leads
 to its own floor, `competing` that names nothing in `rivals.json`, moving its holder up to someone
@@ -909,11 +926,15 @@ the run as before.
 
 - `title` and `lines` are the stand-in, a panel of its own, one paragraph to a line. The real
   payout and Floors 4 to 10 wait for later, so it should say so, deadpan.
+- `variants` are told instead, the first whose `when` holds, any condition, so that how the
+  player got there decides the ending. The game's go by flags: `got-rid-of-a-boss`, the ousting's,
+  then a post created at the top, then a Grand Plan done for show, and otherwise the stand-in as
+  written. A variant can have its own `title`.
 - `reached` is what the route up calls winning it, as `{job}` in `route`.
 - `results` is the results screen's `title` and `intro` after a win, and `ending` how it says the
   run ended, with `{month}`.
 
-These are refused: a seat with both `job` and `win`, or neither.
+These are refused: a seat with both `job` and `win`, or neither, and more than one seat that wins.
 
 ## `threads.json`
 
@@ -949,5 +970,6 @@ story, and they count as hidden, so no option can depend on them.
 ## `ui.json`
 
 Headings, buttons and the "What you can do now" hints. `goal` is the goal of the run, shown above
-the hints from the first screen on, so a newcomer has it at once: keep it to a line. `hints.win` is
+the hints from the first screen on, and not on the results screen, so a newcomer has it at once.
+Keep it to a line or two. `hints.win` is
 the hint beside the stand-in for [winning](#winning).
