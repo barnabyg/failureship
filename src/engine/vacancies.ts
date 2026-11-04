@@ -34,7 +34,7 @@ const ABOUT_THE_SEAT = "the-seat";
 export function fillVacancies(state: State, content: Content): void {
   const written = content.vacancies;
   if (!written) return;
-  for (const vacancy of state.vacancies) {
+  for (const vacancy of [...state.vacancies]) {
     if (vacancy.decided === null && vacancy.decides === state.month) {
       decide(state, content, written, vacancy);
     }
@@ -302,7 +302,13 @@ function decide(
     stood.length > 0 || (running && !isRuledOut(written, kind, you))
       ? stood
       : teamOf(state, content, holder).map(weighOf);
-  const field = running || others.length === 0 ? [you, ...others] : others;
+  const field = running ? [you, ...others] : others;
+  if (field.length === 0) {
+    // With the player out of the running and nobody else, the seat stays
+    // empty: a holder moving up stays put, and one gone is still covered.
+    state.vacancies = state.vacancies.filter((v) => v !== vacancy);
+    return;
+  }
   const { winner, top } = pick(state, written, seat, kind, field);
   // Who would have had it without the mistake, against those who stood for it,
   // which says whether it cost the seat.

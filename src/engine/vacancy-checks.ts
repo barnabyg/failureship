@@ -145,6 +145,9 @@ export function findBrokenVacancies(content: Content): string[] {
       "A seat is written, so mistakes.json needs the words for being demoted.",
     );
   }
+  if (written.seats.filter((s) => s.win).length > 1) {
+    problems.push("Only one seat can win the run.");
+  }
   const floors = new Set<string>();
   for (const seat of written.seats) {
     const owner = `Seat "${seat.id}"`;
