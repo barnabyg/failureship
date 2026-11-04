@@ -1,5 +1,6 @@
 import type { Content } from "./content";
 import { applyOutcome } from "./outcome";
+import { seatPending } from "./reads";
 import { drawFor } from "./rng";
 import type { State, Step } from "./state";
 
@@ -60,7 +61,7 @@ export function scheduleEvents(state: State, content: Content): void {
  * that would open a seat passes by while a seat is already open.
  */
 export function landEvent(state: State, content: Content): Step | null {
-  const open = state.vacancies.some((v) => v.decided === null);
+  const open = seatPending(state);
   state.eventsDue = state.eventsDue.filter(
     (due) =>
       !open || content.events.find((e) => e.id === due)?.vacates === undefined,

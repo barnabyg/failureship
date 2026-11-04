@@ -1,14 +1,15 @@
 import type { Content, Kind } from "./content";
 import {
+  type Bosses,
   bossesAtStart,
   bossesOf,
+  isGone,
   managerAtStart,
   managerOf,
   meantBy,
-  type Bosses,
 } from "./places";
 import { YOU } from "./deal";
-import { isGone, matches, personOf } from "./reads";
+import { matches, personOf } from "./reads";
 import { drawFor, pickWeighted } from "./rng";
 import type { State } from "./state";
 import type { StepView } from "./view";

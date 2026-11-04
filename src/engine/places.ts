@@ -73,9 +73,27 @@ export function bossesOf(state: State, content: Content): Bosses {
 }
 
 /**
- * Whether someone leaving would leave a place above the player empty, so that
- * data naming it would mean nobody. Until a floor's own seat is written, the
- * one at the top of the player's chain stays.
+ * Whether the player, answering up the chart by `answersTo` instead, would have
+ * nobody in a place above them: no boss, or no boss's boss where there is one
+ * now. Data naming an empty place would mean nobody.
+ */
+export function emptiesAPlace(
+  state: State,
+  content: Content,
+  answersTo: (id: string) => string | undefined,
+): boolean {
+  const boss = answersTo(YOU);
+  const head = boss === undefined ? undefined : answersTo(boss);
+  return (
+    boss === undefined ||
+    (head === undefined && headOf(state, content) !== undefined)
+  );
+}
+
+/**
+ * Whether someone's going would leave a place above the player that nobody
+ * covers: whoever they answered to takes their place, so only the top of the
+ * player's chain cannot go. The player never goes.
  */
 export function wouldEmptyAPlace(
   state: State,
@@ -84,12 +102,8 @@ export function wouldEmptyAPlace(
 ): boolean {
   if (id === YOU) return true;
   const gone = (at: string) => at === id || isGone(state, at);
-  const after = (at: string) => managerHere(state, content, at, gone);
-  const boss = after(YOU);
-  const head = boss === undefined ? undefined : after(boss);
-  return (
-    boss === undefined ||
-    (head === undefined && headOf(state, content) !== undefined)
+  return emptiesAPlace(state, content, (at) =>
+    managerHere(state, content, at, gone),
   );
 }
 

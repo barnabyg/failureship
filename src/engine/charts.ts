@@ -1,7 +1,6 @@
 import type { Content } from "./content";
 import { lowerOnMap, raiseOnMap } from "./deal";
-import { headOf, managerOf, whoIs } from "./places";
-import { isGone } from "./reads";
+import { emptiesAPlace, isGone, managerHere, managerOf, whoIs } from "./places";
 import type { State } from "./state";
 
 /**
@@ -38,9 +37,10 @@ export function reshuffleCharts(
     if (answersTo(to)) continue;
     // Nor does one that would leave a place above the player with nobody in it.
     const moved = { ...state.reportsTo, [character]: to };
-    const empties =
-      headOf(state, content) !== undefined &&
-      headOf({ ...state, reportsTo: moved }, content) === undefined;
+    const after = { ...state, reportsTo: moved };
+    const empties = emptiesAPlace(state, content, (at) =>
+      managerHere(after, content, at),
+    );
     if (!empties) state.reportsTo = moved;
   }
   const { truth } = state;

@@ -204,6 +204,11 @@ export function isMet(state: State, content: Content, id: string): boolean {
   );
 }
 
+/** Whether a seat has fallen vacant and is still to be decided, open yet or not. */
+export function seatPending(state: State): boolean {
+  return state.vacancies.some((v) => v.decided === null);
+}
+
 /**
  * Whether a seat is open now, and still to be decided, in this way if one is
  * given. The player is told when one is.
@@ -216,8 +221,6 @@ export function isVacancyOpen(state: State, way?: SeatWay): boolean {
       (way === undefined || v.way === way),
   );
 }
-
-export { isGone };
 
 /** The Characters who answer to someone on the Org Chart now, in the order written. */
 export function teamOf(state: State, content: Content, id: string): string[] {

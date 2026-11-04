@@ -1,12 +1,12 @@
 import type { Content, Kind, Seat, SeatWay, VacancyReason } from "./content";
 import { hasSway, influencerOf, isUnder, YOU } from "./deal";
 import { planCompleted } from "./grand-plans";
-import { bossOf, managerHere, whoIs } from "./places";
+import { bossOf, isGone, managerHere, whoIs } from "./places";
 import {
-  isGone,
   kindOf,
   moodOfCharacter,
   personOf,
+  seatPending,
   shiftBelief,
   teamOf,
   titleHeld,
@@ -64,7 +64,7 @@ export function openSeat(
     !seat ||
     holder !== bossOf(state, content) ||
     isGone(state, holder) ||
-    state.vacancies.some((v) => v.decided === null) ||
+    seatPending(state) ||
     decides > content.balance.monthsPerRun
   ) {
     return;

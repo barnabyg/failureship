@@ -3,13 +3,13 @@ import { noteLanding } from "./boss";
 import type { Content, GrandPlan, PlanHow } from "./content";
 import { isOn } from "./floors";
 import { applyOutcome } from "./outcome";
-import { bossOf } from "./places";
+import { bossOf, isGone } from "./places";
 import {
-  isGone,
   kindOf,
   matches,
   moodOfCharacter,
   personOf,
+  seatPending,
   shiftBelief,
 } from "./reads";
 import { drawFor } from "./rng";
@@ -79,7 +79,7 @@ export function followPlans(state: State, content: Content): void {
   const boss = bossOf(state, content);
   // While a seat is open, nobody takes on anything new: a boss on their way up,
   // or whoever covers for one who has gone.
-  const open = state.vacancies.some((v) => v.decided === null);
+  const open = seatPending(state);
   if (planNow(state, content)?.ended === null || open) return;
   const next = written.plans.find(
     (p) =>
