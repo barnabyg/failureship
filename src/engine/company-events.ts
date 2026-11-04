@@ -57,18 +57,30 @@ export function scheduleEvents(state: State, content: Content): void {
 }
 
 /**
- * A Company Event lands after the player's actions, before the month closes. One
- * that would open a seat passes by while a seat is already open.
+ * A Company Event lands after the player's actions, before the month closes.
+ * One for another floor than the player's passes by. One that would open a
+ * seat waits while a seat is still to be decided, and lands in the first month
+ * after it is, unless the run would end before the seat it opens is decided.
  */
 export function landEvent(state: State, content: Content): Step | null {
-  const open = seatPending(state);
-  state.eventsDue = state.eventsDue.filter(
-    (due) =>
-      !open || content.events.find((e) => e.id === due)?.vacates === undefined,
-  );
-  const id = state.eventsDue.shift();
-  const event = content.events.find((e) => e.id === id);
+  const eventOf = (id: string) => content.events.find((e) => e.id === id);
+  const openFor = content.vacancies?.seats.find(
+    (s) => s.floor === state.job,
+  )?.openFor;
+  const tooLate =
+    openFor === undefined ||
+    state.month + openFor > content.balance.monthsPerRun;
+  state.eventsDue = state.eventsDue.filter((due) => {
+    const event = eventOf(due);
+    const here = event?.floor === undefined || event.floor === state.job;
+    return here && !(event?.vacates !== undefined && tooLate);
+  });
+  const waits = (id: string) =>
+    eventOf(id)?.vacates !== undefined && seatPending(state);
+  const id = state.eventsDue.find((due) => !waits(due));
+  const event = id === undefined ? undefined : eventOf(id);
   if (!event) return null;
+  state.eventsDue.splice(state.eventsDue.indexOf(event.id), 1);
   state.eventsLanded.push({ id: event.id, month: state.month });
   applyOutcome(state, content, event, event.title);
   return { kind: "event", id: event.id };

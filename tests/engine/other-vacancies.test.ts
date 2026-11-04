@@ -252,13 +252,23 @@ describe("a Company Event that opens the seat", () => {
     ).toEqual([]);
   });
 
-  it("passes by while a seat is already open", () => {
+  it("waits while a seat is already open, and lands the month after it is filled", () => {
     const content = otherFixture(1, "movedUp");
-    const run = startRun({ seed: 1, content });
+    // Reporting Ana is traced to the player while her seat is open, so a
+    // Believer gives it to someone else, who is then seconded upstairs.
+    const run = allOfKind(1, content, "believer");
     const views = playWith(run, "report-boss");
+    const truth = readHiddenTruth(run);
 
-    expect(views.some((v) => v.step.kind === "event")).toBe(false);
-    expect(readHiddenTruth(run).vacancies.map((v) => v.way)).toEqual(["fired"]);
+    expect(
+      views.filter((v) => v.step.kind === "event").map((v) => v.month),
+    ).toEqual([3]);
+    expect(
+      truth.vacancies.map((v) => [v.way, v.opened, v.decided?.month]),
+    ).toEqual([
+      ["fired", 2, 2],
+      ["movedUp", 4, 4],
+    ]);
   });
 
   it("needs seats to open one", () => {
