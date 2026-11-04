@@ -237,6 +237,12 @@ body {
   margin: 2px 0 0;
 }
 
+/* The goal of the run, above what to do now, from the first screen on. */
+.next .goal {
+  margin: 0 0 6px;
+  font-weight: 600;
+}
+
 .panel {
   position: absolute;
   top: 92px;

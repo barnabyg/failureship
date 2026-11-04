@@ -105,6 +105,7 @@ const panelSchema = z.strictObject(
     [
       "title",
       "tagline",
+      "goal",
       "jobHeading",
       "monthHeading",
       "monthLabel",
@@ -207,6 +208,7 @@ const panelSchema = z.strictObject(
       "saveLostBody",
       "saveLostConfirm",
       "resultsVacanciesHeading",
+      "resultsRouteHeading",
       "decidedOnPaper",
       "decidedInFact",
       "liftRideTitle",

@@ -1,6 +1,7 @@
 {
   "title": "Failureship",
   "tagline": "Deliver nothing. Demonstrate everything. Get promoted.",
+  "goal": "Your goal: climb by reading people, and reach the top of Floor 3.",
   "jobHeading": "Job title",
   "monthHeading": "Month",
   "monthLabel": "{n} of {total}",
@@ -52,6 +53,7 @@
   "milestonesHeading": "Milestones",
   "resultsStandingHeading": "On paper, and in fact",
   "resultsVacanciesHeading": "Who really decided",
+  "resultsRouteHeading": "How you got there",
   "decidedOnPaper": "On paper",
   "decidedInFact": "In fact",
   "resultsMilestonesHeading": "Milestones earned",
