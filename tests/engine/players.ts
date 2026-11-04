@@ -130,8 +130,10 @@ const STANDING: Record<string, number> = {
 
 /**
  * A careful reader of the room, who keeps a tally of who holds the floor in
- * every Scene's signs, from what is shown and nothing else, and has a word
- * about each open seat with whoever has held it most.
+ * every Scene's signs, and has a word about each open seat with whoever has
+ * held it most. It reads the signs as shown. To tell who a sign's words, such
+ * as "your boss", mean, it parses `run.save()` for `calledBy`, which gives the
+ * same words the screen uses, and reads nothing else of the save.
  */
 export function readsTheRoom() {
   const tally = new Map<string, number>();
