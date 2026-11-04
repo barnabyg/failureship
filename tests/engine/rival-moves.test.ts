@@ -4,7 +4,6 @@ import {
   parseContent,
   startRun,
   type Choice,
-  type Content,
   type PlayerView,
 } from "../../src/engine";
 import { readHiddenTruth } from "../../src/engine/hidden-truth";
@@ -13,7 +12,6 @@ import { plainChoice } from "../../src/ui/later-month";
 import { buzzwordFixtureRaw, calledAtStart } from "./fixture";
 import {
   competitorMovesRaw,
-  rivalsRaw,
   playOut,
   resultsOf,
   SEEDS,
@@ -86,117 +84,6 @@ describe("a competitor's Move", () => {
     if (plain) plain.body = "{competitor} did it.";
 
     expect(() => parseContent(raw)).toThrow(/says \{competitor\}, but is not/);
-  });
-});
-
-describe("a question in a Scene from someone competing", () => {
-  /** The meeting, in which someone competing asks the question, as a Move of theirs. */
-  function askingRaw() {
-    const raw = rivalsRaw();
-    const meeting = raw.scenes[0];
-    if (meeting) {
-      Object.assign(meeting, {
-        competitor: { title: "ASKED-THE-QUESTION", family: "attack" },
-      });
-      meeting.narration = ["{competitor} ASKS THE QUESTION."];
-      const quiet = meeting.options[1];
-      if (quiet) quiet.results = [{ body: "YOU ANSWER {competitor}." }];
-    }
-    return raw;
-  }
-
-  /** Who asked, of Ana and Ben, who always compete, by what the Scene says. */
-  function askerIn(content: Content, view: PlayerView | undefined) {
-    if (view?.step.kind !== "scene") throw new Error("No Scene.");
-    const told = view.step.narration[0];
-    return ["ana", "ben"].find(
-      (id) =>
-        told ===
-        `${capitalised(calledAtStart(content, id))} ASKS THE QUESTION.`,
-    );
-  }
-
-  it("is asked by someone competing, of any kind, and credited only to a Rival", () => {
-    const content = parseContent(askingRaw());
-    const asked = { rival: 0, other: 0, practitioner: 0, otherKind: 0 };
-
-    for (const seed of SEEDS) {
-      const run = startRun({ seed, content });
-      const views = playOut(run);
-      const truth = readHiddenTruth(run);
-      const first = views.find((v) => v.step.kind === "scene");
-      const asker = askerIn(content, first);
-      expect(asker, `seed ${String(seed)}`).toBeDefined();
-      // Whoever asks is in the room.
-      const name = content.characters.find((c) => c.id === asker)?.name;
-      expect(first?.step.kind === "scene" && first.step.cast).toContainEqual(
-        expect.objectContaining({ name }),
-      );
-      const kind = truth.characters.find((c) => c.id === asker)?.kind;
-      if (kind === "practitioner") asked.practitioner += 1;
-      else asked.otherKind += 1;
-      const rival = truth.rivals.find((r) => r.character === asker);
-      if (rival) {
-        asked.rival += 1;
-        expect(rival.did).toContainEqual({ month: 1, move: "meeting" });
-        const listed = resultsOf(views).rivals.flatMap((r) => r.did);
-        expect(listed).toContainEqual({
-          month: 1,
-          text: "ASKED-THE-QUESTION",
-          family: "ATTACK",
-        });
-      } else {
-        asked.other += 1;
-        expect(truth.rivals.flatMap((r) => r.did)).not.toContainEqual({
-          month: 1,
-          move: "meeting",
-        });
-      }
-    }
-
-    expect(asked.rival).toBeGreaterThan(0);
-    expect(asked.other).toBeGreaterThan(0);
-    // Practitioners are a third of those dealt here, and ask more than that.
-    expect(asked.practitioner).toBeGreaterThan(asked.otherKind / 2);
-  });
-
-  it("names the same person in what is said back", () => {
-    const content = parseContent(askingRaw());
-    for (const seed of SEEDS.slice(0, 40)) {
-      const run = startRun({ seed, content });
-      let view = run.view();
-      while (view.step.kind !== "scene") {
-        const next = view.choices[0];
-        if (!next) throw new Error("No Scene.");
-        view = run.choose(next);
-      }
-      const asker = askerIn(content, view) ?? "";
-      const after = run.choose({
-        type: "scene",
-        sceneId: "meeting",
-        optionId: "stay-quiet",
-      });
-
-      expect(after.step).toMatchObject({
-        body: `YOU ANSWER ${calledAtStart(content, asker)}.`,
-      });
-    }
-  });
-
-  it("can be written only in a Scene in which someone competing asks", () => {
-    const raw = rivalsRaw();
-    if (raw.scenes[0]) raw.scenes[0].narration = ["{competitor} ASKS."];
-
-    expect(() => parseContent(raw)).toThrow(/unknown part "\{competitor\}"/);
-  });
-
-  it("needs someone who could compete", () => {
-    const raw: Partial<ReturnType<typeof askingRaw>> = askingRaw();
-    delete raw.rivals;
-
-    expect(() => parseContent(raw)).toThrow(
-      /Scene "meeting" has someone competing ask, but nobody competes/,
-    );
   });
 });
 

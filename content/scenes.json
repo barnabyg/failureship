@@ -4332,13 +4332,36 @@
     "cast": ["{head}", "{boss}", "admin", "analyst"],
     "competitor": {
       "title": "A particularly tricky question, at the Board",
-      "family": "attack"
+      "family": "attack",
+      "label": "How the question is asked",
+      "signs": [
+        {
+          "text": "{competitor} asks it as a favour to the Board, and has slide seven open already.",
+          "likelihood": {
+            "believer": 1,
+            "incompetent": 1,
+            "practitioner": 4
+          }
+        },
+        {
+          "text": "{competitor} asks it as if it had only just occurred to them, and seems surprised by it.",
+          "likelihood": {
+            "believer": 2,
+            "incompetent": 4,
+            "practitioner": 2
+          }
+        },
+        {
+          "text": "{competitor} asks it apologetically, and says that somebody had to.",
+          "likelihood": {
+            "believer": 4,
+            "incompetent": 1,
+            "practitioner": 2
+          }
+        }
+      ]
     },
     "signs": [
-      {
-        "label": "Who asks",
-        "text": "{competitor} asks it as a favour to the Board, and has slide seven open already."
-      },
       {
         "label": "Whom the screen watches",
         "text": "While the question hangs there, the Board watches {holder}, to see how to take it.",

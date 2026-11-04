@@ -178,21 +178,10 @@ export function makerOf(
 }
 
 /**
- * Who of those competing asks in a Scene that has someone competing in it, as
- * a competitor's Move is made: the same person each time it is read that month.
+ * One of those competing, drawn by the odds for their kind, the same each time
+ * the same question is asked in a month.
  */
-export function askerIn(
-  state: State,
-  content: Content,
-  scene: { id: string; competitor?: unknown },
-): string | undefined {
-  if (scene.competitor === undefined) return undefined;
-  const competition = competitionNow(state, content);
-  return competitorFor(state, content, `asker:${scene.id}`, competition);
-}
-
-/** One of those competing, drawn by the odds for their kind. */
-function competitorFor(
+export function competitorFor(
   state: State,
   content: Content,
   question: string,

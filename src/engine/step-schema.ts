@@ -5,6 +5,7 @@ import {
   id,
   months,
   notice,
+  perKind,
   pool,
   text,
 } from "./basic-schema";
@@ -113,7 +114,21 @@ export const scene = z.strictObject({
    * can say `{competitor}`. If they are a Rival, it is listed as what they did.
    */
   competitor: z
-    .strictObject({ title: text, family: z.enum(MOVE_FAMILIES) })
+    .strictObject({
+      title: text,
+      family: z.enum(MOVE_FAMILIES),
+      /** The label of the sign of how they went about it. */
+      label: text,
+      /** How they went about it: one is shown, by the odds for their kind. */
+      signs: z
+        .array(
+          z.strictObject({
+            text,
+            likelihood: perKind(z.number().nonnegative()),
+          }),
+        )
+        .min(2),
+    })
     .optional(),
   /** Names code in `sceneScripts`, for a Scene that data cannot express. */
   script: id.optional(),

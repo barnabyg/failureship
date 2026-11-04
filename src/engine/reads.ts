@@ -95,8 +95,11 @@ export function fillSubject(
   });
 }
 
-/** Parts are relative to who is in the room. Left out, that is everyone. */
-function partsIn(powerMap: PowerMap, room?: readonly string[]) {
+/**
+ * Who text calls the holder, the bystander and the ignored, relative to who is
+ * in the room. Left out, that is everyone.
+ */
+export function partsIn(powerMap: PowerMap, room?: readonly string[]) {
   const present = powerMap.order.filter((id) => room?.includes(id) ?? true);
   return {
     holder: present[0],

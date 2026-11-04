@@ -743,9 +743,12 @@ and who really has what it needs.
   player makes a Move, such as Floor 3's tricky question at the Board. Whoever it is is drawn from
   those competing in [`rivals.json`](#rivalsjson) by its `makers` odds, as a competitor's Move is
   made, and is in the room, so a Practitioner is likeliest but never sure. Its text can say
-  `{competitor}` for them, which no other Scene can, or the bystander if nobody competes. If they
-  are a Rival, the results screen lists its `title` among what they did. It needs `rivals.json`,
-  and an id no Move has.
+  `{competitor}` for them, which no other Scene can. If nobody competes, the bystander asks, in
+  every line, so the Scene needs three people present. One of its `signs`, shown under `label`,
+  says how they went about it, by the `likelihood` for their kind: each must be possible from at
+  least two kinds, with different odds, and every kind must have one, so that it never settles a
+  kind. If they are a Rival, the results screen lists its `title` among what they did. It needs
+  `rivals.json`, and an id no Move has.
 - A Scene with a `verdict` adds what the boss finally says, by their mood.
 - A Scene that data cannot express can name a `script`, which is passed to `startRun` in
   `sceneScripts`. This format is a trial, as the spec, issue #1, says.

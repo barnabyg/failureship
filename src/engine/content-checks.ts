@@ -28,7 +28,11 @@ import { findBrokenFloors } from "./floor-checks";
 import { findBrokenPlans } from "./plan-checks";
 import { findBrokenReviews } from "./review-checks";
 import { findBrokenVacancies, needsVacancies } from "./vacancy-checks";
-import { findBrokenRivals, withoutMaker } from "./rival-checks";
+import {
+  findBrokenRivals,
+  findBrokenWaysOfAsking,
+  withoutMaker,
+} from "./rival-checks";
 import { bossesAtStart, meantBy } from "./places";
 import {
   dependsOnHiddenTruth,
@@ -44,6 +48,7 @@ type SceneResult = SceneData["options"][number]["results"][number];
 
 /** What text in a Scene can name: parts of the Power Map, and the boss's Grand Plan. */
 const PART_TOKENS = ["holder", "ignored", "bystander", "plan", "keeper"];
+const NO_MORE_TOKENS: ReadonlySet<string> = new Set();
 
 /** Thrown when a data file breaks the content format, naming what is wrong. */
 export class ContentError extends Error {
@@ -133,15 +138,14 @@ function findBrokenReferences(content: Content): string[] {
       );
     }
   };
+  /** Text can name the parts, and whatever else `also` allows where it is. */
   const checkParts = (
     owner: string,
     written: string,
-    about = false,
-    asked = false,
+    also: ReadonlySet<string> = NO_MORE_TOKENS,
   ) => {
     for (const [, token] of written.matchAll(/\{(\w+)\}/g)) {
-      if (about && token === "subject") continue;
-      if (asked && token === "competitor") continue;
+      if (also.has(token ?? "")) continue;
       if (!PART_TOKENS.includes(token ?? "")) {
         problems.push(`${owner} uses unknown part "{${token ?? ""}}".`);
       }
@@ -347,7 +351,7 @@ function findBrokenReferences(content: Content): string[] {
     for (const c of s.cast) checkCharacterOrPlace(owner, c);
     if (
       s.cast.length < 3 &&
-      /\{(holder|ignored|bystander)\}/.test(JSON.stringify(s))
+      /\{(holder|ignored|bystander|competitor)\}/.test(JSON.stringify(s))
     ) {
       problems.push(`${owner} names parts, which need three people present.`);
     }
@@ -361,19 +365,25 @@ function findBrokenReferences(content: Content): string[] {
         `${owner} has someone competing ask, as Move "${s.id}" does.`,
       );
     }
-    for (const line of s.narration) checkParts(owner, line, false, asked);
-    for (const sign of s.signs) {
-      checkParts(owner, sign.text, false, asked);
-      checkParts(owner, sign.clue ?? "", false, asked);
+    const sceneTokens = new Set(asked ? ["competitor"] : []);
+    for (const line of s.narration) checkParts(owner, line, sceneTokens);
+    for (const sign of [...s.signs, ...(s.competitor?.signs ?? [])]) {
+      checkParts(owner, sign.text, sceneTokens);
+      checkParts(owner, "clue" in sign ? (sign.clue ?? "") : "", sceneTokens);
     }
+    problems.push(...findBrokenWaysOfAsking(owner, s.competitor?.signs ?? []));
     for (const o of s.options) {
       const optionOwner = `${owner} option "${o.id}"`;
       const about = o.about !== undefined;
       if (o.about !== undefined) checkFact(optionOwner, o.about);
-      checkParts(optionOwner, o.label, about, asked);
+      const optionTokens = new Set([
+        ...sceneTokens,
+        ...(about ? ["subject"] : []),
+      ]);
+      checkParts(optionOwner, o.label, optionTokens);
       for (const r of o.results) {
-        checkParts(optionOwner, r.body, about, asked);
-        checkParts(optionOwner, r.factNote ?? "", about, asked);
+        checkParts(optionOwner, r.body, optionTokens);
+        checkParts(optionOwner, r.factNote ?? "", optionTokens);
         if (r.factAt !== undefined)
           checkCharacterOrPlace(optionOwner, r.factAt);
         if (r.when) checkCondition(optionOwner, r.when);
