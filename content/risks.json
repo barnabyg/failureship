@@ -780,5 +780,235 @@
     "landedOnYou": "It came out when the Head of Transformation told your old boss who had nominated them.",
     "landedElsewhere": "It came out, but the Head of Transformation thought well of you, and shredded the nominations.",
     "neverCameOut": "It never came out. Your nomination is in a drawer on Floor 3, signed."
+  },
+  {
+    "id": "board-number",
+    "addedBy": "made-up-a-board-number",
+    "after": {
+      "min": 2,
+      "max": 3
+    },
+    "note": "You gave the Board a figure you had made up, and it went into the minutes.",
+    "route": {
+      "character": "analyst",
+      "chance": {
+        "believer": 0.8,
+        "incompetent": 0.3,
+        "practitioner": 0.6
+      },
+      "motive": "The Senior Analyst knew the real figure, and found the made-up one in the Board's minutes."
+    },
+    "traced": {
+      "not": {
+        "did": "corrected-the-minutes"
+      }
+    },
+    "onPlayer": {
+      "id": "board-number-landed",
+      "as": "notification",
+      "from": "From: The Board Office",
+      "title": "Minutes of the Board: a query",
+      "body": "The Senior Analyst has written to the Board Office, politely, to say that the figure in Floor 3's minutes is not one the company has. The Board Office would like to know which figure is right, and why the other one was said.",
+      "sets": ["board-number-found-out"],
+      "headOpinion": -2,
+      "options": [
+        {
+          "id": "admit-the-number",
+          "family": "deliver",
+          "label": "Say that you made it up, and give the real one",
+          "sets": ["admitted-the-number"],
+          "result": {
+            "title": "The query",
+            "body": "The Board Office minutes the real figure, and that there was a correction, and whose it was."
+          }
+        },
+        {
+          "id": "blame-the-version",
+          "family": "deflect",
+          "label": "Say that it came from an earlier version of the slide",
+          "sets": ["blamed-the-version"],
+          "opinion": -1,
+          "result": {
+            "title": "The query",
+            "body": "The Board Office asks for the earlier version. There is no earlier version, and now the Board Office knows that as well."
+          }
+        }
+      ]
+    },
+    "onSomeoneElse": {
+      "id": "board-number-corrected",
+      "as": "notice",
+      "title": "Minutes of the Board: a query",
+      "body": "The Senior Analyst mentions that someone queried a figure in the Board's minutes, and found it already corrected. Nobody can say by whom, and the Board Office has minuted that too.",
+      "sets": ["board-number-corrected"]
+    },
+    "landedOnYou": "It came out when the Senior Analyst wrote to the Board Office about the figure in the minutes, and it led to you.",
+    "landedElsewhere": "It came out after you had corrected the minutes yourself, as a query about nothing.",
+    "neverCameOut": "It never came out. Eleven per cent is in the Board's minutes, and will be in next year's pack."
+  },
+  {
+    "id": "checks-cut",
+    "addedBy": "cut-the-checks",
+    "after": {
+      "min": 2,
+      "max": 2
+    },
+    "note": "You met the Chief Financial Officer's thirty per cent by cutting the checks that catch things before they go wrong.",
+    "route": {
+      "character": "delivery",
+      "chance": {
+        "believer": 0.9,
+        "incompetent": 0.4,
+        "practitioner": 0.5
+      },
+      "motive": "The Service Delivery Lead had to explain what went wrong, and kept the list of the checks you cut.",
+      "means": {
+        "remembers": {
+          "character": "delivery",
+          "about": "cut-their-checks"
+        }
+      }
+    },
+    "traced": {
+      "not": {
+        "did": "put-the-checks-back"
+      }
+    },
+    "onPlayer": {
+      "id": "checks-incident",
+      "as": "move",
+      "from": "From: The Service Delivery Lead, Owen Hale",
+      "title": "Incident review: root cause",
+      "body": "Something went wrong on Tuesday that a check would have caught. The Service Delivery Lead's incident review has a section headed Root Cause, and the section is the list of checks you cut, with your name at the top, as the person who accepted the risk.",
+      "sets": ["checks-incident"],
+      "opinion": -1,
+      "headOpinion": -2,
+      "project": {
+        "real": "worse"
+      }
+    },
+    "onSomeoneElse": {
+      "id": "checks-held",
+      "as": "notice",
+      "title": "Incident review",
+      "body": "Something went wrong on Tuesday, and a check caught it before anyone noticed. The incident review is one line long, and nobody reads it, which is how it should be.",
+      "sets": ["checks-held"]
+    },
+    "landedOnYou": "It came out when something went wrong that a check would have caught, and the incident review listed the checks you cut.",
+    "landedElsewhere": "It came out as something going wrong, but you had put the checks back, and one of them caught it.",
+    "neverCameOut": "It never came out. Nothing has gone wrong yet that a check would have caught, and nobody is checking."
+  },
+  {
+    "id": "costs-downstairs",
+    "addedBy": "moved-costs-downstairs",
+    "after": {
+      "min": 1,
+      "max": 2
+    },
+    "note": "You met the thirty per cent by moving a third of Floor 3's costs onto Floor 2's codes.",
+    "route": {
+      "character": "admin",
+      "chance": {
+        "believer": 0.8,
+        "incompetent": 0.4,
+        "practitioner": 0.5
+      },
+      "motive": "The Office Co-ordinator reconciles the cost codes on three floors, and found a third of Floor 3 on Floor 2."
+    },
+    "traced": {
+      "not": {
+        "believes": {
+          "character": "admin",
+          "mood": "warm"
+        }
+      }
+    },
+    "onPlayer": {
+      "id": "costs-found",
+      "as": "notification",
+      "from": "From: The Office Co-ordinator, Marjorie Tull",
+      "title": "Cost codes: Floor 3's, on Floor 2",
+      "body": "Reconciling the cost codes, the Office Co-ordinator has found a third of Floor 3's costs on Floor 2, where nobody ordered them. The reconciliation has gone to the Chief Financial Officer's office, with a covering note that is very neutral.",
+      "sets": ["costs-found"],
+      "headOpinion": -1,
+      "options": [
+        {
+          "id": "call-it-a-recharge",
+          "family": "deflect",
+          "label": "Say that it is a recharge",
+          "sets": ["called-it-a-recharge"],
+          "result": {
+            "title": "Cost codes",
+            "body": "Finance agrees that it is a recharge, and recharges it back to you, with a handling fee."
+          }
+        },
+        {
+          "id": "move-them-back",
+          "family": "deliver",
+          "label": "Move the costs back, and tell the Chief Financial Officer's office",
+          "cost": "standard",
+          "sets": ["moved-the-costs-back"],
+          "result": {
+            "title": "Cost codes",
+            "body": "The costs come back to Floor 3, and your thirty per cent goes with them. The Chief Financial Officer's office thanks you for your honesty, and asks for thirty per cent."
+          }
+        }
+      ]
+    },
+    "onSomeoneElse": {
+      "id": "costs-stayed-downstairs",
+      "as": "notice",
+      "title": "Cost codes",
+      "body": "The Office Co-ordinator mentions that Floor 2 has come out over budget this year, for reasons nobody on Floor 2 can explain. Floor 2 has been asked to find thirty per cent.",
+      "sets": ["costs-stayed-downstairs"]
+    },
+    "landedOnYou": "It came out when the Office Co-ordinator reconciled the cost codes, and the costs on Floor 2 had your codes' names on them.",
+    "landedElsewhere": "It came out, but the Office Co-ordinator thought well of you, and Floor 2 was asked to find thirty per cent.",
+    "neverCameOut": "It never came out. A third of Floor 3 is still being paid for by Floor 2."
+  },
+  {
+    "id": "offsite-recycled",
+    "addedBy": "recycled-the-offsite",
+    "after": {
+      "min": 1,
+      "max": 1
+    },
+    "note": "You presented last year's offsite deck to the Board, with this year's dates.",
+    "route": {
+      "character": "transformation",
+      "chance": {
+        "believer": 0.8,
+        "incompetent": 0.2,
+        "practitioner": 0.6
+      },
+      "motive": "The Head of Transformation had been at last year's offsite, and remembered the photograph."
+    },
+    "traced": {
+      "not": {
+        "believes": {
+          "character": "transformation",
+          "mood": "warm"
+        }
+      }
+    },
+    "onPlayer": {
+      "id": "offsite-recognised",
+      "as": "move",
+      "from": "From: The Head of Transformation, Simone Fairley",
+      "title": "Last year's offsite",
+      "body": "The Head of Transformation has sent you a photograph from last year's offsite, of the same slide, with a note that says: Same plan? It has a question mark, which is worse than not having one.",
+      "sets": ["offsite-recognised"],
+      "headOpinion": -2
+    },
+    "onSomeoneElse": {
+      "id": "offsite-let-go",
+      "as": "notice",
+      "title": "Last year's offsite",
+      "body": "The Head of Transformation mentions, at the coffee bar, that this year's offsite was very like last year's, and that consistency is underrated.",
+      "sets": ["offsite-let-go"]
+    },
+    "landedOnYou": "It came out when the Head of Transformation remembered last year's offsite, and the photograph.",
+    "landedElsewhere": "It came out, but the Head of Transformation thought well of you, and called it consistency.",
+    "neverCameOut": "It never came out. Next year's offsite will be shown the same plan, with next year's dates."
   }
 ]

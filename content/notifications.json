@@ -1806,6 +1806,164 @@
     ]
   },
   {
+    "id": "board-deck",
+    "floor": "middle-manager",
+    "months": [4],
+    "from": "From: The Board Office",
+    "subject": "The Board: your fifteen minutes",
+    "body": "Floor 3 has fifteen minutes at this month's Board, between the pension scheme and lunch. Please bring twelve slides. The Board will have read them, in the sense of having been sent them.",
+    "options": [
+      {
+        "id": "send-the-slides",
+        "label": "Send the twelve slides as they are",
+        "result": {
+          "title": "Your fifteen minutes",
+          "body": "The Board Office confirms receipt, and moves you to between lunch and the pension scheme."
+        }
+      },
+      {
+        "id": "rehearse-the-numbers",
+        "family": "deliver",
+        "label": "Go through every figure with the Senior Analyst first",
+        "cost": "standard",
+        "sets": ["rehearsed-for-the-board"],
+        "approach": "results",
+        "result": {
+          "title": "Your fifteen minutes",
+          "body": "It takes an afternoon. The Senior Analyst finds the figure on slide seven that nobody could explain, and explains it to you twice, until you can."
+        }
+      }
+    ]
+  },
+  {
+    "id": "board-minutes",
+    "floor": "middle-manager",
+    "months": [5],
+    "from": "From: The Board Office",
+    "subject": "Minutes of the Board: for approval",
+    "body": "The minutes of last month's Board are attached, for approval. Floor 3's fifteen minutes are minuted in four lines. Comments are welcome by Thursday, and will be minuted.",
+    "options": [
+      {
+        "id": "approve-the-minutes",
+        "label": "Approve the minutes",
+        "result": {
+          "title": "The minutes",
+          "body": "Approved. The four lines are now what happened, and will be for some years."
+        }
+      },
+      {
+        "id": "correct-the-minutes",
+        "family": "deliver",
+        "label": "Check Floor 3's four lines, and correct anything that was not so",
+        "cost": "standard",
+        "sets": ["corrected-the-minutes"],
+        "approach": "truth",
+        "result": {
+          "title": "The minutes",
+          "body": "You check them against what was said and what is so, which are not always the same. The Board Office accepts your correction, and minutes that there was one."
+        }
+      }
+    ]
+  },
+  {
+    "id": "offsite-brief",
+    "floor": "middle-manager",
+    "months": [6],
+    "from": "From: The Board Office",
+    "subject": "The Board's offsite: tomorrow, two hours",
+    "body": "The Board holds its offsite tomorrow, at a hotel with a lake. Floor 3 has the two hours after lunch, to present its plan for the year. The Board apologises for the short notice, which it has only just given.",
+    "options": [
+      {
+        "id": "bring-what-you-have",
+        "label": "Bring what you have, and see how far it goes",
+        "result": {
+          "title": "The offsite",
+          "body": "What you have is nine slides and a last one that says Questions. You pack it, and a spare cable."
+        }
+      },
+      {
+        "id": "write-it-yourself",
+        "family": "deliver",
+        "label": "Spend the day and the night writing it yourself",
+        "cost": "standard",
+        "sets": ["wrote-the-offsite"],
+        "approach": "results",
+        "result": {
+          "title": "The offsite",
+          "body": "By four in the morning you have two hours of it, with the plan in it as it really is. You are not sure it is good. You are sure it is true, and that it is two hours."
+        }
+      },
+      {
+        "id": "team-writes-it",
+        "family": "deflect",
+        "label": "Ask your team to write it overnight",
+        "sets": ["team-wrote-the-offsite"],
+        "result": {
+          "title": "The offsite",
+          "body": "Your team writes it overnight, in shifts, in a shared document that keeps every keystroke and the time of it. It is very good. The last slide arrives from the Junior Associate at ten past six."
+        },
+        "remembers": [
+          {
+            "character": "associate",
+            "about": "wrote-it-overnight",
+            "text": "You had them write the Board's offsite deck overnight, and the last slide was theirs, at ten past six.",
+            "tone": "bad"
+          },
+          {
+            "character": "analyst",
+            "about": "wrote-it-overnight",
+            "text": "You had them write the Board's offsite deck overnight, at a day's notice.",
+            "tone": "bad"
+          }
+        ]
+      },
+      {
+        "id": "last-years-offsite",
+        "family": "fabricate",
+        "label": "Use last year's offsite deck, with this year's dates",
+        "sets": ["recycled-the-offsite"],
+        "approach": "theatre",
+        "result": {
+          "title": "The offsite",
+          "body": "Last year's deck has two hours in it already. You change the year on every slide, and the photograph of last year's Chief Executive, mostly."
+        }
+      }
+    ]
+  },
+  {
+    "id": "checks-waiver",
+    "floor": "middle-manager",
+    "months": [6],
+    "when": {
+      "did": "cut-the-checks"
+    },
+    "from": "From: The Service Delivery Lead, Owen Hale",
+    "subject": "The checks: a waiver for your signature",
+    "body": "With the checks gone, the Service Delivery Lead needs your signature on a waiver, accepting the risk. It is one page, and the risk is on the back.",
+    "options": [
+      {
+        "id": "sign-the-waiver",
+        "label": "Sign it, without turning it over",
+        "sets": ["signed-the-waiver"],
+        "result": {
+          "title": "The waiver",
+          "body": "Signed. The Service Delivery Lead files it in a folder marked For Later, which is a thick folder."
+        }
+      },
+      {
+        "id": "put-the-checks-back",
+        "family": "deliver",
+        "label": "Put the checks back, out of the offsite's budget",
+        "sets": ["put-the-checks-back"],
+        "approach": "results",
+        "result": {
+          "title": "The waiver",
+          "body": "The checks come back, quietly, and the offsite goes without lanyards. Nobody upstairs notices either."
+        }
+      }
+    ]
+  },
+  {
     "id": "resourcing-matrix",
     "floor": "middle-manager",
     "pool": true,
@@ -1892,6 +2050,95 @@
           "body": "You are seated next to your boss's boss, who talks to the person on the other side all evening, about you, in a way you cannot quite hear."
         },
         "approach": "flatter"
+      }
+    ]
+  },
+  {
+    "id": "spend-control",
+    "floor": "middle-manager",
+    "pool": true,
+    "from": "From: The Office of the Chief Financial Officer",
+    "subject": "Spend control: anything over fifty pounds",
+    "body": "With immediate effect, any spend over fifty pounds needs a business case, approved by the Chief Financial Officer's office within ten working days. The office has two people in it, and one of them is on leave.",
+    "options": [
+      {
+        "id": "case-by-case",
+        "label": "Write the business cases as they come",
+        "result": {
+          "title": "Spend control",
+          "body": "You write nine. Three are approved, each after the thing it was for has happened."
+        }
+      },
+      {
+        "id": "one-case-for-the-year",
+        "family": "deliver",
+        "label": "Write one business case for everything your team needs this year",
+        "cost": "standard",
+        "sets": ["one-case-for-the-year"],
+        "approach": "results",
+        "result": {
+          "title": "Spend control",
+          "body": "It is forty pages long, and approved in a day, because nobody in the office has time to read forty pages."
+        }
+      }
+    ]
+  },
+  {
+    "id": "board-question",
+    "floor": "middle-manager",
+    "pool": true,
+    "from": "From: The Board Office",
+    "subject": "A question from a member of the Board",
+    "body": "A member of the Board has asked why Floor 3 needs so many meetings. The member would like a one-page answer by Monday, and to know who will be at the meeting to discuss it.",
+    "options": [
+      {
+        "id": "one-page",
+        "label": "Send a page saying that each meeting is essential",
+        "result": {
+          "title": "The question",
+          "body": "You send it. The Board Office replies that a meeting has been set up to discuss it."
+        }
+      },
+      {
+        "id": "cancel-a-meeting",
+        "family": "deliver",
+        "label": "Cancel one of your own meetings, and say which",
+        "cost": "standard",
+        "sets": ["cancelled-a-meeting"],
+        "approach": "truth",
+        "result": {
+          "title": "The question",
+          "body": "You cancel Tuesday's. It turns out that nobody else had been going to it either, for a year, and the cancellation is minuted as a saving."
+        }
+      }
+    ]
+  },
+  {
+    "id": "summer-placement",
+    "floor": "middle-manager",
+    "pool": true,
+    "from": "From: The Office of the Head of Transformation",
+    "subject": "A summer placement on your team",
+    "body": "A member of the Board has a nephew who is interested in transformation, and would like to spend the summer on your team. He will need a desk, a laptop and something to put on his CV.",
+    "options": [
+      {
+        "id": "say-you-are-full",
+        "label": "Reply that your team has no room this summer",
+        "result": {
+          "title": "The placement",
+          "body": "The Office of the Head of Transformation says that it quite understands, and copies in the member of the Board, so that they can understand too."
+        }
+      },
+      {
+        "id": "take-the-nephew",
+        "family": "trade",
+        "label": "Find him a desk, and something to put on his CV",
+        "sets": ["took-the-nephew"],
+        "approach": "favour",
+        "result": {
+          "title": "The placement",
+          "body": "He arrives on Monday, in a suit, and asks to see the strategy. You show him the Roadmap. He asks where the rest of it is, and you give him a desk near the window."
+        }
       }
     ]
   },

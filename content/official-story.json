@@ -1013,6 +1013,79 @@
       "happened": "You found last year's figures in it, and this year's nobody had checked."
     },
     {
+      "floor": "middle-manager",
+      "months": [4],
+      "reported": "Floor 3 presented to the Board, which was engaged."
+    },
+    {
+      "floor": "middle-manager",
+      "months": [4],
+      "when": {
+        "flag": "made-up-a-board-number"
+      },
+      "reported": "Floor 3 gave the Board a clear figure.",
+      "happened": "You made it up, and the Office Co-ordinator minuted it."
+    },
+    {
+      "floor": "middle-manager",
+      "months": [4],
+      "when": {
+        "flag": "took-it-offline"
+      },
+      "reported": "Floor 3 took an action from the Board.",
+      "happened": "It was the answer to a question you could not answer."
+    },
+    {
+      "floor": "middle-manager",
+      "months": [5],
+      "reported": "Floor 3 has met the Chief Financial Officer's challenge in full."
+    },
+    {
+      "floor": "middle-manager",
+      "months": [5],
+      "when": {
+        "flag": "cut-the-checks"
+      },
+      "happened": "The thirty per cent came out of the checks, which nobody sees until they are needed."
+    },
+    {
+      "floor": "middle-manager",
+      "months": [5],
+      "when": {
+        "flag": "moved-costs-downstairs"
+      },
+      "happened": "A third of it went down to Floor 2's codes, and is still being spent there."
+    },
+    {
+      "floor": "middle-manager",
+      "months": [5],
+      "when": {
+        "flag": "passed-the-cut-down"
+      },
+      "happened": "Your team found the thirty per cent, out of its own contractor and training."
+    },
+    {
+      "floor": "middle-manager",
+      "months": [6],
+      "reported": "The Board's offsite heard Floor 3's plan for the year."
+    },
+    {
+      "floor": "middle-manager",
+      "months": [6],
+      "when": {
+        "flag": "recycled-the-offsite"
+      },
+      "happened": "It was last year's plan, with this year's dates on it."
+    },
+    {
+      "floor": "middle-manager",
+      "months": [6],
+      "when": {
+        "flag": "team-wrote-the-offsite"
+      },
+      "happened": "Your team wrote it overnight, and finished at ten past six."
+    },
+    {
       "when": {
         "flag": "hired-on-merit"
       },

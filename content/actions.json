@@ -663,6 +663,42 @@
     "sets": ["attended-meeting"]
   },
   {
+    "id": "meeting-the-board",
+    "floor": "middle-manager",
+    "months": [4],
+    "label": "Steering Room 3A",
+    "description": "Floor 3's fifteen minutes at the Board, on the screen.",
+    "place": "steering-room",
+    "cost": "standard",
+    "scene": "the-board",
+    "oncePerMonth": true,
+    "sets": ["attended-meeting"]
+  },
+  {
+    "id": "meeting-cost-challenge",
+    "floor": "middle-manager",
+    "months": [5],
+    "label": "Steering Room 3A",
+    "description": "The Cost Challenge, with the Chief Financial Officer on the phone.",
+    "place": "steering-room",
+    "cost": "standard",
+    "scene": "cost-challenge",
+    "oncePerMonth": true,
+    "sets": ["attended-meeting"]
+  },
+  {
+    "id": "meeting-board-offsite",
+    "floor": "middle-manager",
+    "months": [6],
+    "label": "Steering Room 3A",
+    "description": "The coach to the Board's offsite, which leaves from outside.",
+    "place": "steering-room",
+    "cost": "standard",
+    "scene": "board-offsite",
+    "oncePerMonth": true,
+    "sets": ["attended-meeting"]
+  },
+  {
     "id": "meeting-steering-group",
     "floor": "middle-manager",
     "label": "Steering Room 3A",
@@ -692,6 +728,39 @@
     "place": "steering-room",
     "cost": "standard",
     "scene": "lessons-forum",
+    "oncePerMonth": true,
+    "sets": ["attended-meeting"]
+  },
+  {
+    "id": "meeting-reforecast",
+    "floor": "middle-manager",
+    "label": "Steering Room 3A",
+    "description": "A Reforecast, because the Chief Financial Officer did not like the last one.",
+    "place": "steering-room",
+    "cost": "standard",
+    "scene": "reforecast",
+    "oncePerMonth": true,
+    "sets": ["attended-meeting"]
+  },
+  {
+    "id": "meeting-board-rehearsal",
+    "floor": "middle-manager",
+    "label": "Steering Room 3A",
+    "description": "A Board Rehearsal, with your boss's boss playing the Board.",
+    "place": "steering-room",
+    "cost": "standard",
+    "scene": "board-rehearsal",
+    "oncePerMonth": true,
+    "sets": ["attended-meeting"]
+  },
+  {
+    "id": "meeting-team-structure",
+    "floor": "middle-manager",
+    "label": "Steering Room 3A",
+    "description": "A Team Structure Review, in which there will be fewer of everyone.",
+    "place": "steering-room",
+    "cost": "standard",
+    "scene": "team-structure",
     "oncePerMonth": true,
     "sets": ["attended-meeting"]
   },

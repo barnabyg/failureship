@@ -4321,6 +4321,334 @@
     ]
   },
   {
+    "id": "the-board",
+    "floor": "middle-manager",
+    "months": [4],
+    "title": "The Board",
+    "location": "Floor 3, Steering Room 3A, with the Board on the screen",
+    "narration": [
+      "Floor 3's fifteen minutes at the Board. The Board is on the screen, in a room with better chairs. You are on slide nine of twelve when {competitor} asks, warmly, why the figure on slide seven is lower than last year's."
+    ],
+    "cast": ["{head}", "{boss}", "admin", "analyst"],
+    "competitor": {
+      "title": "A particularly tricky question, at the Board",
+      "family": "attack"
+    },
+    "signs": [
+      {
+        "label": "Who asks",
+        "text": "{competitor} asks it as a favour to the Board, and has slide seven open already."
+      },
+      {
+        "label": "Whom the screen watches",
+        "text": "While the question hangs there, the Board watches {holder}, to see how to take it.",
+        "clue": "At the Board, the screen watched {holder} while the question about slide seven hung there."
+      }
+    ],
+    "options": [
+      {
+        "id": "say-you-will-find-out",
+        "family": "deliver",
+        "label": "Say that you do not know yet, and when you will",
+        "results": [
+          {
+            "when": {
+              "did": "rehearsed-for-the-board"
+            },
+            "body": "You do know, as it turns out, because the Senior Analyst made you say it twice on Tuesday. You say it once. The Board moves on to lunch, and {competitor} closes slide seven.",
+            "sets": ["answered-the-board"],
+            "approach": "results",
+            "headOpinion": 1
+          },
+          {
+            "body": "You say that you do not have it to hand, and that the Board will have it by Friday. The Board writes Friday down. So does {competitor}, in a different colour.",
+            "sets": ["answered-the-board"],
+            "approach": "truth"
+          }
+        ]
+      },
+      {
+        "id": "give-a-number",
+        "family": "fabricate",
+        "label": "Give a figure that sounds about right",
+        "results": [
+          {
+            "body": "You say eleven per cent, firmly, and the Board nods. The Office Co-ordinator, who is taking the minutes, writes eleven per cent down. The Senior Analyst, who knows the figure, looks at the table.",
+            "sets": ["made-up-a-board-number"],
+            "approach": "theatre"
+          }
+        ]
+      },
+      {
+        "id": "take-it-offline",
+        "family": "deflect",
+        "label": "Say that it is a great question, and take it offline",
+        "results": [
+          {
+            "body": "You say that it is a great question. The Board agrees that it is, and would like the answer offline, in writing, before the next Board. {competitor} offers to help, and is thanked.",
+            "sets": ["took-it-offline"],
+            "approach": "stall"
+          }
+        ]
+      },
+      {
+        "id": "ask-it-back",
+        "family": "attack",
+        "label": "Ask {competitor} the same about their own figures",
+        "requires": {
+          "any": [
+            {
+              "sawMove": "pointed-question"
+            },
+            {
+              "sawMove": "tricky-question"
+            }
+          ]
+        },
+        "results": [
+          {
+            "body": "You ask it warmly, as a favour to the Board. {competitor} does not have their own figures open, and says so, at length. The Board minutes it as healthy challenge.",
+            "sets": ["asked-it-back"],
+            "approach": "blame"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "cost-challenge",
+    "floor": "middle-manager",
+    "months": [5],
+    "title": "Cost Challenge",
+    "location": "Floor 3, Steering Room 3A",
+    "narration": [
+      "The Chief Financial Officer wants thirty per cent off every budget on Floor 3, with everything in the plan still delivered. The Chief Financial Officer has joined by phone, from a car, to say that this is not a cut but a challenge. Your answer is due by Friday."
+    ],
+    "cast": ["{head}", "{boss}", "delivery", "analyst", "projects"],
+    "signs": [
+      {
+        "label": "Whose budget is challenged first",
+        "text": "{ignored}'s budget is challenged first, and hardest. {holder}'s is challenged last, and briefly.",
+        "clue": "At the Cost Challenge, {holder}'s budget was challenged last, and briefly."
+      },
+      {
+        "label": "Who rings back",
+        "text": "When the line drops, {bystander} rings the car back, and hands the phone to {holder}."
+      }
+    ],
+    "options": [
+      {
+        "id": "cut-and-say-what-stops",
+        "family": "deliver",
+        "label": "Cut thirty per cent, and list what will no longer be delivered",
+        "results": [
+          {
+            "body": "Your list is two pages long. The Chief Financial Officer says that it is very helpful, and that the plan has not changed. The list is filed with the plan, behind it.",
+            "sets": ["cut-said-what-stops"],
+            "approach": "truth"
+          }
+        ]
+      },
+      {
+        "id": "cut-the-checks",
+        "family": "fabricate",
+        "label": "Cut the testing and the second checks, which nobody sees",
+        "results": [
+          {
+            "body": "It comes to thirty per cent exactly, and nothing in the plan moves. The Service Delivery Lead reads what has gone, and asks who will check things now. You say that everyone will, a bit.",
+            "sets": ["cut-the-checks"],
+            "approach": "theatre",
+            "remembers": [
+              {
+                "character": "delivery",
+                "about": "cut-their-checks",
+                "text": "You cut the checks they run, to meet the thirty per cent, and kept the plan as it was.",
+                "tone": "bad"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "pass-the-cut-down",
+        "family": "deflect",
+        "label": "Pass the cut down to your team, and keep the plan",
+        "results": [
+          {
+            "body": "Each of your team is asked to find thirty per cent of their own, by Friday. The Senior Analyst loses a contractor and the Project Co-ordinator a training course, and both are told that it is a challenge.",
+            "sets": ["passed-the-cut-down"],
+            "approach": "blame",
+            "project": {
+              "real": "worse"
+            },
+            "remembers": [
+              {
+                "character": "analyst",
+                "about": "cut-passed-down",
+                "text": "You passed the Chief Financial Officer's cut down to them, and they lost their contractor.",
+                "tone": "bad"
+              },
+              {
+                "character": "projects",
+                "about": "cut-passed-down",
+                "text": "You passed the Chief Financial Officer's cut down to them, and they lost their training.",
+                "tone": "bad"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "move-the-costs",
+        "family": "fabricate",
+        "label": "Move a third of your costs onto Floor 2's codes",
+        "results": [
+          {
+            "body": "A third of your costs go downstairs, to codes on Floor 2 that nobody on Floor 3 owns. Floor 3's budget is thirty per cent lower. The company's is the same.",
+            "sets": ["moved-costs-downstairs"],
+            "approach": "theatre"
+          }
+        ]
+      },
+      {
+        "id": "stop-roadmap-lines",
+        "family": "deliver",
+        "label": "Find the thirty per cent by stopping lines of {plan}",
+        "requires": {
+          "planRunning": "roadmap"
+        },
+        "results": [
+          {
+            "body": "You stop four lines, which comes to thirty per cent and a bit. Their owners are told by Friday. {plan} is shorter, and the Chief Financial Officer calls it a plan.",
+            "sets": ["roadmap-really-decided", "cut-said-what-stops"],
+            "approach": "results"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "board-offsite",
+    "floor": "middle-manager",
+    "months": [6],
+    "title": "The Board Offsite",
+    "location": "A hotel with a lake, the Orangery",
+    "narration": [
+      "The Board's offsite, in an orangery with no oranges. Floor 3's two hours begin after lunch, which overran, so they are now an hour and three quarters. Each member of the Board has a coffee and a pastry they have not touched."
+    ],
+    "cast": ["{head}", "{boss}", "head", "delivery", "analyst"],
+    "signs": [
+      {
+        "label": "Whom the Board turns to",
+        "text": "Whenever a slide changes, the Board turns to {holder}, to see what to think of it.",
+        "clue": "At the Board Offsite, the Board turned to {holder} whenever a slide changed."
+      },
+      {
+        "label": "Who is not offered a pastry",
+        "text": "{ignored} is the only one not offered a pastry, and says they did not want one."
+      }
+    ],
+    "options": [
+      {
+        "id": "present-it-straight",
+        "family": "deliver",
+        "label": "Present the plan as it is, and stop when it runs out",
+        "results": [
+          {
+            "when": {
+              "did": "wrote-the-offsite"
+            },
+            "body": "It runs to the minute, because you wrote it to. The Board asks four questions, all of them about the plan, which nobody on Floor 3 can remember happening before. Your boss's boss eats the pastry.",
+            "sets": ["presented-the-offsite"],
+            "approach": "results",
+            "headOpinion": 1
+          },
+          {
+            "when": {
+              "did": "team-wrote-the-offsite"
+            },
+            "body": "It is very good, and you are seeing most of it for the first time. The Board asks who wrote slide forty. You say your team, and the Board writes down your team.",
+            "sets": ["presented-the-offsite"],
+            "approach": "results"
+          },
+          {
+            "body": "It runs out after forty minutes. The Board takes an early coffee, and thanks you for the time back, which it says is the most useful thing anyone has given it all day.",
+            "sets": ["presented-the-offsite"],
+            "approach": "truth"
+          }
+        ]
+      },
+      {
+        "id": "fill-the-two-hours",
+        "family": "impress",
+        "label": "Fill the two hours, whatever it takes",
+        "results": [
+          {
+            "body": "There is a breakout, a live poll and an exercise with a beach ball, which ends up in the lake. The two hours are filled. Nobody can say afterwards with what, and everyone says it was energising.",
+            "sets": ["filled-the-offsite"],
+            "approach": "theatre"
+          }
+        ]
+      },
+      {
+        "id": "present-it-as-yours",
+        "family": "deflect",
+        "label": "Present it as your own work, and take the applause",
+        "results": [
+          {
+            "when": {
+              "did": "team-wrote-the-offsite"
+            },
+            "body": "You present your team's night as your own vision. The Board applauds. The Junior Associate, who wrote slide forty, is in the car park, waiting to drive the deck back.",
+            "sets": ["took-the-offsite-credit"],
+            "approach": "theatre",
+            "remembers": [
+              {
+                "character": "associate",
+                "about": "credit-for-the-night",
+                "text": "You presented the deck they wrote overnight to the Board as your own.",
+                "tone": "bad"
+              }
+            ]
+          },
+          {
+            "body": "You present it as your own vision, which it is, in that nobody else will put their name to it. The Board applauds the vision, and asks for the detail by Monday.",
+            "sets": ["took-the-offsite-credit"],
+            "approach": "theatre"
+          }
+        ]
+      },
+      {
+        "id": "hand-the-slot-up",
+        "family": "impress",
+        "label": "Hand the two hours to your boss, and sit at the back",
+        "results": [
+          {
+            "body": "Your boss takes the two hours, gratefully, and keeps them. You sit at the back, by the coffee, where the Chair of the Board asks you who you are.",
+            "sets": ["handed-the-slot-up"],
+            "approach": "flatter",
+            "opinion": 1
+          }
+        ]
+      },
+      {
+        "id": "present-the-roadmap",
+        "family": "fabricate",
+        "label": "Present {plan} as the plan for the year",
+        "requires": {
+          "planRunning": "roadmap"
+        },
+        "results": [
+          {
+            "body": "You put {plan} on the screen, all of it, on one slide, and talk to it for two hours. The Board cannot read it, and says that it can see the shape of it.",
+            "sets": ["roadmap-is-a-slide"],
+            "approach": "theatre"
+          }
+        ]
+      }
+    ]
+  },
+  {
     "id": "steering-group",
     "floor": "middle-manager",
     "pool": true,
@@ -4540,6 +4868,216 @@
         "results": [
           {
             "body": "You take the notes. They are the only record of the forum, so you decide what was learned."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "reforecast",
+    "floor": "middle-manager",
+    "pool": true,
+    "title": "Reforecast",
+    "location": "Floor 3, Steering Room 3A",
+    "narration": [
+      "The year's forecast, again. It was forecast in January and reforecast in April, and is now being re-reforecast, because the Chief Financial Officer did not like April."
+    ],
+    "cast": ["{head}", "{boss}", "head", "delivery", "projects"],
+    "signs": [
+      {
+        "label": "Whose number becomes the forecast",
+        "text": "{holder}'s number becomes the forecast. Everyone else's becomes a range.",
+        "clue": "At a Reforecast, {holder}'s number became the forecast, and everyone else's a range."
+      },
+      {
+        "label": "Who explains a variance",
+        "text": "{ignored} is asked to explain a variance, which turns out to be the gap between what {ignored} said and what {holder} wanted."
+      }
+    ],
+    "options": [
+      {
+        "id": "forecast-what-you-expect",
+        "family": "deliver",
+        "label": "Forecast what you actually expect",
+        "results": [
+          {
+            "body": "You forecast what you expect, which is lower. The room goes quiet. The forecast then goes up anyway, by someone else's pen, and yours is kept as a footnote.",
+            "sets": ["forecast-honestly"],
+            "approach": "truth"
+          }
+        ]
+      },
+      {
+        "id": "forecast-low",
+        "family": "fabricate",
+        "label": "Forecast low, so that you can beat it later",
+        "results": [
+          {
+            "body": "You forecast low. Next quarter you will beat it, and be thanked for the surprise, which you have scheduled.",
+            "sets": ["forecast-low"],
+            "approach": "theatre"
+          }
+        ]
+      },
+      {
+        "id": "forecast-the-bosses",
+        "family": "impress",
+        "label": "Forecast whatever your boss forecast",
+        "results": [
+          {
+            "body": "Your forecast matches your boss's to the pound. Your boss calls it alignment. The Chief Financial Officer's office calls it a coincidence, and asks for the workings.",
+            "sets": ["forecast-the-bosses"],
+            "approach": "flatter"
+          }
+        ]
+      },
+      {
+        "id": "ask-how-it-works",
+        "family": "find-out",
+        "label": "Ask how the forecast is actually worked out",
+        "results": [
+          {
+            "body": "Nobody knows. There is a spreadsheet with a tab called DO NOT TOUCH, and someone touched it four years ago, and left.",
+            "sets": ["asked-how-it-works"]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "board-rehearsal",
+    "floor": "middle-manager",
+    "pool": true,
+    "title": "Board Rehearsal",
+    "location": "Floor 3, Steering Room 3A",
+    "narration": [
+      "A rehearsal for the next Board. Your boss's boss plays the Board, and is better at it than the Board is."
+    ],
+    "cast": ["{head}", "{boss}", "head", "admin", "analyst"],
+    "signs": [
+      {
+        "label": "Who plays the Chair",
+        "text": "{holder} is given the Chair's seat for the rehearsal, and is still in it when the rehearsal ends.",
+        "clue": "At a Board Rehearsal, {holder} was given the Chair's seat, and kept it."
+      },
+      {
+        "label": "Whose slides are cut for time",
+        "text": "{ignored}'s slides are cut for time before anyone has seen them, including {ignored}."
+      }
+    ],
+    "options": [
+      {
+        "id": "ask-for-the-hardest",
+        "family": "deliver",
+        "label": "Ask to be asked the hardest question there is",
+        "results": [
+          {
+            "body": "You are asked it, and get it wrong, here, where it does not count. That is what a rehearsal is for, and nobody in the room believes it.",
+            "sets": ["asked-for-the-hardest"],
+            "approach": "ownership"
+          }
+        ]
+      },
+      {
+        "id": "agree-an-easy-one",
+        "family": "trade",
+        "label": "Agree a friendly question for the day with your boss's boss",
+        "results": [
+          {
+            "body": "Your boss's boss agrees to ask you something easy on the day, and asks what you will do in return. You say anything. Your boss's boss writes anything down.",
+            "sets": ["agreed-an-easy-one"],
+            "approach": "favour",
+            "headOpinion": 1
+          }
+        ]
+      },
+      {
+        "id": "one-slide",
+        "family": "impress",
+        "label": "Cut your section to one slide, with a photograph",
+        "results": [
+          {
+            "body": "Your section is one slide: a photograph of a bridge. It is the only slide the rehearsal remembers, and nobody can say what it was about.",
+            "sets": ["cut-to-one-slide"],
+            "approach": "theatre"
+          }
+        ]
+      },
+      {
+        "id": "time-the-others",
+        "label": "Offer to keep time",
+        "results": [
+          {
+            "body": "You keep time. Everyone overruns except the one person you would have expected to, which you note."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "team-structure",
+    "floor": "middle-manager",
+    "pool": true,
+    "title": "Team Structure Review",
+    "location": "Floor 3, Steering Room 3A",
+    "narration": [
+      "Floor 3 is reviewing how many people report to how many people. The answer is going to be fewer, and the question is who."
+    ],
+    "cast": ["{head}", "{boss}", "head", "delivery", "admin"],
+    "signs": [
+      {
+        "label": "Whose chart is not redrawn",
+        "text": "Every chart on the wall is redrawn, except {holder}'s, which is admired.",
+        "clue": "At the Team Structure Review, {holder}'s chart was the only one not redrawn."
+      },
+      {
+        "label": "Who is drawn as a dotted line",
+        "text": "{ignored} ends the meeting as a dotted line, and is told that dotted lines are very important."
+      }
+    ],
+    "options": [
+      {
+        "id": "defend-your-team",
+        "family": "deliver",
+        "label": "Say what each of your team does, and that you need all of them",
+        "results": [
+          {
+            "body": "You go through your team one by one, with what each of them actually does. It takes twenty minutes, and the room is surprised by how much of it there is.",
+            "sets": ["defended-the-team"],
+            "approach": "ownership"
+          }
+        ]
+      },
+      {
+        "id": "offer-an-empty-post",
+        "family": "fabricate",
+        "label": "Offer up the post you have never been able to fill",
+        "results": [
+          {
+            "body": "You offer up the post that has been empty for a year. It is counted as a saving, a reduction and a difficult decision, bravely taken.",
+            "sets": ["offered-an-empty-post"],
+            "approach": "theatre"
+          }
+        ]
+      },
+      {
+        "id": "fewer-layers-below",
+        "family": "impress",
+        "label": "Say that Floor 3 has too many layers, starting below you",
+        "results": [
+          {
+            "body": "Your boss agrees that there are too many layers, and that the ones below are the place to start. Nobody below is in the room.",
+            "sets": ["fewer-layers-below"],
+            "approach": "flatter"
+          }
+        ]
+      },
+      {
+        "id": "draw-the-chart",
+        "label": "Offer to draw the new chart",
+        "results": [
+          {
+            "body": "You draw it. Where to put the lines turns out to be most of the decision, and nobody has noticed that yet."
           }
         ]
       }

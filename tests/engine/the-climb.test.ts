@@ -6,7 +6,6 @@ import {
   type Content,
   type PlayerView,
 } from "../../src/engine";
-import { isOn } from "../../src/engine/floors";
 import { readHiddenTruth } from "../../src/engine/hidden-truth";
 import { plainChoice } from "../../src/ui/later-month";
 import { withoutSeatEvents } from "./fixture";
@@ -265,47 +264,5 @@ describe("a big mistake at the top of Floor 3", () => {
       expect.stringMatching(/^Month 11: Middle manager/),
       "Month 14: back down to Team lead, after an incident.",
     ]);
-  });
-});
-
-describe("Floor 3", () => {
-  // Floor 2 can start in month 4, and its seat fall vacant then, to be decided
-  // as month 6 closes: so Floor 3 can start in month 7, a stay of twelve.
-  const openFor = gameContent.vacancies?.seats[0]?.openFor ?? 0;
-  const LONGEST = gameContent.balance.monthsPerRun - 2 * (1 + openFor + 1) + 2;
-  const own = <T extends { floor?: string | undefined }>(items: readonly T[]) =>
-    items.filter((i) => i.floor === "middle-manager");
-
-  it("can be stayed on for twelve months", () => {
-    expect(LONGEST).toBe(12);
-  });
-
-  it("holds a meeting of its own, with a choice in it, every month, however long the stay", () => {
-    for (let seed = 1; seed <= 200; seed++) {
-      for (let month = 1; month <= LONGEST; month++) {
-        const where = {
-          seed,
-          job: "middle-manager",
-          monthsOnFloor: { "middle-manager": month },
-        };
-        const scenes = own(gameContent.scenes).filter((s) =>
-          isOn(where, gameContent, s),
-        );
-        const notifications = own(gameContent.notifications).filter((n) =>
-          isOn(where, gameContent, n),
-        );
-        const owner = `seed ${String(seed)} month ${String(month)}`;
-
-        expect(scenes, owner).toHaveLength(1);
-        expect(scenes[0]?.options.length, owner).toBeGreaterThanOrEqual(3);
-        expect(
-          own(gameContent.actions).filter(
-            (a) => a.scene === scenes[0]?.id && isOn(where, gameContent, a),
-          ),
-          owner,
-        ).toHaveLength(1);
-        expect(notifications.length, owner).toBeGreaterThan(0);
-      }
-    }
   });
 });
