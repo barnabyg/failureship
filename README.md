@@ -19,10 +19,10 @@ npm run play
 This installs anything missing the first time, starts the game and opens it in your browser, or
 prints its address. `Ctrl+C` stops it. On Windows, you can double-click `run.bat` instead.
 
-To try it, open `http://localhost:5173/?seed=2`. File the report and go to the meeting each month,
-take the blame yourself in month 2's Lessons Learned Review, and in month 5's Ideas Workshop stick a
-screenshot of the new tool on your boss's note. Month 8 opens with Congratulations: Team lead, and
-the lift takes you to Floor 2. A whole run takes about an hour. [The playtest](docs/playtest.md)
+To try it, add `?seed=2` to the address the command prints. File the report, go to the meeting each
+month and choose the first thing, but take the blame yourself in month 2's Lessons Learned Review,
+and in month 5's Ideas Workshop stick a screenshot of the new tool on your boss's note. Month 8
+opens with Congratulations: Team lead, and the lift takes you to Floor 2. A whole run takes about an hour. [The playtest](docs/playtest.md)
 has seeds for each way up, a Rival winning, a demotion, being fired and the win.
 
 ## What to try
@@ -143,9 +143,8 @@ game reloads when you save a file. If an edit breaks the format, the page shows 
 | `balance.json`        | Actions a month, months in a run and a quarter, each choice's cost, how signs mislead, the boss's mood |
 | `floors.json`         | Each floor, by the job done on it: the job title, the rooms, their fittings and the lift's sign        |
 
-Phase 5 added `floors.json`, `rivals.json`, `grand-plans.json` and `vacancies.json`. Each file's
-fields, the conditions they can use, which floor and month content belongs to, and what to write
-for each mechanic are in the [content format reference](docs/content-format.md), a section a file.
+Each file's fields, the conditions they can use, which floor and month content belongs to, and what
+to write for each mechanic are in the [content format reference](docs/content-format.md).
 
 ## Develop
 
