@@ -447,7 +447,10 @@ true` is done in reality only then, and otherwise as its `otherwise`, a way in a
   holds, or is left out, it is the player at the seeded `chance` for that boss's kind, plus `mood`
   for how they stand with the player, and `onPlayer` is sent, which can be `"mistake": "big"`.
   Otherwise `onSomeoneElse` is. Both are Bills, as in [`threads.json`](#threadsjson), and may not
-  say `{boss}` or `{head}`, since by then that may be someone else.
+  say `{boss}` or `{head}`, since by then that may be someone else. Offer what breaks `sticks` on
+  its own, apart from the floor's riskier Moves, so that trying one does not cost the cover: Floor
+  1's Demand to roll out the tool, Floor 2's Leadership Induction, and Floor 3's welcome e-mail as
+  well as its Cost Challenge.
 - `results` is what the results screen says became of each boss's Plan: `reality`, `appearance`,
   `failed`, or `running` if the run ended first.
 
@@ -681,9 +684,9 @@ player sees none of it until it does, and the results screen lists the lot.
   clearing the shared drive in month 7 does, letting an old friend go on Floor 2, or putting the
   checks back and correcting the Board's minutes on Floor 3. The flag must be set by a choice in
   plain view, other than the one that adds the risk, and be on offer on the same floor before the
-  risk can first come out, as each month opens, or the player never had the chance. Floor 1's
-  shared drive comes a month too late for the risks of month 4's Budget Round and month 6's metric,
-  which the risks test names. If it holds, `onPlayer` is sent. If not, `onSomeoneElse` is, if it
+  risk can first come out, as each month opens, or the player never had the chance, which the risks
+  test checks: so month 4's Budget Round and month 6's metric wait until after the shared drive. If
+  it holds, `onPlayer` is sent. If not, `onSomeoneElse` is, if it
   is written, and otherwise nothing happens. Either is a Bill, as in [`threads.json`](#threadsjson),
   so a risk that lands can be `"mistake": "big"`.
 - `event` names a Company Event, from [`events.json`](#eventsjson), that lands as it comes out.

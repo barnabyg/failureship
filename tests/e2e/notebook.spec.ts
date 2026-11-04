@@ -43,7 +43,7 @@ test("a clue arrives, and a Character is marked", async ({ page }) => {
 test("a mark lasts into the next month, and is on the results screen", async ({
   page,
 }) => {
-  await page.goto("/?seed=1&month=8");
+  await page.goto("/?seed=1&month=8&last=9");
   await openNotebook(page);
   await page.getByTestId("mark-boss").selectOption("practitioner");
   await closeNotebook(page);
@@ -124,7 +124,7 @@ test("escape closes the Notebook, and a mark survives closing it", async ({
 test("the Notebook can be read but not changed once the run is over", async ({
   page,
 }) => {
-  await page.goto("/?seed=1&month=9");
+  await page.goto("/?seed=1&month=9&last=9");
   await playToResults(page);
 
   await openNotebook(page);

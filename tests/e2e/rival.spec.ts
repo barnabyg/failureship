@@ -14,7 +14,7 @@ test("a Rival's Move lands on you, and later you can make the same Move", async 
   // The player is never told who is a Rival, only what happened.
   await expect(page.locator("main")).not.toContainText(/\brivals?\b/i);
 
-  await freshRun(page, "/?seed=39&month=8");
+  await freshRun(page, "/?seed=39&month=8&last=9");
   await playUntil(page, "scene-option-start-a-rumour");
   await page.getByTestId("scene-option-start-a-rumour").click();
   await expect(page.getByTestId("panel-notice")).toContainText(

@@ -27,7 +27,7 @@ test("a discovered Hidden Fact changes what a Scene offers", async ({
     page.getByTestId("scene-option-use-abolished-post-calibration"),
   ).toHaveCount(0);
 
-  await freshRun(page, "/?seed=57&month=8");
+  await freshRun(page, "/?seed=57&month=8&last=9");
   await fileTheReport(page);
   await page.getByTestId("hotspot-inside-info").click();
   await page.getByTestId("source-admin").click();
@@ -53,7 +53,7 @@ test("a discovered Hidden Fact changes what a Scene offers", async ({
 test("blundering into a dangerous Hidden Fact is explained at the end", async ({
   page,
 }) => {
-  await page.goto("/?seed=106&month=8");
+  await page.goto("/?seed=106&month=8&last=9");
   await fileTheReport(page);
   await openMeeting(page);
 

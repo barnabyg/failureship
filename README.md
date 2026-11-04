@@ -3,7 +3,7 @@
 A satirical, single-player browser game. You climb a ten-storey office tower by reading people. The
 design is in [failureship-grill-outcome.md](failureship-grill-outcome.md).
 
-This is Phase 5 in progress: eighteen months from a furnished Floor 1 to the top of a blocked-out
+Phase 5, ready to steer: eighteen months from a furnished Floor 1 to the top of a blocked-out
 Floor 3, with kinds of boss, the Monthly Status Report, Demands, Budgets, every family of Moves,
 Threads, hidden risks, news that travels, Company Events, your word and Deals, Believers who change,
 Gauges, reviews, Rivals, Grand Plans and more than one route up. You can be fired, or win, sort of.
@@ -19,14 +19,21 @@ npm run play
 This installs anything missing the first time, starts the game and opens it in your browser, or
 prints its address. `Ctrl+C` stops it. On Windows, you can double-click `run.bat` instead.
 
+To try it, add `?seed=2` to the address the command prints. File the report, go to the meeting each
+month and choose the first thing, but take the blame yourself in month 2's Lessons Learned Review,
+and in month 5's Ideas Workshop stick a screenshot of the new tool on your boss's note. Month 8
+opens with Congratulations: Team lead, and the lift takes you to Floor 2. A whole run takes about an hour. [The playtest](docs/playtest.md)
+has seeds for each way up, a Rival winning, a demotion, being fired and the win.
+
 ## What to try
 
 Every run has a seed, at the top right, and `?seed=8` picks one. Each month has the same shape:
 
-1. **A Notification arrives.** Answer it. The answer may cost one of your 3 actions. Every third
+1. **A Notification arrives.** Answer it. An answer may cost one of your 3 actions, and one always
+   costs nothing. A month always leaves you something to decide, on any floor. Every third
    month the **Quarterly Business Review** follows by itself, at no cost, and goes on the record.
 2. **Spend your remaining actions** by clicking a place on the floor or its label. The panel at
-   the bottom left always says your goal, and what you can do now.
+   the bottom left always says your goal, and what you can do now, at every step.
 3. **Any Company Event, then a Character Move, lands on you.** You do not get a choice.
 4. **The month closes** with the official story beside what actually happened.
 
@@ -36,18 +43,15 @@ There are four ways to spend an action:
   none of its signs, your boss may take it badly, and the minutes give you an action that follows
   you as a Demand. Everyone present behaves according to their role and their dealt kind, and no
   single sign settles what they are. Your boss's treatment of you shows roughly what they think.
-- **The photocopier** and **the loading bay** are Find Out. At the photocopier, someone is already
-  there and you choose whom to ask about. At the loading bay, you also choose who to buy from.
-  Either way you get a claim that may be true, mistaken, out of date or deliberately false. Asking
-  is mostly about people. Buying is mostly about Hidden Facts.
+- **The photocopier** and **the loading bay** are Find Out: ask whoever is there about someone, or
+  buy from someone, for a claim that may be true, mistaken, out of date or deliberately false.
+  Asking is mostly about people. Buying is mostly about Hidden Facts.
 - **Your boss's boss's office** goes over your boss's head. It can pay off better than
   anything else you can do, or cost you more if your boss finds out. You are not told the odds.
 - **The kitchen, the Senior Analyst's desk and your desk** do what they look like.
 
-People are read first as what they do: your boss, your boss's boss, the Office Co-ordinator. Each
-role is held by the same Character in every deal, with things only it can be seen doing, such as
-overrunning a meeting, and its own way of talking, though each can come from more than one kind.
-Names stay in support: on the charts, cast lists, marks, results, `from` lines and Find Out.
+People are read first as what they do, such as your boss or the Office Co-ordinator, each role with
+its own signs and way of talking, whatever its kind. Names stay in support, on charts and lists.
 
 Press **Notebook**, at no cost, for the claims and signs it keeps, which it never says to trust, and
 mark each Character with the kind you suspect. **Org Chart** is the formal hierarchy; the real one
@@ -82,9 +86,9 @@ work on them, and so can you, if you know whom to approach. You are told who dec
 Official standing. Win, and you are **Team lead**, on Floor 2. Lose, and the winner is your boss.
 The passed over remember. A Team lead's Moves are bigger, and so is the Bill. Floor 2's seat, by
 its Plan or Internal Audit, makes you **Middle manager** on Floor 3, under the Programme Manager and
-the Head of Transformation, where the Board and the CFO reach down: a cut of 30%, an
-offsite at a day's notice, a tricky question. Floor 3's seat, by its Plan or a nomination upstairs,
-is the way out: the run ends with a stand-in for the penthouse that goes by how you got there.
+the Head of Transformation, where the Board and the CFO reach down: a cut of 30%, an offsite at a
+day's notice, a tricky question. Floor 3's seat, by its Plan or a nomination upstairs, is the way
+out: the run ends with a stand-in for the penthouse that goes by how you got there.
 
 At the end, the results screen says how you got there, seat by seat, and who was really who: kinds,
 Hidden Facts, Rivals, your marks, your Moves, your bosses' verdicts, every claim and both charts.
@@ -97,11 +101,6 @@ down the lift, under whoever takes your seat. A few fire you outright, and say s
 **New run** deals a new seed, **Restart from seed** replays one, and leaving a run asks first. A
 friend on your seed gets your deal. Each step is saved in your browser, hidden truth and all, so a
 reload carries on, and a change to `content/` or the game offers a new run.
-
-A month always leaves you something to decide, on any floor. Every Notification has an answer
-that costs nothing, and beside the report a month asks for at most one costly answer, unless late
-figures or a missed meeting add another. [docs/playtest.md](docs/playtest.md) has test scenarios to
-play by hand, which give away some deals.
 
 ## Change the game
 
@@ -183,7 +182,7 @@ How to run the checks and tests is in [AGENTS.md](AGENTS.md#verifying).
   `Panel.tsx` holds their frame and buttons, and `Intranet.tsx` styles the e-mails and newsletter.
   `Header.tsx` draws the header and its cards, with `RunControls.tsx` and `StandingBar.tsx`.
   `Chart.tsx` and `Notebook.tsx` open in a `Modal.tsx`. `saved-run.ts` saves the run, and
-  `later-month.ts` plays the e2e build to `?month=N`.
+  `later-month.ts` plays the e2e build to `?month=N` and ends it at `&last=N`.
 
 ### Checks and exceptions
 

@@ -397,8 +397,6 @@ describe("the real risks", () => {
     const placedBy = (flag: string) =>
       choices.filter((c) => c.sets.includes(flag)).map((c) => c.item);
 
-    // Floor 1's shared drive, in month 7, comes after these two can first come
-    // out. They predate this check, and are left for a ticket of their own.
     const late = new Set<string>();
     let checked = 0;
     for (const risk of gameContent.risks) {
@@ -425,7 +423,7 @@ describe("the real risks", () => {
       }
     }
     expect(checked).toBeGreaterThan(0);
-    expect([...late]).toEqual(["security-skimped", "metric-gamed"]);
+    expect([...late]).toEqual([]);
   });
 
   it("can land as a big mistake", () => {

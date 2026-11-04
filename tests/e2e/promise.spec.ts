@@ -50,7 +50,7 @@ test("the results say a Promise was broken, and who heard", async ({
   page,
 }) => {
   await page.goto(
-    "/?seed=24&month=9&choose=promise-laptops-analyst,next-quarter,promise-laptops",
+    "/?seed=24&month=9&last=9&choose=promise-laptops-analyst,next-quarter,promise-laptops",
   );
   await playUntil(page, "panel-results");
   const rows = page.getByTestId("result-promise");

@@ -1,8 +1,8 @@
 import { build, type Rolldown } from "vite";
 import { describe, expect, it } from "vitest";
 import { gameContent } from "../../src/content";
-import { startRun } from "../../src/engine";
-import { plainChoice, playToMonth } from "../../src/ui/later-month";
+import { startRun, type PlayerView } from "../../src/engine";
+import { endsAfter, plainChoice, playToMonth } from "../../src/ui/later-month";
 
 const newRun = (seed = 1) => startRun({ seed, content: gameContent });
 
@@ -62,6 +62,64 @@ describe("the browser tests' later-month start", () => {
   );
 });
 
+describe("the browser tests' early end", () => {
+  /** Plays a run plainly to the end, ending as `last` in the address says. */
+  const toTheEnd = (address: string, seed = 1) => {
+    const run = startRun({
+      seed,
+      content: gameContent,
+      endsAfter: endsAfter(address, gameContent),
+    });
+    const views = [run.view()];
+    while (views.at(-1)?.choices.length) {
+      const view = views.at(-1) as PlayerView;
+      views.push(run.choose(plainChoice(view)));
+    }
+    return views;
+  };
+  const summary = (views: readonly PlayerView[]) => ({
+    month: views.at(-2)?.month,
+    total: views.at(-1)?.totalMonths,
+    end: views.at(-1)?.step.kind,
+  });
+
+  it("ends the run at the results screen as the month written closes", () => {
+    expect(summary(toTheEnd("?seed=1&last=10"))).toEqual({
+      month: 10,
+      total: 18,
+      end: "results",
+    });
+  });
+
+  it("plays every month before it as the eighteen-month run does", () => {
+    // Seed 2 fakes nothing here, but a seat and its Company Events still go by
+    // the run's real length, which a shorter run would refuse in its last months.
+    for (const seed of [1, 2, 43]) {
+      const short = toTheEnd("?last=9", seed).filter((v) => v.month <= 9);
+      const whole = toTheEnd("", seed).filter((v) => v.month <= 9);
+
+      expect(short.slice(0, -1)).toEqual(whole.slice(0, short.length - 1));
+    }
+  });
+
+  it.each([
+    "",
+    "?last=",
+    "?last=0",
+    "?last=18",
+    "?last=19",
+    "?last=2.5",
+    "?last=soon",
+  ])("leaves the run its eighteen months for %s", (address) => {
+    expect(endsAfter(address, gameContent)).toBeUndefined();
+    expect(summary(toTheEnd(address))).toEqual({
+      month: 18,
+      total: 18,
+      end: "results",
+    });
+  });
+});
+
 /** The JavaScript `vite build` makes in a mode, in memory, unminified to be quick. */
 async function bundle(mode: string) {
   const built = await build({
@@ -80,5 +138,12 @@ describe("what each build holds of the later-month start", () => {
     // Not toContain, which would print the whole bundle on a failure.
     expect((await bundle("e2e")).includes(marker)).toBe(true);
     expect((await bundle("production")).includes(marker)).toBe(false);
+  });
+
+  it("reads the early end in the test build, and in no other", async () => {
+    const reads = (code: string) => code.includes('.get("last")');
+
+    expect(reads(await bundle("e2e"))).toBe(true);
+    expect(reads(await bundle("production"))).toBe(false);
   });
 });

@@ -94,7 +94,7 @@ export function leaveStory(state: State, world: World): void {
   fillVacancies(state, world.content);
   if (
     state.wonIn !== null ||
-    state.month === world.content.balance.monthsPerRun
+    state.month === (world.endsAfter ?? world.content.balance.monthsPerRun)
   ) {
     // A seat decided as the run ends is still told, before the results, and
     // so is the one that wins it.

@@ -101,7 +101,7 @@ test("an address with a seed that cannot be used says so", async ({ page }) => {
 });
 
 test("the end of a run needs no confirmation to leave", async ({ page }) => {
-  await page.goto("/?seed=1&month=9");
+  await page.goto("/?seed=1&month=9&last=9");
   await playToResults(page);
 
   await page.getByTestId("seed-input").fill("5");

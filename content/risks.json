@@ -3,8 +3,8 @@
     "id": "security-skimped",
     "addedBy": "cut-security",
     "after": {
-      "min": 2,
-      "max": 4
+      "min": 4,
+      "max": 5
     },
     "note": "You took the money out of the security budget in the Budget Round. Your name is on the form.",
     "route": {
@@ -50,8 +50,8 @@
     "id": "metric-gamed",
     "addedBy": "gamed-metric",
     "after": {
-      "min": 1,
-      "max": 2
+      "min": 2,
+      "max": 3
     },
     "note": "You worked out how to game the new metric, and then you did.",
     "route": {

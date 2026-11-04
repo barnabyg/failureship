@@ -67,7 +67,7 @@ test("the same choice lands differently with a different kind of boss", async ({
 test("the results screen shows the boss's kind and how choices landed", async ({
   page,
 }) => {
-  await page.goto("/?seed=283&month=9");
+  await page.goto("/?seed=283&month=9&last=9");
   await answerAnyNotification(page);
   await openMeeting(page);
   await page.getByTestId("scene-option-praise-dennis").click();
