@@ -83,6 +83,23 @@ yours, and Floor 2 starts in month 8. Its fourth month is month 11.
 | Seed 12. At month 13's Floor Plan Walkthrough, put the Project Co-ordinator by the lift | In month 15 the Health and Safety Committee writes: they are Floor 2's representative, and their desk is beside the fire door. The same month they say good morning to your boss at the lift                                                         |
 | The same, and at month 14's fire routes, walk the route yourself                        | In month 15 the committee finds the route clear, and signed off by you                                                                                                                                                                               |
 
+## Floor 3's bigger Moves
+
+This takes about twenty-five minutes, a whole run. Play as for [the top of Floor 3](#the-top-of-floor-3),
+but leave the Roadmap alone, so that you stay on Floor 3. On seed 24 Floor 3 starts in month 12, and
+its fourth month, month 15, is the Board.
+
+| Seed and what to do                                                          | Expect                                                                                                                                                            |
+| ---------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Seed 24. At month 15's Board, take the question offline                      | Someone competing with you asks about slide seven, and is named, which is a sign and not a verdict. In month 16 the Board Office asks for your offline answer     |
+| Seed 24. At month 15's Board, give a figure that sounds about right          | The Office Co-ordinator minutes it. In month 17 the Board Office writes: the Senior Analyst has queried the figure in the minutes                                 |
+| The same, and in month 16 correct the Board's minutes                        | In month 17 the query finds the figure already corrected, and nobody can say by whom                                                                              |
+| Seed 24. At month 16's Cost Challenge, cut the testing and the second checks | In month 17 the Service Delivery Lead asks you to sign a waiver. Sign it, and in month 18 the incident review lists the checks you cut, with your name at the top |
+| The same, but put the checks back instead of signing                         | In month 18 a check catches what went wrong, and the incident review is one line long                                                                             |
+| Seed 24. At month 16's Cost Challenge, pass the cut down to your team        | In month 18 the Senior Analyst does seventy per cent of everything, labelled                                                                                      |
+| Seed 24. In month 17, have your team write the offsite deck overnight        | In month 18 the Junior Associate's out-of-office says why. Present the deck as your own at the offsite, and instead they tell your boss's boss about slide forty  |
+| Seed 24. In month 17, use last year's offsite deck                           | In month 18 your boss's boss sends you a photograph of last year's offsite                                                                                        |
+
 ## Other routes up
 
 This takes about fifteen minutes. File the report and go to the meeting each month, saying the

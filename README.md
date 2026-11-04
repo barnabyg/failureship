@@ -82,8 +82,10 @@ work on them, and so can you, if you know whom to approach. You are told who dec
 Official standing. Win, and you are **Team lead**, on Floor 2. Lose, and the winner is your boss.
 The passed over remember. A Team lead's Moves are bigger, and so is the Bill. Floor 2's seat, by
 its Plan or Internal Audit, makes you **Middle manager** on Floor 3, under the Programme Manager and
-the Head of Transformation. Floor 3's, by its Plan or a nomination upstairs, is the way out: the
-run ends with a stand-in for the penthouse that goes by how you got there.
+the Head of Transformation, where the Board and the Chief Financial Officer reach down: a tricky
+question at the Board, a cut of thirty per cent, an offsite at a day's notice. Floor 3's seat, by
+its Plan or a nomination upstairs, is the way out: the run ends with a stand-in for the penthouse
+that goes by how you got there.
 
 At the end, the results screen says how you got there, seat by seat, and who was really who: kinds,
 Hidden Facts, Rivals, your marks, your Moves, your bosses' verdicts, every claim and both charts.
