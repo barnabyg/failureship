@@ -1,89 +1,25 @@
 import { describe, expect, it } from "vitest";
 import { gameContent } from "../../src/content";
-import {
-  startRun,
-  type Choice,
-  type Content,
-  type PlayerView,
-} from "../../src/engine";
+import type { PlayerView } from "../../src/engine";
 import { readHiddenTruth } from "../../src/engine/hidden-truth";
-import { plainChoice } from "../../src/ui/later-month";
 import { withoutSeatEvents } from "./fixture";
-import { CLEAN, playRun } from "./real-runs";
+import {
+  CLEAN,
+  FOR_REAL,
+  FOR_SHOW,
+  FOR_THE_SEAT,
+  GET_RID,
+  HONEST,
+  REPORT,
+  climb,
+  playRun,
+} from "./real-runs";
 
 /**
  * Floor 2's Grand Plan done for real in its second month, and Floor 3's in its
  * own: on seed 2 that wins three seats, as months 7, 11 and 15 close.
  */
 export const CLIMB = `${CLEAN},staff-the-centre,decide-what-stops`;
-
-/** Rings the Speak Up line about your boss, in month 8, which gets rid of them on some deals. */
-const REPORT = "ring-about-your-boss";
-
-/** Asks the Senior Analyst for the figures in month 5, and really loads them: every Plan for real. */
-const HONEST = "take-the-blame,ask-analyst-for-figures,load-the-real-figures";
-
-/** Getting rid of your boss on Floor 2, by Internal Audit, and on Floor 3, upstairs. */
-const GET_RID = ["audit-your-boss", "nominate-your-boss"];
-
-/** What a player who means to climb does for real on Floors 2 and 3, whenever it is offered. */
-const FOR_REAL = [
-  "staff-the-centre",
-  "staff-it-now",
-  "decide-what-stops",
-  "stop-one-programme",
-  "tie-it-to-the-roadmap",
-  "ask-what-stops",
-  "check-the-pack",
-  "book-the-desks",
-];
-
-/** The same player's word about each open seat, with whoever is above their boss. */
-const FOR_THE_SEAT = [
-  "word-with-the-head",
-  "word-with-the-programme-manager",
-  "word-with-transformation",
-];
-
-/** What a player who fakes every Grand Plan does instead. */
-const FOR_SHOW = [
-  "sign-on-a-door",
-  "report-the-centre-open",
-  "lanyards",
-  "hang-the-sign",
-  "draw-swimlanes",
-  "fill-the-template",
-  "add-a-swimlane",
-  "roadmap-as-a-lesson",
-];
-
-/**
- * A scripted player who knows the game but not the deal: takes each of `once`
- * in order, the first time it is offered, then each of `always` whenever it
- * is offered, and plays plainly otherwise.
- */
-function climb(
-  seed: number,
-  once: string,
-  always: readonly string[],
-  content: Content,
-) {
-  const run = startRun({ seed, content });
-  let view = run.view();
-  const views: PlayerView[] = [view];
-  const first = once.split(",");
-  while (view.choices.length > 0) {
-    const offered = (wanted: (id: string) => boolean) =>
-      view.choices.find((c) => "optionId" in c && wanted(c.optionId));
-    const next = offered((id) => id === first[0]);
-    if (next) first.shift();
-    const choice: Choice =
-      next ?? offered((id) => always.includes(id)) ?? plainChoice(view);
-    view = run.choose(choice);
-    views.push(view);
-  }
-  return { views, truth: readHiddenTruth(run) };
-}
 
 /**
  * Of 200 deals, which this player wins, and by which route up, seat by seat:
