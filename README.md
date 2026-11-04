@@ -84,8 +84,7 @@ have seen one: whoever protects them decides, and it can be traced to you. Whoev
 influence over a seat gives it out by what matters to their kind, never a score or a Gauge. Rivals
 work on them, and so can you, if you know whom to approach. You are told who decided, beside
 Official standing. Win, and you are **Team lead**, on Floor 2. Lose, and the winner is your boss.
-The passed over remember. A Team lead can hire an old friend, buy in a consultant, move a critic's
-desk or give the bonus pot to allies, and what their team remembers comes back on them later.
+The passed over remember. A Team lead's Moves are bigger, from hiring to bonuses, and so is the Bill.
 
 After eighteen months the results screen shows who was really who: each Character's kind and Hidden
 Fact, each Rival and what they did, your marks against the truth, how you played by family of Move,
@@ -102,7 +101,8 @@ reload carries on, and a change to `content/` or the game offers a new run.
 
 A month always leaves you something to decide, on either floor. Every Notification has an answer
 that costs nothing, and beside the report a month asks for at most one costly answer, unless late
-figures or a missed meeting add another. [docs/playtest.md](docs/playtest.md) has test scenarios.
+figures or a missed meeting add another. [docs/playtest.md](docs/playtest.md) has test scenarios to
+play by hand, which give away some deals.
 
 ## Change the game
 
