@@ -119,7 +119,9 @@ earliest and is decided `openFor` months later, so with two months open Floor 2 
 4, and a stay is at most fifteen months. Its seven written months and a pool of eight Scenes mean
 no Scene comes twice, and `tests/engine/floor-2-moves.test.ts` holds it to that. Floor 2's own seat
 can fall vacant in its first month, so Floor 3 can start in month 7, a stay of at most twelve.
-Its six written months and a pool of six Scenes mean no Scene comes twice, and
+Since it usually starts in month 12, its three Scenarios come first, so that what they lead to can
+come back within the run. Its five written months and a pool of seven Scenes mean no Scene comes
+twice, and
 `tests/engine/floor-3-moves.test.ts` holds it to that.
 
 These are refused: a `floor` that names no floor, `months` with no `floor`, a floor with no Scene,
@@ -558,9 +560,10 @@ are bigger, and only its own, with `"floor": "team-lead"`: Floor 2's Pay Review 
 the player signs their own team's bonus letters, beside the transformation budget and the cost
 codes, as are the Moves only a Team lead has, such as hiring an old friend onto their team or
 seating it at the Floor Plan Walkthrough. Floor 3's, with `"floor": "middle-manager"`, are a Middle
-manager's: the Chief Financial Officer's thirty per cent at the Cost Challenge, a Scene, and the
-Board's fifteen minutes and its offsite, which the Board Office's Notifications set up. Each adds a
-risk or starts a Thread by its flag, or both, and most leave a memory with whoever it was done to. A
+manager's: the Chief Financial Officer's thirty per cent at month 1's Cost Challenge, the Board's
+offsite in month 2, prepared in a day by its Notification, and the Board in month 3, prepared by
+the Board pack. Each adds a risk or starts a Thread by its flag, or both, and most leave a memory
+with whoever it was done to, while the honest answers start Threads of their own. A
 Move that favours the player's allies picks them with `when` on its results, by who really backs the
 player: a `believes` that is `warm`, or `youOwe`. So a Scene result names them, which an option's
 own words never can.
@@ -675,13 +678,14 @@ player sees none of it until it does, and the results screen lists the lot.
   by the kind they were dealt, their `motive`, for the results screen, and optionally their
   `means`, a condition they need. It gets one chance. If that fails, it never comes out.
 - `traced` is read as it comes out. Reading a flag with `did` lets the player change that, as
-  clearing the shared drive in month 7 does, letting an old friend go on Floor 2, or correcting the
-  Board's minutes on Floor 3. The flag must be set by a choice in plain view, other than the one
-  that adds the risk, and be on offer on the same floor before the risk can first come out, as each
-  month opens, or the player never had the chance. Floor 1's shared drive comes a month too late for the risks of month 4's Budget Round and
-  month 6's metric, which the risks test names. If it holds, `onPlayer` is sent. If not, `onSomeoneElse`
-  is, if it is written, and otherwise nothing happens. Either is a Bill, as in
-  [`threads.json`](#threadsjson), so a risk that lands can be `"mistake": "big"`.
+  clearing the shared drive in month 7 does, letting an old friend go on Floor 2, or putting the
+  checks back and correcting the Board's minutes on Floor 3. The flag must be set by a choice in
+  plain view, other than the one that adds the risk, and be on offer on the same floor before the
+  risk can first come out, as each month opens, or the player never had the chance. Floor 1's
+  shared drive comes a month too late for the risks of month 4's Budget Round and month 6's metric,
+  which the risks test names. If it holds, `onPlayer` is sent. If not, `onSomeoneElse` is, if it
+  is written, and otherwise nothing happens. Either is a Bill, as in [`threads.json`](#threadsjson),
+  so a risk that lands can be `"mistake": "big"`.
 - `event` names a Company Event, from [`events.json`](#eventsjson), that lands as it comes out.
 - `note` says what was building up, and `landedOnYou`, `landedElsewhere` and `neverCameOut` say
   what became of it. The results screen lists every risk that was added.
