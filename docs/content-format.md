@@ -117,7 +117,10 @@ Notifications can be in a pool.
 Write a floor for the longest stay a run allows on it. A seat falls vacant in month 1 at the
 earliest and is decided `openFor` months later, so with two months open Floor 2 can start in month
 4, and a stay is at most fifteen months. Its seven written months and a pool of eight Scenes mean
-no Scene comes twice, and `tests/engine/floor-2-moves.test.ts` holds it to that.
+no Scene comes twice, and `tests/engine/floor-2-moves.test.ts` holds it to that. Floor 2's own seat
+can fall vacant in its first month, so Floor 3 can start in month 7, a stay of at most twelve.
+Its three written months and a pool of three Scenes give it a meeting with a choice every month,
+which `tests/engine/the-climb.test.ts` holds it to, though a Scene can come round again.
 
 These are refused: a `floor` that names no floor, `months` with no `floor`, a floor with no Scene,
 Notification or Demand of its own, a written month with none of them, a floor written for fewer
@@ -270,6 +273,9 @@ Job titles, roles, names, who reports to whom on the Org Chart, and where the pl
   first cast has one, and a place on the Power Map below its `influentialCount` most influential.
   So adding one leaves every deal of the floors below alone. `charactersWithFact` and
   `minPractitioners` in [`hidden-truth.json`](#hidden-truthjson) count the first floor's cast only.
+  Floor 2 brings the Programme Manager and the Service Delivery Lead, and Floor 3 the Head of
+  Transformation, at the top of the chart, so that a Middle manager has a boss's boss: nine in
+  all, of whom a Junior employee meets six.
 - `you.name` is what the Org Chart calls the player, once anyone answers to them.
 - A later floor's cast is met only when the player reaches its floor. Until then nobody of it is
   on the Org Chart, in Find Out, in the Notebook's marks or on the results screen, and whoever
@@ -377,7 +383,7 @@ The floors of the tower, from the bottom up. Each has a `job`, which keys it, th
 that the header, the e-mails and the official story show, and its `rooms`: positions, sizes,
 colours, `fittings` and, for a place the player can see but not act on, such as the lift, a
 `sign`. Content goes to a floor as [Floors and their months](#floors-and-their-months) says. A room
-without `fittings` is a blocked-out box, as on Floor 2. Room ids are unique across floors, so the
+without `fittings` is a blocked-out box, as on Floors 2 and 3, whose lift sign says Floor 4 is shut. Room ids are unique across floors, so the
 same kind of place on another floor, such as your desk, is an action of its own, with its own id.
 The player reaches another floor only by a [seat](#vacanciesjson), and the lift is ridden then.
 
@@ -795,14 +801,18 @@ Nothing opens that the run would end before deciding. It falls vacant in one of 
 - `fired`: the player gets rid of their boss, with `ousts` on a Notification option or a Scene
   result. See [getting rid of your boss](#getting-rid-of-your-boss).
 
-On Floor 2 no seat is written yet, so nothing opens there; a boss who goes is covered by whoever
-they answered to.
+Each floor has its seat: the Team Leader's on Floor 1, which makes the player a Team lead; the
+Head of Operations' on Floor 2, which makes them a Middle manager, under the Programme Manager; and
+the Programme Manager's on Floor 3, the way out of the first version, which wins the run. On Floor 2
+it opens by the Centre of Excellence or a secondment to Floor 3, and on Floor 3 by One Roadmap or a
+restructure. Nobody above the player on Floor 3 can leave or be got rid of, since the Head of
+Transformation is at the top of the chart, with nobody to cover for them.
 
 - `seats` has one seat for each floor that has one, keyed by `floor`, the floor it is on: the
   player's boss holds it while the player's job is that floor's. `job` is the floor that winning it
-  takes the player to. `competing` names what is competed for in [`rivals.json`](#rivalsjson) while
-  it is open, usually with `"when": { "vacancyOpen": true }` and `"who": ["{peers}"]`: they and the
-  player are the candidates. `movesUp` is where its holder goes, by `plan` or `movedUp`: whom they
+  takes the player to, or it has `win` instead, as in [Winning](#winning). `competing` names what is
+  competed for in [`rivals.json`](#rivalsjson) while it is open, usually with
+  `"when": { "vacancyOpen": true }` and `"who": ["{peers}"]`: they and the player are the candidates. `movesUp` is where its holder goes, by `plan` or `movedUp`: whom they
   now answer to, and their new `title` and `called`. `created` is the `title` and `called` of a post
   created out of their team, which its winner holds while its holder keeps their own. `opened` has
   what is told as it opens in each way, and says `{holder}` and `{month}`, the month it is decided
@@ -844,6 +854,10 @@ they answered to.
   holder's title, or a created post's, and the player and the rest of the team answer to them. Each Character who stood
   for it and was passed over keeps a memory: `passedOver.forYou` if the player won, and `forSomeoneElse` if not, each with its
   own `about`, which a Move can read with `remembers`, and a `text` that can say `{winner}`.
+- `route` is what the results screen says of each seat the player won, by the way it fell vacant,
+  and `demoted` of each time a big mistake took them back down, in order. Each says `{month}`,
+  `{job}`, the job title won or gone back to, and `{holder}`, by name. A player taken back down a
+  floor while the seat above was open is out of the running for it.
 
 While a seat is open, a Notification option, a Scene result or a Move can act for it with `seat`:
 
@@ -884,6 +898,23 @@ who answers to them, a `lost` that does not say `{winner}`, `vacancyOpen` or `se
 checks that kept the player's bosses in place are lifted: either can be written to leave, and a
 Company Event can move them, or the player.
 
+### Winning
+
+A seat with `win` instead of `job` is the way out of the first version, at the top of Floor 3.
+It opens and is decided like any other. Winning it ends the run as that month closes, with nobody
+moved on the charts: first its `won` notice, with the decision beside Official standing, then the
+comic stand-in for winning, then the results screen. Losing it puts the winner in its holder's
+place as usual, and the run goes on. Being fired, or reaching `monthsPerRun` without winning, ends
+the run as before.
+
+- `title` and `lines` are the stand-in, a panel of its own, one paragraph to a line. The real
+  payout and Floors 4 to 10 wait for later, so it should say so, deadpan.
+- `reached` is what the route up calls winning it, as `{job}` in `route`.
+- `results` is the results screen's `title` and `intro` after a win, and `ending` how it says the
+  run ended, with `{month}`.
+
+These are refused: a seat with both `job` and `win`, or neither.
+
 ## `threads.json`
 
 A Thread runs from something the player did to the point, months later, where it pays off or
@@ -917,4 +948,6 @@ story, and they count as hidden, so no option can depend on them.
 
 ## `ui.json`
 
-Headings, buttons and the "What you can do now" hints.
+Headings, buttons and the "What you can do now" hints. `goal` is the goal of the run, shown above
+the hints from the first screen on, so a newcomer has it at once: keep it to a line. `hints.win` is
+the hint beside the stand-in for [winning](#winning).

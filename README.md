@@ -3,12 +3,11 @@
 A satirical, single-player browser game. You climb a ten-storey office tower by reading people. The
 design is in [failureship-grill-outcome.md](failureship-grill-outcome.md).
 
-This is Phase 5 in progress: eighteen months from a furnished Floor 1, with kinds of boss, a
-Project, the Monthly Status Report, Demands, one-off Budgets, every family of Moves and going over
-your boss's head. Earlier choices come back through Threads, hidden risks and what people have heard,
-things happen to the company, and you can be fired. You can give your word and make Deals, Believers
-you burn can change or leave, Teflon and Fawning move with Threads, reviews come every quarter,
-colleagues compete, bosses have Grand Plans, and more than one route up takes you to Floor 2.
+This is Phase 5 in progress: eighteen months from a furnished Floor 1 to the top of a blocked-out
+Floor 3, with kinds of boss, a Project, the Monthly Status Report, Demands, Budgets, every family of
+Moves, going over your boss's head, Threads, hidden risks, news that travels, Company Events, your
+word and Deals, Believers who change, Gauges, quarterly reviews, Rivals, Grand Plans and more than
+one route up. You can be fired, and you can win, after a fashion.
 
 ## Play
 
@@ -18,9 +17,8 @@ You need [Node.js](https://nodejs.org/) 22 or later. From the root of the reposi
 npm run play
 ```
 
-This installs anything missing the first time, starts the game and opens it in your browser. If the
-browser does not open, go to the address it prints. Press `Ctrl+C` in the terminal to stop it. On
-Windows, you can double-click `run.bat` in the root of the repository instead.
+This installs anything missing the first time, starts the game and opens it in your browser, or
+prints its address. `Ctrl+C` stops it. On Windows, you can double-click `run.bat` instead.
 
 ## What to try
 
@@ -29,7 +27,7 @@ Every run has a seed, at the top right, and `?seed=8` picks one. Each month has 
 1. **A Notification arrives.** Answer it. The answer may cost one of your 3 actions. Every third
    month the **Quarterly Business Review** follows by itself, at no cost, and goes on the record.
 2. **Spend your remaining actions** by clicking a place on the floor or its label. The panel at
-   the bottom left always says what you can do now.
+   the bottom left always says your goal, and what you can do now.
 3. **Any Company Event, then a Character Move, lands on you.** You do not get a choice.
 4. **The month closes** with the official story beside what actually happened.
 
@@ -85,21 +83,23 @@ influence over a seat gives it out by what matters to their kind, never a score 
 work on them, and so can you, if you know whom to approach. You are told who decided, beside
 Official standing. Win, and you are **Team lead**, on Floor 2. Lose, and the winner is your boss.
 The passed over remember. A Team lead's Moves are bigger, from hiring to bonuses, and so is the Bill.
+Floor 2's seat makes you **Middle manager**, on Floor 3, under new bosses. Floor 3's is the way out:
+win it, and the run ends with a comic stand-in for the penthouse, as Floors 4 to 10 are not built.
 
-After eighteen months the results screen shows who was really who: each Character's kind and Hidden
-Fact, each Rival and what they did, your marks against the truth, how you played by family of Move,
-what your bosses made of you, each claim and clue and its worth, and both charts.
+At the end, the results screen says how you got there, seat by seat, and who was really who: each
+Character's kind and Hidden Fact, each Rival and what they did, your marks against the truth, how
+you played by family of Move, what your bosses made of you, each claim and clue, and both charts.
 
 You can also be fired. Some choices are big mistakes, such as blaming someone with a dangerous
 Hidden Fact. The first puts you on a **Final Warning**, shown beside your job title, and the second
-ends the run. One made while a seat is open can cost you it, and one on Floor 2 takes you down the
-lift, under whoever takes your seat. A few fire you outright, and say so on the button first.
+ends the run. One made while a seat is open can cost you it, and one in a seat you won takes you
+down the lift, under whoever takes your seat. A few fire you outright, and say so on the button.
 
 **New run** deals a new seed, **Restart from seed** replays one, and leaving a run asks first. A
-friend on your seed gets your deal. Each step is saved in your browser, hidden truth and all, so a
-reload carries on, and a change to `content/` or the game offers a new run.
+friend on your seed gets your deal. Each step is saved in your browser, so a reload carries on, and
+a change to `content/` or the game offers a new run.
 
-A month always leaves you something to decide, on either floor. Every Notification has an answer
+A month always leaves you something to decide, on any floor. Every Notification has an answer
 that costs nothing, and beside the report a month asks for at most one costly answer, unless late
 figures or a missed meeting add another. [docs/playtest.md](docs/playtest.md) has test scenarios to
 play by hand, which give away some deals.
@@ -165,8 +165,8 @@ How to run the checks and tests is in [AGENTS.md](AGENTS.md#verifying).
   changing and leaving, `gauges.ts`, the only module that reads a Gauge, `standing.ts`, `reviews.ts`
   for quarterly reviews, `rivals.ts` for Rivals, `grand-plans.ts` for Grand Plans, `vacancies.ts`
   for seats and who really decides them, `departures.ts` for leaving and being got rid of,
-  `demotions.ts` for losing a seat to a mistake. `say.ts` names Characters in text, and `rng.ts` and
-  `seed.ts` hold the seed. `view.ts` is the player view, built by `to-view.ts`, with `to-results.ts`
+  `demotions.ts` for losing a seat to a mistake, `win.ts` for winning the run and the route up.
+  `say.ts` names Characters in text, and `rng.ts` and `seed.ts` hold the seed. `view.ts` is the player view, built by `to-view.ts`, with `to-results.ts`
   its reveal; `hidden-truth.ts` is the tests' read of the truth. `save.ts` writes and reads a run.
   `State` is plain data, so a mechanic gets saving for free: raise `SAVE_VERSION` if it changes what
   saved state means. `content.ts` assembles the schema from the `*-schema.ts` files, as
