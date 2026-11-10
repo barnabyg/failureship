@@ -2,43 +2,16 @@ import { describe, expect, it } from "vitest";
 import { gameContent } from "../../src/content";
 import type { PlayerView } from "../../src/engine";
 import { readHiddenTruth } from "../../src/engine/hidden-truth";
-import { withoutSeatEvents } from "./fixture";
 import {
   CLEAN,
   CLIMB,
-  FOR_REAL,
-  FOR_SHOW,
   FOR_THE_SEAT,
   GET_RID,
-  HONEST,
-  REPORT,
   climb,
   playRun,
 } from "./real-runs";
 
-/**
- * Of 200 deals, which this player wins, and by which route up, seat by seat:
- * how each seat fell vacant, or `ousted` where the player got rid of its
- * holder. Without the Company Events that open seats, the routes are only
- * what the player did.
- */
-function survey(once: string, always: readonly string[]) {
-  const content = withoutSeatEvents(gameContent);
-  const routes = new Map<string, number[]>();
-  for (let seed = 1; seed <= 200; seed++) {
-    const { views, truth } = climb(seed, once, always, content);
-    const end = views.at(-1)?.step;
-    if (end?.kind !== "results" || !end.ending.won) continue;
-    const route = truth.vacancies
-      .filter((v) => v.decided?.winner === "you")
-      .map((v) => (v.ousted ? "ousted" : v.way))
-      .join(" > ");
-    routes.set(route, [...(routes.get(route) ?? []), seed]);
-  }
-  const wins = [...routes.values()].flat().length;
-  return { wins, routes };
-}
-
+// How often each way of playing reaches the top is in tests/balance/the-climb-*.
 describe("the climb to the top of Floor 3", () => {
   it("can be won by a scripted run, and the results screen says how", () => {
     const { views } = playRun(2, CLIMB);
@@ -117,40 +90,6 @@ describe("the climb to the top of Floor 3", () => {
       ending: { fired: true, won: false },
     });
   });
-
-  // A seat falls vacant in a month at the earliest, so the climb is a race
-  // against eighteen months, which a player who knows the game wins on some
-  // deals and not others. Doing the Plans and getting rid of bosses are
-  // different routes up, each the player's own doing, on every floor. Getting
-  // rid of them is the riskier, and faking every Plan wins far less.
-  it(
-    "is reachable within the run by different ways of playing, and much less often for show",
-    { timeout: 300_000 },
-    () => {
-      const planner = survey(CLEAN, [...FOR_REAL, ...FOR_THE_SEAT]);
-      const honest = survey(HONEST, [...FOR_REAL, ...FOR_THE_SEAT]);
-      const ridder = survey(CLEAN, [...GET_RID, ...FOR_THE_SEAT]);
-      const engineer = survey(`take-the-blame,${REPORT}`, [
-        ...GET_RID,
-        ...FOR_THE_SEAT,
-      ]);
-      const forShow = survey(CLEAN, [...FOR_SHOW, ...FOR_THE_SEAT]);
-
-      expect(planner.wins).toBeGreaterThanOrEqual(30);
-      expect(planner.wins).toBeLessThanOrEqual(80);
-      expect([...planner.routes.keys()]).toEqual(["plan > plan > plan"]);
-      expect(honest.wins).toBeGreaterThanOrEqual(15);
-      expect(
-        ridder.routes.get("plan > ousted > ousted")?.length,
-      ).toBeGreaterThan(0);
-      for (const route of ridder.routes.keys())
-        expect(route).toMatch(/ousted$/);
-      expect(
-        engineer.routes.get("ousted > ousted > ousted")?.length,
-      ).toBeGreaterThan(0);
-      expect(forShow.wins).toBeLessThanOrEqual(planner.wins / 2);
-    },
-  );
 });
 
 describe("a big mistake at the top of Floor 3", () => {

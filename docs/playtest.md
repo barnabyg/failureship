@@ -9,7 +9,7 @@ and press Continue. A month takes three or four minutes if you read everything.
 ## What the balance pass found
 
 Scripted players who know every option played the same 100 deals, seeds 1 to 100, with Company
-Events, in `tests/engine/ways-of-playing.test.ts`. A person will likely win less. Of 100 runs:
+Events, in `tests/balance/ways-of-playing.test.ts`. A person will likely win less. Of 100 runs:
 
 | Way of playing                                                   | Won | Passed over | Demoted | Fired |
 | ---------------------------------------------------------------- | --- | ----------- | ------- | ----- |
@@ -23,7 +23,7 @@ Events, in `tests/engine/ways-of-playing.test.ts`. A person will likely win less
 | Clicks about                                                     | 1   | 52          | 10      | 65    |
 
 Plain play never wins on these deals: it does no Plan, so only a Company Event or a boss leaving
-opens a seat for it. Reading people still pays:
+opens a seat for it. Reading people still pays, in `tests/balance/reading-people.test.ts`:
 
 | Whom a climber asks about each open seat | Nobody | A guess | Whoever the signs show holding the room | Whoever really decides |
 | ---------------------------------------- | ------ | ------- | --------------------------------------- | ---------------------- |

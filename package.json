@@ -15,10 +15,11 @@
     "format:check": "prettier --check .",
     "lint": "eslint . --max-warnings 0",
     "typecheck": "tsc --noEmit",
-    "test": "vitest run",
+    "test": "vitest run --project engine",
+    "test:balance": "vitest run --project balance",
     "test:e2e": "playwright test",
     "audit": "npm audit --audit-level=moderate",
-    "verify": "npm run format:check && npm run lint && npm run typecheck && npm run test && npm run test:e2e && npm run audit && npm run build"
+    "verify": "npm run format:check && npm run lint && npm run typecheck && npm run test && npm run test:balance && npm run test:e2e && npm run audit && npm run build"
   },
   "dependencies": {
     "react": "19.3.1",
