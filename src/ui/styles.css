@@ -766,13 +766,13 @@ body {
 .status-card {
   display: flex;
   flex-direction: column;
-  gap: 2px;
-  padding: 6px 12px;
+  padding: 4px 12px;
   border-left: 4px solid var(--accent);
   border-radius: 4px;
   background: var(--paper);
   font-size: 0.8125rem;
-  line-height: 1.35;
+  /* Tight, so that a line the wider Linux fonts wrap still keeps it within 120 px. */
+  line-height: 1.25;
 }
 
 .status-card-line,
