@@ -97,6 +97,8 @@ export function App() {
   const [leavingFor, setLeavingFor] = useState<number | null>(null);
   const [orgChartOpen, setOrgChartOpen] = useState(false);
   const [notebookOpen, setNotebookOpen] = useState(false);
+  // How many clues were new as the Notebook opened, which opening clears.
+  const [notebookFresh, setNotebookFresh] = useState(0);
   const [projectOpen, setProjectOpen] = useState(false);
   const [wordOpen, setWordOpen] = useState(false);
   const [gaugesOpen, setGaugesOpen] = useState(false);
@@ -179,6 +181,8 @@ export function App() {
           setOrgChartOpen(true);
         }}
         onOpenNotebook={() => {
+          setNotebookFresh(view.notebook.unread);
+          setGame({ run, view: run.readNotebook() });
           setNotebookOpen(true);
         }}
         onNewRun={() => {
@@ -435,6 +439,7 @@ export function App() {
         >
           <Notebook
             notebook={view.notebook}
+            fresh={notebookFresh}
             locked={view.choices.length === 0}
             onMark={(character, kind) => {
               setGame({ run, view: run.mark(character, kind) });

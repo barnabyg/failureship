@@ -775,6 +775,45 @@ body {
   border-top: 1px solid var(--rule);
 }
 
+.modal button.notebook-who {
+  margin: 0 0 4px;
+  padding: 1px 8px;
+  white-space: normal;
+  text-align: left;
+}
+
+.modal button.notebook-who[aria-pressed="true"] {
+  background: var(--accent);
+  color: var(--accent-ink);
+}
+
+.notebook-month summary {
+  padding: 4px 0;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.notebook-month summary .results-title {
+  display: inline;
+  margin-left: 8px;
+}
+
+.notebook-clues li.clue-new {
+  border-left: 3px solid var(--highlight);
+  padding-left: 6px;
+}
+
+.clue-new-tag {
+  float: right;
+  margin-left: 6px;
+  padding: 0 4px;
+  border-radius: 3px;
+  background: var(--highlight);
+  color: var(--ink);
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
 .modal::backdrop {
   background: rgb(0 0 0 / 45%);
 }
