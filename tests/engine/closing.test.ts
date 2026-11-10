@@ -45,10 +45,14 @@ function endOf(seed: number, script: Choice[]) {
   return { move, story };
 }
 
+/** The official story's lines as the month closes, each side on its own. */
 function story(seed: number, script: Choice[]) {
   const { step } = endOf(seed, script).story;
   if (step.kind !== "story") throw new Error(step.kind);
-  return step;
+  return {
+    reported: step.pairs.flatMap((p) => p.reported ?? []),
+    happened: step.pairs.flatMap((p) => p.happened ?? []),
+  };
 }
 
 describe("the end of the month", () => {
@@ -167,7 +171,9 @@ describe("the end of the month", () => {
 
     expect(final?.step).toMatchObject({
       kind: "story",
-      happened: expect.arrayContaining(["HAPPENED-WORD-STOLEN"]) as unknown,
+      pairs: expect.arrayContaining([
+        expect.objectContaining({ happened: "HAPPENED-WORD-STOLEN" }),
+      ]) as unknown,
     });
     expect(JSON.stringify(final?.step)).not.toContain("REPORTED-WORD-KEPT");
   });
@@ -184,8 +190,7 @@ describe("the end of the month", () => {
 
     expect(views.at(-2)?.step).toMatchObject({ title: "New Move" });
     expect(views.at(-1)?.step).toMatchObject({
-      reported: ["A new official line."],
-      happened: [],
+      pairs: [{ reported: "A new official line." }],
     });
   });
 

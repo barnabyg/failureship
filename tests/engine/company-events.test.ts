@@ -80,8 +80,11 @@ describe("a month with a Company Event in it", () => {
     );
 
     for (const { month, step } of stories) {
-      expect(step.reported.includes("EVENT-REPORTED")).toBe(month === 2);
-      expect(step.happened.includes("EVENT-HAPPENED")).toBe(month === 2);
+      const told = step.pairs.some(
+        (p) =>
+          p.reported === "EVENT-REPORTED" && p.happened === "EVENT-HAPPENED",
+      );
+      expect(told).toBe(month === 2);
     }
   });
 

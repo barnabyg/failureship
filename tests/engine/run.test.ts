@@ -53,9 +53,10 @@ function playWhole(seed: number, content = closingFixture()) {
   }
 }
 
+/** The official story's reported lines. */
 function story(view: PlayerView) {
   if (view.step.kind !== "story") throw new Error(view.step.kind);
-  return view.step;
+  return { reported: view.step.pairs.flatMap((p) => p.reported ?? []) };
 }
 
 describe("a run of months", () => {
