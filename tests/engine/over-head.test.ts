@@ -8,6 +8,7 @@ import {
   type Run,
 } from "../../src/engine";
 import { readHiddenTruth } from "../../src/engine/hidden-truth";
+import { treatmentOf } from "./scene-view";
 
 const SEEDS = Array.from({ length: 400 }, (_, i) => i + 1);
 const GO: Choice = { type: "action", actionId: "over-head" };
@@ -230,7 +231,7 @@ describe("going over your boss's head", () => {
     const { step } = run.choose({ type: "action", actionId: "meeting" });
     if (step.kind !== "scene") throw new Error(step.kind);
 
-    expect(signs).toContain(step.headTreatment);
+    expect(signs).toContain(treatmentOf(step, "head"));
   });
 
   it("shifts those signs as their belief about you shifts", () => {
@@ -258,8 +259,9 @@ describe("going over your boss's head", () => {
         );
         if (!meeting) continue;
         const { step } = run.choose(meeting);
-        if (step.kind === "scene" && step.headTreatment) {
-          seen.push(step.headTreatment);
+        const head = step.kind === "scene" ? treatmentOf(step, "head") : null;
+        if (head) {
+          seen.push(head);
         }
       }
       return seen;

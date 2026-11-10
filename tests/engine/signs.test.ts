@@ -9,6 +9,8 @@ import {
 import { castDealtFirst } from "../../src/engine/deal";
 import { readHiddenTruth } from "../../src/engine/hidden-truth";
 import { calledAtStart, sceneFixtureRaw } from "./fixture";
+import { behavioursIn } from "./scene-view";
+import { everySign } from "./scene-view";
 
 const KINDS = ["believer", "incompetent", "practitioner"] as const;
 
@@ -65,7 +67,7 @@ function tally(content: Content, seeds = 3000) {
   for (let seed = 1; seed <= seeds; seed++) {
     const { run, step } = openMeeting(seed, content);
     const { characters } = readHiddenTruth(run);
-    for (const { who, text } of step.behaviours) {
+    for (const { who, text } of behavioursIn(step, content)) {
       const known = content.characters.find(
         (c) => calledAtStart(content, c.id) === who,
       );
@@ -88,7 +90,7 @@ describe("signs written per kind", () => {
 
     const { step } = openMeeting(1, content);
 
-    expect(step.behaviours.map((b) => b.who)).toEqual([
+    expect(behavioursIn(step).map((b) => b.who)).toEqual([
       "Ana Abel",
       "Ben Bird",
       "Cal Cope",
@@ -99,7 +101,10 @@ describe("signs written per kind", () => {
     const seen = new Set<string>();
     const content = parseContent(signsFixtureRaw());
     for (let seed = 1; seed <= 200; seed++) {
-      for (const { who, text } of openMeeting(seed, content).step.behaviours) {
+      for (const { who, text } of behavioursIn(
+        openMeeting(seed, content).step,
+        content,
+      )) {
         expect(text).toContain(who);
         expect(text).not.toContain("{who}");
         seen.add(text);
@@ -112,7 +117,7 @@ describe("signs written per kind", () => {
 
   it("shows no behaviours when content has none", () => {
     expect(
-      openMeeting(1, parseContent(sceneFixtureRaw())).step.behaviours,
+      behavioursIn(openMeeting(1, parseContent(sceneFixtureRaw())).step),
     ).toEqual([]);
   });
 
@@ -136,7 +141,7 @@ describe("signs written per kind", () => {
     const content = parseContent(signsFixtureRaw());
     const shown = new Set(
       [1, 2, 3, 4, 5, 6, 7, 8].map((seed) =>
-        JSON.stringify(openMeeting(seed, content).step.behaviours),
+        JSON.stringify(behavioursIn(openMeeting(seed, content).step)),
       ),
     );
 
@@ -155,8 +160,10 @@ describe("signs written per kind", () => {
         view = run.choose(view.choices[0] as never);
       }
       return [
-        step.behaviours,
-        sceneOf(run.choose({ type: "action", actionId: "meeting" })).behaviours,
+        behavioursIn(step),
+        behavioursIn(
+          sceneOf(run.choose({ type: "action", actionId: "meeting" })),
+        ),
       ];
     };
 
@@ -202,7 +209,7 @@ describe("signs of who holds influence", () => {
     const holder = content.characters.find(
       (c) => c.id === readHiddenTruth(run).powerMap.order[0],
     )?.name;
-    return step.signs[0]?.text.includes(holder ?? "?");
+    return everySign(step)[0]?.text.includes(holder ?? "?");
   }
 
   const SEEDS = Array.from({ length: 400 }, (_, i) => i + 1);

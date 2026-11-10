@@ -237,13 +237,16 @@ export function planWords(
 ): Record<string, string> {
   const taken = planNow(state, content);
   const plan = taken && writtenPlan(content, taken.id);
+  const keeper = keeperNow(state, content);
   return {
     "{plan}": plan?.title ?? "",
-    "{keeper}":
-      taken === undefined || taken.keeper === null
-        ? ""
-        : calledBy(state, content, taken.keeper),
+    "{keeper}": keeper === undefined ? "" : calledBy(state, content, keeper),
   };
+}
+
+/** Whoever really has what the boss's Plan now needs, if anyone: `{keeper}`. */
+export function keeperNow(state: State, content: Content): string | undefined {
+  return planNow(state, content)?.keeper ?? undefined;
 }
 
 /** The boss's Plan, once the player has heard of it, and where it has got to. */

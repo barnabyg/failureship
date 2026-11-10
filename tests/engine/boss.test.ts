@@ -8,6 +8,7 @@ import {
 } from "../../src/engine";
 import { readHiddenTruth } from "../../src/engine/hidden-truth";
 import { sceneFixtureRaw, floorOwn } from "./fixture";
+import { treatmentOf } from "./scene-view";
 
 function bossFixtureRaw() {
   const raw = sceneFixtureRaw();
@@ -62,9 +63,8 @@ describe("the boss's belief", () => {
   it("shows in how the boss treats the player in a later month", () => {
     const content = parseContent(bossFixtureRaw());
     const treatments = (optionId: string) =>
-      Array.from(
-        { length: 300 },
-        (_, i) => nextMeeting(i + 1, optionId, content).step.treatment,
+      Array.from({ length: 300 }, (_, i) =>
+        treatmentOf(nextMeeting(i + 1, optionId, content).step),
       );
     const count = (signs: (string | null)[], sign: string) =>
       signs.filter((s) => s === sign).length;
@@ -83,8 +83,8 @@ describe("the boss's belief", () => {
 
     const differs = [1, 2, 3, 4, 5].filter(
       (seed) =>
-        nextMeeting(seed, "please", content).step.treatment !==
-        nextMeeting(seed, "snub", content).step.treatment,
+        treatmentOf(nextMeeting(seed, "please", content).step) !==
+        treatmentOf(nextMeeting(seed, "snub", content).step),
     );
 
     expect(differs.length).toBeGreaterThan(0);
@@ -93,9 +93,8 @@ describe("the boss's belief", () => {
   it("stays deniable: a sign can come from more than one mood", () => {
     const content = parseContent(bossFixtureRaw());
     const seen = new Set(
-      Array.from(
-        { length: 300 },
-        (_, i) => nextMeeting(i + 1, "please", content).step.treatment,
+      Array.from({ length: 300 }, (_, i) =>
+        treatmentOf(nextMeeting(i + 1, "please", content).step),
       ),
     );
 
@@ -111,7 +110,7 @@ describe("the boss's belief", () => {
     const seen = JSON.stringify(run.view());
     expect(seen).not.toMatch(/opinion|likelihood|mood/i);
     expect(seen).not.toMatch(/"warm"|"neutral"|"cold"/);
-    expect(sceneOf(run.view()).treatment).not.toMatch(/\d/);
+    expect(treatmentOf(sceneOf(run.view()))).not.toMatch(/\d/);
   });
 
   it("shows no treatment when the boss is not in the room", () => {
@@ -128,7 +127,7 @@ describe("the boss's belief", () => {
 
     const { step } = nextMeeting(1, "please", parseContent(raw));
 
-    expect(step.treatment).toBeNull();
+    expect(treatmentOf(step)).toBeNull();
   });
 
   it("stays the same however often the Scene is looked at", () => {
