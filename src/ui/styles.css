@@ -442,6 +442,37 @@ body {
   gap: 16px;
 }
 
+/* The results open with a summary; each part after it folds, under a line saying what it holds. */
+.results-again {
+  margin-bottom: 14px;
+}
+
+.results-section {
+  margin-bottom: 8px;
+  border-top: 1px solid var(--rule);
+}
+
+.results-section > summary {
+  padding: 6px 0;
+  cursor: pointer;
+}
+
+.results-section-heading {
+  color: var(--muted);
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.results-section-summary {
+  font-size: 0.9375rem;
+}
+
+.results-section[open] > summary {
+  margin-bottom: 4px;
+}
+
 /*
  * A Scene: the room by person, which scrolls if it must, over a bar of choices
  * that stays in view at the foot of the panel.

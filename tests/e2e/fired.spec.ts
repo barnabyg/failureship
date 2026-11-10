@@ -26,6 +26,7 @@ test("a catastrophic choice says so first, and ends at the results screen", asyn
   await expect(results).toBeVisible();
   await expect(page.getByTestId("results-ending")).toContainText("fired");
   await expect(page.getByTestId("result-mistake")).toHaveCount(1);
+  await page.getByTestId("results-section-who").locator("summary").click();
   await expect(page.getByTestId("result-character").first()).toBeVisible();
 });
 

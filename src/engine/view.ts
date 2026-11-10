@@ -265,7 +265,19 @@ export type StepView =
         truth: string;
         correct: boolean;
       }[];
-      clues: { month: number; source: string; text: string; verdict: string }[];
+      /**
+       * Every sign and claim, false or misleading first. The same thing told
+       * again is one row, with how many times and in which months.
+       */
+      clues: {
+        months: number[];
+        count: number;
+        source: string;
+        text: string;
+        verdict: string;
+      }[];
+      /** How many things the player was told, and how many were false or misleading. */
+      told: { count: number; wrong: number };
       /** Where a Hidden Fact changed what happened in this run. */
       factEvents: { month: number; note: string; fact: string | null }[];
       /** Your boss's true kind, and how each choice came across to them. */

@@ -361,6 +361,45 @@ describe("the results screen", () => {
     expect(kettle?.verdict).toBe("VERDICT-IRRELEVANT");
   });
 
+  it("shows a clue told more than once as one row, with a count", () => {
+    const raw = notebookFixtureRaw();
+    const kettle = raw.notebook.events[0];
+    if (!kettle) throw new Error("No kettle.");
+    raw.notebook.events.push({ ...kettle, id: "kettle-again" });
+    const run = startRun({ seed: 1, content: parseContent(raw) });
+    run.choose({ type: "action", actionId: "kettle" });
+
+    const { clues, told } = resultsOf(playOut(run));
+
+    const rows = clues.filter((c) => c.text === "CLUE-KETTLE");
+    expect(rows).toHaveLength(1);
+    expect(rows[0]).toMatchObject({ count: 2, months: [1] });
+    expect(told.count).toBe(clues.reduce((n, c) => n + c.count, 0));
+  });
+
+  it("puts what was false or misleading first, and counts it", () => {
+    const world = content();
+    for (let seed = 1; seed <= 200; seed++) {
+      const run = startRun({ seed, content: world });
+      run.choose({ type: "action", actionId: "kettle" });
+      run.choose({ type: "continue" });
+      run.choose({ type: "action", actionId: "copier" });
+      run.choose({ type: "find-out", sourceId: "ben", subjectId: "cal" });
+      const { clues, told } = resultsOf(playOut(run));
+      if (clues.every((c) => c.verdict !== "VERDICT-FALSE")) continue;
+
+      expect(clues[0]?.verdict).toBe("VERDICT-FALSE");
+      expect(clues.at(-1)?.verdict).toBe("VERDICT-IRRELEVANT");
+      expect(told.wrong).toBe(
+        clues
+          .filter((c) => c.verdict === "VERDICT-FALSE")
+          .reduce((n, c) => n + c.count, 0),
+      );
+      return;
+    }
+    throw new Error("No seed gave a false claim.");
+  });
+
   it("calls a claim false unless it was true", () => {
     const world = content();
     const verdicts = new Set<string>();

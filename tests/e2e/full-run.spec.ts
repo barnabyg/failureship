@@ -57,6 +57,7 @@ test("eighteen months, all the way to the results screen", async ({ page }) => {
     /Believer|Incompetent|Practitioner/,
   );
   await expect(page.getByTestId("result-mark")).toHaveCount(6);
+  await page.getByTestId("results-section-clues").locator("summary").click();
   await expect(page.getByTestId("result-clue").first()).toBeVisible();
   await expect(page.locator("body")).not.toContainText(/placeholder|lorem/i);
 });

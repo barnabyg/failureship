@@ -87,10 +87,18 @@ function Decided({ decided }: { decided: DecidedView }) {
 interface StepPanelProps {
   view: PlayerView;
   onChoose: (choice: Choice) => void;
+  /** Starts a new run on a seed, without asking: only offered once a run is over. */
+  onRestart: (seed: number) => void;
+  onNewRun: () => void;
 }
 
 /** The panel for the current step of the month, if it needs one. */
-export function StepPanel({ view, onChoose }: StepPanelProps) {
+export function StepPanel({
+  view,
+  onChoose,
+  onRestart,
+  onNewRun,
+}: StepPanelProps) {
   const { step } = view;
   /** An e-mail to the player, by their job title. */
   const mail = (sent: Sent): Look => ({ sent, to: view.job.title });
@@ -212,6 +220,15 @@ export function StepPanel({ view, onChoose }: StepPanelProps) {
         </Panel>
       );
     case "results":
-      return <ResultsPanel step={step} orgChart={view.orgChart} />;
+      return (
+        <ResultsPanel
+          step={step}
+          orgChart={view.orgChart}
+          onPlayAgain={() => {
+            onRestart(view.seed);
+          }}
+          onNewRun={onNewRun}
+        />
+      );
   }
 }

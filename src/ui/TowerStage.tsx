@@ -8,13 +8,21 @@ interface Props {
   hotspots: readonly Hotspot[];
   legal: readonly Choice[];
   onChoose: (choice: Choice) => void;
+  /** Once the run is over, the floor is only scenery: no labels on its places. */
+  unlabelled?: boolean;
 }
 
 const canTake = (legal: readonly Choice[], actionId: string) =>
   legal.some((c) => c.type === "action" && c.actionId === actionId);
 
 /** The tower with its hotspots: a model behind, and labelled buttons in front. */
-export function TowerStage({ rooms, hotspots, legal, onChoose }: Props) {
+export function TowerStage({
+  rooms,
+  hotspots,
+  legal,
+  onChoose,
+  unlabelled = false,
+}: Props) {
   const stage = useRef<HTMLDivElement>(null);
   const tower = useRef<Tower | null>(null);
   const roomClick = useRef<(roomId: string) => void>(() => undefined);
@@ -55,9 +63,11 @@ export function TowerStage({ rooms, hotspots, legal, onChoose }: Props) {
     );
   }, [hotspots, legal]);
 
+  const signed = unlabelled ? [] : rooms;
+  const labelled = unlabelled ? [] : hotspots;
   return (
     <div className="stage" ref={stage}>
-      {rooms.map((room) => {
+      {signed.map((room) => {
         const point = points.get(room.id);
         if (!point || !room.sign) return null;
         return (
@@ -72,7 +82,7 @@ export function TowerStage({ rooms, hotspots, legal, onChoose }: Props) {
           </div>
         );
       })}
-      {hotspots.map((hotspot) => {
+      {labelled.map((hotspot) => {
         const point = points.get(hotspot.place);
         if (!point) return null;
         const enabled = canTake(legal, hotspot.id);
