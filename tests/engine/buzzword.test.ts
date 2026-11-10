@@ -4,7 +4,6 @@ import { buzzwordFixture, buzzwordFixtureRaw } from "./fixture";
 
 function answer(run: Run, optionId: "pub" | "report") {
   run.choose({ type: "notification", notificationId: "invite", optionId });
-  run.choose({ type: "continue" });
 }
 
 function openMeeting(run: Run) {
@@ -46,7 +45,7 @@ describe("a Buzzword in the meeting Scene", () => {
       const run = startRun({ seed: 1, content: buzzwordFixture() });
       answer(run, "pub");
       openMeeting(run);
-      return run.choose({ type: "scene", sceneId: "meeting", optionId }).step;
+      return run.choose({ type: "scene", sceneId: "meeting", optionId }).result;
     };
 
     const buzzword = resultOf("use-word");

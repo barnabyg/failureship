@@ -24,6 +24,7 @@ import { calledBy, sayPeople } from "./say";
 import {
   IllegalChoiceError,
   type ShownBehaviour,
+  type Result,
   type State,
   type Step,
   type World,
@@ -66,7 +67,11 @@ export function sceneData(
  * dealt kind. A quarterly review is staged: everyone is on their best behaviour,
  * so it shows only what is written.
  */
-export function openScene(state: State, world: World, id: string): Step {
+export function openScene(
+  state: State,
+  world: World,
+  id: string,
+): Extract<Step, { kind: "scene" }> {
   const { content } = world;
   const shown: ShownBehaviour[] = [];
   const competition = competitionNow(state, content);
@@ -175,7 +180,7 @@ export function behaveInScene(
   state: State,
   world: World,
   choice: Extract<Choice, { type: "scene" }>,
-): void {
+): Result {
   const scene = sceneData(state, world, choice.sceneId);
   const option = offeredOptions(state, world.content, scene).find(
     (o) => o.id === choice.optionId,
@@ -220,11 +225,12 @@ export function behaveInScene(
   const reply =
     replyToPromise(state, world.content, option?.promise) ??
     replyToDeal(state, world.content, option?.deal);
-  state.step = {
-    kind: "notice",
+  return {
+    kind: "happened",
     title: scene.title,
     body: reply ? `${fill(result.body)} ${reply.body}` : fill(result.body),
     reaction,
     verdict,
+    action: state.step.kind === "scene" ? state.step.action : undefined,
   };
 }

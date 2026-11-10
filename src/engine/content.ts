@@ -246,11 +246,9 @@ export const contentSchema = z.strictObject({
   ui: z.strictObject({
     hints: z.strictObject({
       notification: text,
-      dialog: text,
       actions: text,
       scene: text,
       "find-out": text,
-      claim: text,
       notice: text,
       move: text,
       event: text,

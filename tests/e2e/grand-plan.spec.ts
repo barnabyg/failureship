@@ -1,5 +1,5 @@
 import { expect, test } from "@playwright/test";
-import { freshRun, openMeeting, playUntil } from "./play";
+import { answered, freshRun, openMeeting, playUntil } from "./play";
 
 // "the Grand Plan browser test's seed" in tests/engine/real-grand-plans.test.ts
 // keeps this true: on seed 1, the Plan is heard of at month 1's meeting, and the
@@ -22,10 +22,7 @@ test("hear of your boss's Grand Plan, and complete it", async ({ page }) => {
   await expect(card).toHaveAttribute("title", /One tool for everything/);
   await playUntil(page, "option-fake");
   await page.getByTestId("option-fake").click();
-  await expect(page.getByTestId("panel-notice")).toContainText(
-    "This solves ALL your problems",
-  );
-  await page.getByTestId("continue").click();
+  await expect(answered(page)).toContainText("This solves ALL your problems");
 
   const told = page.getByTestId("panel-notice");
   await expect(told).toContainText("Your boss's Grand Plan: done");

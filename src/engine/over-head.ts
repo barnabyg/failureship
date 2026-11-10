@@ -4,14 +4,14 @@ import { applyOutcome } from "./outcome";
 import { headOf } from "./places";
 import { bossKindOf, inTurn, moodOfCharacter } from "./reads";
 import { drawFor, pickWeighted } from "./rng";
-import type { State, Step } from "./state";
+import type { Result, State } from "./state";
 
 /** A gamble on who the boss's boss really is, and on the boss not hearing of it. */
 export function goOverHead(
   state: State,
   content: Content,
   label: string,
-): Step {
+): Extract<Result, { kind: "happened" }> {
   const written = content.overHead;
   if (!written) throw new Error("Nothing is written for going over the head.");
   state.overHeadUses += 1;
@@ -59,7 +59,7 @@ export function goOverHead(
   }
   const lines = worked ? outcome.worked[standing] : outcome.failed;
   return {
-    kind: "notice",
+    kind: "happened",
     title: label,
     body: inTurn(lines, state.overHeadUses) ?? label,
   };

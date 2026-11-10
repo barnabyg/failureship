@@ -288,11 +288,9 @@ export function fixtureRaw() {
     ui: {
       hints: {
         notification: "Answer the Notification.",
-        dialog: "Press continue.",
         actions: "Click the floor. You have {actions} left.",
         scene: "Watch the room, then choose.",
         "find-out": "Pick a source.",
-        claim: "This is what you were told.",
         notice: "Press continue.",
         move: "Something has happened to you.",
         event: "Something has happened to the company.",

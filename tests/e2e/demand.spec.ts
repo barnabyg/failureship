@@ -7,7 +7,6 @@ async function stallTheDemand(page: Page, seed: number) {
   await answerAnyNotification(page);
   await attendAndFinishMonth(page);
   await page.getByTestId("option-skip-training").click();
-  await page.getByTestId("continue").click();
   await expect(page.getByTestId("panel-notification")).toContainText(
     "Hugh Lamb",
   );
@@ -18,7 +17,6 @@ async function stallTheDemand(page: Page, seed: number) {
   );
   await expect(page.getByTestId("option-fake")).toBeVisible();
   await page.getByTestId("option-stall").click();
-  await page.getByTestId("continue").click();
 }
 
 // The real-content test keeps these seeds true of month 3.

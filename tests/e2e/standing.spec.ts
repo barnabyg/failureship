@@ -16,7 +16,6 @@ test("Official standing moves when the report goes unfiled", async ({
   const before = await marker.evaluate((m) => m.style.left);
 
   await page.getByTestId("option-decline").click();
-  await page.getByTestId("continue").click();
   await expect(marker).toHaveAttribute("style", `left: ${before};`);
   await skipTheReport(page);
 

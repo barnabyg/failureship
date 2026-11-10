@@ -3,7 +3,12 @@ import type { Content } from "./content";
 import { methodOf, sourcesHere } from "./reads";
 import { pick } from "./rng";
 import { calledBy, capitalised } from "./say";
-import { IllegalChoiceError, type State, type Step } from "./state";
+import {
+  IllegalChoiceError,
+  type Result,
+  type State,
+  type Step,
+} from "./state";
 import type { Choice } from "./view";
 
 /** Who is there to ask: whoever happens to be there, or a choice of them. */
@@ -11,7 +16,7 @@ export function arriveToFindOut(
   state: State,
   content: Content,
   id: string,
-): Step {
+): Extract<Step, { kind: "find-out" }> {
   const method = methodOf(content, id);
   const sources = sourcesHere(state, method.sources);
   if (!method.someoneThere) {
@@ -26,7 +31,7 @@ export function hearClaim(
   state: State,
   content: Content,
   choice: Extract<Choice, { type: "find-out" }>,
-): void {
+): Result {
   if (state.step.kind !== "find-out") {
     throw new IllegalChoiceError(choice.sourceId);
   }
@@ -53,5 +58,9 @@ export function hearClaim(
     state.heard = state.heard.filter((h) => h.fact !== factId);
     state.heard.push({ fact: factId, subject });
   }
-  state.step = { kind: "claim", index: state.claims.length - 1 };
+  return {
+    kind: "claim",
+    index: state.claims.length - 1,
+    action: state.step.action,
+  };
 }

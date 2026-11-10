@@ -1,5 +1,5 @@
 import { expect, test } from "@playwright/test";
-import { playUntil } from "./play";
+import { happened, playUntil } from "./play";
 
 test("a good word for a move is shaken on, and kept in Your word given", async ({
   page,
@@ -7,8 +7,7 @@ test("a good word for a move is shaken on, and kept in Your word given", async (
   await page.goto("/?seed=2&month=3");
   await playUntil(page, "scene-option-deal-with-the-coordinator");
   await page.getByTestId("scene-option-deal-with-the-coordinator").click();
-  await expect(page.getByTestId("panel-notice")).toContainText("shakes on it");
-  await page.getByTestId("continue").click();
+  await expect(happened(page)).toContainText("shakes on it");
   await page.getByTestId("open-word").click();
   await expect(page.getByTestId("word-deal")).toContainText(
     "A move, for a good word",

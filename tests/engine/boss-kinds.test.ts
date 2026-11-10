@@ -54,8 +54,8 @@ function dazzle(seed: number, content: Content) {
     sceneId: "meeting",
     optionId: "dazzle",
   });
-  if (view.step.kind !== "notice") throw new Error(view.step.kind);
-  return { run, step: view.step };
+  if (view.result?.kind !== "happened") throw new Error(view.step.kind);
+  return { run, step: view.result };
 }
 
 describe("what impresses each kind of boss", () => {
@@ -120,12 +120,12 @@ describe("what impresses each kind of boss", () => {
     const bodyFor = (kind: Kind) => {
       const run = startRun({ seed: seedWhereBossIs(kind, content), content });
       run.choose({ type: "action", actionId: "meeting" });
-      const { step } = run.choose({
+      const { result } = run.choose({
         type: "scene",
         sceneId: "meeting",
         optionId: "read-the-boss",
       });
-      return step.kind === "notice" ? step.body : step.kind;
+      return result?.kind === "happened" ? result.body : result?.kind;
     };
 
     expect(bodyFor("believer")).toBe("BELIEVER-BODY");

@@ -11,13 +11,11 @@ test("a reload carries on where the player left off", async ({ page }) => {
   await answerAnyNotification(page);
   await attendAndFinishMonth(page);
   await page.getByTestId("option-skip-training").click();
-  await page.getByTestId("continue").click();
   // The Demand from your boss's boss, stalled, so that it stays open.
   await page.getByTestId("option-stall").click();
-  await page.getByTestId("continue").click();
   await answerAnyNotification(page);
   await page.getByTestId("hotspot-kitchen").click();
-  await page.getByTestId("continue").click();
+
   await page.getByTestId("open-notebook").click();
   await page.getByTestId("mark-boss").selectOption("practitioner");
   await page.getByTestId("close-notebook").click();

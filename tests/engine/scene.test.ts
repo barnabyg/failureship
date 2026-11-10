@@ -131,10 +131,11 @@ describe("the meeting Scene", () => {
 
     const view = behave(run, "back-ana");
 
-    expect(view.step).toEqual({
-      kind: "notice",
+    expect(view.result).toEqual({
+      kind: "happened",
       title: "The meeting",
       body: "BACKED-RIGHT: Ana Abel nods.",
+      spent: "Go to meeting",
     });
   });
 
@@ -142,7 +143,7 @@ describe("the meeting Scene", () => {
     const backAnaWhenHolderIs = (holder: string) => {
       const run = runWhereHolderIs(holder);
       openMeeting(run);
-      return behave(run, "back-ana").step;
+      return behave(run, "back-ana").result;
     };
 
     expect(backAnaWhenHolderIs("ana")).not.toEqual(backAnaWhenHolderIs("ben"));
@@ -152,7 +153,7 @@ describe("the meeting Scene", () => {
     const resultOf = (optionId: string) => {
       const run = runWhereHolderIs("ana");
       openMeeting(run);
-      return behave(run, optionId).step;
+      return behave(run, optionId).result;
     };
 
     expect(resultOf("back-ana")).not.toEqual(resultOf("stay-quiet"));
@@ -161,9 +162,8 @@ describe("the meeting Scene", () => {
   it("returns to the month after the result", () => {
     const run = startRun({ seed: 1, content: sceneFixture() });
     openMeeting(run);
-    behave(run, "stay-quiet");
 
-    const view = run.choose({ type: "continue" });
+    const view = behave(run, "stay-quiet");
 
     expect(view.step.kind).toBe("actions");
     expect(view.hotspots.find((h) => h.id === "meeting")?.state).toBe("done");
@@ -191,7 +191,7 @@ describe("the meeting Scene", () => {
     expect(step.options).toEqual([
       { id: "new-option", label: "A new way to behave" },
     ]);
-    expect(behave(run, "new-option").step).toMatchObject({
+    expect(behave(run, "new-option").result).toMatchObject({
       body: "A new result.",
     });
   });

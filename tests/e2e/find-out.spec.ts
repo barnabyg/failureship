@@ -1,5 +1,5 @@
 import { expect, test } from "@playwright/test";
-import { answerAnyNotification } from "./play";
+import { answerAnyNotification, claimHeard } from "./play";
 
 test("spends an action to find something out, and sees the claim", async ({
   page,
@@ -19,13 +19,15 @@ test("spends an action to find something out, and sees the claim", async ({
   const there = /^(.+?) is at the photocopier/.exec(prompt)?.[1] ?? "nobody";
   await page.locator('[data-testid^="subject-"]').first().click();
 
-  await expect(page.getByTestId("panel-claim")).toContainText(there);
+  const claim = claimHeard(page);
+  await expect(claim).toContainText(there);
   await expect(page.getByTestId("claim-text")).not.toBeEmpty();
-  await expect(page.getByTestId("panel-claim")).not.toContainText(
+  await expect(claim).not.toContainText(
     /deliberately false|mistaken|out of date/i,
   );
+  await expect(claim).toContainText("That action is spent");
 
-  await page.getByTestId("continue").click();
+  // What was said stays on the floor, which can still be used.
   await expect(page.getByTestId("hotspot-ask-around")).toBeDisabled();
 });
 

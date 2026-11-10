@@ -1,5 +1,10 @@
 import { expect, test, type Page } from "@playwright/test";
-import { answerAnyNotification, freshRun, skipTheReport } from "./play";
+import {
+  answerAnyNotification,
+  freshRun,
+  happened,
+  skipTheReport,
+} from "./play";
 
 async function expectToSayWhatIsNext(page: Page) {
   await expect(page.getByTestId("hint")).not.toBeEmpty();
@@ -10,7 +15,6 @@ async function reachMeeting(page: Page, answer: "pub" | "report", seed = 1) {
   await page.goto(`/?seed=${String(seed)}`);
   if (answer === "pub") {
     await page.getByTestId("option-pub").click();
-    await page.getByTestId("continue").click();
     await skipTheReport(page);
   } else {
     await answerAnyNotification(page);
@@ -30,8 +34,7 @@ test("opens the meeting Scene from the tower and makes a choice", async ({
 
   await page.getByTestId("scene-option-say-nothing").click();
 
-  await expect(page.getByTestId("panel-notice")).toBeVisible();
-  await page.getByTestId("continue").click();
+  await expect(happened(page)).toBeVisible();
   await expect(page.getByTestId("hotspot-meeting")).toBeDisabled();
   await expect(page.getByTestId("hotspot-kitchen")).toBeEnabled();
 });
@@ -79,7 +82,7 @@ test("the same choice lands differently when someone else holds influence", asyn
   const resultOnSeed = async (seed: number) => {
     await reachMeeting(page, "report", seed);
     await page.getByTestId("scene-option-back-boss").click();
-    return page.getByTestId("panel-notice").innerText();
+    return page.getByTestId("result-body").innerText();
   };
 
   expect(await resultOnSeed(1)).not.toEqual(await resultOnSeed(8));
@@ -92,17 +95,13 @@ test("the full month reads differently for different choices", async ({
   await expectToSayWhatIsNext(page);
   await page.getByTestId("option-pub").click();
   await expectToSayWhatIsNext(page);
-  await page.getByTestId("continue").click();
   await skipTheReport(page);
   await expectToSayWhatIsNext(page);
   await page.getByTestId("hotspot-meeting").click();
   await expectToSayWhatIsNext(page);
   await page.getByTestId("scene-option-use-buzzword").click();
   await expectToSayWhatIsNext(page);
-  await page.getByTestId("continue").click();
   await page.getByTestId("hotspot-kitchen").click();
-  await expectToSayWhatIsNext(page);
-  await page.getByTestId("continue").click();
 
   await expect(page.getByTestId("panel-move")).toBeVisible();
   await expectToSayWhatIsNext(page);
@@ -120,9 +119,7 @@ test("the full month reads differently for different choices", async ({
     "strategic patience",
   );
   await page.getByTestId("scene-option-say-nothing").click();
-  await page.getByTestId("continue").click();
   await page.getByTestId("hotspot-kitchen").click();
-  await page.getByTestId("continue").click();
   await page.getByTestId("continue").click();
 
   await expect(page.getByTestId("story-reported")).not.toHaveText(afterPub);
@@ -142,8 +139,7 @@ test("the pub, then the meeting, then using the Buzzword", async ({ page }) => {
 
   await page.getByTestId("scene-option-use-buzzword").click();
 
-  await expect(page.getByTestId("panel-notice")).toBeVisible();
-  await page.getByTestId("continue").click();
+  await expect(happened(page)).toBeVisible();
   await expect(page.getByTestId("hotspot-meeting")).toBeDisabled();
 });
 

@@ -138,12 +138,6 @@ export interface ShownBehaviour {
 
 export type Step =
   | { kind: "notification"; id: string }
-  | {
-      kind: "dialog";
-      id: string;
-      learned: string[];
-      reaction?: string | undefined;
-    }
   | { kind: "actions" }
   | {
       kind: "scene";
@@ -155,9 +149,16 @@ export type Step =
       regard: { character: string; sign: string }[];
       /** Whether this Scene's signs point at the wrong person. */
       misleading: boolean;
+      /** The action that went there, if a place on the floor opened it. */
+      action?: string | undefined;
     }
-  | { kind: "find-out"; method: string; sources: string[] }
-  | { kind: "claim"; index: number }
+  | {
+      kind: "find-out";
+      method: string;
+      sources: string[];
+      /** The action that went there, which the claim heard spends. */
+      action?: string | undefined;
+    }
   | {
       kind: "notice";
       title: string;
@@ -181,6 +182,40 @@ export type Step =
   /** The comic stand-in for winning, told once, after the seat that won it. */
   | { kind: "win" }
   | { kind: "results" };
+
+/**
+ * What the player's own last choice led to, kept beside whatever comes next
+ * until they choose again, so that reading it costs no click of its own.
+ */
+export type Result =
+  /** What happened at a place on the floor, or in a Scene. */
+  | {
+      kind: "happened";
+      title: string;
+      body: string;
+      /** How the boss took it. Signs only: it never says the boss's kind. */
+      reaction?: string | undefined;
+      verdict?: string | undefined;
+      /** The action spent on it, if a place on the floor was. */
+      action?: string | undefined;
+    }
+  /** A claim heard at Find Out. */
+  | { kind: "claim"; index: number; action?: string | undefined }
+  /** The answer to a Notification, and what it led to. */
+  | {
+      kind: "answer";
+      notificationId: string;
+      optionId: string;
+      then:
+        | Extract<Step, { kind: "notice" }>
+        /** A short text dialog, and the Buzzwords it taught. */
+        | {
+            kind: "dialog";
+            id: string;
+            learned: string[];
+            reaction?: string | undefined;
+          };
+    };
 
 interface Clue {
   month: number;
@@ -427,5 +462,7 @@ export interface State extends MonthRecord {
   /** The big mistakes so far, for the results screen. */
   mistakes: { month: number; choice: string }[];
   step: Step;
+  /** What the player's last choice led to, until they choose again. */
+  result: Result | null;
   truth: TruthOfRun;
 }

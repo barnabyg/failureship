@@ -29,12 +29,11 @@ function isLate(run: Run, month: number): boolean {
     if (notified(view)) return true;
     const free = view.step.options.find((o) => o.costLabel === "Costs nothing");
     if (free === undefined || view.step.id === "monthly-report") return false;
-    run.choose({
+    view = run.choose({
       type: "notification",
       notificationId: view.step.id,
       optionId: free.id,
     });
-    view = run.choose({ type: "continue" });
   }
   return false;
 }
@@ -158,8 +157,7 @@ describe("answering late input", () => {
     const run = atLateInput(seed());
     const before = run.view().actions.remaining;
 
-    run.choose(answer("chase"));
-    const view = run.choose({ type: "continue" });
+    const view = run.choose(answer("chase"));
 
     expect(view.actions.remaining).toBe(before - 1);
     expect(view.step).toMatchObject({
@@ -172,8 +170,7 @@ describe("answering late input", () => {
     const run = atLateInput(seed());
     const before = run.view().actions.remaining;
 
-    run.choose(answer("file-without"));
-    const view = run.choose({ type: "continue" });
+    const view = run.choose(answer("file-without"));
 
     expect(view.actions.remaining).toBe(before - 1);
     expect(view.step.kind).not.toBe("notification");
@@ -184,10 +181,11 @@ describe("answering late input", () => {
     const outcomes = lateSeeds().map((late) => {
       const run = atLateInput(late);
       const before = run.view().actions.remaining;
-      const waited = run.choose(answer("wait"));
-      expect(waited.actions.remaining).toBe(before);
-      const view = run.choose({ type: "continue" });
-      return view.step.kind === "notification" ? "in time" : "missed";
+      const view = run.choose(answer("wait"));
+      if (view.step.kind !== "notification") return "missed";
+      // A missed deadline goes on to whatever it costs, but waiting is free.
+      expect(view.actions.remaining).toBe(before);
+      return "in time";
     });
 
     expect(outcomes).toContain("in time");
@@ -197,8 +195,10 @@ describe("answering late input", () => {
   it("gives each answer a different outcome", () => {
     const after = (optionId: string, late: number) => {
       const run = atLateInput(late);
-      const { step } = run.choose(answer(optionId));
-      return step.kind === "notice" ? step.body : step.kind;
+      const { result } = run.choose(answer(optionId));
+      return result?.kind === "answer" && result.then.kind === "notice"
+        ? result.then.body
+        : result?.kind;
     };
     const late = seed();
 

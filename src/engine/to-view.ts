@@ -39,16 +39,19 @@ import { sceneData } from "./scenes";
 import { calledBy, sayFrom, sayPeople, titleOf } from "./say";
 import { standingInView } from "./standing";
 import { planInView } from "./grand-plans";
-import type { State, Step, World } from "./state";
+import { answerable } from "./month";
+import type { Result, State, Step, World } from "./state";
 import { toResultsView } from "./to-results";
 import { toWinView } from "./win";
 import type {
   Buzzword,
   ChartEntry,
+  DialogView,
   Choice,
   Hotspot,
   NotificationOption,
   PlayerView,
+  ResultView,
   StepView,
 } from "./view";
 
@@ -93,8 +96,6 @@ export function legalChoices(state: State, world: World): Choice[] {
             subjectId: c.id,
           })),
       );
-    case "claim":
-    case "dialog":
     case "notice":
     case "move":
     case "event":
@@ -327,34 +328,15 @@ function toStepView(state: State, world: World): StepView {
   const { content } = world;
   const { step } = state;
   switch (step.kind) {
-    case "notification": {
-      const n = everyNotification(content).find((x) => x.id === step.id);
-      if (!n) throw new Error(`Unknown Notification "${step.id}".`);
+    case "notification":
       return {
         kind: "notification",
-        id: n.id,
-        from: sayFrom(state, content, n.from),
-        subject: n.subject,
-        body: n.body
-          .replaceAll("{real}", statusLabel(content, state.project.real))
-          .replaceAll(
-            "{reported}",
-            statusLabel(content, state.project.reported),
-          ),
-        options: notificationOptions(state, content, n.id),
+        ...toMail(state, content, step.id),
+        id: step.id,
+        options: notificationOptions(state, content, step.id),
+        waiting: answerable(state, content).filter((id) => id !== step.id)
+          .length,
       };
-    }
-    case "dialog": {
-      const dialog = content.dialogs.find((d) => d.id === step.id);
-      if (!dialog) throw new Error(`Unknown dialog "${step.id}".`);
-      return {
-        kind: "dialog",
-        title: dialog.title,
-        lines: dialog.lines,
-        learned: buzzwordsOf(content, step.learned),
-        reaction: step.reaction,
-      };
-    }
     case "scene":
       return toSceneView(state, world, step);
     case "find-out": {
@@ -370,17 +352,6 @@ function toStepView(state: State, world: World): StepView {
         subjects: content.characters
           .filter((c) => !isGone(state, c.id) && isMet(state, content, c.id))
           .map((c) => personOf(state, content, c.id)),
-      };
-    }
-    case "claim": {
-      const claim = state.claims[step.index];
-      if (!claim) throw new Error(`Unknown claim ${String(step.index)}.`);
-      return {
-        kind: "claim",
-        title: sayPeople(content.ui.claimTitle, {
-          "{source}": calledBy(state, content, claim.source),
-        }),
-        text: claim.text,
       };
     }
     case "move": {
@@ -427,6 +398,86 @@ function shownStep(state: State, world: World): StepView {
   const asWritten = state.step.kind === "notice" && state.step.asWritten;
   if (step.kind === "results" || asWritten) return step;
   return coverForGone(state, world.content, step);
+}
+
+/** A Notification as an e-mail: who it is from, its subject and what it says. */
+function toMail(state: State, content: Content, id: string) {
+  const n = everyNotification(content).find((x) => x.id === id);
+  if (!n) throw new Error(`Unknown Notification "${id}".`);
+  return {
+    from: sayFrom(state, content, n.from),
+    subject: n.subject,
+    body: n.body
+      .replaceAll("{real}", statusLabel(content, state.project.real))
+      .replaceAll("{reported}", statusLabel(content, state.project.reported)),
+  };
+}
+
+function toDialogView(
+  content: Content,
+  step: Extract<
+    Extract<Result, { kind: "answer" }>["then"],
+    { kind: "dialog" }
+  >,
+): DialogView {
+  const dialog = content.dialogs.find((d) => d.id === step.id);
+  if (!dialog) throw new Error(`Unknown dialog "${step.id}".`);
+  return {
+    kind: "dialog",
+    title: dialog.title,
+    lines: dialog.lines,
+    learned: buzzwordsOf(content, step.learned),
+    reaction: step.reaction,
+  };
+}
+
+/** The place on the floor an action spent, by its label. */
+function spentOn(content: Content, action: string | undefined) {
+  return content.actions.find((a) => a.id === action)?.label ?? null;
+}
+
+function toResultView(
+  state: State,
+  content: Content,
+  result: Result,
+): ResultView {
+  switch (result.kind) {
+    case "happened": {
+      const { action, ...told } = result;
+      return { ...told, spent: spentOn(content, action) };
+    }
+    case "claim": {
+      const claim = state.claims[result.index];
+      if (!claim) throw new Error(`Unknown claim ${String(result.index)}.`);
+      return {
+        kind: "claim",
+        title: sayPeople(content.ui.claimTitle, {
+          "{source}": calledBy(state, content, claim.source),
+        }),
+        text: claim.text,
+        spent: spentOn(content, result.action),
+      };
+    }
+    case "answer": {
+      const option = everyNotification(content)
+        .find((n) => n.id === result.notificationId)
+        ?.options.find((o) => o.id === result.optionId);
+      const { then } = result;
+      return {
+        kind: "answer",
+        ...toMail(state, content, result.notificationId),
+        answer: option?.label ?? result.optionId,
+        then: then.kind === "dialog" ? toDialogView(content, then) : then,
+      };
+    }
+  }
+}
+
+/** The last result, with whoever covers for anyone who has gone in their place. */
+function shownResult(state: State, content: Content): ResultView | null {
+  const { result } = state;
+  if (result === null) return null;
+  return coverForGone(state, content, toResultView(state, content, result));
 }
 
 function statusLabel(content: Content, id: string): string {
@@ -498,6 +549,7 @@ export function toView(state: State, world: World): PlayerView {
       toHotspot(state, content, a),
     ),
     step: shownStep(state, world),
+    result: shownResult(state, content),
     hint: content.ui.hints[state.step.kind].replaceAll(
       "{actions}",
       actionsLabel,

@@ -1,5 +1,5 @@
 import { expect, test } from "@playwright/test";
-import { freshRun, playUntil } from "./play";
+import { freshRun, happened, playUntil } from "./play";
 
 // "Quarterly reviews" in tests/engine/reviews.test.ts checks the rules, and
 // "the real quarterly reviews" there that the same choice moves the record the
@@ -20,7 +20,7 @@ test("a quarterly review comes round by itself and moves Official standing", asy
 
   await page.getByTestId("scene-option-bigger-arrow").click();
 
-  await expect(page.getByTestId("panel-notice")).toBeVisible();
+  await expect(happened(page)).toBeVisible();
   await expect(marker).not.toHaveAttribute(
     "style",
     `left: ${String(before)}%;`,

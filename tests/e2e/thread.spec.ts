@@ -26,7 +26,6 @@ test("the desk with no window comes back as a Bill in a later month", async ({
   const teflon = page.getByTestId("gauge-teflon").locator("dd");
   const before = Number(await teflon.innerText());
   await page.getByTestId("option-say-it-was-scheduled").click();
-  await page.getByTestId("continue").click();
 
   // Teflon moves as the month closes, and says which Thread moved it.
   await playUntil(page, "panel-story");

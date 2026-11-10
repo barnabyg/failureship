@@ -128,9 +128,9 @@ describe("the Notebook's clues", () => {
       subjectId: "cal",
     });
 
-    if (view.step.kind !== "claim") throw new Error(view.step.kind);
+    if (view.result?.kind !== "claim") throw new Error(view.step.kind);
     expect(view.notebook.clues).toEqual([
-      { month: 1, source: "Ben Bird", text: view.step.text, about: ["cal"] },
+      { month: 1, source: "Ben Bird", text: view.result.text, about: ["cal"] },
     ]);
   });
 
@@ -138,7 +138,6 @@ describe("the Notebook's clues", () => {
     const run = startRun({ seed: 1, content: content() });
 
     run.choose({ type: "action", actionId: "kettle" });
-    run.choose({ type: "continue" });
     const view = run.choose({ type: "action", actionId: "kettle" });
 
     expect(view.notebook.clues).toEqual([
@@ -166,7 +165,6 @@ describe("the Notebook's clues", () => {
       run.choose({ type: "action", actionId: "copier" });
       const views = [
         run.choose({ type: "find-out", sourceId: "ben", subjectId: "cal" }),
-        run.choose({ type: "continue" }),
         run.choose({ type: "action", actionId: "meeting" }),
       ];
       for (const view of views) {

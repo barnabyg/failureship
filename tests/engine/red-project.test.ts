@@ -103,13 +103,13 @@ describe("a Project flagged red", () => {
     const view = run.choose(report("honest"));
     expect(view.project.reported).toBe("STATUS-BAD");
 
-    expect(sceneIdOf(run.choose({ type: "continue" }))).toBe("review");
+    expect(sceneIdOf(run.view())).toBe("review");
   });
 
   it("opens it in a later month, if that is when it goes red", () => {
     const run = fixtureRun();
     run.choose(report("quiet"));
-    let view = run.choose({ type: "continue" });
+    let view = run.view();
     while (view.month === 1) {
       const next = view.choices[0];
       if (!next) throw new Error(`Stuck at ${view.step.kind}.`);
@@ -119,7 +119,7 @@ describe("a Project flagged red", () => {
 
     run.choose(report("honest"));
 
-    expect(sceneIdOf(run.choose({ type: "continue" }))).toBe("review");
+    expect(sceneIdOf(run.view())).toBe("review");
     expect(run.view().month).toBe(2);
   });
 
@@ -127,13 +127,12 @@ describe("a Project flagged red", () => {
     const run = fixtureRun();
     run.choose(report("honest"));
 
-    expect(run.choose({ type: "continue" }).actions.spent).toBe(1);
+    expect(run.view().actions.spent).toBe(1);
   });
 
   it("lets explaining change the reported status, but never the real one", () => {
     const run = fixtureRun();
     run.choose(report("honest"));
-    run.choose({ type: "continue" });
 
     const { project } = run.choose({
       type: "scene",
@@ -148,18 +147,16 @@ describe("a Project flagged red", () => {
   it("does not open it twice for one flag, even if the status stays red", () => {
     const run = fixtureRun();
     run.choose(report("honest"));
-    run.choose({ type: "continue" });
     run.choose({ type: "scene", sceneId: "review", optionId: "honest" });
 
-    expect(run.choose({ type: "continue" }).step.kind).toBe("actions");
+    expect(run.view().step.kind).toBe("actions");
   });
 
   it("opens it again if the status goes red a second time", () => {
     const run = fixtureRun();
     run.choose(report("honest"));
-    run.choose({ type: "continue" });
     run.choose({ type: "scene", sceneId: "review", optionId: "deflect" });
-    let view = run.choose({ type: "continue" });
+    let view = run.view();
     while (view.month === 1) {
       const next = view.choices[0];
       if (!next) throw new Error(`Stuck at ${view.step.kind}.`);
@@ -168,7 +165,7 @@ describe("a Project flagged red", () => {
 
     run.choose(report("honest"));
 
-    expect(sceneIdOf(run.choose({ type: "continue" }))).toBe("review");
+    expect(sceneIdOf(run.view())).toBe("review");
   });
 });
 

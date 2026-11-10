@@ -109,10 +109,9 @@ function hearsList(wantTrue: boolean, world: Content) {
       const run = startRun({ seed, content: world });
       run.choose({ type: "action", actionId: "copier" });
       const view = run.choose({ type: "find-out", sourceId: "ben", subjectId });
-      if (view.step.kind !== "claim") throw new Error(view.step.kind);
-      if (!view.step.text.includes("USEFUL-FACT")) continue;
+      if (view.result?.kind !== "claim") throw new Error(view.step.kind);
+      if (!view.result.text.includes("USEFUL-FACT")) continue;
       if ((natureOf(run, subjectId, world) === "useful") === wantTrue) {
-        run.choose({ type: "continue" });
         return { run, subjectId };
       }
     }
@@ -136,8 +135,8 @@ describe("a dangerous Hidden Fact", () => {
         sceneId: "meeting",
         optionId: "blame-ben",
       });
-      if (view.step.kind !== "notice") throw new Error(view.step.kind);
-      results.get(dangerous)?.add(view.step.body);
+      if (view.result?.kind !== "happened") throw new Error(view.step.kind);
+      results.get(dangerous)?.add(view.result.body);
     }
 
     expect(results.get(true)).toEqual(new Set(["BURNED"]));
@@ -214,8 +213,8 @@ describe("a useful Hidden Fact", () => {
       optionId: "use-list",
     });
 
-    if (view.step.kind !== "notice") throw new Error(view.step.kind);
-    expect(view.step.body).toMatch(/^PAID-OFF/);
+    if (view.result?.kind !== "happened") throw new Error(view.step.kind);
+    expect(view.result.body).toMatch(/^PAID-OFF/);
     expect(resultsOf(playOut(run)).factEvents[0]?.fact).toMatch(/USEFUL-FACT/);
   });
 
@@ -229,8 +228,8 @@ describe("a useful Hidden Fact", () => {
       optionId: "use-list",
     });
 
-    if (view.step.kind !== "notice") throw new Error(view.step.kind);
-    expect(view.step.body).toMatch(/^FELL-FLAT/);
+    if (view.result?.kind !== "happened") throw new Error(view.step.kind);
+    expect(view.result.body).toMatch(/^FELL-FLAT/);
     const { factEvents } = resultsOf(playOut(run));
     expect(factEvents[0]?.note).toMatch(/never so/);
     expect(factEvents[0]?.fact).toBeNull();

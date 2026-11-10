@@ -9,12 +9,19 @@ import { replyToPromise } from "./promises";
 import { costOf, inTurn } from "./reads";
 import { drawFor } from "./rng";
 import { behaveInScene, openScene } from "./scenes";
-import { IllegalChoiceError, type State, type World } from "./state";
+import {
+  IllegalChoiceError,
+  type Result,
+  type State,
+  type World,
+} from "./state";
 import type { Choice } from "./view";
 
 /** Carries out a choice already known to be legal. */
 export function applyChoice(state: State, world: World, choice: Choice): void {
   const { content } = world;
+  // A result is read by the time the player does something else.
+  state.result = null;
   switch (choice.type) {
     case "notification":
       answerNotification(state, world, choice);
@@ -27,23 +34,32 @@ export function applyChoice(state: State, world: World, choice: Choice): void {
       countMove(state, action.family);
       const reaction = applyOutcome(state, content, action, action.label);
       if (action.scene !== undefined) {
-        state.step = openScene(state, world, action.scene);
+        const scene = openScene(state, world, action.scene);
+        state.step = { ...scene, action: action.id };
       } else if (action.findOut !== undefined) {
-        state.step = arriveToFindOut(state, content, action.findOut);
+        const findOut = arriveToFindOut(state, content, action.findOut);
+        state.step = { ...findOut, action: action.id };
       } else if (action.overHead) {
-        state.step = goOverHead(state, content, action.label);
+        const result = goOverHead(state, content, action.label);
+        setAside(state, world, { ...result, action: action.id });
       } else if (action.result) {
         const results = [action.result, ...action.moreResults];
-        const result = inTurn(results, state.month);
-        state.step = { kind: "notice", ...(result ?? action.result), reaction };
+        const { title, body } = inTurn(results, state.month) ?? action.result;
+        setAside(state, world, {
+          kind: "happened",
+          title,
+          body,
+          reaction,
+          action: action.id,
+        });
       }
       return;
     }
     case "find-out":
-      hearClaim(state, content, choice);
+      setAside(state, world, hearClaim(state, content, choice));
       return;
     case "scene":
-      behaveInScene(state, world, choice);
+      setAside(state, world, behaveInScene(state, world, choice));
       return;
     case "continue":
       if (state.step.kind === "story") leaveStory(state, world);
@@ -105,13 +121,28 @@ function answerNotification(
   const reply =
     replyToPromise(state, content, option.promise) ??
     replyToDeal(state, content, option.deal);
-  if (reply) {
-    state.step = { kind: "notice", ...reply, reaction };
-  } else if (option.dialog !== undefined) {
-    state.step = { kind: "dialog", id: option.dialog, learned, reaction };
-  } else if (outcome.result) {
-    state.step = { kind: "notice", ...outcome.result, reaction };
+  const then: Told | null = reply
+    ? { kind: "notice", ...reply, reaction }
+    : option.dialog !== undefined
+      ? { kind: "dialog", id: option.dialog, learned, reaction }
+      : outcome.result
+        ? { kind: "notice", ...outcome.result, reaction }
+        : null;
+  if (then) {
+    const { notificationId, optionId } = choice;
+    setAside(state, world, { kind: "answer", notificationId, optionId, then });
   } else {
     state.step = nextStep(state, world);
   }
+}
+
+type Told = Extract<Result, { kind: "answer" }>["then"];
+
+/**
+ * Keeps what a choice led to beside whatever comes next, which follows at once.
+ * Anything that changes the job, or ends the run, is told before anything else.
+ */
+function setAside(state: State, world: World, result: Result): void {
+  state.result = result;
+  state.step = nextStep(state, world);
 }

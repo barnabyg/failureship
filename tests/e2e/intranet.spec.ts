@@ -25,9 +25,14 @@ for (const [name, size] of [
 
     await answerAnyNotification(page);
     await page.getByTestId("hotspot-kitchen").click();
-    await page.getByTestId("continue").click();
+    // What the player did has its own look, never an e-mail with no sender.
+    const result = page.getByTestId("panel-result");
+    await expect(result).toContainText("What happened");
+    await expect(result).not.toContainText("To:");
+    await expect(result).not.toHaveAttribute("data-look");
+    expect(await fits(result)).toBe(true);
     await page.getByTestId("hotspot-work").click();
-    await page.getByTestId("continue").click();
+
     // The meeting was missed, and the minutes say so first.
     await expect(page.getByTestId("panel-notice")).toContainText("Subject:");
     await page.getByTestId("continue").click();
