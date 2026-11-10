@@ -46,6 +46,7 @@ export function hearClaim(
     source: capitalised(calledBy(state, content, made.claim.source)),
     text: made.claim.text,
     verdict: verdictOfClaim(content, made.claim),
+    about: [made.claim.subject],
   });
   const { factId, subject } = made.claim;
   if (factId !== null) {

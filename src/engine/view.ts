@@ -299,8 +299,11 @@ export type StepView =
 export interface PlayerView {
   notebook: {
     /** Never says which of these can be trusted, until the results screen. */
-    clues: { month: number; source: string; text: string }[];
+    /** `about` names whom a clue concerns. Never whether it can be trusted. */
+    clues: { month: number; source: string; text: string; about: string[] }[];
     marks: (Person & { mark: Kind | null })[];
+    /** How many of the latest clues came since the Notebook was last opened. */
+    unread: number;
   };
   /** The player's own Project, which can be looked at any time for nothing. */
   project: {

@@ -33,6 +33,8 @@ export interface Run {
   choose(choice: Choice): PlayerView;
   /** Sets or clears a suspicion, at no cost. Throws once the run has ended. */
   mark(character: string, kind: Kind | null): PlayerView;
+  /** The Notebook has been opened, so that none of its clues are new. */
+  readNotebook(): PlayerView;
   /** The whole run, as text that `resumeRun` can carry on from. */
   save(): string;
 }
@@ -78,6 +80,7 @@ function dealtState(seed: number, content: Content): State {
     claims: [],
     movesLanded: [],
     clues: [],
+    cluesRead: 0,
     marks: {},
     heard: [],
     factEvents: [],
@@ -187,6 +190,10 @@ function runOf(state: State, world: World): Run {
           (entry): entry is [string, Kind] => entry[1] !== null,
         ),
       );
+      return view();
+    },
+    readNotebook() {
+      state.cluesRead = state.clues.length;
       return view();
     },
     save: () => writeSave(state, content),

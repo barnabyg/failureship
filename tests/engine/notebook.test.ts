@@ -3,6 +3,7 @@ import { gameContent } from "../../src/content";
 import {
   IllegalChoiceError,
   parseContent,
+  resumeRun,
   startRun,
   type Choice,
   type Content,
@@ -129,7 +130,7 @@ describe("the Notebook's clues", () => {
 
     if (view.step.kind !== "claim") throw new Error(view.step.kind);
     expect(view.notebook.clues).toEqual([
-      { month: 1, source: "Ben Bird", text: view.step.text },
+      { month: 1, source: "Ben Bird", text: view.step.text, about: ["cal"] },
     ]);
   });
 
@@ -141,7 +142,7 @@ describe("the Notebook's clues", () => {
     const view = run.choose({ type: "action", actionId: "kettle" });
 
     expect(view.notebook.clues).toEqual([
-      { month: 1, source: "The kettle", text: "CLUE-KETTLE" },
+      { month: 1, source: "The kettle", text: "CLUE-KETTLE", about: [] },
     ]);
   });
 
@@ -170,13 +171,83 @@ describe("the Notebook's clues", () => {
       ];
       for (const view of views) {
         for (const clue of view.notebook.clues) {
-          expect(Object.keys(clue).sort()).toEqual(["month", "source", "text"]);
+          expect(Object.keys(clue).sort()).toEqual([
+            "about",
+            "month",
+            "source",
+            "text",
+          ]);
         }
         expect(JSON.stringify(view.notebook)).not.toMatch(
           /verdict|status|false|irrelevant|VERDICT/,
         );
       }
     }
+  });
+});
+
+describe("whom a clue is about", () => {
+  it("names whoever a behaviour's clue is about", () => {
+    const world = content();
+    for (let seed = 1; seed <= 30; seed++) {
+      const run = startRun({ seed, content: world });
+      const view = run.choose({ type: "action", actionId: "meeting" });
+      for (const clue of view.notebook.clues.filter((c) =>
+        /CLUE-(LATE|KIND)/.test(c.text),
+      )) {
+        const who = clue.text.split(" CLUE-")[0];
+        const id = world.characters.find((c) => c.name === who)?.id;
+        expect(clue.about).toEqual([id]);
+      }
+    }
+  });
+
+  it("names both people a sign's clue names", () => {
+    const world = content();
+    const run = startRun({ seed: 1, content: world });
+    const view = run.choose({ type: "action", actionId: "meeting" });
+
+    const clue = view.notebook.clues.find((c) =>
+      c.text.includes("CLUE-INTERRUPTS"),
+    );
+    const [first, second] = (clue?.text ?? "").split(" CLUE-INTERRUPTS ");
+    const idOf = (name?: string) =>
+      world.characters.find((c) => c.name === name)?.id;
+    expect(clue?.about).toEqual([idOf(first), idOf(second)]);
+  });
+});
+
+describe("new clues", () => {
+  it("counts the clues picked up since the Notebook was last read", () => {
+    const run = startRun({ seed: 1, content: content() });
+    expect(run.view().notebook.unread).toBe(0);
+
+    run.choose({ type: "action", actionId: "kettle" });
+    run.choose({ type: "continue" });
+    const view = run.choose({ type: "action", actionId: "copier" });
+    run.choose({ type: "find-out", sourceId: "ben", subjectId: "cal" });
+
+    expect(view.notebook.unread).toBe(1);
+    expect(run.view().notebook.unread).toBe(2);
+    expect(run.readNotebook().notebook.unread).toBe(0);
+    run.choose({ type: "continue" });
+    expect(
+      run.choose({ type: "action", actionId: "meeting" }).notebook.unread,
+    ).toBeGreaterThan(0);
+  });
+
+  it("are still new after a save is read back", () => {
+    const world = content();
+    const run = startRun({ seed: 1, content: world });
+    run.choose({ type: "action", actionId: "kettle" });
+    run.choose({ type: "continue" });
+    run.readNotebook();
+    run.choose({ type: "action", actionId: "copier" });
+    run.choose({ type: "find-out", sourceId: "ben", subjectId: "cal" });
+
+    const back = resumeRun({ save: run.save(), content: world });
+
+    expect(back.view().notebook.unread).toBe(1);
   });
 });
 
@@ -390,5 +461,48 @@ describe("the game's Notebook", () => {
     expect(withClue.length).toBeGreaterThan(0);
     expect(withClue.length).toBeLessThan(gameContent.behaviours.length);
     expect(gameContent.notebook.events.length).toBeGreaterThan(0);
+  });
+
+  it("says whom each clue is about only by someone its words name", () => {
+    /** Each way the player could know someone: name, job, or place above them. */
+    const waysOf = (view: PlayerView, id: string) => {
+      const known = gameContent.characters.find((c) => c.id === id);
+      const met = view.notebook.marks.find((m) => m.id === id);
+      const places = Object.values(gameContent.places).flatMap((p) =>
+        p !== undefined &&
+        met?.title.endsWith(p.title.replace("{title}", "")) === true
+          ? [p.called]
+          : [],
+      );
+      return [met?.title, met?.name, known?.name, known?.called, ...places]
+        .filter((w) => w !== undefined)
+        .map((w) => w.toLowerCase());
+    };
+    let named = 0;
+    let nobody = 0;
+    for (const seed of [1, 2, 3, 4]) {
+      const run = startRun({ seed, content: gameContent });
+      let view = run.view();
+      for (let turn = 0; view.choices.length > 0 && turn < 500; turn++) {
+        const choice = view.choices[(turn * 7) % view.choices.length];
+        if (!choice) break;
+        const before = view.notebook.clues.length;
+        view = run.choose(choice);
+        for (const clue of view.notebook.clues.slice(before)) {
+          const words = `${clue.source} ${clue.text}`.toLowerCase();
+          for (const id of clue.about) {
+            const ways = waysOf(view, id);
+            expect(
+              ways.some((w) => words.includes(w)),
+              `${id} (${ways.join(", ")}) in "${words}"`,
+            ).toBe(true);
+          }
+          if (clue.about.length === 0) nobody++;
+          else named++;
+        }
+      }
+    }
+    expect(named).toBeGreaterThan(0);
+    expect(nobody).toBeGreaterThan(0);
   });
 });
