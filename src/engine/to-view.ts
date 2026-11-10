@@ -457,11 +457,13 @@ export function toView(state: State, world: World): PlayerView {
   const actionsLabel = countActions(content, left);
   return structuredClone({
     notebook: {
-      clues: state.clues.map(({ month, source, text }) => ({
+      clues: state.clues.map(({ month, source, text, about }) => ({
         month,
         source,
         text,
+        about,
       })),
+      unread: state.clues.length - state.cluesRead,
       marks: content.characters
         .filter((c) => isMet(state, content, c.id))
         .map((c) => ({

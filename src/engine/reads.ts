@@ -372,6 +372,34 @@ export function namedBy(
   return [...new Set(ids.filter((id) => id !== undefined))];
 }
 
+/**
+ * Everyone written words name, as running text would call them or by name. The
+ * longest words are read first, so that "your boss's boss" is not also "your boss".
+ */
+export function namedIn(
+  state: State,
+  content: Content,
+  words: string,
+): string[] {
+  const ways = content.characters.flatMap((c) =>
+    [calledBy(state, content, c.id), c.name].map((way) => ({ id: c.id, way })),
+  );
+  let left = words.toLowerCase();
+  const named = new Set<string>();
+  for (const { id, way } of ways.sort((a, b) => b.way.length - a.way.length)) {
+    const at = new RegExp(String.raw`\b${escaped(way.toLowerCase())}\b`, "g");
+    const after = left.replace(at, " ");
+    if (after === left) continue;
+    named.add(id);
+    left = after;
+  }
+  return [...named];
+}
+
+function escaped(words: string): string {
+  return words.replace(/[.*+?^${}()|[\]\\]/g, String.raw`\$&`);
+}
+
 /** An action exists in a month only if the Scene it opens does too. */
 export function actionsThisMonth(state: State, content: Content) {
   return content.actions.filter((a) => {

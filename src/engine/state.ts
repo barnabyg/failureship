@@ -187,6 +187,8 @@ interface Clue {
   source: string;
   text: string;
   verdict: ClueVerdict;
+  /** The Characters its words name. Whom it concerns, never whether it is true. */
+  about: string[];
 }
 
 /** How one choice came across to the boss, for the results screen. */
@@ -312,6 +314,8 @@ export interface State extends MonthRecord {
   /** So that a Move does not land twice in a run while others remain. */
   movesLanded: string[];
   clues: Clue[];
+  /** How many clues there were when the player last opened the Notebook. */
+  cluesRead: number;
   /** Who the player suspects of what. Nothing in the rules ever reads this. */
   marks: Record<string, Kind>;
   /** Who the player was last told has each Hidden Fact, true or not. */

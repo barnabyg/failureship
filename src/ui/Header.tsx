@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { panelText } from "../content";
 import type { Buzzword, PlayerView } from "../engine";
+import { notebookLabel } from "./Notebook";
 import { RunControls } from "./RunControls";
 import { StandingBar } from "./StandingBar";
 
@@ -264,7 +265,7 @@ export function Header(props: {
           data-testid="open-notebook"
           onClick={props.onOpenNotebook}
         >
-          {panelText.notebookHeading} ({view.notebook.clues.length})
+          {notebookLabel(view.notebook)}
         </button>
       </RunControls>
     </header>

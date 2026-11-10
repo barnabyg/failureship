@@ -13,6 +13,7 @@ import {
   heardAbout,
   matches,
   moodOf,
+  namedBy,
   offeredOptions,
 } from "./reads";
 import { regardOf } from "./reputation";
@@ -129,12 +130,13 @@ function noteScene(
   shown: readonly ShownBehaviour[],
   misleading: boolean,
 ): void {
-  const note = (text: string, verdict: ClueVerdict) => {
+  const note = (text: string, verdict: ClueVerdict, about: string[]) => {
     state.clues.push({
       month: state.month,
       source: scene.title,
       text,
       verdict,
+      about,
     });
   };
   for (const sign of scene.signs) {
@@ -142,6 +144,7 @@ function noteScene(
       note(
         fillParts(state, content, sign.clue, scene.cast, misleading),
         misleading ? "wrong" : "held",
+        namedBy(state, content, sign.clue, scene.cast, misleading),
       );
     }
   }
@@ -153,6 +156,7 @@ function noteScene(
       note(
         sayPeople(own.clue, { "{who}": calledBy(state, content, character) }),
         "held",
+        [character],
       );
     }
     const written = content.behaviours.find((b) => b.id === behaviour);
@@ -162,6 +166,7 @@ function noteScene(
     note(
       sayPeople(written.clue, { "{who}": calledBy(state, content, character) }),
       written.likelihood[kind] === top ? "held" : "wrong",
+      [character],
     );
   }
 }
