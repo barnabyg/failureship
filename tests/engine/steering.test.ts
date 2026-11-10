@@ -2,75 +2,13 @@ import { readdirSync, readFileSync } from "node:fs";
 import path from "node:path";
 import { describe, expect, it } from "vitest";
 import { gameContent } from "../../src/content";
-import {
-  KINDS,
-  startRun,
-  type Content,
-  type Kind,
-  type PlayerView,
-} from "../../src/engine";
-import type { State } from "../../src/engine/state";
-import { calledBy } from "../../src/engine/say";
+import { KINDS, type PlayerView } from "../../src/engine";
 import { readHiddenTruth } from "../../src/engine/hidden-truth";
 import { writtenMonths } from "../../src/engine/floors";
 import { withoutSeatEvents } from "./fixture";
-import { behavioursIn } from "./scene-view";
-
-/**
- * Walks a whole run, with a pick made from what is on offer at each step. At
- * each Scene it notes whom each Character is called, as things stand.
- */
-function walk(
-  seed: number,
-  pickFrom: (view: PlayerView, turn: number) => PlayerView["choices"][number],
-  content: Content = gameContent,
-) {
-  const run = startRun({ seed, content });
-  const views = [run.view()];
-  const named = new Map<PlayerView, Map<string, string>>();
-  let view = views[0] as PlayerView;
-  for (let turn = 0; view.choices.length > 0; turn++) {
-    view = run.choose(pickFrom(view, turn));
-    views.push(view);
-    if (view.step.kind === "scene") {
-      const { state } = JSON.parse(run.save()) as { state: State };
-      named.set(
-        view,
-        new Map(
-          content.characters.map((c) => [
-            c.id,
-            calledBy(state, content, c.id).toLowerCase(),
-          ]),
-        ),
-      );
-    }
-  }
-  return { run, views, named };
-}
+import { attendsEverything, walk } from "./walk";
 
 const stayingPut = withoutSeatEvents(gameContent);
-
-/** Answers for nothing, so as to keep an action for the meeting room, and goes. */
-function attendsEverything(view: PlayerView, turn: number) {
-  const { step } = view;
-  const free =
-    step.kind === "notification"
-      ? step.options.find((o) => o.costLabel === "Costs nothing")
-      : undefined;
-  if (step.kind === "notification" && free) {
-    return {
-      type: "notification" as const,
-      notificationId: step.id,
-      optionId: free.id,
-    };
-  }
-  const meeting = view.choices.find(
-    (c) => c.type === "action" && c.actionId.startsWith("meeting"),
-  );
-  const choice = meeting ?? view.choices[turn % view.choices.length];
-  if (!choice) throw new Error("No choice.");
-  return choice;
-}
 
 /** Takes this option the first time it is offered, and otherwise picks as given. */
 function takingOnce(
@@ -275,24 +213,8 @@ describe("months that do not feel like one month repeated", () => {
 });
 
 describe("the whole run", () => {
-  it("always says what the player can do, on every seed and pick", () => {
-    for (let seed = 1; seed <= 40; seed++) {
-      const { views } = walk(seed, (view, turn) => {
-        const choice =
-          view.choices[(seed * 7 + turn * 3) % view.choices.length];
-        if (!choice) throw new Error("No choice.");
-        return choice;
-      });
-
-      for (const view of views) {
-        expect(view.hint.trim()).not.toBe("");
-        expect(JSON.stringify(view)).not.toMatch(
-          /\{(holder|ignored|bystander|subject|who|name|fact|source|said)\}/,
-        );
-      }
-      expect(views.at(-1)?.step.kind).toBe("results");
-    }
-  });
+  // Whether it always says what the player can do, on many seeds, is in
+  // tests/balance/steering.test.ts.
 
   it("deals visibly different runs from two seeds", () => {
     const seen = [1, 8].map((seed) => {
@@ -310,104 +232,7 @@ describe("the whole run", () => {
 });
 
 describe("the balance of the deal", () => {
-  // Half the seeds move each average below by under 0.01. Their thin limit is
-  // `perfect`, at 0.36 against 0.40, and that is about the limit and not the count.
-  const SEEDS = Array.from({ length: 200 }, (_, i) => i + 1);
-
-  /** The kind a careful reader would guess from the signs seen in a run. */
-  function readerGuesses(
-    views: readonly PlayerView[],
-    named: ReadonlyMap<PlayerView, ReadonlyMap<string, string>>,
-  ) {
-    const { kinds } = gameContent.hiddenTruth;
-    const total = Object.values(kinds).reduce((sum, k) => sum + k.weight, 0);
-    const belief = new Map<string, Record<Kind, number>>();
-    for (const c of gameContent.characters) {
-      belief.set(c.id, {
-        believer: Math.log(kinds.believer.weight / total),
-        incompetent: Math.log(kinds.incompetent.weight / total),
-        practitioner: Math.log(kinds.practitioner.weight / total),
-      });
-    }
-    for (const view of views) {
-      if (view.step.kind !== "scene") continue;
-      for (const { who: name, text } of behavioursIn(view.step)) {
-        const shownBy = gameContent.characters.find((c) => c.name === name);
-        // Whoever is called this now, which follows a place or a seat's title.
-        const who = named.get(view)?.get(shownBy?.id ?? "") ?? name;
-        const written = gameContent.behaviours.find(
-          (b) =>
-            b.text.replaceAll("{who}", who).toLowerCase() ===
-            text.toLowerCase(),
-        );
-        const held = belief.get(shownBy?.id ?? "");
-        // A whistleblower's own signs say nothing of the kind they were dealt.
-        const whistled = gameContent.changing?.whistleblower.signs.some(
-          (s) =>
-            s.text.replaceAll("{who}", who).toLowerCase() ===
-            text.toLowerCase(),
-        );
-        if (whistled) continue;
-        if (!written || !held) throw new Error(`Unknown sign: ${text}`);
-        const role = shownBy?.role;
-        const open = gameContent.behaviours.filter(
-          (b) => role !== undefined && (b.roles?.includes(role) ?? true),
-        );
-        for (const kind of KINDS) {
-          const sum = open.reduce((all, b) => all + b.likelihood[kind], 0);
-          // A sign that one kind could never show still leaves room for doubt.
-          held[kind] += Math.log(
-            Math.max(written.likelihood[kind], 0.25) / sum,
-          );
-        }
-      }
-    }
-    return belief;
-  }
-
-  /** Over many seeds: how often the reader is right, and how often a guess is. */
-  function accuracy() {
-    let right = 0;
-    let everyoneRight = 0;
-    let people = 0;
-    const counts: Record<Kind, number> = {
-      believer: 0,
-      incompetent: 0,
-      practitioner: 0,
-    };
-    for (const seed of SEEDS) {
-      const { run, views, named } = walk(seed, attendsEverything);
-      const belief = readerGuesses(views, named);
-      const truth = readHiddenTruth(run).characters;
-      let allRight = true;
-      for (const dealt of truth) {
-        const held = belief.get(dealt.id);
-        if (!held) throw new Error("Nobody with that id.");
-        const guess = KINDS.reduce((a, b) => (held[b] > held[a] ? b : a));
-        counts[dealt.kind] += 1;
-        people += 1;
-        if (guess === dealt.kind) right += 1;
-        else allRight = false;
-      }
-      if (allRight) everyoneRight += 1;
-    }
-    return {
-      reading: right / people,
-      guessing: Math.max(...Object.values(counts)) / people,
-      perfect: everyoneRight / SEEDS.length,
-    };
-  }
-
-  // Two hundred runs of eighteen months take most of a minute.
-  it("rewards a careful reader, without ever making them certain", () => {
-    const { reading, guessing, perfect } = accuracy();
-
-    // This reader knows the exact likelihoods, so a person will do worse.
-    expect(reading).toBeGreaterThan(guessing + 0.15);
-    expect(reading).toBeLessThan(0.85);
-    expect(perfect).toBeLessThan(0.4);
-  }, 120_000);
-
+  // How well a careful reader does is in tests/balance/steering.test.ts.
   it("leaves no sign that settles a kind on its own", () => {
     for (const b of gameContent.behaviours) {
       expect(

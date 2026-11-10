@@ -69,32 +69,6 @@ function sceneIdOf(view: PlayerView) {
   return view.step.kind === "scene" ? view.step.id : null;
 }
 
-/** Plays a whole run by a seeded rule, watching for flags and the review. */
-function watchRun(seed: number) {
-  const run = startRun({ seed, content: gameContent });
-  let view = run.view();
-  let flags = 0;
-  let reviews = 0;
-  let walk = seed;
-  let reported = view.project.reported;
-  while (view.step.kind !== "results") {
-    walk = (walk * 31 + 7) % 1009;
-    const choice = view.choices[walk % view.choices.length];
-    if (!choice) throw new Error(`Stuck at ${view.step.kind}.`);
-    view = run.choose(choice);
-    if (view.project.reported === "Red" && reported !== "Red") flags += 1;
-    reported = view.project.reported;
-    if (sceneIdOf(view) === "red-project" && choice.type !== "scene") {
-      reviews += 1;
-    }
-  }
-  // Being fired the month it goes red leaves no time to explain it.
-  const { step } = view;
-  const fired = step.ending.fired;
-  if (fired && reported === "Red" && flags > reviews) flags -= 1;
-  return { flags, reviews };
-}
-
 /** Lies in every report and turns down everything else, so it never goes red. */
 function neverRedRun(run: Run) {
   const scenes: (string | null)[] = [];
@@ -200,15 +174,9 @@ describe("a Project flagged red", () => {
 
 describe("the Project Status Review in the game", () => {
   const review = gameContent.scenes.find((s) => s.id === "red-project");
-  const seeds = Array.from({ length: 80 }, (_, i) => i + 1);
 
-  it("opens if and only if the Project has been flagged red", () => {
-    const runs = seeds.map(watchRun);
-
-    expect(runs.some((r) => r.flags > 0)).toBe(true);
-    expect(runs.some((r) => r.flags === 0)).toBe(true);
-    for (const { flags, reviews } of runs) expect(reviews).toBe(flags);
-  });
+  // Whether it opens if and only if flagged, over many whole runs, is in
+  // tests/balance/red-project.test.ts.
 
   it("belongs to no month, and no action opens it", () => {
     expect(review?.months).toBeUndefined();

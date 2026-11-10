@@ -193,9 +193,10 @@ How to run the checks and tests is in [AGENTS.md](AGENTS.md#verifying).
   separate gate: the project holds no credentials. Review if that changes.
 - The `minimatch` override in `package.json` patches GHSA-g3hv-75wg-m249 in the lint tooling. Remove
   it when `eslint` depends on a patched version itself.
-- In `vite.config.ts`, `test.testTimeout` is raised because some engine tests play hundreds of
-  whole runs, and `build.chunkSizeWarningLimit` because Three.js and the game's text make up the
-  single bundle. Review them if the suite gets much faster or slower, or hosting is ever added.
+- In `vite.config.ts`, `test.testTimeout` is raised because some engine tests play many whole runs,
+  and further for the balance tests, which play hundreds, and `build.chunkSizeWarningLimit` because
+  Three.js and the game's text make up the single bundle. Review them if the suite gets much faster
+  or slower, or hosting is ever added.
 - `.prettierignore` leaves the owner's design records and agent docs unformatted, and skips
   `.claude/settings.local.json` and, with `eslint.config.js`, `.claude/worktrees/`, which are
   untracked and local to one machine. Review this if anything in them comes to be tracked.

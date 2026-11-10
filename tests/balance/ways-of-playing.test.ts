@@ -1,14 +1,7 @@
 import { beforeAll, describe, expect, it } from "vitest";
 import { gameContent } from "../../src/content";
-import type { PlayerView, Run } from "../../src/engine";
-import { plainChoice } from "../../src/ui/later-month";
-import {
-  amoral,
-  clicksAbout,
-  guessesWhomToAsk,
-  knowsThePowerMap,
-  readsTheRoom,
-} from "./players";
+import type { PlayerView } from "../../src/engine";
+import { amoral, clicksAbout } from "../engine/players";
 import {
   CLEAN,
   FAKED,
@@ -20,7 +13,7 @@ import {
   REPORT,
   climb,
   type Otherwise,
-} from "./real-runs";
+} from "../engine/real-runs";
 
 /**
  * The balance of the whole climb, played through the real game, Company
@@ -174,118 +167,91 @@ const rate = (name: StyleName, of: keyof Omit<Tally, "runs">) => {
   return tally ? tally[of] / tally.runs : NaN;
 };
 
-// Eight ways of playing a hundred deals take most of a minute.
-describe("ways of playing the whole climb", { timeout: 180_000 }, () => {
-  beforeAll(() => {
-    for (const [name, style] of Object.entries(STYLES)) {
-      for (const seed of SEEDS) play(seed, name as StyleName, style);
-    }
-  }, 180_000);
+const played = new Set<StyleName>();
 
-  // Of these 100 deals, the planner wins 30, honest play 12 and faking every
-  // Plan 11, getting rid of bosses 3 and getting rid of every boss 2. They
-  // know every option, so a person will likely win less.
-  it("reaches the win by at least two different ways of playing, and less often for show", () => {
-    expect(rate("planner", "won")).toBeGreaterThanOrEqual(0.15);
-    expect(rate("honest", "won")).toBeGreaterThanOrEqual(0.05);
-    expect(rate("forShow", "won")).toBeGreaterThan(0);
-    expect(rate("forShow", "won")).toBeLessThan(rate("planner", "won"));
-    expect(rate("ridder", "won") + rate("engineer", "won")).toBeGreaterThan(0);
-  });
-
-  // Of these 100 deals, the amoral climber wins 1 and is fired on 89.
-  it("does not take a climber who makes the amoral choice each time to the top", () => {
-    expect(rate("amoral", "won")).toBeLessThan(rate("honest", "won") / 2);
-    expect(rate("amoral", "won")).toBeLessThan(rate("planner", "won") / 4);
-    expect(rate("amoral", "fired")).toBeGreaterThan(0.5);
-  });
-
-  // Plain play never wins on these deals, which is a finding for the owner and
-  // not a rule: what should hold is that a climber does better.
-  it("does not fire a player who only plays plainly, nor take them as far as a climber", () => {
-    expect(rate("plain", "fired")).toBe(0);
-    expect(rate("plain", "won")).toBeLessThan(rate("planner", "won"));
-    expect(rate("plain", "won")).toBeLessThan(rate("honest", "won"));
-    expect(rate("plain", "passedOver")).toBeGreaterThan(0);
-  });
-
-  // Doing the Plans, for real or for show, never demotes or fires on these 100
-  // deals. Getting rid of bosses is traced, and demotes on 9, or 20 for
-  // getting rid of every boss.
-  it("demotes the players who get rid of their bosses, and rarely fires those who do the Plans", () => {
-    for (const careful of ["planner", "honest", "forShow"] as const) {
-      expect(rate(careful, "fired")).toBeLessThanOrEqual(0.02);
-      expect(rate(careful, "demoted")).toBeLessThan(rate("ridder", "demoted"));
-    }
-    expect(rate("engineer", "demoted")).toBeGreaterThan(0.05);
-    for (const name of Object.keys(STYLES) as StyleName[]) {
-      if (name !== "plain")
-        expect(rate(name, "passedOver"), name).toBeGreaterThan(0);
-    }
-  });
-
-  it("gives a hint and finished text at every step, on every floor, of every run", () => {
-    expect(problems.filter((p) => !p.endsWith("no real choice"))).toEqual([]);
-    // Every step there is a hint for, from a Notification to the win.
-    expect([...kindsSeen].sort()).toEqual(
-      Object.keys(gameContent.ui.hints).sort(),
-    );
-  });
-
-  it("leaves a real choice about an action in every month, on every floor, and after a demotion", () => {
-    expect(problems.filter((p) => p.endsWith("no real choice"))).toEqual([]);
-    for (const { job } of gameContent.floors) {
-      expect(monthsOn.get(job) ?? 0, job).toBeGreaterThan(100);
-    }
-    expect(monthsAfterADemotion).toBeGreaterThan(50);
-  });
-});
-
-/** Seats won, of those the player stood for, and runs won, by how they pick whom to ask. */
-function asking(
-  pick: (seed: number) => {
-    otherwise: Otherwise;
-    watch?: (view: PlayerView, run: Run) => void;
-  },
-) {
-  let won = 0;
-  let stood = 0;
-  let runsWon = 0;
-  for (const seed of SEEDS) {
-    const { truth, views } = climb(
-      seed,
-      CLEAN,
-      FOR_REAL,
-      gameContent,
-      pick(seed),
-    );
-    const decided = truth.vacancies.filter((v) =>
-      v.decided?.candidates.some((c) => c.who === "you"),
-    );
-    stood += decided.length;
-    won += decided.filter((v) => v.decided?.winner === "you").length;
-    const end = views.at(-1)?.step;
-    if (end?.kind === "results" && end.ending.won) runsWon += 1;
-  }
-  return { seats: won / stood, runsWon };
+/** Plays a hundred deals in this way, once. */
+function playStyle(name: StyleName) {
+  if (played.has(name)) return;
+  for (const seed of SEEDS) play(seed, name, STYLES[name]);
+  played.add(name);
 }
 
-// Whoever really holds influence over a seat decides it, and a word with
-// them, or with someone they listen to, counts. So the climb still pays a
-// player who reads people. Of these 100 deals: 73.0% of seats for whoever
-// knows the Power Map, 71.8% for a reader of the room, 66.5% for a guess, and
-// 56.3% for leaving it to the process; and 48, 44, 36 and 24 runs won. The
-// deals are fixed, so the narrow lead of knowing over reading cannot flake.
-describe("reading people on the way up", { timeout: 120_000 }, () => {
-  it("wins more seats for a careful reader of the room than for a guess", () => {
-    const leaving = asking(() => ({ otherwise: plainChoice }));
-    const guessing = asking((seed) => ({ otherwise: guessesWhomToAsk(seed) }));
-    const reading = asking(() => readsTheRoom());
-    const knowing = asking(() => ({ otherwise: knowsThePowerMap }));
+const NAMES = Object.keys(STYLES) as StyleName[];
 
-    expect(reading.seats).toBeGreaterThan(guessing.seats);
-    expect(reading.runsWon).toBeGreaterThan(guessing.runsWon);
-    expect(guessing.seats).toBeGreaterThan(leaving.seats);
-    expect(knowing.seats).toBeGreaterThanOrEqual(reading.seats);
-  }, 120_000);
+// Each way of playing is its own test, so that none runs long. The tests after
+// read them all, and play any not yet played.
+describe("ways of playing the whole climb", { timeout: 60_000 }, () => {
+  it.each(NAMES)("plays a hundred deals to the end: %s", (name) => {
+    playStyle(name);
+
+    expect(survey.get(name)?.runs).toBe(SEEDS.length);
+  });
+
+  describe("taken together", () => {
+    beforeAll(() => {
+      for (const name of NAMES) playStyle(name);
+    }, 300_000);
+
+    // Of these 100 deals, the planner wins 30, honest play 12 and faking every
+    // Plan 11, getting rid of bosses 3 and getting rid of every boss 2. They
+    // know every option, so a person will likely win less.
+    it("reaches the win by at least two different ways of playing, and less often for show", () => {
+      expect(rate("planner", "won")).toBeGreaterThanOrEqual(0.15);
+      expect(rate("honest", "won")).toBeGreaterThanOrEqual(0.05);
+      expect(rate("forShow", "won")).toBeGreaterThan(0);
+      expect(rate("forShow", "won")).toBeLessThan(rate("planner", "won"));
+      expect(rate("ridder", "won") + rate("engineer", "won")).toBeGreaterThan(
+        0,
+      );
+    });
+
+    // Of these 100 deals, the amoral climber wins 1 and is fired on 89.
+    it("does not take a climber who makes the amoral choice each time to the top", () => {
+      expect(rate("amoral", "won")).toBeLessThan(rate("honest", "won") / 2);
+      expect(rate("amoral", "won")).toBeLessThan(rate("planner", "won") / 4);
+      expect(rate("amoral", "fired")).toBeGreaterThan(0.5);
+    });
+
+    // Plain play never wins on these deals, which is a finding for the owner and
+    // not a rule: what should hold is that a climber does better.
+    it("does not fire a player who only plays plainly, nor take them as far as a climber", () => {
+      expect(rate("plain", "fired")).toBe(0);
+      expect(rate("plain", "won")).toBeLessThan(rate("planner", "won"));
+      expect(rate("plain", "won")).toBeLessThan(rate("honest", "won"));
+      expect(rate("plain", "passedOver")).toBeGreaterThan(0);
+    });
+
+    // Doing the Plans, for real or for show, never demotes or fires on these 100
+    // deals. Getting rid of bosses is traced, and demotes on 9, or 20 for
+    // getting rid of every boss.
+    it("demotes the players who get rid of their bosses, and rarely fires those who do the Plans", () => {
+      for (const careful of ["planner", "honest", "forShow"] as const) {
+        expect(rate(careful, "fired")).toBeLessThanOrEqual(0.02);
+        expect(rate(careful, "demoted")).toBeLessThan(
+          rate("ridder", "demoted"),
+        );
+      }
+      expect(rate("engineer", "demoted")).toBeGreaterThan(0.05);
+      for (const name of NAMES) {
+        if (name !== "plain")
+          expect(rate(name, "passedOver"), name).toBeGreaterThan(0);
+      }
+    });
+
+    it("gives a hint and finished text at every step, on every floor, of every run", () => {
+      expect(problems.filter((p) => !p.endsWith("no real choice"))).toEqual([]);
+      // Every step there is a hint for, from a Notification to the win.
+      expect([...kindsSeen].sort()).toEqual(
+        Object.keys(gameContent.ui.hints).sort(),
+      );
+    });
+
+    it("leaves a real choice about an action in every month, on every floor, and after a demotion", () => {
+      expect(problems.filter((p) => p.endsWith("no real choice"))).toEqual([]);
+      for (const { job } of gameContent.floors) {
+        expect(monthsOn.get(job) ?? 0, job).toBeGreaterThan(100);
+      }
+      expect(monthsAfterADemotion).toBeGreaterThan(50);
+    });
+  });
 });
