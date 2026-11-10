@@ -199,14 +199,21 @@ export function App() {
           setWordOpen(true);
         }}
       />
-      <aside className="next" aria-live="polite">
-        {view.step.kind !== "results" && (
+      {/* The goal in full in month 1, and after that only in the tooltip. */}
+      <aside
+        className="next"
+        aria-live="polite"
+        title={view.step.kind === "results" ? undefined : panelText.goal}
+      >
+        {view.month === 1 && view.step.kind !== "results" && (
           <p className="goal" data-testid="goal">
             {panelText.goal}
           </p>
         )}
-        <h2>{panelText.whatNext}</h2>
-        <p data-testid="hint">{view.hint}</p>
+        <div className="next-line">
+          <h2>{panelText.whatNext}</h2>
+          <p data-testid="hint">{view.hint}</p>
+        </div>
       </aside>
       <StepPanel view={view} onChoose={choose} />
       <div className="too-narrow" role="alert" data-testid="too-narrow">

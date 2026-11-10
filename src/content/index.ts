@@ -145,6 +145,7 @@ const panelSchema = z.strictObject(
       "projectReportedLabel",
       "openDemandsHeading",
       "grandPlanHeading",
+      "grandPlanShortLabel",
       "powerMapHeading",
       "closeLabel",
       "standingHeading",

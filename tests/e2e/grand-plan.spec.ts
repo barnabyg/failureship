@@ -15,11 +15,11 @@ test("hear of your boss's Grand Plan, and complete it", async ({ page }) => {
   await expect(page.getByTestId("panel-scene")).toContainText(
     "Item two is your boss's Grand Plan",
   );
-  await expect(card).toContainText("One tool for everything");
+  await expect(card).toHaveAttribute("title", /One tool for everything/);
   await expect(card).toContainText("To be done by the end of month 6");
 
   await freshRun(page, "/?seed=1&month=4");
-  await expect(card).toContainText("One tool for everything");
+  await expect(card).toHaveAttribute("title", /One tool for everything/);
   await playUntil(page, "option-fake");
   await page.getByTestId("option-fake").click();
   await expect(page.getByTestId("panel-notice")).toContainText(
