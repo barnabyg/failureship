@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { gameContent } from "../../src/content";
-import type { StepView } from "../../src/engine";
+import { startRun, type StepView } from "../../src/engine";
+import { plainChoice } from "../../src/ui/later-month";
 import { playAll } from "./real-runs";
 
 type Story = Extract<StepView, { kind: "story" }>;
@@ -60,12 +61,68 @@ describe("the official story", () => {
   });
 
   it.each(SEEDS)(
-    "keeps the pairs in the order things are told in the month: seed %i",
+    "opens with the month's own line, when the month has one: seed %i",
     (seed) => {
+      const opening = new Set(
+        gameContent.officialStory.entries
+          .filter((e) => e.when === undefined)
+          .map((e) => e.reported),
+      );
       for (const story of storiesOf(seed)) {
-        const order = story.pairs.map(sourceOf);
-        expect(order).toEqual([...order].sort((a, b) => a - b));
+        const lines = story.pairs.map((p) => p.reported);
+        const first = lines.findIndex((line) => opening.has(line));
+        if (first >= 0) expect(first).toBe(0);
       }
     },
   );
+});
+
+describe("the official story's order", () => {
+  const lineFor = (flag: string) => {
+    const entry = gameContent.officialStory.entries.find(
+      (e) => e.when !== undefined && "flag" in e.when && e.when.flag === flag,
+    );
+    if (!entry?.happened) throw new Error(`No real line for ${flag}.`);
+    return entry.happened;
+  };
+
+  /** Seed 1's first month, taking the two actions left in the order given. */
+  function firstStory(order: readonly string[]) {
+    const run = startRun({ seed: 1, content: gameContent });
+    let view = run.view();
+    const todo = [...order];
+    while (view.step.kind !== "story") {
+      const wanted = todo[0];
+      const action = view.choices.find(
+        (c) => c.type === "action" && c.actionId === wanted,
+      );
+      if (action) todo.shift();
+      view = run.choose(action ?? plainChoice(view));
+    }
+    expect(todo).toEqual([]);
+    return view.step.pairs.map((p) => p.happened ?? p.reported);
+  }
+
+  it("tells things in the order they happened in the month, not as written", () => {
+    const tea = lineFor("had-tea");
+    const work = lineFor("did-work");
+    // As written, tea comes before work.
+    const written = gameContent.officialStory.entries.map((e) => e.happened);
+    expect(written.indexOf(tea)).toBeLessThan(written.indexOf(work));
+
+    const workFirst = firstStory(["work", "kitchen"]);
+    expect(workFirst.indexOf(work)).toBeGreaterThanOrEqual(0);
+    expect(workFirst.indexOf(work)).toBeLessThan(workFirst.indexOf(tea));
+
+    const teaFirst = firstStory(["kitchen", "work"]);
+    expect(teaFirst.indexOf(tea)).toBeLessThan(teaFirst.indexOf(work));
+  });
+
+  it("opens with the month's own line, before anything the player did", () => {
+    const story = firstStory(["work", "kitchen"]);
+    const opening = gameContent.officialStory.entries.find(
+      (e) => e.when === undefined && e.months?.includes(1),
+    );
+    expect(story[0]).toBe(opening?.reported);
+  });
 });

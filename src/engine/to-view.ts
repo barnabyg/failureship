@@ -2,6 +2,7 @@ import {
   everyBill,
   everyDemand,
   everyNotification,
+  type Condition,
   type Content,
 } from "./content";
 import {
@@ -223,6 +224,27 @@ function inRowOrder(
   ].filter((id) => room.includes(id));
 }
 
+/** The flags a condition needs to be set, leaving out any it needs unset. */
+function flagsNamed(condition: Condition): string[] {
+  if ("flag" in condition) return [condition.flag];
+  if ("all" in condition) return condition.all.flatMap(flagsNamed);
+  if ("any" in condition) return condition.any.flatMap(flagsNamed);
+  return [];
+}
+
+/**
+ * When in the month a thing told happened: as its first flag was set. The
+ * month's own line comes first, and anything with no flag of its own, such as
+ * a meeting missed, last, as the month closes.
+ */
+function whenInMonth(state: State, flags: readonly string[] | null): number {
+  if (flags === null) return -1;
+  const set = flags
+    .map((flag) => state.flags.indexOf(flag))
+    .filter((at) => at >= 0);
+  return set.length === 0 ? state.flags.length : Math.min(...set);
+}
+
 function toStoryView(
   state: State,
   content: Content,
@@ -237,18 +259,28 @@ function toStoryView(
   // Each Company Event of the month, in the story's own words for it.
   const events = state.eventsLanded
     .filter((landed) => landed.month === state.month)
-    .flatMap(({ id }) => content.events.filter((e) => e.id === id))
-    .map((e) => e.story);
+    .flatMap(({ id }) => content.events.filter((e) => e.id === id));
+  const things = [
+    ...events.map((e) => ({ story: e.story, flags: e.sets ?? [] })),
+    ...told.map((e) => ({
+      story: e,
+      // The month's own line, with nothing the player did behind it, opens.
+      flags: e.when === undefined ? null : flagsNamed(e.when),
+    })),
+  ];
   return {
     kind: "story",
     title: title.replaceAll("{job}", floorNow(state, content).title),
     reportedHeading,
     happenedHeading,
     // Both lines of a pair come from the same written thing, never matched up later.
-    pairs: [...events, ...told].map((e) => ({
-      reported: fill(e.reported),
-      happened: fill(e.happened),
-    })),
+    pairs: things
+      .map((thing) => ({ ...thing, at: whenInMonth(state, thing.flags) }))
+      .sort((a, b) => a.at - b.at)
+      .map(({ story }) => ({
+        reported: fill(story.reported),
+        happened: fill(story.happened),
+      })),
     gauges: gaugesThisMonth(state, content),
   };
 }

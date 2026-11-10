@@ -579,8 +579,12 @@ have `when`, `floor` and `months`.
 
 The newsletter sets an entry's `reported` and `happened` side by side on one row, as does a
 [Company Event](#eventsjson)'s `story`, so both are about the same thing. A side left out shows
-as a gap: a report with nothing behind it, or something nobody reported. The month's Company
-Events come first, then the entries told, in the order they are written here.
+as a gap: a report with nothing behind it, or something nobody reported.
+
+The rows go in the order things happened in the month. An entry with no `when` is the month's own
+line, and opens it. Any other comes when the first flag its `when` needs was set, and a Company
+Event when the first flag it `sets` was. One with no such flag set, such as a meeting missed,
+comes last, as the month closes. Entries that tie keep the order they are written here.
 
 ## `over-head.json`
 
