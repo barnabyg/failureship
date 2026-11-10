@@ -56,7 +56,7 @@ describe("the meeting Scene", () => {
       openMeeting(startRun({ seed: 1, content: sceneFixture() })),
     );
 
-    expect(scene.cast).toEqual([
+    expect(scene.people.map(({ name, title }) => ({ name, title }))).toEqual([
       { name: "Ana Abel", title: "Boss" },
       { name: "Ben Bird", title: "Analyst" },
       { name: "Cal Cope", title: "Clerk" },
@@ -64,23 +64,29 @@ describe("the meeting Scene", () => {
   });
 
   it.each(["ana", "ben", "cal"])(
-    "shows signs that match the hidden truth when %s holds influence",
+    "shows signs that match the hidden truth when %s holds influence, each one that names only one person in their row",
     (holder) => {
       const run = runWhereHolderIs(holder);
       const ignored = readHiddenTruth(run).powerMap.order.at(-1) ?? "";
       const name = (id: string) => NAMES[id] ?? id;
 
-      const { signs } = sceneOf(openMeeting(run));
+      const { signs, people } = sceneOf(openMeeting(run));
+      const signsOf = (id: string) =>
+        people.find((p) => p.name === name(id))?.signs;
 
       expect(signs).toEqual([
         {
           label: "Who interrupts whom",
           text: `${name(holder)} talks over ${name(ignored)}.`,
         },
+      ]);
+      expect(signsOf(holder)).toEqual([
         {
           label: "Who everyone looks at",
           text: `Everyone glances at ${name(holder)} before answering.`,
         },
+      ]);
+      expect(signsOf(ignored)).toEqual([
         {
           label: "Who gets ignored",
           text: `Nobody responds to ${name(ignored)}.`,
@@ -111,7 +117,8 @@ describe("the meeting Scene", () => {
   it("lays out the room the same way whoever holds influence", () => {
     const shape = (holder: string) => {
       const scene = sceneOf(openMeeting(runWhereHolderIs(holder)));
-      return { cast: scene.cast, options: scene.options };
+      const cast = scene.people.map(({ name, title }) => ({ name, title }));
+      return { cast, options: scene.options };
     };
 
     expect(shape("ana")).toEqual(shape("ben"));
@@ -178,7 +185,9 @@ describe("the meeting Scene", () => {
 
     const step = sceneOf(openMeeting(run));
 
-    expect(step.signs[0]?.label).toBe("New sign");
+    expect(step.people.flatMap((p) => p.signs)).toEqual([
+      expect.objectContaining({ label: "New sign" }),
+    ]);
     expect(step.options).toEqual([
       { id: "new-option", label: "A new way to behave" },
     ]);
@@ -266,6 +275,98 @@ describe("the meeting Scene", () => {
     breakIt(scene);
 
     expect(() => parseContent(raw)).toThrow(message);
+  });
+});
+
+describe("the room, by person", () => {
+  /** A boss's boss, Dee, and someone under her listed before the boss. */
+  function chartedRaw() {
+    const raw = sceneFixtureRaw();
+    raw.characters = [
+      { id: "cal", name: "Cal Cope", title: "Clerk", reportsTo: "ana" },
+      { id: "eve", name: "Eve Ely", title: "Auditor", reportsTo: "dee" },
+      { id: "ben", name: "Ben Bird", title: "Analyst", reportsTo: "ana" },
+      { id: "ana", name: "Ana Abel", title: "Boss", reportsTo: "dee" },
+      { id: "dee", name: "Dee Dunn", title: "Director" },
+    ];
+    raw.hiddenTruth.charactersWithFact = 3;
+    const scene = raw.scenes[0];
+    if (!scene) throw new Error("The fixture has no Scene.");
+    scene.cast = ["cal", "eve", "ben", "ana", "dee"];
+    return raw;
+  }
+
+  it("gives one row to each Character present, the bosses first and then the Org Chart's order", () => {
+    const run = startRun({ seed: 1, content: parseContent(chartedRaw()) });
+
+    const { people } = sceneOf(openMeeting(run));
+
+    expect(people.map((p) => p.name)).toEqual([
+      "Dee Dunn",
+      "Ana Abel",
+      "Eve Ely",
+      "Cal Cope",
+      "Ben Bird",
+    ]);
+  });
+
+  it("puts what each Character did in that Character's row", () => {
+    const raw = sceneFixtureRaw();
+    raw.behaviours = [
+      {
+        id: "late",
+        text: "{who} is late.",
+        likelihood: { believer: 1, incompetent: 3, practitioner: 1 },
+      },
+      {
+        id: "kind",
+        text: "{who} is kind.",
+        likelihood: { believer: 3, incompetent: 1, practitioner: 1 },
+      },
+    ] as typeof raw.behaviours;
+    const run = startRun({ seed: 1, content: parseContent(raw) });
+
+    const { people } = sceneOf(openMeeting(run));
+
+    expect(people).toHaveLength(3);
+    for (const { name, behaviour } of people) {
+      expect([`${name} is late.`, `${name} is kind.`]).toContain(behaviour);
+    }
+  });
+
+  it("puts how the boss and everyone else are with you in their own rows", () => {
+    // Every sign says the same, so whichever is drawn reads the same.
+    const sign = (text: string, plain?: boolean) =>
+      [
+        { id: "warm", likelihood: { warm: 2, neutral: 1, cold: 0 } },
+        { id: "cold", likelihood: { warm: 0, neutral: 1, cold: 2 } },
+        { id: "flat", likelihood: { warm: 1, neutral: 2, cold: 1 } },
+      ].map((s) => ({ ...s, text, ...(plain === undefined ? {} : { plain }) }));
+    const raw = {
+      ...sceneFixtureRaw(),
+      reputation: {
+        travel: {
+          hopsPerMonth: 1,
+          maxHops: 1,
+          passOnChance: 1,
+          shift: { good: 1, bad: -1 },
+        },
+        mood: { warmAt: 1, coldAt: -1 },
+        signs: sign("{who} looks up.", true),
+        believes: { warm: "W", neutral: "N", cold: "C" },
+        how: { direct: "D", heardFrom: "H {who}" },
+      },
+    };
+    raw.boss.signs = sign("Your boss waves.");
+    const run = startRun({ seed: 1, content: parseContent(raw) });
+
+    const { people } = sceneOf(openMeeting(run));
+
+    expect(people.map((p) => p.withYou)).toEqual([
+      { text: "Your boss waves.", plain: false },
+      { text: "Ben Bird looks up.", plain: true },
+      { text: "Cal Cope looks up.", plain: true },
+    ]);
   });
 });
 

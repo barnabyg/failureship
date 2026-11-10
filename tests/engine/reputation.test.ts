@@ -10,6 +10,7 @@ import {
 } from "../../src/engine";
 import { readHiddenTruth, type PowerMap } from "../../src/engine/hidden-truth";
 import { fixtureRaw, floorOwn } from "./fixture";
+import { regardIn } from "./scene-view";
 
 const sign = (id: string, warm: number, neutral: number, cold: number) => ({
   id,
@@ -278,7 +279,7 @@ describe("what the player sees", () => {
       "do-it",
     );
     const seen = views.flatMap((v) =>
-      v.step.kind === "scene" ? [v.step.regard] : [],
+      v.step.kind === "scene" ? [regardIn(v.step)] : [],
     );
 
     expect(seen.length).toBeGreaterThan(0);
@@ -292,7 +293,7 @@ describe("what the player sees", () => {
       scenesOf(startRun({ seed, content: withScene() }), optionId).flatMap(
         (v) =>
           v.step.kind === "scene"
-            ? v.step.regard
+            ? regardIn(v.step)
                 .filter((r) => r.who === "Ben Bird")
                 .map((r) => r.text)
             : [],
@@ -339,7 +340,15 @@ describe("what the player sees", () => {
         .filter((v) => v.step.kind !== "results")
         .map((v) =>
           v.step.kind === "scene"
-            ? { ...v, step: { ...v.step, regard: [] } }
+            ? {
+                ...v,
+                step: {
+                  ...v.step,
+                  people: v.step.people.map((p) =>
+                    p.place === null ? { ...p, withYou: null } : p,
+                  ),
+                },
+              }
             : v,
         );
 
@@ -463,6 +472,6 @@ describe("the real content", () => {
       );
     }
 
-    expect(view.step.regard.length).toBe(4);
+    expect(regardIn(view.step).length).toBe(4);
   });
 });

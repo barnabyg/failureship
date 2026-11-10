@@ -12,6 +12,7 @@ import {
 import { readHiddenTruth } from "../../src/engine/hidden-truth";
 import { plainChoice } from "../../src/ui/later-month";
 import { sceneFixtureRaw, floorOwn } from "./fixture";
+import { behavioursIn } from "./scene-view";
 
 const SEEDS = Array.from({ length: 200 }, (_, i) => i);
 const WIDE = Array.from({ length: 2000 }, (_, i) => i);
@@ -215,7 +216,7 @@ describe("a Believer burned repeatedly", () => {
     const views = playOut(run);
     const shown = (view: PlayerView) =>
       view.step.kind === "scene"
-        ? view.step.behaviours.find((b) => b.who === "Ben Bird")?.text
+        ? behavioursIn(view.step).find((b) => b.who === "Ben Bird")?.text
         : undefined;
     const later = views
       .filter((v) => v.month > 1)
@@ -237,7 +238,7 @@ describe("a Believer burned repeatedly", () => {
       run.choose(burnAll);
       for (const view of playOut(run).filter((v) => v.month > 2)) {
         if (view.step.kind !== "scene") continue;
-        const text = view.step.behaviours.find(
+        const text = behavioursIn(view.step).find(
           (b) => b.who === "Ben Bird",
         )?.text;
         shown += 1;

@@ -120,6 +120,30 @@ export function headOf(state: State, content: Content): string | undefined {
   return bossesOf(state, content).head;
 }
 
+/**
+ * Everyone on the Org Chart as it is drawn now, top down: each person, then
+ * whoever answers to them, in the order the Characters are written.
+ */
+export function inChartOrder(state: State, content: Content): string[] {
+  const everyone = [...content.characters.map((c) => c.id), YOU];
+  const known = new Set(everyone);
+  const placed = new Set<string>();
+  const under = (above: string | undefined): string[] =>
+    everyone
+      .filter((id) => {
+        const manager = managerOf(state, content, id);
+        return above === undefined
+          ? manager === undefined || !known.has(manager)
+          : manager === above;
+      })
+      .flatMap((id) => {
+        if (placed.has(id)) return [];
+        placed.add(id);
+        return [id, ...under(id)];
+      });
+  return under(undefined);
+}
+
 /** Which place someone is in, among these bosses, if any. */
 export function placeAmong(bosses: Bosses, id: string): Place | undefined {
   if (id === bosses.boss) return "boss";

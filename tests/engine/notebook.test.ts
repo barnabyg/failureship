@@ -11,6 +11,7 @@ import {
 } from "../../src/engine";
 import { readHiddenTruth } from "../../src/engine/hidden-truth";
 import { action, sceneFixtureRaw } from "./fixture";
+import { behavioursIn } from "./scene-view";
 
 function notebookFixtureRaw() {
   const raw = sceneFixtureRaw();
@@ -108,7 +109,7 @@ describe("the Notebook's clues", () => {
       const run = startRun({ seed, content: content() });
       const view = run.choose({ type: "action", actionId: "meeting" });
       if (view.step.kind !== "scene") throw new Error(view.step.kind);
-      const shownClues = view.step.behaviours.filter(
+      const shownClues = behavioursIn(view.step).filter(
         (b) => !b.text.includes("quiet"),
       ).length;
 

@@ -11,6 +11,7 @@ import {
 } from "../../src/engine";
 import { readHiddenTruth } from "../../src/engine/hidden-truth";
 import { plainChoice, playToMonth } from "../../src/ui/later-month";
+import { everySign } from "./scene-view";
 
 const SEEDS = Array.from({ length: 300 }, (_, i) => i + 1);
 const DONE = "Your boss's Grand Plan: done";
@@ -151,7 +152,7 @@ describe("the game's Grand Plans", { timeout: 60_000 }, () => {
       const called = gameContent.characters.find(
         (c) => c.id === keeper,
       )?.called;
-      const sign = meeting.step.signs.find(
+      const sign = everySign(meeting.step).find(
         (s) => s.label === "Who has the figures",
       );
 

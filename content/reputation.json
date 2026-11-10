@@ -34,6 +34,7 @@
     {
       "id": "nods-hello",
       "text": "{who} nods when you come in, then goes back to their screen.",
+      "plain": true,
       "likelihood": {
         "warm": 2,
         "neutral": 6,
@@ -43,6 +44,7 @@
     {
       "id": "reads-their-pad",
       "text": "{who} is reading their own notepad, closely, as they do with everyone.",
+      "plain": true,
       "likelihood": {
         "warm": 1,
         "neutral": 6,

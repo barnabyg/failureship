@@ -34,6 +34,8 @@ const bossApproach = z.strictObject({
 const bossSign = z.strictObject({
   id,
   text,
+  /** It says nothing of note, such as a nod hello, so a Scene shows it dimmed. */
+  plain: z.boolean().default(false),
   /** How likely each mood is to show this, relative to its other signs. */
   likelihood: z.strictObject({
     warm: z.number().nonnegative(),

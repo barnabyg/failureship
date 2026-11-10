@@ -12,6 +12,7 @@ import { castDealtFirst } from "../../src/engine/deal";
 import { bossesAtStart, meantBy } from "../../src/engine/places";
 import { readHiddenTruth } from "../../src/engine/hidden-truth";
 import { plainChoice, playToMonth } from "../../src/ui/later-month";
+import { behavioursIn } from "./scene-view";
 
 const SEEDS = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
 
@@ -360,7 +361,7 @@ describe("the real month", () => {
     };
     const firstSign = (seed: number) => meeting(seed).signs[0]?.text;
     const meetingSigns = (seed: number) =>
-      meeting(seed).behaviours.map((b) => b.text);
+      behavioursIn(meeting(seed)).map((b) => b.text);
 
     expect(holderInMeeting(283)).toBe("boss");
     expect(holderInMeeting(106)).toBe("analyst");

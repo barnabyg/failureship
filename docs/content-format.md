@@ -663,6 +663,9 @@ whom it was done in front of, or to. They know at once. A `falseStory` is news t
   [`balance.json`](#balancejson) and [`over-head.json`](#over-headjson).
 - `signs` show how everyone else present in a Scene is with the player. Each says `{who}`, and
   must be possible from at least two of `warm`, `neutral` and `cold`, so that no sign settles it.
+  `"plain": true` marks one that says nothing of note, such as a nod hello, and the Scene shows
+  it dimmed. The signs in [`boss.json`](#bossjson) and [`over-head.json`](#over-headjson) can
+  carry it too.
 - `believes` and `how` are the results screen's words. `how.heardFrom` says `{who}`.
 - `falseStories` says how a false story is found out. As each month opens, before news moves, each
   person who heard one in an earlier month sees through it at the seeded chance in `foundOut` for
@@ -740,6 +743,11 @@ meeting has everyone in it. `{plan}` and `{keeper}` say your boss's [Grand Plan]
 and who really has what it needs.
 
 - A sign can have a `clue`, for the Notebook.
+- The Scene shows one row to each person present, your boss's boss and your boss first and then
+  the Org Chart's order. A sign whose text names only one person present, by `{holder}`,
+  `{ignored}`, `{bystander}`, `{keeper}` or `{competitor}`, goes in their row. One that names two
+  or more, or nobody present, goes above the rows, headed by its `label`, so write `label` as
+  the question the sign answers, such as "Who everyone looks at".
 - An option's `requires` hides it until that holds. See [Conditions](#conditions).
 - An option with `"about": "lost-list"` appears once the player has been told that Hidden Fact
   about someone, true or not, and can say `{subject}` for that person.

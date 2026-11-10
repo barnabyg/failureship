@@ -14,6 +14,7 @@ import { calledBy } from "../../src/engine/say";
 import { readHiddenTruth } from "../../src/engine/hidden-truth";
 import { writtenMonths } from "../../src/engine/floors";
 import { withoutSeatEvents } from "./fixture";
+import { behavioursIn } from "./scene-view";
 
 /**
  * Walks a whole run, with a pick made from what is on offer at each step. At
@@ -37,8 +38,8 @@ function walk(
         view,
         new Map(
           content.characters.map((c) => [
-            calledBy(state, content, c.id).toLowerCase(),
             c.id,
+            calledBy(state, content, c.id).toLowerCase(),
           ]),
         ),
       );
@@ -330,15 +331,15 @@ describe("the balance of the deal", () => {
     }
     for (const view of views) {
       if (view.step.kind !== "scene") continue;
-      for (const { who, text } of view.step.behaviours) {
+      for (const { who: name, text } of behavioursIn(view.step)) {
+        const shownBy = gameContent.characters.find((c) => c.name === name);
+        // Whoever is called this now, which follows a place or a seat's title.
+        const who = named.get(view)?.get(shownBy?.id ?? "") ?? name;
         const written = gameContent.behaviours.find(
           (b) =>
             b.text.replaceAll("{who}", who).toLowerCase() ===
             text.toLowerCase(),
         );
-        // Whoever is called this now, which follows a place or a seat's title.
-        const id = named.get(view)?.get(who.toLowerCase());
-        const shownBy = gameContent.characters.find((c) => c.id === id);
         const held = belief.get(shownBy?.id ?? "");
         // A whistleblower's own signs say nothing of the kind they were dealt.
         const whistled = gameContent.changing?.whistleblower.signs.some(

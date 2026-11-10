@@ -8,6 +8,7 @@ import {
   type PlayerView,
 } from "../../src/engine";
 import { plainChoice } from "../../src/ui/later-month";
+import { treatmentOf } from "./scene-view";
 
 /*
  * Whole runs of the real game, played by script on several seeds, and what the
@@ -153,11 +154,11 @@ describe("the player views of whole scripted runs", () => {
       ends.some((step) => step?.kind === "results" && step.ending.fired),
     ).toBe(true);
     expect(
-      steps.some((step) => step.kind === "scene" && step.treatment !== null),
+      steps.some((step) => step.kind === "scene" && treatmentOf(step) !== null),
     ).toBe(true);
     expect(
       steps.some(
-        (step) => step.kind === "scene" && step.headTreatment !== null,
+        (step) => step.kind === "scene" && treatmentOf(step, "head") !== null,
       ),
     ).toBe(true);
   });

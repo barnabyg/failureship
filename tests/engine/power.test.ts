@@ -12,6 +12,7 @@ import {
   sceneFixtureRaw,
   floorOwn,
 } from "./fixture";
+import { everySign } from "./scene-view";
 
 const SEEDS = Array.from({ length: 200 }, (_, i) => i + 1);
 
@@ -137,7 +138,9 @@ describe("a Scene under the Power Map", () => {
       const { step } = run.choose({ type: "action", actionId: "meeting" });
       if (step.kind !== "scene") throw new Error(step.kind);
 
-      expect(step.signs.map((s) => s.text)).toEqual(
+      const said = (label: string) =>
+        everySign(step).find((s) => s.label === label)?.text;
+      expect(["Top", "Middle", "Bottom"].map(said)).toEqual(
         [present[0], present[1], present[2]].map((id) => names.get(id ?? "")),
       );
     }

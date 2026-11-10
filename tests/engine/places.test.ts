@@ -10,6 +10,7 @@ import {
 } from "../../src/engine";
 import { readHiddenTruth } from "../../src/engine/hidden-truth";
 import { action, room, sceneFixtureRaw, withRoom, floorOwn } from "./fixture";
+import { castOf, regardIn, treatmentOf } from "./scene-view";
 
 /*
  * On the fixture's Org Chart, Ana is at the top and Ben and Cal answer to her.
@@ -220,7 +221,7 @@ describe("your boss, read from your place on the Org Chart", () => {
       kind: "notification",
       from: "From: Your boss, Ben Bird",
     });
-    expect(openMeeting(run).cast).toEqual([
+    expect(castOf(openMeeting(run))).toEqual([
       { name: "Ana Abel", title: "Boss, YOUR-BOSS'S-BOSS" },
       { name: "Ben Bird", title: "Analyst, YOUR-BOSS" },
       { name: "Cal Cope", title: "Clerk" },
@@ -232,9 +233,9 @@ describe("your boss, read from your place on the Org Chart", () => {
     raw.you.reportsTo = "ben";
     const run = startRun({ seed: 1, content: parseContent(raw) });
 
-    expect(openMeeting(run).cast).toEqual([
-      { name: "Ben Bird", title: "Analyst, YOUR-BOSS" },
+    expect(castOf(openMeeting(run))).toEqual([
       { name: "Ana Abel", title: "Boss, YOUR-BOSS'S-BOSS" },
+      { name: "Ben Bird", title: "Analyst, YOUR-BOSS" },
       { name: "Cal Cope", title: "Clerk" },
     ]);
   });
@@ -242,9 +243,8 @@ describe("your boss, read from your place on the Org Chart", () => {
   it("changes when the player moves, and the boss's signs and treatment follow", () => {
     const content = parseContent(placesFixtureRaw());
     const treatments = (to: string | null) =>
-      Array.from(
-        { length: 300 },
-        (_, i) => pleasedThenMoved(i + 1, content, to).step.treatment,
+      Array.from({ length: 300 }, (_, i) =>
+        treatmentOf(pleasedThenMoved(i + 1, content, to).step),
       );
     const count = (signs: (string | null)[], sign: string) =>
       signs.filter((s) => s === sign).length;
@@ -262,10 +262,10 @@ describe("your boss, read from your place on the Org Chart", () => {
     const content = parseContent(placesFixtureRaw());
     const { run, step } = pleasedThenMoved(1, content, "cal");
 
-    expect(step.cast).toEqual([
+    expect(castOf(step)).toEqual([
       { name: "Ana Abel", title: "Boss, YOUR-BOSS'S-BOSS" },
-      { name: "Ben Bird", title: "Analyst" },
       { name: "Cal Cope", title: "Clerk, YOUR-BOSS" },
+      { name: "Ben Bird", title: "Analyst" },
     ]);
     run.choose({ type: "scene", sceneId: "meeting", optionId: "snub" });
 
@@ -279,9 +279,8 @@ describe("your boss, read from your place on the Org Chart", () => {
   it("shows no treatment when the new boss is not in the room, even if the old one is", () => {
     const content = parseContent(placesFixtureRaw(["ana", "ben"]));
 
-    const treated = Array.from(
-      { length: 50 },
-      (_, i) => pleasedThenMoved(i + 1, content, "cal").step.treatment,
+    const treated = Array.from({ length: 50 }, (_, i) =>
+      treatmentOf(pleasedThenMoved(i + 1, content, "cal").step),
     );
 
     expect(treated.every((t) => t === null)).toBe(true);
@@ -365,8 +364,8 @@ describe("your boss, read from your place on the Org Chart", () => {
         .filter((s) => s.likelihood[mood] > 0)
         .filter((s) => s.likelihood[mood === "warm" ? "cold" : "warm"] === 0)
         .map((s) => s.text);
-    const regardOf = (step: { regard: { who: string }[] }) =>
-      step.regard.map((r) => r.who);
+    const regardOf = (step: Parameters<typeof regardIn>[0]) =>
+      regardIn(step).map((r) => r.who);
     const movedUp = (optionId: string) =>
       Array.from({ length: 100 }, (_, i) => {
         const run = startRun({ seed: i + 1, content });
@@ -382,11 +381,11 @@ describe("your boss, read from your place on the Org Chart", () => {
     for (const { before, after } of [...pleased, ...snubbed]) {
       expect(regardOf(before)).toEqual(["Cal Cope"]);
       expect(regardOf(after)).toEqual(["Ana Abel"]);
-      expect(after.treatment).not.toBeNull();
-      expect(after.headTreatment).not.toBeNull();
+      expect(treatmentOf(after)).not.toBeNull();
+      expect(treatmentOf(after, "head")).not.toBeNull();
     }
     const heads = (runs: typeof pleased) =>
-      runs.map((r) => r.after.headTreatment);
+      runs.map((r) => treatmentOf(r.after, "head"));
     expect(heads(pleased).some((t) => only("warm").includes(t ?? ""))).toBe(
       true,
     );
