@@ -278,28 +278,47 @@
   line-height: 1.15;
 }
 
-.panel[data-look="newsletter"] .story-reported {
-  column-count: 2;
-  column-gap: 24px;
-  column-rule: 1px solid #e3dccb;
+/*
+ * Each thing told of the month is one row: the newsletter's line on the left,
+ * what actually happened beside it in the confidential column on the right.
+ */
+.panel[data-look="newsletter"] .story {
   margin-bottom: 12px;
+}
+
+.panel[data-look="newsletter"] .story-pair {
+  display: grid;
+  grid-template-columns: minmax(0, 3fr) minmax(0, 2fr);
+}
+
+.panel[data-look="newsletter"] .story-reported {
+  padding: 6px 16px 6px 0;
+  border-top: 1px solid #e3dccb;
   font-size: 0.9375rem;
   line-height: 1.45;
 }
 
-.panel[data-look="newsletter"] .story-reported h3 {
-  column-span: all;
-  margin-bottom: 6px;
-  color: var(--stamp-red);
+.panel[data-look="newsletter"] .story-heads .story-reported {
+  border-top: none;
+}
+
+.panel[data-look="newsletter"] .story h3 {
+  margin: 0;
   font-family: "Segoe UI", Arial, sans-serif;
 }
 
-.panel[data-look="newsletter"] .story-reported p {
-  margin-bottom: 8px;
-  break-inside: avoid;
+.panel[data-look="newsletter"] .story-reported h3 {
+  color: var(--stamp-red);
 }
 
-.panel[data-look="newsletter"] .story-reported p:first-of-type::first-letter {
+.panel[data-look="newsletter"] .story-pair p {
+  margin: 0;
+}
+
+.panel[data-look="newsletter"]
+  .story-pair:nth-child(2)
+  .story-reported
+  p::first-letter {
   float: left;
   margin: 4px 6px 0 0;
   color: var(--company-blue);
@@ -321,68 +340,32 @@
 }
 
 .panel[data-look="newsletter"] .story-happened {
-  padding: 12px 16px;
-  border: none;
-  border-radius: 4px;
+  padding: 6px 16px;
+  border-top: 1px solid #34414f;
   background: #1d2733;
   color: #e8edf2;
   font-family: "Segoe UI", Arial, sans-serif;
   font-size: 0.875rem;
+  line-height: 1.4;
+}
+
+/* The stamp goes under the column's heading, clear of its words. */
+.panel[data-look="newsletter"] .story-heads .story-happened {
+  padding-top: 12px;
+  padding-bottom: 34px;
+  border-top: none;
+  border-radius: 4px 4px 0 0;
+}
+
+.panel[data-look="newsletter"] .story-pair:last-child .story-happened {
+  padding-bottom: 12px;
+  border-radius: 0 0 4px 4px;
 }
 
 .panel[data-look="newsletter"] .story-happened h3 {
   color: var(--company-gold);
 }
 
-.panel[data-look="newsletter"] .story-happened p {
-  margin-bottom: 6px;
-}
-
 .panel[data-look="newsletter"] button.primary {
   font-family: "Segoe UI", Arial, sans-serif;
-}
-
-/* On a narrow screen the stamp joins the header, and the newsletter is one column. */
-@media (max-width: 600px) {
-  .stamped .mail-subject h2 {
-    padding-right: 0;
-  }
-
-  .mailhead .stamp {
-    position: static;
-    display: inline-block;
-    margin-top: 8px;
-  }
-
-  .letterhead-place {
-    display: none;
-  }
-
-  .panel .masthead-name {
-    font-size: 1.625rem;
-  }
-
-  .masthead-issue {
-    width: 52px;
-    height: 52px;
-    font-size: 1.125rem;
-  }
-
-  .masthead-issue small {
-    font-size: 0.5rem;
-  }
-
-  .panel[data-look="newsletter"] .story-reported {
-    column-count: 1;
-  }
-
-  .happened-stamp .stamp {
-    right: 8px;
-    padding: 1px 6px;
-    font-size: 0.6875rem;
-  }
-
-  .panel[data-look="newsletter"] .story-happened h3 {
-    padding-right: 124px;
-  }
 }

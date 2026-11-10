@@ -40,6 +40,34 @@ body {
   overflow: hidden;
 }
 
+/*
+ * The game is made for 1920×1080, and laid out to work down to 1280 px wide.
+ * Narrower, the wide step panel would cover the cards, so it says so instead.
+ */
+.too-narrow {
+  display: none;
+}
+
+@media (max-width: 1279.98px) {
+  .too-narrow {
+    position: absolute;
+    z-index: 10;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+    background: #20262b;
+    color: var(--paper);
+    text-align: center;
+  }
+
+  .too-narrow p {
+    max-width: 32em;
+  }
+}
+
 .stage {
   position: absolute;
   inset: 0;
@@ -309,16 +337,6 @@ body {
   color: var(--accent-ink);
 }
 
-.cast {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 2px 16px;
-  margin: 0 0 10px;
-  padding: 0;
-  list-style: none;
-  font-size: 0.875rem;
-}
-
 .signs {
   margin: 0 0 10px;
   padding: 6px 12px;
@@ -329,10 +347,6 @@ body {
 .signs div + div,
 .signs li + li {
   margin-top: 4px;
-}
-
-.behaviours {
-  list-style: none;
 }
 
 .signs dt {
@@ -428,43 +442,127 @@ body {
   gap: 16px;
 }
 
-/* Fonts differ by platform, so a Scene needs room to spare at 1280x800. */
-.scene-columns {
-  display: grid;
-  grid-template-columns: 1fr 215px;
-  gap: 14px;
-  align-items: start;
-  font-size: 0.8125rem;
-  line-height: 1.25;
+/*
+ * A Scene: the room by person, which scrolls if it must, over a bar of choices
+ * that stays in view at the foot of the panel.
+ */
+.panel:has(> .scene) {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
 }
 
-.scene-columns .options {
+.scene {
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: column;
+  min-height: 0;
+  font-size: 0.9375rem;
+  line-height: 1.35;
+}
+
+.scene-body {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-y: auto;
+}
+
+.scene-body > p {
+  margin-bottom: 8px;
+}
+
+.scene h3 {
+  margin-top: 8px;
+}
+
+.scene-signs {
+  display: flex;
+  flex-direction: column;
   gap: 4px;
+  margin-bottom: 4px;
 }
 
-.scene-columns p,
-.scene-columns .signs,
-.scene-columns .cast {
-  margin-bottom: 6px;
-}
-
-.scene-columns .cast {
-  font-size: inherit;
-}
-
-.scene-columns .signs {
+.scene-sign {
   padding: 4px 10px;
+  border-left: 4px solid var(--rule);
+  background: #e7e3d6;
 }
 
-.scene-columns h3 {
-  margin-top: 6px;
+.scene-sign-label {
+  color: var(--muted);
+  font-size: 0.8125rem;
+  font-weight: 600;
 }
 
-@media (max-width: 800px) {
-  .results-charts,
-  .scene-columns {
-    grid-template-columns: 1fr;
-  }
+.scene-sign-label::after {
+  content: ":";
+}
+
+.scene-people {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.scene-person {
+  display: grid;
+  grid-template-columns: 180px 1fr;
+  gap: 12px;
+  padding: 6px 0;
+  border-top: 1px solid var(--rule);
+}
+
+.scene-boss .scene-person-who strong {
+  color: var(--accent);
+}
+
+.scene-person-who strong {
+  display: block;
+}
+
+.scene-person-name {
+  color: var(--muted);
+  font-size: 0.8125rem;
+}
+
+.scene-person-seen {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.panel .scene-person-seen p {
+  margin: 0;
+}
+
+.scene-with-you {
+  color: var(--muted);
+  font-size: 0.8125rem;
+  font-weight: 600;
+}
+
+.scene-with-you::after {
+  content: ":";
+}
+
+/* A line that says nothing of note, such as a nod hello. */
+.scene-plain {
+  color: var(--muted);
+}
+
+.scene-choices {
+  flex: none;
+  padding-top: 4px;
+  border-top: 2px solid var(--rule);
+}
+
+.scene-choices .options {
+  flex-flow: row wrap;
+  gap: 6px;
+}
+
+.scene-choices .option {
+  max-width: 100%;
 }
 
 .chart {

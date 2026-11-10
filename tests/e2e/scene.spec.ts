@@ -110,8 +110,8 @@ test("the full month reads differently for different choices", async ({
 
   await expect(page.getByTestId("panel-story")).toBeVisible();
   await expectToSayWhatIsNext(page);
-  const afterPub = await page.getByTestId("story-reported").innerText();
-  await expect(page.getByTestId("story-happened")).toBeVisible();
+  const afterPub = await page.getByTestId("story-reported").allInnerTexts();
+  await expect(page.getByTestId("story-happened").first()).toBeVisible();
 
   await freshRun(page, "/?seed=1");
   await answerAnyNotification(page);
@@ -161,3 +161,53 @@ test("every Scene choice is visible without scrolling at 1280x800", async ({
   );
   expect(scrolls).toBe(false);
 });
+
+test("each Character's row holds what they were seen doing", async ({
+  page,
+}) => {
+  await reachMeeting(page, "report", 5);
+
+  const rows = page.getByTestId("person");
+  await expect(rows).toHaveCount(6);
+  await expect(page.getByTestId("behaviour")).toHaveCount(6);
+  const analyst = rows.filter({
+    has: page.locator("strong", { hasText: /^Senior Analyst$/ }),
+  });
+  await expect(analyst.getByTestId("behaviour")).toContainText(
+    "the Senior Analyst",
+    { ignoreCase: true },
+  );
+  // The bosses come first, and say in their own row how they are with you.
+  await expect(rows.nth(0).getByTestId("head-treatment")).toHaveCount(1);
+  await expect(rows.nth(1).getByTestId("treatment")).toHaveCount(1);
+});
+
+for (const [width, height] of [
+  [1280, 720],
+  [1920, 1080],
+] as const) {
+  test(`keeps every choice in view, in text of 15 px or more, at ${String(width)}x${String(height)}`, async ({
+    page,
+  }) => {
+    await page.setViewportSize({ width, height });
+    await reachMeeting(page, "report", 5);
+
+    const options = page.locator('[data-testid^="scene-option-"]');
+    expect(await options.count()).toBeGreaterThan(1);
+    for (const option of await options.all()) {
+      await expect(option).toBeInViewport({ ratio: 1 });
+    }
+    const panel = page.getByTestId("panel-scene");
+    expect(
+      await panel.evaluate((el) => el.scrollHeight > el.clientHeight),
+    ).toBe(false);
+    const sizes = await panel
+      .locator(
+        '[data-testid="behaviour"], [data-testid="sign"], [data-testid^="scene-option-"]',
+      )
+      .evaluateAll((els) =>
+        els.map((el) => parseFloat(getComputedStyle(el).fontSize)),
+      );
+    expect(Math.min(...sizes)).toBeGreaterThanOrEqual(15);
+  });
+}

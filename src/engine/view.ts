@@ -50,6 +50,39 @@ export interface ChartEntry {
   reportsTo: string | null;
 }
 
+/**
+ * One thing told of the month in the official story: what was reported
+ * upstairs, beside what actually happened. Either side may be missing, for a
+ * report with nothing behind it or a thing nobody reported.
+ */
+export interface StoryPair {
+  reported?: string | undefined;
+  happened?: string | undefined;
+}
+
+/** A sign in a Scene: its question, and what was seen. */
+export interface SceneSign {
+  label: string;
+  text: string;
+}
+
+/** Everything seen of one Character in a Scene, led by their role. */
+export interface ScenePerson {
+  name: string;
+  title: string;
+  /** Whether they are the player's boss, or the boss's boss. */
+  place: "boss" | "head" | null;
+  /** What they were seen doing, from How people behave, if anything. */
+  behaviour: string | null;
+  /**
+   * How they are with the player: the bosses' treatment, or anyone else's
+   * regard. Signs, and no more. A plain one says nothing of note.
+   */
+  withYou: { text: string; plain: boolean } | null;
+  /** The signs from What you notice that name them and nobody else. */
+  signs: SceneSign[];
+}
+
 export interface Person {
   id: string;
   name: string;
@@ -80,18 +113,10 @@ export type StepView =
       title: string;
       location: string;
       narration: string[];
-      cast: { name: string; title: string }[];
-      signs: { label: string; text: string }[];
-      behaviours: {
-        who: string;
-        text: string;
-      }[];
-      /** How the boss treats the player, if the boss is in the room. */
-      treatment: string | null;
-      /** The same of the boss's boss, if they are in the room. */
-      headTreatment: string | null;
-      /** How anyone else present is with the player. Signs, and no more. */
-      regard: { who: string; text: string }[];
+      /** One row to each Character present: the bosses, then the Org Chart's order. */
+      people: ScenePerson[];
+      /** The signs that name two people or more, or nobody in the room. */
+      signs: SceneSign[];
       options: { id: string; label: string; stakes?: string | undefined }[];
     }
   | {
@@ -119,8 +144,8 @@ export type StepView =
       title: string;
       reportedHeading?: string | undefined;
       happenedHeading?: string | undefined;
-      reported: string[];
-      happened: string[];
+      /** Each thing told of the month, in the month's order. */
+      pairs: StoryPair[];
       /** What moved a Gauge as the month closed. */
       gauges: string[];
     }

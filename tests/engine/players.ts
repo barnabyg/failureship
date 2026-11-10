@@ -6,6 +6,7 @@ import { calledBy } from "../../src/engine/say";
 import type { State } from "../../src/engine/state";
 import { plainChoice } from "../../src/ui/later-month";
 import type { Otherwise } from "./real-runs";
+import { everySign } from "./scene-view";
 
 /**
  * Scripted players for the balance tests, each a way of choosing whatever a
@@ -147,7 +148,7 @@ export function readsTheRoom() {
         c.id,
       ]),
     );
-    for (const { text } of step.signs) {
+    for (const { text } of everySign(step)) {
       for (const { pattern, parts } of signs.get(step.id) ?? []) {
         const found = pattern.exec(text);
         if (!found) continue;

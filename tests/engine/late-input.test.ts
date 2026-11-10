@@ -77,7 +77,9 @@ function freeChoice(view: PlayerView): Choice | undefined {
   );
 }
 
-const lateSeeds = () => SEEDS.filter(lateInMonthTwo);
+// Found once, for every test that reads them.
+let lateFound: number[] | undefined;
+const lateSeeds = () => (lateFound ??= SEEDS.filter(lateInMonthTwo));
 
 const answer = (optionId: string): Choice => ({
   type: "notification",

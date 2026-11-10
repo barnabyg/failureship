@@ -4,16 +4,18 @@ The [README](README.md) covers playing and steering the game, and the code map. 
 
 ### Verifying
 
-- `npm run verify` runs every check: formatting, lint, types, engine tests, browser tests, dependency audit and build. The browser tests need Chromium once: `npx playwright install chromium`.
-- One engine test: `npx vitest run <file> -t "<name>"`.
-- One browser test: `npx playwright test <file> -g "<name>"`.
+- `npm run verify` runs every check: formatting, lint, types, engine tests, balance tests, browser tests, dependency audit and build. The browser tests need Chromium once: `npx playwright install chromium`.
+- `npm test` runs the engine and tower tests: 19 s on a 20-thread machine, or 29 s on four workers. `npm run test:balance` runs the balance tests alone, in 66 s on the same machine. CI runs both.
+- One engine or balance test: `npx vitest run <file> -t "<name>"`.
+- One browser test: `npx playwright test <file> -g "<name>"`. Set `E2E_PORT` to run the browser tests in two worktrees at once.
 
 ### Tests
 
 - `tests/engine/` tests the rules headlessly, and a few checks on the builds and lint. `fixture.ts` there builds small content, and `src/engine/hidden-truth.ts` is the test-only read of the hidden truth.
 - `tests/e2e/` holds the browser tests. `play.ts` there has the helpers for playing through a month. Most run against a test-only build, `vite build --mode e2e` in `dist-e2e/`, where `?month=N` starts a run at a later month, so use it when a test only needs walking months as setup. The start plays as `src/ui/later-month.ts` does, and `&choose=a,b` has it take those options, in order, on the way. `&last=N` ends the run as month N closes, with every rule still going by the run's eighteen months, so a test of the results screen need not walk the rest of them. `npm run build` and `npm run play` ignore both.
 - `tests/tower/` tests the tower's fittings.
-- `tests/engine/playtest-seeds.test.ts` keeps the seven seeds at the top of `docs/playtest.md` true, and `ways-of-playing.test.ts` gives the numbers in its balance section: change them together.
+- `tests/balance/` holds the statistical balance tests and the other tests that play many whole runs, which `npm test` leaves out. A test that plays many runs goes there, and takes under 30 s: a longer one plays its runs in parts, each its own test, as `climb-survey.ts` does.
+- `tests/engine/playtest-seeds.test.ts` keeps the seven seeds at the top of `docs/playtest.md` true, and `tests/balance/ways-of-playing.test.ts` and `reading-people.test.ts` give the numbers in its balance section: change them together.
 
 ### Adding a game mechanic
 

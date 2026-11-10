@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 import { gameContent } from "../../src/content";
 import { parseContent, startRun, type Content } from "../../src/engine";
 import { calledAtStart, findOutFixtureRaw, sceneFixtureRaw } from "./fixture";
+import { behavioursIn, castOf, everySign } from "./scene-view";
 
 const LIKELY = { believer: 4, incompetent: 2, practitioner: 1 };
 
@@ -54,7 +55,7 @@ describe("behaviour that belongs to a role", () => {
     const seen = new Set<string>();
 
     for (let seed = 1; seed <= 300; seed++) {
-      for (const shown of openMeeting(seed, content).behaviours) {
+      for (const shown of behavioursIn(openMeeting(seed, content))) {
         const [word] = /[A-Z-]{3,}/.exec(shown.text) ?? [""];
         seen.add(word);
         const owner = allowed.get(word);
@@ -85,7 +86,7 @@ describe("behaviour that belongs to a role", () => {
         if (!next) throw new Error(`Stuck at ${view.step.kind}.`);
         view = run.choose(next);
       }
-      for (const shown of view.step.behaviours) {
+      for (const shown of behavioursIn(view.step, gameContent)) {
         const written = gameContent.behaviours.find(
           (b) =>
             b.text.replaceAll("{who}", shown.who).toLowerCase() ===
@@ -187,7 +188,9 @@ describe("how running text refers to people", () => {
 
   it("says what they are called, with a capital only where a sentence starts", () => {
     const content = parseContent(calledFixtureRaw());
-    const { signs, behaviours } = openMeeting(8, content);
+    const scene = openMeeting(8, content);
+    const signs = everySign(scene);
+    const behaviours = behavioursIn(scene, content);
 
     expect(JSON.stringify([signs, behaviours])).not.toMatch(/Ana|Ben|Cal/);
     expect(signs[0]?.text).toMatch(
@@ -208,13 +211,14 @@ describe("how running text refers to people", () => {
     const run = startRun({ seed: 1, content });
 
     expect(run.view().orgChart.map((e) => e.name)).toContain("Ana Abel");
-    expect(openMeeting(1, content).cast.map((c) => c.name)).toContain(
+    expect(castOf(openMeeting(1, content)).map((c) => c.name)).toContain(
       "Ana Abel",
     );
   });
 
   it("falls back on the name when nothing else is written", () => {
-    const { behaviours } = openMeeting(1, parseContent(rolesFixtureRaw()));
+    const content = parseContent(rolesFixtureRaw());
+    const behaviours = behavioursIn(openMeeting(1, content), content);
 
     expect(behaviours.map((b) => b.who)).toEqual([
       "Ana Abel",

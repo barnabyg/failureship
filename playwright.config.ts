@@ -1,7 +1,9 @@
 import { availableParallelism } from "node:os";
 import { defineConfig } from "@playwright/test";
 
-const port = 4179;
+// E2E_PORT lets two worktrees run the browser tests at once, each with its own
+// server, since a local run reuses whatever server already holds the port.
+const port = Number(process.env.E2E_PORT ?? 4179);
 const vite = "node node_modules/vite/bin/vite.js";
 
 export default defineConfig({

@@ -11,6 +11,7 @@ import {
 import { lowerOnMap, raiseOnMap, type PowerMap } from "../../src/engine/deal";
 import { readHiddenTruth } from "../../src/engine/hidden-truth";
 import { fixtureRaw, floorOwn } from "./fixture";
+import { everySign } from "./scene-view";
 
 const story = { reported: "EVENT-REPORTED", happened: "EVENT-HAPPENED" };
 const certain = { believer: 1, incompetent: 1, practitioner: 1 };
@@ -80,8 +81,11 @@ describe("a month with a Company Event in it", () => {
     );
 
     for (const { month, step } of stories) {
-      expect(step.reported.includes("EVENT-REPORTED")).toBe(month === 2);
-      expect(step.happened.includes("EVENT-HAPPENED")).toBe(month === 2);
+      const told = step.pairs.some(
+        (p) =>
+          p.reported === "EVENT-REPORTED" && p.happened === "EVENT-HAPPENED",
+      );
+      expect(told).toBe(month === 2);
     }
   });
 
@@ -357,7 +361,7 @@ describe("a reshuffle", () => {
     if (seed === undefined) throw new Error("No such deal.");
     const signs = play(startRun({ seed, content })).flatMap((v) =>
       v.step.kind === "scene"
-        ? [{ month: v.month, said: v.step.signs[0]?.text ?? "" }]
+        ? [{ month: v.month, said: everySign(v.step)[0]?.text ?? "" }]
         : [],
     );
 

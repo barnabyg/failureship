@@ -1,6 +1,55 @@
 import { panelText } from "../content";
-import type { Choice, StepView } from "../engine";
+import type { Choice, ScenePerson, SceneSign, StepView } from "../engine";
 import { Panel, Stakes } from "./Panel";
+
+/** A sign from What you notice: the only thing in the Scene in a grey box. */
+function Sign({ sign }: { sign: SceneSign }) {
+  return (
+    <div className="scene-sign" data-testid="sign">
+      <span className="scene-sign-label">{sign.label}</span> {sign.text}
+    </div>
+  );
+}
+
+const WITH_YOU_TEST_ID = {
+  boss: "treatment",
+  head: "head-treatment",
+} as const;
+
+/** Everything seen of one Character, led by their role, with the name smaller. */
+function PersonRow({ person }: { person: ScenePerson }) {
+  const { withYou } = person;
+  return (
+    <li
+      className={person.place ? "scene-person scene-boss" : "scene-person"}
+      data-testid="person"
+    >
+      <div className="scene-person-who">
+        <strong>{person.title}</strong>
+        <span className="scene-person-name">{person.name}</span>
+      </div>
+      <div className="scene-person-seen">
+        {person.behaviour !== null && (
+          <p data-testid="behaviour">{person.behaviour}</p>
+        )}
+        {withYou !== null && (
+          <p
+            className={withYou.plain ? "scene-plain" : undefined}
+            data-testid={
+              person.place ? WITH_YOU_TEST_ID[person.place] : "regard"
+            }
+          >
+            <span className="scene-with-you">{panelText.withYouLabel}</span>{" "}
+            {withYou.text}
+          </p>
+        )}
+        {person.signs.map((sign) => (
+          <Sign key={sign.label} sign={sign} />
+        ))}
+      </div>
+    </li>
+  );
+}
 
 export function ScenePanel({
   step,
@@ -11,63 +60,29 @@ export function ScenePanel({
 }) {
   return (
     <Panel testId="panel-scene" eyebrow={step.location} title={step.title} wide>
-      <div className="scene-columns">
-        <div>
+      <div className="scene">
+        <div className="scene-body">
           {step.narration.map((line) => (
             <p key={line}>{line}</p>
           ))}
+          {step.signs.length > 0 && (
+            <>
+              <h3>{panelText.signsHeading}</h3>
+              <div className="scene-signs">
+                {step.signs.map((sign) => (
+                  <Sign key={sign.label} sign={sign} />
+                ))}
+              </div>
+            </>
+          )}
           <h3>{panelText.castHeading}</h3>
-          <ul className="cast">
-            {step.cast.map((person) => (
-              <li key={person.name}>
-                <strong>{person.title}</strong>, {person.name}
-              </li>
+          <ul className="scene-people">
+            {step.people.map((person) => (
+              <PersonRow key={person.name} person={person} />
             ))}
           </ul>
-          <h3>{panelText.signsHeading}</h3>
-          <dl className="signs">
-            {step.signs.map((sign) => (
-              <div key={sign.label} data-testid="sign">
-                <dt>{sign.label}</dt>
-                <dd>{sign.text}</dd>
-              </div>
-            ))}
-          </dl>
-          {step.behaviours.length + step.regard.length > 0 && (
-            <>
-              <h3>{panelText.behavioursHeading}</h3>
-              <ul className="signs behaviours">
-                {step.behaviours.map((shown) => (
-                  <li key={shown.who} data-testid="behaviour">
-                    {shown.text}
-                  </li>
-                ))}
-                {step.regard.map((shown) => (
-                  <li key={`regard-${shown.who}`} data-testid="regard">
-                    {shown.text}
-                  </li>
-                ))}
-              </ul>
-            </>
-          )}
         </div>
-        <div>
-          {step.treatment !== null && (
-            <>
-              <h3>{panelText.treatmentHeading}</h3>
-              <p className="signs" data-testid="treatment">
-                {step.treatment}
-              </p>
-            </>
-          )}
-          {step.headTreatment !== null && (
-            <>
-              <h3>{panelText.headTreatmentHeading}</h3>
-              <p className="signs" data-testid="head-treatment">
-                {step.headTreatment}
-              </p>
-            </>
-          )}
+        <div className="scene-choices">
           <h3>{panelText.optionsHeading}</h3>
           <div className="options">
             {step.options.map((option) => (

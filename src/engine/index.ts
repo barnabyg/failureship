@@ -15,5 +15,8 @@ export type {
   NotificationOption,
   Person,
   PlayerView,
+  ScenePerson,
+  SceneSign,
   StepView,
+  StoryPair,
 } from "./view";

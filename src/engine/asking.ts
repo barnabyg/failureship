@@ -5,8 +5,15 @@ import { drawFor, pickWeighted } from "./rng";
 import { calledBy, sayPeople } from "./say";
 import type { State } from "./state";
 
+/** A sign as it is held: whoever it named as `{competitor}` is written in. */
+export type HeldSign = SceneData["signs"][number] & {
+  /** Who it named as `{competitor}`, if it did. */
+  competing?: string | undefined;
+};
+
 /** A Scene as it is held, with whoever of those competing asks in it, if anyone does. */
-export type HeldScene = SceneData & {
+export type HeldScene = Omit<SceneData, "signs"> & {
+  signs: HeldSign[];
   /** Who asks, if the Scene has someone competing ask, and anyone competes. */
   asker?: string | undefined;
 };
@@ -51,11 +58,14 @@ export function askIn(
     asker: drawn,
     narration: scene.narration.map(say),
     signs: [
-      ...(way ? [{ label: competitor.label, text: say(way.text) }] : []),
+      ...(way
+        ? [{ label: competitor.label, text: say(way.text), competing: asking }]
+        : []),
       ...scene.signs.map((sign) => ({
         ...sign,
         text: say(sign.text),
         clue: sign.clue === undefined ? undefined : say(sign.clue),
+        competing: sign.text.includes(COMPETITOR) ? asking : undefined,
       })),
     ],
     options: scene.options.map((option) => ({

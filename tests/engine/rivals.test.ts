@@ -385,40 +385,7 @@ describe("the game's Rivals", () => {
     expect(competitors.some((m) => m.falseStory !== undefined)).toBe(true);
   });
 
-  it("names a maker who is sometimes a Rival and sometimes not", () => {
-    const made = { rival: 0, other: 0 };
-    const otherKinds = new Set<string>();
-    for (const seed of SEEDS.slice(0, 120)) {
-      const { run, views } = playPlainly(seed);
-      const truth = readHiddenTruth(run);
-      for (const view of views) {
-        if (view.step.kind !== "move") continue;
-        const { body } = view.step;
-        const named = gameContent.characters.find(
-          (c) =>
-            body.toLowerCase().includes((c.called ?? c.name).toLowerCase()) ||
-            (c.id === "boss" && /\byour boss\b(?!'s)/i.test(body)),
-        );
-        const written = gameContent.moves.find(
-          (m) => m.title === (view.step as { title: string }).title,
-        );
-        if (written?.by !== "{competitor}" || !named) continue;
-        const credited = truth.rivals.some((r) =>
-          r.did.some((d) => d.month === view.month && d.move === written.id),
-        );
-        if (credited) made.rival += 1;
-        else {
-          made.other += 1;
-          const kind = truth.characters.find((c) => c.id === named.id)?.kind;
-          if (kind) otherKinds.add(kind);
-        }
-      }
-    }
-
-    expect(made.rival).toBeGreaterThan(made.other / 3);
-    expect(made.other).toBeGreaterThan(10);
-    expect(otherKinds.size).toBeGreaterThanOrEqual(2);
-  });
+  // Whether a maker is sometimes a Rival is in tests/balance/rivals.test.ts.
 
   // tests/e2e/rival.spec.ts plays these: a competitor's false story lands in month 1
   // of seed 39, and in month 8 the player tells one too, to the Office

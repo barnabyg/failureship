@@ -11,6 +11,7 @@ import {
 import { readHiddenTruth } from "../../src/engine/hidden-truth";
 import { plainChoice } from "../../src/ui/later-month";
 import { action, fixtureRaw, room } from "./fixture";
+import { behavioursIn, everySign } from "./scene-view";
 
 /** A review for one quarter, whose choices go on the record or do not. */
 function review(quarter: number) {
@@ -134,8 +135,10 @@ describe("Quarterly reviews", () => {
       view = run.choose(view.choices[0] as Choice);
     }
 
-    expect(view.step.behaviours).toEqual([]);
-    expect(view.step.signs[0]?.text).toMatch(/^\S.*'s slide is skipped\.$/);
+    expect(behavioursIn(view.step)).toEqual([]);
+    expect(everySign(view.step)[0]?.text).toMatch(
+      /^\S.*'s slide is skipped\.$/,
+    );
   });
 
   it("come in their month of the run on whichever floor the player is on", () => {

@@ -8,7 +8,7 @@ import type {
 } from "./content";
 import { YOU, type PowerMap } from "./deal";
 import { isOn, isOnFloor } from "./floors";
-import { isPlanRunning, planWords } from "./grand-plans";
+import { isPlanRunning, keeperNow, planWords } from "./grand-plans";
 import { bossOf, isGone, managerOf, placeOf, whoIs } from "./places";
 import { calledBy, capitalised, sayFrom, sayPeople, titleOf } from "./say";
 import type { State } from "./state";
@@ -329,15 +329,47 @@ export function fillParts(
   room?: readonly string[],
   misleading = false,
 ): string {
+  const named = partsNamed(state, content, room, misleading);
   const who = (id: string | undefined) =>
     id === undefined ? "" : calledBy(state, content, id);
-  const { holder, ignored, bystander } = partsIn(state.truth.powerMap, room);
   return sayPeople(written, {
-    "{holder}": who(misleading ? bystander : holder),
-    "{ignored}": who(ignored),
-    "{bystander}": who(misleading ? holder : bystander),
     ...planWords(state, content),
+    ...Object.fromEntries(
+      Object.entries(named).map(([part, id]) => [part, who(id)]),
+    ),
   });
+}
+
+/**
+ * Who each part that text can say names, in this room. A room that gives the
+ * wrong impression swaps the holder and the bystander.
+ */
+function partsNamed(
+  state: State,
+  content: Content,
+  room?: readonly string[],
+  misleading = false,
+): Record<string, string | undefined> {
+  const { holder, ignored, bystander } = partsIn(state.truth.powerMap, room);
+  return {
+    "{holder}": misleading ? bystander : holder,
+    "{ignored}": ignored,
+    "{bystander}": misleading ? holder : bystander,
+    "{keeper}": keeperNow(state, content),
+  };
+}
+
+/** Everyone that text names by its parts, as `fillParts` would write them in. */
+export function namedBy(
+  state: State,
+  content: Content,
+  written: string,
+  room?: readonly string[],
+  misleading = false,
+): string[] {
+  const named = partsNamed(state, content, room, misleading);
+  const ids = (written.match(/\{\w+\}/g) ?? []).map((part) => named[part]);
+  return [...new Set(ids.filter((id) => id !== undefined))];
 }
 
 /** An action exists in a month only if the Scene it opens does too. */

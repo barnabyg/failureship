@@ -2,6 +2,7 @@ import {
   everyBill,
   everyDemand,
   everyNotification,
+  type Condition,
   type Content,
 } from "./content";
 import {
@@ -15,6 +16,7 @@ import {
   isMet,
   matches,
   methodOf,
+  namedBy,
   offeredOptions,
   optionsOnOffer,
   personOf,
@@ -24,7 +26,13 @@ import { YOU } from "./deal";
 import { dealsInView } from "./deals";
 import { floorNow, isOn } from "./floors";
 import { gaugesInView, gaugesThisMonth } from "./gauges";
-import { isGone, managerOf } from "./places";
+import {
+  bossesOf,
+  inChartOrder,
+  isGone,
+  managerOf,
+  placeAmong,
+} from "./places";
 import { promisesInView } from "./promises";
 import { COMPETITOR } from "./rivals";
 import { sceneData } from "./scenes";
@@ -132,46 +140,109 @@ function toSceneView(
   const scene = sceneData(state, world, id);
   const fill = (written: string) =>
     fillParts(state, content, written, scene.cast);
+  const behaviourOf = (character: string) => {
+    const seen = shown.find((s) => s.character === character);
+    if (seen === undefined) return null;
+    const written = [
+      ...content.behaviours,
+      ...(content.changing?.whistleblower.signs ?? []),
+    ].find((b) => b.id === seen.behaviour);
+    const who = calledBy(state, content, character);
+    return sayPeople(written?.text ?? "", { "{who}": who });
+  };
+  // A sign that names only one person in the room is about them.
+  const signs = scene.signs.map((s) => {
+    const named = [
+      ...namedBy(state, content, s.text, scene.cast, misleading),
+      ...(s.competing === undefined ? [] : [s.competing]),
+    ].filter((c) => scene.cast.includes(c));
+    const only = new Set(named).size === 1 ? named[0] : undefined;
+    return {
+      label: s.label,
+      text: fillParts(state, content, s.text, scene.cast, misleading),
+      about: only,
+    };
+  });
+  const { boss, head } = bossesOf(state, content);
+  const withYouOf = (character: string) => {
+    const regarded = regard.find((r) => r.character === character);
+    const written =
+      character === boss
+        ? content.boss.signs.find((s) => s.id === treatment)
+        : character === head
+          ? content.overHead?.signs.find((s) => s.id === headTreatment)
+          : content.reputation?.signs.find((s) => s.id === regarded?.sign);
+    if (written === undefined) return null;
+    const who = calledBy(state, content, character);
+    return {
+      text: sayPeople(written.text, { "{who}": who }),
+      plain: written.plain,
+    };
+  };
   return {
     kind: "scene",
     id: scene.id,
     title: scene.title,
     location: scene.location,
     narration: scene.narration.map(fill),
-    cast: scene.cast.flatMap((c) =>
+    people: inRowOrder(state, content, scene.cast).flatMap((c) =>
       content.characters
         .filter((x) => x.id === c)
-        .map((x) => ({ name: x.name, title: titleOf(state, content, x.id) })),
+        .map((x) => ({
+          name: x.name,
+          title: titleOf(state, content, x.id),
+          place: placeAmong({ boss, head }, x.id) ?? null,
+          behaviour: behaviourOf(x.id),
+          withYou: withYouOf(x.id),
+          signs: signs.filter((s) => s.about === x.id).map(asSign),
+        })),
     ),
-    signs: scene.signs.map((s) => ({
-      label: s.label,
-      text: fillParts(state, content, s.text, scene.cast, misleading),
-    })),
-    behaviours: shown.map(({ character, behaviour }) => {
-      const who = calledBy(state, content, character);
-      const written = [
-        ...content.behaviours,
-        ...(content.changing?.whistleblower.signs ?? []),
-      ].find((b) => b.id === behaviour);
-      return {
-        who,
-        text: sayPeople(written?.text ?? "", { "{who}": who }),
-      };
-    }),
-    treatment: content.boss.signs.find((s) => s.id === treatment)?.text ?? null,
-    headTreatment:
-      content.overHead?.signs.find((s) => s.id === headTreatment)?.text ?? null,
-    regard: regard.map(({ character, sign }) => {
-      const written = content.reputation?.signs.find((s) => s.id === sign);
-      const who = calledBy(state, content, character);
-      return { who, text: sayPeople(written?.text ?? "", { "{who}": who }) };
-    }),
+    signs: signs.filter((s) => s.about === undefined).map(asSign),
     options: offeredOptions(state, content, scene).map((o) => ({
       id: o.id,
       label: fillSubject(state, content, o.about, fill(o.label)),
       stakes: o.stakes,
     })),
   };
+}
+
+function asSign({ label, text }: { label: string; text: string }) {
+  return { label, text };
+}
+
+/** Whoever is in the room, the bosses first and then as the Org Chart has them. */
+function inRowOrder(
+  state: State,
+  content: Content,
+  room: readonly string[],
+): string[] {
+  const { boss, head } = bossesOf(state, content);
+  const bosses = [head, boss].filter((id) => id !== undefined);
+  return [
+    ...bosses,
+    ...inChartOrder(state, content).filter((id) => !bosses.includes(id)),
+  ].filter((id) => room.includes(id));
+}
+
+/** The flags a condition needs to be set, leaving out any it needs unset. */
+function flagsNamed(condition: Condition): string[] {
+  if ("flag" in condition) return [condition.flag];
+  if ("all" in condition) return condition.all.flatMap(flagsNamed);
+  if ("any" in condition) return condition.any.flatMap(flagsNamed);
+  return [];
+}
+
+/**
+ * When in the month a thing told happened: as its first flag was set. The
+ * month's own line comes first, and anything with no flag of its own, such as
+ * a meeting missed, last, as the month closes.
+ */
+function whenInMonth(state: State, flags: readonly string[] | null): number {
+  if (flags === null) return -1;
+  const set = flags
+    .map((flag) => state.flags.indexOf(flag))
+    .filter((at) => at >= 0);
+  return set.length === 0 ? state.flags.length : Math.min(...set);
 }
 
 function toStoryView(
@@ -184,19 +255,32 @@ function toStoryView(
     (e) => isOn(state, content, e) && matches(state, content, e.when),
   );
   const fill = (written: string | undefined) =>
-    written === undefined ? [] : [fillParts(state, content, written)];
+    written === undefined ? undefined : fillParts(state, content, written);
   // Each Company Event of the month, in the story's own words for it.
   const events = state.eventsLanded
     .filter((landed) => landed.month === state.month)
-    .flatMap(({ id }) => content.events.filter((e) => e.id === id))
-    .map((e) => e.story);
+    .flatMap(({ id }) => content.events.filter((e) => e.id === id));
+  const things = [
+    ...events.map((e) => ({ story: e.story, flags: e.sets })),
+    ...told.map((e) => ({
+      story: e,
+      // The month's own line, with nothing the player did behind it, opens.
+      flags: e.when === undefined ? null : flagsNamed(e.when),
+    })),
+  ];
   return {
     kind: "story",
     title: title.replaceAll("{job}", floorNow(state, content).title),
     reportedHeading,
     happenedHeading,
-    reported: [...events, ...told].flatMap((e) => fill(e.reported)),
-    happened: [...events, ...told].flatMap((e) => fill(e.happened)),
+    // Both lines of a pair come from the same written thing, never matched up later.
+    pairs: things
+      .map((thing) => ({ ...thing, at: whenInMonth(state, thing.flags) }))
+      .sort((a, b) => a.at - b.at)
+      .map(({ story }) => ({
+        reported: fill(story.reported),
+        happened: fill(story.happened),
+      })),
     gauges: gaugesThisMonth(state, content),
   };
 }

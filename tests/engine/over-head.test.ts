@@ -8,6 +8,7 @@ import {
   type Run,
 } from "../../src/engine";
 import { readHiddenTruth } from "../../src/engine/hidden-truth";
+import { treatmentOf } from "./scene-view";
 
 const SEEDS = Array.from({ length: 400 }, (_, i) => i + 1);
 const GO: Choice = { type: "action", actionId: "over-head" };
@@ -164,64 +165,11 @@ describe("going over your boss's head", () => {
     }
   });
 
-  it("is not simply the best action every month", () => {
-    const finalBelief = (seed: number, climbs: boolean) => {
-      const run = startRun({ seed, content: gameContent });
-      let view = run.view();
-      while (view.step.kind !== "results") {
-        const { step } = view;
-        const free =
-          step.kind === "notification"
-            ? step.options.find((o) => o.costLabel === "Costs nothing")
-            : undefined;
-        const climb =
-          climbs &&
-          view.choices.some((c) => JSON.stringify(c) === JSON.stringify(GO));
-        const ordinary = view.choices.find(
-          (c) => c.type !== "action" || c.actionId === "kitchen",
-        );
-        const next: Choice | undefined =
-          step.kind === "notification" && free
-            ? {
-                type: "notification",
-                notificationId: step.id,
-                optionId: free.id,
-              }
-            : climb
-              ? GO
-              : (ordinary ?? view.choices[0]);
-        if (!next) throw new Error(`Stuck at ${step.kind}.`);
-        view = run.choose(next);
-      }
-      return readHiddenTruth(run).bossBelief;
-    };
-    // Twenty-five is plenty: climbing every month leaves the boss's belief
-    // over 11 lower on all 16 sets of twenty-five tried.
-    const mean = (climbs: boolean) =>
-      SEEDS.slice(0, 25).reduce((sum, s) => sum + finalBelief(s, climbs), 0) /
-      25;
+  // Whether it is the best action every month is in
+  // tests/balance/over-head.test.ts.
 
-    expect(mean(true)).toBeLessThan(mean(false));
-  });
-
-  it("never shows either belief or kind before the run ends", () => {
-    for (const seed of SEEDS.slice(0, 60)) {
-      const run = startRun({ seed, content: gameContent });
-      let view = run.view();
-      let turn = 0;
-      while (view.step.kind !== "results") {
-        const seen = JSON.stringify(view);
-        expect(seen).not.toMatch(/opinion/i);
-        expect(seen).not.toMatch(/Believer|Incompetent|Practitioner/);
-        const climb = view.choices.find(
-          (c) => c.type === "action" && c.actionId === "over-head",
-        );
-        const next = climb ?? view.choices[turn++ % view.choices.length];
-        if (!next) throw new Error(`Stuck at ${view.step.kind}.`);
-        view = run.choose(next);
-      }
-    }
-  });
+  // Whether either belief or kind shows before the end is in
+  // tests/balance/over-head.test.ts.
 
   it("shows how your boss's boss treats you, in any Scene they are in", () => {
     const signs = gameContent.overHead?.signs.map((s) => s.text) ?? [];
@@ -230,7 +178,7 @@ describe("going over your boss's head", () => {
     const { step } = run.choose({ type: "action", actionId: "meeting" });
     if (step.kind !== "scene") throw new Error(step.kind);
 
-    expect(signs).toContain(step.headTreatment);
+    expect(signs).toContain(treatmentOf(step, "head"));
   });
 
   it("shifts those signs as their belief about you shifts", () => {
@@ -258,8 +206,9 @@ describe("going over your boss's head", () => {
         );
         if (!meeting) continue;
         const { step } = run.choose(meeting);
-        if (step.kind === "scene" && step.headTreatment) {
-          seen.push(step.headTreatment);
+        const head = step.kind === "scene" ? treatmentOf(step, "head") : null;
+        if (head) {
+          seen.push(head);
         }
       }
       return seen;

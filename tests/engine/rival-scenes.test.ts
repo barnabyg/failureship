@@ -10,6 +10,8 @@ import { readHiddenTruth } from "../../src/engine/hidden-truth";
 import { capitalised } from "../../src/engine/say";
 import { calledAtStart } from "./fixture";
 import { playOut, resultsOf, rivalsRaw, SEEDS } from "./rival-fixture";
+import { castOf } from "./scene-view";
+import { everySign } from "./scene-view";
 
 /** The meeting, in which someone competing asks the question, as a Move of theirs. */
 function askingRaw() {
@@ -78,7 +80,7 @@ describe("a question in a Scene from someone competing", () => {
       expect(asker, `seed ${String(seed)}`).toBeDefined();
       // Whoever asks is in the room.
       const name = content.characters.find((c) => c.id === asker)?.name;
-      expect(first.step.kind === "scene" && first.step.cast).toContainEqual(
+      expect(first.step.kind === "scene" && castOf(first.step)).toContainEqual(
         expect.objectContaining({ name }),
       );
       const kind = truth.characters.find((c) => c.id === asker)?.kind;
@@ -136,7 +138,9 @@ describe("a question in a Scene from someone competing", () => {
       const kind = readHiddenTruth(run).characters.find(
         (c) => c.id === asker,
       )?.kind;
-      const sign = view.step.signs.find((s) => s.label === "How it is asked");
+      const sign = everySign(view.step).find(
+        (s) => s.label === "How it is asked",
+      );
       const way = sign?.text.split(" ").slice(-2).join(" ") ?? "";
       expect(sign, `seed ${String(seed)}`).toBeDefined();
       if (kind)
@@ -171,7 +175,7 @@ describe("a question in a Scene from someone competing", () => {
       const said = capitalised(calledAtStart(content, bystander));
 
       expect(view.step.narration[0]).toBe(`${said} ASKS THE QUESTION.`);
-      expect(view.step.signs).toContainEqual({
+      expect(everySign(view.step)).toContainEqual({
         label: "Who answers",
         text: `${said} WAITS.`,
       });

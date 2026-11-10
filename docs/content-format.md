@@ -577,6 +577,15 @@ The official story, assembled from `entries` according to what you did. Its `tit
 `{job}`, the player's job title. Each entry has `reported` or `happened` text, or both, and can
 have `when`, `floor` and `months`.
 
+The newsletter sets an entry's `reported` and `happened` side by side on one row, as does a
+[Company Event](#eventsjson)'s `story`, so both are about the same thing. A side left out shows
+as a gap: a report with nothing behind it, or something nobody reported.
+
+The rows go in the order things happened in the month. An entry with no `when` is the month's own
+line, and opens it. Any other comes when the first flag its `when` needs was set, and a Company
+Event when the first flag it `sets` was. One with no such flag set, such as a meeting missed,
+comes last, as the month closes. Entries that tie keep the order they are written here.
+
 ## `over-head.json`
 
 Going over your boss's head, to [your boss's boss](#your-boss-and-your-bosss-boss), which an action
@@ -658,6 +667,9 @@ whom it was done in front of, or to. They know at once. A `falseStory` is news t
   [`balance.json`](#balancejson) and [`over-head.json`](#over-headjson).
 - `signs` show how everyone else present in a Scene is with the player. Each says `{who}`, and
   must be possible from at least two of `warm`, `neutral` and `cold`, so that no sign settles it.
+  `"plain": true` marks one that says nothing of note, such as a nod hello, and the Scene shows
+  it dimmed. The signs in [`boss.json`](#bossjson) and [`over-head.json`](#over-headjson) can
+  carry it too.
 - `believes` and `how` are the results screen's words. `how.heardFrom` says `{who}`.
 - `falseStories` says how a false story is found out. As each month opens, before news moves, each
   person who heard one in an earlier month sees through it at the seeded chance in `foundOut` for
@@ -735,6 +747,11 @@ meeting has everyone in it. `{plan}` and `{keeper}` say your boss's [Grand Plan]
 and who really has what it needs.
 
 - A sign can have a `clue`, for the Notebook.
+- The Scene shows one row to each person present, your boss's boss and your boss first and then
+  the Org Chart's order. A sign whose text names only one person present, by `{holder}`,
+  `{ignored}`, `{bystander}`, `{keeper}` or `{competitor}`, goes in their row. One that names two
+  or more, or nobody present, goes above the rows, headed by its `label`, so write `label` as
+  the question the sign answers, such as "Who everyone looks at".
 - An option's `requires` hides it until that holds. See [Conditions](#conditions).
 - An option with `"about": "lost-list"` appears once the player has been told that Hidden Fact
   about someone, true or not, and can say `{subject}` for that person.

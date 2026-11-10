@@ -2,16 +2,13 @@ import { readdirSync, readFileSync } from "node:fs";
 import path from "node:path";
 import { describe, expect, it } from "vitest";
 import { gameContent, parsePanelText, panelText } from "../../src/content";
-import {
-  startRun,
-  type Choice,
-  type PlayerView,
-  type Run,
-} from "../../src/engine";
+import { startRun, type Choice, type Run } from "../../src/engine";
 import { castDealtFirst } from "../../src/engine/deal";
 import { bossesAtStart, meantBy } from "../../src/engine/places";
 import { readHiddenTruth } from "../../src/engine/hidden-truth";
 import { plainChoice, playToMonth } from "../../src/ui/later-month";
+import { behavioursIn } from "./scene-view";
+import { everyPath } from "./month-paths";
 
 const SEEDS = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
 
@@ -26,31 +23,6 @@ const isFindOut = (choice: Choice) =>
   gameContent.actions.some(
     (a) => a.id === choice.actionId && a.findOut !== undefined,
   );
-
-/** Every way through the first month, as the views seen along each one. */
-function everyPath(seed: number): PlayerView[][] {
-  const paths: PlayerView[][] = [];
-  const walk = (script: Choice[]) => {
-    const run = startRun({ seed, content: gameContent });
-    const views = [run.view(), ...script.map((c) => run.choose(c))];
-    const last = views.at(-1);
-    if (last?.step.kind === "story") {
-      paths.push(views);
-      return;
-    }
-    // Every source and subject would multiply the paths and show nothing new,
-    // and so would the three actions left by not filing the report.
-    const choices =
-      last?.step.kind === "find-out"
-        ? last.choices.slice(0, 1)
-        : (last?.choices ?? []).filter(
-            (c) => !(c.type === "notification" && c.optionId === "skip"),
-          );
-    for (const choice of choices) walk([...script, choice]);
-  };
-  walk([]);
-  return paths;
-}
 
 /** Who holds influence among the people in the meeting, on this deal. */
 function holderInMeeting(seed: number) {
@@ -92,54 +64,8 @@ describe("the real month", () => {
     }
   });
 
-  it("always says what the player can do, and never reaches a dead end", () => {
-    for (const seed of SEEDS.slice(0, 3)) {
-      for (const views of everyPath(seed)) {
-        for (const view of views) {
-          expect(view.hint.trim()).not.toBe("");
-          expect(view.hint).not.toMatch(/\{\w+\}/);
-          if (view.step.kind !== "story") {
-            expect(view.choices.length).toBeGreaterThan(0);
-          }
-        }
-        expect(views.at(-1)?.step.kind).toBe("story");
-        expect(views.map((v) => v.step.kind)).toContain("move");
-      }
-    }
-  });
-
-  it("never shows the hidden truth or an unfilled role on any path", () => {
-    for (const seed of SEEDS.slice(0, 3)) {
-      const dealt = readHiddenTruth(startRun({ seed, content: gameContent }));
-      const facts = dealt.characters.flatMap((c) =>
-        c.fact ? [c.fact.text] : [],
-      );
-      // A claim can pass on a real fact, so asking is checked separately.
-      const unasked = everyPath(seed).filter(
-        (views) => !views.some((v) => v.step.kind === "find-out"),
-      );
-      for (const views of unasked) {
-        for (const view of views) {
-          const seen = JSON.stringify(view);
-          for (const fact of facts) expect(seen).not.toContain(fact);
-          expect(seen).not.toMatch(/Believer|Incompetent|Practitioner/);
-          expect(seen).not.toContain("powerMap");
-          expect(seen).not.toMatch(/\{(holder|ignored|bystander)\}/);
-        }
-      }
-    }
-  });
-
-  it("never mentions the Buzzword to a player who did not go to the pub", () => {
-    const paths = everyPath(1).filter(
-      (views) => views.at(-1)?.buzzwords.length === 0,
-    );
-    expect(paths.length).toBeGreaterThan(0);
-    for (const views of paths) {
-      const seen = JSON.stringify(views.map((v) => v.step)).toLowerCase();
-      expect(seen).not.toContain("strategic patience");
-    }
-  });
+  // Every path through month 1 is walked in
+  // tests/balance/real-month-paths.test.ts.
 
   it("leaves the Power Map to be read from the signs alone", () => {
     const told = JSON.stringify([
@@ -360,7 +286,7 @@ describe("the real month", () => {
     };
     const firstSign = (seed: number) => meeting(seed).signs[0]?.text;
     const meetingSigns = (seed: number) =>
-      meeting(seed).behaviours.map((b) => b.text);
+      behavioursIn(meeting(seed)).map((b) => b.text);
 
     expect(holderInMeeting(283)).toBe("boss");
     expect(holderInMeeting(106)).toBe("analyst");

@@ -6,9 +6,10 @@ async function fits(panel: Locator) {
   return panel.evaluate((p) => p.scrollWidth <= p.clientWidth);
 }
 
+// The narrowest window the game is laid out for, and the screen it is made for.
 for (const [name, size] of [
-  ["desktop", { width: 1280, height: 800 }],
-  ["phone", { width: 375, height: 812 }],
+  ["laptop", { width: 1280, height: 800 }],
+  ["full HD", { width: 1920, height: 1080 }],
 ] as const) {
   test(`the month's mail is intranet e-mail, and its summary the newsletter, at ${name} width`, async ({
     page,

@@ -1,64 +1,8 @@
 import { describe, expect, it } from "vitest";
 import { gameContent } from "../../src/content";
-import {
-  startRun,
-  type Choice,
-  type Kind,
-  type PlayerView,
-  type Run,
-} from "../../src/engine";
+import { startRun } from "../../src/engine";
 import { readHiddenTruth } from "../../src/engine/hidden-truth";
-
-const SEEDS = Array.from({ length: 200 }, (_, i) => i + 1);
-
-const bossKind = (run: Run) =>
-  readHiddenTruth(run).characters.find((c) => c.id === "boss")?.kind as Kind;
-
-/** Plays for nothing until the given Notification arrives. */
-function reach(run: Run, notificationId: string): PlayerView {
-  let view = run.view();
-  while (view.step.kind !== "results") {
-    const { step } = view;
-    if (step.kind === "notification" && step.id === notificationId) return view;
-    const free =
-      step.kind === "notification"
-        ? step.options.find((o) => o.costLabel === "Costs nothing")
-        : undefined;
-    const next: Choice | undefined =
-      step.kind === "notification" && free
-        ? { type: "notification", notificationId: step.id, optionId: free.id }
-        : view.choices[0];
-    if (!next) throw new Error(`Stuck at ${step.kind}.`);
-    view = run.choose(next);
-  }
-  throw new Error(`Never reached ${notificationId}.`);
-}
-
-/** The same Budget choice, for one seed: what the boss made of it. */
-function decide(seed: number, notificationId: string, optionId: string) {
-  const run = startRun({ seed, content: gameContent });
-  reach(run, notificationId);
-  const before = readHiddenTruth(run).bossBelief;
-  const { step } = run.choose({
-    type: "notification",
-    notificationId,
-    optionId,
-  });
-  if (step.kind !== "notice") throw new Error(step.kind);
-  return {
-    kind: bossKind(run),
-    shift: readHiddenTruth(run).bossBelief - before,
-    reaction: step.reaction,
-  };
-}
-
-const DECISIONS = [
-  ["bonus-pot", ["bonus-allies", "bonus-workers", "bonus-boss", "bonus-split"]],
-  [
-    "underspend",
-    ["underspend-chairs", "underspend-project", "underspend-return"],
-  ],
-] as const;
+import { DECISIONS, reach } from "./budget-runs";
 
 describe("one-off Budgets", () => {
   it("offers at least two different decisions in a run", () => {
@@ -74,30 +18,8 @@ describe("one-off Budgets", () => {
     ).toBeGreaterThan(2);
   });
 
-  it.each(
-    DECISIONS.flatMap(([id, options]) =>
-      options.map((option) => [id, option] as const),
-    ),
-  )("lands %s %s differently with different boss kinds", (id, option) => {
-    const landings = SEEDS.slice(0, 60).map((s) => decide(s, id, option));
-    const byKind = (kind: Kind) => landings.filter((l) => l.kind === kind);
-
-    expect(byKind("believer").length).toBeGreaterThan(0);
-    expect(byKind("practitioner").length).toBeGreaterThan(0);
-    expect(byKind("believer")[0]?.reaction).not.toEqual(
-      byKind("incompetent")[0]?.reaction,
-    );
-    expect(new Set(landings.map((l) => l.shift)).size).toBeGreaterThan(1);
-  });
-
-  it("gives an ally's bonus a worse reception from a Believer", () => {
-    const landings = SEEDS.map((s) => decide(s, "bonus-pot", "bonus-allies"));
-    const of = (kind: Kind) =>
-      landings.find((l) => l.kind === kind)?.shift ?? NaN;
-
-    expect(of("believer")).toBeLessThan(0);
-    expect(of("practitioner")).toBeGreaterThan(0);
-  });
+  // How each decision lands with each kind of boss is in
+  // tests/balance/budgets.test.ts.
 
   it("has an immediate effect on the people involved", () => {
     for (const [id, options] of DECISIONS) {

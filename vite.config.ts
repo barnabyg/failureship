@@ -40,9 +40,28 @@ export default defineConfig({
     chunkSizeWarningLimit: 1600,
   },
   test: {
-    include: ["tests/engine/**/*.test.ts", "tests/tower/**/*.test.ts"],
     bail: process.env.CI ? 1 : 0,
-    // Some tests play hundreds of whole nine-month runs.
+    // Some tests play many whole runs.
     testTimeout: 30_000,
+    projects: [
+      {
+        extends: true,
+        test: {
+          name: "engine",
+          include: ["tests/engine/**/*.test.ts", "tests/tower/**/*.test.ts"],
+        },
+      },
+      // The statistical balance tests, which play hundreds of whole runs each.
+      // `npm test` leaves them out, and `npm run verify` and CI run them. The
+      // longer timeout is headroom for a slower runner, over AGENTS.md's limit.
+      {
+        extends: true,
+        test: {
+          name: "balance",
+          include: ["tests/balance/**/*.test.ts"],
+          testTimeout: 60_000,
+        },
+      },
+    ],
   },
 });
