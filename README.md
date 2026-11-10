@@ -91,8 +91,10 @@ the Head of Transformation, where the Board and the CFO reach down: a cut of 30%
 day's notice, a tricky question. Floor 3's seat, by its Plan or a nomination upstairs, is the way
 out: the run ends with a stand-in for the penthouse that goes by how you got there.
 
-At the end, the results screen says how you got there, seat by seat, and who was really who: kinds,
-Hidden Facts, Rivals, your marks, your Moves, your bosses' verdicts, every claim and both charts.
+At the end, the results screen opens with how the run ended, how you got there, seat by seat, who
+really decided, how much of what you were told was false, and **Play this seed again** and **New
+run**. Below, each part folds: who was really who, Hidden Facts, Rivals, your marks, your Moves, your
+bosses' verdicts, every claim and both charts.
 
 You can also be fired. Some choices are big mistakes, such as blaming someone with a dangerous
 Hidden Fact. The first puts you on a **Final Warning**, shown beside your job title, and the second

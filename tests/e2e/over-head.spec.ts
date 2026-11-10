@@ -25,5 +25,6 @@ test("goes over your boss's head, and reads the outcome and the reveal", async (
   await expect(page.getByTestId("result-head-kind")).toContainText(
     /Believer|Incompetent|Practitioner/,
   );
+  await page.getByTestId("results-section-head").locator("summary").click();
   await expect(page.getByTestId("result-head-verdict")).toBeVisible();
 });

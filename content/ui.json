@@ -96,6 +96,18 @@
   "resultsClaimsHeading": "What you were told",
   "resultsNoClaims": "You asked nobody anything. It was a position.",
   "resultsMonthLabel": "Month {n}",
+  "resultsMonthsLabel": "Months {months}",
+  "resultsTold": "You were told {things}; {wrong}.",
+  "resultsThings": "{n} things",
+  "resultsThingsOne": "1 thing",
+  "resultsWrong": "{n} were false or misleading",
+  "resultsWrongOne": "1 was false or misleading",
+  "resultsTimesTold": "Told {n} times",
+  "resultsChartsHeading": "The Org Chart, and the Power Map",
+  "resultsMarksRight": "Right about {right} of {marked}",
+  "resultsNobody": "Nobody",
+  "resultsNone": "None",
+  "playAgainLabel": "Play this seed again",
   "seedInputLabel": "Type a seed",
   "seedRefused": "\"{seed}\" cannot be used as a seed. A seed is a whole number, from 0 to 4294967295.",
   "restartLabel": "Restart from seed",
@@ -119,7 +131,7 @@
     "event": "This has happened to the whole company, and there is nothing to choose. Press Continue.",
     "story": "The month has closed. Read what was reported, then press Continue to move on.",
     "win": "You have reached the top. Read what it comes to, then press Continue for the results.",
-    "results": "The run is over. Type its seed to play the same deal again, or start a new run."
+    "results": "The run is over. Read what really happened, then play this seed again or start a new run."
   },
   "actionCount": {
     "one": "1 action",

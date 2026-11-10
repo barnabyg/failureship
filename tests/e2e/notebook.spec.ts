@@ -52,6 +52,7 @@ test("a mark lasts into the next month, and is on the results screen", async ({
 
   const row = page.getByTestId("result-mark").filter({ hasText: "Dennis" });
   await expect(row).toContainText("Practitioner");
+  await page.getByTestId("results-section-clues").locator("summary").click();
   await expect(page.getByTestId("result-clue").first()).toBeVisible();
 });
 

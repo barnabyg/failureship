@@ -165,6 +165,7 @@ export function App() {
         hotspots={view.hotspots}
         legal={view.choices}
         onChoose={choose}
+        unlabelled={view.step.kind === "results"}
       />
       <Header
         view={view}
@@ -208,7 +209,14 @@ export function App() {
         <h2>{panelText.whatNext}</h2>
         <p data-testid="hint">{view.hint}</p>
       </aside>
-      <StepPanel view={view} onChoose={choose} />
+      <StepPanel
+        view={view}
+        onChoose={choose}
+        onRestart={restart}
+        onNewRun={() => {
+          restart(randomSeed());
+        }}
+      />
       <div className="too-narrow" role="alert" data-testid="too-narrow">
         <h2>{panelText.tooNarrowHeading}</h2>
         <p>{panelText.tooNarrowText}</p>
