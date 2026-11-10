@@ -3,6 +3,7 @@ import path from "node:path";
 import { expect, test, type Page } from "@playwright/test";
 import type { ViteDevServer } from "vite";
 import { startDevServer } from "./dev-server";
+import { openRunMenu } from "./run-menu";
 
 // The game teaches only three Buzzwords so far, so this spec serves the pub with
 // more of them. Only the dev server reads content/ as separate files, so it starts
@@ -123,6 +124,7 @@ test("ten Buzzwords show the latest three, and the rest behind +7 more", async (
   await expect(page.locator(".buzzword-new")).toHaveCount(0);
 
   // Starting the same seed again, the pub teaches them anew, and they stand out.
+  await openRunMenu(page);
   await page.getByTestId("seed-input").fill("1");
   await page.getByTestId("restart-seed").click();
   await page.getByTestId("confirm-leave-yes").click();

@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { panelText } from "../content";
+import { gaugeTitles, panelText } from "../content";
 import type { Buzzword, PlayerView } from "../engine";
 import { RunControls } from "./RunControls";
 import { StandingBar } from "./StandingBar";
@@ -186,7 +186,7 @@ function Gauges({
           type="button"
           className="status-link"
           data-testid={`open-gauge-${gauge.id}`}
-          title={panelText.gaugesHeading}
+          title={gaugeTitles[gauge.id]}
           onClick={onOpen}
         >
           {gauge.value}
@@ -214,8 +214,8 @@ export function Header(props: {
     <header className="status">
       <div className="status-title">
         <h1>{panelText.title}</h1>
-        <p className="tagline" title={panelText.tagline}>
-          {panelText.tagline}
+        <p className="tagline">
+          <span>{panelText.tagline}</span>
         </p>
       </div>
       <dl>

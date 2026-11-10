@@ -1,7 +1,13 @@
 import { readdirSync, readFileSync } from "node:fs";
 import path from "node:path";
 import { describe, expect, it } from "vitest";
-import { gameContent, parsePanelText, panelText } from "../../src/content";
+import {
+  gameContent,
+  gaugeTitles,
+  parseGaugeTitles,
+  parsePanelText,
+  panelText,
+} from "../../src/content";
 import { startRun, type Choice, type Run } from "../../src/engine";
 import { castDealtFirst } from "../../src/engine/deal";
 import { bossesAtStart, meantBy } from "../../src/engine/places";
@@ -54,6 +60,16 @@ describe("the real month", () => {
     const missingTitle = { ...panelText, title: undefined };
 
     expect(() => parsePanelText(missingTitle)).toThrow(/title/);
+  });
+
+  it("says what each Gauge is, and refuses a Gauge with nothing said", () => {
+    expect(gaugeTitles.teflon).toMatch(/blame/);
+    expect(gaugeTitles.fawning).toMatch(/sucking up/);
+
+    const onlyTeflon = { teflon: gaugeTitles.teflon };
+    expect(() => parseGaugeTitles(onlyTeflon, gameContent.gauges)).toThrow(
+      /fawning/,
+    );
   });
 
   it("has no placeholder text in any data file", () => {

@@ -138,18 +138,41 @@ body {
   background: var(--paper);
 }
 
+/* Above the step panel, so the Run menu can open over it. */
+.status {
+  z-index: 2;
+}
+
 .status h1 {
   margin: 0;
   font-size: 1.25rem;
 }
 
+/*
+ * The tagline shows whole or not at all. With too little room it wraps on to a
+ * second line, after an empty first item a line tall, and is cut off unseen.
+ */
 .tagline {
+  display: flex;
+  flex-wrap: wrap;
+  height: 20px;
   margin: 0;
   overflow: hidden;
   color: var(--muted);
   font-size: 0.875rem;
+  line-height: 20px;
   white-space: nowrap;
-  text-overflow: ellipsis;
+}
+
+.tagline::before {
+  height: 20px;
+  content: "";
+}
+
+@media (max-width: 1199.98px) {
+  .tagline {
+    display: none;
+  }
 }
 
 /* The title gives way first, so a full header still keeps to one row. */
@@ -179,10 +202,21 @@ body {
   padding: 0;
   border: none;
   border-bottom: 1px dotted currentColor;
+  border-radius: 2px;
   background: none;
   color: inherit;
   font: inherit;
   cursor: pointer;
+}
+
+/* On hover and focus it looks like the button it is, still without moving. */
+.status-link:hover,
+.status-link:focus-visible {
+  border-bottom-color: transparent;
+  outline: none;
+  background: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent);
+  color: var(--accent-ink);
 }
 
 /* Only the latest few, on one line, so the header never grows. */
@@ -592,18 +626,44 @@ body {
   margin-bottom: 12px;
 }
 
+/* Org Chart and Notebook, used every month, then the Run menu, used once a run. */
 .run-controls {
   display: flex;
-  flex-direction: column;
   flex-shrink: 0;
-  gap: 4px;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.875rem;
+}
+
+.status .run-controls > button {
+  padding: 4px 14px;
+}
+
+.run-menu {
+  position: relative;
   font-size: 0.8125rem;
 }
 
-.run-controls-row {
+.run-menu-toggle::after {
+  content: " \25BE";
+}
+
+.run-menu-panel {
+  position: absolute;
+  top: calc(100% + 6px);
+  right: 0;
   display: flex;
-  align-items: center;
-  justify-content: flex-end;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 8px;
+  padding: 10px 12px;
+  border-radius: 4px;
+  background: var(--paper);
+  box-shadow: 0 8px 28px rgb(0 0 0 / 45%);
+}
+
+.run-menu-restart {
+  display: flex;
   gap: 8px;
 }
 

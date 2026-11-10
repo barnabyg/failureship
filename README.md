@@ -28,7 +28,7 @@ has seeds for each way up, a Rival winning, a demotion, being fired and the win.
 
 ## What to try
 
-Every run has a seed, at the top right, and `?seed=8` picks one. Each month has the same shape:
+Every run has a seed, on the **Run** menu at the top right, and `?seed=8` picks one. Each month has the same shape:
 
 1. **A Notification arrives.** Answer it. An answer may cost one of your 3 actions, and one always
    costs nothing. A month always leaves you something to decide, on any floor. Every third
@@ -99,9 +99,10 @@ Hidden Fact. The first puts you on a **Final Warning**, shown beside your job ti
 ends the run. One made while a seat is open can cost you it, and one in a seat you won takes you
 down the lift, under whoever takes your seat. A few fire you outright, and say so on the button.
 
-**New run** deals a new seed, **Restart from seed** replays one, and leaving a run asks first. A
-friend on your seed gets your deal. Each step is saved in your browser, hidden truth and all, so a
-reload carries on, and a change to `content/` or the game offers a new run.
+The **Run** menu holds **New run**, which deals a new seed, and **Restart from seed**, which
+replays one. Leaving a run asks first. A friend on your seed gets your deal. Each step is saved in
+your browser, hidden truth and all, so a reload carries on, and a change to `content/` or the game
+offers a new run.
 
 ## Change the game
 
