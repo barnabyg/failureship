@@ -261,7 +261,7 @@ function toStoryView(
     .filter((landed) => landed.month === state.month)
     .flatMap(({ id }) => content.events.filter((e) => e.id === id));
   const things = [
-    ...events.map((e) => ({ story: e.story, flags: e.sets ?? [] })),
+    ...events.map((e) => ({ story: e.story, flags: e.sets })),
     ...told.map((e) => ({
       story: e,
       // The month's own line, with nothing the player did behind it, opens.
