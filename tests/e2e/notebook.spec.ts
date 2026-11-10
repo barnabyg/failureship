@@ -25,9 +25,7 @@ test("a clue arrives, and a Character is marked", async ({ page }) => {
   await answerAnyNotification(page);
   await askAtPhotocopier(page);
   const claim = await page.getByTestId("claim-text").innerText();
-  const title = await page
-    .locator('[data-testid="panel-claim"] h2')
-    .innerText();
+  const title = await page.getByTestId("result-title").innerText();
   const source = title.replace(/ has a word with you$/, "");
 
   await openNotebook(page);
@@ -67,19 +65,15 @@ test("the Notebook opens from every step of a month", async ({ page }) => {
   await page.goto("/?seed=1");
   await opensAndCloses("panel-notification");
   await page.getByTestId("option-pub").click();
-  await opensAndCloses("panel-dialog");
-  await page.getByTestId("continue").click();
+  await opensAndCloses("answered");
   await skipTheReport(page);
   await page.getByTestId("hotspot-ask-around").click();
   await opensAndCloses("panel-find-out");
   await page.locator('[data-testid^="subject-"]').first().click();
-  await opensAndCloses("panel-claim");
-  await page.getByTestId("continue").click();
+  await opensAndCloses("panel-result");
   await page.getByTestId("hotspot-meeting").click();
   await opensAndCloses("panel-scene");
   await page.getByTestId("scene-option-say-nothing").click();
-  await opensAndCloses("panel-notice");
-  await page.getByTestId("continue").click();
   await opensAndCloses("panel-move");
   await page.getByTestId("continue").click();
   await opensAndCloses("panel-story");
@@ -101,10 +95,10 @@ test("opening the Notebook costs nothing, from any step", async ({ page }) => {
 
   await expect(page.getByTestId("actions-left")).toContainText("2");
   await page.getByTestId("hotspot-kitchen").click();
-  await expect(page.getByTestId("panel-notice")).toBeVisible();
+  await expect(page.getByTestId("panel-result")).toBeVisible();
   await openNotebook(page);
   await closeNotebook(page);
-  await expect(page.getByTestId("panel-notice")).toBeVisible();
+  await expect(page.getByTestId("panel-result")).toBeVisible();
 });
 
 test("escape closes the Notebook, and a mark survives closing it", async ({

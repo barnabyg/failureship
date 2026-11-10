@@ -840,3 +840,67 @@ body {
   color: #b3261e;
   font-weight: 700;
 }
+
+/*
+ * What came of the player's own action on the floor: one look, a card that
+ * leaves the floor free, or heads whatever panel lands next. On the floor it
+ * lies along the front, below every place's label, and lets clicks through.
+ */
+.panel-result {
+  top: auto;
+  right: auto;
+  bottom: 12px;
+  left: 384px;
+  width: min(880px, calc(100% - 396px));
+  max-height: calc(100% - 104px);
+  padding: 10px 14px;
+  font-size: 0.9375rem;
+  pointer-events: none;
+}
+
+.happened {
+  padding: 10px 14px;
+  border-left: 4px solid var(--highlight);
+  border-radius: 4px;
+  background: #fbf7e4;
+  color: var(--ink);
+}
+
+.panel > .happened {
+  margin: 14px 0;
+}
+
+.panel-result > .happened,
+.panel-result > .answered {
+  margin: 0;
+}
+
+.panel .happened-heading {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.panel .happened-title {
+  margin: 2px 0 6px;
+  color: var(--ink);
+  font-size: 1rem;
+  letter-spacing: normal;
+  text-transform: none;
+}
+
+.panel .happened-spent {
+  margin: 8px 0 0;
+  color: var(--muted);
+  font-size: 0.875rem;
+}
+
+.panel .inbox-count {
+  margin: 12px 0 0;
+  color: var(--muted);
+  font-size: 0.8125rem;
+  font-weight: 600;
+}

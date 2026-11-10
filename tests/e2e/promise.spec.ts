@@ -1,5 +1,5 @@
 import { expect, test } from "@playwright/test";
-import { playUntil } from "./play";
+import { answered, happened, playUntil } from "./play";
 
 // tests/engine/promises.test.ts keeps this seed true: the Senior Analyst believes it
 // in month 3, it falls due in month 5, and by month 6 your boss has heard that it
@@ -14,9 +14,8 @@ test("a Promise is made, and is in Your word given", async ({ page }) => {
 
   await playUntil(page, "option-promise-laptops-analyst");
   await page.getByTestId("option-promise-laptops-analyst").click();
-  await expect(page.getByTestId("panel-notice")).toContainText("laptops");
+  await expect(answered(page)).toContainText("laptops");
   await expect(page.getByTestId("word-count")).toContainText("1");
-  await page.getByTestId("continue").click();
 });
 
 test("a Promise is broken, and the next one is not believed", async ({
@@ -27,15 +26,11 @@ test("a Promise is broken, and the next one is not believed", async ({
 
   await playUntil(page, "option-next-quarter");
   await page.getByTestId("option-next-quarter").click();
-  await page.getByTestId("continue").click();
 
   await playUntil(page, "scene-option-promise-laptops");
   await page.getByTestId("scene-option-promise-laptops").click();
 
-  await expect(page.getByTestId("panel-notice")).toContainText(
-    "new laptops for their team",
-  );
-  await page.getByTestId("continue").click();
+  await expect(happened(page)).toContainText("new laptops for their team");
   await page.getByTestId("open-word").click();
   await expect(page.getByTestId("word-promise")).toHaveCount(2);
   await expect(page.getByTestId("word-promise").nth(1)).toContainText(

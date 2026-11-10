@@ -89,13 +89,11 @@ describe("a run of months", () => {
   it("reopens a place that was once a month", () => {
     const run = startRun({ seed: 1, content: closingFixture() });
     run.choose(report);
-    run.choose(next);
     run.choose({ type: "action", actionId: "meeting" });
     closeMonth(run);
     run.choose(next);
-    run.choose(report);
 
-    const { hotspots } = run.choose(next);
+    const { hotspots } = run.choose(report);
 
     expect(hotspots.find((h) => h.id === "meeting")?.state).toBe("available");
   });
@@ -140,15 +138,15 @@ describe("a run of months", () => {
 
   it("does not announce a Buzzword the player already knows", () => {
     const run = startRun({ seed: 1, content: closingFixture() });
-    expect(run.choose(pub).step).toMatchObject({
-      learned: [{ id: "fixture-word" }],
+    expect(run.choose(pub).result).toMatchObject({
+      then: { learned: [{ id: "fixture-word" }] },
     });
     closeMonth(run);
     run.choose(next);
 
-    const { step, buzzwords } = run.choose(pub);
+    const { result, buzzwords } = run.choose(pub);
 
-    expect(step).toMatchObject({ kind: "dialog", learned: [] });
+    expect(result).toMatchObject({ then: { kind: "dialog", learned: [] } });
     expect(buzzwords).toHaveLength(1);
   });
 

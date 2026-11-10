@@ -36,16 +36,16 @@ export function decide(seed: number, notificationId: string, optionId: string) {
   const run = startRun({ seed, content: gameContent });
   reach(run, notificationId);
   const before = readHiddenTruth(run).bossBelief;
-  const { step } = run.choose({
+  const { result } = run.choose({
     type: "notification",
     notificationId,
     optionId,
   });
-  if (step.kind !== "notice") throw new Error(step.kind);
+  if (result?.kind !== "answer") throw new Error(result?.kind);
   return {
     kind: bossKind(run),
     shift: readHiddenTruth(run).bossBelief - before,
-    reaction: step.reaction,
+    reaction: result.then.reaction,
   };
 }
 

@@ -109,6 +109,7 @@ function dealtState(seed: number, content: Content): State {
     demotions: [],
     mistakes: [],
     step: { kind: "actions" },
+    result: null,
     truth: {
       characters: later.characters,
       powerMap: later.powerMap,

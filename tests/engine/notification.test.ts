@@ -45,16 +45,17 @@ describe("the report-or-pub Notification", () => {
 
     const view = choosePub(run);
 
-    expect(view.step).toMatchObject({ kind: "dialog", title: "At the pub" });
+    expect(view.result).toMatchObject({
+      then: { kind: "dialog", title: "At the pub" },
+    });
     expect(view.buzzwords.map((b) => b.id)).toEqual(["fixture-word"]);
     expect(view.actions.remaining).toBe(2);
   });
 
-  it("the dialog leaves actions to spend once it is closed", () => {
+  it("the dialog leaves actions to spend", () => {
     const run = startRun({ seed: 1, content: fixture() });
-    choosePub(run);
 
-    const view = run.choose({ type: "continue" });
+    const view = choosePub(run);
 
     expect(view.step.kind).toBe("actions");
     expect(view.buzzwords).toHaveLength(1);
@@ -65,10 +66,10 @@ describe("the report-or-pub Notification", () => {
 
     const view = chooseReport(run);
 
-    expect(view.step.kind).toBe("notice");
+    expect(view.result).toMatchObject({ then: { kind: "notice" } });
     expect(view.buzzwords).toEqual([]);
     expect(view.actions.remaining).toBe(2);
-    expect(run.choose({ type: "continue" }).step.kind).toBe("actions");
+    expect(view.step.kind).toBe("actions");
   });
 
   it("takes each choice's cost from balance data", () => {
@@ -95,9 +96,8 @@ describe("the report-or-pub Notification", () => {
       ],
     });
     const run = startRun({ seed: 1, content: parseContent(raw) });
-    chooseReport(run);
 
-    const view = run.choose({ type: "continue" });
+    const view = chooseReport(run);
 
     expect(view.step).toMatchObject({ kind: "notification", id: "second" });
     expect(view.actions.remaining).toBe(2);

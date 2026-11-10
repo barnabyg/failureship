@@ -10,7 +10,6 @@ import { emptyMonth, emptyMonthRaw, sceneFixture } from "./fixture";
 
 function spendAction(run: Run, actionId: string) {
   run.choose({ type: "action", actionId });
-  run.choose({ type: "continue" });
 }
 
 /** Plays the first month, as far as its official story. */
@@ -89,7 +88,6 @@ describe("a month", () => {
     const run = startRun({ seed: 1, content: sceneFixture() });
     run.choose({ type: "action", actionId: "meeting" });
     run.choose({ type: "scene", sceneId: "meeting", optionId: "stay-quiet" });
-    run.choose({ type: "continue" });
 
     expect(() => run.choose({ type: "action", actionId: "meeting" })).toThrow(
       /not available/i,
@@ -99,40 +97,19 @@ describe("a month", () => {
     );
   });
 
-  it("will not take an action while a result is waiting to be read", () => {
-    const run = startRun({ seed: 1, content: emptyMonth() });
-    run.choose({ type: "action", actionId: "kettle" });
-
-    expect(run.view().step.kind).toBe("notice");
-    expect(() => run.choose({ type: "action", actionId: "desk" })).toThrow(
-      /not available/i,
-    );
-  });
-
   it("runs in order: actions, then the official story", () => {
     const run = startRun({ seed: 1, content: emptyMonth() });
 
     const kinds = playThrough(run).map((v) => v.step.kind);
 
-    expect(kinds).toEqual([
-      "actions",
-      "notice",
-      "actions",
-      "notice",
-      "actions",
-      "notice",
-      "story",
-    ]);
+    expect(kinds).toEqual(["actions", "actions", "actions", "story"]);
   });
 
   it("gives the same outcome for the same seed and choices", () => {
     const script: Choice[] = [
       { type: "action", actionId: "desk" },
-      { type: "continue" },
       { type: "action", actionId: "plant" },
-      { type: "continue" },
       { type: "action", actionId: "kettle" },
-      { type: "continue" },
     ];
     const play = (seed: number) => {
       const run = startRun({ seed, content: emptyMonth() });

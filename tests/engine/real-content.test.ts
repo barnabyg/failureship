@@ -40,13 +40,11 @@ function fileTheReport(run: Run) {
     notificationId: "pub-invite",
     optionId: "decline",
   });
-  run.choose({ type: "continue" });
   run.choose({
     type: "notification",
     notificationId: "monthly-report",
     optionId: "report",
   });
-  run.choose({ type: "continue" });
 }
 
 describe("the real month", () => {
@@ -192,7 +190,7 @@ describe("the real month", () => {
     });
 
     expect(nature(106, "analyst")).toBe("dangerous");
-    expect(JSON.stringify(told.step)).toContain("abolished");
+    expect(JSON.stringify(told.result)).toContain("abolished");
     // What the Office Co-ordinator says is true, so the results screen shows it.
     const boss = readHiddenTruth(run).characters.find((c) => c.id === "boss");
     expect(boss?.fact?.id).toBe("abolished-post");
@@ -213,25 +211,20 @@ describe("the real month", () => {
       notificationId: "training",
       optionId: "skip-training",
     });
-    run.choose({ type: "continue" });
-    run.choose({
+    // Month 1's meeting was missed, so its action comes before the report.
+    const given = run.choose({
       type: "notification",
       notificationId: "fewer-meetings",
       optionId: "push-back",
-    });
-
-    // Month 1's meeting was missed, so its action comes before the report.
-    const given = run.choose({ type: "continue" }).step;
+    }).step;
     if (given.kind !== "notification") throw new Error(given.kind);
-    run.choose({
+    const after = run.choose({
       type: "notification",
       notificationId: given.id,
       optionId: "push-back",
     });
 
-    expect(run.choose({ type: "continue" }).step).toMatchObject({
-      id: "report-input-late",
-    });
+    expect(after.step).toMatchObject({ id: "report-input-late" });
   });
 
   // The Demand browser test relies on these.
@@ -355,12 +348,13 @@ describe("the real month", () => {
       const run = startRun({ seed, content: gameContent });
       fileTheReport(run);
       const before = readHiddenTruth(run);
-      run.choose({ type: "action", actionId: "over-head" });
+      const view = run.choose({ type: "action", actionId: "over-head" });
       const after = readHiddenTruth(run);
 
       expect(after.headBelief - before.headBelief).toBe(head);
       expect(after.bossBelief - before.bossBelief).toBe(boss);
-      expect(run.choose({ type: "continue" }).step.kind).toBe(then);
+      expect(view.result).toMatchObject({ kind: "happened" });
+      expect(view.step.kind).toBe(then);
     },
   );
 
@@ -371,7 +365,7 @@ describe("the real month", () => {
 
     const told = run.choose({ type: "action", actionId: "over-head" });
 
-    expect(JSON.stringify(told.step)).toContain("told to listen to you");
+    expect(JSON.stringify(told.result)).toContain("told to listen to you");
   });
 
   // Each of these holds influence in the meeting on that seed.

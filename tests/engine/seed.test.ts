@@ -26,12 +26,9 @@ describe("restarting from a seed", () => {
     const content = closingFixture();
     const script: Choice[] = [
       { type: "notification", notificationId: "invite", optionId: "pub" },
-      { type: "continue" },
       { type: "action", actionId: "meeting" },
       { type: "scene", sceneId: "meeting", optionId: "use-word" },
-      { type: "continue" },
       { type: "action", actionId: "kettle" },
-      { type: "continue" },
       { type: "continue" },
       { type: "continue" },
     ];

@@ -4,7 +4,9 @@ Test scenarios to play by hand, which give away their deals. Start the game with
 from the root of the repository, as in [Play](../README.md#play), and add `?seed=N` to the address
 it prints. Each row starts in month 1 and plays plainly unless it says otherwise: answer each
 e-mail with the report or what costs nothing, go to each month's meeting and say the first thing,
-and press Continue. A month takes three or four minutes if you read everything.
+and press Continue for a Company Event, a Move, the news of a seat and the official story. What
+your own choices led to stays on screen until you choose again, so it needs no Continue. A month
+takes three or four minutes if you read everything.
 
 ## What the balance pass found
 

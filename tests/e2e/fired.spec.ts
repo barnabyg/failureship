@@ -17,7 +17,6 @@ test("a catastrophic choice says so first, and ends at the results screen", asyn
   await expect(page.getByTestId("final-warning")).toHaveCount(0);
 
   await choice.click();
-  await page.getByTestId("continue").click();
 
   await expect(page.getByTestId("panel-notice")).toContainText("released");
   await page.getByTestId("continue").click();
@@ -38,7 +37,6 @@ test("a Final Warning shows, and a second big mistake gets the player fired", as
   await answerAnyNotification(page);
   await page.getByTestId("hotspot-meeting-lessons").click();
   await page.getByTestId("scene-option-blame-callum").click();
-  await page.getByTestId("continue").click();
 
   await expect(page.getByTestId("panel-notice")).toContainText("envelope");
   await expect(page.getByTestId("final-warning")).toBeVisible();
@@ -51,7 +49,6 @@ test("a Final Warning shows, and a second big mistake gets the player fired", as
   await answerAnyNotification(page);
   await openMeeting(page);
   await page.getByTestId("scene-option-cut-callum").click();
-  await page.getByTestId("continue").click();
 
   await expect(page.getByTestId("panel-notice")).toContainText("released");
   await page.getByTestId("continue").click();
@@ -71,7 +68,6 @@ test("a whole run from month 1 to being fired, reloaded on a Final Warning", asy
   await answerAnyNotification(page);
   await page.getByTestId("hotspot-meeting-lessons").click();
   await page.getByTestId("scene-option-blame-callum").click();
-  await page.getByTestId("continue").click();
   await expect(page.getByTestId("final-warning")).toBeVisible();
   await finishMonth(page);
 
@@ -83,10 +79,10 @@ test("a whole run from month 1 to being fired, reloaded on a Final Warning", asy
   await answerAnyNotification(page);
   await openMeeting(page);
   await page.getByTestId("scene-option-cut-callum").click();
-  await page.getByTestId("continue").click();
 
   await expect(page.getByTestId("panel-notice")).toContainText("released");
   await page.getByTestId("continue").click();
   await expect(page.getByTestId("results-ending")).toContainText("fired");
+
   await expect(page.getByTestId("result-mistake")).toHaveCount(2);
 });

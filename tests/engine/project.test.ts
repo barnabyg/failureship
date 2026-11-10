@@ -138,7 +138,6 @@ describe("a Project", () => {
     raw.project.start = { real: "bad", reported: "bad" };
     const run = startRun({ seed: 1, content: parseContent(raw) });
     run.choose(answer("skip"));
-    run.choose({ type: "continue" });
 
     const { project } = run.choose({ type: "action", actionId: "desk" });
 
@@ -151,7 +150,6 @@ describe("a Project", () => {
     raw.project.start = { real: "good", reported: "bad" };
     const run = startRun({ seed: 1, content: parseContent(raw) });
     const skipped = run.choose(answer("skip"));
-    run.choose({ type: "continue" });
 
     const worked = run.choose({ type: "action", actionId: "desk" });
 
@@ -280,8 +278,8 @@ function reachFloor(run: Run, report = "report"): PlayerView {
 
 function deliver(run: Run) {
   const view = run.choose({ type: "action", actionId: "work" });
-  if (view.step.kind !== "notice") throw new Error(view.step.kind);
-  return view.step;
+  if (view.result?.kind !== "happened") throw new Error(view.step.kind);
+  return view.result;
 }
 
 describe("the Monthly Status Report in the game", () => {
@@ -377,7 +375,6 @@ describe("Deliver", () => {
         if (dealtBoss(run) !== kind) return false;
         reachFloor(run);
         run.choose({ type: "action", actionId: "work" });
-        run.choose({ type: "continue" });
         let view = run.view();
         while (view.step.kind !== "move" && view.step.kind !== "story") {
           const meeting = view.choices.find(

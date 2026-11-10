@@ -1,5 +1,5 @@
 import { expect, test } from "@playwright/test";
-import { finishMonth, freshRun, playUntil } from "./play";
+import { answered, finishMonth, freshRun, playUntil } from "./play";
 
 // tests/engine/real-routes.test.ts keeps this deal true. Played plainly, seed 43
 // never completes the Grand Plan, so the seat stays filled until month 8, when
@@ -15,8 +15,7 @@ test("get rid of your boss, take their seat, and lose it when the call is traced
 
   await playUntil(page, "option-ring-about-your-boss");
   await page.getByTestId("option-ring-about-your-boss").click();
-  await expect(page.getByTestId("panel-notice")).toContainText("Speak Up");
-  await page.getByTestId("continue").click();
+  await expect(answered(page)).toContainText("Speak Up");
 
   // The boss goes, and the seat opens.
   const told = page.getByTestId("panel-notice");

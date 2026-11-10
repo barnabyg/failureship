@@ -182,7 +182,7 @@ describe("a Promise", () => {
     expect(view.promises).toEqual([
       { month: 1, to: "Ben Bird", what: "WHAT-first", status: "OPEN" },
     ]);
-    expect(view.step).toMatchObject({ kind: "notice", title: "first" });
+    expect(view.result).toMatchObject({ then: { title: "first" } });
   });
 
   it("can be declined, and the reason shows through what they say", () => {
@@ -191,7 +191,7 @@ describe("a Promise", () => {
     const view = run.choose(answer("offers", "offer-first"));
 
     expect(view.promises[0]?.status).toBe("REFUSED");
-    expect(JSON.stringify(view.step)).toContain("DOUBTS");
+    expect(JSON.stringify(view.result)).toContain("DOUBTS");
   });
 
   it("is given once in a run", () => {
@@ -289,7 +289,9 @@ describe("a Promise", () => {
       run.choose(answer("first-due", "break-it-first"));
       reachMonthBefore(run, "more-offers");
       return [
-        JSON.stringify(run.choose(answer("more-offers", "offer-second")).step),
+        JSON.stringify(
+          run.choose(answer("more-offers", "offer-second")).result,
+        ),
       ];
     });
 
@@ -358,6 +360,6 @@ describe("the real Promises", () => {
     });
 
     expect(view.promises[1]?.status).toBe("They did not believe you");
-    expect(JSON.stringify(view.step)).toMatch(/new laptops for their team/);
+    expect(JSON.stringify(view.result)).toMatch(/new laptops for their team/);
   });
 });

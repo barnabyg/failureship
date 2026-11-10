@@ -155,9 +155,8 @@ describe("a Deal", () => {
 
     const view = run.choose(answer("offer", "shake"));
 
-    expect(view.step).toMatchObject({
-      kind: "notice",
-      body: "Ben Bird AGREES",
+    expect(view.result).toMatchObject({
+      then: { kind: "notice", body: "Ben Bird AGREES" },
     });
     expect(view.deals).toEqual([
       { month: 1, with: "Ben Bird", what: "WORD-DEAL", status: "D-OPEN" },

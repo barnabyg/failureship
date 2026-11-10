@@ -1,5 +1,5 @@
 import { expect, test } from "@playwright/test";
-import { freshRun, playUntil } from "./play";
+import { answered, freshRun, happened, playUntil } from "./play";
 
 // tests/engine/browser-seeds.test.ts keeps this deal true. On seed 16, taking
 // the blame in month 2 and faking the Plan in month 5 wins the seat, and your
@@ -19,10 +19,7 @@ test("hire an old friend onto your team, and hear from a Believer boss about it"
     "Hiring Decision",
   );
   await page.getByTestId("scene-option-hire-your-friend").click();
-  await expect(page.getByTestId("panel-notice")).toContainText(
-    "Your friend starts on Monday",
-  );
-  await page.getByTestId("continue").click();
+  await expect(happened(page)).toContainText("Your friend starts on Monday");
 
   await playUntil(page, "option-own-the-hire");
   await expect(page.getByTestId("month")).toContainText("12 of 18");
@@ -30,7 +27,5 @@ test("hire an old friend onto your team, and hear from a Believer boss about it"
   await expect(furious).toContainText("A word about your new hire");
   await expect(furious).toContainText("appalled");
   await page.getByTestId("option-own-the-hire").click();
-  await expect(page.getByTestId("panel-notice")).toContainText(
-    "it took something to say so",
-  );
+  await expect(answered(page)).toContainText("it took something to say so");
 });

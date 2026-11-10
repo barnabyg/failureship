@@ -4,7 +4,6 @@ import { answerAnyNotification, playToResults } from "./play";
 async function reachSecondAction(page: Page) {
   await answerAnyNotification(page);
   await page.getByTestId("hotspot-kitchen").click();
-  await page.getByTestId("continue").click();
 }
 
 test("restarts from a typed seed in the middle of a run", async ({ page }) => {
@@ -13,7 +12,6 @@ test("restarts from a typed seed in the middle of a run", async ({ page }) => {
   await page.getByTestId("hotspot-meeting").click();
   const signs = await page.getByTestId("panel-scene").innerText();
   await page.getByTestId("scene-option-say-nothing").click();
-  await page.getByTestId("continue").click();
 
   await page.goto("/?seed=1");
   await reachSecondAction(page);

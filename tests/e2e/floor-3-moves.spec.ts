@@ -1,5 +1,5 @@
 import { expect, test } from "@playwright/test";
-import { freshRun, playUntil } from "./play";
+import { answered, freshRun, happened, playUntil } from "./play";
 
 // tests/engine/browser-seeds.test.ts keeps this deal true. On seed 24, taking
 // the blame in month 2, faking the Plan in month 5 and staffing the Centre of
@@ -21,10 +21,7 @@ test("take the Board's tricky question offline, and hear from the Board Office a
   await expect(board).toContainText("when your boss asks, warmly");
   await expect(board).toContainText("How the question is asked");
   await page.getByTestId("scene-option-take-it-offline").click();
-  await expect(page.getByTestId("panel-notice")).toContainText(
-    "would like the answer offline",
-  );
-  await page.getByTestId("continue").click();
+  await expect(happened(page)).toContainText("would like the answer offline");
 
   await playUntil(page, "option-still-offline");
   await expect(page.getByTestId("month")).toContainText("15 of 18");
@@ -32,5 +29,5 @@ test("take the Board's tricky question offline, and hear from the Board Office a
   await expect(chased).toContainText("Your offline answer");
   await expect(chased).toContainText("slide seven");
   await page.getByTestId("option-still-offline").click();
-  await expect(page.getByTestId("panel-notice")).toContainText("as item one");
+  await expect(answered(page)).toContainText("as item one");
 });

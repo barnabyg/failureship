@@ -44,7 +44,7 @@ test("ride the lift to Floor 3, do its Grand Plan, and win the way out of it", a
     "The Board Offsite",
   );
   await page.getByTestId("scene-option-decide-what-stops").click();
-  await page.getByTestId("continue").click();
+
   await expect(page.getByTestId("panel-notice")).toContainText(
     "One Roadmap is done",
   );

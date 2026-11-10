@@ -1,7 +1,16 @@
-import { useEffect, useRef, type ReactNode } from "react";
+import {
+  createContext,
+  useContext,
+  useEffect,
+  useRef,
+  type ReactNode,
+} from "react";
 import { panelText } from "../content";
 import type { Choice } from "../engine";
 import { MailFoot, MailHead, Masthead, type Look } from "./Intranet";
+
+/** What the player did last, shown at the head of whatever panel comes next. */
+export const ResultBefore = createContext<ReactNode>(null);
 
 interface PanelProps {
   testId: string;
@@ -22,6 +31,7 @@ export function Panel({
   look,
   children,
 }: PanelProps) {
+  const before = useContext(ResultBefore);
   const heading = useRef<HTMLHeadingElement>(null);
   useEffect(() => {
     heading.current?.focus();
@@ -38,6 +48,7 @@ export function Panel({
       data-look={look && ("sent" in look ? "mail" : "newsletter")}
       aria-label={title}
     >
+      {before}
       {look && "sent" in look ? (
         <MailHead sent={look.sent} to={look.to} from={eyebrow} subject={h2} />
       ) : (

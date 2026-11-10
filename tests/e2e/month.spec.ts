@@ -1,9 +1,8 @@
 import { expect, test, type Page } from "@playwright/test";
-import { answerAnyNotification } from "./play";
+import { answerAnyNotification, happened } from "./play";
 
 async function spendAction(page: Page, id: string) {
   await page.getByTestId(`hotspot-${id}`).click();
-  await page.getByTestId("continue").click();
 }
 
 async function fileTheReport(page: Page) {
@@ -72,7 +71,7 @@ test("opens and closes the Org Chart at no cost in actions", async ({
   await expect(chart).toHaveCount(0);
   await expect(page.getByTestId("actions-left")).toContainText("2");
   await page.getByTestId("hotspot-kitchen").click();
-  await expect(page.getByTestId("panel-notice")).toBeVisible();
+  await expect(happened(page)).toBeVisible();
 });
 
 test("spends an action by clicking on the floor itself", async ({ page }) => {
@@ -86,7 +85,7 @@ test("spends an action by clicking on the floor itself", async ({ page }) => {
   // Each label sits just above its room, so this lands on the room's model.
   await page.mouse.click(box.x + box.width / 2, box.y + box.height + 24);
 
-  await expect(page.getByTestId("panel-notice")).toBeVisible();
+  await expect(happened(page)).toBeVisible();
   await expect(page.getByTestId("actions-left")).toContainText("1");
 });
 

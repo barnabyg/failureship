@@ -1,5 +1,5 @@
 import { expect, test } from "@playwright/test";
-import { answerAnyNotification, finishMonth } from "./play";
+import { answerAnyNotification, answerNotification, finishMonth } from "./play";
 
 test("a skipped meeting comes back as a Demand in a later month", async ({
   page,
@@ -9,9 +9,7 @@ test("a skipped meeting comes back as a Demand in a later month", async ({
 
   // Stays away from the meeting, and spends the rest elsewhere.
   await page.getByTestId("hotspot-kitchen").click();
-  await page.getByTestId("continue").click();
   await page.getByTestId("hotspot-work").click();
-  await page.getByTestId("continue").click();
 
   await expect(page.getByTestId("panel-notice")).toContainText("minutes");
   await expect(page.getByTestId("open-demands")).toContainText("1");
@@ -22,21 +20,13 @@ test("a skipped meeting comes back as a Demand in a later month", async ({
   const demand = page
     .getByTestId("panel-notification")
     .filter({ hasText: "ACTION:" });
-  while (!(await demand.isVisible())) {
-    await page
-      .getByTestId("panel-notification")
-      .locator("button:enabled", { hasText: "Costs nothing" })
-      .first()
-      .click();
-    await page.getByTestId("continue").click();
-  }
+  while (!(await demand.isVisible())) await answerNotification(page);
 
   await expect(page.getByTestId("option-deliver")).toBeVisible();
   await expect(page.getByTestId("option-push-back")).toBeVisible();
   await expect(page.getByTestId("option-hand-off")).toBeVisible();
   await expect(page.getByTestId("option-fake")).toBeVisible();
   await page.getByTestId("option-stall").click();
-  await page.getByTestId("continue").click();
 
   await expect(page.getByTestId("open-demands")).toContainText("1");
 });

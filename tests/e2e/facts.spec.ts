@@ -2,6 +2,7 @@ import { expect, test, type Page } from "@playwright/test";
 import {
   answerAnyNotification,
   finishMonth,
+  happened,
   openMeeting,
   playToResults,
   freshRun,
@@ -43,7 +44,7 @@ test("a discovered Hidden Fact changes what a Scene offers", async ({
   await expect(option).toContainText("your boss");
   await option.click();
 
-  await expect(page.getByTestId("panel-notice")).toContainText("Your boss");
+  await expect(happened(page)).toContainText("Your boss");
   await playToResults(page);
   await expect(page.getByTestId("result-fact-event")).toContainText(
     "abolished",
@@ -58,9 +59,7 @@ test("blundering into a dangerous Hidden Fact is explained at the end", async ({
   await openMeeting(page);
 
   await page.getByTestId("scene-option-report-the-analyst").click();
-  await expect(page.getByTestId("panel-notice")).toContainText(
-    "your own expenses",
-  );
+  await expect(happened(page)).toContainText("your own expenses");
 
   await playToResults(page);
   await expect(page.getByTestId("result-fact-event")).toContainText(

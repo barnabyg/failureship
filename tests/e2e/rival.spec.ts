@@ -1,5 +1,5 @@
 import { expect, test } from "@playwright/test";
-import { freshRun, playToResults, playUntil } from "./play";
+import { freshRun, happened, playToResults, playUntil } from "./play";
 
 // "the game's Rivals" in tests/engine/rivals.test.ts keeps these seeds true: on
 // seed 39 a Rival's false story about your project lands in month 1, and by month
@@ -17,10 +17,7 @@ test("a Rival's Move lands on you, and later you can make the same Move", async 
   await freshRun(page, "/?seed=39&month=8&last=9");
   await playUntil(page, "scene-option-start-a-rumour");
   await page.getByTestId("scene-option-start-a-rumour").click();
-  await expect(page.getByTestId("panel-notice")).toContainText(
-    "come back to you",
-  );
-  await page.getByTestId("continue").click();
+  await expect(happened(page)).toContainText("come back to you");
 
   await playToResults(page);
   // Yours is the same Move as theirs: a false story that travels, from whoever you told.

@@ -72,8 +72,8 @@ test.describe("at 1920×1080", () => {
     await expect(scene).toBeInViewport({ ratio: 1 });
 
     await page.locator('[data-testid^="scene-option-"]').first().click();
-    await page.getByTestId("continue").click();
     await page.getByTestId("open-notebook").click();
+
     await expect(page.getByTestId("notebook")).toBeVisible();
   });
 
