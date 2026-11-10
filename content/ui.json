@@ -32,6 +32,7 @@
   "withYouLabel": "With you",
   "optionsHeading": "How do you behave?",
   "seedLabel": "Seed",
+  "runMenuLabel": "Run",
   "orgChartHeading": "Org Chart",
   "projectHeading": "Your project",
   "projectOwnerLabel": "Owner",
@@ -39,6 +40,7 @@
   "projectReportedLabel": "As reported upstairs",
   "openDemandsHeading": "Open Demands",
   "grandPlanHeading": "Your boss's Grand Plan",
+  "grandPlanShortLabel": "Grand Plan",
   "powerMapHeading": "Power Map",
   "closeLabel": "Close",
   "standingHeading": "Standing",
@@ -49,6 +51,10 @@
   "dealsHeading": "Deals you have made",
   "favoursHeading": "Favours, yours and owed to you",
   "gaugesHeading": "Gauges",
+  "gaugeTitles": {
+    "teflon": "Teflon, out of 100: how well blame slides off you. It is your track record, not how safe you are. Press to see what moved it.",
+    "fawning": "Fawning, out of 100: how well sucking up to your managers is paying off. Not whether they like you, and no help to a promotion. Press to see what moved it."
+  },
   "gaugesNoMoves": "Nothing has come back on you yet, so nothing has moved it. It is your track record, not how safe you are or how anyone feels about you.",
   "milestonesHeading": "Milestones",
   "resultsStandingHeading": "On paper, and in fact",
