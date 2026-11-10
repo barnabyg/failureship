@@ -52,8 +52,8 @@ export default defineConfig({
         },
       },
       // The statistical balance tests, which play hundreds of whole runs each.
-      // `npm test` leaves them out, and `npm run verify` and CI run them. Each
-      // takes under 30 s here, and the longer timeout is for a slower runner.
+      // `npm test` leaves them out, and `npm run verify` and CI run them. The
+      // longer timeout is headroom for a slower runner, over AGENTS.md's limit.
       {
         extends: true,
         test: {

@@ -5,7 +5,7 @@ The [README](README.md) covers playing and steering the game, and the code map. 
 ### Verifying
 
 - `npm run verify` runs every check: formatting, lint, types, engine tests, balance tests, browser tests, dependency audit and build. The browser tests need Chromium once: `npx playwright install chromium`.
-- `npm test` runs the engine and tower tests: 19 s on a 20-thread machine, or 29 s on four workers. `npm run test:balance` runs the balance tests alone, in 66 s on the same machine, with no test over 20 s. CI runs both.
+- `npm test` runs the engine and tower tests: 19 s on a 20-thread machine, or 29 s on four workers. `npm run test:balance` runs the balance tests alone, in 66 s on the same machine. CI runs both.
 - One engine or balance test: `npx vitest run <file> -t "<name>"`.
 - One browser test: `npx playwright test <file> -g "<name>"`. Set `E2E_PORT` to run the browser tests in two worktrees at once.
 

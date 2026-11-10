@@ -17,9 +17,8 @@ npm run play
 ```
 
 This installs anything missing the first time, starts the game and opens it in your browser, or
-prints its address. `Ctrl+C` stops it. On Windows, you can double-click `run.bat` instead.
-
-The game is made for a 1920×1080 screen, and needs a window at least 1280 pixels wide.
+prints its address. `Ctrl+C` stops it. On Windows, you can double-click `run.bat` instead. The game
+is made for a 1920×1080 screen, and needs a window at least 1280 pixels wide.
 
 To try it, add `?seed=2` to the address the command prints. File the report, go to the meeting each
 month and choose the first thing, but take the blame yourself in month 2's Lessons Learned Review,
@@ -157,7 +156,7 @@ How to run the checks and tests is in [AGENTS.md](AGENTS.md#verifying).
 - `src/engine/` holds the rules: headless, seeded, and free of Three.js and React. `run.ts` is the
   interface to a run and `deal.ts` deals it; `choices.ts` carries out each choice; `month.ts` holds
   the month's order; `charts.ts` moves people on the charts, and `places.ts` reads your bosses from
-  your place on them; `floors.ts` your floor and what is on there each month; `outcome.ts` is the
+  your place on them, and puts people in Org Chart order; `floors.ts` your floor and what is on there each month; `outcome.ts` is the
   one place any consequence takes effect; `state.ts` and `reads.ts` are what the mechanics share.
   The mechanics are `boss.ts`, `demands.ts`, `find-out.ts` with `claims.ts`, `notebook.ts`,
   `over-head.ts`, `project.ts`, `scenes.ts` with `asking.ts`, `company-events.ts`, `mistakes.ts`,
@@ -193,10 +192,9 @@ How to run the checks and tests is in [AGENTS.md](AGENTS.md#verifying).
   separate gate: the project holds no credentials. Review if that changes.
 - The `minimatch` override in `package.json` patches GHSA-g3hv-75wg-m249 in the lint tooling. Remove
   it when `eslint` depends on a patched version itself.
-- In `vite.config.ts`, `test.testTimeout` is raised because some engine tests play many whole runs,
-  and further for the balance tests, which play hundreds, and `build.chunkSizeWarningLimit` because
-  Three.js and the game's text make up the single bundle. Review them if the suite gets much faster
-  or slower, or hosting is ever added.
+- In `vite.config.ts`, `test.testTimeout` is raised for tests that play many whole runs, most of all
+  the balance tests, and `build.chunkSizeWarningLimit` because Three.js and the game's text make up
+  the single bundle. Review them if the suite gets much faster or slower, or hosting is ever added.
 - `.prettierignore` leaves the owner's design records and agent docs unformatted, and skips
   `.claude/settings.local.json` and, with `eslint.config.js`, `.claude/worktrees/`, which are
   untracked and local to one machine. Review this if anything in them comes to be tracked.

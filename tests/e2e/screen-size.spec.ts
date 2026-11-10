@@ -94,6 +94,19 @@ test.describe("at 1920×1080", () => {
   }
 });
 
+test("at 1280 px the Scene sits beside the cards, not over them", async ({
+  page,
+}) => {
+  await page.setViewportSize({ width: 1280, height: 720 });
+  await freshRun(page, "/?seed=5");
+  await answerAnyNotification(page);
+  await page.getByTestId("hotspot-meeting").click();
+  const scene = await page.getByTestId("panel-scene").boundingBox();
+  const cards = await page.locator(".top-left").boundingBox();
+  if (!scene || !cards) throw new Error("Nothing to measure.");
+  expect(scene.x).toBeGreaterThanOrEqual(cards.x + cards.width);
+});
+
 test("a window narrower than 1280 px says so, and one at 1280 px does not", async ({
   page,
 }) => {

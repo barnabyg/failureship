@@ -41,8 +41,8 @@ body {
 }
 
 /*
- * The game is made for 1920×1080, and laid out to work down to 1280 px wide,
- * where the step panel starts to cover the cards. Below that it says so.
+ * The game is made for 1920×1080, and laid out to work down to 1280 px wide.
+ * Narrower, the wide step panel would cover the cards, so it says so instead.
  */
 .too-narrow {
   display: none;

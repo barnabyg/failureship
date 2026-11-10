@@ -56,6 +56,7 @@ describe("the official story", () => {
 
     expect(pairs.some((p) => p.reported && p.happened)).toBe(true);
     expect(pairs.some((p) => p.reported && !p.happened)).toBe(true);
+    expect(pairs.some((p) => !p.reported && p.happened)).toBe(true);
   });
 
   it.each(SEEDS)(
