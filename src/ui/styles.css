@@ -40,6 +40,34 @@ body {
   overflow: hidden;
 }
 
+/*
+ * The game is made for 1920×1080, and laid out to work down to 1280 px wide,
+ * where the step panel starts to cover the cards. Below that it says so.
+ */
+.too-narrow {
+  display: none;
+}
+
+@media (max-width: 1279.98px) {
+  .too-narrow {
+    position: absolute;
+    z-index: 10;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+    background: #20262b;
+    color: var(--paper);
+    text-align: center;
+  }
+
+  .too-narrow p {
+    max-width: 32em;
+  }
+}
+
 .stage {
   position: absolute;
   inset: 0;
@@ -458,13 +486,6 @@ body {
 
 .scene-columns h3 {
   margin-top: 6px;
-}
-
-@media (max-width: 800px) {
-  .results-charts,
-  .scene-columns {
-    grid-template-columns: 1fr;
-  }
 }
 
 .chart {

@@ -19,6 +19,8 @@ npm run play
 This installs anything missing the first time, starts the game and opens it in your browser, or
 prints its address. `Ctrl+C` stops it. On Windows, you can double-click `run.bat` instead.
 
+The game is made for a 1920×1080 screen, and needs a window at least 1280 pixels wide.
+
 To try it, add `?seed=2` to the address the command prints. File the report, go to the meeting each
 month and choose the first thing, but take the blame yourself in month 2's Lessons Learned Review,
 and in month 5's Ideas Workshop stick a screenshot of the new tool on your boss's note. Month 8

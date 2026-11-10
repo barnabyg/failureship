@@ -119,6 +119,8 @@ const panelSchema = z.strictObject(
       "doneLabel",
       "unavailableLabel",
       "whatNext",
+      "tooNarrowHeading",
+      "tooNarrowText",
       "intranetLabel",
       "mailToLabel",
       "mailSubjectLabel",

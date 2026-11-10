@@ -209,6 +209,10 @@ export function App() {
         <p data-testid="hint">{view.hint}</p>
       </aside>
       <StepPanel view={view} onChoose={choose} />
+      <div className="too-narrow" role="alert" data-testid="too-narrow">
+        <h2>{panelText.tooNarrowHeading}</h2>
+        <p>{panelText.tooNarrowText}</p>
+      </div>
       {orgChartOpen && (
         <Modal
           testId="org-chart"

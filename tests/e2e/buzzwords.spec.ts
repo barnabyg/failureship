@@ -84,8 +84,8 @@ test("ten Buzzwords show the latest three, and the rest behind +7 more", async (
     "notifications.json",
     pubTeaches(buzzwords.map((b) => b.id)),
   );
-  // Narrower than a laptop, since CI's fonts run wider than Windows' do.
-  await page.setViewportSize({ width: 1100, height: 800 });
+  // The narrowest window the game is laid out for, where the header is tightest.
+  await page.setViewportSize({ width: 1280, height: 800 });
   await page.goto(`${origin}?seed=1`);
   const status = page.locator(".status");
   const heightOf = () =>
