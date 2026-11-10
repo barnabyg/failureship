@@ -1,6 +1,6 @@
 import type { Content } from "./content";
 import { applyOutcome } from "./outcome";
-import { seatPending } from "./reads";
+import { namedIn, seatPending } from "./reads";
 import { drawFor } from "./rng";
 import type { State, Step } from "./state";
 
@@ -49,6 +49,7 @@ export function scheduleEvents(state: State, content: Content): void {
         source: clue.source,
         text: clue.text,
         verdict: "held",
+        about: namedIn(state, content, `${clue.source} ${clue.text}`),
       });
     }
   }

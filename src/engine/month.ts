@@ -116,6 +116,22 @@ export function leaveStory(state: State, world: World): void {
   state.step = nextStep(state, world);
 }
 
+/** The Notifications that can be answered now, in the order they arrive. */
+export function answerable(state: State, content: Content): string[] {
+  const notifications = everyNotification(content);
+  return state.unanswered.filter((id) => {
+    const notification = notifications.find((n) => n.id === id);
+    return (
+      notification !== undefined &&
+      !mentionsGone(state, content, notification.from) &&
+      optionsOnOffer(state, content, notification.options).some(
+        (o) => costOf(content, o.cost) <= remaining(state, content),
+      ) &&
+      matches(state, content, notification.when)
+    );
+  });
+}
+
 /**
  * The month's order: Notifications, any review, actions, any Company Event, a
  * Move, and then the month closes.
@@ -134,19 +150,8 @@ export function nextStep(state: State, world: World): Step {
     const won = state.wonIn !== null && state.step.kind !== "win";
     return won ? { kind: "win" } : { kind: "results" };
   }
-  const notifications = everyNotification(content);
-  for (const id of state.unanswered) {
-    const notification = notifications.find((n) => n.id === id);
-    const answerable =
-      notification &&
-      !mentionsGone(state, content, notification.from) &&
-      optionsOnOffer(state, content, notification.options).some(
-        (o) => costOf(content, o.cost) <= remaining(state, content),
-      );
-    if (answerable && matches(state, content, notification.when)) {
-      return { kind: "notification", id };
-    }
-  }
+  const [id] = answerable(state, content);
+  if (id !== undefined) return { kind: "notification", id };
   const flag = content.project.flagged;
   if (flag && state.project.flagged) {
     state.project.flagged = false;

@@ -29,12 +29,9 @@ function play(seed: number, script: Choice[], content = closingFixture()) {
 /** Answers the Notification, attends the meeting and spends the last action. */
 const month = (answer: Choice, optionId: string): Choice[] => [
   answer,
-  next,
   meeting,
   inScene(optionId),
-  next,
   kettle,
-  next,
 ];
 
 function endOf(seed: number, script: Choice[]) {
@@ -57,12 +54,14 @@ function story(seed: number, script: Choice[]) {
 
 describe("the end of the month", () => {
   it("lands a Character Move after the last action and before the close", () => {
-    const kinds = play(1, [...month(report, "stay-quiet"), next]).map(
-      (v) => v.step.kind,
-    );
+    const views = play(1, [...month(report, "stay-quiet"), next]);
+    const kinds = views.map((v) => v.step.kind);
 
-    expect(kinds.slice(-3)).toEqual(["notice", "move", "story"]);
+    expect(kinds.slice(-3)).toEqual(["actions", "move", "story"]);
     expect(kinds.indexOf("move")).toBe(kinds.length - 2);
+    // The last action's result stays beside the Move, until it is passed.
+    expect(views.at(-2)?.result).toMatchObject({ kind: "happened" });
+    expect(views.at(-1)?.result).toBeNull();
   });
 
   it("shows the Move as something that happened, not a choice", () => {
@@ -79,19 +78,16 @@ describe("the end of the month", () => {
 
     expect(kinds).toEqual([
       "notification",
-      "dialog",
       "actions",
       "scene",
-      "notice",
       "actions",
-      "notice",
       "move",
       "story",
     ]);
   });
 
   it("will not land a Move while actions remain", () => {
-    const views = play(1, [report, next, kettle, next]);
+    const views = play(1, [report, kettle]);
 
     expect(views.map((v) => v.step.kind)).not.toContain("move");
   });

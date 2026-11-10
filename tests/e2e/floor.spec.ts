@@ -1,5 +1,5 @@
 import { expect, test } from "@playwright/test";
-import { answerAnyNotification } from "./play";
+import { answerAnyNotification, happened } from "./play";
 
 test("the lift shows the route up, and cannot be taken yet", async ({
   page,
@@ -15,7 +15,7 @@ test("the lift shows the route up, and cannot be taken yet", async ({
   if (!box) throw new Error("The lift has no sign position.");
   await page.mouse.click(box.x + box.width / 2, box.y + box.height + 40);
 
-  await expect(page.getByTestId("panel-notice")).toHaveCount(0);
+  await expect(happened(page)).toHaveCount(0);
   await expect(page.getByTestId("actions-left")).toContainText("2");
 });
 
@@ -44,7 +44,7 @@ test("the furniture is part of the place, and the scenery is not", async ({
   await page.mouse.move(640, 660);
   await expect(canvas).toHaveCSS("cursor", "default");
   await page.mouse.click(640, 660);
-  await expect(page.getByTestId("panel-notice")).toHaveCount(0);
+  await expect(happened(page)).toHaveCount(0);
   await expect(page.getByTestId("actions-left")).toContainText("2");
 
   // The chair at Your desk, well below its label.
@@ -57,7 +57,7 @@ test("the furniture is part of the place, and the scenery is not", async ({
   await page.mouse.move(chair.x, chair.y);
   await expect(canvas).toHaveCSS("cursor", "pointer");
   await page.mouse.click(chair.x, chair.y);
-  await expect(page.getByTestId("panel-notice")).toBeVisible();
+  await expect(happened(page)).toBeVisible();
   await expect(page.getByTestId("actions-left")).toContainText("1");
 });
 
@@ -88,7 +88,6 @@ test("a place lights up under the mouse, and dims once it is done", async ({
 
   await page.getByTestId("hotspot-meeting").click();
   await page.getByTestId("scene-option-say-nothing").click();
-  await page.getByTestId("continue").click();
   await expect(page.getByTestId("hotspot-meeting")).toBeDisabled();
   await expect.poll(looksAtRest).toBe(false);
 });

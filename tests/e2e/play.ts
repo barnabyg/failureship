@@ -65,17 +65,26 @@ export async function answerAnyNotification(page: Page) {
   await expect(panel.or(told).first()).toBeVisible();
   if (await told.isVisible()) await page.getByTestId("continue").click();
   while (await panel.isVisible()) {
-    const report = page.getByTestId("option-report");
-    const free = panel.locator("button:enabled", { hasText: "Costs nothing" });
-    await ((await report.isVisible()) ? report : free.first()).click();
-    await page.getByTestId("continue").click();
+    await answerNotification(page);
   }
   // A Project flagged red has to be explained before anything else.
   const review = page.getByTestId("panel-scene");
   if (await review.isVisible()) {
     await page.locator('[data-testid^="scene-option-"]').first().click();
-    await page.getByTestId("continue").click();
   }
+}
+
+/**
+ * Files the report, or says no, to the Notification showing, and waits for it
+ * to go. Its result stays in the e-mail, over the next one, at no extra click.
+ */
+export async function answerNotification(page: Page) {
+  const panel = page.getByTestId("panel-notification");
+  const subject = await panel.locator("h2").innerText();
+  const report = page.getByTestId("option-report");
+  const free = panel.locator("button:enabled", { hasText: "Costs nothing" });
+  await ((await report.isVisible()) ? report : free.first()).click();
+  await expect(panel.locator("h2", { hasText: subject })).toHaveCount(0);
 }
 
 /**
@@ -109,11 +118,7 @@ export async function playUntil(page: Page, testId: string) {
     if (await stepOut.isVisible()) {
       await stepOut.click();
     } else if (await notification.isVisible()) {
-      const report = page.getByTestId("option-report");
-      const free = notification.locator("button:enabled", {
-        hasText: "Costs nothing",
-      });
-      await ((await report.isVisible()) ? report : free.first()).click();
+      await answerNotification(page);
     } else if (await scene.isVisible()) {
       await page.locator('[data-testid^="scene-option-"]').first().click();
     } else if (await carryOn.isVisible()) {
@@ -129,7 +134,7 @@ export async function playUntil(page: Page, testId: string) {
 /** Declines the month's offers and leaves the report unfiled, to keep the actions. */
 export async function skipTheReport(page: Page) {
   await page.getByTestId("option-skip").click();
-  await page.getByTestId("continue").click();
+  await expect(page.getByTestId("option-skip")).toHaveCount(0);
 }
 
 /** Goes to whatever is on in the meeting room this month. */
@@ -160,5 +165,20 @@ export async function playToResults(page: Page) {
 export async function askAtPhotocopier(page: Page) {
   await page.getByTestId("hotspot-ask-around").click();
   await page.locator('[data-testid^="subject-"]').first().click();
-  await expect(page.getByTestId("panel-claim")).toBeVisible();
+  await expect(claimHeard(page)).toBeVisible();
+}
+
+/** What the player was told at Find Out, which stays until they do something else. */
+export function claimHeard(page: Page): Locator {
+  return page.locator('[data-testid="result"][data-kind="claim"]');
+}
+
+/** What came of the player's last action on the floor, or in a Scene. */
+export function happened(page: Page): Locator {
+  return page.locator('[data-testid="result"][data-kind="happened"]');
+}
+
+/** A Notification answered, with what came of it, under the answer. */
+export function answered(page: Page): Locator {
+  return page.getByTestId("answered");
 }

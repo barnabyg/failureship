@@ -57,6 +57,7 @@ test("eighteen months, all the way to the results screen", async ({ page }) => {
     /Believer|Incompetent|Practitioner/,
   );
   await expect(page.getByTestId("result-mark")).toHaveCount(6);
+  await page.getByTestId("results-section-clues").locator("summary").click();
   await expect(page.getByTestId("result-clue").first()).toBeVisible();
   await expect(page.locator("body")).not.toContainText(/placeholder|lorem/i);
 });
@@ -65,7 +66,6 @@ test("eighteen months, all the way to the results screen", async ({ page }) => {
 async function take(page: Page, option: string) {
   await playUntil(page, `scene-option-${option}`);
   await page.getByTestId(`scene-option-${option}`).click();
-  await page.getByTestId("continue").click();
 }
 
 // The climb from the very start, as a player would see it, with a reload on

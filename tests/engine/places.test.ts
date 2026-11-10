@@ -297,8 +297,8 @@ describe("your boss, read from your place on the Org Chart", () => {
           sceneId: "meeting",
           optionId: "back-boss",
         });
-        if (view.step.kind !== "notice") throw new Error(view.step.kind);
-        return { holder, body: view.step.body };
+        if (view.result?.kind !== "happened") throw new Error(view.step.kind);
+        return { holder, body: view.result.body };
       });
 
     for (const [to, boss] of [

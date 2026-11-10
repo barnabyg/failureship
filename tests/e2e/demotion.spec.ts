@@ -14,7 +14,6 @@ test("a big mistake while the seat is open costs it, and the decision says so", 
 
   await playUntil(page, "scene-option-sink-the-projects-candidate");
   await page.getByTestId("scene-option-sink-the-projects-candidate").click();
-  await page.getByTestId("continue").click();
   await expect(page.getByTestId("panel-notice")).toContainText(
     "A letter in a plain envelope",
   );
@@ -40,7 +39,7 @@ test("a big mistake on Floor 2 demotes you, and the lift takes you down", async 
 
   await playUntil(page, "scene-option-blame-your-analyst");
   await page.getByTestId("scene-option-blame-your-analyst").click();
-  await page.getByTestId("continue").click();
+
   await expect(page.getByTestId("panel-notice")).toContainText(
     "A letter in a plain envelope",
   );

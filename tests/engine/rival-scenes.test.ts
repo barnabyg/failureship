@@ -122,7 +122,7 @@ describe("a question in a Scene from someone competing", () => {
         optionId: "stay-quiet",
       });
 
-      expect(after.step).toMatchObject({
+      expect(after.result).toMatchObject({
         body: `YOU ANSWER ${calledAtStart(content, asker)}.`,
       });
     }

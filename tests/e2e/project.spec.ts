@@ -13,7 +13,6 @@ async function closeProject(page: Page) {
 
 async function reachTheReport(page: Page) {
   await page.getByTestId("option-decline").click();
-  await page.getByTestId("continue").click();
   await expect(page.getByTestId("option-report")).toBeVisible();
 }
 
@@ -37,7 +36,6 @@ test("lying in the report sets the reported status apart from the real one", asy
   await expect(page.getByTestId("project-real")).toHaveText("Amber");
   await expect(page.getByTestId("project-reported")).toHaveText("Green");
   await closeProject(page);
-  await page.getByTestId("continue").click();
   await finishMonth(page);
 
   await expect(page.getByTestId("month")).toContainText("2 of 18");
@@ -65,7 +63,6 @@ test("doing the work improves the real status, and nothing else", async ({
   await page.goto("/?seed=1");
   await reachTheReport(page);
   await page.getByTestId("option-lie").click();
-  await page.getByTestId("continue").click();
 
   await page.getByTestId("hotspot-work").click();
 
@@ -95,7 +92,6 @@ test("the Project card covers nothing on the floor, and nothing covers it in a S
   await page.goto("/?seed=1");
   await reachTheReport(page);
   await page.getByTestId("option-report").click();
-  await page.getByTestId("continue").click();
   const card = await page.getByTestId("open-project").boundingBox();
   if (!card) throw new Error("No card to measure.");
 

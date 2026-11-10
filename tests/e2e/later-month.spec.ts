@@ -4,7 +4,8 @@ import { answerAnyNotification, attendAndFinishMonth } from "./play";
 
 async function whereTheRunIs(page: Page) {
   await page.getByTestId("open-notebook").click();
-  const clues = await page.getByTestId("clue").allInnerTexts();
+  // Words, not what shows: which months are folded, or new, is the Notebook's own.
+  const clues = await page.getByTestId("clue-words").allTextContents();
   await page.getByTestId("close-notebook").click();
   return {
     month: await page.getByTestId("month").innerText(),

@@ -279,7 +279,7 @@ describe("a scheduled event with a clue", () => {
     const views = play(startRun({ seed: 1, content }));
 
     expect(views.at(-1)?.notebook.clues).toEqual([
-      { month: 1, source: "THE-LIFT", text: "CLUE-WORDS" },
+      { month: 1, source: "THE-LIFT", text: "CLUE-WORDS", about: [] },
     ]);
     expect(landed(views)[0]?.month).toBe(3);
   });

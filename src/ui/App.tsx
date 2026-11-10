@@ -97,6 +97,8 @@ export function App() {
   const [leavingFor, setLeavingFor] = useState<number | null>(null);
   const [orgChartOpen, setOrgChartOpen] = useState(false);
   const [notebookOpen, setNotebookOpen] = useState(false);
+  // How many clues were new as the Notebook opened, which opening clears.
+  const [notebookFresh, setNotebookFresh] = useState(0);
   const [projectOpen, setProjectOpen] = useState(false);
   const [wordOpen, setWordOpen] = useState(false);
   const [gaugesOpen, setGaugesOpen] = useState(false);
@@ -165,6 +167,7 @@ export function App() {
         hotspots={view.hotspots}
         legal={view.choices}
         onChoose={choose}
+        unlabelled={view.step.kind === "results"}
       />
       <Header
         view={view}
@@ -179,6 +182,8 @@ export function App() {
           setOrgChartOpen(true);
         }}
         onOpenNotebook={() => {
+          setNotebookFresh(view.notebook.unread);
+          setGame({ run, view: run.readNotebook() });
           setNotebookOpen(true);
         }}
         onNewRun={() => {
@@ -199,16 +204,30 @@ export function App() {
           setWordOpen(true);
         }}
       />
-      <aside className="next" aria-live="polite">
-        {view.step.kind !== "results" && (
+      {/* The goal in full in month 1, and after that only in the tooltip. */}
+      <aside
+        className="next"
+        aria-live="polite"
+        title={view.step.kind === "results" ? undefined : panelText.goal}
+      >
+        {view.month === 1 && view.step.kind !== "results" && (
           <p className="goal" data-testid="goal">
             {panelText.goal}
           </p>
         )}
-        <h2>{panelText.whatNext}</h2>
-        <p data-testid="hint">{view.hint}</p>
+        <div className="next-line">
+          <h2>{panelText.whatNext}</h2>
+          <p data-testid="hint">{view.hint}</p>
+        </div>
       </aside>
-      <StepPanel view={view} onChoose={choose} />
+      <StepPanel
+        view={view}
+        onChoose={choose}
+        onRestart={restart}
+        onNewRun={() => {
+          restart(randomSeed());
+        }}
+      />
       <div className="too-narrow" role="alert" data-testid="too-narrow">
         <h2>{panelText.tooNarrowHeading}</h2>
         <p>{panelText.tooNarrowText}</p>
@@ -435,6 +454,7 @@ export function App() {
         >
           <Notebook
             notebook={view.notebook}
+            fresh={notebookFresh}
             locked={view.choices.length === 0}
             onMark={(character, kind) => {
               setGame({ run, view: run.mark(character, kind) });

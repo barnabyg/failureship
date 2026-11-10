@@ -369,3 +369,58 @@
 .panel[data-look="newsletter"] button.primary {
   font-family: "Segoe UI", Arial, sans-serif;
 }
+
+/* A Notification answered: the e-mail, the answer and, under it, what came of it. */
+.answered {
+  margin: 14px 0;
+  font-size: 0.875rem;
+}
+
+.panel .answered-subject {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 10px;
+  margin: 0 0 6px;
+  color: var(--company-navy);
+}
+
+.answered-from {
+  color: #5b6b7d;
+}
+
+.panel .answered-answer {
+  display: flex;
+  gap: 8px;
+  margin: 0 0 8px;
+  padding: 4px 12px;
+  border: 1px solid var(--company-navy);
+  border-radius: 4px;
+  background: #e8eef6;
+}
+
+.answered-label {
+  flex: none;
+  color: #5b6b7d;
+}
+
+.answered-result {
+  padding: 8px 12px;
+  border-left: 4px solid var(--company-sky);
+  background: #f3f6fa;
+}
+
+.panel .answered-result > p:last-child {
+  margin-bottom: 0;
+}
+
+.panel .told-title {
+  margin-bottom: 4px;
+  font-weight: 700;
+}
+
+/* "Next e-mail (2 more)", over the letterhead of the next one. */
+.panel[data-look] > .inbox-count {
+  margin: 0 0 8px;
+  padding-top: 10px;
+  border-top: 1px dashed #c8d1dc;
+}

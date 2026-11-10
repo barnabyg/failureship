@@ -1,6 +1,6 @@
 import type { Content } from "./content";
 import { isOn } from "./floors";
-import { matches } from "./reads";
+import { matches, namedIn } from "./reads";
 import type { State } from "./state";
 
 /** Keeps a clue of whatever the Notebook is written to keep, once in a month. */
@@ -17,6 +17,7 @@ export function noteEvents(state: State, content: Content): void {
         source: event.source,
         text: event.text,
         verdict: event.verdict,
+        about: namedIn(state, content, `${event.source} ${event.text}`),
       });
     }
   }

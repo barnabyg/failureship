@@ -300,8 +300,8 @@ describe("how a source talks", () => {
     run.choose({ type: "action", actionId: "copier" });
     const subjectId = sourceId === "cal" ? "ana" : "cal";
     const view = run.choose({ type: "find-out", sourceId, subjectId });
-    if (view.step.kind !== "claim") throw new Error(view.step.kind);
-    return { run, text: view.step.text };
+    if (view.result?.kind !== "claim") throw new Error(view.step.kind);
+    return { run, text: view.result.text };
   }
 
   it("depends on the source's role", () => {

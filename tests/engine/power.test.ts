@@ -155,7 +155,7 @@ describe("a Scene under the Power Map", () => {
       const holder = order.find((id) => id !== "dee");
       run.choose({ type: "action", actionId: "meeting" });
 
-      const { step } = run.choose({
+      const { result: step } = run.choose({
         type: "scene",
         sceneId: "meeting",
         optionId: "back-ana",

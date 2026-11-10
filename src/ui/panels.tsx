@@ -2,7 +2,8 @@ import { panelText } from "../content";
 import type { Choice, PlayerView, StepView } from "../engine";
 import { FindOutPanel } from "./FindOutPanel";
 import { ConfidentialStamp, type Look, type Sent } from "./Intranet";
-import { Continue, Panel, Reaction, Stakes } from "./Panel";
+import { Continue, Panel, Reaction, ResultBefore, Stakes } from "./Panel";
+import { AnsweredMail, InboxCount, ResultAtHead } from "./Result";
 import { ResultsPanel } from "./ResultsPanel";
 import { ScenePanel } from "./ScenePanel";
 import { StandingBar } from "./StandingBar";
@@ -87,13 +88,59 @@ function Decided({ decided }: { decided: DecidedView }) {
 interface StepPanelProps {
   view: PlayerView;
   onChoose: (choice: Choice) => void;
+  /** Starts a new run on a seed, without asking: only offered once a run is over. */
+  onRestart: (seed: number) => void;
+  onNewRun: () => void;
 }
 
-/** The panel for the current step of the month, if it needs one. */
-export function StepPanel({ view, onChoose }: StepPanelProps) {
-  const { step } = view;
+/**
+ * The panel for the current step of the month, if it needs one, headed by what
+ * the player's last choice led to. With the floor to use, that result stands
+ * alone, and goes once the player chooses again.
+ */
+export function StepPanel(props: StepPanelProps) {
+  const { view } = props;
+  const { step, result, actions } = view;
+  if (step.kind === "actions") {
+    if (result === null) return null;
+    // Small, and taking no focus, so that the floor stays the player's.
+    return (
+      <section
+        className="panel panel-result"
+        data-testid="panel-result"
+        aria-label={panelText.resultHeading}
+      >
+        <ResultAtHead result={result} actions={actions} />
+        {result.kind === "answer" && (
+          <p className="inbox-count" data-testid="inbox-count">
+            {panelText.inboxEmpty}
+          </p>
+        )}
+      </section>
+    );
+  }
+  const before =
+    result === null ? null : step.kind === "notification" &&
+      result.kind === "answer" ? (
+      <>
+        <AnsweredMail result={result} />
+        <InboxCount step={step} answered />
+      </>
+    ) : (
+      <ResultAtHead result={result} actions={actions} />
+    );
+  return (
+    <ResultBefore.Provider value={before}>
+      <StepBody {...props} />
+    </ResultBefore.Provider>
+  );
+}
+
+function StepBody({ view, onChoose, onRestart, onNewRun }: StepPanelProps) {
+  const { step, result } = view;
   /** An e-mail to the player, by their job title. */
   const mail = (sent: Sent): Look => ({ sent, to: view.job.title });
+
   switch (step.kind) {
     case "actions":
       return null;
@@ -128,40 +175,15 @@ export function StepPanel({ view, onChoose }: StepPanelProps) {
               </button>
             ))}
           </div>
+          {result?.kind !== "answer" && (
+            <InboxCount step={step} answered={false} />
+          )}
         </Panel>
       );
     case "scene":
       return <ScenePanel step={step} onChoose={onChoose} />;
     case "find-out":
       return <FindOutPanel step={step} onChoose={onChoose} />;
-    case "claim":
-      return (
-        <Panel testId="panel-claim" title={step.title}>
-          <p className="callout" data-testid="claim-text">
-            {step.text}
-          </p>
-          <Continue onChoose={onChoose} />
-        </Panel>
-      );
-    case "dialog":
-      return (
-        <Panel testId="panel-dialog" title={step.title} look={mail("dialog")}>
-          {step.lines.map((line) => (
-            <p key={line.text}>
-              {line.speaker !== undefined && <strong>{line.speaker}: </strong>}
-              {line.text}
-            </p>
-          ))}
-          {step.learned.map((word) => (
-            <p key={word.id} className="callout" data-testid="learned">
-              <strong>{panelText.learnedLabel}: </strong>
-              {word.term}. {word.meaning}
-            </p>
-          ))}
-          <Reaction text={step.reaction} />
-          <Continue onChoose={onChoose} />
-        </Panel>
-      );
     case "notice":
       return (
         <Panel testId="panel-notice" title={step.title} look={mail("notice")}>
@@ -212,6 +234,15 @@ export function StepPanel({ view, onChoose }: StepPanelProps) {
         </Panel>
       );
     case "results":
-      return <ResultsPanel step={step} orgChart={view.orgChart} />;
+      return (
+        <ResultsPanel
+          step={step}
+          orgChart={view.orgChart}
+          onPlayAgain={() => {
+            onRestart(view.seed);
+          }}
+          onNewRun={onNewRun}
+        />
+      );
   }
 }

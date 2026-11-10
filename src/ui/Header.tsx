@@ -1,6 +1,7 @@
 import { useState } from "react";
-import { panelText } from "../content";
+import { gaugeTitles, panelText } from "../content";
 import type { Buzzword, PlayerView } from "../engine";
+import { notebookLabel } from "./Notebook";
 import { RunControls } from "./RunControls";
 import { StandingBar } from "./StandingBar";
 
@@ -10,48 +11,36 @@ export function monthText(view: PlayerView): string {
     .replace("{total}", String(view.totalMonths));
 }
 
-/** The player's Project, always in view, since the gap in it is the game. */
-function ProjectCard({
+/** The player's Project on one line, always in view, since the gap in it is the game. */
+function ProjectLine({
   view,
   onOpen,
 }: {
   view: PlayerView;
   onOpen: () => void;
 }) {
-  const { project, openDemands, grandPlan } = view;
+  const { project } = view;
   return (
     <button
       type="button"
-      className="project-card"
+      className="status-card-part status-card-project"
       data-testid="open-project"
+      title={panelText.projectHeading}
       onClick={onOpen}
     >
-      <span className="project-card-heading">{panelText.projectHeading}</span>
       <strong>{project.name}</strong>
-      <span className="project-card-statuses">
-        <ProjectStatus
-          label={panelText.projectRealLabel}
-          status={project.real}
-          colour={project.realColour}
-          testId="card-real"
-        />
-        <ProjectStatus
-          label={panelText.projectReportedLabel}
-          status={project.reported}
-          colour={project.reportedColour}
-          testId="card-reported"
-        />
-      </span>
-      {grandPlan && (
-        <span data-testid="grand-plan-card" title={grandPlan.what}>
-          {panelText.grandPlanHeading}: {grandPlan.title}. {grandPlan.status}
-        </span>
-      )}
-      {openDemands.length > 0 && (
-        <span data-testid="open-demands">
-          {panelText.openDemandsHeading}: {openDemands.length}
-        </span>
-      )}
+      <ProjectStatus
+        label={panelText.projectRealLabel}
+        status={project.real}
+        colour={project.realColour}
+        testId="card-real"
+      />
+      <ProjectStatus
+        label={panelText.projectReportedLabel}
+        status={project.reported}
+        colour={project.reportedColour}
+        testId="card-reported"
+      />
     </button>
   );
 }
@@ -106,47 +95,84 @@ function LatestBuzzwords({
   );
 }
 
-/**
- * How the player would fare on paper, always in view. It sits beside the Project
- * rather than in the header, which has no room left for it.
- */
-function StandingCard({
+/** How the player would fare on paper, always in view, and not opened. */
+function StandingLine({
   standing,
 }: {
   standing: NonNullable<PlayerView["standing"]>;
 }) {
   return (
     <div
-      className="project-card standing-card"
+      className="status-card-line"
       title={standing.title}
       data-testid="standing-card"
     >
-      <span className="project-card-heading">{standing.label}</span>
-      <span className="project-card-status">
-        <StandingBar standing={standing} testId="standing" />
-        <span>{standing.band}</span>
-      </span>
+      <span className="status-card-label">{standing.label}</span>
+      <StandingBar standing={standing} testId="standing" />
+      <strong>{standing.band}</strong>
     </div>
   );
 }
 
-/** The player's own commitments, always in view, and free to look at. */
-function WordCard({ view, onOpen }: { view: PlayerView; onOpen: () => void }) {
+/**
+ * What is open: the boss's Grand Plan, Demands not yet heard the last of, and
+ * the player's own word given. A part with nothing in it is left out, but Your
+ * word given is always there, being free to look at.
+ */
+function OpenLine({
+  view,
+  onOpenProject,
+  onOpenWord,
+}: {
+  view: PlayerView;
+  onOpenProject: () => void;
+  onOpenWord: () => void;
+}) {
+  const { grandPlan, openDemands } = view;
   return (
-    <button
-      type="button"
-      className="project-card"
-      data-testid="open-word"
-      onClick={onOpen}
-    >
-      <span className="project-card-heading">{panelText.promisesHeading}</span>
-      <span data-testid="word-count">
-        {panelText.promisesCount.replace(
-          "{n}",
-          String(view.promises.length + view.deals.length),
-        )}
-      </span>
-    </button>
+    <div className="status-card-line">
+      {grandPlan && (
+        <button
+          type="button"
+          className="status-card-part"
+          data-testid="grand-plan-card"
+          title={`${panelText.grandPlanHeading}: ${grandPlan.title}. ${grandPlan.what}`}
+          onClick={onOpenProject}
+        >
+          <span className="status-card-label">
+            {panelText.grandPlanShortLabel}
+          </span>{" "}
+          {grandPlan.status}
+        </button>
+      )}
+      {openDemands.length > 0 && (
+        <button
+          type="button"
+          className="status-card-part"
+          data-testid="open-demands"
+          onClick={onOpenProject}
+        >
+          <span className="status-card-label">
+            {panelText.openDemandsHeading}
+          </span>{" "}
+          {openDemands.length}
+        </button>
+      )}
+      <button
+        type="button"
+        className="status-card-part"
+        data-testid="open-word"
+        onClick={onOpenWord}
+      >
+        <span className="status-card-label">{panelText.promisesHeading}</span>{" "}
+        <span data-testid="word-count">
+          {panelText.promisesCount.replace(
+            "{n}",
+            String(view.promises.length + view.deals.length),
+          )}
+        </span>
+      </button>
+    </div>
   );
 }
 
@@ -157,15 +183,13 @@ function ProjectStatus(props: {
   testId: string;
 }) {
   return (
-    <span>
-      <span className="project-card-label">{props.label}</span>
-      <span className="project-card-status">
-        <span
-          className="project-card-dot"
-          style={{ backgroundColor: props.colour }}
-        />
-        <span data-testid={props.testId}>{props.status}</span>
-      </span>
+    <span className="status-card-status">
+      <span className="status-card-label">{props.label}</span>
+      <span
+        className="status-card-dot"
+        style={{ backgroundColor: props.colour }}
+      />
+      <strong data-testid={props.testId}>{props.status}</strong>
     </span>
   );
 }
@@ -186,7 +210,7 @@ function Gauges({
           type="button"
           className="status-link"
           data-testid={`open-gauge-${gauge.id}`}
-          title={panelText.gaugesHeading}
+          title={gaugeTitles[gauge.id]}
           onClick={onOpen}
         >
           {gauge.value}
@@ -214,8 +238,8 @@ export function Header(props: {
     <header className="status">
       <div className="status-title">
         <h1>{panelText.title}</h1>
-        <p className="tagline" title={panelText.tagline}>
-          {panelText.tagline}
+        <p className="tagline">
+          <span>{panelText.tagline}</span>
         </p>
       </div>
       <dl>
@@ -227,12 +251,14 @@ export function Header(props: {
           <dt>{panelText.monthHeading}</dt>
           <dd>{monthText(view)}</dd>
         </div>
-        <div data-testid="actions-left">
-          <dt>{panelText.actionsHeading}</dt>
-          <dd>
-            {panelText.actionsLeft.replace("{actions}", view.actions.label)}
-          </dd>
-        </div>
+        {view.step.kind !== "results" && (
+          <div data-testid="actions-left">
+            <dt>{panelText.actionsHeading}</dt>
+            <dd>
+              {panelText.actionsLeft.replace("{actions}", view.actions.label)}
+            </dd>
+          </div>
+        )}
         {view.finalWarning && (
           <div className="status-warning" data-testid="final-warning">
             <dt>{panelText.standingHeading}</dt>
@@ -264,14 +290,17 @@ export function Header(props: {
           data-testid="open-notebook"
           onClick={props.onOpenNotebook}
         >
-          {panelText.notebookHeading} ({view.notebook.clues.length})
+          {notebookLabel(view.notebook)}
         </button>
       </RunControls>
     </header>
   );
 }
 
-/** The cards beside the header: the Project, Official standing and Your word given. */
+/**
+ * The status card under the header: the Project, Official standing and what is
+ * open, a line each. The run's end has no use for it.
+ */
 export function HeaderCards(props: {
   view: PlayerView;
   /** Why a seed the player gave was refused, if one was. */
@@ -287,9 +316,17 @@ export function HeaderCards(props: {
           {message}
         </p>
       )}
-      <ProjectCard view={view} onOpen={props.onOpenProject} />
-      {view.standing && <StandingCard standing={view.standing} />}
-      <WordCard view={view} onOpen={props.onOpenWord} />
+      {view.step.kind !== "results" && (
+        <div className="status-card" data-testid="status-card">
+          <ProjectLine view={view} onOpen={props.onOpenProject} />
+          {view.standing && <StandingLine standing={view.standing} />}
+          <OpenLine
+            view={view}
+            onOpenProject={props.onOpenProject}
+            onOpenWord={props.onOpenWord}
+          />
+        </div>
+      )}
     </div>
   );
 }

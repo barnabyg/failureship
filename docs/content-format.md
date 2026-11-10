@@ -607,8 +607,8 @@ that shows.
 ## `project.json`
 
 The player's Project: its `owner`, its `statuses` from best to worst, each with a `colour`,
-where it `start`s, and the `events` that happen to it as a month opens. The **Your project**
-card stays on the floor, showing how it really is and how it has been reported. It can be
+where it `start`s, and the `events` that happen to it as a month opens. Its line on the
+status card stays on the floor, showing how it really is and how it has been reported. It can be
 clicked at any step, at no cost, for the details.
 
 A Notification option, Scene result or action can carry
@@ -1005,7 +1005,8 @@ story, and they count as hidden, so no option can depend on them.
 
 ## `ui.json`
 
-Headings, buttons and the "What you can do now" hints. `goal` is the goal of the run, shown above
-the hints from the first screen on, and not on the results screen, so a newcomer has it at once.
-Keep it to a line or two. `hints.win` is
+Headings, buttons and the "What you can do now" hints. `goal` is the goal of the run, shown in full above
+the hints in month 1, so a newcomer has it at once, and after that in the hints' tooltip. Keep it
+to a line or two. `gaugeTitles` gives each Gauge in [`gauges.json`](#gaugesjson), by its `id`, the
+tooltip saying what it is; a Gauge without one is refused. `hints.win` is
 the hint beside the stand-in for [winning](#winning).

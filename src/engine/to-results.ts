@@ -1,5 +1,5 @@
 import { startedAs } from "./changes";
-import { MOVE_FAMILIES, type Content } from "./content";
+import { MOVE_FAMILIES, type ClueVerdict, type Content } from "./content";
 import { dealsInResults } from "./deals";
 import { gaugesInView } from "./gauges";
 import { plansInResults } from "./grand-plans";
@@ -138,12 +138,7 @@ export function toResultsView(
           mark === startedAs(state, dealt.id, dealt.kind),
       };
     }),
-    clues: state.clues.map(({ month, source, text, verdict }) => ({
-      month,
-      source,
-      text,
-      verdict: content.ui.clueVerdicts[verdict],
-    })),
+    ...toClues(state, content),
     factEvents: state.factEvents,
     boss: toBossResults(state, content),
     played: MOVE_FAMILIES.flatMap((id) => {
@@ -172,6 +167,52 @@ export function toResultsView(
         motive: (motive?.text ?? "").replaceAll("{name}", source),
       };
     }),
+  };
+}
+
+const CLUE_ORDER: readonly ClueVerdict[] = ["wrong", "held", "idle"];
+
+/**
+ * What the player was told, worst first: what was false or misleading, then
+ * what held up, then what did not matter, each in the order it was told. The
+ * same thing told again is one row, with a count.
+ */
+function toClues(
+  state: State,
+  content: Content,
+): Pick<Extract<StepView, { kind: "results" }>, "clues" | "told"> {
+  const rows = new Map<
+    string,
+    {
+      months: number[];
+      source: string;
+      text: string;
+      verdict: ClueVerdict;
+      count: number;
+    }
+  >();
+  for (const { month, source, text, verdict } of state.clues) {
+    const key = JSON.stringify([source, text, verdict]);
+    const row = rows.get(key);
+    if (row === undefined) {
+      rows.set(key, { months: [month], source, text, verdict, count: 1 });
+    } else {
+      row.count += 1;
+      if (!row.months.includes(month)) row.months.push(month);
+    }
+  }
+  const sorted = [...rows.values()].sort(
+    (a, b) => CLUE_ORDER.indexOf(a.verdict) - CLUE_ORDER.indexOf(b.verdict),
+  );
+  return {
+    clues: sorted.map((row) => ({
+      ...row,
+      verdict: content.ui.clueVerdicts[row.verdict],
+    })),
+    told: {
+      count: state.clues.length,
+      wrong: state.clues.filter((c) => c.verdict === "wrong").length,
+    },
   };
 }
 

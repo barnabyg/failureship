@@ -5,7 +5,7 @@ import type { StepView } from "../engine";
 /** The steps that arrive like Notifications: each is an e-mail on the intranet. */
 export type Sent = Extract<
   StepView["kind"],
-  "notification" | "dialog" | "notice" | "move" | "event"
+  "notification" | "notice" | "move" | "event"
 >;
 
 /** An e-mail, sent to the player by their job title, or an issue of the newsletter. */

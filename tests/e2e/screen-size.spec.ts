@@ -46,7 +46,7 @@ test.describe("at 1920×1080", () => {
       "job-title",
       "month",
       "actions-left",
-      "new-run",
+      "run-menu",
       "open-org-chart",
       "open-notebook",
     ]);
@@ -72,8 +72,8 @@ test.describe("at 1920×1080", () => {
     await expect(scene).toBeInViewport({ ratio: 1 });
 
     await page.locator('[data-testid^="scene-option-"]').first().click();
-    await page.getByTestId("continue").click();
     await page.getByTestId("open-notebook").click();
+
     await expect(page.getByTestId("notebook")).toBeVisible();
   });
 
@@ -105,6 +105,55 @@ test("at 1280 px the Scene sits beside the cards, not over them", async ({
   const cards = await page.locator(".top-left").boundingBox();
   if (!scene || !cards) throw new Error("Nothing to measure.");
   expect(scene.x).toBeGreaterThanOrEqual(cards.x + cards.width);
+});
+
+/**
+ * Whether the tagline is on its one line, and if so whether all of it fits.
+ * Pushed on to the hidden second line, it is not shown at all.
+ */
+async function tagline(page: Page) {
+  return page.locator(".tagline").evaluate((line) => {
+    const box = line.getBoundingClientRect();
+    const words = line.querySelector("span")?.getBoundingClientRect();
+    if (!words || box.height === 0) return { shown: false, whole: true };
+    const shown = words.top < box.bottom;
+    return { shown, whole: !shown || words.right <= box.right + 0.5 };
+  });
+}
+
+test("the tagline is shown whole on a wide screen, and never cut off", async ({
+  page,
+}) => {
+  await page.setViewportSize(FULL_HD);
+  await freshRun(page, "/?seed=5");
+  expect(await tagline(page)).toEqual({ shown: true, whole: true });
+
+  // A busy header, with Buzzwords learned, at the narrowest width.
+  await page.setViewportSize({ width: 1280, height: 720 });
+  await freshRun(page, "/?seed=1");
+  await page.getByTestId("option-pub").click();
+  await expect(page.getByTestId("buzzwords")).toBeVisible();
+  expect((await tagline(page)).whole).toBe(true);
+});
+
+test("each Gauge says what it is, and looks like a button when pointed at", async ({
+  page,
+}) => {
+  await freshRun(page, "/?seed=5");
+  await answerAnyNotification(page);
+  const teflon = page.getByTestId("open-gauge-teflon");
+  await expect(teflon).toHaveAttribute("title", /blame/);
+  await expect(page.getByTestId("open-gauge-fawning")).toHaveAttribute(
+    "title",
+    /sucking up/,
+  );
+  const plain = await teflon.evaluate(
+    (b) => getComputedStyle(b).backgroundColor,
+  );
+  await teflon.hover();
+  await expect
+    .poll(() => teflon.evaluate((b) => getComputedStyle(b).backgroundColor))
+    .not.toBe(plain);
 });
 
 test("a window narrower than 1280 px says so, and one at 1280 px does not", async ({

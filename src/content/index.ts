@@ -43,6 +43,7 @@ const {
   freeLabel,
   bossLanded,
   results,
+  gaugeTitles: writtenGaugeTitles,
   ...presentation
 } = ui;
 
@@ -116,6 +117,14 @@ const panelSchema = z.strictObject(
       "buzzwordsMore",
       "buzzwordsListHeading",
       "continueLabel",
+      "resultHeading",
+      "resultSpent",
+      "resultSpentLast",
+      "answerLabel",
+      "nextMail",
+      "nextMailMore",
+      "inboxMore",
+      "inboxEmpty",
       "doneLabel",
       "unavailableLabel",
       "whatNext",
@@ -136,6 +145,7 @@ const panelSchema = z.strictObject(
       "withYouLabel",
       "optionsHeading",
       "seedLabel",
+      "runMenuLabel",
       "orgChartHeading",
       "projectHeading",
       "projectOwnerLabel",
@@ -143,6 +153,7 @@ const panelSchema = z.strictObject(
       "projectReportedLabel",
       "openDemandsHeading",
       "grandPlanHeading",
+      "grandPlanShortLabel",
       "powerMapHeading",
       "closeLabel",
       "standingHeading",
@@ -184,6 +195,11 @@ const panelSchema = z.strictObject(
       "notebookCluesHeading",
       "notebookEmpty",
       "notebookNoMark",
+      "notebookNew",
+      "notebookNewClue",
+      "notebookEveryone",
+      "notebookAbout",
+      "notebookMonthCount",
       "resultsMarksHeading",
       "resultsMarkRight",
       "resultsMarkWrong",
@@ -196,6 +212,18 @@ const panelSchema = z.strictObject(
       "resultsClaimsHeading",
       "resultsNoClaims",
       "resultsMonthLabel",
+      "resultsMonthsLabel",
+      "resultsTold",
+      "resultsThings",
+      "resultsThingsOne",
+      "resultsWrong",
+      "resultsWrongOne",
+      "resultsTimesTold",
+      "resultsChartsHeading",
+      "resultsMarksRight",
+      "resultsNobody",
+      "resultsNone",
+      "playAgainLabel",
       "seedInputLabel",
       "seedRefused",
       "restartLabel",
@@ -227,3 +255,24 @@ export function parsePanelText(raw: unknown): typeof presentation {
 
 /** Words used only by the panels, such as button labels. */
 export const panelText = parsePanelText(presentation);
+
+/**
+ * What each Gauge is, by its id in gauges.json, for its tooltip in the header.
+ * A Gauge with nothing said fails loudly at start-up.
+ */
+export function parseGaugeTitles(
+  raw: unknown,
+  gauges: readonly { id: string }[] = [],
+): Record<string, string> {
+  const schema = z.strictObject(
+    Object.fromEntries(gauges.map((g) => [g.id, z.string().min(1)])),
+  );
+  const parsed = schema.safeParse(raw);
+  if (!parsed.success) throw new ContentError(z.prettifyError(parsed.error));
+  return parsed.data;
+}
+
+export const gaugeTitles = parseGaugeTitles(
+  writtenGaugeTitles,
+  gameContent.gauges,
+);

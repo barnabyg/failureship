@@ -28,13 +28,12 @@ has seeds for each way up, a Rival winning, a demotion, being fired and the win.
 
 ## What to try
 
-Every run has a seed, at the top right, and `?seed=8` picks one. Each month has the same shape:
+Every run has a seed, on the **Run** menu at the top right, and `?seed=8` picks one. Each month has the same shape:
 
 1. **A Notification arrives.** Answer it. An answer may cost one of your 3 actions, and one always
    costs nothing. A month always leaves you something to decide, on any floor. Every third
    month the **Quarterly Business Review** follows by itself, at no cost, and goes on the record.
-2. **Spend your remaining actions** by clicking a place on the floor or its label. The panel at
-   the bottom left always says your goal, and what you can do now, at every step.
+2. **Spend your remaining actions** by clicking places on the floor, as the guide at the foot says.
 3. **Any Company Event, then a Character Move, lands on you.** You do not get a choice.
 4. **The month closes** with the official story beside what actually happened.
 
@@ -74,7 +73,7 @@ along the Power Map, shown only in how they are with you, and good news travels 
 stories. A **Rival** is any Practitioner competing with you, your boss included, and nothing says
 who. Rivals use your own Moves on you, and once you have seen one done, you can use it too.
 
-Your boss's **Grand Plan** is on the **Your project** card once you hear of it. Doing it for real
+Your boss's **Grand Plan** is on the status card once you hear of it. Doing it for real
 needs whoever really has what it takes. Done or faked, it goes on the record, but whether your boss
 counts it goes by who they are, a fake can be found out, and a failed one is blamed on someone.
 
@@ -91,15 +90,15 @@ the Head of Transformation, where the Board and the CFO reach down: a cut of 30%
 day's notice, a tricky question. Floor 3's seat, by its Plan or a nomination upstairs, is the way
 out: the run ends with a stand-in for the penthouse that goes by how you got there.
 
-At the end, the results screen says how you got there, seat by seat, and who was really who: kinds,
-Hidden Facts, Rivals, your marks, your Moves, your bosses' verdicts, every claim and both charts.
+The results screen opens with the ending, who really decided and **Play this seed again**, and
+folds the rest: who was who, Hidden Facts, Rivals, your marks, Moves, verdicts, claims and charts.
 
 You can also be fired. Some choices are big mistakes, such as blaming someone with a dangerous
 Hidden Fact. The first puts you on a **Final Warning**, shown beside your job title, and the second
 ends the run. One made while a seat is open can cost you it, and one in a seat you won takes you
 down the lift, under whoever takes your seat. A few fire you outright, and say so on the button.
 
-**New run** deals a new seed, **Restart from seed** replays one, and leaving a run asks first. A
+The **Run** menu holds **New run** and **Restart from seed**, and leaving a run asks first. A
 friend on your seed gets your deal. Each step is saved in your browser, hidden truth and all, so a
 reload carries on, and a change to `content/` or the game offers a new run.
 
@@ -180,8 +179,9 @@ How to run the checks and tests is in [AGENTS.md](AGENTS.md#verifying).
 - `src/ui/` holds the React panels over the tower: `App.tsx` wires them to the run, and rides the
   lift when the floor changes, and `TowerStage.tsx` the tower's hotspots. `panels.tsx` picks each
   step's panel, the larger being `ScenePanel.tsx`, `FindOutPanel.tsx` and `ResultsPanel.tsx`;
-  `Panel.tsx` holds their frame and buttons, and `Intranet.tsx` styles the e-mails and newsletter.
-  `Header.tsx` draws the header and its cards, with `RunControls.tsx` and `StandingBar.tsx`.
+  `Panel.tsx` holds their frame and buttons, `Result.tsx` what the player's own choices led to, which
+  waits beside what comes next, and `Intranet.tsx` the e-mails and newsletter. `Header.tsx` draws
+  the header and status card, with `RunControls.tsx` (the Run menu) and `StandingBar.tsx`.
   `Chart.tsx` and `Notebook.tsx` open in a `Modal.tsx`. `saved-run.ts` saves the run, and
   `later-month.ts` plays the e2e build to `?month=N` and ends it at `&last=N`.
 

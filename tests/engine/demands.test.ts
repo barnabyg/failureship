@@ -122,7 +122,6 @@ function nextMonth(run: Run): PlayerView {
 function afterStalling(seed: number, content: Content) {
   const run = startRun({ seed, content });
   run.choose(answer("stall"));
-  run.choose({ type: "continue" });
   let view = run.view();
   while (view.step.kind !== "results") {
     if (view.step.kind === "notification") return "chased";
@@ -171,8 +170,7 @@ describe("a stalled Demand", () => {
   it("is resolved no earlier than the month after", () => {
     for (const seed of SEEDS.slice(0, 50)) {
       const run = startRun({ seed, content: content() });
-      run.choose(answer("stall"));
-      const { step, month } = run.choose({ type: "continue" });
+      const { step, month } = run.choose(answer("stall"));
 
       expect(month).toBe(1);
       expect(step.kind).toBe("actions");
@@ -198,7 +196,6 @@ describe("a stalled Demand", () => {
     if (seed === undefined) throw new Error("Nothing was ever forgotten.");
     const run = startRun({ seed, content: content() });
     run.choose(answer("stall"));
-    run.choose({ type: "continue" });
     let view = run.view();
     while (!(view.step.kind === "notice" && view.step.title === "FORGOTTEN")) {
       view = nextMonth(run);
@@ -212,7 +209,6 @@ describe("a stalled Demand", () => {
     if (seed === undefined) throw new Error("Nothing was ever chased.");
     const run = startRun({ seed, content: content() });
     run.choose(answer("stall"));
-    run.choose({ type: "continue" });
     let view = run.view();
     while (view.step.kind !== "notification") view = nextMonth(run);
 
@@ -232,7 +228,6 @@ describe("a stalled Demand", () => {
     const beliefAfterBeingChased = (seed: number) => {
       const run = startRun({ seed, content: content() });
       run.choose(answer("stall"));
-      run.choose({ type: "continue" });
       let view = run.view();
       while (view.step.kind !== "notification") view = nextMonth(run);
       run.choose({
@@ -260,9 +255,9 @@ describe("a Demand's answers", () => {
     const content = parseContent(demandFixtureRaw());
     const landed = (kind: Kind, optionId: string) => {
       const run = startRun({ seed: seedWithBoss(kind, content), content });
-      const { step } = run.choose(answer(optionId));
+      const { result } = run.choose(answer(optionId));
       return {
-        reaction: step.kind === "notice" ? step.reaction : null,
+        reaction: result?.kind === "answer" ? result.then.reaction : null,
         belief: readHiddenTruth(run).bossBelief,
       };
     };
@@ -343,7 +338,6 @@ describe("Demands in content", () => {
     ];
     const run = startRun({ seed, content: parseContent(raw) });
     run.choose(answer("stall"));
-    run.choose({ type: "continue" });
     let view = run.view();
     while (view.step.kind !== "notification") view = nextMonth(run);
     while (view.step.kind !== "story") {

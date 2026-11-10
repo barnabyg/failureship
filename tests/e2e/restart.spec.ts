@@ -1,10 +1,10 @@
 import { expect, test, type Page } from "@playwright/test";
 import { answerAnyNotification, playToResults } from "./play";
+import { openRunMenu } from "./run-menu";
 
 async function reachSecondAction(page: Page) {
   await answerAnyNotification(page);
   await page.getByTestId("hotspot-kitchen").click();
-  await page.getByTestId("continue").click();
 }
 
 test("restarts from a typed seed in the middle of a run", async ({ page }) => {
@@ -13,10 +13,10 @@ test("restarts from a typed seed in the middle of a run", async ({ page }) => {
   await page.getByTestId("hotspot-meeting").click();
   const signs = await page.getByTestId("panel-scene").innerText();
   await page.getByTestId("scene-option-say-nothing").click();
-  await page.getByTestId("continue").click();
 
   await page.goto("/?seed=1");
   await reachSecondAction(page);
+  await openRunMenu(page);
   await page.getByTestId("seed-input").fill("8");
   await page.getByTestId("restart-seed").click();
 
@@ -38,6 +38,7 @@ test("declining the confirmation keeps the run", async ({ page }) => {
   await page.goto("/?seed=1");
   await reachSecondAction(page);
 
+  await openRunMenu(page);
   await page.getByTestId("new-run").click();
   await page.getByTestId("confirm-leave-no").click();
 
@@ -50,6 +51,7 @@ test("escape also keeps the run", async ({ page }) => {
   await page.goto("/?seed=1");
   await reachSecondAction(page);
 
+  await openRunMenu(page);
   await page.getByTestId("new-run").click();
   await expect(page.getByTestId("confirm-leave")).toBeVisible();
   await page.keyboard.press("Escape");
@@ -62,6 +64,7 @@ test("a new run deals a new seed from any step", async ({ page }) => {
   await page.goto("/?seed=1");
   await page.getByTestId("option-pub").click();
 
+  await openRunMenu(page);
   await page.getByTestId("new-run").click();
   await page.getByTestId("confirm-leave-yes").click();
 
@@ -76,6 +79,7 @@ test("a seed that cannot be used is refused and the run carries on", async ({
   await page.goto("/?seed=1");
   await reachSecondAction(page);
 
+  await openRunMenu(page);
   await page.getByTestId("seed-input").fill("not a seed");
   await page.getByTestId("seed-input").press("Enter");
 
@@ -104,6 +108,7 @@ test("the end of a run needs no confirmation to leave", async ({ page }) => {
   await page.goto("/?seed=1&month=9&last=9");
   await playToResults(page);
 
+  await openRunMenu(page);
   await page.getByTestId("seed-input").fill("5");
   await page.getByTestId("restart-seed").click();
 
@@ -112,10 +117,65 @@ test("the end of a run needs no confirmation to leave", async ({ page }) => {
   await expect(page.getByTestId("panel-notification")).toBeVisible();
 });
 
+test("the Run menu holds the seed, New run and Restart from seed, and only Org Chart and Notebook sit beside it", async ({
+  page,
+}) => {
+  await page.goto("/?seed=3");
+  await answerAnyNotification(page);
+
+  const menu = page.getByTestId("run-menu");
+  await expect(menu).toContainText("3");
+  await expect(menu).toHaveAttribute("aria-expanded", "false");
+  await expect(page.getByTestId("new-run")).toHaveCount(0);
+  await expect(page.getByTestId("seed-input")).toHaveCount(0);
+  const buttons = await page
+    .locator(".run-controls button:visible")
+    .evaluateAll((els) => els.map((el) => el.getAttribute("data-testid")));
+  expect(buttons).toEqual(["open-org-chart", "open-notebook", "run-menu"]);
+
+  await menu.click();
+  await expect(menu).toHaveAttribute("aria-expanded", "true");
+  await expect(page.getByTestId("new-run")).toBeVisible();
+  await expect(page.getByTestId("restart-seed")).toBeVisible();
+
+  // A click elsewhere puts it away.
+  await page.getByTestId("job-title").click();
+  await expect(page.getByTestId("new-run")).toHaveCount(0);
+});
+
+test("the Run menu works from the keyboard, and leaving still asks first", async ({
+  page,
+}) => {
+  await page.goto("/?seed=1");
+  await reachSecondAction(page);
+
+  await page.getByTestId("run-menu").focus();
+  await page.keyboard.press("Enter");
+  await expect(page.getByTestId("new-run")).toBeVisible();
+  await page.keyboard.press("Escape");
+  await expect(page.getByTestId("new-run")).toHaveCount(0);
+  await expect(page.getByTestId("run-menu")).toBeFocused();
+
+  await page.keyboard.press("Enter");
+  await page.keyboard.press("Tab");
+  await expect(page.getByTestId("new-run")).toBeFocused();
+  await page.keyboard.press("Tab");
+  await expect(page.getByTestId("seed-input")).toBeFocused();
+  await page.keyboard.type("8");
+  await page.keyboard.press("Tab");
+  await expect(page.getByTestId("restart-seed")).toBeFocused();
+  await page.keyboard.press("Enter");
+
+  await expect(page.getByTestId("confirm-leave")).toBeVisible();
+  await page.getByTestId("confirm-leave-yes").click();
+  await expect(page.getByTestId("seed")).toHaveText("8");
+});
+
 test("a new run can be started from the end", async ({ page }) => {
   await page.goto("/?seed=1&month=9");
   await playToResults(page);
 
+  await openRunMenu(page);
   await page.getByTestId("new-run").click();
 
   await expect(page.getByTestId("seed")).not.toHaveText("1");

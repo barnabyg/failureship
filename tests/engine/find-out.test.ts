@@ -98,16 +98,16 @@ describe("Find Out", () => {
 
     const view = askOnce(run);
 
-    if (view.step.kind !== "claim") throw new Error(view.step.kind);
-    expect(view.step.title).toContain("Ben Bird");
-    expect(view.step.text).toMatch(/Cal Cope|HEARD/);
-    expect(view.step.text).not.toMatch(/\{\w+\}/);
-    expect(view.choices).toEqual([{ type: "continue" }]);
+    if (view.result?.kind !== "claim") throw new Error(view.step.kind);
+    expect(view.result.title).toContain("Ben Bird");
+    expect(view.result.text).toMatch(/Cal Cope|HEARD/);
+    expect(view.result.text).not.toMatch(/\{\w+\}/);
+    expect(view.step.kind).toBe("actions");
   });
 
   it("is the same again for the same seed and choices", () => {
     const told = (seed: number) =>
-      askOnce(startRun({ seed, content: content() })).step;
+      askOnce(startRun({ seed, content: content() })).result;
 
     for (const seed of [1, 2, 3, 4]) expect(told(seed)).toEqual(told(seed));
   });
@@ -117,7 +117,7 @@ describe("Find Out", () => {
       const run = startRun({ seed, content: content() });
       const seen = JSON.stringify([
         askOnce(run),
-        run.choose({ type: "continue" }),
+        run.choose({ type: "action", actionId: "kettle" }),
       ]);
 
       expect(seen).not.toMatch(/VERDICT|"status"|mistaken|outOfDate/);
@@ -129,9 +129,12 @@ describe("Find Out", () => {
     for (let seed = 1; seed <= 1500; seed++) {
       const run = startRun({ seed, content: content() });
       const view = askOnce(run);
-      if (view.step.kind !== "claim") throw new Error(view.step.kind);
+      if (view.result?.kind !== "claim") throw new Error(view.step.kind);
       const [{ verdict } = { verdict: "" }] = resultsOf(playOut(run)).claims;
-      said.set(view.step.text, [...(said.get(view.step.text) ?? []), verdict]);
+      said.set(view.result.text, [
+        ...(said.get(view.result.text) ?? []),
+        verdict,
+      ]);
     }
 
     const common = [...said].filter(([, verdicts]) => verdicts.length >= 20);
@@ -192,14 +195,14 @@ describe("Find Out", () => {
   it("shows each claim and its truth on the results screen", () => {
     const run = startRun({ seed: 1, content: content() });
     const view = askOnce(run);
-    if (view.step.kind !== "claim") throw new Error(view.step.kind);
+    if (view.result?.kind !== "claim") throw new Error(view.step.kind);
 
     const [claim] = resultsOf(playOut(run)).claims;
 
     expect(claim).toMatchObject({
       month: 1,
       source: "Ben Bird",
-      text: view.step.text,
+      text: view.result.text,
       motive: "Ben Bird had no reason.",
     });
     expect(claim?.verdict).toMatch(/^VERDICT-/);
@@ -275,8 +278,8 @@ describe("the conversation around a claim", () => {
 
     const view = askOnce(run);
 
-    if (view.step.kind !== "claim") throw new Error(view.step.kind);
-    expect(view.step.text).toMatch(
+    if (view.result?.kind !== "claim") throw new Error(view.step.kind);
+    expect(view.result.text).toMatch(
       /^Ben Bird sighs\. .+ The toner runs out\.$/,
     );
   });
@@ -300,7 +303,7 @@ describe("the conversation around a claim", () => {
 
     const told = Array.from({ length: 30 }, (_, i) => {
       const view = askOnce(startRun({ seed: i + 1, content: world }));
-      return view.step.kind === "claim" ? view.step.text : "";
+      return view.result?.kind === "claim" ? view.result.text : "";
       // A true claim about someone with no fact falls back to their kind.
     }).filter((t) => !t.includes("SAID-"));
 

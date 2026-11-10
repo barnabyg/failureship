@@ -89,6 +89,16 @@ export interface Person {
   title: string;
 }
 
+/** A short text dialog an answer led to, and the Buzzwords it taught. */
+export interface DialogView {
+  kind: "dialog";
+  title: string;
+  lines: DialogLine[];
+  learned: Buzzword[];
+  /** How the boss took it. Signs only: it never says the boss's kind. */
+  reaction?: string | undefined;
+}
+
 export type StepView =
   | {
       kind: "notification";
@@ -97,14 +107,8 @@ export type StepView =
       subject: string;
       body: string;
       options: NotificationOption[];
-    }
-  | {
-      kind: "dialog";
-      title: string;
-      lines: DialogLine[];
-      learned: Buzzword[];
-      /** How the boss took it. Signs only: it never says the boss's kind. */
-      reaction?: string | undefined;
+      /** How many more Notifications are waiting after this one. */
+      waiting: number;
     }
   | { kind: "actions" }
   | {
@@ -126,7 +130,6 @@ export type StepView =
       sources: Person[];
       subjects: Person[];
     }
-  | { kind: "claim"; title: string; text: string }
   | {
       kind: "notice";
       title: string;
@@ -265,7 +268,19 @@ export type StepView =
         truth: string;
         correct: boolean;
       }[];
-      clues: { month: number; source: string; text: string; verdict: string }[];
+      /**
+       * Every sign and claim, false or misleading first. The same thing told
+       * again is one row, with how many times and in which months.
+       */
+      clues: {
+        months: number[];
+        count: number;
+        source: string;
+        text: string;
+        verdict: string;
+      }[];
+      /** How many things the player was told, and how many were false or misleading. */
+      told: { count: number; wrong: number };
       /** Where a Hidden Fact changed what happened in this run. */
       factEvents: { month: number; note: string; fact: string | null }[];
       /** Your boss's true kind, and how each choice came across to them. */
@@ -295,12 +310,44 @@ export type StepView =
       }[];
     };
 
+/**
+ * What the player's own last choice led to, shown beside whatever comes next
+ * until they choose again.
+ */
+export type ResultView =
+  /** What happened at a place on the floor, or in a Scene. */
+  | {
+      kind: "happened";
+      title: string;
+      body: string;
+      /** How the boss took it. Signs only: it never says the boss's kind. */
+      reaction?: string | undefined;
+      /** What the boss finally says of the player. */
+      verdict?: string | undefined;
+      /** The place on the floor spent on it, if one was. */
+      spent: string | null;
+    }
+  /** A claim heard at Find Out, which nothing says is true. */
+  | { kind: "claim"; title: string; text: string; spent: string | null }
+  /** A Notification answered: the e-mail, the answer and what it led to. */
+  | {
+      kind: "answer";
+      from: string;
+      subject: string;
+      body: string;
+      answer: string;
+      then: Extract<StepView, { kind: "notice" }> | DialogView;
+    };
+
 /** Only what the player is entitled to see. It never holds undiscovered truth. */
 export interface PlayerView {
   notebook: {
     /** Never says which of these can be trusted, until the results screen. */
-    clues: { month: number; source: string; text: string }[];
+    /** `about` names whom a clue concerns. Never whether it can be trusted. */
+    clues: { month: number; source: string; text: string; about: string[] }[];
     marks: (Person & { mark: Kind | null })[];
+    /** How many of the latest clues came since the Notebook was last opened. */
+    unread: number;
   };
   /** The player's own Project, which can be looked at any time for nothing. */
   project: {
@@ -353,6 +400,7 @@ export interface PlayerView {
   orgChart: ChartEntry[];
   hotspots: Hotspot[];
   step: StepView;
+  result: ResultView | null;
   hint: string;
   choices: Choice[];
 }

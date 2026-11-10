@@ -1,5 +1,6 @@
 import { expect, test, type Page } from "@playwright/test";
 import { answerAnyNotification, attendAndFinishMonth } from "./play";
+import { openRunMenu } from "./run-menu";
 
 async function savedText(page: Page) {
   return page.evaluate(() => window.localStorage.getItem("failureship.run"));
@@ -10,13 +11,11 @@ test("a reload carries on where the player left off", async ({ page }) => {
   await answerAnyNotification(page);
   await attendAndFinishMonth(page);
   await page.getByTestId("option-skip-training").click();
-  await page.getByTestId("continue").click();
   // The Demand from your boss's boss, stalled, so that it stays open.
   await page.getByTestId("option-stall").click();
-  await page.getByTestId("continue").click();
   await answerAnyNotification(page);
   await page.getByTestId("hotspot-kitchen").click();
-  await page.getByTestId("continue").click();
+
   await page.getByTestId("open-notebook").click();
   await page.getByTestId("mark-boss").selectOption("practitioner");
   await page.getByTestId("close-notebook").click();
@@ -75,6 +74,7 @@ test("new run and restart from seed replace the saved run", async ({
   await page.goto("/?seed=8");
   await answerAnyNotification(page);
 
+  await openRunMenu(page);
   await page.getByTestId("seed-input").fill("5");
   await page.getByTestId("restart-seed").click();
   await page.getByTestId("confirm-leave-yes").click();
@@ -82,6 +82,7 @@ test("new run and restart from seed replace the saved run", async ({
   await expect(page.getByTestId("seed")).toHaveText("5");
   await expect(page.getByTestId("panel-notification")).toBeVisible();
 
+  await openRunMenu(page);
   await page.getByTestId("new-run").click();
   await page.getByTestId("confirm-leave-yes").click();
   const seed = await page.getByTestId("seed").innerText();
@@ -95,6 +96,7 @@ test("declining to leave keeps the saved run", async ({ page }) => {
   await answerAnyNotification(page);
   const saved = await savedText(page);
 
+  await openRunMenu(page);
   await page.getByTestId("new-run").click();
   await page.getByTestId("confirm-leave-no").click();
 
