@@ -57,13 +57,40 @@ for (const size of [
   });
 }
 
+for (const size of [
+  { width: 1440, height: 900 },
+  { width: 1280, height: 720 },
+]) {
+  test(`at ${String(size.width)}×${String(size.height)} what happened at a place sits clear of the guide and the labels`, async ({
+    page,
+  }) => {
+    await page.setViewportSize(size);
+    await freshRun(page, "/?seed=5");
+    await answerAnyNotification(page);
+    await page.locator('[data-testid="hotspot-work"]:enabled').click();
+
+    const card = await page.getByTestId("panel-result").boundingBox();
+    const guide = await page.locator(".next").boundingBox();
+    if (!card || !guide) throw new Error("Nothing to measure.");
+    expect(overlaps(card, guide), "the card is over the guide").toBe(false);
+    await expectLabelsClear(page);
+    for (const label of await page
+      .locator('[data-testid^="hotspot-"], [data-testid^="room-sign-"]')
+      .all()) {
+      const box = await label.boundingBox();
+      if (!box) continue;
+      const name = (await label.getAttribute("data-testid")) ?? "";
+      expect(overlaps(box, card), `${name} is under the card`).toBe(false);
+    }
+  });
+}
+
 test("one compact status card, with a Grand Plan and an open Demand, each part opening its panel", async ({
   page,
 }) => {
   await freshRun(page, "/?seed=1&month=4");
   await playUntil(page, "option-stall");
   await page.getByTestId("option-stall").click();
-  await page.getByTestId("continue").click();
 
   const card = page.getByTestId("status-card");
   await expect(page.getByTestId("grand-plan-card")).toBeVisible();

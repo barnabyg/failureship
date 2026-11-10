@@ -221,14 +221,12 @@ describe("new clues", () => {
     expect(run.view().notebook.unread).toBe(0);
 
     run.choose({ type: "action", actionId: "kettle" });
-    run.choose({ type: "continue" });
     const view = run.choose({ type: "action", actionId: "copier" });
     run.choose({ type: "find-out", sourceId: "ben", subjectId: "cal" });
 
     expect(view.notebook.unread).toBe(1);
     expect(run.view().notebook.unread).toBe(2);
     expect(run.readNotebook().notebook.unread).toBe(0);
-    run.choose({ type: "continue" });
     expect(
       run.choose({ type: "action", actionId: "meeting" }).notebook.unread,
     ).toBeGreaterThan(0);
@@ -238,7 +236,6 @@ describe("new clues", () => {
     const world = content();
     const run = startRun({ seed: 1, content: world });
     run.choose({ type: "action", actionId: "kettle" });
-    run.choose({ type: "continue" });
     run.readNotebook();
     run.choose({ type: "action", actionId: "copier" });
     run.choose({ type: "find-out", sourceId: "ben", subjectId: "cal" });
@@ -380,7 +377,6 @@ describe("the results screen", () => {
     for (let seed = 1; seed <= 200; seed++) {
       const run = startRun({ seed, content: world });
       run.choose({ type: "action", actionId: "kettle" });
-      run.choose({ type: "continue" });
       run.choose({ type: "action", actionId: "copier" });
       run.choose({ type: "find-out", sourceId: "ben", subjectId: "cal" });
       const { clues, told } = resultsOf(playOut(run));

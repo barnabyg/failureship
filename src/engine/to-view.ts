@@ -462,11 +462,12 @@ function toResultView(
       const option = everyNotification(content)
         .find((n) => n.id === result.notificationId)
         ?.options.find((o) => o.id === result.optionId);
+      if (!option) throw new Error(`Unknown answer "${result.optionId}".`);
       const { then } = result;
       return {
         kind: "answer",
         ...toMail(state, content, result.notificationId),
-        answer: option?.label ?? result.optionId,
+        answer: option.label,
         then: then.kind === "dialog" ? toDialogView(content, then) : then,
       };
     }

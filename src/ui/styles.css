@@ -292,8 +292,12 @@ body {
   line-height: 1.35;
 }
 
-/* Beside a wide step panel, such as a Scene, it keeps to a narrow column. */
-.game:has(.panel-wide) .next {
+/*
+ * Beside a wide step panel, such as a Scene, or the card of what just happened,
+ * which starts at 384 px, it keeps to a narrow column.
+ */
+.game:has(.panel-wide) .next,
+.game:has(.panel-result) .next {
   max-width: 360px;
 }
 
