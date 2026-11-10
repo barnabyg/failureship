@@ -50,6 +50,16 @@ export interface ChartEntry {
   reportsTo: string | null;
 }
 
+/**
+ * One thing told of the month in the official story: what was reported
+ * upstairs, beside what actually happened. Either side may be missing, for a
+ * report with nothing behind it or a thing nobody reported.
+ */
+export interface StoryPair {
+  reported?: string | undefined;
+  happened?: string | undefined;
+}
+
 export interface Person {
   id: string;
   name: string;
@@ -119,8 +129,8 @@ export type StepView =
       title: string;
       reportedHeading?: string | undefined;
       happenedHeading?: string | undefined;
-      reported: string[];
-      happened: string[];
+      /** Each thing told of the month, in the month's order. */
+      pairs: StoryPair[];
       /** What moved a Gauge as the month closed. */
       gauges: string[];
     }

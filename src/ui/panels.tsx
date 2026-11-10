@@ -19,10 +19,34 @@ function StoryPanel({
 }) {
   return (
     <Panel testId="panel-story" title={step.title} look={{ issue: month }}>
-      <div className="story-reported" data-testid="story-reported">
-        {step.reportedHeading !== undefined && <h3>{step.reportedHeading}</h3>}
-        {step.reported.map((line) => (
-          <p key={line}>{line}</p>
+      <div className="story" data-testid="story">
+        <div className="story-pair story-heads">
+          <div className="story-reported">
+            {step.reportedHeading !== undefined && (
+              <h3>{step.reportedHeading}</h3>
+            )}
+          </div>
+          <div className="story-happened">
+            {step.happenedHeading !== undefined && (
+              <h3>{step.happenedHeading}</h3>
+            )}
+            <ConfidentialStamp />
+          </div>
+        </div>
+        {step.pairs.map(({ reported, happened }, index) => (
+          // Each thing told of the month on one row: the gap where a side is missing is the joke.
+          <div key={index} className="story-pair" data-testid="story-pair">
+            <div className="story-reported">
+              {reported !== undefined && (
+                <p data-testid="story-reported">{reported}</p>
+              )}
+            </div>
+            <div className="story-happened">
+              {happened !== undefined && (
+                <p data-testid="story-happened">{happened}</p>
+              )}
+            </div>
+          </div>
         ))}
       </div>
       {step.gauges.map((line) => (
@@ -30,19 +54,6 @@ function StoryPanel({
           {line}
         </p>
       ))}
-      {step.happened.length > 0 && (
-        <>
-          <ConfidentialStamp />
-          <div className="callout story-happened" data-testid="story-happened">
-            {step.happenedHeading !== undefined && (
-              <h3>{step.happenedHeading}</h3>
-            )}
-            {step.happened.map((line) => (
-              <p key={line}>{line}</p>
-            ))}
-          </div>
-        </>
-      )}
       <Continue onChoose={onChoose} />
     </Panel>
   );

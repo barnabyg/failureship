@@ -184,7 +184,7 @@ function toStoryView(
     (e) => isOn(state, content, e) && matches(state, content, e.when),
   );
   const fill = (written: string | undefined) =>
-    written === undefined ? [] : [fillParts(state, content, written)];
+    written === undefined ? undefined : fillParts(state, content, written);
   // Each Company Event of the month, in the story's own words for it.
   const events = state.eventsLanded
     .filter((landed) => landed.month === state.month)
@@ -195,8 +195,11 @@ function toStoryView(
     title: title.replaceAll("{job}", floorNow(state, content).title),
     reportedHeading,
     happenedHeading,
-    reported: [...events, ...told].flatMap((e) => fill(e.reported)),
-    happened: [...events, ...told].flatMap((e) => fill(e.happened)),
+    // Both lines of a pair come from the same written thing, never matched up later.
+    pairs: [...events, ...told].map((e) => ({
+      reported: fill(e.reported),
+      happened: fill(e.happened),
+    })),
     gauges: gaugesThisMonth(state, content),
   };
 }

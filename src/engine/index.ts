@@ -16,4 +16,5 @@ export type {
   Person,
   PlayerView,
   StepView,
+  StoryPair,
 } from "./view";

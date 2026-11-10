@@ -577,6 +577,11 @@ The official story, assembled from `entries` according to what you did. Its `tit
 `{job}`, the player's job title. Each entry has `reported` or `happened` text, or both, and can
 have `when`, `floor` and `months`.
 
+The newsletter sets an entry's `reported` and `happened` side by side on one row, as does a
+[Company Event](#eventsjson)'s `story`, so both are about the same thing. A side left out shows
+as a gap: a report with nothing behind it, or something nobody reported. The month's Company
+Events come first, then the entries told, in the order they are written here.
+
 ## `over-head.json`
 
 Going over your boss's head, to [your boss's boss](#your-boss-and-your-bosss-boss), which an action

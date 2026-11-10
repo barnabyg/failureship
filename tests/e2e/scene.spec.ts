@@ -110,8 +110,8 @@ test("the full month reads differently for different choices", async ({
 
   await expect(page.getByTestId("panel-story")).toBeVisible();
   await expectToSayWhatIsNext(page);
-  const afterPub = await page.getByTestId("story-reported").innerText();
-  await expect(page.getByTestId("story-happened")).toBeVisible();
+  const afterPub = await page.getByTestId("story-reported").allInnerTexts();
+  await expect(page.getByTestId("story-happened").first()).toBeVisible();
 
   await freshRun(page, "/?seed=1");
   await answerAnyNotification(page);

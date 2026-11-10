@@ -193,7 +193,9 @@ describe("months that do not feel like one month repeated", () => {
     (_, seed) => {
       const { views } = walk(seed, pickOn(seed), stayingPut);
       const stories = views.flatMap((v) =>
-        v.step.kind === "story" ? [JSON.stringify(v.step.reported)] : [],
+        v.step.kind === "story"
+          ? [JSON.stringify(v.step.pairs.map((p) => p.reported))]
+          : [],
       );
 
       expect(views.at(-2)?.job.id).toBe(
@@ -250,7 +252,9 @@ describe("months that do not feel like one month repeated", () => {
       return choice;
     });
     const reported = views.flatMap((v) =>
-      v.step.kind === "story" ? v.step.reported : [],
+      v.step.kind === "story"
+        ? v.step.pairs.flatMap((p) => p.reported ?? [])
+        : [],
     );
 
     expect(reported.join()).toContain("this month's meeting");
