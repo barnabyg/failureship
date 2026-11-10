@@ -6,7 +6,7 @@ The [README](README.md) covers playing and steering the game, and the code map. 
 
 - `npm run verify` runs every check: formatting, lint, types, engine tests, browser tests, dependency audit and build. The browser tests need Chromium once: `npx playwright install chromium`.
 - One engine test: `npx vitest run <file> -t "<name>"`.
-- One browser test: `npx playwright test <file> -g "<name>"`.
+- One browser test: `npx playwright test <file> -g "<name>"`. Set `E2E_PORT` to run the browser tests in two worktrees at once.
 
 ### Tests
 
