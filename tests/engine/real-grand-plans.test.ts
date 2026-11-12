@@ -12,6 +12,7 @@ import {
 import { readHiddenTruth } from "../../src/engine/hidden-truth";
 import { plainChoice, playToMonth } from "../../src/ui/later-month";
 import { everySign } from "./scene-view";
+import { landedIn } from "./landed";
 
 const SEEDS = Array.from({ length: 300 }, (_, i) => i + 1);
 const DONE = "Your boss's Grand Plan: done";
@@ -194,10 +195,14 @@ describe("the game's Grand Plans", { timeout: 60_000 }, () => {
         for (let view = run.view(); view.month < 8;) {
           // Blamed on you, it offers Escapes. Blamed on someone else, it
           // arrives as a Move, without your name.
+          const told = [view.step, ...landedIn(view)];
           if (
-            (view.step.kind === "move" || view.step.kind === "escape") &&
-            view.step.title === "Lessons from the new tool" &&
-            view.step.body.includes("your name")
+            told.some(
+              (s) =>
+                (s.kind === "move" || s.kind === "escape") &&
+                s.title === "Lessons from the new tool" &&
+                s.body.includes("your name"),
+            )
           ) {
             return true;
           }

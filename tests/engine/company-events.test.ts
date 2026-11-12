@@ -12,6 +12,7 @@ import { lowerOnMap, raiseOnMap, type PowerMap } from "../../src/engine/deal";
 import { readHiddenTruth } from "../../src/engine/hidden-truth";
 import { fixtureRaw, floorOwn } from "./fixture";
 import { everySign } from "./scene-view";
+import { landedIn } from "./landed";
 
 const story = { reported: "EVENT-REPORTED", happened: "EVENT-HAPPENED" };
 const certain = { believer: 1, incompetent: 1, practitioner: 1 };
@@ -46,8 +47,9 @@ function play(run: Run): PlayerView[] {
   return views;
 }
 
+/** Each Monthly Summary that tells of a Company Event. */
 const landed = (views: PlayerView[]) =>
-  views.filter((v) => v.step.kind === "event");
+  views.filter((v) => landedIn(v).some((l) => l.kind === "event"));
 
 function resultsOf(views: PlayerView[]) {
   const { step } = views.at(-1) as PlayerView;
@@ -60,19 +62,25 @@ describe("a month with a Company Event in it", () => {
 
   it("runs in the defined order, after the actions and before it closes", () => {
     const views = play(startRun({ seed: 1, content }));
-    const inMonth = views.filter((v) => v.month === 2).map((v) => v.step.kind);
+    const inMonth = views.filter((v) => v.month === 2);
+    const kinds = inMonth.map((v) => v.step.kind);
+    const story = inMonth.find((v) => v.step.kind === "story");
 
-    const event = inMonth.indexOf("event");
-    expect(inMonth.lastIndexOf("actions")).toBeLessThan(event);
-    expect(event).toBeLessThan(inMonth.indexOf("move"));
-    expect(inMonth.indexOf("move")).toBeLessThan(inMonth.indexOf("story"));
+    expect(kinds.lastIndexOf("actions")).toBeLessThan(kinds.indexOf("story"));
+    expect(landedIn(story as PlayerView).map((l) => l.kind)).toEqual([
+      "event",
+      "move",
+    ]);
   });
 
   it("offers nothing to choose", () => {
     const [view] = landed(play(startRun({ seed: 1, content })));
 
     expect(view?.choices).toEqual([{ type: "continue" }]);
-    expect(view?.step).toMatchObject({ from: "The Board", title: "THE-EVENT" });
+    expect(landedIn(view as PlayerView)[0]).toMatchObject({
+      from: "The Board",
+      title: "THE-EVENT",
+    });
   });
 
   it("is covered by the official story, that month and no other", () => {

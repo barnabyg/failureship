@@ -11,7 +11,6 @@ import {
   coverForGone,
   fillParts,
   fillSubject,
-  isAvailable,
   isDone,
   isMet,
   matches,
@@ -24,7 +23,7 @@ import {
 } from "./reads";
 import { YOU } from "./deal";
 import { dealsInView } from "./deals";
-import { escapesInStory, escapesOnOffer } from "./escapes";
+import { escapesInStory, escapesOnOffer, inboxEscapes } from "./escapes";
 import { floorNow, isOn } from "./floors";
 import { gaugesInView, gaugesThisMonth } from "./gauges";
 import {
@@ -40,8 +39,8 @@ import { sceneData } from "./scenes";
 import { calledBy, sayFrom, sayPeople, titleOf } from "./say";
 import { standingInView } from "./standing";
 import { planInView } from "./grand-plans";
-import { answerable } from "./month";
-import type { Result, State, Step, World } from "./state";
+import { answerable, canTakeNow, inboxMail, onTheFloor } from "./month";
+import type { Landing, Notice, Result, State, Step, World } from "./state";
 import { toResultsView } from "./to-results";
 import { toWinView } from "./win";
 import type {
@@ -54,24 +53,60 @@ import type {
   PlayerView,
   ResultView,
   StepView,
+  EscapeView,
+  InboxItemView,
+  LandedView,
+  MailView,
+  NoticeView,
 } from "./view";
+
+/** The Escapes on offer from one consequence, as choices. */
+function escapeChoices(state: State, content: Content, id: string): Choice[] {
+  return escapesOnOffer(state, content, id).map((e) => ({
+    type: "escape",
+    billId: id,
+    escapeId: e.id,
+  }));
+}
+
+/** The answers that can be given to one Notification, as choices. */
+function answerChoices(state: State, content: Content, id: string): Choice[] {
+  return notificationOptions(state, content, id)
+    .filter((o) => o.affordable)
+    .map((o) => ({ type: "notification", notificationId: id, optionId: o.id }));
+}
+
+/** The floor's actions that can be taken now. */
+function actionChoices(state: State, content: Content): Choice[] {
+  return actionsThisMonth(state, content)
+    .filter((a) => canTakeNow(state, content, a))
+    .map((a) => ({ type: "action", actionId: a.id }));
+}
+
+/**
+ * On the floor: whatever the inbox holds, in its order, so that the top of
+ * the inbox comes first, and then the floor's actions.
+ */
+function floorChoices(state: State, content: Content): Choice[] {
+  return [
+    ...inboxEscapes(state, content).flatMap((id) =>
+      escapeChoices(state, content, id),
+    ),
+    ...inboxMail(state, content).flatMap((id) =>
+      answerChoices(state, content, id),
+    ),
+    ...actionChoices(state, content),
+  ];
+}
 
 export function legalChoices(state: State, world: World): Choice[] {
   const { content } = world;
   const { step } = state;
+  if (onTheFloor(state, content)) return floorChoices(state, content);
   switch (step.kind) {
     case "notification":
-      return notificationOptions(state, content, step.id)
-        .filter((o) => o.affordable)
-        .map((o) => ({
-          type: "notification",
-          notificationId: step.id,
-          optionId: o.id,
-        }));
     case "actions":
-      return actionsThisMonth(state, content)
-        .filter((a) => isAvailable(state, content, a))
-        .map((a) => ({ type: "action", actionId: a.id }));
+      return floorChoices(state, content);
     case "scene":
       return offeredOptions(
         state,
@@ -98,17 +133,10 @@ export function legalChoices(state: State, world: World): Choice[] {
           })),
       );
     case "escape":
-      return escapesOnOffer(state, content, step.id).map((e) => ({
-        type: "escape",
-        billId: step.id,
-        escapeId: e.id,
-      }));
+      return escapeChoices(state, content, step.id);
     case "notice":
-    case "move":
-    case "event":
-    case "win":
-      return [{ type: "continue" }];
     case "story":
+    case "win":
       return [{ type: "continue" }];
     case "results":
       return [];
@@ -276,6 +304,9 @@ function toStoryView(
   return {
     kind: "story",
     title: title.replaceAll("{job}", floorNow(state, content).title),
+    landed: state.landed.map((landing) =>
+      toLandedView(state, content, landing),
+    ),
     reportedHeading,
     happenedHeading,
     // Both lines of a pair come from the same written thing, never matched up later.
@@ -335,10 +366,7 @@ function toStepView(state: State, world: World): StepView {
   switch (step.kind) {
     case "notification":
       return {
-        kind: "notification",
-        ...toMail(state, content, step.id),
-        id: step.id,
-        options: notificationOptions(state, content, step.id),
+        ...toMailView(state, content, step.id),
         waiting: answerable(state, content).filter((id) => id !== step.id)
           .length,
       };
@@ -359,14 +387,59 @@ function toStepView(state: State, world: World): StepView {
           .map((c) => personOf(state, content, c.id)),
       };
     }
+    case "escape":
+      return toEscapeView(state, content, step.id);
+    case "story":
+      return toStoryView(state, content);
+    case "win":
+      return toWinView(state, content);
+    case "results":
+      return toResultsView(state, content);
+    case "notice":
+      return toNoticeView(step);
+    case "actions":
+      return step;
+  }
+}
+
+/** A notice as the player reads it. Whether it was urgent is the engine's business. */
+function toNoticeView(notice: Notice): NoticeView {
+  const { title, body, reaction, verdict, decided } = notice;
+  return { kind: "notice", title, body, reaction, verdict, decided };
+}
+
+/** A consequence of the player's own doing, and the ways out of it. */
+function toEscapeView(state: State, content: Content, id: string): EscapeView {
+  const bill = everyBill(content).find((b) => b.id === id);
+  if (!bill) throw new Error(`Unknown Bill "${id}".`);
+  return {
+    kind: "escape",
+    id: bill.id,
+    from: sayFrom(state, content, bill.from ?? ""),
+    title: bill.title,
+    body: fillParts(state, content, bill.body),
+    escapes: escapesOnOffer(state, content, bill.id).map((e) => ({
+      id: e.id,
+      label: e.label,
+    })),
+  };
+}
+
+/** What landed as the month closed, as the Monthly Summary tells it. */
+function toLandedView(
+  state: State,
+  content: Content,
+  landing: Landing,
+): LandedView {
+  switch (landing.kind) {
     case "move": {
       const move = [...content.moves, ...everyBill(content)].find(
-        (m) => m.id === step.id,
+        (m) => m.id === landing.id,
       );
-      if (!move) throw new Error(`Unknown Move "${step.id}".`);
+      if (!move) throw new Error(`Unknown Move "${landing.id}".`);
       const body = sayPeople(move.body, {
         [COMPETITOR]:
-          step.by === undefined ? "" : calledBy(state, content, step.by),
+          landing.by === undefined ? "" : calledBy(state, content, landing.by),
       });
       return {
         kind: "move",
@@ -375,24 +448,9 @@ function toStepView(state: State, world: World): StepView {
         body: fillParts(state, content, body),
       };
     }
-    case "escape": {
-      const bill = everyBill(content).find((b) => b.id === step.id);
-      if (!bill) throw new Error(`Unknown Bill "${step.id}".`);
-      return {
-        kind: "escape",
-        id: bill.id,
-        from: sayFrom(state, content, bill.from ?? ""),
-        title: bill.title,
-        body: fillParts(state, content, bill.body),
-        escapes: escapesOnOffer(state, content, bill.id).map((e) => ({
-          id: e.id,
-          label: e.label,
-        })),
-      };
-    }
     case "event": {
-      const event = content.events.find((e) => e.id === step.id);
-      if (!event) throw new Error(`Unknown Company Event "${step.id}".`);
+      const event = content.events.find((e) => e.id === landing.id);
+      if (!event) throw new Error(`Unknown Company Event "${landing.id}".`);
       return {
         kind: "event",
         from: sayFrom(state, content, event.from),
@@ -400,24 +458,64 @@ function toStepView(state: State, world: World): StepView {
         body: event.body,
       };
     }
-    case "story":
-      return toStoryView(state, content);
-    case "win":
-      return toWinView(state, content);
-    case "results":
-      return toResultsView(state, content);
-    case "actions":
     case "notice":
-      return step;
+      return toNoticeView(landing);
   }
 }
 
 /** The step, with whoever covers for anyone who has gone written in their place. */
 function shownStep(state: State, world: World): StepView {
+  const { content } = world;
   const step = toStepView(state, world);
   const asWritten = state.step.kind === "notice" && state.step.asWritten;
   if (step.kind === "results" || asWritten) return step;
-  return coverForGone(state, world.content, step);
+  if (step.kind === "story") {
+    return {
+      ...coverForGone(state, content, step),
+      landed: state.landed.map((landing, i) => {
+        const shown = step.landed[i] ?? toLandedView(state, content, landing);
+        return landing.kind === "notice" && landing.asWritten
+          ? shown
+          : coverForGone(state, content, shown);
+      }),
+    };
+  }
+  return coverForGone(state, content, step);
+}
+
+/**
+ * What waits in the inbox: consequences to escape, then e-mail, in the order
+ * they came, and then what the month's opening told, only to read.
+ */
+function toInbox(state: State, content: Content): PlayerView["inbox"] {
+  const over = ["story", "win", "results"].includes(state.step.kind);
+  if (over) return { items: [], toAnswer: 0 };
+  const items: InboxItemView[] = [
+    ...inboxEscapes(state, content).map((id) =>
+      toEscapeView(state, content, id),
+    ),
+    ...inboxMail(state, content).map((id) => toMailView(state, content, id)),
+  ].map((item) => coverForGone(state, content, item));
+  const notes = state.notes.map((note) => {
+    const shown = toNoticeView(note);
+    return note.asWritten ? shown : coverForGone(state, content, shown);
+  });
+  return {
+    items: [...items, ...notes],
+    toAnswer:
+      inboxEscapes(state, content).length + answerable(state, content).length,
+  };
+}
+
+/** A Notification as it waits in the inbox. */
+function toMailView(state: State, content: Content, id: string): MailView {
+  return {
+    kind: "notification",
+    ...toMail(state, content, id),
+    id,
+    options: notificationOptions(state, content, id),
+    short: state.mailSeen.includes(id),
+  };
 }
 
 /** A Notification as an e-mail: who it is from, its subject and what it says. */
@@ -569,14 +667,38 @@ export function toView(state: State, world: World): PlayerView {
     hotspots: actionsThisMonth(state, content).map((a) =>
       toHotspot(state, content, a),
     ),
+    inbox: toInbox(state, content),
+    waiting: !onTheFloor(state, content),
     step: shownStep(state, world),
     result: shownResult(state, content),
-    hint: content.ui.hints[state.step.kind].replaceAll(
-      "{actions}",
-      actionsLabel,
-    ),
+    hint: hintFor(state, content).replaceAll("{actions}", actionsLabel),
     choices: legalChoices(state, world),
   });
+}
+
+/**
+ * What the player can do now. On the floor with the inbox not yet clear, the
+ * hint says how the month closes, and once the actions are spent, that the
+ * inbox is all that holds it.
+ */
+function hintFor(state: State, content: Content): string {
+  const { hints } = content.ui;
+  const { step } = state;
+  if (
+    step.kind !== "notification" &&
+    (step.kind === "actions" || !onTheFloor(state, content))
+  ) {
+    return hints[step.kind];
+  }
+  const toAnswer =
+    inboxEscapes(state, content).length + answerable(state, content).length;
+  const acting = actionsThisMonth(state, content).some((a) =>
+    canTakeNow(state, content, a),
+  );
+  return (acting ? hints.inbox : hints.inboxOnly).replaceAll(
+    "{n}",
+    String(toAnswer),
+  );
 }
 
 /** In the order learned, which is the order the header and its list show. */
@@ -598,7 +720,7 @@ function toHotspot(
     costLabel: costLabel(content, action.cost),
     state: done
       ? "done"
-      : isAvailable(state, content, action)
+      : canTakeNow(state, content, action)
         ? "available"
         : "unavailable",
   };

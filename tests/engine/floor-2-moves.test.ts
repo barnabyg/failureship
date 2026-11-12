@@ -5,6 +5,7 @@ import { isOn } from "../../src/engine/floors";
 import { readHiddenTruth } from "../../src/engine/hidden-truth";
 import { plainChoice, playToMonth } from "../../src/ui/later-month";
 import { withoutSeatEvents } from "./fixture";
+import { landedIn } from "./landed";
 import { CLEAN, playAll, playRun } from "./real-runs";
 
 /** The bigger Moves only a Team lead has, as Scene or Notification and option. */
@@ -35,7 +36,7 @@ function arrived(views: readonly PlayerView[], idOrTitle: string) {
       ((v.step.kind === "notification" && v.step.id === idOrTitle) ||
         (v.step.kind === "escape" &&
           (v.step.id === idOrTitle || v.step.title === idOrTitle)) ||
-        (v.step.kind === "move" && v.step.title === idOrTitle)),
+        landedIn(v).some((l) => l.title === idOrTitle)),
   )?.month;
 }
 

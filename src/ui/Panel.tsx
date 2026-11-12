@@ -6,36 +6,45 @@ import {
   type ReactNode,
 } from "react";
 import { panelText } from "../content";
-import type { Choice, StepView } from "../engine";
+import type { Choice, PlayerView } from "../engine";
 import { MailFoot, MailHead, Masthead, type Look } from "./Intranet";
 
 /** What the player did last, shown at the head of whatever panel comes next. */
 export const ResultBefore = createContext<ReactNode>(null);
 
-/** What kind of step is waiting, and for e-mails how many are left, atop its panel. */
+/**
+ * What kind of step is waiting atop its panel, or, on the floor, that the
+ * inbox's panel waits for nothing, and how much in it is left to answer.
+ */
 export const StepTag = createContext<string | null>(null);
 
-/** The tag for a step that waits for an answer, or null while the floor is open. */
-export function stepTag(step: StepView): string | null {
+/**
+ * The inbox's list, atop the panel of whatever is open in it. A panel with one
+ * is the inbox, which leaves the floor open.
+ */
+export const InboxHead = createContext<ReactNode>(null);
+
+/** The tag for a step that waits for an answer, or for the inbox on the floor. */
+export function stepTag(view: PlayerView): string | null {
+  const { step, inbox } = view;
+  if (!view.waiting) {
+    if (inbox.items.length === 0) return null;
+    return inbox.toAnswer > 0
+      ? panelText.inboxTag.replaceAll("{n}", String(inbox.toAnswer))
+      : panelText.inboxTagNone;
+  }
   switch (step.kind) {
     case "actions":
-      return null;
     case "notification":
-      return step.waiting > 0
-        ? panelText.stepMailMore.replaceAll("{n}", String(step.waiting))
-        : panelText.stepMailLast;
+      return null;
     case "scene":
       return panelText.stepScene;
     case "find-out":
       return panelText.stepFindOut;
     case "notice":
       return panelText.stepNotice;
-    case "move":
-      return panelText.stepMove;
     case "escape":
       return panelText.stepEscape;
-    case "event":
-      return panelText.stepEvent;
     case "story":
       return panelText.stepStory;
     case "win":
@@ -66,6 +75,7 @@ export function Panel({
 }: PanelProps) {
   const before = useContext(ResultBefore);
   const tag = useContext(StepTag);
+  const inbox = useContext(InboxHead);
   const heading = useRef<HTMLHeadingElement>(null);
   useEffect(() => {
     heading.current?.focus();
@@ -75,9 +85,10 @@ export function Panel({
       {title}
     </h2>
   );
+  const classes = ["panel", wide && "panel-wide", inbox && "panel-inbox"];
   return (
     <section
-      className={wide ? "panel panel-wide" : "panel"}
+      className={classes.filter(Boolean).join(" ")}
       data-testid={testId}
       data-look={look && ("sent" in look ? "mail" : "newsletter")}
       aria-label={title}
@@ -87,6 +98,7 @@ export function Panel({
           {tag}
         </p>
       )}
+      {inbox}
       {before}
       {look && "sent" in look ? (
         <MailHead sent={look.sent} to={look.to} from={eyebrow} subject={h2} />

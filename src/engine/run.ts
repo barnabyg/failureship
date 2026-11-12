@@ -92,6 +92,7 @@ function dealtState(seed: number, content: Content): State {
     overHeadUses: 0,
     actionsGiven: [],
     noticesDue: [],
+    mailSeen: [],
     project: { ...content.project.start, news: [], flagged: false },
     deeds: [],
     threads: [],

@@ -13,12 +13,19 @@ export function everyPath(seed: number): PlayerView[][] {
       return;
     }
     // Every source and subject would multiply the paths and show nothing new,
-    // and so would the three actions left by not filing the report.
+    // and so would the three actions left by not filing the report, and so
+    // would answering the inbox in every order: it is answered from the top.
+    const step = last?.step;
     const choices =
-      last?.step.kind === "find-out"
-        ? last.choices.slice(0, 1)
+      step?.kind === "find-out"
+        ? (last?.choices.slice(0, 1) ?? [])
         : (last?.choices ?? []).filter(
-            (c) => !(c.type === "notification" && c.optionId === "skip"),
+            (c) =>
+              !(c.type === "notification" && c.optionId === "skip") &&
+              !(
+                step?.kind === "notification" &&
+                !(c.type === "notification" && c.notificationId === step.id)
+              ),
           );
     for (const choice of choices) walk([...script, choice]);
   };

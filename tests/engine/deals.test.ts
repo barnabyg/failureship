@@ -10,6 +10,7 @@ import {
 import { readHiddenTruth, type PowerMap } from "../../src/engine/hidden-truth";
 import { plainChoice } from "../../src/ui/later-month";
 import { emptyMonthRaw, floorOwn } from "./fixture";
+import { landedIn, notesIn } from "./landed";
 
 const SEEDS = Array.from({ length: 200 }, (_, i) => i);
 const lines = (written: string) => ({
@@ -187,8 +188,8 @@ describe("a Deal", () => {
       SEEDS.slice(0, 40).map((seed) => {
         const run = startRun({ seed, content });
         run.choose(answer("offer", "shake"));
-        const view = playOn(run, (v) => v.step.kind === "notice");
-        return JSON.stringify(view.step);
+        const view = playOn(run, (v) => notesIn(v).length > 0);
+        return JSON.stringify(notesIn(view));
       }),
     );
 
@@ -260,11 +261,10 @@ describe("favours owed", () => {
     run.choose(answer("word-due", "not-do-it"));
 
     expect(run.view().favours).toContain("YOU-OWE Ben Bird: YOU-LET-BEN-DOWN");
-    const landed = playOn(
-      run,
-      (v) => v.step.kind === "move" && v.step.title === "PAY-BACK",
+    const landed = playOn(run, (v) =>
+      landedIn(v).some((l) => l.title === "PAY-BACK"),
     );
-    expect(landed.step.kind).toBe("move");
+    expect(landed.step.kind).toBe("story");
     expect(landed.favours).toEqual([]);
   });
 

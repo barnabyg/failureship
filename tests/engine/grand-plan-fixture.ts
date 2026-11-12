@@ -9,6 +9,7 @@ import {
 } from "../../src/engine";
 import { readHiddenTruth } from "../../src/engine/hidden-truth";
 import { fixtureRaw, floorOwn } from "./fixture";
+import { firstTold, monthsTold } from "./landed";
 
 const SEEDS = Array.from({ length: 300 }, (_, i) => i + 1);
 
@@ -254,22 +255,13 @@ export const answer = (notificationId: string, optionId: string): Choice => ({
   optionId,
 });
 
+/** The view in which the player was first told this, by any means. */
 export const titled = (views: PlayerView[], title: string) =>
-  views.find(
-    (v) =>
-      (v.step.kind === "notice" || v.step.kind === "move") &&
-      v.step.title === title,
-  );
+  firstTold(views, title)?.view;
 
 /** The months in which the player was told this. */
 export const toldIn = (views: PlayerView[], title: string) =>
-  views
-    .filter(
-      (v) =>
-        (v.step.kind === "notice" || v.step.kind === "move") &&
-        v.step.title === title,
-    )
-    .map((v) => v.month);
+  monthsTold(views, title);
 
 /** The boss, whom the fixture makes Ana, dealt as this kind on some seed. */
 export function seedWhereBossIs(kind: Kind, content: Content): number {

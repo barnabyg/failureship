@@ -1,6 +1,12 @@
 import { describe, expect, it } from "vitest";
-import { parseContent, startRun, type Choice } from "../../src/engine";
+import {
+  parseContent,
+  startRun,
+  type Choice,
+  type PlayerView,
+} from "../../src/engine";
 import { closingFixture, closingFixtureRaw } from "./fixture";
+import { everyLanded, landedIn } from "./landed";
 
 const pub: Choice = {
   type: "notification",
@@ -34,11 +40,12 @@ const month = (answer: Choice, optionId: string): Choice[] => [
   kettle,
 ];
 
+/** The Monthly Summary as the month closes, and the Move told in it. */
 function endOf(seed: number, script: Choice[]) {
   const run = startRun({ seed, content: closingFixture() });
   for (const choice of script) run.choose(choice);
-  const move = run.view();
-  const story = run.choose(next);
+  const story = run.view();
+  const move = landedIn(story).find((l) => l.kind === "move") ?? null;
   return { move, story };
 }
 
@@ -53,13 +60,15 @@ function story(seed: number, script: Choice[]) {
 }
 
 describe("the end of the month", () => {
-  it("lands a Character Move after the last action and before the close", () => {
+  it("lands a Character Move after the last action, told in the Monthly Summary", () => {
     const views = play(1, [...month(report, "stay-quiet"), next]);
     const kinds = views.map((v) => v.step.kind);
 
-    expect(kinds.slice(-3)).toEqual(["actions", "move", "story"]);
-    expect(kinds.indexOf("move")).toBe(kinds.length - 2);
-    // The last action's result stays beside the Move, until it is passed.
+    expect(kinds.slice(-3, -1)).toEqual(["actions", "story"]);
+    expect(landedIn(views.at(-2) as PlayerView)).toMatchObject([
+      { kind: "move" },
+    ]);
+    // The last action's result stays beside the summary, until it is passed.
     expect(views.at(-2)?.result).toMatchObject({ kind: "happened" });
     expect(views.at(-1)?.result).toBeNull();
   });
@@ -67,21 +76,19 @@ describe("the end of the month", () => {
   it("shows the Move as something that happened, not a choice", () => {
     const view = play(1, month(report, "stay-quiet")).at(-1);
 
-    expect(view?.step).toMatchObject({ kind: "move" });
+    expect(view?.step).toMatchObject({ kind: "story" });
+    expect(landedIn(view as PlayerView)).toMatchObject([{ kind: "move" }]);
     expect(view?.choices).toEqual([{ type: "continue" }]);
   });
 
   it("runs the whole month in the defined order", () => {
-    const kinds = play(1, [...month(pub, "use-word"), next]).map(
-      (v) => v.step.kind,
-    );
+    const kinds = play(1, month(pub, "use-word")).map((v) => v.step.kind);
 
     expect(kinds).toEqual([
       "notification",
       "actions",
       "scene",
       "actions",
-      "move",
       "story",
     ]);
   });
@@ -89,7 +96,7 @@ describe("the end of the month", () => {
   it("will not land a Move while actions remain", () => {
     const views = play(1, [report, kettle]);
 
-    expect(views.map((v) => v.step.kind)).not.toContain("move");
+    expect(everyLanded(views)).toEqual([]);
   });
 
   it("only lands a Move whose condition holds", () => {
@@ -100,16 +107,20 @@ describe("the end of the month", () => {
     const withWord = play(1, month(pub, "use-word"), content);
     const withoutWord = play(1, month(pub, "stay-quiet"), content);
 
-    expect(withWord.at(-1)?.step.kind).toBe("move");
-    expect(withoutWord.at(-1)?.step.kind).toBe("story");
+    expect(landedIn(withWord.at(-1) as PlayerView)).toMatchObject([
+      { kind: "move" },
+    ]);
+    expect(withoutWord.at(-1)?.step).toMatchObject({
+      kind: "story",
+      landed: [],
+    });
   });
 
   it("varies the Move with the seed", () => {
     const titles = new Set(
-      [1, 2, 3, 4, 5, 6, 7, 8].map((seed) => {
-        const { step } = endOf(seed, month(report, "stay-quiet")).move;
-        return step.kind === "move" ? step.title : step.kind;
-      }),
+      [1, 2, 3, 4, 5, 6, 7, 8].map(
+        (seed) => endOf(seed, month(report, "stay-quiet")).move?.title,
+      ),
     );
 
     expect(titles).toEqual(new Set(["MOVE-CREDIT", "MOVE-STEAL"]));
@@ -163,7 +174,7 @@ describe("the end of the month", () => {
     raw.moves = raw.moves.filter((m) => m.id === "word-stolen");
     const content = parseContent(raw);
 
-    const final = play(1, [...month(pub, "use-word"), next], content).at(-1);
+    const final = play(1, month(pub, "use-word"), content).at(-1);
 
     expect(final?.step).toMatchObject({
       kind: "story",
@@ -182,10 +193,10 @@ describe("the end of the month", () => {
     raw.officialStory.entries = [{ reported: "A new official line." }];
     const content = parseContent(raw);
 
-    const views = play(1, [...month(report, "stay-quiet"), next], content);
+    const views = play(1, month(report, "stay-quiet"), content);
 
-    expect(views.at(-2)?.step).toMatchObject({ title: "New Move" });
     expect(views.at(-1)?.step).toMatchObject({
+      landed: [{ title: "New Move" }],
       pairs: [{ reported: "A new official line." }],
     });
   });

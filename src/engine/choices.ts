@@ -104,6 +104,9 @@ function answerNotification(
   state.unanswered = state.unanswered.filter(
     (id) => id !== choice.notificationId,
   );
+  if (!state.mailSeen.includes(choice.notificationId)) {
+    state.mailSeen.push(choice.notificationId);
+  }
   const learned = option.learns.filter((w) => !state.buzzwords.includes(w));
   const lost =
     option.bet &&

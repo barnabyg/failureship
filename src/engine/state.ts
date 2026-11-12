@@ -170,16 +170,15 @@ export type Step =
       asWritten?: boolean | undefined;
       /** A vacancy decided: Official standing beside who really decided. */
       decided?: DecidedNotice | undefined;
+      /** A big mistake: told at once, before anything else, wherever it falls. */
+      urgent?: boolean | undefined;
     }
-  | {
-      kind: "move";
-      id: string;
-      /** Who made it, if anyone in particular did. */
-      by?: string | undefined;
-    }
-  /** A consequence of the player's own bad behaviour, with its Escapes on offer. */
+  /**
+   * A consequence of the player's own bad behaviour, with its Escapes on offer.
+   * One that comes as the month opens waits in the inbox, with the e-mail.
+   */
   | { kind: "escape"; id: string }
-  | { kind: "event"; id: string }
+  /** The Monthly Summary: what landed as the month closed, and the official story. */
   | { kind: "story" }
   /** The comic stand-in for winning, told once, after the seat that won it. */
   | { kind: "win" }
@@ -329,6 +328,23 @@ export interface GaugeMove {
   note: string;
 }
 
+/** Something the player is told, with nothing to choose. */
+export type Notice = Omit<Extract<Step, { kind: "notice" }>, "kind">;
+
+/**
+ * What lands as the month closes with nothing to choose, which the Monthly
+ * Summary tells together: a Company Event, a Character Move, or a notice.
+ */
+export type Landing =
+  | { kind: "event"; id: string }
+  | {
+      kind: "move";
+      id: string;
+      /** Who made it, if anyone in particular did. */
+      by?: string | undefined;
+    }
+  | ({ kind: "notice" } & Notice);
+
 /** What belongs to the month, and is wiped when the next one opens. */
 export interface MonthRecord {
   noted: string[];
@@ -343,6 +359,10 @@ export interface MonthRecord {
   reviewed: boolean;
   /** Whether the month has closed: the last month's, once its story is told. */
   closed: boolean;
+  /** Told as the month opened, and kept in the inbox to read, with nothing to answer. */
+  notes: Notice[];
+  /** What has landed as the month closes, for the Monthly Summary. */
+  landed: Landing[];
 }
 
 /**
@@ -383,15 +403,14 @@ export interface State extends MonthRecord {
   overHeadUses: number;
   /** The missed meetings' actions given so far, each of them once in a run. */
   actionsGiven: string[];
-  /** What the player is told before anything else, as a month opens. */
-  noticesDue: {
-    title: string;
-    body: string;
-    asWritten?: boolean;
-    /** How the boss took it. Signs only: it never says the boss's kind. */
-    reaction?: string | undefined;
-    decided?: DecidedNotice | undefined;
-  }[];
+  /**
+   * What the player is told before anything else. What the month's opening
+   * tells goes to the inbox instead, and what its close tells to the Monthly
+   * Summary, unless it is urgent.
+   */
+  noticesDue: Notice[];
+  /** The Notifications answered in an earlier month, whose repeats are shown short. */
+  mailSeen: string[];
   project: {
     real: string;
     reported: string;

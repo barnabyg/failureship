@@ -288,14 +288,13 @@ export function fixtureRaw() {
     ] as RawFloor[],
     ui: {
       hints: {
-        notification: "Answer the Notification.",
         actions: "Click the floor. You have {actions} left.",
+        inbox: "Answer your inbox: {n} to answer. You have {actions} left.",
+        inboxOnly: "Answer your inbox to close the month: {n} to answer.",
         scene: "Watch the room, then choose.",
         "find-out": "Pick a source.",
         notice: "Press continue.",
-        move: "Something has happened to you.",
         escape: "Something has come back on you. Choose a way out.",
-        event: "Something has happened to the company.",
         story: "The month has closed.",
         win: "You have won.",
         results: "The run is over.",

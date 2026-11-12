@@ -30,14 +30,25 @@ export function holdForEscape(
 }
 
 /**
- * The next consequence to escape from as the month opens. One that comes as a
- * Character Move waits for where Moves land, as `landBill` says.
+ * Whether a consequence waits in the inbox, to be escaped any time before the
+ * month closes. One that comes as a Character Move waits for where Moves land,
+ * as `landBill` says, and asks there.
  */
+export function inInbox(content: Content, id: string): boolean {
+  return billOf(content, id).as !== "move";
+}
+
+/** The consequences to escape from in the inbox, in the order they came. */
+export function inboxEscapes(state: State, content: Content): string[] {
+  return state.escapesDue
+    .map((d) => d.bill)
+    .filter((id) => inInbox(content, id));
+}
+
+/** The first consequence to escape from in the inbox, if any. */
 export function nextEscape(state: State, content: Content): Step | null {
-  const due = state.escapesDue.find(
-    (d) => billOf(content, d.bill).as !== "move",
-  );
-  return due ? { kind: "escape", id: due.bill } : null;
+  const [id] = inboxEscapes(state, content);
+  return id === undefined ? null : { kind: "escape", id };
 }
 
 function billOf(content: Content, id: string): Bill {

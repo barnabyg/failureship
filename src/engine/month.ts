@@ -1,5 +1,5 @@
 import { landBill, playThreads, surfaceRisks } from "./bills";
-import { nextEscape } from "./escapes";
+import { inInbox, nextEscape } from "./escapes";
 import { blowWhistles, changePeople } from "./changes";
 import { landEvent, scheduleEvents } from "./company-events";
 import { everyNotification, type Content } from "./content";
@@ -35,7 +35,7 @@ import {
 import { drawFor, pick } from "./rng";
 import { fillVacancies } from "./vacancies";
 import { openScene } from "./scenes";
-import type { MonthRecord, State, Step, World } from "./state";
+import type { Landing, MonthRecord, State, Step, World } from "./state";
 
 export function freshMonth(where: Whereabouts, content: Content): MonthRecord {
   return {
@@ -52,11 +52,24 @@ export function freshMonth(where: Whereabouts, content: Content): MonthRecord {
     absenceDealtWith: false,
     reviewed: false,
     closed: false,
+    notes: [],
+    landed: [],
   };
 }
 
-/** What happens as a month opens, whatever the player has done. */
+/**
+ * What happens as a month opens, whatever the player has done. Whatever it
+ * tells waits in the inbox to be read, unless it is urgent.
+ */
 export function openMonth(state: State, content: Content): void {
+  const before = state.noticesDue.length;
+  happenAsMonthOpens(state, content);
+  const told = state.noticesDue.splice(before);
+  state.noticesDue.push(...told.filter((n) => n.urgent));
+  state.notes.push(...told.filter((n) => !n.urgent));
+}
+
+function happenAsMonthOpens(state: State, content: Content): void {
   // Plans past due fail before anything else this month can complete them.
   followPlans(state, content);
   spreadNews(state, content);
@@ -117,26 +130,93 @@ export function leaveStory(state: State, world: World): void {
   state.step = nextStep(state, world);
 }
 
-/** The Notifications that can be answered now, in the order they arrive. */
-export function answerable(state: State, content: Content): string[] {
+/**
+ * The Notifications in the inbox, in the order they arrive: those still to be
+ * answered this month, including any the actions left cannot pay for.
+ */
+export function inboxMail(state: State, content: Content): string[] {
   const notifications = everyNotification(content);
   return state.unanswered.filter((id) => {
     const notification = notifications.find((n) => n.id === id);
     return (
       notification !== undefined &&
       !mentionsGone(state, content, notification.from) &&
-      optionsOnOffer(state, content, notification.options).some(
-        (o) => costOf(content, o.cost) <= remaining(state, content),
-      ) &&
       matches(state, content, notification.when)
     );
   });
 }
 
+/** The Notifications that can be answered now, in the order they arrive. */
+export function answerable(state: State, content: Content): string[] {
+  const notifications = everyNotification(content);
+  return inboxMail(state, content).filter((id) =>
+    optionsOnOffer(
+      state,
+      content,
+      notifications.find((n) => n.id === id)?.options ?? [],
+    ).some((o) => costOf(content, o.cost) <= remaining(state, content)),
+  );
+}
+
 /**
- * The month's order: any consequence to escape, Notifications, any review,
- * actions, any Company Event, a Move, and then the month closes. A consequence
- * that comes as a Move is escaped where Moves land.
+ * The actions kept for the inbox: the least that answering each e-mail in it
+ * can cost, so that the floor cannot spend what an answer needs.
+ */
+function keptForInbox(state: State, content: Content): number {
+  const notifications = everyNotification(content);
+  return answerable(state, content)
+    .map((id) =>
+      Math.min(
+        ...optionsOnOffer(
+          state,
+          content,
+          notifications.find((n) => n.id === id)?.options ?? [],
+        ).map((o) => costOf(content, o.cost)),
+      ),
+    )
+    .reduce((sum, cost) => sum + cost, 0);
+}
+
+/**
+ * Whether an action on the floor can be taken now: it is available, and
+ * taking it leaves enough to answer the inbox, so that the month cannot close
+ * with an e-mail left unanswered for want of an action.
+ */
+export function canTakeNow(
+  state: State,
+  content: Content,
+  action: Content["actions"][number],
+): boolean {
+  const cost = costOf(content, action.cost);
+  return (
+    isAvailable(state, content, action) &&
+    (cost === 0 ||
+      cost + keptForInbox(state, content) <= remaining(state, content))
+  );
+}
+
+/**
+ * Whether the step lets the player use the floor and their inbox: it is the
+ * floor, or something in the inbox, which can be answered in any order.
+ */
+export function onTheFloor(state: State, content: Content): boolean {
+  const { step } = state;
+  return (
+    step.kind === "actions" ||
+    step.kind === "notification" ||
+    (step.kind === "escape" && inInbox(content, step.id))
+  );
+}
+
+/**
+ * The month's order. Anything urgent is told first. Then the floor opens, with
+ * the inbox: any consequence to escape that came as the month opened, and the
+ * Notifications, which the player answers in any order, beside their actions.
+ * The step names whatever is at the top of the inbox. Once the inbox is clear,
+ * any flagged Project and any review come, and the month closes once the
+ * actions are spent and the inbox is clear. What then lands with nothing to
+ * choose is told in the Monthly Summary, and a consequence that comes as a Move
+ * asks for its Escape in place, as the month closes.
  */
 export function nextStep(state: State, world: World): Step {
   const { content } = world;
@@ -172,17 +252,43 @@ export function nextStep(state: State, world: World): Step {
   ) {
     return { kind: "actions" };
   }
-  return (
-    dealWithAbsence(state, content) ??
-    landEvent(state, content) ??
-    landBill(state, content) ??
-    landMove(state, content) ??
-    closeGauges(state, content) ?? { kind: "story" }
-  );
+  return closeMonth(state, content);
+}
+
+/**
+ * As the month closes, everything that lands with nothing to choose is kept
+ * for the Monthly Summary, in the order it lands. A consequence with Escapes
+ * stops to ask, and so does anything urgent, such as a big mistake.
+ */
+function closeMonth(state: State, content: Content): Step {
+  for (;;) {
+    const landing =
+      dealWithAbsence(state, content) ??
+      landEvent(state, content) ??
+      landBill(state, content) ??
+      landMove(state, content) ??
+      closeGauges(state, content);
+    if (landing === null) return { kind: "story" };
+    if (landing.kind === "escape") return landing;
+    state.landed.push(landing);
+    // What a landing told, such as a Milestone, is told with it.
+    const told = state.noticesDue.splice(0);
+    const urgent = told.filter((n) => n.urgent);
+    state.landed.push(
+      ...told
+        .filter((n) => !n.urgent)
+        .map((n) => ({ kind: "notice" as const, ...n })),
+    );
+    const [first, ...rest] = urgent;
+    if (first) {
+      state.noticesDue.push(...rest);
+      return { kind: "notice", ...first };
+    }
+  }
 }
 
 /** Picks the month's Character Move from those whose conditions hold. */
-function landMove(state: State, content: Content): Step | null {
+function landMove(state: State, content: Content): Landing | null {
   if (state.moveLanded) return null;
   state.moveLanded = true;
   const competition = competitionNow(state, content);

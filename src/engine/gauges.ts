@@ -1,5 +1,5 @@
 import type { Content } from "./content";
-import type { GaugeMove, State, Step } from "./state";
+import type { GaugeMove, Landing, State } from "./state";
 
 type Written = NonNullable<Content["gauges"]>[number];
 
@@ -43,8 +43,8 @@ function clamp(gauge: Written, value: number): number {
   return Math.min(gauge.max, Math.max(gauge.min, value));
 }
 
-/** As the month closes, Gauges move, and any Milestone reached is told first. */
-export function closeGauges(state: State, content: Content): Step | null {
+/** As the month closes, Gauges move, and any Milestone reached is told in the Monthly Summary. */
+export function closeGauges(state: State, content: Content): Landing | null {
   for (const move of state.gaugesDue.splice(0)) {
     const gauge = content.gauges?.find((g) => g.id === move.gauge);
     if (!gauge) continue;

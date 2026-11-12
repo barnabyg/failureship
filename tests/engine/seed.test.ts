@@ -30,7 +30,6 @@ describe("restarting from a seed", () => {
       { type: "scene", sceneId: "meeting", optionId: "use-word" },
       { type: "action", actionId: "kettle" },
       { type: "continue" },
-      { type: "continue" },
     ];
     const first = startRun({ seed: 9, content });
     const seen = script.map((choice) => first.choose(choice));

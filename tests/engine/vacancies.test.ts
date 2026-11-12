@@ -10,6 +10,7 @@ import {
 } from "../../src/engine";
 import { readHiddenTruth } from "../../src/engine/hidden-truth";
 import { answer, play } from "./grand-plan-fixture";
+import { firstTold } from "./landed";
 import {
   decidedOn,
   edited,
@@ -243,9 +244,7 @@ describe("what is done for an open seat", () => {
     const run = openWithDee("believer", using);
     const views = playRest(run);
 
-    const told = views.find(
-      (v) => v.step.kind === "move" && v.step.title === "FOR-THE-SEAT",
-    );
+    const told = firstTold(views, "FOR-THE-SEAT");
     const truth = readHiddenTruth(run);
     const story = truth.memories.find(
       (m) => m.character === "dee" && m.text === "A-STORY-ABOUT-YOU",
@@ -403,10 +402,7 @@ describe("the decision", () => {
 
 describe("those passed over", () => {
   const outcomes = SEEDS.map((s) => decidedOn(s, content));
-  const grudge = (views: PlayerView[]) =>
-    views.find(
-      (v) => v.step.kind === "move" && v.step.title === "BEN-REMEMBERS",
-    );
+  const grudge = (views: PlayerView[]) => firstTold(views, "BEN-REMEMBERS");
 
   it("remember it, and come back on a player who had the seat", () => {
     const won = outcomes.find((o) => o.decided?.winner === "you");

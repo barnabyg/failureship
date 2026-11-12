@@ -10,6 +10,7 @@ import { readHiddenTruth } from "../../src/engine/hidden-truth";
 import { capitalised } from "../../src/engine/say";
 import { plainChoice } from "../../src/ui/later-month";
 import { buzzwordFixtureRaw, calledAtStart } from "./fixture";
+import { everyLanded, firstTold, landedIn } from "./landed";
 import {
   competitorMovesRaw,
   playOut,
@@ -28,12 +29,10 @@ describe("a competitor's Move", () => {
       const run = startRun({ seed, content });
       const views = playOut(run);
       const truth = readHiddenTruth(run);
-      const claimed = views.find(
-        (v) => v.step.kind === "move" && v.step.title === "MOVE-CLAIMED",
-      );
+      const claimed = firstTold(views, "MOVE-CLAIMED");
       // Ana and Ben always compete, so it lands in the first month.
       expect(claimed?.month).toBe(1);
-      const body = claimed?.step.kind === "move" ? claimed.step.body : "";
+      const body = claimed?.told.body ?? "";
       const maker = ["ana", "ben"].find(
         (id) =>
           body ===
@@ -71,8 +70,8 @@ describe("a competitor's Move", () => {
     ];
     const content = parseContent(raw);
     for (const seed of SEEDS.slice(0, 40)) {
-      const titles = playOut(startRun({ seed, content })).flatMap((v) =>
-        v.step.kind === "move" ? [v.step.title] : [],
+      const titles = everyLanded(playOut(startRun({ seed, content }))).flatMap(
+        (l) => (l.kind === "move" ? [l.title] : []),
       );
       expect(titles).not.toContain("MOVE-CLAIMED");
     }
@@ -144,7 +143,7 @@ describe("a false story about the player", () => {
     const content = parseContent(raw);
     for (const seed of SEEDS.slice(0, 40)) {
       const run = startRun({ seed, content });
-      const landed = playOut(run).filter((v) => v.step.kind === "move");
+      const landed = everyLanded(playOut(run)).filter((l) => l.kind === "move");
       expect(landed.length).toBeGreaterThan(1);
       const stories = readHiddenTruth(run).news.filter(
         (n) => n.startedBy !== undefined,
@@ -352,9 +351,11 @@ describe("the game's ways to the same Move", () => {
     let seen = false;
     while (view.step.kind !== "scene" || view.step.id !== "metric-review") {
       const { step } = view;
-      if (step.kind === "move") {
-        const written = gameContent.moves.find((m) => m.title === step.title);
-        if (written && tricky.has(written.id)) seen = true;
+      for (const landed of landedIn(view)) {
+        const written = gameContent.moves.find((m) => m.title === landed.title);
+        if (landed.kind === "move" && written && tricky.has(written.id)) {
+          seen = true;
+        }
       }
       const deliver =
         learn && step.kind === "notification" && step.id === "new-tool";

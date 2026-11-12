@@ -17,11 +17,12 @@ export function makeMistake(
   state.mistakes.push({ month: state.month, choice: label });
   if (mistake === "catastrophic" || state.finalWarning) {
     state.firedIn = state.month;
-    state.noticesDue.push(
-      mistake === "catastrophic" ? written.firedOutright : written.fired,
-    );
+    state.noticesDue.push({
+      ...(mistake === "catastrophic" ? written.firedOutright : written.fired),
+      urgent: true,
+    });
     return;
   }
   state.finalWarning = true;
-  state.noticesDue.push(written.finalWarning);
+  state.noticesDue.push({ ...written.finalWarning, urgent: true });
 }

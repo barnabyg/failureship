@@ -17,12 +17,24 @@ import { endsAfter, playToMonth } from "./later-month";
 import { Modal } from "./Modal";
 import { Notebook, monthLabel } from "./Notebook";
 import { StepTag, stepTag } from "./Panel";
-import { StepPanel } from "./panels";
+import { inboxKey, StepPanel } from "./panels";
 import { readSavedRun, writeSavedRun } from "./saved-run";
 import { TowerStage } from "./TowerStage";
 
 function refusedMessage(typed: string): string {
   return panelText.seedRefused.replace("{seed}", typed.trim());
+}
+
+/** What the player has done with the inbox: hidden it, or opened something in it. */
+interface InboxState {
+  month: number;
+  hidden: boolean;
+  opened: string | null;
+}
+
+/** Each month's inbox opens afresh, at whatever is at the top of it. */
+function freshInbox(month: number): InboxState {
+  return { month, hidden: false, opened: null };
 }
 
 function randomSeed(): number {
@@ -111,6 +123,10 @@ export function App() {
   });
   // Each run's header starts afresh, even on the same seed.
   const [runNumber, setRunNumber] = useState(0);
+  // What the player has opened in the inbox, or whether they hid it, this month.
+  const [inboxState, setInbox] = useState<InboxState>(freshInbox(0));
+  const inbox =
+    inboxState.month === view.month ? inboxState : freshInbox(view.month);
 
   // In an effect, because React may run a state initialiser twice in development.
   useEffect(() => {
@@ -148,6 +164,7 @@ export function App() {
 
   const restart = (seed: number) => {
     setGame(begin(seed));
+    setInbox(freshInbox(0));
     setRunNumber((n) => n + 1);
     setMessage(null);
     setLeavingFor(null);
@@ -169,11 +186,19 @@ export function App() {
         legal={view.choices}
         onChoose={choose}
         unlabelled={view.step.kind === "results"}
-        waiting={view.step.kind !== "actions"}
+        waiting={view.waiting}
       />
       <Header
         view={view}
         runNumber={runNumber}
+        onOpenInbox={() => {
+          const [first] = view.inbox.items;
+          setInbox({
+            month: view.month,
+            hidden: false,
+            opened: first ? inboxKey(first, 0) : null,
+          });
+        }}
         onOpenGauges={() => {
           setGaugesOpen(true);
         }}
@@ -222,13 +247,21 @@ export function App() {
           <p data-testid="hint">{view.hint}</p>
         </div>
       </aside>
-      <StepTag.Provider value={stepTag(view.step)}>
+      <StepTag.Provider value={stepTag(view)}>
         <StepPanel
           view={view}
           onChoose={choose}
           onRestart={restart}
           onNewRun={() => {
             restart(randomSeed());
+          }}
+          inboxHidden={inbox.hidden}
+          opened={inbox.opened}
+          onOpen={(key) => {
+            setInbox({ month: view.month, hidden: false, opened: key });
+          }}
+          onHideInbox={() => {
+            setInbox({ month: view.month, hidden: true, opened: null });
           }}
         />
       </StepTag.Provider>
