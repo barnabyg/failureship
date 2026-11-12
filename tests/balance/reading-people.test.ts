@@ -7,7 +7,7 @@ import {
   knowsThePowerMap,
   readsTheRoom,
 } from "../engine/players";
-import { CLEAN, FOR_REAL, climb, type Otherwise } from "../engine/real-runs";
+import { FAKED, FOR_SHOW, climb, type Otherwise } from "../engine/real-runs";
 
 /**
  * Whom a climber asks about each open seat, played through the real game on
@@ -16,6 +16,15 @@ import { CLEAN, FOR_REAL, climb, type Otherwise } from "../engine/real-runs";
  */
 
 const SEEDS = Array.from({ length: 100 }, (_, i) => i + 1);
+
+/** Takes the blame in month 2, fakes the Plan and claims its credit. */
+const CLIMBER = `take-the-blame,${FAKED},claim-the-credit`;
+/** Then fakes every Plan above, and claims each one's credit. */
+const FOR_SHOW_AND_CREDIT = [
+  ...FOR_SHOW,
+  "claim-it-team-lead",
+  "claim-it-middle-manager",
+];
 
 /** Seats won, of those the player stood for, and runs won, by how they pick whom to ask. */
 function asking(
@@ -30,8 +39,8 @@ function asking(
   for (const seed of SEEDS) {
     const { truth, views } = climb(
       seed,
-      CLEAN,
-      FOR_REAL,
+      CLIMBER,
+      FOR_SHOW_AND_CREDIT,
       gameContent,
       pick(seed),
     );
@@ -48,10 +57,11 @@ function asking(
 
 // Whoever really holds influence over a seat decides it, and a word with
 // them, or with someone they listen to, counts. So the climb still pays a
-// player who reads people. Of these 100 deals: 73.0% of seats for whoever
-// knows the Power Map, 71.8% for a reader of the room, 66.5% for a guess, and
-// 56.3% for leaving it to the process; and 48, 44, 36 and 24 runs won. The
-// deals are fixed, so the narrow lead of knowing over reading cannot flake.
+// player who reads people. Of these 100 deals, a climber who fakes the Plans
+// and claims their credit wins 62.0% of seats knowing the Power Map, 60.8%
+// reading the room, 57.9% on a guess, and 46.6% leaving it to the process;
+// and 15, 14, 12 and 7 runs. The deals are fixed, so the narrow lead of
+// knowing over reading cannot flake.
 describe("reading people on the way up", { timeout: 60_000 }, () => {
   const once = <T>(play: () => T) => {
     let played: { value: T } | undefined;

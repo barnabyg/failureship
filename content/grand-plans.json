@@ -40,7 +40,7 @@
           },
           "needs": true,
           "otherwise": "wrong-figures",
-          "counts": ["believer", "incompetent"],
+          "counts": ["believer"],
           "belief": {
             "believer": 4,
             "incompetent": 0,
@@ -233,7 +233,7 @@
           "when": {
             "did": "desks-really-booked"
           },
-          "counts": ["believer", "incompetent"],
+          "counts": ["believer"],
           "belief": {
             "believer": 4,
             "incompetent": 0,
@@ -373,7 +373,7 @@
           "when": {
             "did": "centre-really-staffed"
           },
-          "counts": ["believer", "incompetent", "practitioner"],
+          "counts": ["believer"],
           "belief": {
             "believer": 4,
             "incompetent": 1,
@@ -512,7 +512,7 @@
           "when": {
             "did": "roadmap-really-decided"
           },
-          "counts": ["believer", "incompetent", "practitioner"],
+          "counts": ["believer"],
           "belief": {
             "believer": 4,
             "incompetent": 1,

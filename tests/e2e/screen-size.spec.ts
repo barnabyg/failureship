@@ -78,10 +78,13 @@ test.describe("at 1920×1080", () => {
   });
 
   for (const [floor, address] of [
-    [2, "/?seed=16&month=11&choose=take-the-blame,screenshot-on-the-note"],
+    [
+      2,
+      "/?seed=16&month=11&choose=take-the-blame,screenshot-on-the-note,claim-the-credit,word-with-the-analyst",
+    ],
     [
       3,
-      "/?seed=24&month=14&choose=take-the-blame,screenshot-on-the-note,staff-the-centre",
+      "/?seed=24&month=14&choose=take-the-blame,screenshot-on-the-note,claim-the-credit,word-with-the-analyst,staff-the-centre",
     ],
   ] as const) {
     test(`every place on Floor ${String(floor)} can be pressed`, async ({

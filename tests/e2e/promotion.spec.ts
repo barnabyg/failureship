@@ -1,10 +1,12 @@
 import { expect, test } from "@playwright/test";
 import { freshRun, playUntil } from "./play";
 
-// tests/engine/real-vacancies.test.ts keeps these deals true. Faking the Plan at
-// month 5's Ideas Workshop completes it, your boss counts it done, and the seat
-// is open in months 6 and 7. On seed 2 it is yours, and on seed 14 a Rival has it.
-const FAKED = "choose=screenshot-on-the-note";
+// tests/engine/real-vacancies.test.ts keeps these deals true. Taking the blame
+// in month 2 and faking the Plan at month 5's Ideas Workshop completes it, your
+// boss counts it done, and the seat is open in months 6 and 7. A word with the
+// Senior Analyst in month 6 makes it yours on seed 2; on seed 14 a Rival has it.
+const FAKED =
+  "choose=take-the-blame,screenshot-on-the-note,word-with-the-analyst";
 
 test("win the seat, and ride the lift to Floor 2", async ({ page }) => {
   await freshRun(page, `/?seed=2&month=7&${FAKED}`);
