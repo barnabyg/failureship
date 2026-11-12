@@ -783,6 +783,20 @@ and who really has what it needs.
   `sceneScripts`. This format is a trial, as the spec, issue #1, says.
 - A Scene with a `quarter` is a quarterly review, as [Quarterly reviews](#quarterly-reviews) says.
 
+A Scene is read for who looks at whom, not for prose, so it is held to a word budget:
+
+- Before its options, a Scene can show at most 120 words, however it is dealt. That counts its
+  `narration`, every sign's `label` and `text` (and a `competitor`'s `label` and longest sign),
+  and a row for each person in its `cast`, plus one for whoever competes, each with the longest
+  behaviour they can show and the longest regard, or, for the boss and the boss's boss, the
+  longest treatment. A plain line is left out, so it is not counted, and a quarterly review shows
+  no behaviours. Each part, such as `{holder}` or `{plan}`, counts as one word, as a name is read
+  at a glance. Names and job titles at the head of each row are not counted.
+- Write `narration` as one sentence, and each sign as one or two short ones.
+- An option says at most 8 words, counted the same way, so that it fits on one line.
+
+`scene-checks.ts` refuses a Scene over either limit.
+
 ## `sources.json`
 
 Find Out: who can be asked, how each role talks, how reliable each kind is, and every claim.

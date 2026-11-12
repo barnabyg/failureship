@@ -27,6 +27,7 @@ import {
 import { findBrokenFloors } from "./floor-checks";
 import { findBrokenPlans } from "./plan-checks";
 import { findBrokenReviews } from "./review-checks";
+import { findWordyScenes } from "./scene-checks";
 import { findBrokenVacancies, needsVacancies } from "./vacancy-checks";
 import {
   findBrokenRivals,
@@ -229,6 +230,7 @@ function findBrokenReferences(content: Content): string[] {
   problems.push(...findBrokenGauges(content));
   problems.push(...findBrokenStanding(content));
   problems.push(...findBrokenReputation(content, characters));
+  problems.push(...findWordyScenes(content));
   for (const event of content.events) {
     checkProject(`Company Event "${event.id}"`, event.project);
   }
