@@ -178,7 +178,7 @@ export type Step =
    * One that comes as the month opens waits in the inbox, with the e-mail.
    */
   | { kind: "escape"; id: string }
-  /** The Monthly Summary: what landed as the month closed, and the official story. */
+  /** The official story: what landed as the month closed, then what was reported beside what happened. */
   | { kind: "story" }
   /** The comic stand-in for winning, told once, after the seat that won it. */
   | { kind: "win" }
@@ -361,7 +361,7 @@ export interface MonthRecord {
   closed: boolean;
   /** Told as the month opened, and kept in the inbox to read, with nothing to answer. */
   notes: Notice[];
-  /** What has landed as the month closes, for the Monthly Summary. */
+  /** What has landed as the month closes, for the official story. */
   landed: Landing[];
 }
 

@@ -43,7 +43,7 @@ function clamp(gauge: Written, value: number): number {
   return Math.min(gauge.max, Math.max(gauge.min, value));
 }
 
-/** As the month closes, Gauges move, and any Milestone reached is told in the Monthly Summary. */
+/** As the month closes, Gauges move, and any Milestone reached is told in the official story. */
 export function closeGauges(state: State, content: Content): Landing | null {
   for (const move of state.gaugesDue.splice(0)) {
     const gauge = content.gauges?.find((g) => g.id === move.gauge);

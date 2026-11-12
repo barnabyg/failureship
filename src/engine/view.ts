@@ -138,7 +138,7 @@ export interface NoticeView {
   decided?: DecidedNotice | undefined;
 }
 
-/** What landed as the month closed with nothing to choose, in the Monthly Summary. */
+/** What landed as the month closed with nothing to choose, in the official story. */
 export type LandedView =
   | { kind: "event"; from: string; title: string; body: string }
   | { kind: "move"; from: string; title: string; body: string }
@@ -182,7 +182,7 @@ export type StepView =
    * open, and one that came as a Move asks before the month can close.
    */
   | EscapeView
-  /** The Monthly Summary, as the month closes. */
+  /** The official story, as the month closes. */
   | {
       kind: "story";
       title: string;

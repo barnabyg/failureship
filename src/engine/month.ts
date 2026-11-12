@@ -215,7 +215,7 @@ export function onTheFloor(state: State, content: Content): boolean {
  * The step names whatever is at the top of the inbox. Once the inbox is clear,
  * any flagged Project and any review come, and the month closes once the
  * actions are spent and the inbox is clear. What then lands with nothing to
- * choose is told in the Monthly Summary, and a consequence that comes as a Move
+ * choose is told in the official story, and a consequence that comes as a Move
  * asks for its Escape in place, as the month closes.
  */
 export function nextStep(state: State, world: World): Step {
@@ -236,15 +236,8 @@ export function nextStep(state: State, world: World): Step {
   if (escape) return escape;
   const [id] = answerable(state, content);
   if (id !== undefined) return { kind: "notification", id };
-  const flag = content.project.flagged;
-  if (flag && state.project.flagged) {
-    state.project.flagged = false;
-    state.spent = Math.min(
-      content.balance.actionsPerMonth,
-      state.spent + costOf(content, flag.cost),
-    );
-    return openScene(state, world, flag.scene);
-  }
+  const flagged = explainFlagged(state, world);
+  if (flagged) return flagged;
   const review = holdReview(state, world);
   if (review) return review;
   if (
@@ -252,15 +245,30 @@ export function nextStep(state: State, world: World): Step {
   ) {
     return { kind: "actions" };
   }
-  return closeMonth(state, content);
+  return closeMonth(state, world);
+}
+
+/** A Project flagged red has to be explained, as soon as nothing else waits. */
+function explainFlagged(state: State, world: World): Step | null {
+  const { content } = world;
+  const flag = content.project.flagged;
+  if (!flag || !state.project.flagged) return null;
+  state.project.flagged = false;
+  state.spent = Math.min(
+    content.balance.actionsPerMonth,
+    state.spent + costOf(content, flag.cost),
+  );
+  return openScene(state, world, flag.scene);
 }
 
 /**
  * As the month closes, everything that lands with nothing to choose is kept
- * for the Monthly Summary, in the order it lands. A consequence with Escapes
- * stops to ask, and so does anything urgent, such as a big mistake.
+ * for the official story, in the order it lands. A consequence with Escapes
+ * stops to ask, and so does anything urgent, such as a big mistake, and a
+ * Project flagged red.
  */
-function closeMonth(state: State, content: Content): Step {
+function closeMonth(state: State, world: World): Step {
+  const { content } = world;
   for (;;) {
     const landing =
       dealWithAbsence(state, content) ??
@@ -284,6 +292,9 @@ function closeMonth(state: State, content: Content): Step {
       state.noticesDue.push(...rest);
       return { kind: "notice", ...first };
     }
+    // A landing that flags the Project red is explained at once, as ever.
+    const flagged = explainFlagged(state, world);
+    if (flagged) return flagged;
   }
 }
 

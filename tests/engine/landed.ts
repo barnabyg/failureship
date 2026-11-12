@@ -1,6 +1,6 @@
 import type { LandedView, NoticeView, PlayerView } from "../../src/engine";
 
-/** What landed as the month closed, told in its Monthly Summary, if the view is one. */
+/** What landed as the month closed, told in its official story, if the view is one. */
 export function landedIn(view: PlayerView): LandedView[] {
   return view.step.kind === "story" ? view.step.landed : [];
 }

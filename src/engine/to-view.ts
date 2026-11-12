@@ -425,7 +425,7 @@ function toEscapeView(state: State, content: Content, id: string): EscapeView {
   };
 }
 
-/** What landed as the month closed, as the Monthly Summary tells it. */
+/** What landed as the month closed, as the official story tells it. */
 function toLandedView(
   state: State,
   content: Content,

@@ -47,7 +47,7 @@ function play(run: Run): PlayerView[] {
   return views;
 }
 
-/** Each Monthly Summary that tells of a Company Event. */
+/** Each official story that tells of a Company Event. */
 const landed = (views: PlayerView[]) =>
   views.filter((v) => landedIn(v).some((l) => l.kind === "event"));
 

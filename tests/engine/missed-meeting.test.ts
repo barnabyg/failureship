@@ -183,7 +183,7 @@ describe("a meeting you do not go to", () => {
     const reactions = new Map<string, Set<string>>();
     for (let seed = 1; seed <= 200; seed++) {
       // With no Move or Company Event, nothing else lands on the boss as the
-      // month closes, so the Monthly Summary tells of the missed meeting alone.
+      // month closes, so the official story tells of the missed meeting alone.
       const run = startRun({
         seed,
         content: { ...gameContent, moves: [], events: [] },

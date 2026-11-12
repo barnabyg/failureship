@@ -378,6 +378,25 @@ body {
   margin: 8px 0 4px;
 }
 
+/*
+ * Closed, the inbox is only its list, small at the top right, above the places
+ * on the floor, so that every one of them can be clicked from the start.
+ */
+.panel.panel-inbox-closed {
+  width: min(380px, calc(100% - 24px));
+  max-height: 240px;
+  padding: 0 14px 6px;
+}
+
+.panel.panel-inbox-closed > p.step-tag {
+  margin: 0 -14px;
+  padding: 5px 14px;
+}
+
+.panel.panel-inbox-closed .inbox {
+  margin: 6px 0 0;
+}
+
 .panel .inbox-list {
   display: flex;
   flex-direction: column;
@@ -416,7 +435,7 @@ body {
   font-size: 0.8125rem;
 }
 
-/* What landed as the month closed, each a short section of the Monthly Summary. */
+/* What landed as the month closed, each a short section of the official story. */
 .landed-list {
   margin: 0 0 14px;
 }

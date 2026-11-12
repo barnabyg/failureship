@@ -40,7 +40,7 @@ const month = (answer: Choice, optionId: string): Choice[] => [
   kettle,
 ];
 
-/** The Monthly Summary as the month closes, and the Move told in it. */
+/** The official story as the month closes, and the Move told in it. */
 function endOf(seed: number, script: Choice[]) {
   const run = startRun({ seed, content: closingFixture() });
   for (const choice of script) run.choose(choice);
@@ -60,7 +60,7 @@ function story(seed: number, script: Choice[]) {
 }
 
 describe("the end of the month", () => {
-  it("lands a Character Move after the last action, told in the Monthly Summary", () => {
+  it("lands a Character Move after the last action, told in the official story", () => {
     const views = play(1, [...month(report, "stay-quiet"), next]);
     const kinds = views.map((v) => v.step.kind);
 

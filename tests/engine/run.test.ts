@@ -238,7 +238,7 @@ describe("content restricted to particular months", () => {
       },
     ];
     const run = startRun({ seed: 1, content: parseContent(raw) });
-    /** What landed as the month closed, as its Monthly Summary tells it. */
+    /** What landed as the month closed, as its official story tells it. */
     const stepsUntilStory = () => {
       while (run.view().step.kind !== "story") {
         run.choose(run.view().choices[0] as Choice);

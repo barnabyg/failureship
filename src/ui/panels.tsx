@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { panelText } from "../content";
 import type {
   Choice,
@@ -18,6 +18,7 @@ import {
   Reaction,
   ResultBefore,
   Stakes,
+  StepTag,
 } from "./Panel";
 import { ResultAtHead } from "./Result";
 import { ResultsPanel } from "./ResultsPanel";
@@ -30,7 +31,7 @@ const landedLabels: Record<LandedView["kind"], string> = {
   notice: panelText.landedNotice,
 };
 
-/** Something that landed as the month closed, as a section of the Monthly Summary. */
+/** Something that landed as the month closed, as a section of the official story. */
 function Landed({ landed }: { landed: LandedView }) {
   return (
     <section className="landed" data-testid="landed" data-kind={landed.kind}>
@@ -46,7 +47,7 @@ function Landed({ landed }: { landed: LandedView }) {
 }
 
 /**
- * The Monthly Summary, as that month's issue of the staff newsletter: what
+ * The official story, as that month's issue of the staff newsletter: what
  * landed as the month closed, then the official story beside what happened.
  */
 function StoryPanel({
@@ -233,7 +234,7 @@ function toAnswer(item: InboxItemView): boolean {
     : item.kind === "notification" && item.options.some((o) => o.affordable);
 }
 
-/** The inbox's list: each thing in it, the one open marked, and a way to hide it. */
+/** The inbox's list: each thing in it, the one open marked, and a way to close it. */
 function InboxList({
   items,
   open,
@@ -241,9 +242,10 @@ function InboxList({
   onHide,
 }: {
   items: InboxItemView[];
-  open: string;
+  open: string | null;
   onOpen: (key: string) => void;
-  onHide: () => void;
+  /** Closes what is open, back to the list, if anything is. */
+  onHide?: (() => void) | undefined;
 }) {
   return (
     <nav className="inbox" aria-label={panelText.inboxHeading}>
@@ -276,21 +278,23 @@ function InboxList({
           );
         })}
       </ul>
-      <button
-        type="button"
-        className="status-link inbox-hide"
-        data-testid="inbox-hide"
-        onClick={onHide}
-      >
-        {panelText.inboxHide}
-      </button>
+      {onHide && (
+        <button
+          type="button"
+          className="status-link inbox-hide"
+          data-testid="inbox-hide"
+          onClick={onHide}
+        >
+          {panelText.inboxHide}
+        </button>
+      )}
     </nav>
   );
 }
 
 /**
  * Whatever is open in the inbox: what the player opened, while it waits, or
- * else whatever is at the top of it. Notes to read are opened only by asking.
+ * else whatever is at the top of it, so that answering one goes on to the next.
  */
 function openInInbox(view: PlayerView, opened: string | null): string | null {
   const keys = view.inbox.items.map(inboxKey);
@@ -307,19 +311,67 @@ interface StepPanelProps {
   /** Starts a new run on a seed, without asking: only offered once a run is over. */
   onRestart: (seed: number) => void;
   onNewRun: () => void;
-  /** Whether the player has hidden the inbox, to see the floor behind it. */
-  inboxHidden: boolean;
+  /** Whether the player has opened the inbox, which is otherwise just its list. */
+  inboxOpen: boolean;
   /** Whatever the player opened in the inbox, by `inboxKey`. */
   opened: string | null;
   onOpen: (key: string) => void;
   onHideInbox: () => void;
 }
 
+/** What the player did last, on the floor: small, and taking no focus. */
+function ResultCard({ view }: { view: PlayerView }) {
+  const { result, actions, inbox } = view;
+  if (result === null) return null;
+  return (
+    <section
+      className="panel panel-result"
+      data-testid="panel-result"
+      aria-label={panelText.resultHeading}
+    >
+      <ResultAtHead result={result} actions={actions} />
+      {result.kind === "answer" && inbox.toAnswer === 0 && (
+        <p className="inbox-count" data-testid="inbox-count">
+          {panelText.inboxEmpty}
+        </p>
+      )}
+    </section>
+  );
+}
+
+/**
+ * The inbox closed: only its list, small along the top, clear of the places
+ * on the floor, so that the floor is the player's from the start of the month.
+ */
+function InboxClosed({
+  view,
+  onOpen,
+}: {
+  view: PlayerView;
+  onOpen: (key: string) => void;
+}) {
+  const tag = useContext(StepTag);
+  return (
+    <section
+      className="panel panel-inbox panel-inbox-closed"
+      data-testid="panel-inbox"
+      aria-label={panelText.inboxHeading}
+    >
+      {tag !== null && (
+        <p className="step-tag" data-testid="step-tag">
+          {tag}
+        </p>
+      )}
+      <InboxList items={view.inbox.items} open={null} onOpen={onOpen} />
+    </section>
+  );
+}
+
 /**
  * The panel for the current step of the month, if it needs one, headed by what
  * the player's last choice led to. On the floor, it is the inbox, which waits
- * for nothing: with nothing open in it, the result stands alone, and goes once
- * the player chooses again.
+ * for nothing: closed, it is only its list, beside the card of what the player
+ * last did, which goes once they choose again.
  */
 export function StepPanel(props: StepPanelProps) {
   const { view } = props;
@@ -327,27 +379,19 @@ export function StepPanel(props: StepPanelProps) {
   const before =
     result === null ? null : <ResultAtHead result={result} actions={actions} />;
   if (!view.waiting) {
-    const open = props.inboxHidden ? null : openInInbox(view, props.opened);
+    const open = props.inboxOpen ? openInInbox(view, props.opened) : null;
     const index = inbox.items.findIndex(
       (item, i) => inboxKey(item, i) === open,
     );
     const item = inbox.items[index];
     if (open === null || item === undefined) {
-      if (result === null) return null;
-      // Small, and taking no focus, so that the floor stays the player's.
       return (
-        <section
-          className="panel panel-result"
-          data-testid="panel-result"
-          aria-label={panelText.resultHeading}
-        >
-          {before}
-          {result.kind === "answer" && inbox.toAnswer === 0 && (
-            <p className="inbox-count" data-testid="inbox-count">
-              {panelText.inboxEmpty}
-            </p>
+        <>
+          {inbox.items.length > 0 && (
+            <InboxClosed view={view} onOpen={props.onOpen} />
           )}
-        </section>
+          <ResultCard view={view} />
+        </>
       );
     }
     return (

@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { gameContent } from "../../src/content";
 import { startRun, type Choice, type PlayerView } from "../../src/engine";
+import { notesIn } from "../engine/landed";
 
 const SEEDS = Array.from({ length: 60 }, (_, i) => i + 1);
 
@@ -12,9 +13,16 @@ describe("Demands in the game", () => {
       let view = run.view();
       while (view.step.kind !== "results") {
         const { step } = view;
-        if (step.kind === "notice" && view.openDemands.length === 0) {
-          if (/forget|never spoken|not mentioned again/i.test(step.body)) {
-            outcomes.add("forgotten");
+        // Forgotten, it is told as the month opens, in a note in the inbox.
+        const told = [
+          ...(step.kind === "notice" ? [step] : []),
+          ...notesIn(view),
+        ];
+        if (view.openDemands.length === 0) {
+          for (const { body } of told) {
+            if (/forget|never spoken|not mentioned again/i.test(body)) {
+              outcomes.add("forgotten");
+            }
           }
         }
         if (step.kind === "notification" && step.id.endsWith("-chased")) {

@@ -22,6 +22,9 @@ function watchRun(seed: number) {
     if (view.project.reported === "Red" && reported !== "Red") flags += 1;
     reported = view.project.reported;
     if (sceneIdOf(view) === "red-project" && choice.type !== "scene") {
+      // One choice can explain the Project and, as the month closes, see a
+      // Move flag it red again, with no view between in which it is not red.
+      if (reviews === flags && reported === "Red") flags += 1;
       reviews += 1;
     }
   }

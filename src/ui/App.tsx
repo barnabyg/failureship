@@ -25,16 +25,16 @@ function refusedMessage(typed: string): string {
   return panelText.seedRefused.replace("{seed}", typed.trim());
 }
 
-/** What the player has done with the inbox: hidden it, or opened something in it. */
+/** Whether the player has opened the inbox this month, and what in it. */
 interface InboxState {
   month: number;
-  hidden: boolean;
+  open: boolean;
   opened: string | null;
 }
 
-/** Each month's inbox opens afresh, at whatever is at the top of it. */
+/** Each month's inbox starts closed, as a list, so that the floor is clear. */
 function freshInbox(month: number): InboxState {
-  return { month, hidden: false, opened: null };
+  return { month, open: false, opened: null };
 }
 
 function randomSeed(): number {
@@ -123,7 +123,7 @@ export function App() {
   });
   // Each run's header starts afresh, even on the same seed.
   const [runNumber, setRunNumber] = useState(0);
-  // What the player has opened in the inbox, or whether they hid it, this month.
+  // Whether the player has opened the inbox this month, and what in it.
   const [inboxState, setInbox] = useState<InboxState>(freshInbox(0));
   const inbox =
     inboxState.month === view.month ? inboxState : freshInbox(view.month);
@@ -148,6 +148,10 @@ export function App() {
     (choice: Choice) => {
       const next = run.choose(choice);
       const from = view.job.id;
+      // Going somewhere on the floor closes the inbox, back to its list.
+      if (choice.type === "action") {
+        setInbox((s) => ({ ...s, open: false, opened: null }));
+      }
       setRide((current) => {
         // The run's end has no floor to ride to.
         if (next.step.kind === "results") return null;
@@ -193,9 +197,10 @@ export function App() {
         runNumber={runNumber}
         onOpenInbox={() => {
           const [first] = view.inbox.items;
+          // Opens at the top of the inbox: what is to answer comes before notes.
           setInbox({
             month: view.month,
-            hidden: false,
+            open: true,
             opened: first ? inboxKey(first, 0) : null,
           });
         }}
@@ -255,13 +260,13 @@ export function App() {
           onNewRun={() => {
             restart(randomSeed());
           }}
-          inboxHidden={inbox.hidden}
+          inboxOpen={inbox.open}
           opened={inbox.opened}
           onOpen={(key) => {
-            setInbox({ month: view.month, hidden: false, opened: key });
+            setInbox({ month: view.month, open: true, opened: key });
           }}
           onHideInbox={() => {
-            setInbox({ month: view.month, hidden: true, opened: null });
+            setInbox(freshInbox(view.month));
           }}
         />
       </StepTag.Provider>
