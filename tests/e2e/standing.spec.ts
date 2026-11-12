@@ -1,5 +1,5 @@
 import { expect, test } from "@playwright/test";
-import { playToResults, skipTheReport } from "./play";
+import { openInboxIfAny, playToResults, skipTheReport } from "./play";
 
 // "Official standing" in tests/engine/standing.test.ts checks the rules.
 test("Official standing moves when the report goes unfiled", async ({
@@ -15,6 +15,7 @@ test("Official standing moves when the report goes unfiled", async ({
   await expect(bar).not.toContainText(/\d/);
   const before = await marker.evaluate((m) => m.style.left);
 
+  await openInboxIfAny(page);
   await page.getByTestId("option-decline").click();
   await expect(marker).toHaveAttribute("style", `left: ${before};`);
   await skipTheReport(page);

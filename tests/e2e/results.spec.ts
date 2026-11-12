@@ -1,5 +1,5 @@
 import { expect, test, type Locator, type Page } from "@playwright/test";
-import { playUntil } from "./play";
+import { openInboxIfAny, playUntil } from "./play";
 
 // Seed 2, ended at month 9: a vacancy decided, Rivals, and a long Notebook.
 const ENDED_AT_NINE =
@@ -99,6 +99,7 @@ test("Play this seed again starts the same deal, without asking", async ({
 }) => {
   const fresh = await browser.newPage();
   await fresh.goto("/?seed=2");
+  await openInboxIfAny(fresh);
   const first =
     (await fresh.getByTestId("panel-notification").textContent()) ?? "";
   await fresh.close();
@@ -111,6 +112,7 @@ test("Play this seed again starts the same deal, without asking", async ({
   await expect(page.getByTestId("seed")).toHaveText("2");
   await expect(page).toHaveURL(/seed=2/);
   await expect(page.getByTestId("month")).toContainText("1 of 18");
+  await openInboxIfAny(page);
   await expect(page.getByTestId("panel-notification")).toHaveText(first);
 });
 

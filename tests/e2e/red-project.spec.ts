@@ -3,15 +3,18 @@ import {
   answerAnyNotification,
   attendAndFinishMonth,
   happened,
+  openInboxIfAny,
   skipTheReport,
 } from "./play";
 
 /** Two skipped reports turn the Project from green to red. Seed 4 has no late input. */
 async function turnProjectRed(page: Page) {
   await page.goto("/?seed=4");
+  await openInboxIfAny(page);
   await page.getByTestId("option-decline").click();
   await skipTheReport(page);
   await attendAndFinishMonth(page);
+  await openInboxIfAny(page);
   await page.getByTestId("option-skip-training").click();
   await page.getByTestId("option-push-back").click();
   await skipTheReport(page);

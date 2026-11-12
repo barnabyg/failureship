@@ -8,9 +8,13 @@ test("a Rival's Move lands on you, and later you can make the same Move", async 
   page,
 }) => {
   await page.goto("/?seed=39");
-  const moved = page.getByTestId("panel-move");
-  await playUntil(page, "panel-move");
-  await expect(moved).toContainText("Your project is apparently in trouble");
+  await playUntil(page, "panel-story");
+  await expect(page.getByTestId("month")).toContainText("1 of 18");
+  await expect(
+    page
+      .getByTestId("landed")
+      .filter({ hasText: "Your project is apparently in trouble" }),
+  ).toHaveAttribute("data-kind", "move");
   // The player is never told who is a Rival, only what happened.
   await expect(page.locator("main")).not.toContainText(/\brivals?\b/i);
 

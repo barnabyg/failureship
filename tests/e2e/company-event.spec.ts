@@ -23,14 +23,17 @@ test("a Company Event lands and the Org Chart changes", async ({ page }) => {
   await page.locator('[data-testid^="scene-option-"]').first().click();
   expect(await readOrgChart(page)).toBe(before);
 
-  const event = page.getByTestId("panel-event");
-  await continueUntil(page, event);
-  await expect(event).toContainText("Simplifying how we work");
-  await expect(page.getByTestId("month")).toContainText("3 of 18");
-  await page.getByTestId("continue").click();
-  expect(await readOrgChart(page)).not.toBe(before);
-
+  // It lands as the month closes, told first in the official story.
   const story = page.getByTestId("panel-story");
   await continueUntil(page, story);
+  await expect(story.getByTestId("landed").first()).toHaveAttribute(
+    "data-kind",
+    "event",
+  );
+  await expect(story.getByTestId("landed").first()).toContainText(
+    "Simplifying how we work",
+  );
+  await expect(page.getByTestId("month")).toContainText("3 of 18");
   await expect(story).toContainText("simplified");
+  expect(await readOrgChart(page)).not.toBe(before);
 });

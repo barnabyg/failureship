@@ -3,6 +3,7 @@ import {
   answerAnyNotification,
   freshRun,
   happened,
+  openInboxIfAny,
   openMeeting,
   skipTheReport,
 } from "./play";
@@ -15,6 +16,7 @@ async function expectToSayWhatIsNext(page: Page) {
 async function reachMeeting(page: Page, answer: "pub" | "report", seed = 1) {
   await page.goto(`/?seed=${String(seed)}`);
   if (answer === "pub") {
+    await openInboxIfAny(page);
     await page.getByTestId("option-pub").click();
     await skipTheReport(page);
   } else {
@@ -104,6 +106,7 @@ test("the full month reads differently for different choices", async ({
 }) => {
   await page.goto("/?seed=1");
   await expectToSayWhatIsNext(page);
+  await openInboxIfAny(page);
   await page.getByTestId("option-pub").click();
   await expectToSayWhatIsNext(page);
   await skipTheReport(page);
@@ -114,11 +117,8 @@ test("the full month reads differently for different choices", async ({
   await expectToSayWhatIsNext(page);
   await page.getByTestId("hotspot-kitchen").click();
 
-  await expect(page.getByTestId("panel-move")).toBeVisible();
-  await expectToSayWhatIsNext(page);
-  await page.getByTestId("continue").click();
-
   await expect(page.getByTestId("panel-story")).toBeVisible();
+  await expect(page.getByTestId("landed")).toHaveAttribute("data-kind", "move");
   await expectToSayWhatIsNext(page);
   const afterPub = await page.getByTestId("story-reported").allInnerTexts();
   await expect(page.getByTestId("story-happened").first()).toBeVisible();

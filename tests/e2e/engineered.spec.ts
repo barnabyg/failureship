@@ -1,5 +1,11 @@
 import { expect, test } from "@playwright/test";
-import { answered, finishMonth, freshRun, playUntil } from "./play";
+import {
+  answered,
+  finishMonth,
+  freshRun,
+  openInboxIfAny,
+  playUntil,
+} from "./play";
 
 // tests/engine/real-routes.test.ts keeps this deal true. Played plainly, seed 43
 // never completes the Grand Plan, so the seat stays filled until month 8, when
@@ -14,6 +20,7 @@ test("get rid of your boss, take their seat, and lose it when the call is traced
   await freshRun(page, "/?seed=43&month=8");
 
   await playUntil(page, "option-ring-about-your-boss");
+  await openInboxIfAny(page);
   await page.getByTestId("option-ring-about-your-boss").click();
   await expect(answered(page)).toContainText("Speak Up");
 
@@ -43,10 +50,10 @@ test("get rid of your boss, take their seat, and lose it when the call is traced
 
   // The call is traced, and the lift takes you back down.
   await finishMonth(page);
-  await playUntil(page, "panel-move");
-  await expect(page.getByTestId("panel-move")).toContainText(
-    "A note for the file",
-  );
+  await playUntil(page, "panel-story");
+  await expect(
+    page.getByTestId("landed").filter({ hasText: "A note for the file" }),
+  ).toHaveAttribute("data-kind", "move");
   await playUntil(page, "lift-ride-floors");
   await expect(page.getByTestId("lift-ride-floors")).toContainText(
     /Floor 1\.$/,
