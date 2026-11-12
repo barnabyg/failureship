@@ -1,0 +1,26 @@
+{
+  "gauge": "teflon",
+  "by": 10,
+  "failed": {
+    "by": -10,
+    "note": "You tried to get out of \"{what}\", and it stuck."
+  },
+  "blamed": {
+    "about": "blamed-for-yours",
+    "text": "You put \"{what}\" down to them.",
+    "warm": -3
+  },
+  "why": {
+    "dangerous": "{name} was the wrong person to name. {fact}",
+    "lie": "Your boss believed in the process, and had seen it for themselves.",
+    "bet": "It was a bet, and it did not come off.",
+    "warm": "{name} had been on your side until then.",
+    "rival": "{name} was your Rival, and made sure it got round."
+  },
+  "kinds": {
+    "blame": "Blamed someone",
+    "lie": "Lied",
+    "bury": "Buried it",
+    "take": "Took it"
+  }
+}

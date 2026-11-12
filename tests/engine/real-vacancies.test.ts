@@ -4,6 +4,7 @@ import { startRun, type PlayerView } from "../../src/engine";
 import { readHiddenTruth } from "../../src/engine/hidden-truth";
 import { playToMonth } from "../../src/ui/later-month";
 import { withoutSeatEvents } from "./fixture";
+import { everyTold, firstTold } from "./landed";
 import { CLEAN, FAKED, playAll } from "./real-runs";
 
 function playedTo(seed: number, month: string, choose: string | null = FAKED) {
@@ -22,8 +23,7 @@ const SINK = "sink-the-projects-candidate";
 const EXAMPLE = "blame-your-analyst";
 const REPORT = "report-the-analyst";
 
-const noticed = (views: PlayerView[], title: string) =>
-  views.find((v) => v.step.kind === "notice" && v.step.title === title);
+const noticed = (views: PlayerView[], title: string) => firstTold(views, title);
 
 describe("the first promotion in the game", () => {
   // The browser tests rely on these two deals.
@@ -77,10 +77,9 @@ describe("those passed over", () => {
       JSON.stringify(m.when).includes("lost-the-seat-to-you"),
   );
   const landedIn = (views: PlayerView[]) =>
-    views.flatMap((v) =>
-      v.step.kind === "move" &&
-      passedOver.some((m) => v.step.kind === "move" && m.title === v.step.title)
-        ? [v.month]
+    everyTold(views).flatMap(({ month, told }) =>
+      told.kind === "move" && passedOver.some((m) => m.title === told.title)
+        ? [month]
         : [],
     );
 
@@ -201,7 +200,7 @@ describe("a big mistake, in the game", () => {
     expect(noticed(views, "A letter in a plain envelope")?.month).toBe(9);
     const demoted = noticed(views, "A sideways move, downwards");
     expect(demoted?.month).toBe(10);
-    expect(demoted?.step.kind === "notice" && demoted.step.body).toContain(
+    expect(demoted?.told.body).toContain(
       "You now report to the Junior Associate,",
     );
     expect(view.month).toBe(10);

@@ -3,6 +3,7 @@ import { gameContent } from "../../src/content";
 import { startRun, type PlayerView } from "../../src/engine";
 import { readHiddenTruth } from "../../src/engine/hidden-truth";
 import { plainChoice } from "../../src/ui/later-month";
+import { everyTold, firstTold } from "./landed";
 
 /** Fakes the Plan at month 5's Ideas Workshop, which a boss who is not a Believer counts. */
 const PLAN = "screenshot-on-the-note";
@@ -33,8 +34,7 @@ function playAll(seed: number, choose: string) {
 const firstOnFloor2 = (views: PlayerView[]) =>
   views.find((v) => v.job.id === "team-lead")?.month;
 
-const noticed = (views: PlayerView[], title: string) =>
-  views.find((v) => v.step.kind === "notice" && v.step.title === title);
+const noticed = (views: PlayerView[], title: string) => firstTold(views, title);
 
 // The browser tests and docs/playtest.md rely on seed 43.
 describe("two ways up, on the same deal", () => {
@@ -79,7 +79,9 @@ describe("two ways up, on the same deal", () => {
       onPlayer: true,
     });
     expect(
-      views.find((v) => v.step.kind === "move" && v.month === 12)?.step,
+      everyTold(views).find(
+        ({ month, told }) => told.kind === "move" && month === 12,
+      )?.told,
     ).toMatchObject({ title: "A note for the file" });
     expect(noticed(views, "A sideways move, downwards")?.month).toBe(13);
     expect(views.at(-1)?.job.id).toBe("junior-employee");

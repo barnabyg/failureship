@@ -2,6 +2,7 @@ import { expect, test, type Page } from "@playwright/test";
 import {
   answerAnyNotification,
   askAtPhotocopier,
+  openInboxIfAny,
   playToResults,
   skipTheReport,
 } from "./play";
@@ -66,7 +67,8 @@ test("the Notebook opens from every step of a month", async ({ page }) => {
   };
 
   await page.goto("/?seed=1");
-  await opensAndCloses("panel-notification");
+  await opensAndCloses("panel-inbox");
+  await openInboxIfAny(page);
   await page.getByTestId("option-pub").click();
   await opensAndCloses("answered");
   await skipTheReport(page);
@@ -77,8 +79,6 @@ test("the Notebook opens from every step of a month", async ({ page }) => {
   await page.getByTestId("hotspot-meeting").click();
   await opensAndCloses("panel-scene");
   await page.getByTestId("scene-option-say-nothing").click();
-  await opensAndCloses("panel-move");
-  await page.getByTestId("continue").click();
   await opensAndCloses("panel-story");
 });
 
@@ -86,6 +86,7 @@ test("opening the Notebook costs nothing, from any step", async ({ page }) => {
   await page.goto("/?seed=1");
   await openNotebook(page);
   await closeNotebook(page);
+  await openInboxIfAny(page);
   await expect(page.getByTestId("panel-notification")).toBeVisible();
 
   await answerAnyNotification(page);

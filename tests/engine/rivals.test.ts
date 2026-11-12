@@ -10,6 +10,7 @@ import { castDealtFirst } from "../../src/engine/deal";
 import { readHiddenTruth } from "../../src/engine/hidden-truth";
 import { plainChoice } from "../../src/ui/later-month";
 import { floorOwn } from "./fixture";
+import { everyTold } from "./landed";
 import {
   competitorMovesRaw,
   playOut,
@@ -398,8 +399,8 @@ describe("the game's Rivals", () => {
           v.step.kind === "scene" &&
           v.step.options.some((o) => o.id === "start-a-rumour"),
       );
-    const rumour = views.find(
-      (v) => v.step.kind === "move" && v.step.title.includes("in trouble"),
+    const rumour = everyTold(views).find(
+      ({ told }) => told.kind === "move" && told.title.includes("in trouble"),
     );
     const { news, memories } = readHiddenTruth(run);
     const story = news.findIndex((n) => n.startedBy !== undefined);

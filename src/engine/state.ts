@@ -170,14 +170,15 @@ export type Step =
       asWritten?: boolean | undefined;
       /** A vacancy decided: Official standing beside who really decided. */
       decided?: DecidedNotice | undefined;
+      /** A big mistake: told at once, before anything else, wherever it falls. */
+      urgent?: boolean | undefined;
     }
-  | {
-      kind: "move";
-      id: string;
-      /** Who made it, if anyone in particular did. */
-      by?: string | undefined;
-    }
-  | { kind: "event"; id: string }
+  /**
+   * A consequence of the player's own bad behaviour, with its Escapes on offer.
+   * One that comes as the month opens waits in the inbox, with the e-mail.
+   */
+  | { kind: "escape"; id: string }
+  /** The official story: what landed as the month closed, then what was reported beside what happened. */
   | { kind: "story" }
   /** The comic stand-in for winning, told once, after the seat that won it. */
   | { kind: "win" }
@@ -320,6 +321,30 @@ interface ProjectNews {
   text: string;
 }
 
+/** A Gauge moved by something that played out, and what the player is told moved it. */
+export interface GaugeMove {
+  gauge: string;
+  by: number;
+  note: string;
+}
+
+/** Something the player is told, with nothing to choose. */
+export type Notice = Omit<Extract<Step, { kind: "notice" }>, "kind">;
+
+/**
+ * What lands as the month closes with nothing to choose, which the Monthly
+ * Summary tells together: a Company Event, a Character Move, or a notice.
+ */
+export type Landing =
+  | { kind: "event"; id: string }
+  | {
+      kind: "move";
+      id: string;
+      /** Who made it, if anyone in particular did. */
+      by?: string | undefined;
+    }
+  | ({ kind: "notice" } & Notice);
+
 /** What belongs to the month, and is wiped when the next one opens. */
 export interface MonthRecord {
   noted: string[];
@@ -334,6 +359,10 @@ export interface MonthRecord {
   reviewed: boolean;
   /** Whether the month has closed: the last month's, once its story is told. */
   closed: boolean;
+  /** Told as the month opened, and kept in the inbox to read, with nothing to answer. */
+  notes: Notice[];
+  /** What has landed as the month closes, for the official story. */
+  landed: Landing[];
 }
 
 /**
@@ -374,15 +403,14 @@ export interface State extends MonthRecord {
   overHeadUses: number;
   /** The missed meetings' actions given so far, each of them once in a run. */
   actionsGiven: string[];
-  /** What the player is told before anything else, as a month opens. */
-  noticesDue: {
-    title: string;
-    body: string;
-    asWritten?: boolean;
-    /** How the boss took it. Signs only: it never says the boss's kind. */
-    reaction?: string | undefined;
-    decided?: DecidedNotice | undefined;
-  }[];
+  /**
+   * What the player is told before anything else. What the month's opening
+   * tells goes to the inbox instead, and what its close tells to the Monthly
+   * Summary, unless it is urgent.
+   */
+  noticesDue: Notice[];
+  /** The Notifications answered in an earlier month, whose repeats are shown short. */
+  mailSeen: string[];
   project: {
     real: string;
     reported: string;
@@ -402,6 +430,19 @@ export interface State extends MonthRecord {
   }[];
   /** Bills waiting to land this month as Character Moves. */
   billsDue: string[];
+  /**
+   * Bills with Escapes, waiting for the player to choose one: with any Gauge
+   * moves of the Thread that sent them, which land only if the consequence does.
+   */
+  escapesDue: { bill: string; gauges: GaugeMove[] }[];
+  /** Each Escape tried, whether it worked, and why. Never explained until the end. */
+  escapes: {
+    month: number;
+    bill: string;
+    escape: string;
+    worked: boolean;
+    why: string[];
+  }[];
   /** Who has been moved on the Org Chart, the player included, and who to. */
   reportsTo: Record<string, string>;
   /** The player's job now, which decides the floor they are on. */
@@ -448,8 +489,8 @@ export interface State extends MonthRecord {
   gauges: Record<string, number>;
   /** What moved each Gauge, for the player to see. */
   gaugeMoves: { month: number; gauge: string; by: number; note: string }[];
-  /** Moves from Threads played out this month, waiting for it to close. */
-  gaugesDue: { gauge: string; by: number; note: string }[];
+  /** Moves from Threads and Escapes played out this month, waiting for it to close. */
+  gaugesDue: GaugeMove[];
   milestones: { gauge: string; at: number; month: number }[];
   /** Told to the player, and shown from then on. */
   finalWarning: boolean;

@@ -77,6 +77,6 @@ test("the results screen shows the boss's kind and how choices landed", async ({
   await expect(
     page
       .getByTestId("result-boss-choice")
-      .filter({ hasText: "Say how much you have learned from your boss" }),
+      .filter({ hasText: "Say how much your boss taught you" }),
   ).toContainText("Went down well");
 });

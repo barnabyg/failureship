@@ -7,6 +7,7 @@ import { readHiddenTruth } from "../../src/engine/hidden-truth";
 import { writtenMonths } from "../../src/engine/floors";
 import { withoutSeatEvents } from "./fixture";
 import { attendsEverything, walk } from "./walk";
+import { everyLanded, everyNotice } from "./landed";
 
 const stayingPut = withoutSeatEvents(gameContent);
 
@@ -119,8 +120,8 @@ describe("months that do not feel like one month repeated", () => {
     // A Bill can land as a Move as well, beside the month's own.
     const written = new Set(gameContent.moves.map((m) => m.title));
     const { views } = walk(seed, pickOn(seed), stayingPut);
-    const moves = views.flatMap((v) =>
-      v.step.kind === "move" && written.has(v.step.title) ? [v.step.title] : [],
+    const moves = everyLanded(views).flatMap((l) =>
+      l.kind === "move" && written.has(l.title) ? [l.title] : [],
     );
 
     expect(moves).toHaveLength(gameContent.balance.monthsPerRun);
@@ -165,10 +166,8 @@ describe("months that do not feel like one month repeated", () => {
       return choice;
     });
     const written = gameContent.demands?.missed?.actions.map((a) => a.title);
-    const told = views.flatMap((v) =>
-      v.step.kind === "notice" && written?.includes(v.step.title)
-        ? [v.step.title]
-        : [],
+    const told = everyNotice(views).flatMap((n) =>
+      written?.includes(n.title) ? [n.title] : [],
     );
 
     expect(new Set(told).size).toBe(gameContent.balance.monthsPerRun);

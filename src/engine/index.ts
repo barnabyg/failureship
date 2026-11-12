@@ -20,5 +20,10 @@ export type {
   ScenePerson,
   SceneSign,
   StepView,
+  InboxItemView,
+  LandedView,
+  MailView,
+  NoticeView,
+  EscapeView,
   StoryPair,
 } from "./view";

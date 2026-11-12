@@ -17,11 +17,11 @@ import {
   otherRaw,
   playWith,
 } from "./other-vacancy-fixture";
+import { everyLanded, everyTold, firstTold } from "./landed";
 
 const SEEDS = Array.from({ length: 40 }, (_, i) => i + 1);
 
-const told = (views: PlayerView[], title: string) =>
-  views.find((v) => v.step.kind === "notice" && v.step.title === title);
+const told = (views: PlayerView[], title: string) => firstTold(views, title);
 
 const bossIn = (view: PlayerView | undefined) =>
   view?.orgChart.find((e) => e.title.endsWith("YOUR-BOSS"))?.name;
@@ -374,7 +374,7 @@ describe("a Company Event that opens the seat", () => {
     const run = startRun({ seed: 1, content: parseContent(raw) });
     const views = playWith(run, "keep-quiet");
 
-    expect(views.some((v) => v.step.kind === "event")).toBe(false);
+    expect(everyLanded(views).some((l) => l.kind === "event")).toBe(false);
     expect(
       readHiddenTruth(run).vacancies.filter((v) => v.way === "movedUp"),
     ).toEqual([]);
@@ -389,7 +389,9 @@ describe("a Company Event that opens the seat", () => {
     const truth = readHiddenTruth(run);
 
     expect(
-      views.filter((v) => v.step.kind === "event").map((v) => v.month),
+      everyTold(views)
+        .filter(({ told }) => told.kind === "event")
+        .map(({ month }) => month),
     ).toEqual([3]);
     expect(
       truth.vacancies.map((v) => [v.way, v.opened, v.decided?.month]),

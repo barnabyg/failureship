@@ -4,22 +4,22 @@
     "title": "Monthly Alignment Meeting",
     "location": "Floor 1, Meeting Room 1B",
     "narration": [
-      "Item one on the agenda is the agenda. The projector shows a slide titled Where We Are. Nobody can say. Item two is your boss's Grand Plan, {plan}. The slide is a lighthouse."
+      "Item one is the agenda; item two is your boss's Grand Plan, {plan}, shown as a lighthouse."
     ],
     "cast": ["{head}", "{boss}", "analyst", "admin", "projects", "associate"],
     "signs": [
       {
         "label": "Who interrupts whom",
-        "text": "{holder} talks over {ignored} twice before the first slide. {ignored} apologises both times.",
+        "text": "{holder} talks over {ignored} twice. {ignored} apologises both times.",
         "clue": "{holder} talked over {ignored}, and {ignored} apologised."
       },
       {
         "label": "Who everyone looks at",
-        "text": "When a question is asked, {bystander} and {ignored} both glance at {holder} before answering."
+        "text": "{bystander} and {ignored} glance at {holder} before answering."
       },
       {
         "label": "Who gets ignored",
-        "text": "{ignored} makes a suggestion. Four minutes later {bystander} makes the same one, to general approval."
+        "text": "{ignored} suggests something. Later {bystander} does, to applause."
       }
     ],
     "options": [
@@ -132,7 +132,7 @@
       {
         "id": "use-buzzword",
         "family": "impress",
-        "label": "Suggest that what this calls for is strategic patience",
+        "label": "Suggest that this calls for strategic patience",
         "requires": {
           "hasBuzzword": "strategic-patience"
         },
@@ -173,21 +173,21 @@
     "title": "Lessons Learned Review",
     "location": "Floor 1, Meeting Room 1B",
     "narration": [
-      "A project was delivered late. The purpose of this session is not to find someone to blame, your boss explains, and asks whose fault it was. Everyone looks at you, the most junior person present."
+      "A late project is reviewed, not to blame anyone, and everyone looks at you."
     ],
     "cast": ["{head}", "{boss}", "analyst", "admin", "projects", "associate"],
     "signs": [
       {
         "label": "Who has prepared",
-        "text": "{holder} has brought no notes, and nobody has asked why. {ignored} has brought a timeline, and nobody has asked to see it."
+        "text": "{holder} has no notes, unquestioned. {ignored}'s timeline goes unread."
       },
       {
         "label": "Who has the figures",
-        "text": "When someone asks where the real figures are kept, nobody answers, and everyone looks at {keeper}."
+        "text": "Asked where the real figures are, everyone looks at {keeper}."
       },
       {
         "label": "Who goes quiet",
-        "text": "When the delay comes up, {bystander} looks at {holder}, then at the table.",
+        "text": "At the delay, {bystander} looks at {holder}, then the table.",
         "clue": "When the delay came up, {bystander} looked at {holder}, then at the table."
       }
     ],
@@ -195,7 +195,7 @@
       {
         "id": "blame-callum",
         "family": "deflect",
-        "label": "Say that the delay began with the Project Co-ordinator",
+        "label": "Say the delay began with the Project Co-ordinator",
         "results": [
           {
             "when": {
@@ -227,7 +227,7 @@
       {
         "id": "blame-priya",
         "family": "deflect",
-        "label": "Say that the delay began with the Senior Analyst",
+        "label": "Say the delay began with the Senior Analyst",
         "results": [
           {
             "when": {
@@ -259,7 +259,7 @@
       {
         "id": "blame-marjorie",
         "family": "deflect",
-        "label": "Say that the delay began with the Office Co-ordinator",
+        "label": "Say the delay began with the Office Co-ordinator",
         "results": [
           {
             "when": {
@@ -291,7 +291,7 @@
       {
         "id": "blame-tessa",
         "family": "deflect",
-        "label": "Say that the delay began with the Junior Associate",
+        "label": "Say the delay began with the Junior Associate",
         "results": [
           {
             "when": {
@@ -354,7 +354,7 @@
         "id": "use-abolished-post",
         "family": "attack",
         "about": "abolished-post",
-        "label": "Mention to {subject}, quietly, the reorganisation of two years ago",
+        "label": "Quietly mention the old reorganisation to {subject}",
         "results": [
           {
             "when": {
@@ -377,7 +377,7 @@
         "id": "use-values-statement",
         "family": "attack",
         "about": "values-statement",
-        "label": "Quote the values statement at {subject}, with a small smile",
+        "label": "Quote the values statement at {subject}, smiling",
         "results": [
           {
             "when": {
@@ -399,7 +399,7 @@
         "id": "use-lost-list",
         "family": "attack",
         "about": "lost-list",
-        "label": "Tell {subject} that you could help look for a certain list",
+        "label": "Offer {subject} help finding a certain list",
         "results": [
           {
             "when": {
@@ -422,7 +422,7 @@
         "id": "use-competitor-offer",
         "family": "attack",
         "about": "competitor-offer",
-        "label": "Ask {subject} how things are looking at the competition",
+        "label": "Ask {subject} how the competition is looking",
         "results": [
           {
             "when": {
@@ -449,25 +449,25 @@
     "title": "All-Colleague Town Hall",
     "location": "Floor 1, Meeting Room 1B, by video link",
     "narration": [
-      "The Chief Executive appears on the screen, slightly too large, and says that this has been a year of challenges and that the challenges have been opportunities. The floor has gathered to watch, and to be seen watching."
+      "The Chief Executive, slightly too large on screen, calls the year's challenges opportunities."
     ],
     "cast": ["{head}", "{boss}", "analyst", "admin", "projects", "associate"],
     "signs": [
       {
         "label": "Who sits where",
-        "text": "{holder} takes the chair nearest the door. Nobody asked {holder} to, and nobody else tries it. {ignored} ends up on a stool.",
+        "text": "{holder} takes the chair by the door, unchallenged. {ignored} gets a stool.",
         "clue": "At the Town Hall, {holder} had the good chair, and {ignored} had a stool."
       },
       {
         "label": "Who is asked what it means",
-        "text": "When the slide changes, {bystander} leans over to ask {holder} what it means."
+        "text": "{bystander} leans over to ask {holder} what the slide means."
       }
     ],
     "options": [
       {
         "id": "ask-proudest",
         "family": "impress",
-        "label": "Type a question: which of your decisions are you most proud of?",
+        "label": "Ask which decision they are most proud of",
         "results": [
           {
             "when": {
@@ -488,7 +488,7 @@
       {
         "id": "sit-by-head",
         "family": "impress",
-        "label": "Sit next to your boss's boss and nod along",
+        "label": "Sit by your boss's boss, nodding along",
         "results": [
           {
             "when": {
@@ -510,7 +510,7 @@
       {
         "id": "sit-by-boss",
         "family": "impress",
-        "label": "Sit next to your boss and laugh at the right moments",
+        "label": "Sit by your boss, laughing on cue",
         "results": [
           {
             "when": {
@@ -530,7 +530,7 @@
       {
         "id": "sit-by-priya",
         "family": "impress",
-        "label": "Sit next to the Senior Analyst and share the notes",
+        "label": "Sit by the Senior Analyst and share notes",
         "results": [
           {
             "when": {
@@ -548,7 +548,7 @@
       {
         "id": "north-star-town-hall",
         "family": "impress",
-        "label": "Remark to the room that it is good to have a north star",
+        "label": "Say it's good to have a north star",
         "requires": {
           "hasBuzzword": "north-star"
         },
@@ -574,7 +574,7 @@
         "id": "deal-with-the-coordinator",
         "family": "trade",
         "deal": "move-for-a-word",
-        "label": "Sit by the Project Co-ordinator, who wants off the supplier's team, and offer them a way out for a good word with your boss",
+        "label": "Get the Project Co-ordinator out, for a word",
         "results": [
           {
             "body": "You sit by the Project Co-ordinator, who spends the Chief Executive's slide on purpose telling you about the supplier's team.",
@@ -591,25 +591,25 @@
     "title": "Budget Round",
     "location": "Floor 1, Meeting Room 1B",
     "narration": [
-      "The Chief Financial Officer has asked Floor 1 to cut its budget by thirty per cent while delivering everything in the plan. Your boss says this is an exciting conversation, and that someone junior should start it."
+      "Finance wants thirty per cent cut and everything delivered, and someone junior should start."
     ],
     "cast": ["{head}", "{boss}", "analyst", "admin", "projects", "associate"],
     "signs": [
       {
         "label": "Whose budget is safe",
-        "text": "Every proposal so far has somehow avoided anything to do with {holder}. {ignored}'s budget has been mentioned four times.",
+        "text": "No proposal touches {holder}. {ignored}'s budget is mentioned four times.",
         "clue": "In the Budget Round, nobody went near {holder}'s budget, and {ignored}'s came up four times."
       },
       {
         "label": "Who checks the figures",
-        "text": "{bystander} writes down a number, looks at {holder}, then crosses it out."
+        "text": "{bystander} writes a number, looks at {holder}, and crosses it out."
       }
     ],
     "options": [
       {
         "id": "hire-consultant",
         "family": "impress",
-        "label": "Propose bringing in a consultant to find the savings",
+        "label": "Propose a consultant to find the savings",
         "results": [
           {
             "body": "The consultant costs more than the thirty per cent, and recommends a further consultant. It has stopped being your problem.",
@@ -691,7 +691,7 @@
       {
         "id": "single-source-budget",
         "family": "deflect",
-        "label": "Say that this needs a single source of truth first",
+        "label": "Say this needs a single source of truth",
         "requires": {
           "hasBuzzword": "single-source-of-truth"
         },
@@ -707,7 +707,7 @@
         "id": "use-abolished-post-budget",
         "family": "attack",
         "about": "abolished-post",
-        "label": "Mention to {subject}, quietly, the reorganisation of two years ago",
+        "label": "Quietly mention the old reorganisation to {subject}",
         "results": [
           {
             "when": {
@@ -730,7 +730,7 @@
         "id": "use-values-statement-budget",
         "family": "attack",
         "about": "values-statement",
-        "label": "Quote the values statement at {subject}, with a small smile",
+        "label": "Quote the values statement at {subject}, smiling",
         "results": [
           {
             "when": {
@@ -752,7 +752,7 @@
         "id": "use-lost-list-budget",
         "family": "attack",
         "about": "lost-list",
-        "label": "Tell {subject} that you could help look for a certain list",
+        "label": "Offer {subject} help finding a certain list",
         "results": [
           {
             "when": {
@@ -775,7 +775,7 @@
         "id": "use-competitor-offer-budget",
         "family": "attack",
         "about": "competitor-offer",
-        "label": "Ask {subject} how things are looking at the competition",
+        "label": "Ask {subject} how the competition is looking",
         "results": [
           {
             "when": {
@@ -796,7 +796,7 @@
       {
         "id": "cut-security",
         "family": "deflect",
-        "label": "Take it out of security. Nobody has ever thanked security for anything",
+        "label": "Take it out of security. Nobody thanks security",
         "results": [
           {
             "body": "The line goes through without a question. Your name goes on the form, because a form needs one. Someone asks whether the door logs still get reviewed, and everybody agrees that this is a good question.",
@@ -808,7 +808,7 @@
         "id": "promise-stationery",
         "family": "trade",
         "promise": "stationery-for-the-coordinator",
-        "label": "Lean across and tell the Office Co-ordinator you will get their stationery budget back afterwards",
+        "label": "Promise the Office Co-ordinator their stationery budget back",
         "results": [
           {
             "body": "You lean across, under cover of a slide about headcount, and say it quietly.",
@@ -825,18 +825,18 @@
     "title": "Ideas Workshop",
     "location": "Floor 1, Meeting Room 1B",
     "narration": [
-      "An Ideas Workshop, with a wall, a pad of sticky notes each and a facilitator from Floor 3. There are no bad ideas. The ideas will be prioritised afterwards, by your boss, who has brought one."
+      "There are no bad ideas, and your boss, who will prioritise them, has brought one."
     ],
     "cast": ["{boss}", "analyst", "admin", "projects", "associate"],
     "signs": [
       {
         "label": "Whose note goes to the top",
-        "text": "{bystander} moves {holder}'s note to the top of the wall without being asked, and smooths it down.",
+        "text": "{bystander} moves {holder}'s note to the top, unasked, and smooths it.",
         "clue": "At the Ideas Workshop, {bystander} moved {holder}'s note to the top of the wall unasked."
       },
       {
         "label": "Whose note is parked",
-        "text": "{ignored}'s note goes in the Parking Lot, which is a flipchart by the door that is wheeled away at the end."
+        "text": "{ignored}'s note goes in the Parking Lot, which gets wheeled away."
       }
     ],
     "options": [
@@ -855,7 +855,7 @@
       {
         "id": "a-real-idea",
         "family": "deliver",
-        "label": "Write a real idea, which would work and cost nothing",
+        "label": "Write a real idea that costs nothing",
         "results": [
           {
             "body": "Your note says to stop doing the thing that nobody reads. The facilitator calls it brave, and moves it to the Parking Lot so that it can be given the time it deserves.",
@@ -867,7 +867,7 @@
       {
         "id": "take-the-note",
         "family": "fabricate",
-        "label": "Copy the Project Co-ordinator's idea onto your own note, in neater writing",
+        "label": "Copy the Project Co-ordinator's idea, more neatly",
         "results": [
           {
             "body": "Your note is read out first, because it is easier to read. The Project Co-ordinator's is read out second, as building on yours.",
@@ -896,7 +896,7 @@
       {
         "id": "load-the-real-figures",
         "family": "deliver",
-        "label": "Offer to load the figures you were sent into the new tool, and launch it yourself",
+        "label": "Load the figures yourself, and launch the tool",
         "requires": {
           "all": [
             {
@@ -918,7 +918,7 @@
       {
         "id": "launch-it-as-theirs",
         "family": "impress",
-        "label": "Offer to load the figures you were sent, so that your boss can launch the new tool as their own idea",
+        "label": "Load the figures; let your boss take credit",
         "requires": {
           "all": [
             {
@@ -940,7 +940,7 @@
       {
         "id": "screenshot-on-the-note",
         "family": "fabricate",
-        "label": "Stick a screenshot of the new tool on your boss's note, and say that it is live",
+        "label": "Stick up a screenshot; say it is live",
         "requires": {
           "planRunning": "one-tool"
         },
@@ -960,26 +960,25 @@
     "title": "Quarterly Business Review",
     "location": "The Auditorium, with every floor on the video link",
     "narration": [
-      "The first Quarterly Business Review of the year. Attendance is mandatory, and it is held over lunch, so that it takes up nobody's time.",
-      "The quarter is reviewed. Each team presents what it has achieved, on a slide with an arrow going up. The arrows have been drawn before the figures, so as not to influence them."
+      "Each team shows its quarter as an arrow going up, drawn before the figures."
     ],
     "cast": ["{head}", "{boss}", "analyst", "admin", "projects", "associate"],
     "signs": [
       {
         "label": "Whose slide is skipped",
-        "text": "When it gets to {holder}'s slide, everyone agrees that they have seen it. {ignored}'s slide is gone through line by line.",
+        "text": "Everyone has seen {holder}'s slide. {ignored}'s is read line by line.",
         "clue": "At the Quarterly Review, nobody asked to see {holder}'s slide, and {ignored}'s was gone through line by line."
       },
       {
         "label": "Who speaks last",
-        "text": "{bystander} starts to summarise, stops, and waits for {holder} to say something first."
+        "text": "{bystander} starts to summarise, stops, and waits for {holder}."
       }
     ],
     "options": [
       {
         "id": "credit-boss",
         "family": "impress",
-        "label": "Say that your team's arrow is all down to your boss",
+        "label": "Credit the arrow to your boss",
         "results": [
           {
             "body": "You say it clearly, and it is minuted. Several people write something down. Whether it was the right name, the minutes do not say.",
@@ -991,7 +990,7 @@
       {
         "id": "credit-head",
         "family": "impress",
-        "label": "Say that the arrow is all down to your boss's boss",
+        "label": "Credit the arrow to your boss's boss",
         "results": [
           {
             "body": "Your boss's boss does not acknowledge it, in the way of someone who has heard it before and expects to again. It is minuted as a team effort, led from the top.",
@@ -1004,7 +1003,7 @@
       {
         "id": "bigger-arrow",
         "family": "fabricate",
-        "label": "Offer to make the arrow steeper for next quarter",
+        "label": "Offer a steeper arrow for next quarter",
         "results": [
           {
             "body": "You are thanked for your energy, and given the slide. It is now yours, along with everything that it says.",
@@ -1016,7 +1015,7 @@
       {
         "id": "show-the-figures",
         "family": "deliver",
-        "label": "Say that the figures do not show an arrow",
+        "label": "Say the figures do not show an arrow",
         "results": [
           {
             "body": "You put the figures on the screen. They go along, and slightly down. There is a pause, and someone asks whether this has been through the proper process.",
@@ -1029,7 +1028,7 @@
       {
         "id": "single-source-quarter",
         "family": "deflect",
-        "label": "Say that this needs a single source of truth first",
+        "label": "Say this needs a single source of truth",
         "requires": {
           "hasBuzzword": "single-source-of-truth"
         },
@@ -1055,7 +1054,7 @@
         "id": "deal-with-the-analyst",
         "family": "trade",
         "deal": "credit-for-a-word",
-        "label": "Offer the Senior Analyst their name on the next deck, for a word with your boss's boss",
+        "label": "Offer the Senior Analyst credit, for a word",
         "results": [
           {
             "body": "You pass the Senior Analyst a note under the arrow. They read it twice, and nod once.",
@@ -1071,26 +1070,25 @@
     "title": "Quarterly Business Review: Half Year",
     "location": "The Auditorium, with every floor on the video link",
     "narration": [
-      "The second Quarterly Business Review, held over lunch again. The sandwiches are from the first one.",
-      "This quarter, each team's arrow is shown beside last quarter's. Where last quarter's arrow was higher, it has been restated, so that progress can be seen."
+      "This quarter's arrows sit beside last quarter's, which were restated where they were higher."
     ],
     "cast": ["{head}", "{boss}", "analyst", "admin", "projects", "associate"],
     "signs": [
       {
         "label": "Whose arrow is restated",
-        "text": "{holder}'s arrow is the only one that nobody restates. {ignored} is asked to restate theirs twice, in different directions.",
+        "text": "Nobody restates {holder}'s arrow. {ignored} restates theirs twice, both ways.",
         "clue": "At the half-year review, {holder}'s arrow was left as it was, and {ignored} was asked to restate theirs twice."
       },
       {
         "label": "Who holds the clicker",
-        "text": "{bystander} reaches for the clicker, then hands it to {holder} without being asked."
+        "text": "{bystander} reaches for the clicker, then hands it to {holder}."
       }
     ],
     "options": [
       {
         "id": "restate-last-quarter",
         "family": "fabricate",
-        "label": "Offer to restate last quarter's arrow lower, so that yours goes up",
+        "label": "Restate last quarter lower, so yours rises",
         "results": [
           {
             "body": "You are thanked for your rigour. Last quarter is restated, and you are now an arrow ahead of where you were, without having moved.",
@@ -1102,7 +1100,7 @@
       {
         "id": "own-the-dip",
         "family": "deliver",
-        "label": "Say that your arrow went down this quarter, and why",
+        "label": "Say your arrow went down, and why",
         "results": [
           {
             "body": "You explain the dip. It takes four minutes, and all of it is true. The minutes record that you raised a timing difference, which is to be restated.",
@@ -1115,7 +1113,7 @@
       {
         "id": "blame-the-template",
         "family": "deflect",
-        "label": "Say that the dip is a known issue with the template",
+        "label": "Blame the dip on the template",
         "results": [
           {
             "body": "Everyone has had trouble with the template. A working group on the template is formed, and you are not on it, which was the point.",
@@ -1149,7 +1147,7 @@
       {
         "id": "show-the-tool-live",
         "family": "deliver",
-        "label": "Put the new tool on the big screen, and load the figures you were sent into it while everyone watches",
+        "label": "Load the figures into the tool, live",
         "requires": {
           "all": [
             {
@@ -1171,7 +1169,7 @@
       {
         "id": "screenshot-for-the-review",
         "family": "fabricate",
-        "label": "Show a screenshot of the new tool, which loads faster than the tool",
+        "label": "Show a screenshot of the tool instead",
         "requires": {
           "planRunning": "one-tool"
         },
@@ -1191,19 +1189,18 @@
     "title": "Quarterly Business Review: Year End",
     "location": "The Auditorium, with every floor on the video link",
     "narration": [
-      "The last Quarterly Business Review of the year, held over lunch. Lunch is one biscuit each, because of the forecast.",
-      "This quarter, the year's three arrows have been joined into one, in the shape of a hockey stick. The handle is this year. The blade is next year, and has been drawn already, so that the figures know what is expected of them."
+      "The year's arrows are now one hockey stick, its blade next year, drawn already."
     ],
     "cast": ["{head}", "{boss}", "analyst", "admin", "projects", "associate"],
     "signs": [
       {
         "label": "Who says how steep",
-        "text": "{holder} is asked how steep the blade should be, and the room waits. Nobody asks {ignored}.",
+        "text": "{holder} is asked how steep the blade should be. Nobody asks {ignored}.",
         "clue": "At the year-end review, the room waited for {holder} to say how steep next year should be, and nobody asked {ignored}."
       },
       {
         "label": "Who laughs first",
-        "text": "{bystander} laughs at a joke a moment after {holder} does, and a moment before anyone else."
+        "text": "{bystander} laughs just after {holder}, and just before everyone else."
       }
     ],
     "options": [
@@ -1234,7 +1231,7 @@
       {
         "id": "point-at-the-handle",
         "family": "deliver",
-        "label": "Say that the handle is the only part that has happened",
+        "label": "Say only the handle has actually happened",
         "results": [
           {
             "body": "You point at the handle. It is flat. There is a silence, and then the slide is moved along to the blade, where things are better.",
@@ -1261,18 +1258,18 @@
     "title": "Project Status Review",
     "location": "Floor 1, Meeting Room 1B",
     "narration": [
-      "Your project has been flagged red on this morning's chart, and the Project Status Review has been called for you. Your boss has asked you to walk the room through it. There is a chart behind you, and it shows something bad that is actually happening."
+      "Your project is flagged red, and the chart behind you shows something actually happening."
     ],
     "cast": ["{head}", "{boss}", "analyst", "admin", "projects", "associate"],
     "signs": [
       {
         "label": "Who decides the colour",
-        "text": "Someone asks whether it is really red. Everybody turns to {holder}, who says nothing, and the question goes away.",
+        "text": "Asked if it is really red, everyone turns to {holder}, who says nothing.",
         "clue": "In the Status Review, the question of what colour things are went away when {holder} said nothing."
       },
       {
         "label": "Who is left holding it",
-        "text": "{ignored} points out that this was flagged in June. {bystander} thanks {ignored} for that, and moves on."
+        "text": "{ignored} says this was flagged in June. {bystander} thanks {ignored} and moves on."
       }
     ],
     "options": [
@@ -1306,7 +1303,7 @@
       {
         "id": "blame-priyas-figures",
         "family": "deflect",
-        "label": "Say that the Senior Analyst's figures must be wrong",
+        "label": "Say the Senior Analyst's figures must be wrong",
         "results": [
           {
             "when": {
@@ -1335,7 +1332,7 @@
       {
         "id": "ask-hugh",
         "family": "deflect",
-        "label": "Ask your boss's boss to take a look at it personally",
+        "label": "Ask your boss's boss to look personally",
         "results": [
           {
             "when": {
@@ -1360,7 +1357,7 @@
       {
         "id": "ask-dennis",
         "family": "deflect",
-        "label": "Say that your boss has this completely under control",
+        "label": "Say your boss has this under control",
         "results": [
           {
             "when": {
@@ -1383,7 +1380,7 @@
       {
         "id": "patience-red",
         "family": "deflect",
-        "label": "Suggest that what this calls for is strategic patience",
+        "label": "Suggest that this calls for strategic patience",
         "requires": {
           "hasBuzzword": "strategic-patience"
         },
@@ -1407,25 +1404,25 @@
     "title": "Annual Calibration",
     "location": "Floor 1, Meeting Room 1B",
     "narration": [
-      "Ratings are decided here, on a curve, by people who say that nobody is being compared with anybody. Someone must be at the bottom. You have been invited to give your perspective, which is new, and you are told that it is a privilege."
+      "Ratings go on a curve here, somebody must be at the bottom, and you have a perspective."
     ],
     "cast": ["{head}", "{boss}", "analyst", "admin", "projects", "associate"],
     "signs": [
       {
         "label": "Who sets the curve",
-        "text": "{holder} has not said a word about anyone, and every name so far has been moved after a look at {holder}.",
+        "text": "{holder} says nothing, and every name moves after a look at {holder}.",
         "clue": "At Calibration, every name moved after a look at {holder}."
       },
       {
         "label": "Who ends up at the bottom",
-        "text": "{ignored}'s name comes up, and {bystander} says what a valued colleague {ignored} is. Everyone knows what that means."
+        "text": "{bystander} calls {ignored} a valued colleague. Everyone knows what that means."
       }
     ],
     "options": [
       {
         "id": "praise-hugh",
         "family": "impress",
-        "label": "Say how much you have learned from your boss's boss",
+        "label": "Say how much your boss's boss taught you",
         "results": [
           {
             "when": {
@@ -1443,7 +1440,7 @@
       {
         "id": "praise-dennis",
         "family": "impress",
-        "label": "Say how much you have learned from your boss",
+        "label": "Say how much your boss taught you",
         "results": [
           {
             "when": {
@@ -1463,7 +1460,7 @@
       {
         "id": "praise-priya",
         "family": "impress",
-        "label": "Say how much you have learned from the Senior Analyst",
+        "label": "Say how much the Senior Analyst taught you",
         "results": [
           {
             "when": {
@@ -1481,7 +1478,7 @@
       {
         "id": "praise-marjorie",
         "family": "impress",
-        "label": "Say how much you have learned from the Office Co-ordinator",
+        "label": "Say how much the Office Co-ordinator taught you",
         "results": [
           {
             "when": {
@@ -1499,7 +1496,7 @@
       {
         "id": "praise-callum",
         "family": "impress",
-        "label": "Say how much you have learned from the Project Co-ordinator",
+        "label": "Say how much the Project Co-ordinator taught you",
         "results": [
           {
             "when": {
@@ -1517,7 +1514,7 @@
       {
         "id": "praise-tessa",
         "family": "impress",
-        "label": "Say how much you have learned from the Junior Associate",
+        "label": "Say how much the Junior Associate taught you",
         "results": [
           {
             "when": {
@@ -1535,7 +1532,7 @@
       {
         "id": "north-star-calibration",
         "family": "impress",
-        "label": "Say that everyone should be measured against the north star",
+        "label": "Say the north star should measure everyone",
         "requires": {
           "hasBuzzword": "north-star"
         },
@@ -1551,7 +1548,7 @@
         "id": "use-abolished-post-calibration",
         "family": "attack",
         "about": "abolished-post",
-        "label": "Mention to {subject}, quietly, the reorganisation of two years ago",
+        "label": "Quietly mention the old reorganisation to {subject}",
         "results": [
           {
             "when": {
@@ -1574,7 +1571,7 @@
         "id": "use-values-statement-calibration",
         "family": "attack",
         "about": "values-statement",
-        "label": "Quote the values statement at {subject}, with a small smile",
+        "label": "Quote the values statement at {subject}, smiling",
         "results": [
           {
             "when": {
@@ -1596,7 +1593,7 @@
         "id": "use-lost-list-calibration",
         "family": "attack",
         "about": "lost-list",
-        "label": "Tell {subject} that you could help look for a certain list",
+        "label": "Offer {subject} help finding a certain list",
         "results": [
           {
             "when": {
@@ -1619,7 +1616,7 @@
         "id": "use-competitor-offer-calibration",
         "family": "attack",
         "about": "competitor-offer",
-        "label": "Ask {subject} how things are looking at the competition",
+        "label": "Ask {subject} how the competition is looking",
         "results": [
           {
             "when": {
@@ -1640,7 +1637,7 @@
       {
         "id": "claim-the-figures",
         "family": "deflect",
-        "label": "Mention, modestly and twice, the long evenings you spent on the team's figures",
+        "label": "Mention, twice, your long evenings on the figures",
         "requires": {
           "any": [
             {
@@ -1685,25 +1682,25 @@
     "title": "The New Metric",
     "location": "Floor 1, Meeting Room 1B",
     "narration": [
-      "Your boss has introduced a new metric, the Stakeholder Delight Index. It will be reported monthly, and it goes up when a form is filled in. The first results are being shown today. Nobody has said who fills in the form."
+      "Your boss's Stakeholder Delight Index goes up when a form is filled in, by somebody."
     ],
     "cast": ["{head}", "{boss}", "analyst", "admin", "projects", "associate"],
     "signs": [
       {
         "label": "Whose number is not discussed",
-        "text": "Everyone's score goes up on the screen. {holder}'s is passed over with a nod, and {ignored}'s is left up there for some time.",
+        "text": "{holder}'s score gets a nod. {ignored}'s stays on screen for some time.",
         "clue": "At the metric review, {holder}'s number was passed over, and {ignored}'s was left on the screen."
       },
       {
         "label": "Who decides what it means",
-        "text": "{bystander} starts to say what the number shows, sees {holder}'s expression, and says what it shows instead."
+        "text": "{bystander} starts to explain the number, sees {holder}'s face, and changes it."
       }
     ],
     "options": [
       {
         "id": "game-the-metric",
         "family": "fabricate",
-        "label": "Fill in the form yourself, on behalf of several stakeholders",
+        "label": "Fill in the form yourself, several times",
         "results": [
           {
             "body": "Your Delight goes to ninety-four. Three stakeholders have now expressed delight, and one of them is a meeting room. You are asked to share your approach with the team.",
@@ -1727,7 +1724,7 @@
       {
         "id": "tricky-question-analyst",
         "family": "attack",
-        "label": "Ask the Senior Analyst, kindly, how their number was arrived at",
+        "label": "Kindly ask the Senior Analyst how they scored",
         "requires": {
           "any": [
             {
@@ -1766,7 +1763,7 @@
       {
         "id": "praise-the-metric",
         "family": "impress",
-        "label": "Say that this metric has really changed how you think",
+        "label": "Say this metric has changed how you think",
         "results": [
           {
             "body": "You say it with a straight face. Your boss says that this is exactly the sort of thing the metric was meant to do, though neither of you says what that is.",
@@ -1789,7 +1786,7 @@
         "id": "promise-laptops",
         "family": "trade",
         "promise": "laptops-for-the-boss",
-        "label": "Catch your boss on the way out, and tell them you can get the team new laptops",
+        "label": "Promise your boss new laptops for the team",
         "results": [
           {
             "body": "You catch your boss at the door, and hear yourself say it.",
@@ -1806,18 +1803,18 @@
     "title": "Recruitment Panel",
     "location": "Floor 1, Meeting Room 1B",
     "narration": [
-      "The floor has a vacancy for an analyst, and you are on the panel, for balance. There are three candidates. One is excellent, one was recommended, and one is an old friend of yours who has asked you not to mention how you know each other."
+      "You are on the panel for an analyst, and one candidate is your old friend."
     ],
     "cast": ["{head}", "{boss}", "analyst", "admin", "projects", "associate"],
     "signs": [
       {
         "label": "Whose candidate it is",
-        "text": "The panel goes round the table. Everyone looks at {holder} before giving a view, and {ignored} is thanked before finishing theirs.",
+        "text": "Everyone looks at {holder} before speaking. {ignored} is thanked mid-sentence.",
         "clue": "On the Recruitment Panel, everyone looked at {holder} before giving a view, and {ignored} was thanked before finishing."
       },
       {
         "label": "Who has already decided",
-        "text": "{bystander} has filled in the scoring sheet in pen. {holder} has not filled in anything, and does not look as if that will matter."
+        "text": "{bystander} has scored in pen. {holder} has written nothing, and need not."
       }
     ],
     "options": [
@@ -1860,7 +1857,7 @@
       {
         "id": "go-with-the-recommendation",
         "family": "impress",
-        "label": "Say how impressed you were by whoever was recommended",
+        "label": "Praise whoever was recommended",
         "results": [
           {
             "body": "You had not read the application. It does not come up. Your remarks are recorded as the view of the panel, which turns out to be the view of the person who made the recommendation.",
@@ -1872,7 +1869,7 @@
       {
         "id": "sink-the-projects-candidate",
         "family": "attack",
-        "label": "Raise a concern about the Project Co-ordinator's preferred candidate",
+        "label": "Doubt the Project Co-ordinator's preferred candidate",
         "results": [
           {
             "when": {
@@ -1899,7 +1896,7 @@
         "id": "promise-opening",
         "family": "trade",
         "promise": "opening-for-the-coordinator",
-        "label": "Tell the Project Co-ordinator that the next opening is as good as theirs",
+        "label": "Promise the Project Co-ordinator the next opening",
         "results": [
           {
             "body": "You say it by the coffee, afterwards, as though it were yours to say.",
@@ -1916,25 +1913,25 @@
     "title": "Speak Up Listening Session",
     "location": "Floor 1, Meeting Room 1B",
     "narration": [
-      "Human Resources is holding a Listening Session, in which anyone may raise anything in complete confidence, in this room, in front of everybody. There are biscuits. Someone from Human Resources is writing down who takes one."
+      "Anyone may raise anything in confidence, in front of everybody, and someone notes who takes biscuits."
     ],
     "cast": ["{head}", "{boss}", "analyst", "admin", "projects", "associate"],
     "signs": [
       {
         "label": "Who is safe to mention",
-        "text": "Several concerns are raised about the floor in general. Nobody's sentence ends anywhere near {holder}, and two of them end at {ignored}.",
+        "text": "No concern ends near {holder}. Two end at {ignored}.",
         "clue": "At the Listening Session, no concern came near {holder}, and two ended at {ignored}."
       },
       {
         "label": "Who is really listening",
-        "text": "The person from Human Resources writes down what {bystander} says, and then looks at {holder} to see whether to keep it."
+        "text": "Human Resources notes what {bystander} says, then checks {holder}'s face."
       }
     ],
     "options": [
       {
         "id": "raise-the-project",
         "family": "deliver",
-        "label": "Say what is actually wrong with your own project",
+        "label": "Say what is really wrong with your project",
         "results": [
           {
             "body": "You say it. It takes two minutes. The person from Human Resources thanks you for bringing your whole self to the session, and asks whether you would like to speak to someone.",
@@ -1978,7 +1975,7 @@
       {
         "id": "start-a-rumour",
         "family": "attack",
-        "label": "Mention, by the biscuits, that the Project Co-ordinator's project is in trouble",
+        "label": "Mention the Project Co-ordinator's project is in trouble",
         "requires": {
           "sawMove": "rumour"
         },
@@ -2017,7 +2014,7 @@
       {
         "id": "feel-safe",
         "family": "impress",
-        "label": "Say that you feel safe, and that you would like that recorded",
+        "label": "Say you feel safe, for the record",
         "results": [
           {
             "body": "It is recorded. You are asked whether you would be willing to say that on a poster. You find that you are.",
@@ -2029,7 +2026,7 @@
       {
         "id": "tell-them-everything",
         "family": "attack",
-        "label": "Take the microphone, and say what you think of each of them, by name",
+        "label": "Take the microphone and name names",
         "stakes": "It is being recorded. People have been walked out of the building for much less.",
         "results": [
           {
@@ -2057,18 +2054,18 @@
     "title": "Quarterly Business Review: The Pivot",
     "location": "The Auditorium, with every floor on the video link",
     "narration": [
-      "A new year's first Quarterly Business Review. Last year's arrow has been turned ninety degrees, and is now called a pivot. It points at a slide that says Beyond."
+      "Last year's arrow has turned ninety degrees, become a pivot, and points at Beyond."
     ],
     "cast": ["{head}", "{boss}", "analyst", "admin", "projects", "associate"],
     "signs": [
       {
         "label": "Who names the pivot",
-        "text": "{holder} is asked what the pivot is towards, and says Beyond, and the room nods. {ignored} asks where Beyond is, and is thanked.",
+        "text": "{holder} says the pivot is towards Beyond. {ignored} asks where that is, and is thanked.",
         "clue": "At the Pivot review, the room nodded when {holder} said Beyond, and thanked {ignored} for asking where it was."
       },
       {
         "label": "Who sits nearest",
-        "text": "{bystander} has saved the seat beside {holder}, and gives it up only when {holder} sits in it."
+        "text": "{bystander} saves the seat beside {holder}, until {holder} takes it."
       }
     ],
     "options": [
@@ -2128,25 +2125,25 @@
     "title": "Quarterly Business Review: Lessons From the Future",
     "location": "The Auditorium, with every floor on the video link",
     "narration": [
-      "This quarter's review looks back from next year, which has gone well. A consultant reads out what we will have learned, and the room takes notes on its own future."
+      "A consultant reads out what we will have learned next year, which went well."
     ],
     "cast": ["{head}", "{boss}", "analyst", "admin", "projects", "associate"],
     "signs": [
       {
         "label": "Whose future is read first",
-        "text": "The consultant reads out what {holder} will have achieved, at length. {ignored}'s future is in the appendix.",
+        "text": "{holder}'s future achievements are read at length. {ignored}'s are in the appendix.",
         "clue": "At the Lessons From the Future review, {holder}'s future came first and {ignored}'s was in the appendix."
       },
       {
         "label": "Who claps first",
-        "text": "{bystander} claps for a future achievement a moment after {holder} does, and a moment before anyone else."
+        "text": "{bystander} claps just after {holder}, and just before everyone else."
       }
     ],
     "options": [
       {
         "id": "claim-a-future-win",
         "family": "fabricate",
-        "label": "Say that you will have delivered the new tool by then",
+        "label": "Say you will have delivered the tool",
         "results": [
           {
             "body": "It is written into next year, in your name. Next year has become a deadline.",
@@ -2198,18 +2195,18 @@
     "title": "Quarterly Business Review: The Year, Again",
     "location": "The Auditorium, with every floor on the video link",
     "narration": [
-      "The last review of the period. The slides are last year's, with the year changed, because the slides went well last year. The arrow is back, and is going up again, from where it was."
+      "The slides are last year's with the year changed, because they went well."
     ],
     "cast": ["{head}", "{boss}", "analyst", "admin", "projects", "associate"],
     "signs": [
       {
         "label": "Who notices the slides",
-        "text": "{holder} says that the slides look familiar, and everyone agrees that this is a strength. {ignored} says the same thing, and is asked to take it offline.",
+        "text": "{holder} finds the slides familiar: a strength. {ignored} says so, and is taken offline.",
         "clue": "At the last review, the room agreed with {holder} that the slides looked familiar, and asked {ignored} to take it offline."
       },
       {
         "label": "Who speaks last",
-        "text": "{bystander} finishes a sentence only once {holder} has nodded at the end of it."
+        "text": "{bystander} finishes a sentence only once {holder} nods."
       }
     ],
     "options": [
@@ -2241,7 +2238,7 @@
       {
         "id": "credit-boss-again",
         "family": "impress",
-        "label": "Say that the arrow is all down to your boss",
+        "label": "Credit the arrow to your boss",
         "results": [
           {
             "body": "It is minuted, as it was last year, in the same words.",
@@ -2269,18 +2266,18 @@
     "title": "The Stand-Up",
     "location": "Floor 1, Meeting Room 1B",
     "narration": [
-      "The daily stand-up, which is now monthly, and seated, and an hour. Everyone says what they did, what they will do, and what is blocking them, which is the stand-up."
+      "The daily stand-up is now monthly, seated and an hour long."
     ],
     "cast": ["{head}", "{boss}", "analyst", "admin", "projects", "associate"],
     "signs": [
       {
         "label": "Who goes first",
-        "text": "{holder} is asked to go first, and says they will go last. Everyone waits for them anyway.",
+        "text": "{holder} is asked to go first, says last, and is waited for.",
         "clue": "At the stand-up, everyone waited for {holder}, who had said they would go last."
       },
       {
         "label": "Who is cut short",
-        "text": "{ignored} is thanked halfway through a sentence, and the meeting moves on."
+        "text": "{ignored} is thanked halfway through a sentence."
       }
     ],
     "options": [
@@ -2338,18 +2335,18 @@
     "title": "Away Day Planning",
     "location": "Floor 1, Meeting Room 1B",
     "narration": [
-      "A meeting to plan the team's away day, which will be held in this room, to save money. There will be an icebreaker. There is already an ice."
+      "The away day is being planned, in this room, with an icebreaker and already an ice."
     ],
     "cast": ["{head}", "{boss}", "analyst", "admin", "projects", "associate"],
     "signs": [
       {
         "label": "Who chooses the icebreaker",
-        "text": "{holder}'s icebreaker is chosen before the others are read out. {ignored}'s is the one about two truths and a lie.",
+        "text": "{holder}'s icebreaker is picked unread. {ignored}'s is two truths and a lie.",
         "clue": "At Away Day Planning, {holder}'s icebreaker was chosen before anyone else's was read."
       },
       {
         "label": "Who books the room",
-        "text": "{bystander} offers to book the room, and checks with {holder} first."
+        "text": "{bystander} offers to book the room, after checking with {holder}."
       }
     ],
     "options": [
@@ -2407,18 +2404,18 @@
     "title": "Process Improvement Review",
     "location": "Floor 1, Meeting Room 1B",
     "narration": [
-      "A review of the process for improving processes. The process has a flowchart, and the flowchart has a box that says Improve, with an arrow back to the start."
+      "The process for improving processes has a box saying Improve, arrowed back to the start."
     ],
     "cast": ["{head}", "{boss}", "analyst", "admin", "projects", "associate"],
     "signs": [
       {
         "label": "Who owns the flowchart",
-        "text": "{holder} is asked whether the flowchart is right, and says that it is, and it is.",
+        "text": "{holder} says the flowchart is right, and it is.",
         "clue": "At the Process Improvement Review, {holder} said the flowchart was right, and that settled it."
       },
       {
         "label": "Whose box is removed",
-        "text": "{ignored}'s box is taken off the flowchart to simplify it. Nothing else changes."
+        "text": "{ignored}'s box is removed to simplify things. Nothing else changes."
       }
     ],
     "options": [
@@ -2449,7 +2446,7 @@
       {
         "id": "praise-the-flowchart",
         "family": "impress",
-        "label": "Say that you have never seen a clearer flowchart",
+        "label": "Say you have never seen a clearer flowchart",
         "results": [
           {
             "body": "Your boss says it took a lot of work. It took a lot of boxes.",
@@ -2476,13 +2473,13 @@
     "title": "Leadership Induction",
     "location": "Floor 2, Team Room 2A",
     "narration": [
-      "Your induction as a leader. Your boss welcomes you, and announces the Grand Plan, {plan}. Nobody says what it will excel at. There are pastries."
+      "Your leadership induction has pastries and the Grand Plan, {plan}, excelling at nobody knows what."
     ],
     "cast": ["{head}", "{boss}", "admin", "delivery", "analyst", "projects"],
     "signs": [
       {
         "label": "Who takes the last pastry",
-        "text": "{holder} takes the last pastry without asking, and nobody minds. {ignored} had been looking at it.",
+        "text": "{holder} takes the last pastry. {ignored} had been eyeing it.",
         "clue": "At your Leadership Induction, {holder} took the last pastry, and nobody minded."
       },
       {
@@ -2545,18 +2542,18 @@
     "title": "Team Leads' Sync",
     "location": "Floor 2, Team Room 2A",
     "narration": [
-      "The team leads' weekly sync, held monthly. Every team is at capacity."
+      "The leads' weekly sync, held monthly, where every team is at capacity."
     ],
     "cast": ["{head}", "{boss}", "admin", "delivery", "analyst", "projects"],
     "signs": [
       {
         "label": "Whose capacity counts",
-        "text": "{holder}'s team being at capacity is minuted. {ignored} is asked for evidence.",
+        "text": "{holder}'s capacity is minuted. {ignored} is asked for evidence.",
         "clue": "At the Team Leads' Sync, {holder}'s word on capacity was minuted, and {ignored} was asked for evidence."
       },
       {
         "label": "Who sets the agenda",
-        "text": "{bystander} reads out the agenda, which {holder} sent round an hour ago."
+        "text": "{bystander} reads out the agenda {holder} sent an hour ago."
       }
     ],
     "options": [
@@ -2595,7 +2592,7 @@
       {
         "id": "staff-the-centre",
         "family": "deliver",
-        "label": "Staff the Centre of Excellence with your best people",
+        "label": "Staff the Centre of Excellence with your best",
         "results": [
           {
             "body": "Your best people move to the Centre. It has a desk now, and the desk has work on it.",
@@ -2610,7 +2607,7 @@
       {
         "id": "sign-on-a-door",
         "family": "fabricate",
-        "label": "Put a Centre of Excellence sign on an empty office",
+        "label": "Put a Centre of Excellence sign up",
         "results": [
           {
             "body": "The sign is laminated. The office behind it has a chair, and the chair has a box of old cables on it.",
@@ -2625,7 +2622,7 @@
       {
         "id": "blame-your-analyst",
         "family": "attack",
-        "label": "Say that your team would not be at capacity, but for the Senior Analyst",
+        "label": "Blame your capacity on the Senior Analyst",
         "results": [
           {
             "when": {
@@ -2657,25 +2654,25 @@
     "title": "Resourcing Call",
     "location": "Floor 2, Team Room 2A",
     "narration": [
-      "A call about resourcing, which is a word for people. Your own team is on it, so that it can hear itself resourced. Some of them wanted your job."
+      "A call about resourcing your team, with your team on it, some of whom wanted your job."
     ],
     "cast": ["{head}", "{boss}", "admin", "delivery", "analyst", "projects"],
     "signs": [
       {
         "label": "Who speaks for the team",
-        "text": "{holder} answers a question that was put to you, and nobody corrects it.",
+        "text": "{holder} answers a question put to you, uncorrected.",
         "clue": "On the Resourcing Call, {holder} answered a question put to you, and nobody corrected it."
       },
       {
         "label": "Who is moved",
-        "text": "{ignored} is moved to another project in the course of a sentence, and finds out at the end of it."
+        "text": "{ignored} is moved to another project mid-sentence."
       }
     ],
     "options": [
       {
         "id": "back-your-team",
         "family": "deliver",
-        "label": "Say that your team needs more people, not fewer",
+        "label": "Say your team needs more people",
         "results": [
           {
             "body": "You say it. You are thanked for your advocacy, and your team is reduced by one, for balance.",
@@ -2699,7 +2696,7 @@
       {
         "id": "report-the-centre-open",
         "family": "fabricate",
-        "label": "Report the Centre of Excellence as open for business",
+        "label": "Report the Centre of Excellence open",
         "results": [
           {
             "body": "It is minuted as open. Business is welcome, by appointment, which nobody has.",
@@ -2729,18 +2726,18 @@
     "title": "Leads' Huddle",
     "location": "Floor 2, Team Room 2A",
     "narration": [
-      "A huddle, which is a meeting that stands up so as to seem shorter. It is not shorter."
+      "A huddle is a meeting that stands up to seem shorter, and is not."
     ],
     "cast": ["{head}", "{boss}", "admin", "delivery", "analyst", "projects"],
     "signs": [
       {
         "label": "Who ends it",
-        "text": "The huddle ends when {holder} sits down. Nobody had said it would.",
+        "text": "The huddle ends when {holder} sits down.",
         "clue": "At a Leads' Huddle, it ended when {holder} sat down."
       },
       {
         "label": "Who is not in the circle",
-        "text": "{ignored} stands slightly outside the circle, and is asked to speak up."
+        "text": "{ignored} stands just outside the circle, and is asked to speak up."
       }
     ],
     "options": [
@@ -2801,18 +2798,18 @@
     "title": "Risk Register Review",
     "location": "Floor 2, Team Room 2A",
     "narration": [
-      "The risk register is reviewed. It has ninety risks, eight of them red. Each is owned by someone who is not in the room."
+      "The register has ninety risks, eight red, each owned by someone absent."
     ],
     "cast": ["{head}", "{boss}", "admin", "delivery", "analyst", "projects"],
     "signs": [
       {
         "label": "Whose risks go amber",
-        "text": "{holder}'s red risks are agreed to be amber, on reflection. {ignored}'s amber risk is made red.",
+        "text": "{holder}'s red risks become amber. {ignored}'s amber one turns red.",
         "clue": "At the Risk Register Review, {holder}'s red risks became amber, and {ignored}'s became red."
       },
       {
         "label": "Who keeps the register",
-        "text": "{bystander} has the spreadsheet, and changes nothing until {holder} has spoken."
+        "text": "{bystander} changes nothing until {holder} has spoken."
       }
     ],
     "options": [
@@ -2843,7 +2840,7 @@
       {
         "id": "hang-the-sign",
         "family": "fabricate",
-        "label": "List the Centre of Excellence as a mitigation for everything",
+        "label": "List the Centre of Excellence as every mitigation",
         "results": [
           {
             "body": "The Centre mitigates thirty risks. It does not yet have anyone in it.",
@@ -2858,7 +2855,7 @@
       {
         "id": "assign-a-risk",
         "family": "attack",
-        "label": "Assign the reddest risk to the Project Co-ordinator, who is not in the room",
+        "label": "Assign the reddest risk to the Project Co-ordinator",
         "results": [
           {
             "when": {
@@ -2899,18 +2896,18 @@
     "title": "Planning Pre-Meet",
     "location": "Floor 2, Team Room 2A",
     "narration": [
-      "A meeting before the planning meeting, to agree what the planning meeting will decide. The planning meeting has been told it is empowered."
+      "A meeting to agree what the empowered planning meeting will decide."
     ],
     "cast": ["{head}", "{boss}", "admin", "delivery", "analyst", "projects"],
     "signs": [
       {
         "label": "Who decides first",
-        "text": "{holder} says what the planning meeting will decide, and it is written down as a proposal.",
+        "text": "{holder} says what will be decided, minuted as a proposal.",
         "clue": "At the Planning Pre-Meet, {holder} said what would be decided, and it was minuted as a proposal."
       },
       {
         "label": "Who is told afterwards",
-        "text": "{ignored} asks what was agreed, and is told that it will be agreed at the planning meeting."
+        "text": "{ignored} asks what was agreed, and is told: at the planning meeting."
       }
     ],
     "options": [
@@ -2967,19 +2964,17 @@
     "pool": true,
     "title": "The Retrospective",
     "location": "Floor 1, Meeting Room 1B",
-    "narration": [
-      "A retrospective, on what went well and what did not. The one action is to hold another."
-    ],
+    "narration": ["A retrospective, whose one action is to hold another."],
     "cast": ["{head}", "{boss}", "analyst", "admin", "projects", "associate"],
     "signs": [
       {
         "label": "Whose sticky note stays up",
-        "text": "{holder}'s note under What Went Well stays up. {ignored}'s falls off, and stays off.",
+        "text": "{holder}'s note stays up. {ignored}'s falls off, and stays off.",
         "clue": "At the Retrospective, {holder}'s note stayed up, and {ignored}'s fell off and stayed down."
       },
       {
         "label": "Who reads them out",
-        "text": "{bystander} reads the notes aloud, and pauses at {holder}'s."
+        "text": "{bystander} reads the notes aloud, pausing at {holder}'s."
       }
     ],
     "options": [
@@ -3022,7 +3017,7 @@
       {
         "id": "rumour-about-your-boss",
         "family": "attack",
-        "label": "Tell the Senior Analyst by the kettle that your boss is on the way out",
+        "label": "Tell the Senior Analyst your boss is leaving",
         "requires": {
           "sawMove": "rumour"
         },
@@ -3052,13 +3047,13 @@
     "title": "Wellbeing Hour",
     "location": "Floor 1, Meeting Room 1B",
     "narration": [
-      "A mandatory Wellbeing Hour, in the hour before the deadline. There is a breathing exercise, a slide about burnout, and a reminder that the deadline has not moved."
+      "A mandatory Wellbeing Hour, in the hour before the deadline, which has not moved."
     ],
     "cast": ["{head}", "{boss}", "analyst", "admin", "projects", "associate"],
     "signs": [
       {
         "label": "Who leaves early",
-        "text": "{holder} leaves halfway through, for a call, and nobody minds. {ignored} checks a phone, and is asked to be present.",
+        "text": "{holder} leaves for a call, unremarked. {ignored} checks a phone, and is told off.",
         "clue": "At the Wellbeing Hour, {holder} left early unremarked, and {ignored} was asked to be present."
       },
       {
@@ -3079,7 +3074,7 @@
       {
         "id": "mention-the-deadline",
         "family": "deliver",
-        "label": "Point out that the deadline is in an hour",
+        "label": "Point out the deadline is in an hour",
         "results": [
           {
             "body": "There is a silence, which the facilitator calls a mindful pause.",
@@ -3091,7 +3086,7 @@
       {
         "id": "work-under-the-table",
         "family": "deliver",
-        "label": "Finish your work on your knee, under the table",
+        "label": "Finish your work under the table",
         "results": [
           {
             "body": "You finish it. The facilitator thanks everyone for being so present.",
@@ -3121,13 +3116,13 @@
     "title": "Supplier Pitch",
     "location": "Floor 1, Meeting Room 1B",
     "narration": [
-      "A supplier has come to pitch a platform that does what the new tool does, and what the old tool did. There is a free lanyard each."
+      "A supplier pitches a platform that does what both our tools do, with free lanyards."
     ],
     "cast": ["{head}", "{boss}", "analyst", "admin", "projects", "associate"],
     "signs": [
       {
         "label": "Who the supplier talks to",
-        "text": "The supplier addresses every slide to {holder}, having asked at reception who decides. {ignored} is handed the brochure.",
+        "text": "The supplier, having asked who decides, pitches to {holder}. {ignored} gets the brochure.",
         "clue": "At the Supplier Pitch, the supplier spoke only to {holder}, and gave {ignored} the brochure."
       },
       {
@@ -3151,7 +3146,7 @@
       {
         "id": "ask-for-a-trial",
         "family": "impress",
-        "label": "Ask for a free trial for the whole floor",
+        "label": "Ask for a free trial for the floor",
         "results": [
           {
             "body": "The supplier is delighted. The trial is free for thirty days, after which it is not.",
@@ -3190,18 +3185,18 @@
     "title": "One Team Day",
     "location": "Floor 2, Team Room 2A",
     "narration": [
-      "A day for the whole of Floor 2 to feel like one team. The teams sit at separate tables, by team, and compete."
+      "Floor 2 spends a day feeling like one team, at separate tables, competing."
     ],
     "cast": ["{head}", "{boss}", "admin", "delivery", "analyst", "projects"],
     "signs": [
       {
         "label": "Whose table wins",
-        "text": "{holder}'s table wins the quiz. Nobody had told the others there was a prize.",
+        "text": "{holder}'s table wins the quiz. Nobody else knew of a prize.",
         "clue": "At One Team Day, {holder}'s table won the quiz, and only they knew of the prize."
       },
       {
         "label": "Who keeps score",
-        "text": "{bystander} keeps the score, and checks each total with {holder}."
+        "text": "{bystander} keeps score, checking each total with {holder}."
       }
     ],
     "options": [
@@ -3259,7 +3254,7 @@
     "title": "Budget Planning",
     "location": "Floor 2, Team Room 2A",
     "narration": [
-      "Next year's budget is this year's, less ten per cent, plus whatever can be argued for."
+      "Next year's budget is this year's, less ten per cent, plus whatever is argued for."
     ],
     "cast": ["{head}", "{boss}", "admin", "delivery", "analyst", "projects"],
     "signs": [
@@ -3270,7 +3265,7 @@
       },
       {
         "label": "Who holds the spreadsheet",
-        "text": "{bystander} has the spreadsheet open, and scrolls when {holder} nods."
+        "text": "{bystander} scrolls the spreadsheet when {holder} nods."
       }
     ],
     "options": [
@@ -3289,7 +3284,7 @@
       {
         "id": "offer-the-cut",
         "family": "impress",
-        "label": "Offer to take the ten per cent from your team",
+        "label": "Offer the ten per cent from your team",
         "results": [
           {
             "body": "You are thanked for your leadership. Your team is told by the spreadsheet.",
@@ -3301,7 +3296,7 @@
       {
         "id": "pad-the-line",
         "family": "fabricate",
-        "label": "Add twenty per cent to your line, to be cut back",
+        "label": "Pad your line twenty per cent, to cut",
         "results": [
           {
             "body": "Your line is cut by ten per cent, and comes out ahead.",
@@ -3328,18 +3323,18 @@
     "title": "Hiring Decision",
     "location": "Floor 2, Team Room 2A",
     "narration": [
-      "Your req has been approved: one post, on your team, and the hire is yours. The Senior Analyst has recommended a candidate, and your boss has mentioned one. An old friend of yours is between things, and their CV says transformation eleven times."
+      "Your hire: the Senior Analyst and your boss each have a candidate, and so does an old friend."
     ],
     "cast": ["{head}", "{boss}", "admin", "delivery", "analyst", "projects"],
     "signs": [
       {
         "label": "Whose candidate it is",
-        "text": "The shortlist goes up. Everyone looks at {holder}, and {holder} looks at nobody.",
+        "text": "Everyone looks at {holder}, who looks at nobody.",
         "clue": "At the Hiring Decision, everyone looked at {holder} when the shortlist went up."
       },
       {
         "label": "Who is consulted",
-        "text": "{bystander} is asked for a view, and gives {holder}'s. {ignored} is asked to book the room."
+        "text": "{bystander} gives {holder}'s view as theirs. {ignored} is asked to book the room."
       }
     ],
     "options": [
@@ -3427,13 +3422,13 @@
     "title": "Pay Review",
     "location": "Floor 2, Team Room 2A",
     "narration": [
-      "Your team's bonus pot is twelve thousand pounds, and this year it is yours to divide. Once your boss signs off the split, each share goes out in a letter with your signature on it."
+      "Your team's twelve-thousand-pound bonus pot is yours to split, over your signature."
     ],
     "cast": ["{head}", "{boss}", "admin", "delivery", "analyst", "projects"],
     "signs": [
       {
         "label": "Whose split goes through",
-        "text": "{holder}'s split is signed before it is read. {ignored}'s is read twice.",
+        "text": "{holder}'s split is signed unread. {ignored}'s is read twice.",
         "clue": "At the Pay Review, {holder}'s split was signed before anyone read it."
       },
       {
@@ -3610,7 +3605,7 @@
       {
         "id": "pot-by-the-work",
         "family": "deliver",
-        "label": "Divide it by the year's work, and give the reasons",
+        "label": "Divide it by the work, with reasons",
         "results": [
           {
             "body": "The biggest share goes to the Senior Analyst, who did most of the year's work. Each letter gives its reasons, with dates. Your boss asks why your split has an appendix.",
@@ -3651,7 +3646,7 @@
     "title": "Floor Plan Walkthrough",
     "location": "Floor 2, by the lift",
     "narration": [
-      "Facilities walks the leads round Floor 2 with a plan and a pencil. Each lead seats their own team: who by whom, who by the window, and who by the lift. The Senior Analyst and the Project Co-ordinator sit together, and talk."
+      "Each lead seats their team on Floor 2, where the Senior Analyst and Project Co-ordinator sit together, talking."
     ],
     "cast": ["{head}", "{boss}", "admin", "delivery", "analyst", "projects"],
     "signs": [
@@ -3662,7 +3657,7 @@
       },
       {
         "label": "Who gets the lift",
-        "text": "{ignored}'s team is given the desks by the lift, in passing."
+        "text": "{ignored}'s team gets the desks by the lift, in passing."
       }
     ],
     "options": [
@@ -3679,7 +3674,7 @@
       {
         "id": "split-the-pair",
         "family": "attack",
-        "label": "Split up the Senior Analyst and the Project Co-ordinator",
+        "label": "Split up the Senior Analyst and Project Co-ordinator",
         "results": [
           {
             "body": "You put the length of the floor between them. They now talk by e-mail, which is slower, and copy each other in on everything, which is not.",
@@ -3705,7 +3700,7 @@
       {
         "id": "move-the-critic",
         "family": "attack",
-        "label": "Put the Project Co-ordinator, who questions your plans, by the lift",
+        "label": "Seat the critical Project Co-ordinator by the lift",
         "results": [
           {
             "body": "The Project Co-ordinator carries everything to the desk by the lift in one trip, and sets it down beside the fire door. The lift opens, and says Floor 2.",
@@ -3725,7 +3720,7 @@
       {
         "id": "take-the-window",
         "family": "impress",
-        "label": "Take the window yourself, and seat your team facing you",
+        "label": "Take the window, with your team facing you",
         "results": [
           {
             "body": "You have the window. Your team faces you, with the light behind you, and sees only your outline.",
@@ -3743,13 +3738,13 @@
     "title": "Succession Planning",
     "location": "Floor 2, Team Room 2A",
     "narration": [
-      "Each lead writes down who on their team could step into their job tomorrow. The forms are confidential, and are read out, so each lead hears who would replace them."
+      "Each lead names their successor in confidence, and the forms are read out."
     ],
     "cast": ["{head}", "{boss}", "admin", "delivery", "analyst", "projects"],
     "signs": [
       {
         "label": "Whose name comes up",
-        "text": "{holder}'s name is on two forms that are not {holder}'s own.",
+        "text": "{holder}'s name is on two forms besides {holder}'s own.",
         "clue": "At Succession Planning, {holder}'s name was on other leads' forms."
       },
       {
@@ -3761,7 +3756,7 @@
       {
         "id": "name-a-successor",
         "family": "deliver",
-        "label": "Write down the Senior Analyst, who could do it",
+        "label": "Name the Senior Analyst, who could do it",
         "results": [
           {
             "body": "The Senior Analyst's name is read out. They look across at you, surprised, and then at your job, with interest.",
@@ -3781,7 +3776,7 @@
       {
         "id": "name-nobody",
         "family": "impress",
-        "label": "Write that nobody on your team is ready yet",
+        "label": "Write that nobody on your team is ready",
         "results": [
           {
             "body": "It is read out. Your team hears that it is not ready, and you hear that you are irreplaceable, which upstairs means something else.",
@@ -3823,7 +3818,7 @@
       {
         "id": "let-your-friend-go",
         "family": "deliver",
-        "label": "Write that your old friend has moved on, and go and tell them",
+        "label": "Say your friend moved on, and tell them",
         "requires": {
           "all": [
             {
@@ -3865,7 +3860,7 @@
     "title": "Recognition Panel",
     "location": "Floor 2, Team Room 2A",
     "narration": [
-      "The leads choose this quarter's Star of the Floor, from every team on Floor 2. There is a certificate and a parking space for a month, and the leads vote."
+      "The leads vote for Star of the Floor: a certificate and a month's parking space."
     ],
     "cast": ["{head}", "{boss}", "admin", "delivery", "analyst", "projects"],
     "signs": [
@@ -3876,7 +3871,7 @@
       },
       {
         "label": "Who seconds",
-        "text": "{bystander} seconds {holder}'s nominee, and then asks who it is."
+        "text": "{bystander} seconds {holder}'s nominee, then asks who it is."
       }
     ],
     "options": [
@@ -3895,7 +3890,7 @@
       {
         "id": "trade-your-vote",
         "family": "trade",
-        "label": "Vote for the Service Delivery Lead's nominee, for their vote next time",
+        "label": "Back the Service Delivery Lead's nominee, for later",
         "results": [
           {
             "body": "The Service Delivery Lead's nominee wins by one vote, yours. The Service Delivery Lead nods to you, once, like a receipt.",
@@ -3942,18 +3937,18 @@
     "title": "Org Design Workshop",
     "location": "Floor 2, Team Room 2A",
     "narration": [
-      "The leads redraw the floor's boxes on a whiteboard. Lines may be moved and boxes merged. Nobody in a box is to be told until the boxes are final."
+      "The leads redraw the floor's boxes, and nobody in a box is told yet."
     ],
     "cast": ["{head}", "{boss}", "admin", "delivery", "analyst", "projects"],
     "signs": [
       {
         "label": "Who holds the pen",
-        "text": "{holder} holds the pen, and the boxes move towards {holder}.",
+        "text": "{holder} holds the pen, and the boxes drift towards {holder}.",
         "clue": "At the Org Design Workshop, {holder} held the pen, and the boxes moved towards them."
       },
       {
         "label": "Whose box goes",
-        "text": "{ignored}'s box is merged into a box called Shared Services, which is drawn larger."
+        "text": "{ignored}'s box is merged into a larger one called Shared Services."
       }
     ],
     "options": [
@@ -3981,7 +3976,7 @@
       {
         "id": "draw-out-the-critic",
         "family": "attack",
-        "label": "Draw the Project Co-ordinator's line into someone else's box",
+        "label": "Draw the Project Co-ordinator into another box",
         "results": [
           {
             "body": "The line is moved. The Project Co-ordinator is now in Shared Services, on the whiteboard, until somebody wipes it.",
@@ -4001,7 +3996,7 @@
       {
         "id": "ask-your-team",
         "family": "deliver",
-        "label": "Ask for a week, so as to ask your team",
+        "label": "Ask for a week to consult your team",
         "results": [
           {
             "body": "You are given a week, and the boxes are finalised in the meantime.",
@@ -4019,13 +4014,13 @@
     "title": "Ways of Working Charter",
     "location": "Floor 2, Team Room 2A",
     "narration": [
-      "The leads agree a charter for how Floor 2 works: core hours, time without meetings, and the tone of e-mails. Once agreed, it will be laminated."
+      "The leads agree a charter for core hours, meetings and e-mail tone, to be laminated."
     ],
     "cast": ["{head}", "{boss}", "admin", "delivery", "analyst", "projects"],
     "signs": [
       {
         "label": "Whose hours are core",
-        "text": "{holder}'s working hours become the floor's core hours, without a vote.",
+        "text": "{holder}'s hours become core hours, without a vote.",
         "clue": "At the Ways of Working Charter, {holder}'s hours became the core hours without a vote."
       },
       {
@@ -4088,25 +4083,25 @@
     "title": "Cost Challenge",
     "location": "Floor 3, Steering Room 3A",
     "narration": [
-      "Your first week as a Middle manager, and the Chief Financial Officer wants thirty per cent off every budget on Floor 3, with everything in the plan still delivered. The Chief Financial Officer has joined by phone, from a car, to say that this is not a cut but a challenge."
+      "The Chief Financial Officer, phoning from a car, wants thirty per cent off, which is a challenge, not a cut."
     ],
     "cast": ["{head}", "{boss}", "delivery", "analyst", "projects"],
     "signs": [
       {
         "label": "Whose budget is challenged first",
-        "text": "{ignored}'s budget is challenged first, and hardest. {holder}'s is challenged last, and briefly.",
+        "text": "{ignored}'s budget is challenged first and hardest. {holder}'s, last and briefly.",
         "clue": "At the Cost Challenge, {holder}'s budget was challenged last, and briefly."
       },
       {
         "label": "Who rings back",
-        "text": "When the line drops, {bystander} rings the car back, and hands the phone to {holder}."
+        "text": "When the line drops, {bystander} rings back, and hands {holder} the phone."
       }
     ],
     "options": [
       {
         "id": "ask-what-stops",
         "family": "deliver",
-        "label": "Make the cut, and ask in writing what will stop because of it",
+        "label": "Cut, and ask in writing what stops",
         "results": [
           {
             "body": "Your list of what will stop is two pages long, and the first line is the Roadmap's. The Chief Financial Officer says that it is very helpful, and that the plan has not changed. The list is filed with the plan, behind it.",
@@ -4118,7 +4113,7 @@
       {
         "id": "cut-the-checks",
         "family": "fabricate",
-        "label": "Cut the testing and the second checks, which nobody sees",
+        "label": "Cut the testing and checks nobody sees",
         "results": [
           {
             "body": "It comes to thirty per cent exactly, and nothing in the plan moves. The Service Delivery Lead reads what has gone, and asks who will check things now. You say that everyone will, a bit.",
@@ -4138,7 +4133,7 @@
       {
         "id": "pass-the-cut-down",
         "family": "deflect",
-        "label": "Pass the cut down to your team, and keep the plan",
+        "label": "Pass the cut to your team, plan intact",
         "results": [
           {
             "body": "Each of your team is asked to find thirty per cent of their own, by Friday. The Senior Analyst loses a contractor and the Project Co-ordinator a training course, and both are told that it is a challenge.",
@@ -4167,7 +4162,7 @@
       {
         "id": "move-the-costs",
         "family": "fabricate",
-        "label": "Move a third of your costs onto Floor 2's codes",
+        "label": "Move a third of your costs downstairs",
         "results": [
           {
             "body": "A third of your costs go downstairs, to codes on Floor 2 that nobody on Floor 3 owns. Floor 3's budget is thirty per cent lower. The company's is the same.",
@@ -4185,25 +4180,25 @@
     "title": "The Board Offsite",
     "location": "A hotel with a lake, the Orangery",
     "narration": [
-      "The Board's offsite, in an orangery with no oranges. Your boss has the morning. Floor 3 has the two hours after lunch, which overran, so they are now an hour and three quarters."
+      "The Board's offsite, in an orangery with no oranges, where Floor 3's two hours have shrunk."
     ],
     "cast": ["{head}", "{boss}", "head", "delivery", "analyst"],
     "signs": [
       {
         "label": "Whom the Board turns to",
-        "text": "Whenever a slide changes, the Board turns to {holder}, to see what to think of it.",
+        "text": "At each slide, the Board turns to {holder} to see what to think.",
         "clue": "At the Board Offsite, the Board turned to {holder} whenever a slide changed."
       },
       {
         "label": "Who is not offered a pastry",
-        "text": "{ignored} is the only one not offered a pastry, and says they did not want one."
+        "text": "{ignored} alone is not offered a pastry, and did not want one."
       }
     ],
     "options": [
       {
         "id": "present-it-straight",
         "family": "deliver",
-        "label": "Present the plan as it is, and stop when it runs out",
+        "label": "Present the plan as it is, then stop",
         "results": [
           {
             "when": {
@@ -4255,7 +4250,7 @@
       {
         "id": "present-it-as-yours",
         "family": "deflect",
-        "label": "Present it as your own work, and take the applause",
+        "label": "Present it as your own, and take applause",
         "results": [
           {
             "when": {
@@ -4283,7 +4278,7 @@
       {
         "id": "decide-what-stops",
         "family": "deliver",
-        "label": "Use the two hours to have the Board decide what stops",
+        "label": "Have the Board decide what stops",
         "requires": {
           "planRunning": "roadmap"
         },
@@ -4298,7 +4293,7 @@
       {
         "id": "draw-swimlanes",
         "family": "fabricate",
-        "label": "Show {plan} as swimlanes, with everything on it and no dates",
+        "label": "Show {plan} as undated swimlanes of everything",
         "requires": {
           "planRunning": "roadmap"
         },
@@ -4319,7 +4314,7 @@
     "title": "The Board",
     "location": "Floor 3, Steering Room 3A, with the Board on the screen",
     "narration": [
-      "Floor 3's fifteen minutes at the Board. The Board is on the screen, in a room with better chairs. You are on slide nine of twelve when {competitor} asks, warmly, why the figure on slide seven is lower than last year's."
+      "On slide nine of twelve at the Board, {competitor} asks, warmly, why slide seven's figure fell."
     ],
     "cast": ["{head}", "{boss}", "admin", "analyst"],
     "competitor": {
@@ -4328,7 +4323,7 @@
       "label": "How the question is asked",
       "signs": [
         {
-          "text": "{competitor} asks it as a favour to the Board, and has slide seven open already.",
+          "text": "{competitor} asks it as a favour, slide seven ready.",
           "likelihood": {
             "believer": 1,
             "incompetent": 1,
@@ -4336,7 +4331,7 @@
           }
         },
         {
-          "text": "{competitor} asks it as if it had only just occurred to them, and seems surprised by it.",
+          "text": "{competitor} asks as if it just occurred to them.",
           "likelihood": {
             "believer": 2,
             "incompetent": 4,
@@ -4344,7 +4339,7 @@
           }
         },
         {
-          "text": "{competitor} asks it apologetically, and says that somebody had to.",
+          "text": "{competitor} asks apologetically: somebody had to.",
           "likelihood": {
             "believer": 4,
             "incompetent": 1,
@@ -4356,7 +4351,7 @@
     "signs": [
       {
         "label": "Whom the screen watches",
-        "text": "While the question hangs there, the Board watches {holder}, to see how to take it.",
+        "text": "The Board watches {holder}, to see how to take the question.",
         "clue": "At the Board, the screen watched {holder} while the question about slide seven hung there."
       }
     ],
@@ -4364,7 +4359,7 @@
       {
         "id": "say-you-will-find-out",
         "family": "deliver",
-        "label": "Say that you do not know yet, and when you will",
+        "label": "Say you do not know yet, but when",
         "results": [
           {
             "when": {
@@ -4397,7 +4392,7 @@
       {
         "id": "take-it-offline",
         "family": "deflect",
-        "label": "Say that it is a great question, and take it offline",
+        "label": "Call it a great question; take it offline",
         "results": [
           {
             "body": "You say that it is a great question. The Board agrees that it is, and would like the answer offline, in writing, before the next Board. {competitor} offers to help, and is thanked.",
@@ -4409,7 +4404,7 @@
       {
         "id": "blame-the-analyst",
         "family": "deflect",
-        "label": "Say that the figure came from the Senior Analyst",
+        "label": "Say the figure came from the Senior Analyst",
         "results": [
           {
             "when": {
@@ -4443,7 +4438,7 @@
       {
         "id": "ask-it-back",
         "family": "attack",
-        "label": "Ask {competitor} the same about their own figures",
+        "label": "Ask {competitor} the same about their figures",
         "requires": {
           "any": [
             {
@@ -4471,25 +4466,25 @@
     "title": "Stakeholder Mapping",
     "location": "Floor 3, Steering Room 3A",
     "narration": [
-      "Everyone puts everyone else on a grid of power against interest. It is anonymous, and done on a whiteboard, in front of everyone."
+      "Everyone puts everyone on a grid of power and interest, anonymously, in front of everyone."
     ],
     "cast": ["{head}", "{boss}", "head", "delivery", "admin"],
     "signs": [
       {
         "label": "Who is put top right",
-        "text": "Four pens in four colours put {holder} in the top right corner. Nobody puts themselves there.",
+        "text": "Four pens put {holder} top right. Nobody puts themselves there.",
         "clue": "At Stakeholder Mapping, everyone put {holder} in the top right corner."
       },
       {
         "label": "Who is left off",
-        "text": "{ignored} is not on the grid at all, and notices, and says it is fine."
+        "text": "{ignored} is not on the grid, notices, and says it is fine."
       }
     ],
     "options": [
       {
         "id": "map-it-as-it-is",
         "family": "find-out",
-        "label": "Put people where you have seen them act, not by title",
+        "label": "Place people by how they act, not title",
         "results": [
           {
             "body": "Your pen moves two people away from their job titles. One of them sees, and looks at the grid for a long time, and then at you.",
@@ -4501,7 +4496,7 @@
       {
         "id": "head-top-right",
         "family": "impress",
-        "label": "Put your boss's boss in the top right, large",
+        "label": "Put your boss's boss top right, large",
         "results": [
           {
             "body": "You draw your boss's boss in the top right, larger than the corner. Your boss's boss pretends not to have seen it, and has it photographed.",
@@ -4514,7 +4509,7 @@
       {
         "id": "analyst-bottom-left",
         "family": "attack",
-        "label": "Put the Senior Analyst in the bottom left, and say why",
+        "label": "Put the Senior Analyst bottom left, saying why",
         "results": [
           {
             "when": {
@@ -4547,7 +4542,7 @@
       },
       {
         "id": "pass-the-pen",
-        "label": "Say that you are still new, and pass the pen",
+        "label": "Say you are new, and pass the pen",
         "results": [
           {
             "body": "You pass the pen. It is taken by the person who most wanted it, which tells you more than the grid does."
@@ -4563,18 +4558,18 @@
     "title": "Portfolio Review",
     "location": "Floor 3, Steering Room 3A",
     "narration": [
-      "A Portfolio Review, with a slide of a road. The road has no cars on it, and goes over a hill, and everything Floor 3 is doing is somewhere on it."
+      "The portfolio is a slide of an empty road over a hill, with everything on it."
     ],
     "cast": ["{head}", "{boss}", "head", "delivery", "analyst"],
     "signs": [
       {
         "label": "Whom the slides face",
-        "text": "The projector is angled at {holder}, and so is everyone's chair.",
+        "text": "The projector faces {holder}, and so does every chair.",
         "clue": "At a Portfolio Review, the projector and the chairs were angled at {holder}."
       },
       {
         "label": "Whose programme is skipped",
-        "text": "{ignored}'s programme is on slide nine, and the meeting ends on slide eight."
+        "text": "{ignored}'s programme is on slide nine. The meeting ends on eight."
       }
     ],
     "options": [
@@ -4632,18 +4627,18 @@
     "title": "Steering Group",
     "location": "Floor 3, Steering Room 3A",
     "narration": [
-      "The Steering Group, which meets to steer. The minutes of the last one are approved, and nobody can remember what was steered."
+      "The Steering Group approves its last minutes, though nobody remembers what was steered."
     ],
     "cast": ["{head}", "{boss}", "head", "delivery", "analyst"],
     "signs": [
       {
         "label": "Who approves the minutes",
-        "text": "The minutes are approved when {holder} nods. Nobody had asked for a nod.",
+        "text": "The minutes are approved when {holder} nods, unasked.",
         "clue": "At a Steering Group, the minutes were approved when {holder} nodded."
       },
       {
         "label": "Whose action is carried forward",
-        "text": "{ignored}'s action is carried forward again, for the fourth meeting running."
+        "text": "{ignored}'s action is carried forward, for the fourth time."
       }
     ],
     "options": [
@@ -4662,7 +4657,7 @@
       {
         "id": "stop-one-programme",
         "family": "deliver",
-        "label": "Propose stopping one programme, so the Roadmap is true",
+        "label": "Stop one programme, so the Roadmap is true",
         "requires": {
           "planRunning": "roadmap"
         },
@@ -4677,7 +4672,7 @@
       {
         "id": "add-a-swimlane",
         "family": "fabricate",
-        "label": "Add a swimlane for everything not on the Roadmap yet",
+        "label": "Add a swimlane for everything else",
         "requires": {
           "planRunning": "roadmap"
         },
@@ -4710,25 +4705,25 @@
     "title": "Benefits Realisation Review",
     "location": "Floor 3, Steering Room 3A",
     "narration": [
-      "A review of the benefits last year's programmes said they would realise. They are in a spreadsheet, in a folder called Archive."
+      "Last year's promised benefits are reviewed, from a spreadsheet in a folder called Archive."
     ],
     "cast": ["{head}", "{boss}", "head", "delivery", "analyst"],
     "signs": [
       {
         "label": "Whose benefits are counted",
-        "text": "{holder}'s benefits are counted first, and generously, by {bystander}.",
+        "text": "{bystander} counts {holder}'s benefits first, and generously.",
         "clue": "At the Benefits Realisation Review, {holder}'s benefits were counted first, and generously."
       },
       {
         "label": "Whose spreadsheet is opened",
-        "text": "{ignored}'s spreadsheet is opened, and closed again, before anyone reads it."
+        "text": "{ignored}'s spreadsheet is opened, and closed unread."
       }
     ],
     "options": [
       {
         "id": "count-them-properly",
         "family": "deliver",
-        "label": "Count your team's benefits properly, missing ones included",
+        "label": "Count your benefits properly, missing ones included",
         "results": [
           {
             "body": "Your benefits come to about a third of what was promised. It is the only honest number in the review, and it is circled.",
@@ -4752,7 +4747,7 @@
       {
         "id": "tie-it-to-the-roadmap",
         "family": "deliver",
-        "label": "Tie each benefit to a Roadmap line, and drop lines with none",
+        "label": "Tie benefits to Roadmap lines; drop lines without",
         "requires": {
           "planRunning": "roadmap"
         },
@@ -4785,18 +4780,18 @@
     "title": "Lessons Learned Forum",
     "location": "Floor 3, Steering Room 3A",
     "narration": [
-      "A forum for the lessons Floor 3 has learned. They are the same lessons as last year's, on a newer template."
+      "Floor 3 shares its lessons: last year's, on a newer template."
     ],
     "cast": ["{head}", "{boss}", "head", "delivery", "analyst"],
     "signs": [
       {
         "label": "Whose lesson it is",
-        "text": "Every lesson names someone who has left. {holder} chose the template.",
+        "text": "Every lesson names a leaver. {holder} chose the template.",
         "clue": "At the Lessons Learned Forum, {holder} had chosen the template."
       },
       {
         "label": "Who is asked to present",
-        "text": "{ignored} is asked to present the lessons, and none of them are {ignored}'s."
+        "text": "{ignored} presents the lessons, none of them {ignored}'s."
       }
     ],
     "options": [
@@ -4815,7 +4810,7 @@
       {
         "id": "lesson-for-the-leaver",
         "family": "deflect",
-        "label": "Put your lesson down to someone who has left",
+        "label": "Put your lesson down to a leaver",
         "results": [
           {
             "body": "The lesson goes to someone who has left, who cannot attend to accept it. It is accepted on their behalf.",
@@ -4856,18 +4851,18 @@
     "title": "Roadmap Workshop",
     "location": "Floor 3, Steering Room 3A",
     "narration": [
-      "A workshop on what Floor 3 is doing, with sticky notes in four colours. Everyone was asked to leave their job title at the door. Nobody has."
+      "A sticky-note workshop where job titles were left at the door, except by everyone."
     ],
     "cast": ["{head}", "{boss}", "head", "delivery", "analyst"],
     "signs": [
       {
         "label": "Whose notes stay up",
-        "text": "{holder}'s sticky notes stay up. Everyone else's are moved, gently, to a column called Later.",
+        "text": "{holder}'s notes stay up. The rest move, gently, to Later.",
         "clue": "At the Roadmap Workshop, {holder}'s sticky notes were the only ones not moved to Later."
       },
       {
         "label": "Who gets the facilitator",
-        "text": "The facilitator asks {bystander} what {holder} thinks, and writes the answer down."
+        "text": "The facilitator asks {bystander} what {holder} thinks, and writes it down."
       }
     ],
     "options": [
@@ -4935,7 +4930,7 @@
     "title": "Reforecast",
     "location": "Floor 3, Steering Room 3A",
     "narration": [
-      "The year's forecast, again. It was forecast in January and reforecast in April, and is now being re-reforecast, because the Chief Financial Officer did not like April."
+      "The forecast is being re-reforecast, because the Chief Financial Officer did not like April."
     ],
     "cast": ["{head}", "{boss}", "head", "delivery", "projects"],
     "signs": [
@@ -4946,7 +4941,7 @@
       },
       {
         "label": "Who explains a difference",
-        "text": "{ignored} is asked to explain a difference, which turns out to be the gap between what {ignored} said and what {holder} wanted."
+        "text": "{ignored} explains a difference: between what {ignored} said and {holder} wanted."
       }
     ],
     "options": [
@@ -4965,7 +4960,7 @@
       {
         "id": "forecast-low",
         "family": "fabricate",
-        "label": "Forecast low, so that you can beat it later",
+        "label": "Forecast low, so you can beat it",
         "results": [
           {
             "body": "You forecast low. Next quarter you will beat it, and be thanked for the surprise, which you have scheduled.",
@@ -5006,25 +5001,25 @@
     "title": "Board Rehearsal",
     "location": "Floor 3, Steering Room 3A",
     "narration": [
-      "A rehearsal for the next Board. Your boss's boss plays the Board, and is better at it than the Board is."
+      "Your boss's boss plays the Board in rehearsal, better than the Board does."
     ],
     "cast": ["{head}", "{boss}", "head", "admin", "analyst"],
     "signs": [
       {
         "label": "Who plays the Chair",
-        "text": "{holder} is given the Chair's seat for the rehearsal, and is still in it when the rehearsal ends.",
+        "text": "{holder} gets the Chair's seat, and is still in it at the end.",
         "clue": "At a Board Rehearsal, {holder} was given the Chair's seat, and kept it."
       },
       {
         "label": "Whose slides are cut for time",
-        "text": "{ignored}'s slides are cut for time before anyone has seen them, including {ignored}."
+        "text": "{ignored}'s slides are cut unseen, even by {ignored}."
       }
     ],
     "options": [
       {
         "id": "ask-for-the-hardest",
         "family": "deliver",
-        "label": "Ask to be asked the hardest question there is",
+        "label": "Ask for the hardest question there is",
         "results": [
           {
             "body": "You are asked it, and get it wrong, here, where it does not count. That is what a rehearsal is for, and nobody in the room believes it.",
@@ -5036,7 +5031,7 @@
       {
         "id": "agree-an-easy-one",
         "family": "trade",
-        "label": "Agree a friendly question for the day with your boss's boss",
+        "label": "Agree a friendly question with your boss's boss",
         "results": [
           {
             "body": "Your boss's boss agrees to ask you something easy on the day, and asks what you will do in return. You say anything. Your boss's boss writes anything down.",
@@ -5049,7 +5044,7 @@
       {
         "id": "one-slide",
         "family": "impress",
-        "label": "Cut your section to one slide, with a photograph",
+        "label": "Cut your section to one photograph",
         "results": [
           {
             "body": "Your section is one slide: a photograph of a bridge. It is the only slide the rehearsal remembers, and nobody can say what it was about.",
@@ -5076,25 +5071,25 @@
     "title": "Team Structure Review",
     "location": "Floor 3, Steering Room 3A",
     "narration": [
-      "Floor 3 is reviewing how many people report to how many people. The answer is going to be fewer, and the question is who."
+      "Floor 3 is reviewing who reports to whom, and the answer is fewer people."
     ],
     "cast": ["{head}", "{boss}", "head", "delivery", "admin"],
     "signs": [
       {
         "label": "Whose chart is not redrawn",
-        "text": "Every chart on the wall is redrawn, except {holder}'s, which is admired.",
+        "text": "Every chart is redrawn except {holder}'s, which is admired.",
         "clue": "At the Team Structure Review, {holder}'s chart was the only one not redrawn."
       },
       {
         "label": "Who is drawn as a dotted line",
-        "text": "{ignored} ends the meeting as a dotted line, and is told that dotted lines are very important."
+        "text": "{ignored} becomes a dotted line, which is very important."
       }
     ],
     "options": [
       {
         "id": "defend-your-team",
         "family": "deliver",
-        "label": "Say what each of your team does, and that you need all of them",
+        "label": "Say you need everyone on your team",
         "results": [
           {
             "body": "You go through your team one by one, with what each of them actually does. It takes twenty minutes, and the room is surprised by how much of it there is.",
@@ -5106,7 +5101,7 @@
       {
         "id": "offer-an-empty-post",
         "family": "fabricate",
-        "label": "Offer up the post you have never been able to fill",
+        "label": "Offer up the post you never filled",
         "results": [
           {
             "body": "You offer up the post that has been empty for a year. It is counted as a saving, a reduction and a difficult decision, bravely taken.",
@@ -5118,7 +5113,7 @@
       {
         "id": "fewer-layers-below",
         "family": "impress",
-        "label": "Say that Floor 3 has too many layers, starting below you",
+        "label": "Say there are too many layers below you",
         "results": [
           {
             "body": "Your boss agrees that there are too many layers, and that the ones below are the place to start. Nobody below is in the room.",

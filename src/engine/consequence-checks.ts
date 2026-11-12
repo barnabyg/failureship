@@ -22,6 +22,11 @@ function flagsThatCanBeSet(content: Content): Set<string> {
     ),
     ...content.moves.flatMap((m) => m.sets),
     ...everyBill(content).flatMap((b) => b.sets),
+    ...everyBill(content).flatMap((b) =>
+      b.escapes.flatMap((e) =>
+        e.kind === "take" ? [] : [...e.worked.sets, ...e.failed.sets],
+      ),
+    ),
     ...content.events.flatMap((e) => e.sets),
     ...Object.values(content.demands?.sets ?? {}),
     ...(content.demands?.missed?.sets ?? []),
@@ -74,9 +79,6 @@ export function findBrokenChanging(content: Content): string[] {
     }
   }
   for (const sign of written.whistleblower.signs) {
-    if (!sign.text.includes("{who}")) {
-      problems.push(`Whistleblower sign "${sign.id}" needs to say {who}.`);
-    }
     if (content.behaviours.some((b) => b.id === sign.id)) {
       problems.push(`Whistleblower sign "${sign.id}" shares a behaviour's id.`);
     }

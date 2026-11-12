@@ -12,6 +12,7 @@ import {
   changing,
   companyEvent,
   deals,
+  escapeRules,
   gauge,
   mistakes,
   promises,
@@ -62,7 +63,12 @@ export {
   type PlanHow,
   type VacancyReason,
 } from "./boss-schema";
-export type { Bill } from "./consequence-schema";
+export {
+  ESCAPE_KINDS,
+  type Bill,
+  type Escape,
+  type EscapeKind,
+} from "./consequence-schema";
 export {
   MOVE_FAMILIES,
   TONES,
@@ -172,6 +178,7 @@ export const contentSchema = z.strictObject({
   deals: deals.optional(),
   changing: changing.optional(),
   gauges: z.array(gauge).optional(),
+  escapes: escapeRules.optional(),
   standing: standing.optional(),
   /** What the results screen calls each family of Moves. */
   families: z
@@ -245,13 +252,16 @@ export const contentSchema = z.strictObject({
   floors: z.array(floorData).min(1),
   ui: z.strictObject({
     hints: z.strictObject({
-      notification: text,
       actions: text,
+      /** On the floor with the inbox to answer. Says {actions} and {n}, how many to answer. */
+      inbox: text,
+      /** The actions spent, and the inbox all that holds the month open. Says {n}. */
+      inboxOnly: text,
       scene: text,
       "find-out": text,
       notice: text,
-      move: text,
-      event: text,
+      /** A consequence that came as a Move, asking as the month closes. */
+      escape: text,
       story: text,
       win: text,
       results: text,

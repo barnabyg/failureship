@@ -1,5 +1,11 @@
 import { expect, test } from "@playwright/test";
-import { answered, freshRun, happened, playUntil } from "./play";
+import {
+  answered,
+  freshRun,
+  happened,
+  openInboxIfAny,
+  playUntil,
+} from "./play";
 
 // tests/engine/browser-seeds.test.ts keeps this deal true. On seed 16, taking
 // the blame in month 2 and faking the Plan in month 5 wins the seat, and your
@@ -23,6 +29,7 @@ test("hire an old friend onto your team, and hear from a Believer boss about it"
 
   await playUntil(page, "option-own-the-hire");
   await expect(page.getByTestId("month")).toContainText("12 of 18");
+  await openInboxIfAny(page);
   const furious = page.getByTestId("panel-notification");
   await expect(furious).toContainText("A word about your new hire");
   await expect(furious).toContainText("appalled");

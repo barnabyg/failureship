@@ -1,5 +1,5 @@
 import { expect, test } from "@playwright/test";
-import { answered, happened, playUntil } from "./play";
+import { answered, happened, openInboxIfAny, playUntil } from "./play";
 
 // tests/engine/promises.test.ts keeps this seed true: the Senior Analyst believes it
 // in month 3, it falls due in month 5, and by month 6 your boss has heard that it
@@ -13,6 +13,7 @@ test("a Promise is made, and is in Your word given", async ({ page }) => {
   await page.getByTestId("close-word").click();
 
   await playUntil(page, "option-promise-laptops-analyst");
+  await openInboxIfAny(page);
   await page.getByTestId("option-promise-laptops-analyst").click();
   await expect(answered(page)).toContainText("laptops");
   await expect(page.getByTestId("word-count")).toContainText("1");
@@ -25,6 +26,7 @@ test("a Promise is broken, and the next one is not believed", async ({
   await expect(page.getByTestId("word-count")).toContainText("1");
 
   await playUntil(page, "option-next-quarter");
+  await openInboxIfAny(page);
   await page.getByTestId("option-next-quarter").click();
 
   await playUntil(page, "scene-option-promise-laptops");

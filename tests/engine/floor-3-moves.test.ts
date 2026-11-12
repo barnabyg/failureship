@@ -4,6 +4,7 @@ import type { PlayerView } from "../../src/engine";
 import { isOn } from "../../src/engine/floors";
 import { readHiddenTruth } from "../../src/engine/hidden-truth";
 import { withoutSeatEvents } from "./fixture";
+import { landedIn, notesIn } from "./landed";
 import { CLEAN, playAll, playRun } from "./real-runs";
 
 /** The bigger Moves only a Middle manager has, as Scene or Notification and option. */
@@ -41,7 +42,10 @@ function arrived(views: readonly PlayerView[], idOrTitle: string) {
     (v) =>
       v.job.id === "middle-manager" &&
       ((v.step.kind === "notification" && v.step.id === idOrTitle) ||
-        (v.step.kind === "move" && v.step.title === idOrTitle) ||
+        (v.step.kind === "escape" &&
+          (v.step.id === idOrTitle || v.step.title === idOrTitle)) ||
+        landedIn(v).some((l) => l.title === idOrTitle) ||
+        notesIn(v).some((n) => n.title === idOrTitle) ||
         (v.step.kind === "notice" && v.step.title === idOrTitle)),
   )?.month;
 }
@@ -280,9 +284,12 @@ describe("One Roadmap's cover, apart from the Cost Challenge", () => {
   // so with the Roadmap left alone its failure is blamed on the player on
   // these seeds. Asking in reply to the welcome e-mail covers it instead.
   const blamed = (views: readonly PlayerView[]) =>
-    views.some(
-      (v) =>
-        v.step.kind === "move" && v.step.body.includes("middle-management"),
+    views.some((v) =>
+      [v.step, ...landedIn(v)].some(
+        (s) =>
+          (s.kind === "move" || s.kind === "escape") &&
+          s.body.includes("middle-management"),
+      ),
     );
 
   it.each([24, 28, 37])(

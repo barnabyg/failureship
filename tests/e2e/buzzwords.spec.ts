@@ -1,4 +1,5 @@
 import { readFileSync } from "node:fs";
+import { openInboxIfAny } from "./play";
 import path from "node:path";
 import { expect, test, type Page } from "@playwright/test";
 import type { ViteDevServer } from "vite";
@@ -67,6 +68,7 @@ test.beforeEach(async ({ page }) => {
 test("three Buzzwords all show, with no more to open", async ({ page }) => {
   await serve(page, "notifications.json", pubTeaches(written.map((b) => b.id)));
   await page.goto(`${origin}?seed=1`);
+  await openInboxIfAny(page);
   await page.getByTestId("option-pub").click();
 
   await expect(page.getByTestId("buzzword")).toHaveText([
@@ -92,6 +94,7 @@ test("ten Buzzwords show the latest three, and the rest behind +7 more", async (
   const heightOf = () =>
     status.evaluate((header) => header.getBoundingClientRect().height);
   const before = await heightOf();
+  await openInboxIfAny(page);
   await page.getByTestId("option-pub").click();
 
   const shown = page.getByTestId("buzzword");
@@ -129,6 +132,7 @@ test("ten Buzzwords show the latest three, and the rest behind +7 more", async (
   await page.getByTestId("restart-seed").click();
   await page.getByTestId("confirm-leave-yes").click();
   await expect(page.getByTestId("buzzwords")).toHaveCount(0);
+  await openInboxIfAny(page);
   await page.getByTestId("option-pub").click();
   await expect(shown.first()).toHaveClass("buzzword-new");
 });

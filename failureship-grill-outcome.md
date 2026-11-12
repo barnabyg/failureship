@@ -108,7 +108,7 @@ Events drive promotion, not scores. Promotion needs a vacancy, and whoever reall
 
 ## Gauges
 
-Gauges such as Fawning are comic and fun to watch, and have little effect on play. Teflon is the exception (changed at the Phase 5 checkpoint, issue 112): it rises with each Escape that works, and some Escapes need a minimum Teflon. Gauges reflect your track record, not your real danger, and never reveal the Power Map. A Gauge moves only when a Thread or an Escape has played out: you did something, it paid off, a Gauge moves. Reaching a set level earns a Milestone, such as "Slippery as an eel" at 70 Teflon.
+Gauges such as Fawning are comic and fun to watch, and have little effect on play. Teflon is the exception (changed at the Phase 5 checkpoint, issue 112): it rises with each Escape that works, falls with each that fails, and the bolder Escapes need a minimum Teflon. Gauges reflect your track record, not your real danger, and never reveal the Power Map. A Gauge moves only when a Thread or an Escape has played out: you did something, it paid off or did not, a Gauge moves. Reaching a set level earns a Milestone, such as "Slippery as an eel" at 70 Teflon.
 
 Gauges are visible numbers, and a high one does not necessarily lead to promotion. Teflon is the only one named so far.
 

@@ -62,6 +62,28 @@
                 "body": "You make the schedule that afternoon. The committee thanks you, and points out that the date you chose was a Sunday. It has noted this as well."
               }
             }
+          ],
+          "escapes": [
+            {
+              "id": "safety-blame-the-office",
+              "kind": "blame",
+              "label": "Say the Office Co-ordinator holds the training records",
+              "blames": "admin",
+              "worked": {
+                "body": "The committee writes to the Office Co-ordinator about the training records, which are in a drawer, as records are.",
+                "reported": "Training records were found to be held locally, and will be digitised.",
+                "happened": "You said the Office Co-ordinator had the training records. There were no records."
+              },
+              "failed": {
+                "body": "The Office Co-ordinator sends the committee the drawer's contents: a form for each of the team, unsigned, with your name at the top as the person to chase them.",
+                "opinion": -2
+              }
+            },
+            {
+              "id": "safety-take-it",
+              "kind": "take",
+              "label": "Answer the committee"
+            }
           ]
         },
         "gauges": [
@@ -152,7 +174,44 @@
           "title": "A small discrepancy",
           "body": "Someone in Finance, whom you have never met, has been reading old Monthly Status Reports for pleasure. They have laid one of your green ones beside the figures, and sent both to your boss. Your boss replies to all, thanking Finance for its engagement. You are not to do it again, or at least not in writing.",
           "sets": ["green-report-found"],
-          "opinion": -1
+          "opinion": -1,
+          "escapes": [
+            {
+              "id": "green-blame-the-co-ordinator",
+              "kind": "blame",
+              "label": "Say the Project Co-ordinator put that month's report together",
+              "blames": "projects",
+              "worked": {
+                "body": "Finance thanks the Project Co-ordinator for their engagement. The Project Co-ordinator does not know what they did.",
+                "reported": "A reporting discrepancy was traced to how the report was put together.",
+                "happened": "You said the Project Co-ordinator wrote your green report. It had your name in the footer."
+              },
+              "failed": {
+                "body": "The Project Co-ordinator replies with the file's properties. Author: you. Last modified: you, at eleven at night.",
+                "opinion": -2
+              }
+            },
+            {
+              "id": "green-say-forecast",
+              "kind": "lie",
+              "label": "Reply that green was the forecast, not the status",
+              "worked": {
+                "body": "Finance replies that forecasting is outside its remit, and closes the query.",
+                "reported": "A status report was clarified as a forecast.",
+                "happened": "You said your green status had been a forecast. It had been a wish."
+              },
+              "failed": {
+                "body": "Your boss was in the meeting where you said it was green now, not later, and replies to all to say so.",
+                "opinion": -2,
+                "headOpinion": -1
+              }
+            },
+            {
+              "id": "green-take-it",
+              "kind": "take",
+              "label": "Reply to all, thanking Finance for its engagement"
+            }
+          ]
         },
         "gauges": [
           {
@@ -192,7 +251,36 @@
           "opinion": -1,
           "project": {
             "real": "worse"
-          }
+          },
+          "escapes": [
+            {
+              "id": "bonus-ask-for-a-plan",
+              "kind": "bury",
+              "label": "Ask the Project Co-ordinator for a delivery plan for the figures",
+              "fails": {
+                "believes": {
+                  "character": "projects",
+                  "mood": "cold"
+                }
+              },
+              "worked": {
+                "body": "The Project Co-ordinator sends a delivery plan, which takes them a week, so the figures are later still, but now on a plan.",
+                "reported": "Late figures were brought under a delivery plan.",
+                "happened": "You buried the late figures under a plan for them."
+              },
+              "failed": {
+                "body": "The delivery plan has a section headed Dependencies, and the dependency is a chair.",
+                "why": "The Project Co-ordinator had already gone off you, and the delivery plan said so.",
+                "opinion": -1,
+                "headOpinion": -1
+              }
+            },
+            {
+              "id": "bonus-take-it",
+              "kind": "take",
+              "label": "Wait for the figures"
+            }
+          ]
         },
         "gauges": [
           {
@@ -309,7 +397,44 @@
           "from": "From: The shared calendar",
           "title": "Action: you (from the minutes)",
           "body": "The minutes of a meeting you went to months ago have been circulated at last. They record an action against your name: to take forward the cross-team synergy piece. Nobody remembers agreeing it, including you, but it is minuted, and minutes are how things happen here.",
-          "sets": ["minuted-an-action"]
+          "sets": ["minuted-an-action"],
+          "escapes": [
+            {
+              "id": "minutes-blame-the-associate",
+              "kind": "blame",
+              "label": "Say the action was meant for the Junior Associate",
+              "blames": "associate",
+              "worked": {
+                "body": "The Junior Associate accepts the cross-team synergy piece, and asks you what it is. You say it is a development opportunity.",
+                "reported": "The synergy action was reassigned as a development opportunity.",
+                "happened": "You gave the Junior Associate an action nobody had agreed to."
+              },
+              "failed": {
+                "body": "The Junior Associate replies to all, asking what meeting it was, and who was at it. The minutes say who was. It was you.",
+                "opinion": -1
+              }
+            },
+            {
+              "id": "minutes-latest-version",
+              "kind": "bury",
+              "label": "Reply to all, asking whether this is the latest version of the minutes",
+              "chance": 0.7,
+              "worked": {
+                "body": "Three versions of the minutes go round in reply. In two of them the action has nobody's name on it.",
+                "reported": "The minutes were revised following comments.",
+                "happened": "You asked which version was the latest, until there was one without your name."
+              },
+              "failed": {
+                "body": "Someone replies with the final version, which is marked Final, and has your name in bold.",
+                "opinion": -1
+              }
+            },
+            {
+              "id": "minutes-take-it",
+              "kind": "take",
+              "label": "Take the action forward"
+            }
+          ]
         },
         "gauges": [
           {
@@ -689,6 +814,28 @@
                 "body": "You do two jobs, one of them in your friend's name. Your friend's work improves markedly, and your friend is very pleased with it."
               }
             }
+          ],
+          "escapes": [
+            {
+              "id": "furious-blame-the-analyst",
+              "kind": "blame",
+              "label": "Say the Senior Analyst signed off the interview panel",
+              "blames": "analyst",
+              "worked": {
+                "body": "Your boss asks the Senior Analyst why they signed it off. The Senior Analyst, who did not, is now very careful near your desk.",
+                "reported": "The sign-off of recruitment panels is under review.",
+                "happened": "You said the Senior Analyst signed off your friend's hire. They had recommended someone else."
+              },
+              "failed": {
+                "body": "The Senior Analyst sends your boss the e-mail recommending the other candidate, with your reply, which was a thumbs-up.",
+                "opinion": -2
+              }
+            },
+            {
+              "id": "furious-take-it",
+              "kind": "take",
+              "label": "Go and see your boss"
+            }
           ]
         },
         "gauges": [
@@ -710,7 +857,35 @@
           "from": "From: Your boss, {boss}",
           "title": "About your new hire",
           "body": "Your boss lets it be known that they know how your new hire came to be hired, and that it can stay between the two of you. For now. Your boss starts a sentence with you owe me, and leaves it there.",
-          "sets": ["friend-held-over-you"]
+          "sets": ["friend-held-over-you"],
+          "escapes": [
+            {
+              "id": "held-say-there-was-a-panel",
+              "kind": "lie",
+              "label": "Say the hire went through a proper panel",
+              "fails": {
+                "believes": {
+                  "character": "{boss}",
+                  "mood": "cold"
+                }
+              },
+              "worked": {
+                "body": "Your boss says that of course it did, and lets it go, and does not write that down.",
+                "reported": "A hire was confirmed as made through due process.",
+                "happened": "You told your boss there had been a panel. There had been a coffee."
+              },
+              "failed": {
+                "body": "Your boss asks for the panel's notes. There are none. Your boss lets it be known that this, too, can stay between the two of you.",
+                "why": "Your boss had already gone off you, and asked for the notes.",
+                "opinion": -1
+              }
+            },
+            {
+              "id": "held-take-it",
+              "kind": "take",
+              "label": "Say nothing"
+            }
+          ]
         },
         "gauges": [
           {
@@ -766,7 +941,44 @@
           "title": "The consultant's readout",
           "body": "The consultant presents their findings: that your team should keep doing what it was doing, but transformationally. Your boss asks what that means, twice, and then asks what it cost.",
           "sets": ["consultant-unconvincing"],
-          "opinion": -1
+          "opinion": -1,
+          "escapes": [
+            {
+              "id": "readout-blame-the-programme",
+              "minTeflon": 60,
+              "kind": "blame",
+              "label": "Say the Programme Manager chose the consultant",
+              "blames": "programme",
+              "worked": {
+                "body": "Your boss writes to the Programme Manager about value for money. The Programme Manager adds it to the lessons log.",
+                "reported": "Lessons about value for money were logged for the transformation budget.",
+                "happened": "You said the Programme Manager chose the consultant. You chose them at the coffee machine."
+              },
+              "failed": {
+                "body": "The Programme Manager sends your boss the purchase order, which you raised, and the meeting invite, which you sent.",
+                "opinion": -2
+              }
+            },
+            {
+              "id": "readout-confirmation-is-value",
+              "kind": "lie",
+              "label": "Say the readout proves the team was right all along, which is value",
+              "worked": {
+                "body": "Your boss says that confirmation is valuable, and writes it on a slide.",
+                "reported": "The consultancy confirmed the team's direction.",
+                "happened": "You said that paying to be told you were right was value."
+              },
+              "failed": {
+                "body": "Your boss sat through the whole readout, and asks how much it cost to be told that.",
+                "opinion": -2
+              }
+            },
+            {
+              "id": "readout-take-it",
+              "kind": "take",
+              "label": "Say what it cost"
+            }
+          ]
         },
         "gauges": [
           {
@@ -803,7 +1015,28 @@
           "title": "Version history",
           "body": "The Senior Analyst has sent your boss their spreadsheet from last spring, which is the consultant's framework, with the version history attached. The colours are different. Nothing else is.",
           "sets": ["consultant-work-traced"],
-          "opinion": -1
+          "opinion": -1,
+          "escapes": [
+            {
+              "id": "traced-industry-standard",
+              "kind": "lie",
+              "label": "Say the framework is an industry standard, and both of them used it",
+              "worked": {
+                "body": "Your boss accepts that frameworks are industry standard. The Senior Analyst adds a footnote to theirs: industry standard since last spring.",
+                "reported": "The consultancy used a framework that is standard in the industry.",
+                "happened": "You said the Senior Analyst's spreadsheet was an industry standard. It is now."
+              },
+              "failed": {
+                "body": "Your boss saw the Senior Analyst's spreadsheet last spring, and liked it then too.",
+                "opinion": -2
+              }
+            },
+            {
+              "id": "traced-take-it",
+              "kind": "take",
+              "label": "Thank the Senior Analyst for the version history"
+            }
+          ]
         },
         "gauges": [
           {
@@ -862,7 +1095,30 @@
           "opinion": -1,
           "project": {
             "real": "worse"
-          }
+          },
+          "escapes": [
+            {
+              "id": "resented-survey",
+              "kind": "bury",
+              "label": "Ask People and Culture to run an engagement survey",
+              "chance": 0.5,
+              "worked": {
+                "body": "The survey runs for six weeks. Its results are shown as a word cloud, and the biggest word is Valued.",
+                "reported": "Team engagement was measured, and found to be valued.",
+                "happened": "You buried a resignation in a survey."
+              },
+              "failed": {
+                "body": "The survey's free-text box has one answer in it, very long, from the Senior Analyst.",
+                "opinion": -1,
+                "headOpinion": -1
+              }
+            },
+            {
+              "id": "resented-take-it",
+              "kind": "take",
+              "label": "Let it be"
+            }
+          ]
         },
         "gauges": [
           {
@@ -887,7 +1143,28 @@
           "title": "Resilience",
           "body": "The Project Co-ordinator has pinned your letter about resilience above their desk. Your boss has read it there, and asked the Project Co-ordinator how they are, and been told.",
           "sets": ["resilience-pinned-up"],
-          "opinion": -1
+          "opinion": -1,
+          "escapes": [
+            {
+              "id": "resilience-the-template",
+              "kind": "lie",
+              "label": "Say the letter was People and Culture's template",
+              "worked": {
+                "body": "Your boss nods at People and Culture's template. People and Culture are asked to make the template warmer.",
+                "reported": "Bonus letter templates are to be reviewed for tone.",
+                "happened": "You said People and Culture wrote your letter about resilience. You wrote it."
+              },
+              "failed": {
+                "body": "Your boss signed off the letter, and remembers the word resilience, underlined, in your handwriting.",
+                "opinion": -2
+              }
+            },
+            {
+              "id": "resilience-take-it",
+              "kind": "take",
+              "label": "Leave the letter where it is"
+            }
+          ]
         },
         "gauges": [
           {
@@ -953,7 +1230,29 @@
           "body": "From the desk by the lift, the Project Co-ordinator says good morning to everyone who comes up to Floor 2, your boss included. Your boss now hears how your team is doing before you do, and in more detail.",
           "sets": ["lift-desk-talks"],
           "opinion": -1,
-          "headOpinion": -1
+          "headOpinion": -1,
+          "escapes": [
+            {
+              "id": "lift-blame-the-office",
+              "kind": "blame",
+              "label": "Say the Office Co-ordinator put them by the lift",
+              "blames": "admin",
+              "worked": {
+                "body": "Your boss asks the Office Co-ordinator about the desk by the lift. The Office Co-ordinator says it is a temporary arrangement, which here means the opposite.",
+                "reported": "The desk by the lift is a temporary arrangement.",
+                "happened": "You said the Office Co-ordinator moved the Project Co-ordinator. You did."
+              },
+              "failed": {
+                "body": "The Office Co-ordinator sends your boss the request to move the desk. It is from you, and the reason given is Questions.",
+                "opinion": -2
+              }
+            },
+            {
+              "id": "lift-take-it",
+              "kind": "take",
+              "label": "Say good morning back"
+            }
+          ]
         },
         "gauges": [
           {
@@ -1023,6 +1322,28 @@
                 "body": "It takes two days, and it is a less good figure than anyone hoped. The Board Office thanks you for it, and files it with the question."
               }
             }
+          ],
+          "escapes": [
+            {
+              "id": "offline-working-group",
+              "kind": "bury",
+              "label": "Reply that the answer is with a working group",
+              "chance": 0.6,
+              "worked": {
+                "body": "The Board Office adds the working group to its list of things to chase. The working group does not exist, which makes it hard to chase.",
+                "reported": "The answer on slide seven is with a working group.",
+                "happened": "You made up a working group to have the answer."
+              },
+              "failed": {
+                "body": "The Board Office asks for the working group's terms of reference, its members and its chair, which it suggests should be you.",
+                "headOpinion": -2
+              }
+            },
+            {
+              "id": "offline-take-it",
+              "kind": "take",
+              "label": "Answer the Board Office"
+            }
           ]
         },
         "gauges": [
@@ -1075,7 +1396,28 @@
           "opinion": -1,
           "project": {
             "real": "worse"
-          }
+          },
+          "escapes": [
+            {
+              "id": "seventy-a-target",
+              "kind": "lie",
+              "label": "Say seventy per cent is the team's new efficiency target",
+              "worked": {
+                "body": "Your boss is impressed by the target, and asks whether the rest of the floor could hit seventy per cent too.",
+                "reported": "The team piloted an efficiency target of seventy per cent.",
+                "happened": "You said the Senior Analyst's protest was a target."
+              },
+              "failed": {
+                "body": "Your boss read the Chief Financial Officer's e-mail about the cut, and the labels say the same thing.",
+                "opinion": -2
+              }
+            },
+            {
+              "id": "seventy-take-it",
+              "kind": "take",
+              "label": "Say nothing about the labels"
+            }
+          ]
         },
         "gauges": [
           {
@@ -1100,7 +1442,30 @@
           "title": "Self-directed learning",
           "body": "The Project Co-ordinator, whose training went in your cut, has started a lunchtime session called Self-Directed Learning. It is very well attended. This week's topic is how a cut is passed down, with worked examples.",
           "sets": ["self-directed-learning"],
-          "headOpinion": -1
+          "headOpinion": -1,
+          "escapes": [
+            {
+              "id": "learning-book-the-room",
+              "kind": "bury",
+              "label": "Book the room at the same lunchtime, for a mandatory briefing",
+              "chance": 0.6,
+              "worked": {
+                "body": "Your briefing takes the room. Self-Directed Learning moves to the stairwell, where attendance is lower and the acoustics better.",
+                "reported": "A mandatory briefing was well attended.",
+                "happened": "You took the room away from a session about you."
+              },
+              "failed": {
+                "body": "Self-Directed Learning moves to your briefing, and asks questions.",
+                "opinion": -1,
+                "headOpinion": -1
+              }
+            },
+            {
+              "id": "learning-take-it",
+              "kind": "take",
+              "label": "Attend"
+            }
+          ]
         },
         "gauges": [
           {
@@ -1154,7 +1519,29 @@
           "title": "Slide forty",
           "body": "The Junior Associate has mentioned to your boss's boss, in the lift, that they wrote slide forty of the offsite deck, at five in the morning. Your boss's boss had particularly liked slide forty, and had told you so, and you had said thank you.",
           "sets": ["slide-forty"],
-          "headOpinion": -2
+          "headOpinion": -2,
+          "escapes": [
+            {
+              "id": "forty-you-wrote-it",
+              "kind": "lie",
+              "label": "Tell your boss's boss that you wrote it, and the Junior Associate typed it up",
+              "worked": {
+                "body": "Your boss's boss says that is how it should work: the thinking at your level, the typing below.",
+                "reported": "Slide forty was developed by the team lead and formatted by the team.",
+                "happened": "You said you wrote slide forty. You were asleep."
+              },
+              "failed": {
+                "body": "Your boss was copied on the e-mail at five in the morning, with slide forty attached, from the Junior Associate.",
+                "opinion": -1,
+                "headOpinion": -2
+              }
+            },
+            {
+              "id": "forty-take-it",
+              "kind": "take",
+              "label": "Thank the Junior Associate, in the lift"
+            }
+          ]
         },
         "gauges": [
           {
@@ -1191,7 +1578,29 @@
           "title": "Out of office",
           "body": "The Junior Associate's out-of-office says that they are recovering from writing the Board's offsite deck overnight, and that questions about it should go to you. Your boss has had the out-of-office twice.",
           "sets": ["recovering-from-the-offsite"],
-          "opinion": -1
+          "opinion": -1,
+          "escapes": [
+            {
+              "id": "recovering-switch-it-off",
+              "kind": "bury",
+              "label": "Ask IT to switch off the out-of-office",
+              "chance": 0.7,
+              "worked": {
+                "body": "IT switches it off, and asks if there is anything else. There is not, any more.",
+                "reported": "An out-of-office message was corrected.",
+                "happened": "You had an out-of-office switched off because it was true."
+              },
+              "failed": {
+                "body": "IT switches it off, and the Junior Associate switches it back on, with a sentence added about IT.",
+                "opinion": -2
+              }
+            },
+            {
+              "id": "recovering-take-it",
+              "kind": "take",
+              "label": "Answer the questions about the deck"
+            }
+          ]
         },
         "gauges": [
           {
@@ -1292,7 +1701,29 @@
           "from": "From: Your boss, {boss}",
           "title": "Friday",
           "body": "Your boss has sent the Board your figure on Friday, as promised, from their own address, with a note about how hard Floor 3 has been working on it. You are copied in, at the bottom.",
-          "sets": ["friday-under-their-name"]
+          "sets": ["friday-under-their-name"],
+          "escapes": [
+            {
+              "id": "friday-send-yours",
+              "kind": "bury",
+              "label": "Forward the Board your own e-mail of the figure, dated Thursday",
+              "chance": 0.5,
+              "worked": {
+                "body": "The Board Office files both. Someone there notices that one is dated Thursday, and mentions it to someone upstairs.",
+                "reported": "The Board received the figure on time, twice.",
+                "happened": "You made sure the Board saw who sent it first."
+              },
+              "failed": {
+                "body": "Your boss is copied, and replies to you alone, with one word: Noted.",
+                "opinion": -2
+              }
+            },
+            {
+              "id": "friday-take-it",
+              "kind": "take",
+              "label": "Leave it under your boss's name"
+            }
+          ]
         },
         "gauges": [
           {
@@ -1414,7 +1845,29 @@
           "title": "The workings",
           "body": "The Senior Analyst has sent the Board Office the workings behind the figure on slide seven, which you said came from them. The workings have a date on them, and the date is three weeks before the Board, and the e-mail they came in was to you.",
           "sets": ["the-workings"],
-          "headOpinion": -2
+          "headOpinion": -2,
+          "escapes": [
+            {
+              "id": "workings-only-checking",
+              "kind": "lie",
+              "label": "Say the workings were sent to you to check, not written for you",
+              "worked": {
+                "body": "The Board Office accepts that you were checking. It asks whether checking is the same as getting it wrong, and decides not to find out.",
+                "reported": "A Board figure was confirmed as checked by the team lead.",
+                "happened": "You said you had only been checking the Senior Analyst's workings. They were the figure."
+              },
+              "failed": {
+                "body": "Your boss was copied on the e-mail with the workings, and the Board Office has asked your boss.",
+                "headOpinion": -2,
+                "mistake": "big"
+              }
+            },
+            {
+              "id": "workings-take-it",
+              "kind": "take",
+              "label": "Correct the record"
+            }
+          ]
         },
         "gauges": [
           {

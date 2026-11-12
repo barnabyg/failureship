@@ -1,17 +1,29 @@
 import { everyBill, type Bill, type Content } from "./content";
+import { holdForEscape } from "./escapes";
 import { gaugesFromThread } from "./gauges";
 import { applyOutcome } from "./outcome";
 import { matches, mentionsGone } from "./reads";
 import { drawFor } from "./rng";
-import type { State, Step } from "./state";
+import type { GaugeMove, Landing, State, Step } from "./state";
 import { isGone } from "./places";
 
-/** A Bill reaches the player: told at once, sent as a message, or kept for the Move. */
-export function sendBill(state: State, content: Content, bill: Bill): void {
+/**
+ * A Bill reaches the player: offered with its Escapes, told at once, sent as a
+ * message, or kept for the Move. A Thread's Gauges move with it.
+ */
+export function sendBill(
+  state: State,
+  content: Content,
+  bill: Bill,
+  gauges: readonly GaugeMove[] = [],
+): void {
+  const held = holdForEscape(state, bill, gauges);
+  if (!held) gaugesFromThread(state, gauges);
   if (bill.as === "move") {
     state.billsDue.push(bill.id);
     return;
   }
+  if (held) return;
   applyOutcome(state, content, bill, bill.title);
   if (bill.as === "notification") state.unanswered.unshift(bill.id);
   else state.noticesDue.push({ title: bill.title, body: bill.body });
@@ -30,8 +42,7 @@ export function playThreads(state: State, content: Content): void {
     );
     if (!outcome) continue;
     started.played = { month: state.month, text: outcome.playedOut };
-    gaugesFromThread(state, outcome.gauges);
-    sendBill(state, content, outcome.bill);
+    sendBill(state, content, outcome.bill, outcome.gauges);
   }
 }
 
@@ -63,11 +74,20 @@ export function surfaceRisks(state: State, content: Content): void {
   }
 }
 
-/** A Bill that comes as a Character Move lands where Moves do. */
-export function landBill(state: State, content: Content): Step | null {
+/**
+ * A Bill that comes as a Character Move lands where Moves do, in the order the
+ * Bills were sent. One with Escapes offers them there instead.
+ */
+export function landBill(
+  state: State,
+  content: Content,
+): Landing | Extract<Step, { kind: "escape" }> | null {
   const id = state.billsDue.shift();
   const bill = everyBill(content).find((b) => b.id === id);
   if (!bill) return null;
+  if (state.escapesDue.some((d) => d.bill === bill.id)) {
+    return { kind: "escape", id: bill.id };
+  }
   applyOutcome(state, content, bill, bill.title);
   return { kind: "move", id: bill.id };
 }

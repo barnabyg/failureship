@@ -1,5 +1,11 @@
 import { expect, test, type Locator } from "@playwright/test";
-import { answerAnyNotification, answered, freshRun, happened } from "./play";
+import {
+  answerAnyNotification,
+  answered,
+  freshRun,
+  happened,
+  openInboxIfAny,
+} from "./play";
 
 /*
  * What reading a result costs. A result that nothing else waits on costs no
@@ -15,6 +21,7 @@ test("plainly playing month 7 on seed 2 takes at most 10 clicks to its official 
     await target.click();
     clicks += 1;
   };
+  await openInboxIfAny(page);
   const notification = page.getByTestId("panel-notification");
   const carryOn = page.getByTestId("continue");
   const story = page.getByTestId("panel-story");
@@ -48,22 +55,23 @@ test("plainly playing month 7 on seed 2 takes at most 10 clicks to its official 
   expect(clicks).toBeLessThanOrEqual(10);
 });
 
-test("says how many e-mails are waiting, and keeps each answer's result in its e-mail", async ({
+test("says how many e-mails are waiting, and keeps each answer's result over the next", async ({
   page,
 }) => {
   await freshRun(page, "/?seed=2&month=7");
-  const count = page.getByTestId("inbox-count");
+  const count = page.getByTestId("open-inbox");
 
-  await expect(count).toHaveText("Inbox: 3 more after this one");
+  await expect(count).toHaveText("4 to answer");
+  await openInboxIfAny(page);
   await page
     .getByTestId("panel-notification")
-    .locator("button:enabled")
+    .locator('[data-testid^="option-"]:enabled')
     .first()
     .click();
 
   await expect(answered(page)).toContainText("You answered");
   await expect(page.getByTestId("answer-result")).not.toBeEmpty();
-  await expect(count).toHaveText("Next e-mail (2 more)");
+  await expect(count).toHaveText("3 to answer");
 });
 
 test("keeps a result on the floor until the player goes somewhere else", async ({

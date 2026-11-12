@@ -1,5 +1,5 @@
 import { expect, test, type Locator } from "@playwright/test";
-import { answerAnyNotification } from "./play";
+import { answerAnyNotification, openInboxIfAny } from "./play";
 
 /** Nothing in the panel is wider than it, so nothing is cut off. */
 async function fits(panel: Locator) {
@@ -17,6 +17,7 @@ for (const [name, size] of [
     await page.setViewportSize(size);
     await page.goto("/?seed=1");
 
+    await openInboxIfAny(page);
     const invite = page.getByTestId("panel-notification");
     await expect(invite).toContainText("To:");
     await expect(invite).toContainText("Subject:");
@@ -33,14 +34,12 @@ for (const [name, size] of [
     expect(await fits(result)).toBe(true);
     await page.getByTestId("hotspot-work").click();
 
-    // The meeting was missed, and the minutes say so first.
-    await expect(page.getByTestId("panel-notice")).toContainText("Subject:");
-    await page.getByTestId("continue").click();
-    const move = page.getByTestId("panel-move");
-    await expect(move.locator(".stamp")).toHaveText("CONFIDENTIAL");
-    await page.getByTestId("continue").click();
-
+    // The minutes of the meeting missed, and the Move, head the newsletter.
     const story = page.getByTestId("panel-story");
+    await expect(story.getByTestId("landed")).toHaveCount(2);
+    await expect(story.getByTestId("landed-list")).toContainText(
+      "As the month closed",
+    );
     await expect(story.locator(".masthead")).toContainText("Inside Track");
     await expect(story.locator(".masthead-issue")).toContainText("1");
     await expect(story.locator(".happened-stamp")).toHaveText("CONFIDENTIAL");

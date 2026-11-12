@@ -1,5 +1,10 @@
 import { expect, test } from "@playwright/test";
-import { answerAnyNotification, answerNotification, finishMonth } from "./play";
+import {
+  answerAnyNotification,
+  answerNotification,
+  finishMonth,
+  openInboxIfAny,
+} from "./play";
 
 test("a skipped meeting comes back as a Demand in a later month", async ({
   page,
@@ -11,15 +16,18 @@ test("a skipped meeting comes back as a Demand in a later month", async ({
   await page.getByTestId("hotspot-kitchen").click();
   await page.getByTestId("hotspot-work").click();
 
-  await expect(page.getByTestId("panel-notice")).toContainText("minutes");
+  await expect(
+    page.getByTestId("landed").filter({ hasText: "minutes" }).first(),
+  ).toHaveAttribute("data-kind", "notice");
   await expect(page.getByTestId("open-demands")).toContainText("1");
   await expect(page.getByTestId("panel-scene")).toHaveCount(0);
   await finishMonth(page);
 
   await expect(page.getByTestId("month")).toContainText("2 of");
+  await openInboxIfAny(page);
   const demand = page
     .getByTestId("panel-notification")
-    .filter({ hasText: "ACTION:" });
+    .filter({ has: page.locator("h2", { hasText: "ACTION:" }) });
   while (!(await demand.isVisible())) await answerNotification(page);
 
   await expect(page.getByTestId("option-deliver")).toBeVisible();

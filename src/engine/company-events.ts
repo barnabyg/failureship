@@ -2,7 +2,7 @@ import type { Content } from "./content";
 import { applyOutcome } from "./outcome";
 import { namedIn, seatPending } from "./reads";
 import { drawFor } from "./rng";
-import type { State, Step } from "./state";
+import type { Landing, State } from "./state";
 
 type CompanyEvent = Content["events"][number];
 
@@ -63,7 +63,7 @@ export function scheduleEvents(state: State, content: Content): void {
  * seat waits while a seat is still to be decided, and lands in the first month
  * after it is, unless the run would end before the seat it opens is decided.
  */
-export function landEvent(state: State, content: Content): Step | null {
+export function landEvent(state: State, content: Content): Landing | null {
   const eventOf = (id: string) => content.events.find((e) => e.id === id);
   const openFor = content.vacancies?.seats.find(
     (s) => s.floor === state.job,

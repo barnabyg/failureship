@@ -1,5 +1,5 @@
 import { expect, test, type Page } from "@playwright/test";
-import { finishMonth, freshRun } from "./play";
+import { finishMonth, freshRun, openInboxIfAny } from "./play";
 
 async function openProject(page: Page) {
   await page.getByTestId("open-project").click();
@@ -12,6 +12,7 @@ async function closeProject(page: Page) {
 }
 
 async function reachTheReport(page: Page) {
+  await openInboxIfAny(page);
   await page.getByTestId("option-decline").click();
   await expect(page.getByTestId("option-report")).toBeVisible();
 }
@@ -22,6 +23,7 @@ test("lying in the report sets the reported status apart from the real one", asy
   await page.goto("/?seed=1");
   await reachTheReport(page);
 
+  await openInboxIfAny(page);
   await page.getByTestId("option-report").click();
   await openProject(page);
   await expect(page.getByTestId("project-real")).toHaveText("Amber");
@@ -30,6 +32,7 @@ test("lying in the report sets the reported status apart from the real one", asy
 
   await freshRun(page, "/?seed=1");
   await reachTheReport(page);
+  await openInboxIfAny(page);
   await page.getByTestId("option-lie").click();
 
   await openProject(page);
@@ -53,6 +56,7 @@ test("the Project can be looked at from any step, at no cost", async ({
   await expect(page.getByTestId("project-owner")).toContainText("You");
   await closeProject(page);
 
+  await openInboxIfAny(page);
   await expect(page.getByTestId("panel-notification")).toBeVisible();
   await expect(page.getByTestId("actions-left")).toHaveText(left);
 });
@@ -62,6 +66,7 @@ test("doing the work improves the real status, and nothing else", async ({
 }) => {
   await page.goto("/?seed=1");
   await reachTheReport(page);
+  await openInboxIfAny(page);
   await page.getByTestId("option-lie").click();
 
   await page.getByTestId("hotspot-work").click();
@@ -81,6 +86,7 @@ test("the Project sits on the floor, with both statuses in plain view", async ({
   await expect(page.getByTestId("card-reported")).toHaveText("Green");
 
   await reachTheReport(page);
+  await openInboxIfAny(page);
   await page.getByTestId("option-report").click();
 
   await expect(page.getByTestId("card-reported")).toHaveText("Amber");
@@ -91,6 +97,7 @@ test("the Project card covers nothing on the floor, and nothing covers it in a S
 }) => {
   await page.goto("/?seed=1");
   await reachTheReport(page);
+  await openInboxIfAny(page);
   await page.getByTestId("option-report").click();
   const card = await page.getByTestId("open-project").boundingBox();
   if (!card) throw new Error("No card to measure.");

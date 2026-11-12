@@ -34,7 +34,7 @@ const bossApproach = z.strictObject({
 const bossSign = z.strictObject({
   id,
   text,
-  /** It says nothing of note, such as a nod hello, so a Scene shows it dimmed. */
+  /** It says nothing of note, such as a nod hello, so a Scene leaves it out. */
   plain: z.boolean().default(false),
   /** How likely each mood is to show this, relative to its other signs. */
   likelihood: z.strictObject({
@@ -120,7 +120,7 @@ export const reputation = z.strictObject({
     warmAt: z.number().int().positive(),
     coldAt: z.number().int().negative(),
   }),
-  /** How someone other than the bosses is with the player. Says {who}. */
+  /** How someone other than the bosses is with the player, shown in their row. */
   signs: z.array(bossSign).min(1),
   /** What the results screen says each ended up believing. */
   believes: z.strictObject({ warm: text, neutral: text, cold: text }),

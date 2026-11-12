@@ -1,11 +1,12 @@
 import { describe, expect, it } from "vitest";
 import type { PlayerView } from "../../src/engine";
 import { readHiddenTruth } from "../../src/engine/hidden-truth";
+import { firstTold } from "./landed";
 import { CLEAN, CLIMB, FAKED, REPORT, playRun } from "./real-runs";
 
 /** The month a notice with this title was told, if it was. */
 const told = (views: readonly PlayerView[], title: string) =>
-  views.find((v) => v.step.kind === "notice" && v.step.title === title)?.month;
+  firstTold(views, title)?.month;
 
 /** The first month the player was in this job. */
 const firstIn = (views: readonly PlayerView[], job: string) =>
@@ -39,11 +40,7 @@ describe("the seven seeds the playtest starts with", () => {
       ousted: true,
       decided: { month: 10, winner: "you" },
     });
-    expect(
-      views.find(
-        (v) => v.step.kind === "move" && v.step.title === "A note for the file",
-      )?.month,
-    ).toBe(12);
+    expect(told(views, "A note for the file")).toBe(12);
     expect(told(views, "A sideways move, downwards")).toBe(13);
   });
 

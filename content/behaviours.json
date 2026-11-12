@@ -1,7 +1,7 @@
 [
   {
     "id": "arrives-late",
-    "text": "{who} arrives eleven minutes late, carrying a laptop and an explanation.",
+    "text": "Arrives late, with an explanation.",
     "likelihood": {
       "believer": 3,
       "incompetent": 6,
@@ -10,7 +10,7 @@
   },
   {
     "id": "repeats-a-point",
-    "text": "{who} says \"as I was saying\" before making a point that somebody else made first.",
+    "text": "Remakes someone else's point.",
     "likelihood": {
       "believer": 2,
       "incompetent": 3,
@@ -19,7 +19,7 @@
   },
   {
     "id": "all-night-deck",
-    "text": "{who} has stayed up all night on a slide deck that nobody asked for.",
+    "text": "Made an unrequested deck overnight.",
     "likelihood": {
       "believer": 5,
       "incompetent": 4,
@@ -28,7 +28,7 @@
   },
   {
     "id": "asks-about-your-week",
-    "text": "{who} stops to ask how your week has been, and seems to listen to the answer.",
+    "text": "Asks about your week. Listens.",
     "likelihood": {
       "believer": 6,
       "incompetent": 3,
@@ -37,7 +37,7 @@
   },
   {
     "id": "challenges-a-figure",
-    "text": "{who} challenges a figure on the slide, and turns out to be right.",
+    "text": "Challenges a figure, correctly.",
     "likelihood": {
       "believer": 6,
       "incompetent": 1,
@@ -47,7 +47,7 @@
   },
   {
     "id": "which-meeting",
-    "text": "{who} asks, some way in, which meeting this is.",
+    "text": "Asks which meeting this is.",
     "likelihood": {
       "believer": 2,
       "incompetent": 6,
@@ -57,7 +57,7 @@
   },
   {
     "id": "notes-senior-names",
-    "text": "{who} writes something down whenever a senior name is mentioned, and only then.",
+    "text": "Writes down only senior names.",
     "likelihood": {
       "believer": 2,
       "incompetent": 2,
@@ -67,7 +67,7 @@
   },
   {
     "id": "takes-the-action",
-    "text": "{who} volunteers for the action that nobody wants, and looks tired doing it.",
+    "text": "Takes the unwanted action, wearily.",
     "likelihood": {
       "believer": 6,
       "incompetent": 4,
@@ -77,7 +77,7 @@
   },
   {
     "id": "delay-began-elsewhere",
-    "text": "{who} mentions, in passing, that the delay began in another team.",
+    "text": "Says the delay began elsewhere.",
     "likelihood": {
       "believer": 2,
       "incompetent": 4,
@@ -87,7 +87,7 @@
   },
   {
     "id": "says-nothing-leaves-first",
-    "text": "{who} says nothing for the whole meeting, and is the first to leave.",
+    "text": "Says nothing, then leaves first.",
     "likelihood": {
       "believer": 2,
       "incompetent": 5,
@@ -96,7 +96,7 @@
   },
   {
     "id": "corrects-the-minutes",
-    "text": "{who} asks for the minutes to be corrected, on a point of fact that embarrasses nobody but {who}.",
+    "text": "Corrects the minutes, embarrassing themselves.",
     "clue": "{who} had the minutes corrected, against their own interest.",
     "likelihood": {
       "believer": 6,
@@ -106,7 +106,7 @@
   },
   {
     "id": "wrong-file",
-    "text": "{who} shares a screen to show the figures, and shows everyone a holiday booking instead.",
+    "text": "Screen-shares a holiday booking instead.",
     "clue": "{who} shared the wrong thing on screen.",
     "likelihood": {
       "believer": 2,
@@ -116,7 +116,7 @@
   },
   {
     "id": "knows-the-seating",
-    "text": "{who} has moved chairs before the start, and it takes you a while to see why.",
+    "text": "Rearranged the chairs beforehand.",
     "clue": "{who} had moved the chairs before anyone arrived.",
     "likelihood": {
       "believer": 2,
@@ -126,7 +126,7 @@
   },
   {
     "id": "brings-biscuits",
-    "text": "{who} has brought biscuits for everyone, and knows who cannot have the ones with nuts.",
+    "text": "Brings biscuits, minding nut allergies.",
     "likelihood": {
       "believer": 5,
       "incompetent": 3,
@@ -135,7 +135,7 @@
   },
   {
     "id": "on-mute",
-    "text": "{who} talks for some time before someone points out that the microphone is off.",
+    "text": "Talks at length on mute.",
     "likelihood": {
       "believer": 3,
       "incompetent": 6,
@@ -144,7 +144,7 @@
   },
   {
     "id": "reopens-a-decision",
-    "text": "{who} reopens a decision that was settled last month, and asks who settled it.",
+    "text": "Reopens last month's settled decision.",
     "clue": "{who} reopened a settled decision, and asked who had settled it.",
     "roles": ["head-of-operations"],
     "likelihood": {
@@ -155,7 +155,7 @@
   },
   {
     "id": "reads-the-real-figures",
-    "text": "{who} asks to see the real figures instead of the slide, and reads all of them.",
+    "text": "Reads every real figure.",
     "clue": "{who} asked for the real figures, and read them.",
     "roles": ["head-of-operations"],
     "likelihood": {
@@ -166,7 +166,7 @@
   },
   {
     "id": "signs-off-the-plan",
-    "text": "{who} signs off the plan, then asks what it is a plan for.",
+    "text": "Signs off the plan, unread.",
     "roles": ["head-of-operations"],
     "likelihood": {
       "believer": 2,
@@ -176,7 +176,7 @@
   },
   {
     "id": "overruns-the-meeting",
-    "text": "{who} overruns the meeting by twenty minutes, then schedules another to cover what was missed.",
+    "text": "Overruns, then schedules another meeting.",
     "clue": "{who} overran the meeting, and scheduled another to cover it.",
     "roles": ["team-leader"],
     "likelihood": {
@@ -187,7 +187,7 @@
   },
   {
     "id": "closes-on-time",
-    "text": "{who} closes the meeting exactly on time, having left out the item about the delay.",
+    "text": "Ends on time, delay unmentioned.",
     "clue": "{who} closed the meeting on time, without reaching the delay.",
     "roles": ["team-leader"],
     "likelihood": {
@@ -198,7 +198,7 @@
   },
   {
     "id": "hears-the-quietest",
-    "text": "{who} stops the meeting to make sure the quietest person in the room has been heard.",
+    "text": "Hears out the quietest person.",
     "roles": ["team-leader"],
     "likelihood": {
       "believer": 7,
@@ -208,7 +208,7 @@
   },
   {
     "id": "minutes-have-changed",
-    "text": "{who} reads back last month's minutes, in which several things have changed.",
+    "text": "Reads back quietly changed minutes.",
     "clue": "{who} read back last month's minutes, and several things had changed.",
     "roles": ["office-coordinator"],
     "likelihood": {
@@ -219,7 +219,7 @@
   },
   {
     "id": "box-of-pens",
-    "text": "{who} has noticed you are out of pens, and leaves a box on your desk with no form to fill in.",
+    "text": "Leaves you pens, no form.",
     "roles": ["office-coordinator"],
     "likelihood": {
       "believer": 7,
@@ -229,7 +229,7 @@
   },
   {
     "id": "wrong-minutes",
-    "text": "{who} circulates the minutes of a different meeting, and asks everyone to confirm them.",
+    "text": "Circulates another meeting's minutes.",
     "clue": "{who} circulated the minutes of a different meeting.",
     "roles": ["office-coordinator"],
     "likelihood": {
@@ -240,7 +240,7 @@
   },
   {
     "id": "tiny-footnote",
-    "text": "{who} adds a footnote to the slide, in a size that only {who} can read.",
+    "text": "Adds an unreadably small footnote.",
     "clue": "{who} added a very small footnote to the slide.",
     "roles": ["senior-analyst"],
     "likelihood": {
@@ -251,7 +251,7 @@
   },
   {
     "id": "reworks-the-figures",
-    "text": "{who} reworks the figures during the meeting, and sends the correction to everyone, including the people it embarrasses.",
+    "text": "Circulates corrected figures to everyone.",
     "clue": "{who} corrected the figures, in front of the people it embarrassed.",
     "roles": ["senior-analyst"],
     "likelihood": {
@@ -262,7 +262,7 @@
   },
   {
     "id": "moving-axis",
-    "text": "{who} presents a chart whose axis starts at a different number on each slide, and nobody can say whether that was on purpose.",
+    "text": "Presents charts with wandering axes.",
     "roles": ["senior-analyst"],
     "likelihood": {
       "believer": 1,
@@ -272,7 +272,7 @@
   },
   {
     "id": "tracker-disagrees",
-    "text": "{who} keeps a tracker that disagrees with the slide, and mentions it when asked.",
+    "text": "Their tracker contradicts the slide.",
     "clue": "{who} keeps a tracker that disagrees with the slide.",
     "roles": ["project-coordinator"],
     "likelihood": {
@@ -283,7 +283,7 @@
   },
   {
     "id": "closes-a-late-task",
-    "text": "{who} marks a late task as complete, and opens a new one with the same name.",
+    "text": "Closes, then reopens, late tasks.",
     "clue": "{who} closed a late task, and opened a new one with the same name.",
     "roles": ["project-coordinator"],
     "likelihood": {
@@ -294,7 +294,7 @@
   },
   {
     "id": "cannot-find-the-project",
-    "text": "{who} cannot find the project on the tracker, and adds it during the meeting.",
+    "text": "Adds the missing project mid-meeting.",
     "roles": ["project-coordinator"],
     "likelihood": {
       "believer": 3,
@@ -304,7 +304,7 @@
   },
   {
     "id": "makes-your-point-louder",
-    "text": "{who} makes your point again, a minute after you made it and a little louder, and is thanked for it.",
+    "text": "Says your point louder. Thanked.",
     "clue": "{who} made your point again, louder, and was thanked for it.",
     "roles": ["junior-associate"],
     "likelihood": {
@@ -315,7 +315,7 @@
   },
   {
     "id": "asks-how-you-did-it",
-    "text": "{who} asks how you did the figures, and writes down your answer word for word.",
+    "text": "Copies down your method verbatim.",
     "roles": ["junior-associate"],
     "likelihood": {
       "believer": 6,
@@ -325,7 +325,7 @@
   },
   {
     "id": "thanks-you-by-name",
-    "text": "{who} thanks you by name for the figures, in front of the people who will remember it.",
+    "text": "Thanks you by name, publicly.",
     "clue": "{who} thanked you by name, in front of the right people.",
     "roles": ["junior-associate"],
     "likelihood": {
@@ -336,7 +336,7 @@
   },
   {
     "id": "asks-for-a-one-pager",
-    "text": "{who} asks for the whole thing on one page, and then for that page to be shorter.",
+    "text": "Wants one page, then less.",
     "clue": "{who} asked for everything on one page, and then for less.",
     "roles": ["programme-manager"],
     "likelihood": {
@@ -347,7 +347,7 @@
   },
   {
     "id": "draws-the-dependencies",
-    "text": "{who} draws who depends on whom on the whiteboard, and leaves it up when everyone has gone.",
+    "text": "Whiteboards who depends on whom.",
     "clue": "{who} drew who depends on whom, and left it on the whiteboard.",
     "roles": ["programme-manager"],
     "likelihood": {
@@ -358,7 +358,7 @@
   },
   {
     "id": "has-a-tracker",
-    "text": "{who} has a tracker for this, colour-coded, and offers to add a column for you.",
+    "text": "Offers you a tracker column.",
     "clue": "{who} offered to add a column for you to their tracker.",
     "roles": ["service-delivery-lead"],
     "likelihood": {
@@ -369,7 +369,7 @@
   },
   {
     "id": "quotes-the-service-level",
-    "text": "{who} quotes the service level from memory, to the minute, and then says that it is under review.",
+    "text": "Quotes the under-review service level.",
     "clue": "{who} quoted the service level to the minute, and said it was under review.",
     "roles": ["service-delivery-lead"],
     "likelihood": {
@@ -380,7 +380,7 @@
   },
   {
     "id": "talks-in-horizons",
-    "text": "{who} talks about the next three horizons, and is vague only about the first.",
+    "text": "Vague only about horizon one.",
     "clue": "{who} talked about three horizons, and was vague about the first.",
     "roles": ["head-of-transformation"],
     "likelihood": {
@@ -391,7 +391,7 @@
   },
   {
     "id": "asks-what-stops",
-    "text": "{who} asks what will stop, if all of this starts, and waits for an answer.",
+    "text": "Asks what will stop. Waits.",
     "clue": "{who} asked what would stop if it all started, and waited.",
     "roles": ["head-of-transformation"],
     "likelihood": {

@@ -419,6 +419,31 @@ export function ResultsPanel({
           </div>
         </Section>
       )}
+      {step.escapes.length > 0 && (
+        <Section
+          testId="escapes"
+          heading={panelText.resultsEscapesHeading}
+          summary={count(step.escapes)}
+        >
+          <div data-testid="results-escapes">
+            {step.escapes.map((row, index) => (
+              <p
+                key={index}
+                data-testid="result-escape"
+                data-worked={row.worked}
+              >
+                <strong>{monthLabel(row.month)}. </strong>
+                {row.title}: {row.label}.{" "}
+                {row.worked
+                  ? panelText.resultsEscapeWorked
+                  : panelText.resultsEscapeFailed}{" "}
+                {row.why.join(" ")}
+                <span className="results-title">{row.kind}</span>
+              </p>
+            ))}
+          </div>
+        </Section>
+      )}
       {step.risks.length > 0 && (
         <Section
           testId="risks"

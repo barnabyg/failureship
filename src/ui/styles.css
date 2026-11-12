@@ -77,6 +77,24 @@ body {
   display: block;
 }
 
+/*
+ * While a step waits for an answer the floor goes dark behind its panel, labels
+ * and all, so it is plain that the floor is not what to answer.
+ */
+.stage::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: rgb(12 16 20 / 55%);
+  opacity: 0;
+  transition: opacity 150ms ease-out;
+  pointer-events: none;
+}
+
+.stage[data-floor="waiting"]::after {
+  opacity: 1;
+}
+
 .hotspot {
   position: absolute;
   display: flex;
@@ -340,6 +358,134 @@ body {
   border-radius: 4px;
   background: var(--paper);
   box-shadow: 0 8px 28px rgb(0 0 0 / 45%);
+}
+
+/* A step waiting for an answer stands plainly in front of the header's cards. */
+.panel:not(.panel-result) {
+  outline: 3px solid var(--highlight);
+  box-shadow:
+    0 0 0 6px rgb(12 16 20 / 35%),
+    0 16px 48px rgb(0 0 0 / 65%);
+}
+
+/* The inbox waits for nothing, so it does not stand out as a step that waits. */
+.panel.panel-inbox {
+  outline: none;
+  box-shadow: 0 8px 28px rgb(0 0 0 / 45%);
+}
+
+.panel .inbox {
+  margin: 8px 0 4px;
+}
+
+/*
+ * Closed, the inbox is only its list, small at the top right, above the places
+ * on the floor, so that every one of them can be clicked from the start.
+ */
+.panel.panel-inbox-closed {
+  width: min(380px, calc(100% - 24px));
+  max-height: 240px;
+  padding: 0 14px 6px;
+}
+
+.panel.panel-inbox-closed > p.step-tag {
+  margin: 0 -14px;
+  padding: 5px 14px;
+}
+
+.panel.panel-inbox-closed .inbox {
+  margin: 6px 0 0;
+}
+
+.panel .inbox-list {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  margin: 0 0 4px;
+  padding: 0;
+  list-style: none;
+}
+
+.panel button.inbox-item {
+  width: 100%;
+  padding: 3px 10px;
+  border: none;
+  border-left: 3px solid transparent;
+  border-radius: 0;
+  color: var(--ink);
+  font-size: 0.875rem;
+  text-align: left;
+}
+
+.panel button.inbox-item[data-to-answer="true"] {
+  font-weight: 600;
+}
+
+.panel button.inbox-item[aria-current="true"] {
+  border-left-color: var(--accent);
+  background: #eef3f8;
+}
+
+.panel .inbox-to-read {
+  color: var(--muted);
+  font-weight: 400;
+}
+
+.panel button.inbox-hide {
+  font-size: 0.8125rem;
+}
+
+/* What landed as the month closed, each a short section of the official story. */
+.landed-list {
+  margin: 0 0 14px;
+}
+
+.landed {
+  margin: 6px 0;
+  padding: 6px 12px;
+  border-left: 4px solid var(--accent);
+  background: #f4f6f8;
+}
+
+.panel .landed-kind {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.panel .landed .eyebrow {
+  margin: 0;
+}
+
+.panel .landed-title {
+  margin: 2px 0 4px;
+  color: var(--ink);
+  font-size: 1rem;
+  letter-spacing: normal;
+  text-transform: none;
+}
+
+.panel .landed p:last-child {
+  margin-bottom: 0;
+}
+
+/* What kind of step it is, and where it stands, in a band across the panel's top. */
+.panel > p.step-tag {
+  margin: -14px -20px 8px;
+  padding: 5px 20px;
+  background: var(--ink);
+  color: var(--highlight);
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.panel[data-look] > p.step-tag {
+  margin: 0 -20px;
 }
 
 .panel-wide {
@@ -631,11 +777,6 @@ body {
 
 .scene-with-you::after {
   content: ":";
-}
-
-/* A line that says nothing of note, such as a nod hello. */
-.scene-plain {
-  color: var(--muted);
 }
 
 .scene-choices {

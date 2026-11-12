@@ -82,20 +82,30 @@ function problemsWith(view: PlayerView): string[] {
 }
 
 /**
+ * Which hint the step has: on the floor with something in the inbox to answer,
+ * the inbox's, by whether a place on the floor can still be taken.
+ */
+function hintOf(view: PlayerView): string {
+  const { step, waiting, choices } = view;
+  if (waiting || step.kind === "actions") return step.kind;
+  return choices.some((c) => c.type === "action") ? "inbox" : "inboxOnly";
+}
+
+/**
  * Whether the player had a real choice about at least one action this month:
  * a place on the floor to pick with an action left, or an answer that costs
  * one beside one that does not.
  */
 function aChoiceAbout(views: readonly PlayerView[]): boolean {
-  return views.some(({ step, choices, actions }) =>
-    step.kind === "actions"
-      ? actions.remaining > 0 &&
-        choices.filter((c) => c.type === "action").length >= 2
-      : step.kind === "notification" &&
+  return views.some(
+    ({ step, choices, actions }) =>
+      (actions.remaining > 0 &&
+        choices.filter((c) => c.type === "action").length >= 2) ||
+      (step.kind === "notification" &&
         step.options.some(
           (o) => o.affordable && o.costLabel !== gameContent.ui.freeLabel,
         ) &&
-        step.options.some((o) => o.costLabel === gameContent.ui.freeLabel),
+        step.options.some((o) => o.costLabel === gameContent.ui.freeLabel)),
   );
 }
 
@@ -116,7 +126,7 @@ function play(seed: number, name: StyleName, style: Style) {
   const owner = `${name} seed ${String(seed)}`;
   let demotedIn: number | null = null;
   for (const [i, view] of views.entries()) {
-    kindsSeen.add(view.step.kind);
+    kindsSeen.add(hintOf(view));
     for (const problem of problemsWith(view)) {
       problems.push(
         `${owner} month ${String(view.month)} ${view.step.kind}: ${problem}`,

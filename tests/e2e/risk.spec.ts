@@ -20,7 +20,7 @@ test("a hidden risk lands on the player", async ({ page }) => {
   await page.locator('[data-testid^="scene-option-"]').first().click();
 
   const landed = page
-    .getByTestId("panel-move")
+    .getByTestId("panel-story")
     .filter({ hasText: "correction to the minutes" });
   await continueUntil(page, landed);
 

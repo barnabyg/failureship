@@ -413,13 +413,13 @@ describe("what is written", () => {
     expect(() => parseContent(base)).toThrow(ContentError);
   });
 
-  it("refuses a sign that names nobody", () => {
+  it("refuses a sign that names anyone but whose row it is in", () => {
     const base = raw();
     base.reputation.signs = [
-      { ...sign("a", 1, 2, 0), text: "Someone is there." },
+      { ...sign("a", 1, 2, 0), text: "Looks at {holder}." },
       sign("b", 0, 1, 2),
     ];
-    expect(() => parseContent(base)).toThrow(/\{who\}/);
+    expect(() => parseContent(base)).toThrow(/\{holder\}/);
   });
 
   it("refuses news with no one for it to reach", () => {
@@ -449,29 +449,44 @@ describe("the real content", () => {
     expect(gameContent.reputation?.travel.hopsPerMonth).toBeGreaterThan(0);
   });
 
-  it("gives every Scene regard for those who are not bosses", () => {
-    const run = startRun({ seed: 1, content: gameContent });
-    let view = run.view();
-    while (view.step.kind !== "scene") {
-      const { step } = view;
-      const free =
-        step.kind === "notification"
-          ? step.options.find((o) => o.costLabel === "Costs nothing")
-          : undefined;
-      const meeting = view.choices.find(
-        (c) => c.type === "action" && c.actionId.startsWith("meeting"),
-      );
-      view = run.choose(
-        step.kind === "notification" && free
-          ? {
-              type: "notification",
-              notificationId: step.id,
-              optionId: free.id,
-            }
-          : (meeting ?? (view.choices[0] as Choice)),
-      );
-    }
+  it("shows regard for those who are not bosses, leaving out the plain", () => {
+    const firstScene = (seed: number) => {
+      const run = startRun({ seed, content: gameContent });
+      let view = run.view();
+      while (view.step.kind !== "scene") {
+        const { step } = view;
+        const free =
+          step.kind === "notification"
+            ? step.options.find((o) => o.costLabel === "Costs nothing")
+            : undefined;
+        const meeting = view.choices.find(
+          (c) => c.type === "action" && c.actionId.startsWith("meeting"),
+        );
+        view = run.choose(
+          step.kind === "notification" && free
+            ? {
+                type: "notification",
+                notificationId: step.id,
+                optionId: free.id,
+              }
+            : (meeting ?? (view.choices[0] as Choice)),
+        );
+      }
+      return view.step;
+    };
+    const signs = gameContent.reputation?.signs ?? [];
+    const plain = signs.filter((s) => s.plain).map((s) => s.text);
+    const telling = signs.filter((s) => !s.plain).map((s) => s.text);
+    // Four people who are not bosses, in each of ten deals' first meeting.
+    const shown = Array.from({ length: 10 }, (_, i) =>
+      regardIn(firstScene(i + 1)).map((r) => r.text),
+    );
 
-    expect(regardIn(view.step).length).toBe(4);
+    expect(shown.flat().length).toBeGreaterThan(0);
+    expect(shown.flat().length).toBeLessThan(40);
+    for (const text of shown.flat()) {
+      expect(telling).toContain(text);
+      expect(plain).not.toContain(text);
+    }
   });
 });

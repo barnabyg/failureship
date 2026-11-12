@@ -11,6 +11,7 @@ import {
 } from "../../src/engine";
 import { readHiddenTruth } from "../../src/engine/hidden-truth";
 import { action, emptyMonthRaw, floorOwn, withoutSeatEvents } from "./fixture";
+import { landedIn } from "./landed";
 
 const SEEDS = Array.from({ length: 200 }, (_, i) => i + 1);
 const notice = { title: "Done", body: "Done." };
@@ -376,7 +377,7 @@ describe("Deliver", () => {
         reachFloor(run);
         run.choose({ type: "action", actionId: "work" });
         let view = run.view();
-        while (view.step.kind !== "move" && view.step.kind !== "story") {
+        while (view.step.kind !== "story") {
           const meeting = view.choices.find(
             (c) => c.type === "action" && c.actionId === "meeting",
           );
@@ -384,7 +385,9 @@ describe("Deliver", () => {
           if (!next) throw new Error(`Stuck at ${view.step.kind}.`);
           view = run.choose(next);
         }
-        return view.step.kind === "move" && view.step.title === credit?.title;
+        return landedIn(view).some(
+          (l) => l.kind === "move" && l.title === credit?.title,
+        );
       });
 
     expect(creditLanded("practitioner")).toBe(true);

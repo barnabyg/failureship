@@ -1,5 +1,10 @@
 import { expect, test } from "@playwright/test";
-import { answerAnyNotification, attendAndFinishMonth, playUntil } from "./play";
+import {
+  answerAnyNotification,
+  attendAndFinishMonth,
+  openInboxIfAny,
+  playUntil,
+} from "./play";
 
 // On this seed the desk move of month 4 goes unnoticed at the time, and comes back
 // in month 6. Leaving the training undone in month 2 is what the committee then
@@ -20,6 +25,14 @@ test("the desk with no window comes back as a Bill in a later month", async ({
   await attendAndFinishMonth(page);
 
   await expect(page.getByTestId("month")).toContainText("6 of 18");
+  // It backfires on the player, so it offers Escapes first. Taking it, the
+  // committee's e-mail arrives as it always did. Both wait in the inbox.
+  await openInboxIfAny(page);
+  await expect(page.getByTestId("panel-escape")).toContainText(
+    "Health and Safety",
+  );
+  await page.getByTestId("escape-safety-take-it").click();
+  await openInboxIfAny(page);
   await expect(page.getByTestId("panel-notification")).toContainText(
     "Health and Safety",
   );

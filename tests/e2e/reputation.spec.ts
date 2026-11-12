@@ -21,20 +21,25 @@ async function reviewThenNextMeeting(page: Page, optionId: string) {
 test("something public reaches a connected Character, who behaves differently", async ({
   page,
 }) => {
+  // A plain regard, such as a nod hello, is left out of the row.
   const regard = page
-    .getByTestId("regard")
-    .filter({ hasText: "Office Co-ordinator" });
+    .getByTestId("person")
+    .filter({
+      has: page.locator("strong", { hasText: /^Office Co-ordinator$/ }),
+    })
+    .getByTestId("regard");
+  const regardNow = async () => (await regard.allInnerTexts()).join("");
 
   await freshRun(page, "/?seed=29&month=2");
   await reviewThenNextMeeting(page, "blame-supplier");
-  const without = await regard.innerText();
+  const without = await regardNow();
 
   await freshRun(page, "/?seed=29&month=2");
   await reviewThenNextMeeting(page, "blame-priya");
-  const after = await regard.innerText();
+  const after = await regardNow();
 
   expect(after).not.toBe(without);
-  expect(after).toMatch(/stops talking|misses you out/);
+  expect(after).toMatch(/Stops talking|Thanks everyone except you/);
   await expect(page.locator(".panel")).not.toContainText(
     "heard it from the Senior Analyst",
   );

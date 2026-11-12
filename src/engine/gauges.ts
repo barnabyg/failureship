@@ -1,12 +1,14 @@
 import type { Content } from "./content";
-import type { State, Step } from "./state";
+import type { GaugeMove, Landing, State } from "./state";
 
 type Written = NonNullable<Content["gauges"]>[number];
 
 /**
  * The only place a Gauge is read. Gauges are the player's track record, so they
- * move only when a Thread plays out, and nothing in the rules but Milestones reads
- * them: never the Power Map, a hidden risk or anyone's belief.
+ * move only when a Thread or an Escape plays out. Milestones read them, and one
+ * rule does: a bolder Escape needs the Gauge Escapes raise, Teflon, at its
+ * `minTeflon`. Nothing else does: never the Power Map, a hidden risk or anyone's
+ * belief.
  */
 export function startingGauges(
   content: Content,
@@ -24,17 +26,48 @@ export function startingGauges(
 /** A Thread has played out: its Gauges move as the month closes. */
 export function gaugesFromThread(
   state: State,
-  moves: readonly { gauge: string; by: number; note: string }[],
+  moves: readonly GaugeMove[],
 ): void {
   state.gaugesDue.push(...moves);
+}
+
+/**
+ * An Escape was tried: the Gauge Escapes raise goes up as the month closes if it
+ * worked, and down if it failed.
+ */
+export function gaugeFromEscape(
+  state: State,
+  content: Content,
+  worked: boolean,
+  note: string,
+): void {
+  const rules = content.escapes;
+  if (!rules) return;
+  const by = worked ? rules.by : rules.failed.by;
+  state.gaugesDue.push({ gauge: rules.gauge, by, note });
+}
+
+/**
+ * What an Escape with a minimum needs, while the Gauge Escapes raise is below it:
+ * the Gauge's label and the level. Undefined if it can be played.
+ */
+export function gaugeNeeded(
+  state: State,
+  content: Content,
+  min: number | undefined,
+): { label: string; at: number } | undefined {
+  const gauge = content.gauges?.find((g) => g.id === content.escapes?.gauge);
+  if (min === undefined || !gauge) return undefined;
+  const now = state.gauges[gauge.id] ?? gauge.start;
+  return now < min ? { label: gauge.label, at: min } : undefined;
 }
 
 function clamp(gauge: Written, value: number): number {
   return Math.min(gauge.max, Math.max(gauge.min, value));
 }
 
-/** As the month closes, Gauges move, and any Milestone reached is told first. */
-export function closeGauges(state: State, content: Content): Step | null {
+/** As the month closes, Gauges move, and any Milestone reached is told in the official story. */
+export function closeGauges(state: State, content: Content): Landing | null {
   for (const move of state.gaugesDue.splice(0)) {
     const gauge = content.gauges?.find((g) => g.id === move.gauge);
     if (!gauge) continue;

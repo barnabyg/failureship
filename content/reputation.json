@@ -15,7 +15,7 @@
   "signs": [
     {
       "id": "saves-a-seat",
-      "text": "{who} moves a folder off the chair beside them when you come in.",
+      "text": "Saves you a seat.",
       "likelihood": {
         "warm": 6,
         "neutral": 1,
@@ -24,7 +24,7 @@
     },
     {
       "id": "asks-your-view",
-      "text": "{who} glances across at you before they answer, to see how you are taking it.",
+      "text": "Checks your reaction first.",
       "likelihood": {
         "warm": 5,
         "neutral": 2,
@@ -33,7 +33,7 @@
     },
     {
       "id": "nods-hello",
-      "text": "{who} nods when you come in, then goes back to their screen.",
+      "text": "Nods, then back to their screen.",
       "plain": true,
       "likelihood": {
         "warm": 2,
@@ -43,7 +43,7 @@
     },
     {
       "id": "reads-their-pad",
-      "text": "{who} is reading their own notepad, closely, as they do with everyone.",
+      "text": "Reads their own notepad, closely.",
       "plain": true,
       "likelihood": {
         "warm": 1,
@@ -53,7 +53,7 @@
     },
     {
       "id": "stops-talking",
-      "text": "{who} stops talking as you come in, and starts again about something else.",
+      "text": "Stops talking; changes subject.",
       "likelihood": {
         "warm": 0,
         "neutral": 1,
@@ -62,7 +62,7 @@
     },
     {
       "id": "copies-someone-else",
-      "text": "{who} thanks the room for coming, by name, and misses you out.",
+      "text": "Thanks everyone except you.",
       "likelihood": {
         "warm": 0,
         "neutral": 1,
