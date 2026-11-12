@@ -18,7 +18,9 @@ test("take the Board's tricky question offline, and hear from the Board Office a
   await page.getByTestId("hotspot-meeting-the-board").click();
   const board = page.getByTestId("panel-scene");
   await expect(board).toContainText("The Board");
-  await expect(board).toContainText("when your boss asks, warmly");
+  await expect(board).toContainText(
+    "twelve at the Board, your boss asks, warmly",
+  );
   await expect(board).toContainText("How the question is asked");
   await page.getByTestId("scene-option-take-it-offline").click();
   await expect(happened(page)).toContainText("would like the answer offline");

@@ -340,7 +340,7 @@ export const changing = z.strictObject({
   whistleblower: z.strictObject({
     /** How much of what a whistleblower is seen doing is one of their own signs. */
     share: z.number().gt(0).lt(1),
-    /** Shown beside what any Believer might show. Each says {who}. */
+    /** Shown beside what any Believer might show, in their row, so without their name. */
     signs: z.array(
       z.strictObject({
         id,

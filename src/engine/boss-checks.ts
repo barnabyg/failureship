@@ -171,11 +171,6 @@ export function findBrokenReputation(
         "Reputation sign",
       )
     : [];
-  for (const sign of written?.signs ?? []) {
-    if (!sign.text.includes("{who}")) {
-      problems.push(`Reputation sign "${sign.id}" needs to say {who}.`);
-    }
-  }
   const outcomes = [
     ...content.scenes.flatMap((s) => s.options.flatMap((o) => o.results)),
     ...everyNotification(content).flatMap((n) =>

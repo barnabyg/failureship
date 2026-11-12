@@ -14,14 +14,14 @@ export function treatmentOf(
   scene: SceneView,
   place: "boss" | "head" = "boss",
 ): string | null {
-  return scene.people.find((p) => p.place === place)?.withYou?.text ?? null;
+  return scene.people.find((p) => p.place === place)?.withYou ?? null;
 }
 
 /** How everyone else present is with the player. */
 export function regardIn(scene: SceneView) {
   return scene.people.flatMap((p) =>
     p.place === null && p.withYou !== null
-      ? [{ who: p.name, text: p.withYou.text }]
+      ? [{ who: p.name, text: p.withYou }]
       : [],
   );
 }

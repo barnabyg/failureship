@@ -88,7 +88,7 @@ describe("the seeds the browser tests walk", () => {
     expect(views[0]?.month).toBe(14);
     expect(views[0]?.job.id).toBe("middle-manager");
     expect(board?.step.kind === "scene" && board.step.narration[0]).toContain(
-      "when your boss asks, warmly",
+      "twelve at the Board, your boss asks, warmly",
     );
     expect(chased?.month).toBe(15);
     expect(chased?.job.id).toBe("middle-manager");

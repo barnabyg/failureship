@@ -295,7 +295,7 @@ describe("the real month", () => {
     };
     const firstSign = (seed: number) => meeting(seed).signs[0]?.text;
     const meetingSigns = (seed: number) =>
-      behavioursIn(meeting(seed)).map((b) => b.text);
+      behavioursIn(meeting(seed), gameContent);
 
     expect(holderInMeeting(283)).toBe("boss");
     expect(holderInMeeting(106)).toBe("analyst");
@@ -305,12 +305,14 @@ describe("the real month", () => {
     expect(of(106).projects?.nature).toBe("useful");
     expect(of(283).analyst?.nature).toBe("useful");
     expect(of(106).analyst?.nature).toBe("dangerous");
-    expect(meetingSigns(58)).toContain(
-      "Your boss overruns the meeting by twenty minutes, then schedules another to cover what was missed.",
-    );
-    expect(meetingSigns(57)).toContain(
-      "The Project Co-ordinator marks a late task as complete, and opens a new one with the same name.",
-    );
+    expect(meetingSigns(58)).toContainEqual({
+      who: "your boss",
+      text: "Overruns, then schedules another meeting.",
+    });
+    expect(meetingSigns(57)).toContainEqual({
+      who: "the Project Co-ordinator",
+      text: "Closes, then reopens, late tasks.",
+    });
     expect(of(283).boss?.kind).toBe("incompetent");
     expect(of(106).boss?.kind).toBe("believer");
   });

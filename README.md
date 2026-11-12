@@ -173,8 +173,8 @@ How to run the checks and tests is in [AGENTS.md](AGENTS.md#verifying).
   checks beside it: `truth-checks.ts` for the hidden truth and its signs, `boss-checks.ts` for the
   boss, going over the head, Demands and reputation, `consequence-checks.ts` for what choices lead
   to, `word-checks.ts` for Promises and Deals, and `floor-checks.ts`, `review-checks.ts`,
-  `rival-checks.ts`, `plan-checks.ts` and `vacancy-checks.ts` for floors, reviews, Rivals, Grand
-  Plans and seats.
+  `rival-checks.ts`, `plan-checks.ts`, `vacancy-checks.ts` and `scene-checks.ts` for floors,
+  reviews, Rivals, Grand Plans, seats and each Scene's word budget.
 - `src/tower/` draws the floor the view names, and holds no rules.
 - `src/ui/` holds the React panels over the tower: `App.tsx` wires them to the run, and rides the
   lift when the floor changes, and `TowerStage.tsx` the tower's hotspots. `panels.tsx` picks each

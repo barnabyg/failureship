@@ -140,10 +140,11 @@ export function findBrokenBehaviours(content: Content): string[] {
   const nameParts = content.characters.flatMap((c) => c.name.split(" "));
   for (const b of content.behaviours) {
     const owner = `Behaviour "${b.id}"`;
-    for (const written of [b.text, b.clue ?? "{who}"]) {
-      if (!written.includes("{who}")) {
-        problems.push(`${owner} needs to say {who}.`);
-      }
+    // Shown in their own row, it need not say who; kept in the Notebook, it must.
+    if (b.clue !== undefined && !b.clue.includes("{who}")) {
+      problems.push(`${owner}'s clue needs to say {who}.`);
+    }
+    for (const written of [b.text, b.clue ?? ""]) {
       for (const [, token] of written.matchAll(/\{(\w+)\}/g)) {
         if (token !== "who") {
           problems.push(`${owner} uses unknown token "{${token ?? ""}}".`);

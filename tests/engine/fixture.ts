@@ -248,6 +248,7 @@ export function fixtureRaw() {
     behaviours: [] as {
       id: string;
       text: string;
+      clue?: string;
       roles?: string[];
       likelihood: {
         believer: number;

@@ -3,6 +3,7 @@ import {
   answerAnyNotification,
   freshRun,
   happened,
+  openMeeting,
   skipTheReport,
 } from "./play";
 
@@ -56,24 +57,34 @@ test("the meeting shows a dealt sign for each person present", async ({
 
   const signs = page.getByTestId("behaviour");
   await expect(signs).toHaveCount(6);
-  await expect(signs.filter({ hasText: /^Your boss (?!'s)/ })).toHaveCount(1);
+  const boss = page
+    .getByTestId("person")
+    .filter({ has: page.getByTestId("treatment") });
+  await expect(boss.getByTestId("behaviour")).toHaveCount(1);
   await expect(signs.filter({ hasText: "{who}" })).toHaveCount(0);
 });
 
+/** What the person with this job title was seen doing, in their own row. */
+function behaviourOf(page: Page, title: RegExp) {
+  return page
+    .getByTestId("person")
+    .filter({ has: page.locator("strong", { hasText: title }) })
+    .getByTestId("behaviour");
+}
+
 // The real-content test keeps these signs true of seeds 58 and 57.
 test("a Scene shows behaviour that belongs to a role", async ({ page }) => {
-  const signs = page.getByTestId("behaviour");
   await reachMeeting(page, "report", 58);
-  await expect(
-    signs.filter({ hasText: "Your boss overruns the meeting" }),
-  ).toHaveCount(1);
+  await expect(behaviourOf(page, /^Team Leader/)).toContainText(
+    "Overruns, then schedules another meeting.",
+  );
 
   await freshRun(page, "/?seed=57");
   await answerAnyNotification(page);
   await page.getByTestId("hotspot-meeting").click();
-  await expect(
-    signs.filter({ hasText: "The Project Co-ordinator marks a late task" }),
-  ).toHaveCount(1);
+  await expect(behaviourOf(page, /^Project Co-ordinator$/)).toContainText(
+    "Closes, then reopens, late tasks.",
+  );
 });
 
 test("the same choice lands differently when someone else holds influence", async ({
@@ -166,16 +177,43 @@ test("each Character's row holds what they were seen doing", async ({
   const rows = page.getByTestId("person");
   await expect(rows).toHaveCount(6);
   await expect(page.getByTestId("behaviour")).toHaveCount(6);
-  const analyst = rows.filter({
-    has: page.locator("strong", { hasText: /^Senior Analyst$/ }),
-  });
-  await expect(analyst.getByTestId("behaviour")).toContainText(
-    "the Senior Analyst",
-    { ignoreCase: true },
+  // Only a Senior Analyst can rework the figures, and how they are with you
+  // is folded into the same line.
+  const analyst = behaviourOf(page, /^Senior Analyst$/);
+  await expect(analyst).toHaveText(
+    "Circulates corrected figures to everyone. Checks your reaction first.",
   );
-  // The bosses come first, and say in their own row how they are with you.
+  await expect(analyst.getByTestId("regard")).toHaveText(
+    "Checks your reaction first.",
+  );
+  // The bosses come first, and say on a line of their own how they are with you.
   await expect(rows.nth(0).getByTestId("head-treatment")).toHaveCount(1);
   await expect(rows.nth(1).getByTestId("treatment")).toHaveCount(1);
+});
+
+// The Recruitment Panel has the most people in a Floor 1 meeting, and was the longest read.
+test("a meeting's people and choices fit without scrolling at 1600x900", async ({
+  page,
+}) => {
+  await page.setViewportSize({ width: 1600, height: 900 });
+  await freshRun(page, "/?seed=2&month=7");
+  await answerAnyNotification(page);
+  await openMeeting(page);
+
+  const panel = page.getByTestId("panel-scene");
+  await expect(panel).toContainText("Recruitment Panel");
+  const rows = page.getByTestId("person");
+  expect(await rows.count()).toBeGreaterThan(4);
+  for (const row of await rows.all()) {
+    await expect(row).toBeInViewport({ ratio: 1 });
+  }
+  const options = page.locator('[data-testid^="scene-option-"]');
+  for (const option of await options.all()) {
+    await expect(option).toBeInViewport({ ratio: 1 });
+  }
+  expect(await panel.evaluate((el) => el.scrollHeight > el.clientHeight)).toBe(
+    false,
+  );
 });
 
 for (const [width, height] of [

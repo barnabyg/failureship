@@ -338,11 +338,11 @@ describe("signs in content", () => {
       /no evidence/,
     ],
     [
-      "no {who} to fill in",
+      "a clue with no {who} to fill in",
       (b) => {
-        b.text = "Somebody is late.";
+        b.clue = "Somebody was late.";
       },
-      /\{who\}/,
+      /clue needs to say \{who\}/,
     ],
     [
       "a token it cannot fill in",

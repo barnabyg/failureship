@@ -189,7 +189,10 @@ Actions a month, months in a run and the cost of each choice.
 What Characters can be seen doing. When a Scene opens, each person present shows one,
 chosen by their dealt kind.
 
-- A behaviour says `{who}`, and is written for a kind of person, never a named one.
+- A behaviour is shown in its person's row, so it is written without their name, as what they do:
+  "Arrives late, with an explanation." Keep it to about five words, as a Scene's
+  [word budget](#scenesjson) counts it. A `clue` says `{who}`. Either is written for a kind of
+  person, never a named one.
 - `likelihood` gives the weight for each kind. Every behaviour must be possible from at
   least two kinds, with different likelihoods, or it is refused.
 - `"roles": ["team-leader"]` means only a Character with one of those roles in
@@ -237,8 +240,9 @@ leaves. The player is not told. The results screen says who changed, from what t
 - `threshold` is the total weight at which a Believer changes, checked as each month opens. Someone
   changes once. Other kinds never change.
 - `became` is what the results screen calls each change.
-- `whistleblower.signs` say `{who}` and are shown, by `weight`, beside what any Believer of their
-  role might show. A `clue` makes the Notebook keep one. A month after changing, a whistleblower
+- `whistleblower.signs` are shown in the whistleblower's row, by `weight`, beside what any
+  Believer of their role might show, so, like a behaviour, they need not say `{who}`. A `clue`
+  makes the Notebook keep one. A month after changing, a whistleblower
   sends the first of `reports` whose `when` holds, a Bill as in [`threads.json`](#threadsjson): what
   they know about goes first. Failing that, they bring out the first hidden risk still waiting,
   whatever its own route, or else send the last report, which needs no `when`. `share` is how much of
@@ -665,11 +669,12 @@ whom it was done in front of, or to. They know at once. A `falseStory` is news t
   moves their belief. So the same deed reaches different people on different deals.
 - `mood` says when the belief of anyone but your bosses shows. Your bosses have their own, in
   [`balance.json`](#balancejson) and [`over-head.json`](#over-headjson).
-- `signs` show how everyone else present in a Scene is with the player. Each says `{who}`, and
+- `signs` show how everyone else present in a Scene is with the player, folded into the line of
+  what they were seen doing, so each is a few words without their name: "Saves you a seat." Each
   must be possible from at least two of `warm`, `neutral` and `cold`, so that no sign settles it.
-  `"plain": true` marks one that says nothing of note, such as a nod hello, and the Scene shows
-  it dimmed. The signs in [`boss.json`](#bossjson) and [`over-head.json`](#over-headjson) can
-  carry it too.
+  `"plain": true` marks one that says nothing of note, such as a nod hello, and the Scene leaves
+  it out. The signs in [`boss.json`](#bossjson) and [`over-head.json`](#over-headjson) can carry
+  it too, and are shown on a line of their own in the boss's row, under With you.
 - `believes` and `how` are the results screen's words. `how.heardFrom` says `{who}`.
 - `falseStories` says how a false story is found out. As each month opens, before news moves, each
   person who heard one in an earlier month sees through it at the seeded chance in `foundOut` for
@@ -747,11 +752,11 @@ meeting has everyone in it. `{plan}` and `{keeper}` say your boss's [Grand Plan]
 and who really has what it needs.
 
 - A sign can have a `clue`, for the Notebook.
-- The Scene shows one row to each person present, your boss's boss and your boss first and then
-  the Org Chart's order. A sign whose text names only one person present, by `{holder}`,
-  `{ignored}`, `{bystander}`, `{keeper}` or `{competitor}`, goes in their row. One that names two
-  or more, or nobody present, goes above the rows, headed by its `label`, so write `label` as
-  the question the sign answers, such as "Who everyone looks at".
+- The Scene shows one row to each person present with something telling to show, your boss's
+  boss and your boss first and then the Org Chart's order. A sign whose text names only one
+  person present, by `{holder}`, `{ignored}`, `{bystander}`, `{keeper}` or `{competitor}`, goes
+  in their row. One that names two or more, or nobody present, goes above the rows, headed by its
+  `label`, so write `label` as the question the sign answers, such as "Who everyone looks at".
 - An option's `requires` hides it until that holds. See [Conditions](#conditions).
 - An option with `"about": "lost-list"` appears once the player has been told that Hidden Fact
   about someone, true or not, and can say `{subject}` for that person.
@@ -777,6 +782,20 @@ and who really has what it needs.
 - A Scene that data cannot express can name a `script`, which is passed to `startRun` in
   `sceneScripts`. This format is a trial, as the spec, issue #1, says.
 - A Scene with a `quarter` is a quarterly review, as [Quarterly reviews](#quarterly-reviews) says.
+
+A Scene is read for who looks at whom, not for prose, so it is held to a word budget:
+
+- Before its options, a Scene can show at most 120 words, however it is dealt. That counts its
+  `narration`, every sign's `label` and `text` (and a `competitor`'s `label` and longest sign),
+  and a row for each person in its `cast`, plus one for whoever competes, each with the longest
+  behaviour they can show and the longest regard, or, for the boss and the boss's boss, the
+  longest treatment. A plain line is left out, so it is not counted, and a quarterly review shows
+  no behaviours. Each part, such as `{holder}` or `{plan}`, counts as one word, as a name is read
+  at a glance. Names and job titles at the head of each row are not counted.
+- Write `narration` as one sentence, and each sign as one or two short ones.
+- An option says at most 8 words, counted the same way, so that it fits on one line.
+
+`scene-checks.ts` refuses a Scene over either limit.
 
 ## `sources.json`
 
