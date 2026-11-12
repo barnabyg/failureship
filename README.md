@@ -64,8 +64,9 @@ some a **Deal**, in which each side offers something. Whether you are believed, 
 word from someone counts, goes by who they really are and what has reached them. **Your word
 given** shows your Promises, Deals and favours, at no cost, and nothing of what others owe.
 
-**Teflon**, in the header, is your track record, not your danger, and rises with each Escape that
-works. **Fawning** is how well sucking up to your managers is paying off, not whether they like
+**Teflon**, in the header, is your track record, not your danger. It rises with each Escape that
+works and falls with each that fails, and the bolder Escapes, such as blaming your boss, stay locked
+until you have enough of it. **Fawning** is how well sucking up to your managers is paying off, not whether they like
 you, and plays no part in promotion. Each moves only when a Thread or an Escape plays out, and the
 official story says which. Some levels earn a Milestone.
 **Official standing** is a bar from red to green, with no number: how you would fare on paper if a

@@ -46,3 +46,17 @@ test("an Escape that fails is worse, and the results screen says why", async ({
   await expect(row).toContainText("It did not work.");
   await expect(row).toContainText("Chief Executive");
 });
+
+// tests/engine/escapes.test.ts keeps this seed true too: having blamed someone
+// and delivered on the way, the player on seed 1 is blamed for the One tool
+// Grand Plan in month 7, with Teflon still below what burying it needs.
+test("a locked Escape shows the Teflon it needs, and cannot be chosen", async ({
+  page,
+}) => {
+  await page.goto("/?seed=1&month=7&choose=blame-marjorie,deliver");
+  await playUntil(page, "panel-escape");
+  const locked = page.getByTestId("escape-one-tool-validation");
+  await expect(locked).toBeDisabled();
+  await expect(locked).toContainText("Needs Teflon 60");
+  await expect(page.getByTestId("escape-one-tool-take-it")).toBeEnabled();
+});

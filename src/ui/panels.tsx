@@ -227,6 +227,7 @@ function StepBody({ view, onChoose, onRestart, onNewRun }: StepPanelProps) {
                 type="button"
                 className="option"
                 data-testid={`escape-${escape.id}`}
+                disabled={escape.needs !== undefined}
                 onClick={() => {
                   onChoose({
                     type: "escape",
@@ -236,6 +237,13 @@ function StepBody({ view, onChoose, onRestart, onNewRun }: StepPanelProps) {
                 }}
               >
                 <span>{escape.label}</span>
+                {escape.needs && (
+                  <span className="option-cost">
+                    {panelText.escapeNeeds
+                      .replace("{gauge}", escape.needs.label)
+                      .replace("{at}", String(escape.needs.at))}
+                  </span>
+                )}
               </button>
             ))}
           </div>

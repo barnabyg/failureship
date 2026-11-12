@@ -180,6 +180,7 @@
             },
             {
               "id": "one-tool-validation",
+              "minTeflon": 60,
               "kind": "bury",
               "label": "Reply that the write-up's findings are being validated",
               "chance": 0.4,
@@ -444,6 +445,7 @@
           "escapes": [
             {
               "id": "excellence-blame-the-programme",
+              "minTeflon": 60,
               "kind": "blame",
               "label": "Say the Programme Manager owned the Centre's launch",
               "blames": "programme",
@@ -582,6 +584,7 @@
           "escapes": [
             {
               "id": "one-roadmap-blame-the-programme",
+              "minTeflon": 60,
               "kind": "blame",
               "label": "Say the Programme Manager owned delivery",
               "blames": "programme",

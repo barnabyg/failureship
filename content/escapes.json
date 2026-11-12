@@ -1,6 +1,10 @@
 {
   "gauge": "teflon",
   "by": 10,
+  "failed": {
+    "by": -10,
+    "note": "You tried to get out of \"{what}\", and it stuck."
+  },
   "blamed": {
     "about": "blamed-for-yours",
     "text": "You put \"{what}\" down to them.",

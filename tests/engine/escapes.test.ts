@@ -9,7 +9,9 @@ import {
   type PlayerView,
   type Run,
 } from "../../src/engine";
+import { everyBill } from "../../src/engine/content";
 import { readHiddenTruth } from "../../src/engine/hidden-truth";
+import { plainChoice, playToMonth } from "../../src/ui/later-month";
 import { fixtureRaw, floorOwn } from "./fixture";
 
 const certain = { believer: 1, incompetent: 1, practitioner: 1 };
@@ -17,6 +19,7 @@ const certain = { believer: 1, incompetent: 1, practitioner: 1 };
 const rules = {
   gauge: "teflon",
   by: 10,
+  failed: { by: -10, note: 'STUCK "{what}"' },
   blamed: { about: "blamed-for-yours", text: 'BLAMED for "{what}"', warm: -3 },
   why: {
     dangerous: "DANGEROUS {name}: {fact}",
@@ -233,7 +236,12 @@ describe("an Escape", () => {
       ),
     ).toBe(true);
     expect(truth.bossBelief).toBeLessThan(readHiddenTruth(taken).bossBelief);
-    expect(teflon(views.at(-1))).toBe(50);
+    // Failing lowers Teflon, and the story says why.
+    expect(teflon(views.at(-1))).toBe(40);
+    const story = views.find((v) => v.step.kind === "story" && v.month === 3);
+    expect(story?.step).toMatchObject({
+      gauges: ['Teflon -10. STUCK "ON-YOU"'],
+    });
   });
 
   it("works when whoever it names has nothing on the player: Teflon rises, and the story reports it", () => {
@@ -297,6 +305,121 @@ describe("an Escape", () => {
     expect(escapesOf(views)[0]).toMatchObject({
       worked: false,
       why: ["WHY-FOUND"],
+    });
+  });
+});
+
+describe("an Escape with a minimum Teflon", () => {
+  /** The fixture with a minimum Teflon on lose-it, and Teflon starting where written. */
+  function gated(start: number) {
+    const base = raw({
+      escapes: escapes.map((e) =>
+        e.id === "lose-it" ? { ...e, minTeflon: 60 } : e,
+      ),
+    });
+    return parseContent({
+      ...base,
+      gauges: base.gauges.map((g) => ({ ...g, start })),
+    });
+  }
+
+  /** The view where the consequence lands, played plainly until then. */
+  function offered(content: Content): { run: Run; view: PlayerView } {
+    const run = startRun({ seed: 1, content });
+    let view = run.view();
+    while (view.step.kind !== "escape" && view.choices.length > 0) {
+      view = run.choose(view.choices[0] as Choice);
+    }
+    return { run, view };
+  }
+
+  it("is shown locked below it, with the Teflon it needs, and cannot be chosen", () => {
+    const { run, view } = offered(gated(50));
+
+    expect(view.step).toMatchObject({
+      kind: "escape",
+      escapes: expect.arrayContaining([
+        { id: "lose-it", label: "LOSE-IT", needs: { label: "Teflon", at: 60 } },
+      ]) as unknown,
+    });
+    const ids = view.choices.map((c) =>
+      c.type === "escape" ? c.escapeId : "",
+    );
+    expect(ids).toEqual(["blame-cal", "deny-it", "take-it"]);
+    expect(() =>
+      run.choose({ type: "escape", billId: "on-you", escapeId: "lose-it" }),
+    ).toThrow(/not available/);
+  });
+
+  it("can be chosen once Teflon reaches it", () => {
+    const { view } = offered(gated(60));
+
+    expect(view.step).toMatchObject({
+      kind: "escape",
+      escapes: expect.arrayContaining([
+        { id: "lose-it", label: "LOSE-IT", needs: undefined },
+      ]) as unknown,
+    });
+    expect(view.choices).toContainEqual({
+      type: "escape",
+      billId: "on-you",
+      escapeId: "lose-it",
+    });
+  });
+
+  it("is never on Take it, and is one Teflon can be below and reach", () => {
+    const withMin = (id: string, minTeflon: number) =>
+      raw({
+        escapes: escapes.map((e) => (e.id === id ? { ...e, minTeflon } : e)),
+      });
+    expect(() => parseContent(withMin("take-it", 60))).toThrow(ContentError);
+    expect(() => parseContent(withMin("lose-it", 0))).toThrow(
+      /needs "minTeflon" above 0, and at most 100/,
+    );
+    expect(() => parseContent(withMin("lose-it", 101))).toThrow(
+      /needs "minTeflon" above 0, and at most 100/,
+    );
+  });
+
+  it("gates the game's bolder Escapes, and never a whole list but Take it", () => {
+    const gatedIds = everyBill(gameContent).flatMap((b) =>
+      b.escapes.flatMap((e) =>
+        e.kind !== "take" && e.minTeflon !== undefined ? [e.id] : [],
+      ),
+    );
+    expect(gatedIds).toEqual(
+      expect.arrayContaining([
+        "invoice-blame-your-boss",
+        "letters-blame-your-boss",
+        "roadmap-blame-the-programme",
+        "one-tool-validation",
+      ]),
+    );
+    for (const bill of everyBill(gameContent)) {
+      if (bill.escapes.length === 0) continue;
+      const open = bill.escapes.filter(
+        (e) => e.kind !== "take" && e.minTeflon === undefined,
+      );
+      expect(open.length, bill.id).toBeGreaterThan(0);
+    }
+  });
+
+  it("keeps seed 1's One tool blame on the player in month 7, with burying it locked, for escape.spec.ts", () => {
+    const run = startRun({ seed: 1, content: gameContent });
+    let view = playToMonth(run, "7", "blame-marjorie,deliver");
+    while (view.step.kind !== "escape" && view.month === 7) {
+      view = run.choose(plainChoice(view));
+    }
+
+    expect(view.step).toMatchObject({
+      kind: "escape",
+      id: "one-tool-blamed-you",
+      escapes: expect.arrayContaining([
+        expect.objectContaining({
+          id: "one-tool-validation",
+          needs: { label: "Teflon", at: 60 },
+        }),
+      ]) as unknown,
     });
   });
 });

@@ -365,6 +365,7 @@
       "escapes": [
         {
           "id": "centre-blame-delivery",
+          "minTeflon": 60,
           "kind": "blame",
           "label": "Say the Service Delivery Lead was to staff it",
           "blames": "delivery",
@@ -665,6 +666,7 @@
       "escapes": [
         {
           "id": "invoice-blame-your-boss",
+          "minTeflon": 70,
           "kind": "blame",
           "label": "Say your boss hired the consultant, and you only signed",
           "blames": "{boss}",
@@ -794,6 +796,7 @@
       "escapes": [
         {
           "id": "letters-blame-your-boss",
+          "minTeflon": 70,
           "kind": "blame",
           "label": "Say your boss set the split, and you only signed",
           "blames": "{boss}",
@@ -979,6 +982,7 @@
       "escapes": [
         {
           "id": "roadmap-blame-the-programme",
+          "minTeflon": 60,
           "kind": "blame",
           "label": "Say the Programme Manager owns the dates",
           "blames": "programme",
@@ -1268,6 +1272,7 @@
         },
         {
           "id": "checks-reopen-the-review",
+          "minTeflon": 60,
           "kind": "bury",
           "label": "Ask for the review to be reopened, with terms of reference",
           "fails": {

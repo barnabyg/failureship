@@ -40,6 +40,8 @@ const tried = {
   fails: condition.optional(),
   /** An explicit bet: the seeded chance that it works, if nothing else fails it first. */
   chance: z.number().min(0).max(1).optional(),
+  /** The Teflon, the Gauge Escapes raise, it needs. Below it, it is shown locked. */
+  minTeflon: z.number().int().optional(),
   /** Moves the consequence elsewhere, and the official story reports it. */
   worked: z.strictObject({
     ...escapeEffect,
@@ -59,7 +61,7 @@ const tried = {
 
 /**
  * A way out, offered as a consequence of the player's bad behaviour lands on them.
- * Take it accepts the consequence as it is. A minimum Teflon can be added here.
+ * Take it accepts the consequence as it is, and is always open.
  */
 export const escape = z.discriminatedUnion("kind", [
   z.strictObject({
@@ -91,6 +93,8 @@ export const escapeRules = z.strictObject({
   /** The Gauge a working Escape raises, and by how much. */
   gauge: id,
   by: z.number().int().positive(),
+  /** How far a failed Escape lowers it, and the official story's line, which says {what}. */
+  failed: z.strictObject({ by: z.number().int().negative(), note: text }),
   /** What whoever the player blames keeps of it. Says {what}, the consequence. */
   blamed: z.strictObject({
     about: id,
