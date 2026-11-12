@@ -41,6 +41,8 @@ function arrived(views: readonly PlayerView[], idOrTitle: string) {
     (v) =>
       v.job.id === "middle-manager" &&
       ((v.step.kind === "notification" && v.step.id === idOrTitle) ||
+        (v.step.kind === "escape" &&
+          (v.step.id === idOrTitle || v.step.title === idOrTitle)) ||
         (v.step.kind === "move" && v.step.title === idOrTitle) ||
         (v.step.kind === "notice" && v.step.title === idOrTitle)),
   )?.month;
@@ -282,7 +284,8 @@ describe("One Roadmap's cover, apart from the Cost Challenge", () => {
   const blamed = (views: readonly PlayerView[]) =>
     views.some(
       (v) =>
-        v.step.kind === "move" && v.step.body.includes("middle-management"),
+        (v.step.kind === "move" || v.step.kind === "escape") &&
+        v.step.body.includes("middle-management"),
     );
 
   it.each([24, 28, 37])(

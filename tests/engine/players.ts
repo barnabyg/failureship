@@ -1,6 +1,6 @@
 import { gameContent } from "../../src/content";
 import type { Choice, PlayerView, Run } from "../../src/engine";
-import { everyNotification } from "../../src/engine/content";
+import { everyBill, everyNotification } from "../../src/engine/content";
 import { readHiddenTruth } from "../../src/engine/hidden-truth";
 import { calledBy } from "../../src/engine/say";
 import type { State } from "../../src/engine/state";
@@ -33,8 +33,30 @@ function familyOf(choice: Choice): string | undefined {
 /** The families a player without scruples reaches for, first choice first. */
 const AMORAL = ["fabricate", "attack", "deflect"];
 
-/** Takes the amoral choice each time there is one, and plays plainly otherwise. */
+/** The Escapes a player without scruples reaches for, first choice first. */
+const ESCAPING = ["blame", "lie", "bury"];
+
+/** The kind of Escape a choice is, as written in the data. */
+function escapeKindOf(choice: Choice): string | undefined {
+  if (choice.type !== "escape") return undefined;
+  return everyBill(gameContent)
+    .find((b) => b.id === choice.billId)
+    ?.escapes.find((e) => e.id === choice.escapeId)?.kind;
+}
+
+/**
+ * Takes the amoral choice each time there is one, and plays plainly otherwise.
+ * Offered a way out, they blame someone, lie or bury it, before taking it.
+ */
 export const amoral: Otherwise = (view) => {
+  const escape = view.choices
+    .map((choice) => ({
+      choice,
+      at: ESCAPING.indexOf(escapeKindOf(choice) ?? ""),
+    }))
+    .filter(({ at }) => at >= 0)
+    .sort((a, b) => a.at - b.at)[0];
+  if (escape) return escape.choice;
   const ranked = view.choices
     .map((choice) => ({ choice, at: AMORAL.indexOf(familyOf(choice) ?? "") }))
     .filter(({ at }) => at >= 0)

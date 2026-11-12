@@ -192,9 +192,10 @@ describe("the game's Grand Plans", { timeout: 60_000 }, () => {
         playToMonth(run, "4");
         take(run, answer);
         for (let view = run.view(); view.month < 8;) {
-          // Blamed on someone else, it arrives the same way, without your name.
+          // Blamed on you, it offers Escapes. Blamed on someone else, it
+          // arrives as a Move, without your name.
           if (
-            view.step.kind === "move" &&
+            (view.step.kind === "move" || view.step.kind === "escape") &&
             view.step.title === "Lessons from the new tool" &&
             view.step.body.includes("your name")
           ) {

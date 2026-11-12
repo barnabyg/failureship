@@ -2,6 +2,16 @@
   "threshold": 3,
   "burns": [
     {
+      "about": "blamed-for-yours",
+      "weight": 2,
+      "why": "You put something of yours down to them.",
+      "leans": {
+        "practitioner": 3,
+        "whistleblower": 2,
+        "left": 1
+      }
+    },
+    {
       "about": "blamed-in-the-review",
       "weight": 2,
       "why": "You blamed them in the Lessons Learned Review, in the minutes.",

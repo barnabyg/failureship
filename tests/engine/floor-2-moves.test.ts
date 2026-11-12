@@ -33,6 +33,8 @@ function arrived(views: readonly PlayerView[], idOrTitle: string) {
     (v) =>
       v.job.id === "team-lead" &&
       ((v.step.kind === "notification" && v.step.id === idOrTitle) ||
+        (v.step.kind === "escape" &&
+          (v.step.id === idOrTitle || v.step.title === idOrTitle)) ||
         (v.step.kind === "move" && v.step.title === idOrTitle)),
   )?.month;
 }

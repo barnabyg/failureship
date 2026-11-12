@@ -8,6 +8,7 @@ import orgChart from "../../content/characters.json";
 import deals from "../../content/deals.json";
 import demands from "../../content/demands.json";
 import dialogs from "../../content/dialogs.json";
+import escapes from "../../content/escapes.json";
 import events from "../../content/events.json";
 import families from "../../content/families.json";
 import floors from "../../content/floors.json";
@@ -57,6 +58,7 @@ export const gameContent = parseContent({
   deals,
   changing,
   gauges,
+  escapes,
   standing,
   families,
   hiddenTruth,
@@ -183,6 +185,10 @@ const panelSchema = z.strictObject(
       "resultsMistakesHeading",
       "resultsThreadsHeading",
       "resultsRisksHeading",
+      "resultsEscapesHeading",
+      "resultsEscapeWorked",
+      "resultsEscapeFailed",
+      "escapeHeading",
       "resultsChangesHeading",
       "resultsBeliefsHeading",
       "resultsHeardNothing",

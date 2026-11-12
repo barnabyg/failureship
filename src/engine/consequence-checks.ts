@@ -22,6 +22,11 @@ function flagsThatCanBeSet(content: Content): Set<string> {
     ),
     ...content.moves.flatMap((m) => m.sets),
     ...everyBill(content).flatMap((b) => b.sets),
+    ...everyBill(content).flatMap((b) =>
+      b.escapes.flatMap((e) =>
+        e.kind === "take" ? [] : [...e.worked.sets, ...e.failed.sets],
+      ),
+    ),
     ...content.events.flatMap((e) => e.sets),
     ...Object.values(content.demands?.sets ?? {}),
     ...(content.demands?.missed?.sets ?? []),

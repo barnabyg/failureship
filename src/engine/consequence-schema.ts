@@ -19,6 +19,100 @@ import {
   sets,
 } from "./outcome-schema";
 
+export const ESCAPE_KINDS = ["blame", "lie", "bury", "take"] as const;
+export type EscapeKind = (typeof ESCAPE_KINDS)[number];
+
+/** What an Escape does to the player, as it works or fails. */
+const escapeEffect = {
+  /** What the player is told. */
+  body: text,
+  sets,
+  opinion,
+  headOpinion,
+  remembers,
+};
+
+/** Every Escape but Take it can fail, and failing is worse than taking it. */
+const tried = {
+  id,
+  label: text,
+  /** What also makes it fail, which reading people should tell. Needs `failed.why`. */
+  fails: condition.optional(),
+  /** An explicit bet: the seeded chance that it works, if nothing else fails it first. */
+  chance: z.number().min(0).max(1).optional(),
+  /** Moves the consequence elsewhere, and the official story reports it. */
+  worked: z.strictObject({
+    ...escapeEffect,
+    /** The official story's line for it. */
+    reported: text,
+    /** What actually happened, beside it. */
+    happened: text,
+  }),
+  /** Lands on top of the consequence itself. */
+  failed: z.strictObject({
+    ...escapeEffect,
+    /** Why it failed, when `fails` is what failed it. */
+    why: text.optional(),
+    mistake: bigMistake,
+  }),
+};
+
+/**
+ * A way out, offered as a consequence of the player's bad behaviour lands on them.
+ * Take it accepts the consequence as it is. A minimum Teflon can be added here.
+ */
+export const escape = z.discriminatedUnion("kind", [
+  z.strictObject({
+    id,
+    kind: z.literal("take"),
+    label: text,
+    /** What the player is told, if anything, once they have taken it. */
+    body: text.optional(),
+  }),
+  z.strictObject({
+    ...tried,
+    kind: z.literal("blame"),
+    /** Whom the player names: a Character, or a place. */
+    blames: id,
+  }),
+  z.strictObject({
+    ...tried,
+    kind: z.literal("lie"),
+    /** Whether the boss saw it, so that lying to a Believer fails. Left out, they did. */
+    seen: condition.optional(),
+  }),
+  z.strictObject({ ...tried, kind: z.literal("bury") }),
+]);
+
+export type Escape = z.infer<typeof escape>;
+
+/** The rules every Escape keeps, and the words for them. */
+export const escapeRules = z.strictObject({
+  /** The Gauge a working Escape raises, and by how much. */
+  gauge: id,
+  by: z.number().int().positive(),
+  /** What whoever the player blames keeps of it. Says {what}, the consequence. */
+  blamed: z.strictObject({
+    about: id,
+    text,
+    /** How much further it moves someone who was warm to the player. */
+    warm: z.number().int().negative(),
+  }),
+  /** Why one failed, or had an effect of its own, for the results screen. */
+  why: z.strictObject({
+    /** Says {name} and {fact}. */
+    dangerous: text,
+    lie: text,
+    bet: text,
+    /** Says {name}. */
+    warm: text,
+    /** Says {name}. */
+    rival: text,
+  }),
+  /** What the results screen calls each kind. */
+  kinds: z.strictObject({ blame: text, lie: text, bury: text, take: text }),
+});
+
 /**
  * What comes back on the player, usually through someone else. It can do anything
  * another outcome can, and a Thread or a hidden risk can send one.
@@ -40,6 +134,8 @@ export const bill = z.strictObject({
   mistake: bigMistake,
   remembers,
   news,
+  /** The ways out, if this is a consequence of the player's own bad behaviour. */
+  escapes: z.array(escape).default([]),
 });
 
 export type Bill = z.infer<typeof bill>;

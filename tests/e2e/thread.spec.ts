@@ -20,6 +20,12 @@ test("the desk with no window comes back as a Bill in a later month", async ({
   await attendAndFinishMonth(page);
 
   await expect(page.getByTestId("month")).toContainText("6 of 18");
+  // It backfires on the player, so it offers Escapes first. Taking it, the
+  // committee's e-mail arrives as it always did.
+  await expect(page.getByTestId("panel-escape")).toContainText(
+    "Health and Safety",
+  );
+  await page.getByTestId("escape-safety-take-it").click();
   await expect(page.getByTestId("panel-notification")).toContainText(
     "Health and Safety",
   );

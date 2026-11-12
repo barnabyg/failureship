@@ -177,6 +177,8 @@ export type Step =
       /** Who made it, if anyone in particular did. */
       by?: string | undefined;
     }
+  /** A consequence of the player's own bad behaviour, with its Escapes on offer. */
+  | { kind: "escape"; id: string }
   | { kind: "event"; id: string }
   | { kind: "story" }
   /** The comic stand-in for winning, told once, after the seat that won it. */
@@ -320,6 +322,13 @@ interface ProjectNews {
   text: string;
 }
 
+/** A Gauge moved by something that played out, and what the player is told moved it. */
+export interface GaugeMove {
+  gauge: string;
+  by: number;
+  note: string;
+}
+
 /** What belongs to the month, and is wiped when the next one opens. */
 export interface MonthRecord {
   noted: string[];
@@ -402,6 +411,19 @@ export interface State extends MonthRecord {
   }[];
   /** Bills waiting to land this month as Character Moves. */
   billsDue: string[];
+  /**
+   * Bills with Escapes, waiting for the player to choose one: with any Gauge
+   * moves of the Thread that sent them, which land only if the consequence does.
+   */
+  escapesDue: { bill: string; gauges: GaugeMove[] }[];
+  /** Each Escape tried, whether it worked, and why. Never explained until the end. */
+  escapes: {
+    month: number;
+    bill: string;
+    escape: string;
+    worked: boolean;
+    why: string[];
+  }[];
   /** Who has been moved on the Org Chart, the player included, and who to. */
   reportsTo: Record<string, string>;
   /** The player's job now, which decides the floor they are on. */
@@ -448,8 +470,8 @@ export interface State extends MonthRecord {
   gauges: Record<string, number>;
   /** What moved each Gauge, for the player to see. */
   gaugeMoves: { month: number; gauge: string; by: number; note: string }[];
-  /** Moves from Threads played out this month, waiting for it to close. */
-  gaugesDue: { gauge: string; by: number; note: string }[];
+  /** Moves from Threads and Escapes played out this month, waiting for it to close. */
+  gaugesDue: GaugeMove[];
   milestones: { gauge: string; at: number; month: number }[];
   /** Told to the player, and shown from then on. */
   finalWarning: boolean;

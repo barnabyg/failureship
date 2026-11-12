@@ -1,12 +1,12 @@
 import type { Content } from "./content";
-import type { State, Step } from "./state";
+import type { GaugeMove, State, Step } from "./state";
 
 type Written = NonNullable<Content["gauges"]>[number];
 
 /**
  * The only place a Gauge is read. Gauges are the player's track record, so they
- * move only when a Thread plays out, and nothing in the rules but Milestones reads
- * them: never the Power Map, a hidden risk or anyone's belief.
+ * move only when a Thread or an Escape plays out, and nothing in the rules but
+ * Milestones reads them: never the Power Map, a hidden risk or anyone's belief.
  */
 export function startingGauges(
   content: Content,
@@ -24,9 +24,19 @@ export function startingGauges(
 /** A Thread has played out: its Gauges move as the month closes. */
 export function gaugesFromThread(
   state: State,
-  moves: readonly { gauge: string; by: number; note: string }[],
+  moves: readonly GaugeMove[],
 ): void {
   state.gaugesDue.push(...moves);
+}
+
+/** An Escape worked: the Gauge Escapes raise moves as the month closes. */
+export function gaugeFromEscape(
+  state: State,
+  content: Content,
+  note: string,
+): void {
+  const rules = content.escapes;
+  if (rules) state.gaugesDue.push({ gauge: rules.gauge, by: rules.by, note });
 }
 
 function clamp(gauge: Written, value: number): number {
