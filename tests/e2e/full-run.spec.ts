@@ -3,6 +3,7 @@ import {
   answerAnyNotification,
   finishMonth,
   freshRun,
+  openInboxIfAny,
   openMeeting,
   playUntil,
 } from "./play";
@@ -27,7 +28,10 @@ test("eighteen months, all the way to the results screen", async ({ page }) => {
     }
     await expect(page.getByTestId("gauge-teflon")).toBeVisible();
     await expect(page.getByTestId("gauge-fawning")).toBeVisible();
-    notifications.add(await page.getByTestId("panel-notification").innerText());
+    await openInboxIfAny(page);
+    notifications.add(
+      await page.getByTestId("panel-notification").locator("h2").innerText(),
+    );
     await answerAnyNotification(page);
     await expect(page.getByTestId("hint")).not.toBeEmpty();
 

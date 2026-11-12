@@ -1,7 +1,8 @@
 import { describe, expect, it } from "vitest";
 import { gameContent } from "../../src/content";
-import { startRun } from "../../src/engine";
+import { startRun, type PlayerView } from "../../src/engine";
 import { readHiddenTruth } from "../../src/engine/hidden-truth";
+import { landedIn } from "../engine/landed";
 import { everyPath } from "../engine/month-paths";
 
 const SEEDS = [1, 2, 3];
@@ -18,7 +19,9 @@ describe("the real month", () => {
           }
         }
         expect(views.at(-1)?.step.kind).toBe("story");
-        expect(views.map((v) => v.step.kind)).toContain("move");
+        expect(
+          landedIn(views.at(-1) as PlayerView).map((l) => l.kind),
+        ).toContain("move");
       }
     }
   });

@@ -4,7 +4,7 @@ import { gaugesFromThread } from "./gauges";
 import { applyOutcome } from "./outcome";
 import { matches, mentionsGone } from "./reads";
 import { drawFor } from "./rng";
-import type { GaugeMove, State, Step } from "./state";
+import type { GaugeMove, Landing, State, Step } from "./state";
 import { isGone } from "./places";
 
 /**
@@ -78,7 +78,10 @@ export function surfaceRisks(state: State, content: Content): void {
  * A Bill that comes as a Character Move lands where Moves do, in the order the
  * Bills were sent. One with Escapes offers them there instead.
  */
-export function landBill(state: State, content: Content): Step | null {
+export function landBill(
+  state: State,
+  content: Content,
+): Landing | Extract<Step, { kind: "escape" }> | null {
   const id = state.billsDue.shift();
   const bill = everyBill(content).find((b) => b.id === id);
   if (!bill) return null;

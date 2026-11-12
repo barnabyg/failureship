@@ -12,6 +12,7 @@ import {
 } from "../../src/engine";
 import { readHiddenTruth } from "../../src/engine/hidden-truth";
 import { emptyMonthRaw } from "./fixture";
+import { notesIn } from "./landed";
 
 const SEEDS = Array.from({ length: 300 }, (_, i) => i + 1);
 const notice = { title: "Done", body: "Done." };
@@ -124,10 +125,10 @@ function afterStalling(seed: number, content: Content) {
   run.choose(answer("stall"));
   let view = run.view();
   while (view.step.kind !== "results") {
-    if (view.step.kind === "notification") return "chased";
-    if (view.step.kind === "notice" && view.step.title === "FORGOTTEN") {
+    if (notesIn(view).some((n) => n.title === "FORGOTTEN")) {
       return "forgotten";
     }
+    if (view.step.kind === "notification") return "chased";
     view = nextMonth(run);
   }
   return "still open";
@@ -197,7 +198,7 @@ describe("a stalled Demand", () => {
     const run = startRun({ seed, content: content() });
     run.choose(answer("stall"));
     let view = run.view();
-    while (!(view.step.kind === "notice" && view.step.title === "FORGOTTEN")) {
+    while (!notesIn(view).some((n) => n.title === "FORGOTTEN")) {
       view = nextMonth(run);
     }
 

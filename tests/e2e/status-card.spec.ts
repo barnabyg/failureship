@@ -2,6 +2,7 @@ import { expect, test, type Page } from "@playwright/test";
 import {
   answerAnyNotification,
   freshRun,
+  openInboxIfAny,
   playToResults,
   playUntil,
 } from "./play";
@@ -90,6 +91,7 @@ test("one compact status card, with a Grand Plan and an open Demand, each part o
 }) => {
   await freshRun(page, "/?seed=1&month=4");
   await playUntil(page, "option-stall");
+  await openInboxIfAny(page);
   await page.getByTestId("option-stall").click();
 
   const card = page.getByTestId("status-card");

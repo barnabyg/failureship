@@ -1,5 +1,5 @@
 import { expect, test, type Page } from "@playwright/test";
-import { answerAnyNotification, playToResults } from "./play";
+import { answerAnyNotification, openInboxIfAny, playToResults } from "./play";
 import { openRunMenu } from "./run-menu";
 
 async function reachSecondAction(page: Page) {
@@ -27,6 +27,7 @@ test("restarts from a typed seed in the middle of a run", async ({ page }) => {
   await expect(page).toHaveURL(/seed=8/);
   await expect(page.getByTestId("month")).toContainText("1 of 18");
   await expect(page.getByTestId("actions-left")).toContainText("3");
+  await openInboxIfAny(page);
   await expect(page.getByTestId("panel-notification")).toBeVisible();
 
   await answerAnyNotification(page);
@@ -62,6 +63,7 @@ test("escape also keeps the run", async ({ page }) => {
 
 test("a new run deals a new seed from any step", async ({ page }) => {
   await page.goto("/?seed=1");
+  await openInboxIfAny(page);
   await page.getByTestId("option-pub").click();
 
   await openRunMenu(page);
@@ -70,6 +72,7 @@ test("a new run deals a new seed from any step", async ({ page }) => {
 
   await expect(page.getByTestId("seed")).not.toHaveText("1");
   await expect(page.getByTestId("buzzwords")).toHaveCount(0);
+  await openInboxIfAny(page);
   await expect(page.getByTestId("panel-notification")).toBeVisible();
 });
 
@@ -114,6 +117,7 @@ test("the end of a run needs no confirmation to leave", async ({ page }) => {
 
   await expect(page.getByTestId("confirm-leave")).toHaveCount(0);
   await expect(page.getByTestId("seed")).toHaveText("5");
+  await openInboxIfAny(page);
   await expect(page.getByTestId("panel-notification")).toBeVisible();
 });
 

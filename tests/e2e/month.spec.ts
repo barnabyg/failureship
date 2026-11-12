@@ -1,5 +1,5 @@
 import { expect, test, type Page } from "@playwright/test";
-import { answerAnyNotification, happened } from "./play";
+import { answerAnyNotification, happened, openInboxIfAny } from "./play";
 
 async function spendAction(page: Page, id: string) {
   await page.getByTestId(`hotspot-${id}`).click();
@@ -22,16 +22,20 @@ test("plays through a month on a fixed-camera Floor 1", async ({ page }) => {
 
   await spendAction(page, "work");
 
-  // The meeting was missed, and the minutes say so before anything else lands.
-  await expect(page.getByTestId("panel-notice")).toBeVisible();
-  await page.getByTestId("continue").click();
-  await expect(page.getByTestId("panel-move")).toBeVisible();
-  await page.getByTestId("continue").click();
-
-  await expect(page.getByTestId("panel-story")).toBeVisible();
-  await expect(page.getByTestId("panel-story")).toContainText(
-    "Junior employee Monthly Summary",
+  // One panel tells the month's close: the minutes of the meeting missed, before
+  // anything else that landed, then the official story.
+  const story = page.getByTestId("panel-story");
+  await expect(story).toBeVisible();
+  await expect(story.getByTestId("landed")).toHaveCount(2);
+  await expect(story.getByTestId("landed").first()).toHaveAttribute(
+    "data-kind",
+    "notice",
   );
+  await expect(story.getByTestId("landed").last()).toHaveAttribute(
+    "data-kind",
+    "move",
+  );
+  await expect(story).toContainText("Junior employee Monthly Summary");
   await expect(page.getByTestId("job-title")).toHaveText("Junior employee");
   await expect(page.getByTestId("hotspot-meeting")).toBeDisabled();
 });
@@ -42,8 +46,6 @@ test("plays from month 1 into month 2", async ({ page }) => {
   await fileTheReport(page);
   await spendAction(page, "kitchen");
   await spendAction(page, "work");
-  await page.getByTestId("continue").click();
-  await page.getByTestId("continue").click();
   await expect(page.getByTestId("panel-story")).toBeVisible();
   await expect(page.getByTestId("month")).toContainText("1 of 18");
 
@@ -51,6 +53,7 @@ test("plays from month 1 into month 2", async ({ page }) => {
 
   await expect(page.getByTestId("month")).toContainText("2 of 18");
   await expect(page.getByTestId("actions-left")).toContainText("3");
+  await openInboxIfAny(page);
   await expect(page.getByTestId("panel-notification")).toBeVisible();
 });
 

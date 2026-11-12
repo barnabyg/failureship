@@ -13,6 +13,7 @@ import { everyBill } from "../../src/engine/content";
 import { readHiddenTruth } from "../../src/engine/hidden-truth";
 import { plainChoice, playToMonth } from "../../src/ui/later-month";
 import { fixtureRaw, floorOwn } from "./fixture";
+import { everyLanded } from "./landed";
 
 const certain = { believer: 1, incompetent: 1, practitioner: 1 };
 
@@ -192,7 +193,31 @@ describe("an Escape", () => {
       escapes: escapes.map(({ id, label }) => ({ id, label })),
     });
     expect(offered?.choices).toHaveLength(escapes.length);
-    expect(views.some((v) => v.step.kind === "move")).toBe(false);
+    expect(offered?.waiting).toBe(true);
+    expect(everyLanded(views).some((l) => l.kind === "move")).toBe(false);
+  });
+
+  it("waits in the inbox when it does not come as a Move, with the floor open", () => {
+    const inbox = parseContent(raw({ as: "notice", from: undefined }));
+    const run = startRun({ seed: 1, content: inbox });
+    let view = run.view();
+    while (view.step.kind !== "escape") {
+      view = run.choose(view.choices[0] as Choice);
+    }
+
+    expect(view.month).toBe(3);
+    expect(view.waiting).toBe(false);
+    expect(view.inbox).toMatchObject({
+      items: [{ kind: "escape", title: "ON-YOU" }],
+      toAnswer: 1,
+    });
+    const action = view.choices.find((c) => c.type === "action");
+    expect(action).toBeDefined();
+
+    // An action first, and the way out still waits, holding the month open.
+    const after = run.choose(action as Choice);
+    expect(after.step).toMatchObject({ kind: "escape", id: "on-you" });
+    expect(after.month).toBe(3);
   });
 
   it("taken, lands the consequence as written, and raises nothing", () => {

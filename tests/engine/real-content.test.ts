@@ -9,11 +9,13 @@ import {
   panelText,
 } from "../../src/content";
 import { startRun, type Choice, type Run } from "../../src/engine";
+import { chasedIdOf } from "../../src/engine/content";
 import { castDealtFirst } from "../../src/engine/deal";
 import { bossesAtStart, meantBy } from "../../src/engine/places";
 import { readHiddenTruth } from "../../src/engine/hidden-truth";
 import { plainChoice, playToMonth } from "../../src/ui/later-month";
 import { behavioursIn } from "./scene-view";
+import { landedIn, notesIn } from "./landed";
 import { everyPath } from "./month-paths";
 
 const SEEDS = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
@@ -245,9 +247,9 @@ describe("the real month", () => {
 
   // The Demand browser test relies on these.
   it.each([
-    [4, "notification"],
-    [283, "notice"],
-  ])("keeps what follows a stalled Demand on seed %i", (seed, kind) => {
+    [4, "chased"],
+    [283, "forgotten"],
+  ])("keeps what follows a stalled Demand on seed %i", (seed, fate) => {
     // As the browser test plays it: plainly, but skipping the training and
     // stalling the Demand in month 2.
     const run = startRun({ seed, content: gameContent });
@@ -267,7 +269,15 @@ describe("the real month", () => {
       view = run.choose(next);
     }
 
-    expect(view.step.kind).toBe(kind);
+    // Chased, it is the first e-mail in the inbox. Forgotten, a note says so.
+    const chased =
+      view.step.kind === "notification" &&
+      view.step.id === chasedIdOf("fewer-meetings");
+    const forgotten = notesIn(view).some((n) => n.title === "Meetings");
+    expect({ chased, forgotten }).toEqual({
+      chased: fate === "chased",
+      forgotten: fate === "forgotten",
+    });
   });
 
   // docs/playtest.md contrasts these two seeds.
@@ -323,7 +333,7 @@ describe("the real month", () => {
     let view = playToMonth(run, "4", "do-training,fake");
     const moves: string[] = [];
     while (view.month === 4) {
-      if (view.step.kind === "move") moves.push(view.step.body);
+      for (const l of landedIn(view)) if (l.kind === "move") moves.push(l.body);
       view = run.choose(plainChoice(view));
     }
 

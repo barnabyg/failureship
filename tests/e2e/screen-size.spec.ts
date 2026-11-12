@@ -1,5 +1,5 @@
 import { expect, test, type Page } from "@playwright/test";
-import { answerAnyNotification, freshRun } from "./play";
+import { answerAnyNotification, freshRun, openInboxIfAny } from "./play";
 
 // The smallest screen the game supports is 1920×1080. A browser there shows
 // less than the whole screen, and a laptop that scales its display shows less
@@ -131,6 +131,7 @@ test("the tagline is shown whole on a wide screen, and never cut off", async ({
   // A busy header, with Buzzwords learned, at the narrowest width.
   await page.setViewportSize({ width: 1280, height: 720 });
   await freshRun(page, "/?seed=1");
+  await openInboxIfAny(page);
   await page.getByTestId("option-pub").click();
   await expect(page.getByTestId("buzzwords")).toBeVisible();
   expect((await tagline(page)).whole).toBe(true);

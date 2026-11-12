@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { parseContent, startRun, type PlayerView } from "../../src/engine";
 import { emptyMonthRaw } from "./fixture";
+import { landedIn } from "./landed";
 
 function priorityRaw() {
   const raw = emptyMonthRaw();
@@ -28,7 +29,7 @@ function movesIn(seed: number, firstAction: string) {
   const titles: string[] = [];
   let view: PlayerView = run.choose({ type: "action", actionId: firstAction });
   while (view.choices.length > 0) {
-    if (view.step.kind === "move") titles.push(view.step.title);
+    for (const l of landedIn(view)) if (l.kind === "move") titles.push(l.title);
     const choice =
       view.choices.find((c) => c.type === "continue") ??
       view.choices.find((c) => c.type === "action" && c.actionId === "desk");

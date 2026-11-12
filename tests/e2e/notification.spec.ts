@@ -1,13 +1,14 @@
 import { expect, test } from "@playwright/test";
-import { answered } from "./play";
+import { answered, openInboxIfAny } from "./play";
 
-test("the month opens with a Notification that must be answered", async ({
+test("the month opens with its Notifications in the inbox, beside an open floor", async ({
   page,
 }) => {
   await page.goto("/?seed=1");
 
+  await openInboxIfAny(page);
   await expect(page.getByTestId("panel-notification")).toBeVisible();
-  await expect(page.getByTestId("hotspot-kitchen")).toBeDisabled();
+  await expect(page.getByTestId("hotspot-kitchen")).toBeEnabled();
   await expect(page.getByTestId("option-pub")).toContainText("1 action");
   await expect(page.getByTestId("option-decline")).toContainText(
     "Costs nothing",
@@ -23,6 +24,7 @@ test("the pub is a text dialog, in the e-mail it answers, with the office still 
 }) => {
   await page.goto("/?seed=1");
 
+  await openInboxIfAny(page);
   await page.getByTestId("option-pub").click();
 
   await expect(answered(page)).toContainText("Go to the pub");
@@ -41,6 +43,7 @@ test("the pub is a text dialog, in the e-mail it answers, with the office still 
 test("the report teaches no Buzzword", async ({ page }) => {
   await page.goto("/?seed=1");
 
+  await openInboxIfAny(page);
   await page.getByTestId("option-decline").click();
   await page.getByTestId("option-report").click();
 

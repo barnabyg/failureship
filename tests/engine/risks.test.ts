@@ -10,6 +10,7 @@ import {
 } from "../../src/engine";
 import { readHiddenTruth } from "../../src/engine/hidden-truth";
 import { fixtureRaw, floorOwn } from "./fixture";
+import { firstTold } from "./landed";
 
 const mistakes = {
   finalWarning: { title: "WARNED", body: "One more." },
@@ -105,7 +106,7 @@ function play(run: Run, ...answers: string[]): PlayerView[] {
 }
 
 const titled = (views: PlayerView[], title: string) =>
-  views.find((v) => v.step.kind === "notice" && v.step.title === title);
+  firstTold(views, title)?.view;
 
 function risksOf(views: PlayerView[]) {
   const { step } = views.at(-1) as PlayerView;

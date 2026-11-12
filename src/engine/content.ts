@@ -252,14 +252,16 @@ export const contentSchema = z.strictObject({
   floors: z.array(floorData).min(1),
   ui: z.strictObject({
     hints: z.strictObject({
-      notification: text,
       actions: text,
+      /** On the floor with the inbox to answer. Says {actions} and {n}, how many to answer. */
+      inbox: text,
+      /** The actions spent, and the inbox all that holds the month open. Says {n}. */
+      inboxOnly: text,
       scene: text,
       "find-out": text,
       notice: text,
-      move: text,
+      /** A consequence that came as a Move, asking as the month closes. */
       escape: text,
-      event: text,
       story: text,
       win: text,
       results: text,

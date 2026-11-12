@@ -1,5 +1,5 @@
 import { panelText } from "../content";
-import type { PlayerView, ResultView, StepView } from "../engine";
+import type { PlayerView, ResultView } from "../engine";
 import { Reaction } from "./Panel";
 
 type Answer = Extract<ResultView, { kind: "answer" }>;
@@ -126,30 +126,5 @@ export function ResultAtHead({
     <AnsweredMail result={result} />
   ) : (
     <HappenedCard result={result} actions={actions} />
-  );
-}
-
-/** "Next e-mail (2 more)", over the next Notification, or how many are waiting. */
-export function InboxCount({
-  step,
-  answered,
-}: {
-  step: Extract<StepView, { kind: "notification" }>;
-  answered: boolean;
-}) {
-  const more = (written: string) =>
-    written.replaceAll("{n}", String(step.waiting));
-  const text = answered
-    ? step.waiting > 0
-      ? more(panelText.nextMailMore)
-      : panelText.nextMail
-    : step.waiting > 0
-      ? more(panelText.inboxMore)
-      : null;
-  if (text === null) return null;
-  return (
-    <p className="inbox-count" data-testid="inbox-count">
-      {text}
-    </p>
   );
 }

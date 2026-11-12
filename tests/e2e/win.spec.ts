@@ -1,5 +1,5 @@
 import { expect, test } from "@playwright/test";
-import { freshRun, playUntil } from "./play";
+import { freshRun, openInboxIfAny, playUntil } from "./play";
 
 // tests/engine/browser-seeds.test.ts keeps this deal true. On seed 2, taking
 // the blame in month 2 and faking the Plan in month 5 wins Floor 1's seat, and
@@ -12,6 +12,7 @@ const CLIMB = "choose=take-the-blame,screenshot-on-the-note,staff-the-centre";
 test("says the goal on the first screen", async ({ page }) => {
   await freshRun(page, "/?seed=8");
 
+  await openInboxIfAny(page);
   await expect(page.getByTestId("panel-notification")).toBeVisible();
   await expect(page.getByTestId("goal")).toHaveText(
     "Your goal: get promoted, seat by seat, to the top of Floor 3. Work out who really decides.",

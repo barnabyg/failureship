@@ -1,5 +1,11 @@
 import { expect, test } from "@playwright/test";
-import { answered, freshRun, happened, playUntil } from "./play";
+import {
+  answered,
+  freshRun,
+  happened,
+  openInboxIfAny,
+  playUntil,
+} from "./play";
 
 // tests/engine/browser-seeds.test.ts keeps this deal true. On seed 24, taking
 // the blame in month 2, faking the Plan in month 5 and staffing the Centre of
@@ -27,6 +33,7 @@ test("take the Board's tricky question offline, and hear from the Board Office a
 
   await playUntil(page, "option-still-offline");
   await expect(page.getByTestId("month")).toContainText("15 of 18");
+  await openInboxIfAny(page);
   const chased = page.getByTestId("panel-notification");
   await expect(chased).toContainText("Your offline answer");
   await expect(chased).toContainText("slide seven");
