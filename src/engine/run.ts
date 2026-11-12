@@ -96,6 +96,8 @@ function dealtState(seed: number, content: Content): State {
     deeds: [],
     threads: [],
     billsDue: [],
+    escapesDue: [],
+    escapes: [],
     reportsTo: {},
     eventsDue: [],
     eventsLanded: [],

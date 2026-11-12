@@ -6,7 +6,8 @@ export type Choice =
   | { type: "action"; actionId: string }
   | { type: "notification"; notificationId: string; optionId: string }
   | { type: "scene"; sceneId: string; optionId: string }
-  | { type: "find-out"; sourceId: string; subjectId: string };
+  | { type: "find-out"; sourceId: string; subjectId: string }
+  | { type: "escape"; billId: string; escapeId: string };
 
 /** A vacancy decided: Official standing, beside who really decided and why. */
 export interface DecidedNotice {
@@ -142,6 +143,15 @@ export type StepView =
       decided?: DecidedNotice | undefined;
     }
   | { kind: "move"; from: string; title: string; body: string }
+  /** A consequence of the player's own doing lands, and these are the ways out. */
+  | {
+      kind: "escape";
+      id: string;
+      from: string;
+      title: string;
+      body: string;
+      escapes: { id: string; label: string }[];
+    }
   | { kind: "event"; from: string; title: string; body: string }
   | {
       kind: "story";
@@ -197,6 +207,15 @@ export type StepView =
       }[];
       /** What moved the charts during the run. */
       changes: { month: number; title: string; changed: string }[];
+      /** Each Escape tried: whether it worked, and why. */
+      escapes: {
+        month: number;
+        title: string;
+        label: string;
+        kind: string;
+        worked: boolean;
+        why: string[];
+      }[];
       /** What was building up, including what never came out. */
       risks: {
         addedIn: number;

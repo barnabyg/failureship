@@ -13,6 +13,13 @@ function walkingToTheEnd(page: Page) {
 const DESKS = ["work", "work-2", "work-3"];
 const DESK = DESKS.map((id) => `[data-testid="hotspot-${id}"]`).join(", ");
 
+/** Taking it, the last way out of a consequence, as src/ui/later-month.ts does. */
+function takeIt(page: Page): Locator {
+  return page
+    .locator('[data-testid="panel-escape"] [data-testid^="escape-"]')
+    .last();
+}
+
 /** Goes to an address as a new player would, with no saved run to come back to. */
 export async function freshRun(page: Page, address: string) {
   if (page.url() !== "about:blank") {
@@ -33,14 +40,16 @@ export async function finishMonth(page: Page) {
   const results = page.getByTestId("panel-results");
   const stepOut = page.getByTestId("lift-step-out");
   const notification = page.getByTestId("panel-notification");
+  const escape = takeIt(page);
   const before = await month.innerText();
   while ((await month.innerText()) === before && !(await results.isVisible())) {
     const carryOn = page.getByTestId("continue");
     const spare = page.locator(DESK);
     await expect(
-      carryOn.or(spare).or(results).or(stepOut).first(),
+      carryOn.or(spare).or(results).or(stepOut).or(escape).first(),
     ).toBeVisible();
     if (await stepOut.isVisible()) await stepOut.click();
+    else if (await escape.isVisible()) await escape.click();
     else if (await notification.isVisible()) await answerAnyNotification(page);
     else if (await carryOn.isVisible()) await carryOn.click();
     else if (await spare.isEnabled()) await spare.click();
@@ -51,8 +60,11 @@ export async function finishMonth(page: Page) {
 export async function continueUntil(page: Page, panel: Locator) {
   const carryOn = page.getByTestId("continue");
   const spare = page.locator(DESK);
+  const escape = takeIt(page);
   await expect(async () => {
-    if (await carryOn.isVisible()) await carryOn.click();
+    if (await panel.isVisible()) return;
+    if (await escape.isVisible()) await escape.click();
+    else if (await carryOn.isVisible()) await carryOn.click();
     else if (await spare.isEnabled()) await spare.click();
     await expect(panel).toBeVisible({ timeout: 100 });
   }).toPass();
@@ -62,7 +74,9 @@ export async function continueUntil(page: Page, panel: Locator) {
 export async function answerAnyNotification(page: Page) {
   const panel = page.getByTestId("panel-notification");
   const told = page.getByTestId("panel-notice");
-  await expect(panel.or(told).first()).toBeVisible();
+  const escape = takeIt(page);
+  await expect(panel.or(told).or(escape).first()).toBeVisible();
+  while (await escape.isVisible()) await escape.click();
   if (await told.isVisible()) await page.getByTestId("continue").click();
   while (await panel.isVisible()) {
     await answerNotification(page);
@@ -103,9 +117,11 @@ export async function playUntil(page: Page, testId: string) {
     DESKS.map((id) => `[data-testid="hotspot-${id}"]:enabled`).join(", "),
   );
   const stepOut = page.getByTestId("lift-step-out");
+  const escape = takeIt(page);
   for (;;) {
     await expect(
       wanted
+        .or(escape)
         .or(notification)
         .or(scene)
         .or(carryOn)
@@ -117,6 +133,8 @@ export async function playUntil(page: Page, testId: string) {
     if ((await wanted.isVisible()) && (await wanted.isEnabled())) return;
     if (await stepOut.isVisible()) {
       await stepOut.click();
+    } else if (await escape.isVisible()) {
+      await escape.click();
     } else if (await notification.isVisible()) {
       await answerNotification(page);
     } else if (await scene.isVisible()) {

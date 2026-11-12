@@ -24,6 +24,7 @@ import {
 } from "./reads";
 import { YOU } from "./deal";
 import { dealsInView } from "./deals";
+import { escapesInStory, escapesOnOffer } from "./escapes";
 import { floorNow, isOn } from "./floors";
 import { gaugesInView, gaugesThisMonth } from "./gauges";
 import {
@@ -96,6 +97,12 @@ export function legalChoices(state: State, world: World): Choice[] {
             subjectId: c.id,
           })),
       );
+    case "escape":
+      return escapesOnOffer(state, content, step.id).map((e) => ({
+        type: "escape",
+        billId: step.id,
+        escapeId: e.id,
+      }));
     case "notice":
     case "move":
     case "event":
@@ -278,7 +285,8 @@ function toStoryView(
       .map(({ story }) => ({
         reported: fill(story.reported),
         happened: fill(story.happened),
-      })),
+      }))
+      .concat(escapesInStory(state, content)),
     gauges: gaugesThisMonth(state, content),
   };
 }
@@ -365,6 +373,21 @@ function toStepView(state: State, world: World): StepView {
         from: sayFrom(state, content, move.from ?? ""),
         title: move.title,
         body: fillParts(state, content, body),
+      };
+    }
+    case "escape": {
+      const bill = everyBill(content).find((b) => b.id === step.id);
+      if (!bill) throw new Error(`Unknown Bill "${step.id}".`);
+      return {
+        kind: "escape",
+        id: bill.id,
+        from: sayFrom(state, content, bill.from ?? ""),
+        title: bill.title,
+        body: fillParts(state, content, bill.body),
+        escapes: escapesOnOffer(state, content, bill.id).map((e) => ({
+          id: e.id,
+          label: e.label,
+        })),
       };
     }
     case "event": {

@@ -210,6 +210,37 @@ function StepBody({ view, onChoose, onRestart, onNewRun }: StepPanelProps) {
           <Continue onChoose={onChoose} />
         </Panel>
       );
+    case "escape":
+      return (
+        <Panel
+          testId="panel-escape"
+          {...(step.from === "" ? {} : { eyebrow: step.from })}
+          title={step.title}
+          look={mail(step.from === "" ? "notice" : "move")}
+        >
+          <p>{step.body}</p>
+          <h3>{panelText.escapeHeading}</h3>
+          <div className="options">
+            {step.escapes.map((escape) => (
+              <button
+                key={escape.id}
+                type="button"
+                className="option"
+                data-testid={`escape-${escape.id}`}
+                onClick={() => {
+                  onChoose({
+                    type: "escape",
+                    billId: step.id,
+                    escapeId: escape.id,
+                  });
+                }}
+              >
+                <span>{escape.label}</span>
+              </button>
+            ))}
+          </div>
+        </Panel>
+      );
     case "event":
       return (
         <Panel

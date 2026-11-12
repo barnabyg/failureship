@@ -63,8 +63,13 @@ export function playIn(seed: number, style: Style) {
     const best = [...view.choices].sort(
       (a, b) => rank(a, style) - rank(b, style),
     )[0];
+    // Offered a way out, each style takes what lands on it, the last way out.
     const next =
-      view.step.kind === "actions" ? (meeting ?? floor ?? best) : best;
+      view.step.kind === "actions"
+        ? (meeting ?? floor ?? best)
+        : view.step.kind === "escape"
+          ? view.choices.at(-1)
+          : best;
     if (!next) throw new Error(`Stuck at ${view.step.kind}.`);
     view = run.choose(next);
   }

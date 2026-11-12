@@ -12,6 +12,7 @@ import {
   changing,
   companyEvent,
   deals,
+  escapeRules,
   gauge,
   mistakes,
   promises,
@@ -62,7 +63,12 @@ export {
   type PlanHow,
   type VacancyReason,
 } from "./boss-schema";
-export type { Bill } from "./consequence-schema";
+export {
+  ESCAPE_KINDS,
+  type Bill,
+  type Escape,
+  type EscapeKind,
+} from "./consequence-schema";
 export {
   MOVE_FAMILIES,
   TONES,
@@ -172,6 +178,7 @@ export const contentSchema = z.strictObject({
   deals: deals.optional(),
   changing: changing.optional(),
   gauges: z.array(gauge).optional(),
+  escapes: escapeRules.optional(),
   standing: standing.optional(),
   /** What the results screen calls each family of Moves. */
   families: z
@@ -251,6 +258,7 @@ export const contentSchema = z.strictObject({
       "find-out": text,
       notice: text,
       move: text,
+      escape: text,
       event: text,
       story: text,
       win: text,

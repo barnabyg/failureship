@@ -294,6 +294,7 @@ export function fixtureRaw() {
         "find-out": "Pick a source.",
         notice: "Press continue.",
         move: "Something has happened to you.",
+        escape: "Something has come back on you. Choose a way out.",
         event: "Something has happened to the company.",
         story: "The month has closed.",
         win: "You have won.",

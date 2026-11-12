@@ -32,6 +32,8 @@ export function stepTag(step: StepView): string | null {
       return panelText.stepNotice;
     case "move":
       return panelText.stepMove;
+    case "escape":
+      return panelText.stepEscape;
     case "event":
       return panelText.stepEvent;
     case "story":

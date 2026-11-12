@@ -1,4 +1,5 @@
 import { landBill, playThreads, surfaceRisks } from "./bills";
+import { nextEscape } from "./escapes";
 import { blowWhistles, changePeople } from "./changes";
 import { landEvent, scheduleEvents } from "./company-events";
 import { everyNotification, type Content } from "./content";
@@ -133,8 +134,9 @@ export function answerable(state: State, content: Content): string[] {
 }
 
 /**
- * The month's order: Notifications, any review, actions, any Company Event, a
- * Move, and then the month closes.
+ * The month's order: any consequence to escape, Notifications, any review,
+ * actions, any Company Event, a Move, and then the month closes. A consequence
+ * that comes as a Move is escaped where Moves land.
  */
 export function nextStep(state: State, world: World): Step {
   const { content } = world;
@@ -150,6 +152,8 @@ export function nextStep(state: State, world: World): Step {
     const won = state.wonIn !== null && state.step.kind !== "win";
     return won ? { kind: "win" } : { kind: "results" };
   }
+  const escape = nextEscape(state, content);
+  if (escape) return escape;
   const [id] = answerable(state, content);
   if (id !== undefined) return { kind: "notification", id };
   const flag = content.project.flagged;

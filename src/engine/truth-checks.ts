@@ -62,6 +62,10 @@ export function flagsSetByHiddenResults(content: Content): Set<string> {
     ...everyBill(content).flatMap((b) => [
       ...b.sets,
       ...b.options.flatMap((o) => o.sets),
+      // Whether an Escape works can read the truth too.
+      ...b.escapes.flatMap((e) =>
+        e.kind === "take" ? [] : [...e.worked.sets, ...e.failed.sets],
+      ),
     ]),
     // Whether a Company Event lands is drawn too.
     ...content.events.flatMap((e) => e.sets),

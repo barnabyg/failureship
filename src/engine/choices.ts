@@ -1,5 +1,6 @@
 import { chasedIdOf, everyNotification } from "./content";
 import { replyToDeal } from "./deals";
+import { chooseEscape } from "./escapes";
 import { arriveToFindOut, hearClaim } from "./find-out";
 import { hearOfPlan } from "./grand-plans";
 import { leaveStory, nextStep } from "./month";
@@ -61,6 +62,12 @@ export function applyChoice(state: State, world: World, choice: Choice): void {
     case "scene":
       setAside(state, world, behaveInScene(state, world, choice));
       return;
+    case "escape": {
+      const told = chooseEscape(state, content, choice.billId, choice.escapeId);
+      if (told) setAside(state, world, told);
+      else state.step = nextStep(state, world);
+      return;
+    }
     case "continue":
       if (state.step.kind === "story") leaveStory(state, world);
       else state.step = nextStep(state, world);

@@ -43,6 +43,7 @@ Where each can be used. These are all the places that take a condition:
 | A Thread outcome's `when`                  | All                                                    |
 | A hidden risk's `route.means` and `traced` | All                                                    |
 | A Grand Plan's `blame.sticks`              | All                                                    |
+| An Escape's `fails`, and a lie's `seen`    | All                                                    |
 | A Grand Plan way's `when`                  | Only those that do not read the hidden truth           |
 | What Rivals compete for's `when`           | All                                                    |
 | A whistleblower report's `when`            | All                                                    |
@@ -344,6 +345,52 @@ Demand behind.
 
 Short text dialogs, such as the pub. A choice's `dialog` opens one.
 
+## `escapes.json`
+
+The rules every [Escape](#escapes) keeps, and their words. Left out, no Bill may offer Escapes.
+
+- `gauge` is the Gauge a working Escape raises, from [`gauges.json`](#gaugesjson), and `by` how far.
+  A Thread that moves it down backfires, and so must offer Escapes.
+- `blamed` is what whoever the player blames keeps: a memory with `about`, which
+  [`changing.json`](#changingjson) can burn, and `text`, which says `{what}`, the consequence's
+  title. `warm` is how much further it moves someone who was warm to the player.
+- `why` says, on the results screen, why an Escape failed: `dangerous`, for naming someone with a
+  dangerous Hidden Fact, says `{name}` and `{fact}`; `lie`, for lying to a Believer boss who saw
+  it; and `bet`, for an explicit bet that did not come off. `warm` and `rival` say `{name}`, for
+  the effect of blaming someone warm to the player, or a Rival.
+- `kinds` is what the results screen calls each kind of Escape.
+
+### Escapes
+
+A consequence of the player's own bad behaviour offers ways out as it lands, in a Bill's
+`escapes`. Every hidden risk's `onPlayer`, every Grand Plan's `failed.onPlayer`, and every Thread
+outcome that moves the Escapes' Gauge down must offer them, unless it is `"mistake": "big"`, which
+is past the point of escape. Grand Plan blame offers them even so. Nothing else may: not
+`onSomeoneElse`, a whistleblower's report or any other Thread outcome.
+
+The player chooses one where the Bill would have arrived: a Move's where Moves land, and any other
+as the month opens. Only then does the Bill take effect, if it does, and only then do its Thread's
+Gauges move. Each Escape has a unique `id`, a `label` and a `kind`:
+
+- `"take"` accepts the consequence as written, with an optional `body` to tell the player. Each
+  list has one, last, and at least one other way out before it. A Notification Bill taken
+  arrives as its Notification.
+- `"blame"` names a Character or place in `blames`. It fails if they have a dangerous Hidden Fact.
+  Whether it works or not they keep `blamed`, which also travels as news from a Rival, and costs
+  more with anyone who was warm to the player. Nobody gone, or not yet met, is offered.
+- `"lie"` fails if the boss is a Believer who saw it. `seen` is a condition for that, left out
+  always.
+- `"bury"` stalls or loses it, and needs `fails` or `chance` to be able to fail.
+
+Any but `"take"` can have `fails`, a condition that also fails it, with `failed.why` to say why on
+the results screen, and `chance`, an explicit bet: the seeded chance that it works if nothing
+else has failed it. Reading people decides the rest. `worked` moves the consequence elsewhere: it
+has the `body` the player is told, `reported` and `happened` for the official story, and can
+carry `sets`, `opinion`, `headOpinion` and `remembers`, and the Gauge rises. `failed` lands on top
+of the Bill itself, with its `body`, the same fields and `"mistake": "big"`, and must be worse than
+taking it: a lower opinion of either boss, a bad memory or a big mistake. It may not be a second
+big mistake on top of a Bill's own.
+
 ## `events.json`
 
 Company Events: things that happen to the company as a whole. They land after the player's
@@ -402,8 +449,8 @@ The player's Gauges, Teflon and Fawning: their track record, in plain view at ev
 Each has `id`, `label`, `start`, and the `min` and `max` it stays within. Its `milestones` are
 earned once each, on reaching `at`, and the player is told `title` and `body` as the month closes.
 A Milestone it can never reach is refused. A Gauge moves only from the `gauges` of a Thread's outcome,
-as in [`threads.json`](#threadsjson), as the month closes, and the official story says which. Nothing
-else moves it. It never reads the Power Map or a hidden risk, and nothing but its Milestones reads it,
+as in [`threads.json`](#threadsjson), or an [Escape](#escapes) that works, as the month closes, and
+the official story says which. Nothing else moves it. It never reads the Power Map or a hidden risk, and nothing but its Milestones reads it,
 so a high one does not mean the player is safe.
 
 A Thread that moves Fawning starts from a choice aimed at your boss or your boss's boss, and every
@@ -449,7 +496,8 @@ true` is done in reality only then, and otherwise as its `otherwise`, a way in a
 - `failed` is what happens if it is not done in time, as the month after it was due opens: its
   boss looks for someone to blame, even if the player has moved away from them. If `blame.sticks`
   holds, or is left out, it is the player at the seeded `chance` for that boss's kind, plus `mood`
-  for how they stand with the player, and `onPlayer` is sent, which can be `"mistake": "big"`.
+  for how they stand with the player, and `onPlayer` is sent, which can be `"mistake": "big"`, and
+  offers [Escapes](#escapes) all the same.
   Otherwise `onSomeoneElse` is. Both are Bills, as in [`threads.json`](#threadsjson), and may not
   say `{boss}` or `{head}`, since by then that may be someone else. Offer what breaks `sticks` on
   its own, apart from the floor's riskier Moves, so that trying one does not cost the cover: Floor
@@ -705,7 +753,8 @@ player sees none of it until it does, and the results screen lists the lot.
   test checks: so month 4's Budget Round and month 6's metric wait until after the shared drive. If
   it holds, `onPlayer` is sent. If not, `onSomeoneElse` is, if it
   is written, and otherwise nothing happens. Either is a Bill, as in [`threads.json`](#threadsjson),
-  so a risk that lands can be `"mistake": "big"`.
+  so a risk that lands can be `"mistake": "big"`. One that lands on the player and is not offers
+  [Escapes](#escapes).
 - `event` names a Company Event, from [`events.json`](#eventsjson), that lands as it comes out.
 - `note` says what was building up, and `landedOnYou`, `landedElsewhere` and `neverCameOut` say
   what became of it. The results screen lists every risk that was added.
@@ -1016,7 +1065,9 @@ A `bill` has a unique `id`, a `title` and a `body`, and `as` says how it arrives
 - `"move"` lands where Character Moves do, beside the month's own, and needs `from`.
 
 An outcome's `gauges` move the player's Gauges as the month it plays out closes, each with the
-`gauge`, how far it moves it `by`, and the `note` the player sees. Only a Thread can move a Gauge.
+`gauge`, how far it moves it `by`, and the `note` the player sees. Only a Thread or an
+[Escape](#escapes) can move a Gauge. An outcome that moves the Escapes' Gauge down backfires, and
+its Bill offers Escapes unless it is a big mistake.
 
 A Bill can carry `sets`, `opinion`, `headOpinion`, `project`, `"mistake": "big"`, `remembers` and
 `news`, and these take effect when it arrives, or, as a Move, when it lands. Its flags can be read by the official
