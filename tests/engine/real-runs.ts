@@ -15,16 +15,26 @@ export const FAKED = "screenshot-on-the-note";
 
 /**
  * Takes the blame in month 2's Lessons Learned Review, which keeps the record
- * clean, and fakes the Plan: on seeds 2 and 16 the seat is yours, and Floor 2
+ * clean, fakes the Plan, then claims its credit and has a word with the Senior
+ * Analyst about the seat: on seeds 2 and 16 the seat is yours, and Floor 2
  * starts in month 8.
  */
-export const CLEAN = `take-the-blame,${FAKED}`;
+export const CLEAN = `take-the-blame,${FAKED},claim-the-credit,word-with-the-analyst`;
 
 /**
- * Floor 2's Grand Plan done for real in its second month, and Floor 3's in its
- * own: on seed 2 that wins three seats, as months 7, 11 and 15 close.
+ * Floor 2's Grand Plan done for show, a word with the Office Co-ordinator
+ * about its seat, then Floor 3's Plan for show and its credit claimed: on seed
+ * 2 that wins three seats, as months 7, 11 and 15 close.
  */
-export const CLIMB = `${CLEAN},staff-the-centre,decide-what-stops`;
+export const CLIMB = `${CLEAN},sign-on-a-door,word-with-the-coordinator-2,draw-swimlanes,claim-it-middle-manager`;
+
+/** The id a scripted player names a choice by: its option's, or its way out's. */
+const idOf = (choice: Choice) =>
+  "optionId" in choice
+    ? choice.optionId
+    : "escapeId" in choice
+      ? choice.escapeId
+      : undefined;
 
 /** A whole run of the real game, played as the browser tests' helpers play. */
 export interface Played {
@@ -39,8 +49,8 @@ export interface Played {
  * Plays the real game plainly, as `src/ui/later-month.ts` does: on to the start
  * of month `from`, taking each option in `before` on the way, as the e2e build's
  * `?month=N&choose=...` does, and then to the end, taking each option in
- * `choose`, a comma-separated list, once and in order, the first time it is
- * offered. Fails if any option named is never offered.
+ * `choose`, a comma-separated list of options or ways out, once and in order,
+ * the first time it is offered. Fails if any named is never offered.
  */
 export function playRun(
   seed: number,
@@ -57,11 +67,12 @@ export function playRun(
   const took = new Map<string, number>();
   const wanted = choose ? choose.split(",") : [];
   while (view.choices.length > 0) {
-    const named = view.choices.find(
-      (c) => "optionId" in c && c.optionId === wanted[0],
-    );
-    if (named && "optionId" in named) {
-      took.set(named.optionId, view.month);
+    const named =
+      wanted[0] === undefined
+        ? undefined
+        : view.choices.find((c) => idOf(c) === wanted[0]);
+    if (named) {
+      took.set(idOf(named) ?? "", view.month);
       wanted.shift();
     }
     view = run.choose(named ?? plainChoice(view));
@@ -149,7 +160,7 @@ export function climb(
   const first = once === "" ? [] : once.split(",");
   while (view.choices.length > 0) {
     const offered = (wanted: (id: string) => boolean) =>
-      view.choices.find((c) => "optionId" in c && wanted(c.optionId));
+      view.choices.find((c) => wanted(idOf(c) ?? ""));
     const next = offered((id) => id === first[0]);
     if (next) first.shift();
     const choice: Choice =

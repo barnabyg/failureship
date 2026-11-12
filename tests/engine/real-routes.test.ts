@@ -3,7 +3,7 @@ import { gameContent } from "../../src/content";
 import { startRun, type PlayerView } from "../../src/engine";
 import { readHiddenTruth } from "../../src/engine/hidden-truth";
 import { plainChoice } from "../../src/ui/later-month";
-import { everyTold, firstTold } from "./landed";
+import { firstTold } from "./landed";
 
 /** Fakes the Plan at month 5's Ideas Workshop, which a boss who is not a Believer counts. */
 const PLAN = "screenshot-on-the-note";
@@ -11,7 +11,13 @@ const PLAN = "screenshot-on-the-note";
 const REPORT = "ring-about-your-boss";
 
 /**
- * Plays a whole run plainly, taking each option named, a comma-separated list,
+ * When the call is traced, says the Senior Analyst used your extension: on
+ * seeds 43 and 31 the Senior Analyst's Hidden Fact is dangerous, so it fails.
+ */
+const BLAME = "line-blame-the-analyst";
+
+/**
+ * Plays a whole run plainly, taking each option or way out named, a comma-separated list,
  * once and in order, and keeps every view.
  */
 function playAll(seed: number, choose: string) {
@@ -21,7 +27,9 @@ function playAll(seed: number, choose: string) {
   const wanted = choose.split(",");
   while (view.choices.length > 0) {
     const named = view.choices.find(
-      (c) => "optionId" in c && c.optionId === wanted[0],
+      (c) =>
+        ("optionId" in c && c.optionId === wanted[0]) ||
+        ("escapeId" in c && c.escapeId === wanted[0]),
     );
     if (named) wanted.shift();
     view = run.choose(named ?? plainChoice(view));
@@ -51,7 +59,7 @@ describe("two ways up, on the same deal", () => {
   });
 
   it("earns seed 43 a promotion by getting rid of your boss instead, which is traced to you later", () => {
-    const { views, truth } = playAll(43, REPORT);
+    const { views, truth } = playAll(43, `${REPORT},${BLAME}`);
     const decided = truth.vacancies[0]?.decided;
 
     expect(truth.vacancies[0]).toMatchObject({
@@ -72,23 +80,24 @@ describe("two ways up, on the same deal", () => {
         .flatMap((v) => v.orgChart)
         .some((e) => e.name === "Dennis Prowse"),
     ).toBe(false);
-    // The call comes out through the Office Co-ordinator's log, as a big
-    // mistake on Floor 2, which takes the player back down.
+    // The call comes out through the Office Co-ordinator's log on Floor 2.
+    // Blaming the wrong person for it is a big mistake, which takes the
+    // player back down.
     expect(truth.risks.find((r) => r.id === "line-call")?.cameOut).toEqual({
       month: 12,
       onPlayer: true,
     });
-    expect(
-      everyTold(views).find(
-        ({ month, told }) => told.kind === "move" && month === 12,
-      )?.told,
-    ).toMatchObject({ title: "A note for the file" });
+    const traced = views.find(
+      (v) => v.step.kind === "escape" && v.step.id === "line-call-landed",
+    );
+    expect(traced?.month).toBe(12);
+    expect(traced?.step).toMatchObject({ title: "A note for the file" });
     expect(noticed(views, "A sideways move, downwards")?.month).toBe(13);
     expect(views.at(-1)?.job.id).toBe("junior-employee");
   });
 
   it("costs seed 31 the seat it opened, when the call comes out while it is open", () => {
-    const { truth } = playAll(31, REPORT);
+    const { truth } = playAll(31, `${REPORT},${BLAME}`);
 
     expect(truth.risks.find((r) => r.id === "line-call")?.cameOut).toEqual({
       month: 10,

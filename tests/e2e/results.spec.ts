@@ -3,10 +3,11 @@ import { openInboxIfAny, playUntil } from "./play";
 
 // Seed 2, ended at month 9: a vacancy decided, Rivals, and a long Notebook.
 const ENDED_AT_NINE =
-  "/?seed=2&month=9&last=9&choose=take-the-blame,screenshot-on-the-note";
+  "/?seed=2&month=9&last=9&choose=take-the-blame,screenshot-on-the-note,claim-the-credit,word-with-the-analyst";
 
 // Wins all three seats, Floor 3's as month 15 closes, as in win.spec.ts.
-const CLIMB = "choose=take-the-blame,screenshot-on-the-note,staff-the-centre";
+const CLIMB =
+  "choose=take-the-blame,screenshot-on-the-note,claim-the-credit,word-with-the-analyst,sign-on-a-door,word-with-the-coordinator-2,draw-swimlanes,claim-it-middle-manager";
 
 async function reachResults(page: Page) {
   await page.goto(ENDED_AT_NINE);

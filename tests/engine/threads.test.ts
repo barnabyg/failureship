@@ -336,7 +336,11 @@ describe("the real Threads", () => {
     expect(report?.options.find((o) => o.id === "lie")?.sets).toContain(
       thread("green-report").startedBy,
     );
-    expect(bills("green-report").some((b) => b.mistake === "big")).toBe(true);
+    expect(
+      bills("green-report").some((b) =>
+        b.escapes.some((e) => e.kind !== "take" && e.failed.mistake === "big"),
+      ),
+    ).toBe(true);
   });
 
   it("leaves some Moves with no Bill", () => {

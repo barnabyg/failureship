@@ -7,7 +7,7 @@ import { withoutSeatEvents } from "./fixture";
 import { everyTold, firstTold } from "./landed";
 import { CLEAN, FAKED, playAll } from "./real-runs";
 
-function playedTo(seed: number, month: string, choose: string | null = FAKED) {
+function playedTo(seed: number, month: string, choose: string | null = CLEAN) {
   const run = startRun({ seed, content: gameContent });
   const view = playToMonth(run, month, choose);
   return { run, view, truth: readHiddenTruth(run) };
@@ -40,6 +40,18 @@ describe("the first promotion in the game", () => {
       title: "Team lead",
       reportsTo: "Hugh Lamb",
     });
+  });
+
+  // The browser tests that start in month 7 have only the word, in month 6.
+  it("keeps seed 2 a win with only a word with the Senior Analyst, and seed 14 a loss", () => {
+    const word = "take-the-blame,screenshot-on-the-note,word-with-the-analyst";
+
+    expect(playedTo(2, "8", word).truth.vacancies[0]?.decided?.winner).toBe(
+      "you",
+    );
+    expect(playedTo(14, "8", word).truth.vacancies[0]?.decided?.winner).toBe(
+      "associate",
+    );
   });
 
   it("keeps seed 14 a loss to a Rival, who becomes your boss", () => {
@@ -84,7 +96,7 @@ describe("those passed over", () => {
     );
 
   it("remember it, and come back on a player who had the seat", () => {
-    const landed = landedIn(playAll(2, FAKED));
+    const landed = landedIn(playAll(2, CLEAN));
 
     expect(passedOver).toHaveLength(3);
     expect(landed.length).toBeGreaterThan(0);
@@ -135,7 +147,7 @@ describe("eighteen months on either floor", () => {
     // Seed 3 is offered a post by a restructure in month 13, so this one runs
     // with no Company Event that opens a seat.
     ["Floor 1, all the way", 3, null, "junior-employee", true],
-    ["Floor 2 from month 8", 2, FAKED, "team-lead", false],
+    ["Floor 2 from month 8", 2, CLEAN, "team-lead", false],
     [
       "Floor 2 in months 8 and 9, and Floor 1 again from month 10",
       2,

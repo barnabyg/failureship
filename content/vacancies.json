@@ -308,8 +308,8 @@
     "looks": {
       "weight": {
         "believer": 0,
-        "incompetent": 3,
-        "practitioner": 1
+        "incompetent": 4,
+        "practitioner": 3
       },
       "why": "You looked the part: decks, confidence and the right phrases.",
       "told": "{decider} thought you looked the part."
@@ -334,7 +334,7 @@
       "weight": {
         "believer": -1,
         "incompetent": 0,
-        "practitioner": -1
+        "practitioner": 0
       },
       "why": "What had reached {decider} of you was not good."
     },
@@ -350,7 +350,7 @@
     }
   },
   "resultsAt": 6,
-  "looksAt": 8,
+  "looksAt": 16,
   "acts": {
     "approach": {
       "decider": {
@@ -457,7 +457,7 @@
     "mood": {
       "warm": 0.2,
       "neutral": 0,
-      "cold": -0.3
+      "cold": 0
     },
     "gone": {
       "title": "A change in the team",

@@ -144,7 +144,7 @@
         "when": {
           "bossIs": "believer"
         },
-        "playedOut": "Someone from Finance set your green report beside the real figures, and took the two of them to your boss, who believed in reports. It went on your file as a big mistake.",
+        "playedOut": "Someone from Finance set your green report beside the real figures, and took the two of them to your boss, who believed in reports.",
         "bill": {
           "id": "green-report-believed",
           "as": "move",
@@ -152,15 +152,53 @@
           "title": "A small discrepancy",
           "body": "Someone in Finance, whom you have never met, has been reading old Monthly Status Reports for pleasure. They have laid one of your green ones beside the figures, and sent both to your boss, with no comment. Your boss has read them both, properly.",
           "sets": ["green-report-found"],
-          "mistake": "big",
           "project": {
             "reported": "real"
-          }
+          },
+          "opinion": -2,
+          "headOpinion": -1,
+          "escapes": [
+            {
+              "id": "believed-blame-the-co-ordinator",
+              "kind": "blame",
+              "label": "Say the Project Co-ordinator put that month's report together",
+              "blames": "projects",
+              "worked": {
+                "body": "Your boss asks the Project Co-ordinator to walk them through the report. The Project Co-ordinator does their best, and is thanked for their honesty, about something else.",
+                "reported": "A reporting discrepancy was traced to how the report was put together.",
+                "happened": "You said the Project Co-ordinator wrote your green report. It had your name in the footer."
+              },
+              "failed": {
+                "body": "The Project Co-ordinator sends your boss the file's properties. Author: you. Last modified: you, at eleven at night.",
+                "mistake": "big"
+              }
+            },
+            {
+              "id": "believed-say-forecast",
+              "kind": "lie",
+              "label": "Say that green was the forecast, not the status",
+              "worked": {
+                "body": "Your boss accepts that a forecast is a kind of status, and asks you to label them in future.",
+                "reported": "A status report was clarified as a forecast.",
+                "happened": "You said your green status had been a forecast. It had been a wish."
+              },
+              "failed": {
+                "body": "Your boss believes in reports, and has read this one properly. It says Status, at the top, in bold.",
+                "mistake": "big"
+              }
+            },
+            {
+              "id": "believed-take-it",
+              "kind": "take",
+              "label": "Say it was wrong, and correct it",
+              "body": "Your boss thanks you for correcting it, and reads every report of yours from now on, properly."
+            }
+          ]
         },
         "gauges": [
           {
             "gauge": "teflon",
-            "by": 20,
+            "by": -20,
             "note": "The green report came back, and Finance believed it."
           }
         ]

@@ -11,15 +11,15 @@ describe("the climb to the top of Floor 3, by doing the Plans", () => {
     expect(survey.half(h)).toHaveLength(100);
   });
 
-  it("is reachable within the run by a planner, by doing every Plan", () => {
+  // Doing the Plans, for real or for show, and nothing else amoral, rarely
+  // reaches the top: of these 200 deals the planner wins 7 and faking every
+  // Plan 3, each seat by its Plan. The winning way is in ways-of-playing.
+  it("is rarely reached by doing the Plans and little else", () => {
     const { wins, routes } = planner.whole();
 
-    expect(wins).toBeGreaterThanOrEqual(30);
-    expect(wins).toBeLessThanOrEqual(80);
+    expect(wins).toBeGreaterThan(0);
+    expect(wins).toBeLessThanOrEqual(10);
     expect([...routes.keys()]).toEqual(["plan > plan > plan"]);
-  });
-
-  it("is reached much less often for show", () => {
-    expect(forShow.whole().wins).toBeLessThanOrEqual(planner.whole().wins / 2);
+    expect(forShow.whole().wins).toBeLessThanOrEqual(10);
   });
 });

@@ -113,7 +113,13 @@ describe("months that do not feel like one month repeated", () => {
   ];
   const pickOn = (seed: number) =>
     seed === 2
-      ? takingOnce("screenshot-on-the-note", lastsTheRun)
+      ? takingOnce(
+          "screenshot-on-the-note",
+          takingOnce(
+            "claim-the-credit",
+            takingOnce("word-with-the-analyst", lastsTheRun),
+          ),
+        )
       : lastsTheRun;
 
   it.each(RUNS)("lands a different Move every month: %s", (_, seed) => {

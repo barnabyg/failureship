@@ -12,7 +12,7 @@ import {
 // Excellence on Floor 2 make a Middle manager of you in month 12. Month 14 is
 // Floor 3's third month, with its Board, where your boss asks the question.
 const TO_FLOOR_3 =
-  "choose=take-the-blame,screenshot-on-the-note,staff-the-centre";
+  "choose=take-the-blame,screenshot-on-the-note,claim-the-credit,word-with-the-analyst,staff-the-centre";
 
 test("take the Board's tricky question offline, and hear from the Board Office about it", async ({
   page,

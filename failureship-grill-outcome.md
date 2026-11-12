@@ -12,7 +12,7 @@ Failureship is a satirical, single-player browser game. You climb a ten-storey o
 
 - **Audience:** a personal project, to share with a small group of friends.
 - **Voice:** deadpan corporate sincerity. The humour must work for anyone who has had a job, with no specialist jargon needed to get the joke. The satire comes from the rules.
-- **Challenge:** the player has to work at it. Taking the amoral choice each time must not lead straight to the top. Amoral Moves always carry risk, you often act on incomplete information, and a bad call puts you on the receiving end of someone else's failureship.
+- **Challenge:** the player has to work at it. Bad behaviour is rewarded, and there is no route to the top without it. The challenge is escaping what it brings (changed at the Phase 5 checkpoint, issue 112). The flow of play is bad behaviour, then a consequence, then an escape: blaming someone else, lying, burying it. Taking the amoral choice every time leads to the top only if every escape is got right, which should be hard. A winning player is amoral about three times in four, and holds back only where the consequence is plain to see. You often act on incomplete information, and a bad call puts you on the receiving end of someone else's failureship.
 - **Pressure from above:** many Demands cannot honestly be met, so the organisation itself pushes people towards failureship.
 
 ## The defining decision: people first, not a company simulation
@@ -103,11 +103,12 @@ Events drive promotion, not scores. Promotion needs a vacancy, and whoever reall
 - **Deals.** They are worth only what the people in them can really deliver, and that can fail on both sides. A good word helps only if the boss actually listens to that person.
 - **Hidden risks.** The company's state is mostly a short list of risks your decisions have built up. They come out as a Company Event, or through a Character with a motive and the means to act. Whether a risk lands on you depends on whether it can be traced to you.
 - **Company Events.** They come from hidden risks, such as a breach after you skimped on security, or from outside, such as a takeover bid. They can reshuffle the Org Chart, so they are dangers and openings at once.
-- **Mistakes.** A big mistake can block a promotion or get you demoted, and puts you on a Final Warning. Another one gets you fired, which ends the game. Only a truly catastrophic Move gets you fired outright, and the game signals those stakes first.
+- **Escapes (added at the Phase 5 checkpoint, issue 112).** A day-to-day consequence of bad behaviour is offered to the player as it lands, with Escapes to choose from: blame someone else, lie, bury it, or take it. Whether an Escape works is decided by what the player has read. Blaming someone with a dangerous Hidden Fact, or lying to a boss who already knows, turns it into a worse consequence. Some Escapes need a minimum Teflon, and are not offered below it. Escaping beforehand, by covering your tracks or keeping someone warm, still works as well.
+- **Mistakes.** A big mistake can block a promotion or get you demoted, and puts you on a Final Warning. Another one gets you fired, which ends the game. Only a truly catastrophic Move gets you fired outright, and the game signals those stakes first. A big mistake or a firing is past the point of escape: it offers none. The player recovers from a big mistake the slow way, from a lower seat, by not making it a second time, and that costs months.
 
 ## Gauges
 
-Gauges such as Teflon are comic and fun to watch, and have little effect on play, except that the bolder Escapes need a minimum Teflon. They reflect your track record, not your real danger, and never reveal the Power Map. A Gauge moves only when a Thread or an Escape has played out: you did something, it paid off or did not, a Gauge moves. Reaching a set level earns a Milestone, such as "Slippery as an eel" at 70 Teflon.
+Gauges such as Fawning are comic and fun to watch, and have little effect on play. Teflon is the exception (changed at the Phase 5 checkpoint, issue 112): it rises with each Escape that works, falls with each that fails, and the bolder Escapes need a minimum Teflon. Gauges reflect your track record, not your real danger, and never reveal the Power Map. A Gauge moves only when a Thread or an Escape has played out: you did something, it paid off or did not, a Gauge moves. Reaching a set level earns a Milestone, such as "Slippery as an eel" at 70 Teflon.
 
 Gauges are visible numbers, and a high one does not necessarily lead to promotion. Teflon is the only one named so far.
 
@@ -256,13 +257,14 @@ Use these terms consistently in the design and the game.
 - **Deal:** an exchange in which the player and a Character each offer something. It is worth only what each side can really deliver, and either side can fail.
 - **Buzzword:** a fashionable phrase the player has picked up, which opens an option in a later Scene.
 - **Thread:** a chain of play running from something the player did to the point where it pays off or backfires.
-- **Gauge:** a visible, comic measure of the player's career that moves only when a Thread plays out. It does not necessarily lead to promotion.
-- **Teflon:** the Gauge reflecting the player's ability to avoid blame.
+- **Gauge:** a visible, comic measure of the player's career that moves only when a Thread or an Escape plays out. It does not necessarily lead to promotion.
+- **Teflon:** the Gauge reflecting the player's ability to avoid blame. Unlike the other Gauges it matters in play: some Escapes need a minimum Teflon.
+- **Escape:** a way out offered when a day-to-day consequence of bad behaviour lands on the player, such as blaming someone else, lying or burying it. It can fail, and makes things worse when it does. A big mistake or a firing offers none.
 - **Fawning:** the Gauge reflecting how well sucking up to the player's managers is paying off. Not whether they like the player, and it plays no part in promotion.
 - **Milestone:** a comic title awarded when a Gauge reaches a set level.
 - **Notebook:** the player's retained record of important clues about the Power Map, which may include false or outdated claims.
 - **Find Out:** spending an action to ask someone about a Character or to buy information, which gives a claim that may be true, mistaken, out of date or deliberately false.
-- **Character Move:** a Move a Character makes that lands on the player after the month's actions, with no choice offered.
+- **Character Move:** a Move a Character makes that lands on the player after the month's actions. It offers no choice, unless it is a consequence of the player's own bad behaviour, which offers Escapes.
 - **Hidden risk:** a written item that the player's decisions add, with a source, a route out and a way of being traced. It may land on the player, on someone else or never come out, and the player sees none of it until it does. Not a running balance.
 - **Budget:** a one-off money decision, such as the Budget Round, the bonus pot or the underspend. It comes back through what Characters remember and the hidden risks it adds. Not a running balance.
 - **Company Event:** something that happens to the company as a whole, such as a takeover bid or a security breach.
