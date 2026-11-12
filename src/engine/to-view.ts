@@ -24,7 +24,7 @@ import {
 } from "./reads";
 import { YOU } from "./deal";
 import { dealsInView } from "./deals";
-import { escapesInStory, escapesOnOffer } from "./escapes";
+import { escapesInStory, escapesInView, escapesOnOffer } from "./escapes";
 import { floorNow, isOn } from "./floors";
 import { gaugesInView, gaugesThisMonth } from "./gauges";
 import {
@@ -384,10 +384,13 @@ function toStepView(state: State, world: World): StepView {
         from: sayFrom(state, content, bill.from ?? ""),
         title: bill.title,
         body: fillParts(state, content, bill.body),
-        escapes: escapesOnOffer(state, content, bill.id).map((e) => ({
-          id: e.id,
-          label: e.label,
-        })),
+        escapes: escapesInView(state, content, bill.id).map(
+          ({ escape, needs }) => ({
+            id: escape.id,
+            label: escape.label,
+            needs,
+          }),
+        ),
       };
     }
     case "event": {

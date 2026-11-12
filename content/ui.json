@@ -101,6 +101,7 @@
   "resultsEscapeWorked": "It worked.",
   "resultsEscapeFailed": "It did not work.",
   "escapeHeading": "What do you do?",
+  "escapeNeeds": "Needs {gauge} {at}",
   "resultsChangesHeading": "What moved the charts",
   "resultsBeliefsHeading": "What each of them ended up believing, and why",
   "resultsHeardNothing": "Nothing about you ever reached them.",

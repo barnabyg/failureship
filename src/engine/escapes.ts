@@ -1,5 +1,5 @@
 import { everyBill, type Bill, type Content, type Escape } from "./content";
-import { gaugeFromEscape, gaugesFromThread } from "./gauges";
+import { gaugeFromEscape, gaugeNeeded, gaugesFromThread } from "./gauges";
 import { applyOutcome } from "./outcome";
 import { isGone, whoIs } from "./places";
 import {
@@ -62,14 +62,33 @@ function blamedBy(
   }
 }
 
-/** The Escapes on offer: nobody is blamed who has gone, or whom the player never met. */
+/** What an Escape needs before it can be played, if the player is short of it. */
+function needs(state: State, content: Content, escape: Escape) {
+  return escape.kind === "take"
+    ? undefined
+    : gaugeNeeded(state, content, escape.minTeflon);
+}
+
+/**
+ * The Escapes in view: nobody is blamed who has gone, or whom the player never
+ * met. One that needs more Teflon than the player has is shown with what it needs.
+ */
+export function escapesInView(state: State, content: Content, id: string) {
+  return billOf(content, id)
+    .escapes.filter(
+      (e) => e.kind !== "blame" || blamedBy(state, content, e) !== undefined,
+    )
+    .map((escape) => ({ escape, needs: needs(state, content, escape) }));
+}
+
+/** The Escapes the player can choose: those in view that need nothing more. */
 export function escapesOnOffer(
   state: State,
   content: Content,
   id: string,
 ): Escape[] {
-  return billOf(content, id).escapes.filter(
-    (e) => e.kind !== "blame" || blamedBy(state, content, e) !== undefined,
+  return escapesInView(state, content, id).flatMap((e) =>
+    e.needs === undefined ? [e.escape] : [],
   );
 }
 
@@ -193,7 +212,7 @@ export function chooseEscape(
   if (failure === null) {
     const { worked } = escape;
     applyOutcome(state, content, worked, escape.label);
-    gaugeFromEscape(state, content, worked.reported);
+    gaugeFromEscape(state, content, true, worked.reported);
     state.escapes.push({
       ...record,
       worked: true,
@@ -203,6 +222,10 @@ export function chooseEscape(
   }
   land(state, content, bill, due.gauges);
   applyOutcome(state, content, escape.failed, escape.label);
+  const note = sayPeople(content.escapes?.failed.note ?? "", {
+    "{what}": bill.title,
+  });
+  gaugeFromEscape(state, content, false, note);
   state.escapes.push({ ...record, worked: false, why: [failure, ...notes] });
   return told(escape.failed.body);
 }

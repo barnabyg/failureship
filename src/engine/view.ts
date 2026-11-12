@@ -150,7 +150,12 @@ export type StepView =
       from: string;
       title: string;
       body: string;
-      escapes: { id: string; label: string }[];
+      /** A locked one `needs` more of a Gauge before it can be chosen. */
+      escapes: {
+        id: string;
+        label: string;
+        needs?: { label: string; at: number } | undefined;
+      }[];
     }
   | { kind: "event"; from: string; title: string; body: string }
   | {

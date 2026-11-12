@@ -350,7 +350,9 @@ Short text dialogs, such as the pub. A choice's `dialog` opens one.
 The rules every [Escape](#escapes) keeps, and their words. Left out, no Bill may offer Escapes.
 
 - `gauge` is the Gauge a working Escape raises, from [`gauges.json`](#gaugesjson), and `by` how far.
-  A Thread that moves it down backfires, and so must offer Escapes.
+  A Thread that moves it down backfires, and so must offer Escapes. `failed.by`, below zero, is
+  how far a failed Escape lowers it, and `failed.note` the official story's line, which says
+  `{what}`, the consequence's title. It is the Gauge an Escape's `minTeflon` reads.
 - `blamed` is what whoever the player blames keeps: a memory with `about`, which
   [`changing.json`](#changingjson) can burn, and `text`, which says `{what}`, the consequence's
   title. `warm` is how much further it moves someone who was warm to the player.
@@ -384,12 +386,22 @@ Gauges move. Each Escape has a unique `id`, a `label` and a `kind`:
 
 Any but `"take"` can have `fails`, a condition that also fails it, with `failed.why` to say why on
 the results screen, and `chance`, an explicit bet: the seeded chance that it works if nothing
-else has failed it. Reading people decides the rest. `worked` moves the consequence elsewhere: it
+else has failed it. Reading people decides the rest.
+
+Any but `"take"` can have `minTeflon`, the Teflon it needs: the value of the Escapes' Gauge, above
+that Gauge's `min` and at most its `max`. Below it, the player sees the Escape locked, with the
+Teflon it needs, and cannot choose it. Gate the bolder ways out, such as blaming your boss or
+someone upstairs, or burying something big, and leave simple blame and lies open, so that a list
+always has Take it and usually another way open. Teflon starts at 50, so 60 needs one working
+Escape or a Thread's gain, and 70 two.
+
+`worked` moves the consequence elsewhere: it
 has the `body` the player is told, `reported` and `happened` for the official story, and can
 carry `sets`, `opinion`, `headOpinion` and `remembers`, and the Gauge rises. `failed` lands on top
 of the Bill itself, with its `body`, the same fields and `"mistake": "big"`, and must be worse than
 taking it: a lower opinion of either boss, a bad memory or a big mistake. It may not be a second
-big mistake on top of a Bill's own.
+big mistake on top of a Bill's own, and the Gauge falls by `failed.by` in
+[`escapes.json`](#escapesjson).
 
 ## `events.json`
 
@@ -449,9 +461,10 @@ The player's Gauges, Teflon and Fawning: their track record, in plain view at ev
 Each has `id`, `label`, `start`, and the `min` and `max` it stays within. Its `milestones` are
 earned once each, on reaching `at`, and the player is told `title` and `body` as the month closes.
 A Milestone it can never reach is refused. A Gauge moves only from the `gauges` of a Thread's outcome,
-as in [`threads.json`](#threadsjson), or an [Escape](#escapes) that works, as the month closes, and
-the official story says which. Nothing else moves it. It never reads the Power Map or a hidden risk, and nothing but its Milestones reads it,
-so a high one does not mean the player is safe.
+as in [`threads.json`](#threadsjson), or an [Escape](#escapes) that works or fails, as the month
+closes, and the official story says which. Nothing else moves it. It never reads the Power Map or a
+hidden risk. Its Milestones read it, and so does an Escape's `minTeflon`, which reads the Escapes'
+Gauge, and nothing else does, so a high one does not mean the player is safe.
 
 A Thread that moves Fawning starts from a choice aimed at your boss or your boss's boss, and every
 result of that choice sets its flag. Its outcomes' `when` read only what the player did, and no

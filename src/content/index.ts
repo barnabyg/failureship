@@ -200,6 +200,7 @@ const panelSchema = z.strictObject(
       "resultsEscapeWorked",
       "resultsEscapeFailed",
       "escapeHeading",
+      "escapeNeeds",
       "resultsChangesHeading",
       "resultsBeliefsHeading",
       "resultsHeardNothing",

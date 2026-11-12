@@ -5,8 +5,10 @@ type Written = NonNullable<Content["gauges"]>[number];
 
 /**
  * The only place a Gauge is read. Gauges are the player's track record, so they
- * move only when a Thread or an Escape plays out, and nothing in the rules but
- * Milestones reads them: never the Power Map, a hidden risk or anyone's belief.
+ * move only when a Thread or an Escape plays out. Milestones read them, and one
+ * rule does: a bolder Escape needs the Gauge Escapes raise, Teflon, at its
+ * `minTeflon`. Nothing else does: never the Power Map, a hidden risk or anyone's
+ * belief.
  */
 export function startingGauges(
   content: Content,
@@ -29,14 +31,35 @@ export function gaugesFromThread(
   state.gaugesDue.push(...moves);
 }
 
-/** An Escape worked: the Gauge Escapes raise moves as the month closes. */
+/**
+ * An Escape was tried: the Gauge Escapes raise goes up as the month closes if it
+ * worked, and down if it failed.
+ */
 export function gaugeFromEscape(
   state: State,
   content: Content,
+  worked: boolean,
   note: string,
 ): void {
   const rules = content.escapes;
-  if (rules) state.gaugesDue.push({ gauge: rules.gauge, by: rules.by, note });
+  if (!rules) return;
+  const by = worked ? rules.by : rules.failed.by;
+  state.gaugesDue.push({ gauge: rules.gauge, by, note });
+}
+
+/**
+ * What an Escape with a minimum needs, while the Gauge Escapes raise is below it:
+ * the Gauge's label and the level. Undefined if it can be played.
+ */
+export function gaugeNeeded(
+  state: State,
+  content: Content,
+  min: number | undefined,
+): { label: string; at: number } | undefined {
+  const gauge = content.gauges?.find((g) => g.id === content.escapes?.gauge);
+  if (min === undefined || !gauge) return undefined;
+  const now = state.gauges[gauge.id] ?? gauge.start;
+  return now < min ? { label: gauge.label, at: min } : undefined;
 }
 
 function clamp(gauge: Written, value: number): number {

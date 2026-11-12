@@ -36,7 +36,8 @@ function billsByNeed(content: Content) {
 
 /**
  * A consequence of the player's bad behaviour offers ways out: Take it, last,
- * and at least one more. Each other way can fail, and failing is worse.
+ * always open, and at least one more. Each other way can fail, and failing is
+ * worse. A minimum Teflon must be one the Gauge can be below, and reach.
  */
 export function findBrokenEscapes(
   content: Content,
@@ -60,6 +61,7 @@ export function findBrokenEscapes(
       problems.push(`Bill "${bill.id}" offers Escapes, but is past them.`);
     }
   }
+  const gauge = content.gauges?.find((g) => g.id === rules?.gauge);
   const ids = new Set<string>();
   // Content that writes no rules for Escapes has none to offer.
   for (const bill of rules ? need : []) {
@@ -77,6 +79,12 @@ export function findBrokenEscapes(
       if (ids.has(escape.id)) problems.push(`${at} uses an id already taken.`);
       ids.add(escape.id);
       if (escape.kind === "take") continue;
+      const min = escape.minTeflon;
+      if (gauge && min !== undefined && (min <= gauge.min || min > gauge.max)) {
+        problems.push(
+          `${at} needs "minTeflon" above ${String(gauge.min)}, and at most ${String(gauge.max)}.`,
+        );
+      }
       if (escape.kind === "blame") checkCharacterOrPlace(at, escape.blames);
       if (escape.kind === "lie" && escape.seen) checkCondition(at, escape.seen);
       if (escape.fails) {

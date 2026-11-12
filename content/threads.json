@@ -945,6 +945,7 @@
           "escapes": [
             {
               "id": "readout-blame-the-programme",
+              "minTeflon": 60,
               "kind": "blame",
               "label": "Say the Programme Manager chose the consultant",
               "blames": "programme",

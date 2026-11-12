@@ -21,8 +21,12 @@ export function plainChoice(view: PlayerView): Choice {
       };
     }
   }
-  // The plain player takes what lands on them, which is always the last way out.
-  const take = step.kind === "escape" ? step.escapes.at(-1) : undefined;
+  // The plain player takes what lands on them, which is always the last way out,
+  // and never locked.
+  const take =
+    step.kind === "escape"
+      ? step.escapes.filter((e) => e.needs === undefined).at(-1)
+      : undefined;
   if (step.kind === "escape" && take) {
     return { type: "escape", billId: step.id, escapeId: take.id };
   }
