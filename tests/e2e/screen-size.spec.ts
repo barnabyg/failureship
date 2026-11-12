@@ -1,5 +1,5 @@
 import { expect, test, type Page } from "@playwright/test";
-import { answerAnyNotification, freshRun } from "./play";
+import { answerAnyNotification, freshRun, openInboxIfAny } from "./play";
 
 // The smallest screen the game supports is 1920×1080. A browser there shows
 // less than the whole screen, and a laptop that scales its display shows less
@@ -78,10 +78,13 @@ test.describe("at 1920×1080", () => {
   });
 
   for (const [floor, address] of [
-    [2, "/?seed=16&month=11&choose=take-the-blame,screenshot-on-the-note"],
+    [
+      2,
+      "/?seed=16&month=11&choose=take-the-blame,screenshot-on-the-note,claim-the-credit,word-with-the-analyst",
+    ],
     [
       3,
-      "/?seed=24&month=14&choose=take-the-blame,screenshot-on-the-note,staff-the-centre",
+      "/?seed=24&month=14&choose=take-the-blame,screenshot-on-the-note,claim-the-credit,word-with-the-analyst,staff-the-centre",
     ],
   ] as const) {
     test(`every place on Floor ${String(floor)} can be pressed`, async ({
@@ -131,6 +134,7 @@ test("the tagline is shown whole on a wide screen, and never cut off", async ({
   // A busy header, with Buzzwords learned, at the narrowest width.
   await page.setViewportSize({ width: 1280, height: 720 });
   await freshRun(page, "/?seed=1");
+  await openInboxIfAny(page);
   await page.getByTestId("option-pub").click();
   await expect(page.getByTestId("buzzwords")).toBeVisible();
   expect((await tagline(page)).whole).toBe(true);

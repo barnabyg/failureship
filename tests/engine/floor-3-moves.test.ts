@@ -4,6 +4,7 @@ import type { PlayerView } from "../../src/engine";
 import { isOn } from "../../src/engine/floors";
 import { readHiddenTruth } from "../../src/engine/hidden-truth";
 import { withoutSeatEvents } from "./fixture";
+import { landedIn, notesIn } from "./landed";
 import { CLEAN, playAll, playRun } from "./real-runs";
 
 /** The bigger Moves only a Middle manager has, as Scene or Notification and option. */
@@ -18,7 +19,7 @@ const FLOOR_3_MOVES = [
   "offsite-brief/last-years-offsite",
 ];
 
-/** Floor 2's Grand Plan done for real: seed 2 is a Middle manager from month 12. */
+/** Floor 2's Grand Plan done for real: seed 24 is a Middle manager from month 12. */
 const TO_FLOOR_3 = `${CLEAN},staff-the-centre`;
 
 /** Without the Company Events that open a seat, so that a stay runs to the end. */
@@ -41,7 +42,10 @@ function arrived(views: readonly PlayerView[], idOrTitle: string) {
     (v) =>
       v.job.id === "middle-manager" &&
       ((v.step.kind === "notification" && v.step.id === idOrTitle) ||
-        (v.step.kind === "move" && v.step.title === idOrTitle) ||
+        (v.step.kind === "escape" &&
+          (v.step.id === idOrTitle || v.step.title === idOrTitle)) ||
+        landedIn(v).some((l) => l.title === idOrTitle) ||
+        notesIn(v).some((n) => n.title === idOrTitle) ||
         (v.step.kind === "notice" && v.step.title === idOrTitle)),
   )?.month;
 }
@@ -62,7 +66,12 @@ function taking(seed: number, move: string) {
 describe("Floor 3's bigger Moves", () => {
   it("are not on offer on the floors below", () => {
     for (const seed of [1, 2, 3, 8, 13, 16, 24]) {
-      const views = playAll(seed, CLEAN, staying);
+      // Seeds 2, 16 and 24 reach Floor 2; the rest stay on Floor 1.
+      const views = playAll(
+        seed,
+        [2, 16, 24].includes(seed) ? CLEAN : null,
+        staying,
+      );
       const below = [
         ...offeredOn(views, "junior-employee"),
         ...offeredOn(views, "team-lead"),
@@ -76,7 +85,7 @@ describe("Floor 3's bigger Moves", () => {
 
   it("are all on offer to a Middle manager", () => {
     const offered = offeredOn(
-      playAll(2, TO_FLOOR_3, staying),
+      playAll(24, TO_FLOOR_3, staying),
       "middle-manager",
     );
 
@@ -170,7 +179,7 @@ describe("what comes back of them, within the run", () => {
   });
 
   it("brings back the costs moved downstairs, through the Office Co-ordinator's reconciliation", () => {
-    const { views, taken, risk } = taking(37, "move-the-costs");
+    const { views, taken, risk } = taking(43, "move-the-costs");
 
     expect(risk("costs-downstairs")).toMatchObject({ onPlayer: true });
     expect(inTime(taken, arrived(views, "costs-found"))).toBe(true);
@@ -232,13 +241,18 @@ describe("what comes back of them, within the run", () => {
 });
 
 describe("the tricky question at the Board", () => {
-  // Deals that reach Floor 3 in month 12, and its Board in month 15.
-  const REACHING = [2, 24, 28, 30, 37, 41, 42, 43, 54, 66, 68, 71];
+  // Deals that reach Floor 3 and its Board: by
+  // Floor 2's Plan done for real, or for show.
+  const FOR_SHOW = `${CLEAN},sign-on-a-door,word-with-the-coordinator-2`;
+  const REACHING = [
+    ...[11, 24, 28, 43, 71, 87, 101].map((seed) => [seed, TO_FLOOR_3] as const),
+    ...[2, 4, 22].map((seed) => [seed, FOR_SHOW] as const),
+  ];
 
   it("is asked by someone competing with the player, and listed against them only if they are a Rival", () => {
     const asked = { rival: 0, other: 0 };
-    for (const seed of REACHING) {
-      const { run, views } = playRun(seed, TO_FLOOR_3, { content: staying });
+    for (const [seed, route] of REACHING) {
+      const { run, views } = playRun(seed, route, { content: staying });
       const board = views.find(
         (v) => v.step.kind === "scene" && v.step.id === "the-board",
       );
@@ -280,12 +294,15 @@ describe("One Roadmap's cover, apart from the Cost Challenge", () => {
   // so with the Roadmap left alone its failure is blamed on the player on
   // these seeds. Asking in reply to the welcome e-mail covers it instead.
   const blamed = (views: readonly PlayerView[]) =>
-    views.some(
-      (v) =>
-        v.step.kind === "move" && v.step.body.includes("middle-management"),
+    views.some((v) =>
+      [v.step, ...landedIn(v)].some(
+        (s) =>
+          (s.kind === "move" || s.kind === "escape") &&
+          s.body.includes("middle-management"),
+      ),
     );
 
-  it.each([24, 28, 37])(
+  it.each([24, 28, 71])(
     "keeps seed %i out of the blame after a Budget Move",
     (seed) => {
       const exposed = playAll(seed, `${TO_FLOOR_3},cut-the-checks`);

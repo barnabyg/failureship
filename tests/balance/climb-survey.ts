@@ -57,9 +57,9 @@ function survey(once: string, always: readonly string[]) {
 // A seat falls vacant in a month at the earliest, so the climb is a race
 // against eighteen months, which a player who knows the game wins on some
 // deals and not others. Doing the Plans and getting rid of bosses are
-// different routes up, each the player's own doing, on every floor. Getting
-// rid of them is the riskier, and faking every Plan wins far less. Each way of
-// playing is its own file, so that workers share them.
+// different routes up, each the player's own doing, on every floor. Without
+// more bad behaviour than that, few reach the top. Each way of playing is its
+// own file, so that workers share them.
 
 /** Fakes Floor 1's Plan, then does each Plan for real. */
 export const planner = survey(CLEAN, [...FOR_REAL, ...FOR_THE_SEAT]);

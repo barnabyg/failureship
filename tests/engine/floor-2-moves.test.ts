@@ -5,6 +5,7 @@ import { isOn } from "../../src/engine/floors";
 import { readHiddenTruth } from "../../src/engine/hidden-truth";
 import { plainChoice, playToMonth } from "../../src/ui/later-month";
 import { withoutSeatEvents } from "./fixture";
+import { landedIn } from "./landed";
 import { CLEAN, playAll, playRun } from "./real-runs";
 
 /** The bigger Moves only a Team lead has, as Scene or Notification and option. */
@@ -33,7 +34,9 @@ function arrived(views: readonly PlayerView[], idOrTitle: string) {
     (v) =>
       v.job.id === "team-lead" &&
       ((v.step.kind === "notification" && v.step.id === idOrTitle) ||
-        (v.step.kind === "move" && v.step.title === idOrTitle)),
+        (v.step.kind === "escape" &&
+          (v.step.id === idOrTitle || v.step.title === idOrTitle)) ||
+        landedIn(v).some((l) => l.title === idOrTitle)),
   )?.month;
 }
 
@@ -85,7 +88,7 @@ describe("what comes back of them, later on Floor 2", () => {
   });
 
   it("brings back the consultant: the invoice, and the Senior Analyst's own spreadsheet", () => {
-    const { views, taken, risk, kept } = taking(12, "hire-the-consultant");
+    const { views, taken, risk, kept } = taking(5, "hire-the-consultant");
 
     expect(kept("analyst", "consultant-took-my-work")).toBe(true);
     expect(arrived(views, "Version history")).toBeGreaterThan(taken);
@@ -103,7 +106,7 @@ describe("what comes back of them, later on Floor 2", () => {
   });
 
   it("brings back the desk by the lift: the one you moved, and the fire door", () => {
-    const { views, taken, risk, kept } = taking(12, "move-the-critic");
+    const { views, taken, risk, kept } = taking(5, "move-the-critic");
 
     expect(kept("projects", "moved-by-the-lift")).toBe(true);
     expect(arrived(views, "Good morning")).toBeGreaterThan(taken);
@@ -118,7 +121,7 @@ describe("the bonus pot given to your allies", () => {
 
   it("goes to whoever really backs you, and leaves out only those who do not", () => {
     const leftOut = new Set<string>();
-    for (const seed of [2, 12, 16, 17, 24, 28, 30, 34, 37]) {
+    for (const seed of [2, 5, 16, 17, 24, 28, 30, 34, 37]) {
       const run = startRun({ seed, content: gameContent });
       let view = playToMonth(run, "12", CLEAN);
       const isPot = (v: PlayerView) =>

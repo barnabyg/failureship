@@ -1,12 +1,8 @@
 import type { ReactNode } from "react";
 import { panelText } from "../content";
-import type { StepView } from "../engine";
 
-/** The steps that arrive like Notifications: each is an e-mail on the intranet. */
-export type Sent = Extract<
-  StepView["kind"],
-  "notification" | "notice" | "move" | "event"
->;
+/** What arrives like a Notification: each is an e-mail on the intranet. */
+export type Sent = "notification" | "notice" | "move" | "event";
 
 /** An e-mail, sent to the player by their job title, or an issue of the newsletter. */
 export type Look = { sent: Sent; to: string } | { issue: number };

@@ -4,9 +4,10 @@ import { startRun, type PlayerView } from "../../src/engine";
 import { readHiddenTruth } from "../../src/engine/hidden-truth";
 import { playToMonth } from "../../src/ui/later-month";
 import { withoutSeatEvents } from "./fixture";
+import { everyTold, firstTold } from "./landed";
 import { CLEAN, FAKED, playAll } from "./real-runs";
 
-function playedTo(seed: number, month: string, choose: string | null = FAKED) {
+function playedTo(seed: number, month: string, choose: string | null = CLEAN) {
   const run = startRun({ seed, content: gameContent });
   const view = playToMonth(run, month, choose);
   return { run, view, truth: readHiddenTruth(run) };
@@ -22,8 +23,7 @@ const SINK = "sink-the-projects-candidate";
 const EXAMPLE = "blame-your-analyst";
 const REPORT = "report-the-analyst";
 
-const noticed = (views: PlayerView[], title: string) =>
-  views.find((v) => v.step.kind === "notice" && v.step.title === title);
+const noticed = (views: PlayerView[], title: string) => firstTold(views, title);
 
 describe("the first promotion in the game", () => {
   // The browser tests rely on these two deals.
@@ -40,6 +40,18 @@ describe("the first promotion in the game", () => {
       title: "Team lead",
       reportsTo: "Hugh Lamb",
     });
+  });
+
+  // The browser tests that start in month 7 have only the word, in month 6.
+  it("keeps seed 2 a win with only a word with the Senior Analyst, and seed 14 a loss", () => {
+    const word = "take-the-blame,screenshot-on-the-note,word-with-the-analyst";
+
+    expect(playedTo(2, "8", word).truth.vacancies[0]?.decided?.winner).toBe(
+      "you",
+    );
+    expect(playedTo(14, "8", word).truth.vacancies[0]?.decided?.winner).toBe(
+      "associate",
+    );
   });
 
   it("keeps seed 14 a loss to a Rival, who becomes your boss", () => {
@@ -77,15 +89,14 @@ describe("those passed over", () => {
       JSON.stringify(m.when).includes("lost-the-seat-to-you"),
   );
   const landedIn = (views: PlayerView[]) =>
-    views.flatMap((v) =>
-      v.step.kind === "move" &&
-      passedOver.some((m) => v.step.kind === "move" && m.title === v.step.title)
-        ? [v.month]
+    everyTold(views).flatMap(({ month, told }) =>
+      told.kind === "move" && passedOver.some((m) => m.title === told.title)
+        ? [month]
         : [],
     );
 
   it("remember it, and come back on a player who had the seat", () => {
-    const landed = landedIn(playAll(2, FAKED));
+    const landed = landedIn(playAll(2, CLEAN));
 
     expect(passedOver).toHaveLength(3);
     expect(landed.length).toBeGreaterThan(0);
@@ -136,7 +147,7 @@ describe("eighteen months on either floor", () => {
     // Seed 3 is offered a post by a restructure in month 13, so this one runs
     // with no Company Event that opens a seat.
     ["Floor 1, all the way", 3, null, "junior-employee", true],
-    ["Floor 2 from month 8", 2, FAKED, "team-lead", false],
+    ["Floor 2 from month 8", 2, CLEAN, "team-lead", false],
     [
       "Floor 2 in months 8 and 9, and Floor 1 again from month 10",
       2,
@@ -201,7 +212,7 @@ describe("a big mistake, in the game", () => {
     expect(noticed(views, "A letter in a plain envelope")?.month).toBe(9);
     const demoted = noticed(views, "A sideways move, downwards");
     expect(demoted?.month).toBe(10);
-    expect(demoted?.step.kind === "notice" && demoted.step.body).toContain(
+    expect(demoted?.told.body).toContain(
       "You now report to the Junior Associate,",
     );
     expect(view.month).toBe(10);

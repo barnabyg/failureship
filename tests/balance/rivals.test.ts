@@ -3,6 +3,7 @@ import { gameContent } from "../../src/content";
 import { startRun, type PlayerView } from "../../src/engine";
 import { readHiddenTruth } from "../../src/engine/hidden-truth";
 import { plainChoice } from "../../src/ui/later-month";
+import { everyTold } from "../engine/landed";
 import { SEEDS } from "../engine/rival-fixture";
 
 describe("the game's Rivals", () => {
@@ -24,20 +25,18 @@ describe("the game's Rivals", () => {
     for (const seed of SEEDS.slice(0, 120)) {
       const { run, views } = playPlainly(seed);
       const truth = readHiddenTruth(run);
-      for (const view of views) {
-        if (view.step.kind !== "move") continue;
-        const { body } = view.step;
+      for (const { month, told: move } of everyTold(views)) {
+        if (move.kind !== "move") continue;
+        const { body } = move;
         const named = gameContent.characters.find(
           (c) =>
             body.toLowerCase().includes((c.called ?? c.name).toLowerCase()) ||
             (c.id === "boss" && /\byour boss\b(?!'s)/i.test(body)),
         );
-        const written = gameContent.moves.find(
-          (m) => m.title === (view.step as { title: string }).title,
-        );
+        const written = gameContent.moves.find((m) => m.title === move.title);
         if (written?.by !== "{competitor}" || !named) continue;
         const credited = truth.rivals.some((r) =>
-          r.did.some((d) => d.month === view.month && d.move === written.id),
+          r.did.some((d) => d.month === month && d.move === written.id),
         );
         if (credited) made.rival += 1;
         else {

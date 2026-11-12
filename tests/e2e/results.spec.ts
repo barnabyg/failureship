@@ -1,12 +1,13 @@
 import { expect, test, type Locator, type Page } from "@playwright/test";
-import { playUntil } from "./play";
+import { openInboxIfAny, playUntil } from "./play";
 
 // Seed 2, ended at month 9: a vacancy decided, Rivals, and a long Notebook.
 const ENDED_AT_NINE =
-  "/?seed=2&month=9&last=9&choose=take-the-blame,screenshot-on-the-note";
+  "/?seed=2&month=9&last=9&choose=take-the-blame,screenshot-on-the-note,claim-the-credit,word-with-the-analyst";
 
 // Wins all three seats, Floor 3's as month 15 closes, as in win.spec.ts.
-const CLIMB = "choose=take-the-blame,screenshot-on-the-note,staff-the-centre";
+const CLIMB =
+  "choose=take-the-blame,screenshot-on-the-note,claim-the-credit,word-with-the-analyst,sign-on-a-door,word-with-the-coordinator-2,draw-swimlanes,claim-it-middle-manager";
 
 async function reachResults(page: Page) {
   await page.goto(ENDED_AT_NINE);
@@ -99,6 +100,7 @@ test("Play this seed again starts the same deal, without asking", async ({
 }) => {
   const fresh = await browser.newPage();
   await fresh.goto("/?seed=2");
+  await openInboxIfAny(fresh);
   const first =
     (await fresh.getByTestId("panel-notification").textContent()) ?? "";
   await fresh.close();
@@ -111,6 +113,7 @@ test("Play this seed again starts the same deal, without asking", async ({
   await expect(page.getByTestId("seed")).toHaveText("2");
   await expect(page).toHaveURL(/seed=2/);
   await expect(page.getByTestId("month")).toContainText("1 of 18");
+  await openInboxIfAny(page);
   await expect(page.getByTestId("panel-notification")).toHaveText(first);
 });
 

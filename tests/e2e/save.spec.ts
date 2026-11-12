@@ -1,5 +1,9 @@
 import { expect, test, type Page } from "@playwright/test";
-import { answerAnyNotification, attendAndFinishMonth } from "./play";
+import {
+  answerAnyNotification,
+  attendAndFinishMonth,
+  openInboxIfAny,
+} from "./play";
 import { openRunMenu } from "./run-menu";
 
 async function savedText(page: Page) {
@@ -10,6 +14,7 @@ test("a reload carries on where the player left off", async ({ page }) => {
   await page.goto("/?seed=4");
   await answerAnyNotification(page);
   await attendAndFinishMonth(page);
+  await openInboxIfAny(page);
   await page.getByTestId("option-skip-training").click();
   // The Demand from your boss's boss, stalled, so that it stays open.
   await page.getByTestId("option-stall").click();
@@ -65,6 +70,7 @@ test("an address with no seed comes back to the saved run", async ({
   await page.goto("/");
 
   await expect(page.getByTestId("seed")).toHaveText("8");
+  await openInboxIfAny(page);
   await expect(page.getByTestId("panel-notification")).toHaveCount(0);
 });
 
@@ -80,6 +86,7 @@ test("new run and restart from seed replace the saved run", async ({
   await page.getByTestId("confirm-leave-yes").click();
   await page.reload();
   await expect(page.getByTestId("seed")).toHaveText("5");
+  await openInboxIfAny(page);
   await expect(page.getByTestId("panel-notification")).toBeVisible();
 
   await openRunMenu(page);
@@ -119,6 +126,7 @@ for (const { what, broken } of [
     await page.getByTestId("save-lost-start-again").click();
     await expect(page.getByTestId("save-lost")).toHaveCount(0);
     await expect(page.getByTestId("month")).toContainText("1 of 18");
+    await openInboxIfAny(page);
     await expect(page.getByTestId("panel-notification")).toBeVisible();
     await expect(page.getByTestId("seed")).toHaveText("8");
   });

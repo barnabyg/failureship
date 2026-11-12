@@ -6,7 +6,8 @@ export type Choice =
   | { type: "action"; actionId: string }
   | { type: "notification"; notificationId: string; optionId: string }
   | { type: "scene"; sceneId: string; optionId: string }
-  | { type: "find-out"; sourceId: string; subjectId: string };
+  | { type: "find-out"; sourceId: string; subjectId: string }
+  | { type: "escape"; billId: string; escapeId: string };
 
 /** A vacancy decided: Official standing, beside who really decided and why. */
 export interface DecidedNotice {
@@ -76,9 +77,10 @@ export interface ScenePerson {
   behaviour: string | null;
   /**
    * How they are with the player: the bosses' treatment, or anyone else's
-   * regard. Signs, and no more. A plain one says nothing of note.
+   * regard. Signs, and no more. A plain one, such as a nod hello, says nothing
+   * of note, so it is left out.
    */
-  withYou: { text: string; plain: boolean } | null;
+  withYou: string | null;
   /** The signs from What you notice that name them and nobody else. */
   signs: SceneSign[];
 }
@@ -99,17 +101,66 @@ export interface DialogView {
   reaction?: string | undefined;
 }
 
+/** A Notification, as an e-mail in the inbox. */
+export interface MailView {
+  kind: "notification";
+  id: string;
+  from: string;
+  subject: string;
+  body: string;
+  options: NotificationOption[];
+  /**
+   * Answered in an earlier month, as the Monthly Status Report is: shown by its
+   * subject and options, with its full text a click away.
+   */
+  short: boolean;
+}
+
+/** A consequence of the player's own doing lands, and these are the ways out. */
+export interface EscapeView {
+  kind: "escape";
+  id: string;
+  from: string;
+  title: string;
+  body: string;
+  /** A locked one `needs` more of a Gauge before it can be chosen. */
+  escapes: {
+    id: string;
+    label: string;
+    needs?: { label: string; at: number } | undefined;
+  }[];
+}
+
+/** Something the player is told, with nothing to choose. */
+export interface NoticeView {
+  kind: "notice";
+  title: string;
+  body: string;
+  /** How the boss took it. Signs only: it never says the boss's kind. */
+  reaction?: string | undefined;
+  /** What the boss finally says of the player. */
+  verdict?: string | undefined;
+  decided?: DecidedNotice | undefined;
+}
+
+/** What landed as the month closed with nothing to choose, in the official story. */
+export type LandedView =
+  | { kind: "event"; from: string; title: string; body: string }
+  | { kind: "move"; from: string; title: string; body: string }
+  | NoticeView;
+
+/**
+ * What waits in the inbox on the floor: e-mail to answer and consequences to
+ * escape, in any order before the month closes, and notes, only to read.
+ */
+export type InboxItemView = MailView | EscapeView | NoticeView;
+
 export type StepView =
-  | {
-      kind: "notification";
-      id: string;
-      from: string;
-      subject: string;
-      body: string;
-      options: NotificationOption[];
+  /** The floor, with this e-mail at the top of the inbox. */
+  | (MailView & {
       /** How many more Notifications are waiting after this one. */
       waiting: number;
-    }
+    })
   | { kind: "actions" }
   | {
       kind: "scene";
@@ -130,21 +181,18 @@ export type StepView =
       sources: Person[];
       subjects: Person[];
     }
-  | {
-      kind: "notice";
-      title: string;
-      body: string;
-      /** How the boss took it. Signs only: it never says the boss's kind. */
-      reaction?: string | undefined;
-      /** What the boss finally says of the player. */
-      verdict?: string | undefined;
-      decided?: DecidedNotice | undefined;
-    }
-  | { kind: "move"; from: string; title: string; body: string }
-  | { kind: "event"; from: string; title: string; body: string }
+  | NoticeView
+  /**
+   * A consequence of the player's own doing. One in the inbox leaves the floor
+   * open, and one that came as a Move asks before the month can close.
+   */
+  | EscapeView
+  /** The official story, as the month closes. */
   | {
       kind: "story";
       title: string;
+      /** What landed as the month closed, in order: Company Events, Moves and notices. */
+      landed: LandedView[];
       reportedHeading?: string | undefined;
       happenedHeading?: string | undefined;
       /** Each thing told of the month, in the month's order. */
@@ -196,6 +244,15 @@ export type StepView =
       }[];
       /** What moved the charts during the run. */
       changes: { month: number; title: string; changed: string }[];
+      /** Each Escape tried: whether it worked, and why. */
+      escapes: {
+        month: number;
+        title: string;
+        label: string;
+        kind: string;
+        worked: boolean;
+        why: string[];
+      }[];
       /** What was building up, including what never came out. */
       risks: {
         addedIn: number;
@@ -399,6 +456,17 @@ export interface PlayerView {
   buzzwords: Buzzword[];
   orgChart: ChartEntry[];
   hotspots: Hotspot[];
+  /** What waits in the inbox, which stays on the floor while the month is open. */
+  inbox: {
+    items: InboxItemView[];
+    /** How many must be answered before the month can close. */
+    toAnswer: number;
+  };
+  /**
+   * Whether the step waits for an answer before anything else can be done, so
+   * that the floor is dimmed. The floor and its inbox never wait.
+   */
+  waiting: boolean;
   step: StepView;
   result: ResultView | null;
   hint: string;

@@ -19,15 +19,89 @@ function chooseReport(run: Run) {
 }
 
 describe("the report-or-pub Notification", () => {
-  it("opens the month before any action can be spent", () => {
+  it("waits in the inbox as the month opens, with the floor open at once", () => {
     const run = startRun({ seed: 1, content: fixture() });
-    const { step, choices } = run.view();
+    const first = run.view();
 
-    expect(step).toMatchObject({ kind: "notification", id: "invite" });
-    expect(choices.every((c) => c.type === "notification")).toBe(true);
-    expect(() => run.choose({ type: "action", actionId: "kettle" })).toThrow(
-      /not available/i,
+    expect(first.step).toMatchObject({ kind: "notification", id: "invite" });
+    expect(first.waiting).toBe(false);
+    expect(first.inbox).toMatchObject({
+      items: [{ kind: "notification", id: "invite", short: false }],
+      toAnswer: 1,
+    });
+    expect(first.choices).toContainEqual({
+      type: "action",
+      actionId: "kettle",
+    });
+
+    const after = run.choose({ type: "action", actionId: "kettle" });
+
+    expect(after.step).toMatchObject({ kind: "notification", id: "invite" });
+    expect(after.result).toMatchObject({ kind: "happened" });
+    expect(after.actions.remaining).toBe(2);
+  });
+
+  it("keeps an action for the inbox, so the month cannot close with it unanswered", () => {
+    const run = startRun({ seed: 1, content: fixture() });
+    run.choose({ type: "action", actionId: "kettle" });
+    const kept = run.choose({ type: "action", actionId: "desk" });
+
+    expect(kept.actions.remaining).toBe(1);
+    expect(kept.choices.every((c) => c.type === "notification")).toBe(true);
+    expect(
+      kept.hotspots.filter((h) => h.state === "available").map((h) => h.id),
+    ).toEqual([]);
+    expect(kept.hint).toBe(
+      "Answer your inbox to close the month: 1 to answer.",
     );
+    expect(kept.step.kind).toBe("notification");
+
+    const closed = chooseReport(run);
+
+    expect(closed.step.kind).toBe("story");
+    expect(closed.inbox).toEqual({ items: [], toAnswer: 0 });
+  });
+
+  it("can be answered in any order", () => {
+    const raw = fixtureRaw();
+    raw.notifications.push({
+      id: "second",
+      from: "Facilities",
+      subject: "Fire drill",
+      body: "Please evacuate in an orderly fashion.",
+      options: [{ id: "noted", label: "Noted" }],
+    });
+    const run = startRun({ seed: 1, content: parseContent(raw) });
+
+    const view = run.choose({
+      type: "notification",
+      notificationId: "second",
+      optionId: "noted",
+    });
+
+    expect(view.step).toMatchObject({ kind: "notification", id: "invite" });
+    expect(
+      view.inbox.items.map((i) => i.kind === "notification" && i.id),
+    ).toEqual(["invite"]);
+  });
+
+  it("is shown short once it has been answered in an earlier month", () => {
+    const run = startRun({ seed: 1, content: fixture() });
+    let view = chooseReport(run);
+    while (view.month === 1) {
+      view = run.choose(view.choices[0] as Parameters<Run["choose"]>[0]);
+    }
+
+    expect(view.step).toMatchObject({
+      kind: "notification",
+      id: "invite",
+      short: true,
+    });
+    // Its full text is still there, a click away.
+    expect(view.inbox.items[0]).toMatchObject({
+      short: true,
+      body: expect.any(String) as unknown,
+    });
   });
 
   it("shows each choice's cost before it is made", () => {

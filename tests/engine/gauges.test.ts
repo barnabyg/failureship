@@ -11,6 +11,7 @@ import {
 } from "../../src/engine";
 import { readHiddenTruth } from "../../src/engine/hidden-truth";
 import { emptyMonthRaw, floorOwn } from "./fixture";
+import { everyNotice } from "./landed";
 
 function raw() {
   const base = emptyMonthRaw();
@@ -123,9 +124,7 @@ describe("a Gauge", () => {
     const views = playOut(run);
 
     expect(
-      views.some(
-        (v) => v.step.kind === "notice" && v.step.title === "SLIPPERY",
-      ),
+      views.some((v) => everyNotice([v]).some((n) => n.title === "SLIPPERY")),
     ).toBe(true);
     const end = views.at(-1)?.step;
     if (end?.kind !== "results") throw new Error("No results.");

@@ -225,6 +225,8 @@ export function Header(props: {
   view: PlayerView;
   /** Each run's header starts afresh, even on the same seed. */
   runNumber: number;
+  /** Opens the inbox at the top, even if the player hid it. */
+  onOpenInbox: () => void;
   onOpenGauges: () => void;
   onOpenBuzzwords: () => void;
   onOpenOrgChart: () => void;
@@ -256,6 +258,27 @@ export function Header(props: {
             <dt>{panelText.actionsHeading}</dt>
             <dd>
               {panelText.actionsLeft.replace("{actions}", view.actions.label)}
+            </dd>
+          </div>
+        )}
+        {view.step.kind !== "results" && (
+          <div data-testid="inbox">
+            <dt>{panelText.inboxHeading}</dt>
+            <dd>
+              <button
+                type="button"
+                className="status-link"
+                data-testid="open-inbox"
+                disabled={view.inbox.items.length === 0}
+                onClick={props.onOpenInbox}
+              >
+                {view.inbox.toAnswer > 0
+                  ? panelText.inboxToAnswer.replace(
+                      "{n}",
+                      String(view.inbox.toAnswer),
+                    )
+                  : panelText.inboxNothing}
+              </button>
             </dd>
           </div>
         )}

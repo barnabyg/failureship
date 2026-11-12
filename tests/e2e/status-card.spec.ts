@@ -2,6 +2,7 @@ import { expect, test, type Page } from "@playwright/test";
 import {
   answerAnyNotification,
   freshRun,
+  openInboxIfAny,
   playToResults,
   playUntil,
 } from "./play";
@@ -46,8 +47,8 @@ for (const size of [
     // Floor 1, then Floors 2 and 3 as screen-size.spec.ts reaches them.
     for (const address of [
       "/?seed=5",
-      "/?seed=16&month=11&choose=take-the-blame,screenshot-on-the-note",
-      "/?seed=24&month=14&choose=take-the-blame,screenshot-on-the-note,staff-the-centre",
+      "/?seed=16&month=11&choose=take-the-blame,screenshot-on-the-note,claim-the-credit,word-with-the-analyst",
+      "/?seed=24&month=14&choose=take-the-blame,screenshot-on-the-note,claim-the-credit,word-with-the-analyst,staff-the-centre",
     ]) {
       await freshRun(page, address);
       await answerAnyNotification(page);
@@ -90,6 +91,7 @@ test("one compact status card, with a Grand Plan and an open Demand, each part o
 }) => {
   await freshRun(page, "/?seed=1&month=4");
   await playUntil(page, "option-stall");
+  await openInboxIfAny(page);
   await page.getByTestId("option-stall").click();
 
   const card = page.getByTestId("status-card");

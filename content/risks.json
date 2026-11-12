@@ -31,7 +31,47 @@
       "title": "A question about the door logs",
       "body": "The Senior Analyst has asked Internal Audit who stopped the review of the door logs. Internal Audit has found a form, and on the form is your name. They would like a word, and they have booked a room with no windows for it.",
       "sets": ["security-traced"],
-      "mistake": "big"
+      "opinion": -1,
+      "headOpinion": -2,
+      "escapes": [
+        {
+          "id": "security-blame-the-office",
+          "kind": "blame",
+          "label": "Say the Office Co-ordinator filled in the form for you",
+          "blames": "admin",
+          "worked": {
+            "body": "Internal Audit asks the Office Co-ordinator about the form. The Office Co-ordinator says they fill in a great many forms, and cannot be expected to remember them all, which Internal Audit accepts as a control weakness.",
+            "reported": "A form was found to have been completed on someone's behalf.",
+            "happened": "You said the Office Co-ordinator filled in the form that stopped the door logs. It was in your handwriting."
+          },
+          "failed": {
+            "body": "The Office Co-ordinator sends Internal Audit the form's history, which shows who opened it, who filled it in and who pressed submit. It was you, three times.",
+            "headOpinion": -1,
+            "mistake": "big"
+          }
+        },
+        {
+          "id": "security-new-system",
+          "kind": "lie",
+          "label": "Say the review moved to a new system, which is better",
+          "worked": {
+            "body": "Internal Audit asks to see the new system. You send a link to a page that is under construction, and they mark the finding as in progress.",
+            "reported": "Door log reviews are being migrated to a new system.",
+            "happened": "You said the door logs were reviewed by a new system. There was no new system."
+          },
+          "failed": {
+            "body": "Your boss tells Internal Audit that there is no new system, because your boss would have had to sign for it, and did not.",
+            "headOpinion": -1,
+            "mistake": "big"
+          }
+        },
+        {
+          "id": "security-take-it",
+          "kind": "take",
+          "label": "Go to the room with no windows",
+          "body": "Internal Audit takes you through the form, slowly. It goes on your file as a finding, not an incident, and the room is booked again for next quarter."
+        }
+      ]
     },
     "onSomeoneElse": {
       "id": "security-elsewhere",
@@ -74,7 +114,45 @@
       "title": "How your numbers are made",
       "body": "The Project Co-ordinator has asked your boss, in the corridor and at some volume, how your numbers are made. Your boss does not know. Your boss would now like to.",
       "sets": ["metric-traced"],
-      "opinion": -2
+      "opinion": -2,
+      "escapes": [
+        {
+          "id": "metric-blame-the-associate",
+          "kind": "blame",
+          "label": "Say the Junior Associate has been doing the numbers lately",
+          "blames": "associate",
+          "worked": {
+            "body": "Your boss thanks you, and has a word with the Junior Associate about rigour. The Junior Associate looks at you for the rest of the week.",
+            "reported": "A data-quality issue was traced to a junior member of the team, who has been given training.",
+            "happened": "You put your numbers down to the Junior Associate, who had never seen them."
+          },
+          "failed": {
+            "body": "The Junior Associate takes it calmly, and forwards your boss every e-mail in which you sent them the numbers to paste in.",
+            "opinion": -2,
+            "headOpinion": -1
+          }
+        },
+        {
+          "id": "metric-say-the-template",
+          "kind": "lie",
+          "label": "Say the numbers come out of the template, and you only fill it in",
+          "worked": {
+            "body": "Your boss nods, and asks for the template. You send one. It has a macro in it that nobody can open, which is how templates are.",
+            "reported": "The floor's numbers were confirmed as template-driven.",
+            "happened": "You said the template made your numbers. You made the template."
+          },
+          "failed": {
+            "body": "Your boss opens the template, and finds your initials in the macro. Your boss would like to know why the template says what you taught it to say.",
+            "opinion": -2
+          }
+        },
+        {
+          "id": "metric-take-it",
+          "kind": "take",
+          "label": "Explain how the numbers are made",
+          "body": "You explain. Your boss listens to all of it, and says that they will need to think about whether that is allowed."
+        }
+      ]
     },
     "onSomeoneElse": {
       "id": "metric-elsewhere",
@@ -116,7 +194,45 @@
       "title": "A correction to the minutes",
       "body": "The Office Co-ordinator has issued a correction to the minutes, to the whole floor. It says that the action you reported as done was not done, and it attaches your email saying that it was. There is no comment. The Office Co-ordinator has never needed one.",
       "sets": ["demand-traced"],
-      "mistake": "big"
+      "opinion": -2,
+      "headOpinion": -1,
+      "escapes": [
+        {
+          "id": "correction-blame-the-associate",
+          "kind": "blame",
+          "label": "Say the Junior Associate told you it was done",
+          "blames": "associate",
+          "worked": {
+            "body": "The Junior Associate apologises to the whole floor for the confusion, without being sure what it was. The Office Co-ordinator issues a correction to the correction.",
+            "reported": "A handover misunderstanding has been corrected in the minutes.",
+            "happened": "You said the Junior Associate told you the action was done. Nobody had told you anything."
+          },
+          "failed": {
+            "body": "The Junior Associate replies to all that they were on leave that week, and attaches the out-of-office, and the e-mail you sent while they were away.",
+            "mistake": "big"
+          }
+        },
+        {
+          "id": "correction-done-since",
+          "kind": "lie",
+          "label": "Reply to all that it has been done since",
+          "worked": {
+            "body": "The Office Co-ordinator notes that the action is now complete, and closes it, which is the most anyone has asked of it.",
+            "reported": "An outstanding action was closed.",
+            "happened": "You said the action had been done since. It still has not been."
+          },
+          "failed": {
+            "body": "Your boss replies to all, asking to see it. There is nothing to see, and everyone on the floor now knows that too.",
+            "mistake": "big"
+          }
+        },
+        {
+          "id": "correction-take-it",
+          "kind": "take",
+          "label": "Thank the Office Co-ordinator for keeping the minutes",
+          "body": "The Office Co-ordinator accepts your thanks in writing. Your boss reads the correction, and the thanks, and says nothing about either."
+        }
+      ]
     },
     "onSomeoneElse": {
       "id": "demand-elsewhere",
@@ -160,7 +276,52 @@
       "body": "The Head of Operations opened the new tool to take its figures to the board, and found that they were not the real ones, where there were any. The launch e-mail is from you. The Head of Operations would like a short note on what the tool does. It is to be shorter than the e-mail.",
       "opinion": -1,
       "headOpinion": -2,
-      "sets": ["tool-found-hollow"]
+      "sets": ["tool-found-hollow"],
+      "escapes": [
+        {
+          "id": "tool-blame-the-office",
+          "kind": "blame",
+          "label": "Say the Office Co-ordinator loaded the figures",
+          "blames": "admin",
+          "worked": {
+            "body": "The Head of Operations writes to the Office Co-ordinator about data entry. The Office Co-ordinator replies that they will look into it, in the tone of someone who will.",
+            "reported": "The new tool's figures were found to be a data-entry issue, and someone in the office has been reminded of the process.",
+            "happened": "You said the Office Co-ordinator had loaded the figures. Nobody had loaded any."
+          },
+          "failed": {
+            "body": "The Office Co-ordinator replies to everyone with the tool's access log. Nobody but you has ever logged in to it, and you logged in once, to take the screenshot.",
+            "opinion": -1,
+            "headOpinion": -2
+          }
+        },
+        {
+          "id": "tool-call-it-a-pilot",
+          "kind": "bury",
+          "label": "Reply that the tool is in pilot, and its figures are illustrative",
+          "fails": {
+            "believes": {
+              "character": "head",
+              "mood": "cold"
+            }
+          },
+          "worked": {
+            "body": "The Head of Operations asks when the pilot ends. You say after the board. The Head of Operations says that is very sensible, and takes a different slide.",
+            "reported": "The new tool was re-scoped as a pilot, with illustrative figures.",
+            "happened": "You called the tool a pilot, after it had launched."
+          },
+          "failed": {
+            "body": "The Head of Operations replies with the launch e-mail, in which you said it was live across the floor. The word pilot does not appear in it. The word live appears four times.",
+            "why": "The Head of Operations had already gone off you, and read the launch e-mail again.",
+            "headOpinion": -2
+          }
+        },
+        {
+          "id": "tool-take-it",
+          "kind": "take",
+          "label": "Write the short note",
+          "body": "You write the note. It says what the tool does, which is nothing yet. It is shorter than the e-mail."
+        }
+      ]
     },
     "onSomeoneElse": {
       "id": "tool-hollow-elsewhere",
@@ -204,7 +365,45 @@
       "body": "The Office Co-ordinator has sent round the seating plan, before and after hot-desking, side by side. They are the same plan. Yours is the name on the e-mail that said it was done.",
       "opinion": -1,
       "headOpinion": -1,
-      "sets": ["desks-found-hollow"]
+      "sets": ["desks-found-hollow"],
+      "escapes": [
+        {
+          "id": "desks-blame-the-co-ordinator",
+          "kind": "blame",
+          "label": "Say the Project Co-ordinator was meant to update the plan",
+          "blames": "projects",
+          "worked": {
+            "body": "The Office Co-ordinator changes the plan's owner to the Project Co-ordinator, who is now responsible for having not hot-desked.",
+            "reported": "The hot-desking roll-out was delayed by an out-of-date seating plan, which now has an owner.",
+            "happened": "You said the Project Co-ordinator owned the seating plan. You had never told them there was one."
+          },
+          "failed": {
+            "body": "The Project Co-ordinator replies that they have never seen the seating plan, and attaches the e-mail in which you said you would keep it to yourself, for now.",
+            "opinion": -1,
+            "headOpinion": -1
+          }
+        },
+        {
+          "id": "desks-say-phase-two",
+          "kind": "lie",
+          "label": "Say the plan shows phase one, and hot-desking is phase two",
+          "worked": {
+            "body": "Your boss says that phase two is exactly the kind of thing. The Office Co-ordinator adds a column headed Phase, and leaves it empty.",
+            "reported": "Hot-desking was confirmed as a roll-out in two phases.",
+            "happened": "You invented phase two of hot-desking, so that phase one could be the old plan."
+          },
+          "failed": {
+            "body": "Your boss was in the meeting where you said it was done, and wrote it down. Your boss reads it back to you, slowly, from the notebook.",
+            "opinion": -2
+          }
+        },
+        {
+          "id": "desks-take-it",
+          "kind": "take",
+          "label": "Say that nothing has moved yet",
+          "body": "You say so. The Office Co-ordinator thanks you for your honesty, and copies the thanks to your boss."
+        }
+      ]
     },
     "landedOnYou": "It came out in the seating plan, which had not changed, beside your e-mail saying it had.",
     "landedElsewhere": "It came out, but nobody could say who had said it was done.",
@@ -240,7 +439,47 @@
       "body": "The Programme Manager took a visitor from Floor 3 to see the Centre of Excellence, and opened the door. The chair, the cables and the launch e-mail all led back to you. The Programme Manager would like a word, and has booked one.",
       "opinion": -1,
       "headOpinion": -2,
-      "sets": ["centre-found-empty"]
+      "sets": ["centre-found-empty"],
+      "escapes": [
+        {
+          "id": "centre-blame-delivery",
+          "minTeflon": 60,
+          "kind": "blame",
+          "label": "Say the Service Delivery Lead was to staff it",
+          "blames": "delivery",
+          "worked": {
+            "body": "The Programme Manager asks the Service Delivery Lead for a staffing plan for the Centre of Excellence. The Service Delivery Lead asks what the Centre of Excellence is.",
+            "reported": "The Centre of Excellence is awaiting staff from Service Delivery.",
+            "happened": "You said the Service Delivery Lead was to staff the Centre of Excellence, which they had never heard of."
+          },
+          "failed": {
+            "body": "The Service Delivery Lead replies that they were never asked, and attaches the launch e-mail, on which they were not copied.",
+            "opinion": -1,
+            "headOpinion": -2
+          }
+        },
+        {
+          "id": "centre-book-the-room",
+          "kind": "bury",
+          "label": "Book the room for a month of workshops, so that nobody opens the door",
+          "chance": 0.5,
+          "worked": {
+            "body": "The room is booked solid. The Programme Manager's visitor is shown the booking screen instead, and finds it very impressive.",
+            "reported": "The Centre of Excellence was fully booked all month.",
+            "happened": "You booked the empty room for workshops nobody held, so that the door stayed shut."
+          },
+          "failed": {
+            "body": "One workshop is cancelled, and the Programme Manager takes the visitor in during the gap. The chair is still there. So is the booking, in your name, for a workshop on excellence.",
+            "opinion": -1,
+            "headOpinion": -2
+          }
+        },
+        {
+          "id": "centre-take-it",
+          "kind": "take",
+          "label": "Go to the word that has been booked"
+        }
+      ]
     },
     "onSomeoneElse": {
       "id": "centre-empty-elsewhere",
@@ -286,8 +525,45 @@
       "title": "A note for the file",
       "body": "The Office Co-ordinator has sent Human Resources a note for the file, with the line's log attached, about who it was that raised the concerns about your old boss, and when. Human Resources would like to discuss your approach to collaboration. They have booked the room with the box of tissues in it.",
       "sets": ["line-call-traced"],
-      "headOpinion": -1,
-      "mistake": "big"
+      "headOpinion": -2,
+      "opinion": -1,
+      "escapes": [
+        {
+          "id": "line-blame-the-analyst",
+          "kind": "blame",
+          "label": "Say the Senior Analyst used your extension",
+          "blames": "analyst",
+          "worked": {
+            "body": "Human Resources asks the Senior Analyst about your extension. The Senior Analyst says they have their own, which Human Resources takes as an admission that they know how phones work.",
+            "reported": "A call to the Speak Up line was made from a shared extension.",
+            "happened": "You said the Senior Analyst rang the line from your phone. You rang it."
+          },
+          "failed": {
+            "body": "The Senior Analyst was in a meeting with Human Resources at the time of the call, which Human Resources can confirm, as it was their meeting.",
+            "mistake": "big"
+          }
+        },
+        {
+          "id": "line-about-the-printer",
+          "kind": "lie",
+          "label": "Say you rang about the printer, and the log is wrong",
+          "worked": {
+            "body": "Human Resources agrees that the log is not always right, and adds the printer to its own concerns.",
+            "reported": "A Speak Up call was reclassified as a facilities matter.",
+            "happened": "You said you rang the Speak Up line about the printer. You rang it about your boss."
+          },
+          "failed": {
+            "body": "The log has a recording. Human Resources plays it to you. It does not mention the printer.",
+            "mistake": "big"
+          }
+        },
+        {
+          "id": "line-take-it",
+          "kind": "take",
+          "label": "Go to the room with the box of tissues",
+          "body": "Human Resources discusses your approach to collaboration for an hour, and gives you a leaflet about it. It goes on your file as a conversation."
+        }
+      ]
     },
     "onSomeoneElse": {
       "id": "line-call-kept",
@@ -332,8 +608,45 @@
       "title": "Where it started",
       "body": "Human Resources has asked the Senior Analyst where the story about your old boss started. The Senior Analyst said the kettle, and then, when pressed, you. Human Resources would like a word about the kettle.",
       "sets": ["boss-rumour-traced"],
-      "headOpinion": -1,
-      "mistake": "big"
+      "headOpinion": -2,
+      "opinion": -1,
+      "escapes": [
+        {
+          "id": "rumour-blame-the-associate",
+          "kind": "blame",
+          "label": "Say you heard it from the Junior Associate",
+          "blames": "associate",
+          "worked": {
+            "body": "Human Resources has a word with the Junior Associate about the kettle. The Junior Associate agrees to make their own tea for a while.",
+            "reported": "The source of an unhelpful story was identified and spoken to.",
+            "happened": "You said the Junior Associate started the story about your old boss. You started it."
+          },
+          "failed": {
+            "body": "The Junior Associate was not at the kettle, or on the floor, or in the country, that week, and has the photographs.",
+            "mistake": "big"
+          }
+        },
+        {
+          "id": "rumour-only-the-kettle",
+          "kind": "lie",
+          "label": "Say you were at the kettle only for the kettle",
+          "worked": {
+            "body": "Human Resources accepts that people go to the kettle for the kettle, and closes the matter.",
+            "reported": "A story about a former manager was found to have no single source.",
+            "happened": "You said you had nothing to do with the story. You told it at the kettle, twice."
+          },
+          "failed": {
+            "body": "Your boss heard you tell it, at the kettle, and tells Human Resources so, with the time.",
+            "mistake": "big"
+          }
+        },
+        {
+          "id": "rumour-take-it",
+          "kind": "take",
+          "label": "Go and have the word about the kettle",
+          "body": "Human Resources talks to you about the kettle for some time. It goes on your file as a conversation, and the kettle gets a notice of its own."
+        }
+      ]
     },
     "landedOnYou": "It came out, and the Senior Analyst said where it had started: with you, by the kettle.",
     "landedElsewhere": "It came out, but the Senior Analyst thought well of you, and said that nobody could say where it had started.",
@@ -378,7 +691,44 @@
       "headOpinion": -2,
       "project": {
         "real": "worse"
-      }
+      },
+      "escapes": [
+        {
+          "id": "friend-blame-the-associate",
+          "kind": "blame",
+          "label": "Say the Junior Associate has been covering for your friend, not you",
+          "blames": "associate",
+          "worked": {
+            "body": "Your boss asks the Junior Associate to stop covering for people. The Junior Associate agrees to, puzzled.",
+            "reported": "Cover arrangements in the team were clarified.",
+            "happened": "You said the Junior Associate had been doing your friend's work. You had."
+          },
+          "failed": {
+            "body": "The Junior Associate replies that they would have liked to, and that nobody asked them, and copies in the Senior Analyst, who adds them to the spreadsheet in a new colour, for none.",
+            "opinion": -1,
+            "headOpinion": -1
+          }
+        },
+        {
+          "id": "friend-say-mentoring",
+          "kind": "lie",
+          "label": "Say you were mentoring your friend, by example",
+          "worked": {
+            "body": "Your boss says that is a very generous way to lead. The Senior Analyst adds a column to the spreadsheet headed Mentoring, and fills it in yellow.",
+            "reported": "A new hire was supported through onboarding with hands-on mentoring.",
+            "happened": "You called doing your friend's job mentoring."
+          },
+          "failed": {
+            "body": "Your boss has seen your friend at their desk, and asks what exactly they were learning by watching you. Your boss would like the answer in writing.",
+            "opinion": -2
+          }
+        },
+        {
+          "id": "friend-take-it",
+          "kind": "take",
+          "label": "Admit that you have been doing it yourself"
+        }
+      ]
     },
     "onSomeoneElse": {
       "id": "friend-work-shared-out",
@@ -463,6 +813,51 @@
             "title": "The invoice",
             "body": "The consultant takes off the travel, and adds a fee for answering the query. It comes to the same, and the Programme Manager has seen you try."
           }
+        }
+      ],
+      "escapes": [
+        {
+          "id": "invoice-blame-your-boss",
+          "minTeflon": 70,
+          "kind": "blame",
+          "label": "Say your boss hired the consultant, and you only signed",
+          "blames": "{boss}",
+          "worked": {
+            "body": "The Programme Manager sends the invoice to your boss, who signs it without reading it, as they sign everything.",
+            "reported": "A consultancy invoice was approved at the appropriate level.",
+            "happened": "You said your boss had hired the consultant. Your boss had been in Lisbon."
+          },
+          "failed": {
+            "body": "Your boss replies that they were in Lisbon that week, and attaches the photographs.",
+            "opinion": -2
+          }
+        },
+        {
+          "id": "invoice-old-inbox",
+          "kind": "bury",
+          "label": "Reply that the invoice must have gone to the old cost-centre inbox",
+          "fails": {
+            "believes": {
+              "character": "programme",
+              "mood": "cold"
+            }
+          },
+          "worked": {
+            "body": "The Programme Manager forwards it to the old cost-centre inbox, which nobody has opened since the reorganisation. It is in good company.",
+            "reported": "An invoice was routed to the correct cost centre.",
+            "happened": "You sent the invoice to an inbox nobody reads."
+          },
+          "failed": {
+            "body": "The Programme Manager replies that the old cost-centre inbox is theirs, and that they have now read it, all of it.",
+            "why": "The Programme Manager had already gone off you, and checked the old inbox, which is theirs.",
+            "opinion": -1,
+            "headOpinion": -1
+          }
+        },
+        {
+          "id": "invoice-take-it",
+          "kind": "take",
+          "label": "Answer the Programme Manager"
         }
       ]
     },
@@ -549,6 +944,44 @@
             "body": "The Senior Analyst withdraws the complaint, and forwards your e-mail to their personal address."
           }
         }
+      ],
+      "escapes": [
+        {
+          "id": "letters-blame-your-boss",
+          "minTeflon": 70,
+          "kind": "blame",
+          "label": "Say your boss set the split, and you only signed",
+          "blames": "{boss}",
+          "worked": {
+            "body": "People and Culture move the conversation to your boss, who is very busy until the end of the year.",
+            "reported": "The team's bonus split was referred to the budget holder.",
+            "happened": "You said your boss set the split. You set it, and your boss signed the cover sheet."
+          },
+          "failed": {
+            "body": "Your boss replies that they delegated the split to you, in writing, and is glad they did. People and Culture move the room with no windows to a smaller one.",
+            "opinion": -2
+          }
+        },
+        {
+          "id": "letters-say-the-matrix",
+          "kind": "lie",
+          "label": "Say the split came out of People and Culture's own matrix",
+          "worked": {
+            "body": "People and Culture apologise for the matrix, and say they will look at it. The matrix is retired, and a new one drawn up, with the same numbers.",
+            "reported": "An old bonus matrix was retired.",
+            "happened": "You said People and Culture's own matrix had decided the split. There is no matrix."
+          },
+          "failed": {
+            "body": "Your boss saw you do the split, on the back of the seating plan, and People and Culture now have the seating plan.",
+            "opinion": -1,
+            "headOpinion": -1
+          }
+        },
+        {
+          "id": "letters-take-it",
+          "kind": "take",
+          "label": "Go to the conversation"
+        }
       ]
     },
     "onSomeoneElse": {
@@ -631,6 +1064,29 @@
             "body": "It takes a day, a tape measure and the committee. The new plan is safe, and everyone sits where they sat in the first place."
           }
         }
+      ],
+      "escapes": [
+        {
+          "id": "fire-door-blame-the-office",
+          "kind": "blame",
+          "label": "Say the Office Co-ordinator drew the floor plan",
+          "blames": "admin",
+          "worked": {
+            "body": "The committee writes to the Office Co-ordinator, who moves the desk fifteen centimetres and signs the form.",
+            "reported": "A small floor-plan issue was put right by the office.",
+            "happened": "You put your floor plan down to the Office Co-ordinator, who had never seen it."
+          },
+          "failed": {
+            "body": "The Office Co-ordinator sends the committee the floor plan's history. Every version is yours, including the one with the arrow labelled Lift.",
+            "opinion": -1,
+            "headOpinion": -1
+          }
+        },
+        {
+          "id": "fire-door-take-it",
+          "kind": "take",
+          "label": "Answer the committee"
+        }
       ]
     },
     "onSomeoneElse": {
@@ -674,7 +1130,47 @@
       "body": "The Board asked the Head of Transformation when the first thing on One Roadmap would be finished. There was no date on the slide, and the slide's properties say that you made it. The Head of Transformation would like a date, and a word.",
       "opinion": -1,
       "headOpinion": -2,
-      "sets": ["roadmap-found-out"]
+      "sets": ["roadmap-found-out"],
+      "escapes": [
+        {
+          "id": "roadmap-blame-the-programme",
+          "minTeflon": 60,
+          "kind": "blame",
+          "label": "Say the Programme Manager owns the dates",
+          "blames": "programme",
+          "worked": {
+            "body": "The Head of Transformation asks the Programme Manager for the dates. The Programme Manager says they will get back to them, which is a date of sorts.",
+            "reported": "Programme dates were referred to the Programme Manager.",
+            "happened": "You said the Programme Manager owned the dates. There were none to own."
+          },
+          "failed": {
+            "body": "The Programme Manager sends the Head of Transformation the meeting note in which you said that dates were a Floor 3 thing.",
+            "opinion": -1,
+            "headOpinion": -2
+          }
+        },
+        {
+          "id": "roadmap-the-appendix",
+          "kind": "lie",
+          "label": "Say the dates are in the appendix",
+          "worked": {
+            "body": "The Head of Transformation asks for the appendix. You send a new pack with an appendix, and the appendix has a date in it: the date of the next Board.",
+            "reported": "Dates for One Roadmap were confirmed in an appendix.",
+            "happened": "You said the dates were in an appendix, and then wrote one."
+          },
+          "failed": {
+            "body": "Your boss was in the room when the slide was made, and says so, to the Head of Transformation, in a meeting about you.",
+            "headOpinion": -2,
+            "mistake": "big"
+          }
+        },
+        {
+          "id": "roadmap-take-it",
+          "kind": "take",
+          "label": "Give a date, and go to the word",
+          "body": "You give a date. It is a Thursday. The Head of Transformation writes it down, which is worse."
+        }
+      ]
     },
     "onSomeoneElse": {
       "id": "roadmap-no-dates-elsewhere",
@@ -719,9 +1215,46 @@
       "from": "From: The Service Delivery Lead, Owen Hale",
       "title": "Ticket closed",
       "body": "The Service Delivery Lead has closed Internal Audit's ticket, and copied the closure note to People and Culture. It says who raised the concern about your old boss, and when, and has a satisfaction survey attached. People and Culture would like to discuss your approach to collaboration.",
-      "headOpinion": -1,
+      "headOpinion": -2,
       "sets": ["audit-call-traced"],
-      "mistake": "big"
+      "opinion": -1,
+      "escapes": [
+        {
+          "id": "ticket-blame-the-programme",
+          "kind": "blame",
+          "label": "Say the Programme Manager raised it from your login",
+          "blames": "programme",
+          "worked": {
+            "body": "People and Culture asks the Programme Manager about the ticket. The Programme Manager says they raise a great many tickets, which is true, and is taken as an answer.",
+            "reported": "A service desk ticket was raised from a shared login.",
+            "happened": "You said the Programme Manager raised the ticket about your old boss. You raised it."
+          },
+          "failed": {
+            "body": "The Programme Manager sends People and Culture their own tickets for the month, all of them, sorted by date. Yours is not among them, and is from your desk.",
+            "mistake": "big"
+          }
+        },
+        {
+          "id": "ticket-wrong-queue",
+          "kind": "lie",
+          "label": "Say it was about the coffee machine, logged in the wrong queue",
+          "worked": {
+            "body": "People and Culture moves the ticket to Facilities, who close it, as the coffee machine is fine.",
+            "reported": "A misrouted ticket was closed by Facilities.",
+            "happened": "You said your ticket to Internal Audit was about the coffee machine. It was about your old boss."
+          },
+          "failed": {
+            "body": "Your boss read the ticket before it was closed. It does not mention coffee, and your boss says so, to People and Culture, in person.",
+            "mistake": "big"
+          }
+        },
+        {
+          "id": "ticket-take-it",
+          "kind": "take",
+          "label": "Discuss your approach to collaboration",
+          "body": "People and Culture discusses it with you, and sends you the satisfaction survey. It goes on your file as a conversation."
+        }
+      ]
     },
     "onSomeoneElse": {
       "id": "audit-call-kept",
@@ -765,10 +1298,46 @@
       "from": "From: The Head of Transformation, Simone Fairley",
       "title": "About your nomination",
       "body": "The Head of Transformation has mentioned to your old boss who nominated them for the refurbishment, and your old boss has written to everyone on Floor 3 to thank you, by name, for thinking of them. Several people have asked to be told if you ever think of them.",
-      "opinion": -1,
+      "opinion": -2,
       "headOpinion": -2,
       "sets": ["nomination-traced"],
-      "mistake": "big"
+      "escapes": [
+        {
+          "id": "nomination-blame-delivery",
+          "kind": "blame",
+          "label": "Say the Service Delivery Lead put the name forward",
+          "blames": "delivery",
+          "worked": {
+            "body": "Your old boss writes again, to thank the Service Delivery Lead instead. The Service Delivery Lead replies that it was nothing, which it was.",
+            "reported": "A nomination was correctly attributed.",
+            "happened": "You said the Service Delivery Lead nominated your old boss. You did."
+          },
+          "failed": {
+            "body": "The Head of Transformation forwards the nomination form, which has your name on it, in the box marked Your name.",
+            "mistake": "big"
+          }
+        },
+        {
+          "id": "nomination-the-whole-team",
+          "kind": "lie",
+          "label": "Say the nomination came from the whole team",
+          "worked": {
+            "body": "Your old boss thanks the whole team instead, which takes longer, and lands on nobody.",
+            "reported": "A nomination was made on behalf of the whole team.",
+            "happened": "You said the whole team nominated your old boss. Nobody else knew."
+          },
+          "failed": {
+            "body": "Your boss asks the team who else signed it. Nobody did, and your boss tells Floor 3 so.",
+            "mistake": "big"
+          }
+        },
+        {
+          "id": "nomination-take-it",
+          "kind": "take",
+          "label": "Thank your old boss for thanking you",
+          "body": "You reply to all. It goes on your file as a conversation, and on Floor 3 as something else."
+        }
+      ]
     },
     "onSomeoneElse": {
       "id": "nomination-kept",
@@ -833,6 +1402,29 @@
             "body": "The Board Office asks for the earlier version. There is no earlier version, and now the Board Office knows that as well."
           }
         }
+      ],
+      "escapes": [
+        {
+          "id": "board-number-blame-the-associate",
+          "kind": "blame",
+          "label": "Say the Junior Associate gave you the figure",
+          "blames": "associate",
+          "worked": {
+            "body": "The Board Office thanks you, and writes to the Junior Associate about version control.",
+            "reported": "A version-control issue in the Board pack was traced to a junior member of staff.",
+            "happened": "You said the Junior Associate had given you the figure. You made it up in the lift."
+          },
+          "failed": {
+            "body": "The Junior Associate replies that they have never been sent the Board pack, and that they would like to be.",
+            "opinion": -1,
+            "headOpinion": -2
+          }
+        },
+        {
+          "id": "board-number-take-it",
+          "kind": "take",
+          "label": "Answer the Board Office"
+        }
       ]
     },
     "onSomeoneElse": {
@@ -885,7 +1477,52 @@
       "headOpinion": -2,
       "project": {
         "real": "worse"
-      }
+      },
+      "escapes": [
+        {
+          "id": "checks-blame-the-co-ordinator",
+          "kind": "blame",
+          "label": "Say the Project Co-ordinator signed off the change",
+          "blames": "projects",
+          "worked": {
+            "body": "The incident review gets a new section, headed Contributing Factors, and the Project Co-ordinator is in it.",
+            "reported": "The incident review found contributing factors in how changes are signed off.",
+            "happened": "You said the Project Co-ordinator signed off the change. The sign-off was yours, and they were on leave."
+          },
+          "failed": {
+            "body": "The Project Co-ordinator sends the review their leave form. It is approved, by you.",
+            "opinion": -1,
+            "headOpinion": -2
+          }
+        },
+        {
+          "id": "checks-reopen-the-review",
+          "minTeflon": 60,
+          "kind": "bury",
+          "label": "Ask for the review to be reopened, with terms of reference",
+          "fails": {
+            "believes": {
+              "character": "delivery",
+              "mood": "cold"
+            }
+          },
+          "worked": {
+            "body": "The review is reopened, and given terms of reference and a steering group. It will report after the next incident.",
+            "reported": "The incident review was extended, so that every lesson is learned.",
+            "happened": "You had the review reopened, so that it would never finish."
+          },
+          "failed": {
+            "body": "The Service Delivery Lead reopens it, adds a section on attempts to reopen it, and closes it again.",
+            "why": "The Service Delivery Lead had already gone off you, and closed it again the same day.",
+            "headOpinion": -2
+          }
+        },
+        {
+          "id": "checks-take-it",
+          "kind": "take",
+          "label": "Accept the review's findings"
+        }
+      ]
     },
     "onSomeoneElse": {
       "id": "checks-held",
@@ -953,6 +1590,28 @@
             "body": "The costs come back to Floor 3, and your thirty per cent goes with them. The Chief Financial Officer's office thanks you for your honesty, and asks for thirty per cent."
           }
         }
+      ],
+      "escapes": [
+        {
+          "id": "costs-next-reconciliation",
+          "kind": "bury",
+          "label": "Reply that the codes will be put right in the next reconciliation",
+          "chance": 0.6,
+          "worked": {
+            "body": "The Office Co-ordinator notes it for the next reconciliation, which is in a year.",
+            "reported": "Cost codes are being aligned in the annual reconciliation.",
+            "happened": "You moved the problem to next year's reconciliation, which you will not be at."
+          },
+          "failed": {
+            "body": "The Chief Financial Officer's office replies that it would rather not wait a year, and asks for the codes by Friday, from you.",
+            "headOpinion": -2
+          }
+        },
+        {
+          "id": "costs-take-it",
+          "kind": "take",
+          "label": "Answer the Office Co-ordinator"
+        }
       ]
     },
     "onSomeoneElse": {
@@ -998,7 +1657,45 @@
       "title": "Last year's offsite",
       "body": "The Head of Transformation has sent you a photograph from last year's offsite, of the same slide, with a note that says: Same plan? It has a question mark, which is worse than not having one.",
       "sets": ["offsite-recognised"],
-      "headOpinion": -2
+      "headOpinion": -2,
+      "escapes": [
+        {
+          "id": "offsite-blame-the-associate",
+          "kind": "blame",
+          "label": "Say the Junior Associate pulled the slide from the archive",
+          "blames": "associate",
+          "worked": {
+            "body": "The Head of Transformation tells the Junior Associate to stop using the archive. The Junior Associate did not know there was one, and now does.",
+            "reported": "The team has been reminded how to use archived material.",
+            "happened": "You said the Junior Associate had recycled the slide. You recycled it."
+          },
+          "failed": {
+            "body": "The Junior Associate replies that they joined after last year's offsite, and attaches their start date.",
+            "headOpinion": -2
+          }
+        },
+        {
+          "id": "offsite-continuity",
+          "kind": "lie",
+          "label": "Say it was deliberate: continuity of vision",
+          "worked": {
+            "body": "The Head of Transformation says that continuity of vision is underrated, and puts it on a slide.",
+            "reported": "This year's offsite built on last year's vision, for continuity.",
+            "happened": "You said reusing last year's slide was a strategy."
+          },
+          "failed": {
+            "body": "Your boss was at last year's offsite, and remembers the slide, and that it did not work last year either.",
+            "opinion": -1,
+            "headOpinion": -2
+          }
+        },
+        {
+          "id": "offsite-take-it",
+          "kind": "take",
+          "label": "Reply: Same plan.",
+          "body": "You reply: Same plan. Without the question mark, it reads as a commitment."
+        }
+      ]
     },
     "onSomeoneElse": {
       "id": "offsite-let-go",

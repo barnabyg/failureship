@@ -9,11 +9,13 @@ import {
   panelText,
 } from "../../src/content";
 import { startRun, type Choice, type Run } from "../../src/engine";
+import { chasedIdOf } from "../../src/engine/content";
 import { castDealtFirst } from "../../src/engine/deal";
 import { bossesAtStart, meantBy } from "../../src/engine/places";
 import { readHiddenTruth } from "../../src/engine/hidden-truth";
 import { plainChoice, playToMonth } from "../../src/ui/later-month";
 import { behavioursIn } from "./scene-view";
+import { notesIn } from "./landed";
 import { everyPath } from "./month-paths";
 
 const SEEDS = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
@@ -126,11 +128,11 @@ describe("the real month", () => {
 
     expect(view.step).toMatchObject({ kind: "results" });
     if (view.step.kind !== "results") throw new Error(view.step.kind);
-    // This run is promoted to Floor 2, so all eight are met: four of Floor 1's
-    // six have a Hidden Fact, and on this deal one of Floor 2's two does. It
+    // This run is promoted to Floor 3, so all nine are met: four of Floor 1's
+    // six have a Hidden Fact, and on this deal one of the three above does. It
     // need not end there: what it does on the way can send it back down.
-    expect(jobs).toContain("team-lead");
-    expect(view.step.characters).toHaveLength(8);
+    expect(jobs).toContain("middle-manager");
+    expect(view.step.characters).toHaveLength(9);
     expect(view.step.characters.filter((c) => c.fact !== null)).toHaveLength(5);
     expect(JSON.stringify(view)).not.toMatch(/\{\w+\}/);
   });
@@ -245,9 +247,9 @@ describe("the real month", () => {
 
   // The Demand browser test relies on these.
   it.each([
-    [4, "notification"],
-    [283, "notice"],
-  ])("keeps what follows a stalled Demand on seed %i", (seed, kind) => {
+    [4, "chased"],
+    [283, "forgotten"],
+  ])("keeps what follows a stalled Demand on seed %i", (seed, fate) => {
     // As the browser test plays it: plainly, but skipping the training and
     // stalling the Demand in month 2.
     const run = startRun({ seed, content: gameContent });
@@ -267,7 +269,15 @@ describe("the real month", () => {
       view = run.choose(next);
     }
 
-    expect(view.step.kind).toBe(kind);
+    // Chased, it is the first e-mail in the inbox. Forgotten, a note says so.
+    const chased =
+      view.step.kind === "notification" &&
+      view.step.id === chasedIdOf("fewer-meetings");
+    const forgotten = notesIn(view).some((n) => n.title === "Meetings");
+    expect({ chased, forgotten }).toEqual({
+      chased: fate === "chased",
+      forgotten: fate === "forgotten",
+    });
   });
 
   // docs/playtest.md contrasts these two seeds.
@@ -295,7 +305,7 @@ describe("the real month", () => {
     };
     const firstSign = (seed: number) => meeting(seed).signs[0]?.text;
     const meetingSigns = (seed: number) =>
-      behavioursIn(meeting(seed)).map((b) => b.text);
+      behavioursIn(meeting(seed), gameContent);
 
     expect(holderInMeeting(283)).toBe("boss");
     expect(holderInMeeting(106)).toBe("analyst");
@@ -305,12 +315,14 @@ describe("the real month", () => {
     expect(of(106).projects?.nature).toBe("useful");
     expect(of(283).analyst?.nature).toBe("useful");
     expect(of(106).analyst?.nature).toBe("dangerous");
-    expect(meetingSigns(58)).toContain(
-      "Your boss overruns the meeting by twenty minutes, then schedules another to cover what was missed.",
-    );
-    expect(meetingSigns(57)).toContain(
-      "The Project Co-ordinator marks a late task as complete, and opens a new one with the same name.",
-    );
+    expect(meetingSigns(58)).toContainEqual({
+      who: "your boss",
+      text: "Overruns, then schedules another meeting.",
+    });
+    expect(meetingSigns(57)).toContainEqual({
+      who: "the Project Co-ordinator",
+      text: "Closes, then reopens, late tasks.",
+    });
     expect(of(283).boss?.kind).toBe("incompetent");
     expect(of(106).boss?.kind).toBe("believer");
   });
@@ -319,13 +331,14 @@ describe("the real month", () => {
   it("keeps a Demand faked in month 2 coming back in month 4 on seed 13", () => {
     const run = startRun({ seed: 13, content: gameContent });
     let view = playToMonth(run, "4", "do-training,fake");
-    const moves: string[] = [];
+    const titles: string[] = [];
     while (view.month === 4) {
-      if (view.step.kind === "move") moves.push(view.step.body);
+      // It lands where Moves land, with ways out of it.
+      if (view.step.kind === "escape") titles.push(view.step.title);
       view = run.choose(plainChoice(view));
     }
 
-    expect(moves.join()).toContain("correction to the minutes");
+    expect(titles).toContain("A correction to the minutes");
   });
 
   // tests/e2e/fired.spec.ts relies on this: blaming and then cutting the Project

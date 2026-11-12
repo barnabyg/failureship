@@ -10,6 +10,7 @@ import {
 } from "../../src/engine";
 import { readHiddenTruth } from "../../src/engine/hidden-truth";
 import { fixtureRaw, floorOwn } from "./fixture";
+import { firstTold } from "./landed";
 
 const mistakes = {
   finalWarning: { title: "WARNED", body: "One more." },
@@ -105,7 +106,7 @@ function play(run: Run, ...answers: string[]): PlayerView[] {
 }
 
 const titled = (views: PlayerView[], title: string) =>
-  views.find((v) => v.step.kind === "notice" && v.step.title === title);
+  firstTold(views, title)?.view;
 
 function risksOf(views: PlayerView[]) {
   const { step } = views.at(-1) as PlayerView;
@@ -426,10 +427,14 @@ describe("the real risks", () => {
     expect([...late]).toEqual([]);
   });
 
-  it("can land as a big mistake", () => {
-    expect(gameContent.risks.some((r) => r.onPlayer.mistake === "big")).toBe(
-      true,
-    );
+  it("can land as a big mistake, when a way out of it fails", () => {
+    expect(
+      gameContent.risks.some((r) =>
+        r.onPlayer.escapes.some(
+          (e) => e.kind !== "take" && e.failed.mistake === "big",
+        ),
+      ),
+    ).toBe(true);
   });
 
   it("brings the bonus pot back through what a Character remembers", () => {

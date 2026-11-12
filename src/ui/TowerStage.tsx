@@ -10,9 +10,11 @@ interface Props {
   onChoose: (choice: Choice) => void;
   /** Once the run is over, the floor is only scenery: no labels on its places. */
   unlabelled?: boolean;
+  /** A step waits for an answer: the floor is dimmed, and none of it can be taken. */
+  waiting?: boolean;
 }
 
-const canTake = (legal: readonly Choice[], actionId: string) =>
+const takable = (legal: readonly Choice[], actionId: string) =>
   legal.some((c) => c.type === "action" && c.actionId === actionId);
 
 /** The tower with its hotspots: a model behind, and labelled buttons in front. */
@@ -22,18 +24,22 @@ export function TowerStage({
   legal,
   onChoose,
   unlabelled = false,
+  waiting = false,
 }: Props) {
   const stage = useRef<HTMLDivElement>(null);
   const tower = useRef<Tower | null>(null);
   const roomClick = useRef<(roomId: string) => void>(() => undefined);
   const [points, setPoints] = useState<Map<string, ScreenPoint>>(new Map());
+  const canTake = (actionId: string) => !waiting && takable(legal, actionId);
 
   useEffect(() => {
     roomClick.current = (roomId) => {
       const hotspot = hotspots.find((h) => h.place === roomId);
-      if (hotspot) onChoose({ type: "action", actionId: hotspot.id });
+      if (hotspot && !waiting && takable(legal, hotspot.id)) {
+        onChoose({ type: "action", actionId: hotspot.id });
+      }
     };
-  }, [hotspots, onChoose]);
+  }, [hotspots, legal, waiting, onChoose]);
 
   useEffect(() => {
     const element = stage.current;
@@ -55,18 +61,25 @@ export function TowerStage({
   }, [rooms]);
 
   useEffect(() => {
-    const clickable = hotspots.filter((h) => canTake(legal, h.id));
+    const clickable = waiting
+      ? []
+      : hotspots.filter((h) => takable(legal, h.id));
     const done = hotspots.filter((h) => h.state === "done");
     tower.current?.setRooms(
       new Set(clickable.map((h) => h.place)),
       new Set(done.map((h) => h.place)),
     );
-  }, [hotspots, legal]);
+  }, [hotspots, legal, waiting]);
 
   const signed = unlabelled ? [] : rooms;
   const labelled = unlabelled ? [] : hotspots;
   return (
-    <div className="stage" ref={stage}>
+    <div
+      className="stage"
+      ref={stage}
+      data-testid="stage"
+      data-floor={waiting ? "waiting" : "open"}
+    >
       {signed.map((room) => {
         const point = points.get(room.id);
         if (!point || !room.sign) return null;
@@ -85,7 +98,7 @@ export function TowerStage({
       {labelled.map((hotspot) => {
         const point = points.get(hotspot.place);
         if (!point) return null;
-        const enabled = canTake(legal, hotspot.id);
+        const enabled = canTake(hotspot.id);
         return (
           <button
             key={hotspot.id}
@@ -100,13 +113,16 @@ export function TowerStage({
             }}
           >
             <span className="hotspot-label">{hotspot.label}</span>
-            <span className="hotspot-detail">
-              {hotspot.state === "done"
-                ? panelText.doneLabel
-                : hotspot.state === "unavailable"
-                  ? panelText.unavailableLabel
-                  : hotspot.costLabel}
-            </span>
+            {/* What a place costs means nothing while the floor cannot be used. */}
+            {!waiting && (
+              <span className="hotspot-detail">
+                {hotspot.state === "done"
+                  ? panelText.doneLabel
+                  : hotspot.state === "unavailable"
+                    ? panelText.unavailableLabel
+                    : hotspot.costLabel}
+              </span>
+            )}
           </button>
         );
       })}

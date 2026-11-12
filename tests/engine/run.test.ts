@@ -16,6 +16,7 @@ import {
   fixtureRaw,
   floorOwn,
 } from "./fixture";
+import { landedIn } from "./landed";
 
 const next: Choice = { type: "continue" };
 const pub: Choice = {
@@ -237,13 +238,12 @@ describe("content restricted to particular months", () => {
       },
     ];
     const run = startRun({ seed: 1, content: parseContent(raw) });
+    /** What landed as the month closed, as its official story tells it. */
     const stepsUntilStory = () => {
-      const kinds = [run.view().step.kind];
       while (run.view().step.kind !== "story") {
-        const choice = run.view().choices[0] as Choice;
-        kinds.push(run.choose(choice).step.kind);
+        run.choose(run.view().choices[0] as Choice);
       }
-      return kinds;
+      return landedIn(run.view()).map((l) => l.kind);
     };
 
     expect(stepsUntilStory()).not.toContain("move");

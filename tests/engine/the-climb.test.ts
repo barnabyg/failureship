@@ -31,12 +31,12 @@ describe("the climb to the top of Floor 3", () => {
     expect(results.ending.text).toContain("month 15");
     expect(results.route.map((r) => r.text)).toEqual([
       "Month 7: Team lead, when Dennis Prowse's Grand Plan was done for show, and Dennis Prowse moved up anyway.",
-      "Month 11: Middle manager, when Hugh Lamb's Grand Plan was really done, and Hugh Lamb moved up.",
-      "Month 15: the top of Floor 3, when Gwen Ashdown's Grand Plan was really done, and Gwen Ashdown moved up.",
+      "Month 11: Middle manager, when Hugh Lamb's Grand Plan was done for show, and Hugh Lamb moved up anyway.",
+      "Month 15: the top of Floor 3, when Gwen Ashdown's Grand Plan was done for show, and Gwen Ashdown moved up anyway.",
     ]);
   });
 
-  // CLIMB fakes Floor 1's Plan. Seed 67 gets rid of both bosses above Floor 1.
+  // CLIMB fakes every Plan. Seed 71 gets rid of both bosses above Floor 1.
   it("tells a stand-in for winning that goes by how the player got there", () => {
     const standIn = (views: readonly PlayerView[]) => {
       const step = views.find((v) => v.step.kind === "win")?.step;
@@ -44,7 +44,7 @@ describe("the climb to the top of Floor 3", () => {
     };
     const forShow = standIn(playRun(2, CLIMB).views);
     const gotRid = standIn(
-      climb(67, CLEAN, [...GET_RID, ...FOR_THE_SEAT], gameContent).views,
+      climb(71, CLEAN, [...GET_RID, ...FOR_THE_SEAT], gameContent).views,
     );
 
     expect(forShow).toContain("a sign on a door");

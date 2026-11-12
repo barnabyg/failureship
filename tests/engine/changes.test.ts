@@ -272,7 +272,9 @@ describe("a Believer burned repeatedly", () => {
     const views = playOut(run);
 
     expect(
-      views.some((v) => JSON.stringify(v.step).includes("KNOWN-REPORTED")),
+      views.some((v) =>
+        JSON.stringify([v.step, v.inbox]).includes("KNOWN-REPORTED"),
+      ),
     ).toBe(true);
     expect(readHiddenTruth(run).risks[0]?.cameOut).toBeNull();
   });
@@ -290,9 +292,9 @@ describe("a Believer burned repeatedly", () => {
 
     const [risk] = readHiddenTruth(run).risks;
     expect(risk?.cameOut?.through).toBeDefined();
-    expect(views.some((v) => JSON.stringify(v.step).includes("RISK-OUT"))).toBe(
-      true,
-    );
+    expect(
+      views.some((v) => JSON.stringify([v.step, v.inbox]).includes("RISK-OUT")),
+    ).toBe(true);
     const end = views.at(-1)?.step;
     if (end?.kind !== "results") throw new Error("No results.");
     expect(end.risks[0]?.motive).toMatch(/WENT-UPSTAIRS/);
@@ -385,12 +387,18 @@ function namesSomeoneGone(view: PlayerView, gone: readonly string[]): boolean {
   if (view.step.kind === "results") return false;
   const step = JSON.stringify(view.step);
   const hotspots = JSON.stringify(view.hotspots);
+  // A note that someone has left is in the inbox as written, naming them.
+  const inbox = JSON.stringify(
+    view.inbox.items.filter((i) => i.kind !== "notice"),
+  );
   return gone.some((id) => {
     const c = gameContent.characters.find((x) => x.id === id);
     const said = [c?.name ?? id, c?.called ?? id];
     const notice =
       view.step.kind === "notice" && view.step.title.includes(c?.name ?? id);
-    return !notice && said.some((s) => `${step} ${hotspots}`.includes(s));
+    return (
+      !notice && said.some((s) => `${step} ${hotspots} ${inbox}`.includes(s))
+    );
   });
 }
 

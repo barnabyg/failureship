@@ -3,7 +3,7 @@ import { recurs } from "./floors";
 import { applyOutcome } from "./outcome";
 import { actionsThisMonth, bossKindOf } from "./reads";
 import { drawFor } from "./rng";
-import type { State, Step } from "./state";
+import type { Landing, State } from "./state";
 
 /** A stalled Demand gets a seeded draw each later month: forgotten, chased or neither. */
 export function followUpDemands(state: State, content: Content): void {
@@ -51,7 +51,10 @@ export function followUpDemands(state: State, content: Content): void {
 }
 
 /** A meeting the player missed gives them an action, and the boss notices. */
-export function dealWithAbsence(state: State, content: Content): Step | null {
+export function dealWithAbsence(
+  state: State,
+  content: Content,
+): Landing | null {
   const missed = content.demands?.missed;
   if (!missed || state.absenceDealtWith) return null;
   state.absenceDealtWith = true;

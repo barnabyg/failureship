@@ -3,14 +3,19 @@ import { finishMonth, freshRun, playUntil } from "./play";
 
 // tests/engine/real-vacancies.test.ts keeps these deals true. On seed 2,
 // taking the blame in month 2 keeps the record clean, and faking the Plan at
-// month 5's Ideas Workshop wins the seat as month 7 closes. The Senior
-// Analyst's Hidden Fact is dangerous, and so is the Project Co-ordinator's.
-const CLEAN = "choose=take-the-blame,screenshot-on-the-note";
+// month 5's Ideas Workshop, with a word with the Senior Analyst while the
+// seat is open, wins it as month 7 closes. The Senior Analyst's Hidden Fact
+// is dangerous, and so is the Project Co-ordinator's.
+const SEATED =
+  "choose=take-the-blame,screenshot-on-the-note,word-with-the-analyst";
+/** The same, and claiming the Plan's credit first, as tests/engine/real-runs.ts's CLEAN. */
+const CLEAN =
+  "choose=take-the-blame,screenshot-on-the-note,claim-the-credit,word-with-the-analyst";
 
 test("a big mistake while the seat is open costs it, and the decision says so", async ({
   page,
 }) => {
-  await freshRun(page, `/?seed=2&month=7&${CLEAN}`);
+  await freshRun(page, `/?seed=2&month=7&${SEATED}`);
 
   await playUntil(page, "scene-option-sink-the-projects-candidate");
   await page.getByTestId("scene-option-sink-the-projects-candidate").click();

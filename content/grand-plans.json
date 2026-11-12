@@ -40,7 +40,7 @@
           },
           "needs": true,
           "otherwise": "wrong-figures",
-          "counts": ["believer", "incompetent"],
+          "counts": ["believer"],
           "belief": {
             "believer": 4,
             "incompetent": 0,
@@ -160,7 +160,48 @@
           "opinion": -1,
           "headOpinion": -2,
           "sets": ["blamed-for-the-plan"],
-          "mistake": "big"
+          "mistake": "big",
+          "escapes": [
+            {
+              "id": "one-tool-blame-the-associate",
+              "kind": "blame",
+              "label": "Say the Junior Associate ran the roll-out",
+              "blames": "associate",
+              "worked": {
+                "body": "The write-up is revised. The Junior Associate's name is on page two now, and yours has moved to the acknowledgements.",
+                "reported": "Lessons from the new tool were assigned to the roll-out team.",
+                "happened": "You put the new tool down to the Junior Associate, who had been asked to make the icon."
+              },
+              "failed": {
+                "body": "The Junior Associate replies with the brief you gave them. It was one line: Make an icon.",
+                "opinion": -1,
+                "headOpinion": -2
+              }
+            },
+            {
+              "id": "one-tool-validation",
+              "minTeflon": 60,
+              "kind": "bury",
+              "label": "Reply that the write-up's findings are being validated",
+              "chance": 0.4,
+              "worked": {
+                "body": "The write-up goes for validation, to a team that validates things. It is not seen again.",
+                "reported": "Lessons from the new tool are being validated.",
+                "happened": "You sent the write-up to be validated, which is where write-ups go to rest."
+              },
+              "failed": {
+                "body": "The validation team validates it, by Friday, and adds a page.",
+                "opinion": -1,
+                "headOpinion": -2
+              }
+            },
+            {
+              "id": "one-tool-take-it",
+              "kind": "take",
+              "label": "Wait to be told when",
+              "body": "Nobody tells you when. It is on your record anyway."
+            }
+          ]
         },
         "onSomeoneElse": {
           "id": "one-tool-blamed-elsewhere",
@@ -192,7 +233,7 @@
           "when": {
             "did": "desks-really-booked"
           },
-          "counts": ["believer", "incompetent"],
+          "counts": ["believer"],
           "belief": {
             "believer": 4,
             "incompetent": 0,
@@ -277,7 +318,30 @@
           "body": "A review has found why everyone still has a desk. It was you, on page one. Someone upstairs would like a word about it, and has put it in the diary as a catch-up.",
           "opinion": -1,
           "headOpinion": -2,
-          "sets": ["blamed-for-the-plan"]
+          "sets": ["blamed-for-the-plan"],
+          "escapes": [
+            {
+              "id": "hot-desks-blame-the-office",
+              "kind": "blame",
+              "label": "Say the Office Co-ordinator was to roll out the desks",
+              "blames": "admin",
+              "worked": {
+                "body": "The review is reissued, with the Office Co-ordinator on page one. The Office Co-ordinator reads it, and says nothing, which they are very good at.",
+                "reported": "The hot-desking review found that it depended on Facilities.",
+                "happened": "You put hot-desking down to the Office Co-ordinator, who had been asked to order labels."
+              },
+              "failed": {
+                "body": "The Office Co-ordinator sends upstairs the order for the labels, which is from you, and the labels, which say Hot Desk and are still in the box.",
+                "opinion": -1,
+                "headOpinion": -2
+              }
+            },
+            {
+              "id": "hot-desks-take-it",
+              "kind": "take",
+              "label": "Go to the catch-up"
+            }
+          ]
         },
         "onSomeoneElse": {
           "id": "hot-desks-blamed-elsewhere",
@@ -309,7 +373,7 @@
           "when": {
             "did": "centre-really-staffed"
           },
-          "counts": ["believer", "incompetent", "practitioner"],
+          "counts": ["believer"],
           "belief": {
             "believer": 4,
             "incompetent": 1,
@@ -377,7 +441,46 @@
           "opinion": -1,
           "headOpinion": -2,
           "sets": ["blamed-for-the-plan"],
-          "mistake": "big"
+          "mistake": "big",
+          "escapes": [
+            {
+              "id": "excellence-blame-the-programme",
+              "minTeflon": 60,
+              "kind": "blame",
+              "label": "Say the Programme Manager owned the Centre's launch",
+              "blames": "programme",
+              "worked": {
+                "body": "The write-up is corrected. Leadership at team level is now leadership at programme level, which is a level the Programme Manager is on.",
+                "reported": "The Centre of Excellence was found to lack leadership at programme level.",
+                "happened": "You put the Centre of Excellence down to the Programme Manager, who had lent you the chair."
+              },
+              "failed": {
+                "body": "The Programme Manager replies with the launch e-mail, which you sent, and the chair, which they would like back.",
+                "opinion": -1,
+                "headOpinion": -2
+              }
+            },
+            {
+              "id": "excellence-virtual",
+              "kind": "lie",
+              "label": "Say the Centre of Excellence is open, and virtual",
+              "worked": {
+                "body": "Upstairs is pleased to hear that the Centre of Excellence is virtual. A virtual Centre needs no room, and the room is given back.",
+                "reported": "The Centre of Excellence moved to a virtual model.",
+                "happened": "You said the empty room was a virtual Centre of Excellence."
+              },
+              "failed": {
+                "body": "Your boss walked past the empty room every morning, and says so, upstairs.",
+                "opinion": -1,
+                "headOpinion": -2
+              }
+            },
+            {
+              "id": "excellence-take-it",
+              "kind": "take",
+              "label": "Accept the write-up"
+            }
+          ]
         },
         "onSomeoneElse": {
           "id": "excellence-blamed-elsewhere",
@@ -409,7 +512,7 @@
           "when": {
             "did": "roadmap-really-decided"
           },
-          "counts": ["believer", "incompetent", "practitioner"],
+          "counts": ["believer"],
           "belief": {
             "believer": 4,
             "incompetent": 1,
@@ -477,7 +580,46 @@
           "opinion": -1,
           "headOpinion": -2,
           "sets": ["blamed-for-the-plan"],
-          "mistake": "big"
+          "mistake": "big",
+          "escapes": [
+            {
+              "id": "one-roadmap-blame-the-programme",
+              "minTeflon": 60,
+              "kind": "blame",
+              "label": "Say the Programme Manager owned delivery",
+              "blames": "programme",
+              "worked": {
+                "body": "The review is reissued, with a lack of clarity at programme level. The Programme Manager asks for clarity on what that means.",
+                "reported": "One Roadmap was found to lack clarity at programme level.",
+                "happened": "You put One Roadmap down to the Programme Manager, who had asked you for the dates twice."
+              },
+              "failed": {
+                "body": "The Programme Manager sends the review both of their requests for the dates, and your reply to each, which was a slide.",
+                "opinion": -1,
+                "headOpinion": -2
+              }
+            },
+            {
+              "id": "one-roadmap-it-was-delivered",
+              "kind": "lie",
+              "label": "Say One Roadmap was delivered, as a roadmap",
+              "worked": {
+                "body": "Upstairs agrees that a roadmap was delivered, and that it is a very clear roadmap. Its being followed is a separate workstream.",
+                "reported": "One Roadmap was delivered.",
+                "happened": "You said a slide with no dates on it was the thing it described."
+              },
+              "failed": {
+                "body": "Your boss had asked for One Roadmap to be done, not drawn, and says so, upstairs, with the slide.",
+                "opinion": -1,
+                "headOpinion": -2
+              }
+            },
+            {
+              "id": "one-roadmap-take-it",
+              "kind": "take",
+              "label": "Accept the review"
+            }
+          ]
         },
         "onSomeoneElse": {
           "id": "roadmap-blamed-elsewhere",

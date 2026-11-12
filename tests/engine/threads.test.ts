@@ -9,6 +9,7 @@ import {
   type Run,
 } from "../../src/engine";
 import { fixtureRaw, floorOwn } from "./fixture";
+import { firstTold, landedIn } from "./landed";
 
 const mistakes = {
   finalWarning: { title: "WARNED", body: "One more." },
@@ -83,7 +84,7 @@ function resultsOf(views: PlayerView[]) {
 }
 
 const noticeOf = (views: PlayerView[], title: string) =>
-  views.find((v) => v.step.kind === "notice" && v.step.title === title);
+  firstTold(views, title);
 
 describe("a Thread", () => {
   const content = parseContent(raw());
@@ -141,7 +142,7 @@ describe("a Thread", () => {
     const without = parseContent({ ...raw(), moves, threads: [] });
     const titles = (c: typeof withThread, seed: number) =>
       play(startRun({ seed, content: c }), "do-it").flatMap((v) =>
-        v.step.kind === "move" ? [v.step.title] : [],
+        landedIn(v).flatMap((l) => (l.kind === "move" ? [l.title] : [])),
       );
 
     for (let seed = 0; seed < 20; seed++) {
@@ -220,11 +221,12 @@ describe("a Bill", () => {
 
     const views = play(startRun({ seed: 1, content }), "do-it");
 
-    const landed = views.find(
-      (v) => v.step.kind === "move" && v.step.title === "THE-BILL",
-    );
+    const landed = firstTold(views, "THE-BILL");
     expect(landed?.month).toBe(3);
-    expect(landed?.step).toMatchObject({ from: "THROUGH-SOMEONE" });
+    expect(landed?.told).toMatchObject({
+      kind: "move",
+      from: "THROUGH-SOMEONE",
+    });
   });
 
   it("can arrive as a Notification, with answers of its own", () => {
@@ -334,7 +336,11 @@ describe("the real Threads", () => {
     expect(report?.options.find((o) => o.id === "lie")?.sets).toContain(
       thread("green-report").startedBy,
     );
-    expect(bills("green-report").some((b) => b.mistake === "big")).toBe(true);
+    expect(
+      bills("green-report").some((b) =>
+        b.escapes.some((e) => e.kind !== "take" && e.failed.mistake === "big"),
+      ),
+    ).toBe(true);
   });
 
   it("leaves some Moves with no Bill", () => {

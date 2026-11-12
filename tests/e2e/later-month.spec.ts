@@ -1,6 +1,10 @@
 import { expect, test, type Page } from "@playwright/test";
 import { startDevServer } from "./dev-server";
-import { answerAnyNotification, attendAndFinishMonth } from "./play";
+import {
+  answerAnyNotification,
+  attendAndFinishMonth,
+  openInboxIfAny,
+} from "./play";
 
 async function whereTheRunIs(page: Page) {
   await page.getByTestId("open-notebook").click();
@@ -42,6 +46,7 @@ test("the dev server ignores a later month", async ({ page }) => {
     await page.goto(`${origin}?seed=2&month=6`);
 
     await expect(page.getByTestId("month")).toContainText("1 of 18");
+    await openInboxIfAny(page);
     await expect(page.getByTestId("panel-notification")).toBeVisible();
   } finally {
     await server.close();

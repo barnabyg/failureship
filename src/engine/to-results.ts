@@ -1,6 +1,7 @@
 import { startedAs } from "./changes";
 import { MOVE_FAMILIES, type ClueVerdict, type Content } from "./content";
 import { dealsInResults } from "./deals";
+import { escapesInResults } from "./escapes";
 import { gaugesInView } from "./gauges";
 import { plansInResults } from "./grand-plans";
 import { bossOf, headOf } from "./places";
@@ -70,6 +71,7 @@ export function toResultsView(
         ? []
         : [{ month, title: written.title, changed: written.changed }];
     }),
+    escapes: escapesInResults(state, content),
     risks: state.truth.risks.flatMap((risk) => {
       const written = content.risks.find((r) => r.id === risk.id);
       if (!written) return [];

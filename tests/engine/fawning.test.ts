@@ -12,6 +12,7 @@ import {
   flagsSetByHiddenResults,
 } from "../../src/engine/truth-checks";
 import { plainChoice } from "../../src/ui/later-month";
+import { everyNotice } from "./landed";
 
 const fawning = (view: PlayerView) =>
   view.gauges.find((g) => g.id === "fawning");
@@ -118,9 +119,7 @@ describe("Fawning", () => {
     ]);
     const titles = ["Team player", "Professional nodder", "Human footstool"];
 
-    const told = views.flatMap((v) =>
-      v.step.kind === "notice" ? [v.step.title] : [],
-    );
+    const told = everyNotice(views).map((n) => n.title);
     for (const title of titles) expect(told).toContain(title);
     const end = views.at(-1)?.step;
     if (end?.kind !== "results") throw new Error("No results.");

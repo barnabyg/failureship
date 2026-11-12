@@ -9,6 +9,7 @@ import {
 } from "../../src/engine";
 import { writtenMonths } from "../../src/engine/floors";
 import { readHiddenTruth } from "../../src/engine/hidden-truth";
+import { landedIn } from "./landed";
 
 const isMeeting = (c: Choice) =>
   c.type === "action" && c.actionId.startsWith("meeting");
@@ -122,9 +123,10 @@ describe("a meeting you do not go to", () => {
       const told: string[] = [];
       for (let m = 1; m <= gameContent.balance.monthsPerRun; m++) {
         for (const view of playMonth(run, false)) {
-          if (view.step.kind === "notice" && view.month === m) {
+          if (view.month !== m) continue;
+          for (const landed of landedIn(view)) {
             const known = gameContent.demands?.missed?.actions.find(
-              (a) => a.title === (view.step as { title: string }).title,
+              (a) => landed.kind === "notice" && a.title === landed.title,
             );
             if (known) told.push(known.id);
           }
@@ -180,7 +182,12 @@ describe("a meeting you do not go to", () => {
     const shifts = new Map<string, Set<number>>();
     const reactions = new Map<string, Set<string>>();
     for (let seed = 1; seed <= 200; seed++) {
-      const run = startRun({ seed, content: gameContent });
+      // With no Move or Company Event, nothing else lands on the boss as the
+      // month closes, so the official story tells of the missed meeting alone.
+      const run = startRun({
+        seed,
+        content: { ...gameContent, moves: [], events: [] },
+      });
       const kind =
         readHiddenTruth(run).characters.find((c) => c.id === "boss")?.kind ??
         "";
@@ -202,12 +209,16 @@ describe("a meeting you do not go to", () => {
         if (!next) throw new Error(`Stuck at ${step.kind}.`);
         const before = readHiddenTruth(run).bossBelief;
         view = run.choose(next);
-        if (view.step.kind === "notice" && titles?.includes(view.step.title)) {
+        const missed = landedIn(view).find(
+          (l) => l.kind === "notice" && titles?.includes(l.title),
+        );
+        if (missed?.kind === "notice") {
+          expect(landedIn(view)).toHaveLength(1);
           const shift = readHiddenTruth(run).bossBelief - before;
           shifts.set(kind, (shifts.get(kind) ?? new Set()).add(shift));
           reactions.set(
             kind,
-            (reactions.get(kind) ?? new Set()).add(view.step.reaction ?? ""),
+            (reactions.get(kind) ?? new Set()).add(missed.reaction ?? ""),
           );
           expect(JSON.stringify(view)).not.toMatch(/opinion/i);
           break;

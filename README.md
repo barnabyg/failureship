@@ -30,12 +30,15 @@ has seeds for each way up, a Rival winning, a demotion, being fired and the win.
 
 Every run has a seed, on the **Run** menu at the top right, and `?seed=8` picks one. Each month has the same shape:
 
-1. **A Notification arrives.** Answer it. An answer may cost one of your 3 actions, and one always
-   costs nothing. A month always leaves you something to decide, on any floor. Every third
-   month the **Quarterly Business Review** follows by itself, at no cost, and goes on the record.
-2. **Spend your remaining actions** by clicking places on the floor, as the guide at the foot says.
-3. **Any Company Event, then a Character Move, lands on you.** You do not get a choice.
-4. **The month closes** with the official story beside what actually happened.
+1. **Your inbox and the floor open together.** Open the Notifications from the inbox's list and
+   answer them in any order, between actions if you like; one answer always costs nothing.
+   Anything that comes back on you waits there with its **Escapes**, such as blaming someone or
+   taking it, and one that fails is worse. Every third month the **Quarterly Business Review**
+   follows once the inbox is clear.
+2. **Spend your 3 actions** by clicking places on the floor, as the guide at the foot says. The
+   month closes once they are spent and the inbox is answered.
+3. **The official story** tells any Company Event and Character Move, then what was reported
+   beside what actually happened. A Move that comes back on you asks for its Escape first.
 
 There are four ways to spend an action:
 
@@ -62,9 +65,11 @@ some a **Deal**, in which each side offers something. Whether you are believed, 
 word from someone counts, goes by who they really are and what has reached them. **Your word
 given** shows your Promises, Deals and favours, at no cost, and nothing of what others owe.
 
-**Teflon**, in the header, is your track record, not your danger. **Fawning** is how well sucking up
-to your managers is paying off, not whether they like you, and plays no part in promotion. Each
-moves only when a Thread plays out, and the official story says which. Some levels earn a Milestone.
+**Teflon**, in the header, is your track record, not your danger. It rises with each Escape that
+works and falls with each that fails, and the bolder Escapes, such as blaming your boss, stay locked
+until you have enough of it. **Fawning** is how well sucking up to your managers is paying off, not whether they like
+you, and plays no part in promotion. Each moves only when a Thread or an Escape plays out, and the
+official story says which. Some levels earn a Milestone.
 **Official standing** is a bar from red to green, with no number: how you would fare on paper if a
 vacancy arose. It reads only the official record, a Final Warning turns it red, and decides nothing.
 
@@ -135,6 +140,7 @@ game reloads when you save a file. If an edit breaks the format, the page shows 
 | `changing.json`       | What burns a Believer, how much it takes, what they can become, and who covers for anyone who leaves   |
 | `characters.json`     | Job titles, roles, how text refers to each person, names, the Org Chart and where you start on it      |
 | `gauges.json`         | The Gauges, Teflon and Fawning: where each starts, and the Milestones earned along the way             |
+| `escapes.json`        | Escapes: the Gauge a working one raises, what someone blamed keeps, and why one failed                 |
 | `standing.json`       | Official standing: what on the official record moves it, its bands, and what the results screen says   |
 | `hidden-truth.json`   | The rules of the deal: kinds, their weights, and the Hidden Facts                                      |
 | `rivals.json`         | What is competed for and by whom, how many Rivals at once, and who makes a competitor's Move           |
@@ -159,8 +165,9 @@ How to run the checks and tests is in [AGENTS.md](AGENTS.md#verifying).
   one place any consequence takes effect; `state.ts` and `reads.ts` are what the mechanics share.
   The mechanics are `boss.ts`, `demands.ts`, `find-out.ts` with `claims.ts`, `notebook.ts`,
   `over-head.ts`, `project.ts`, `scenes.ts` with `asking.ts`, `company-events.ts`, `mistakes.ts`,
-  `reputation.ts`, `risks.ts`, `threads.ts` with `bills.ts`, `promises.ts`, `deals.ts`, `changes.ts`
-  for Believers changing and leaving, `gauges.ts`, the only module that reads a Gauge,
+  `reputation.ts`, `risks.ts`, `threads.ts` with `bills.ts`, `escapes.ts` for the ways out of a
+  consequence, `promises.ts`, `deals.ts`, `changes.ts` for Believers changing and leaving,
+  `gauges.ts`, the only module that reads a Gauge,
   `standing.ts`, `reviews.ts` for quarterly reviews, `rivals.ts` for Rivals, `grand-plans.ts` for
   Grand Plans, `vacancies.ts` for seats and who really decides them, `departures.ts` for leaving and
   being got rid of, `demotions.ts` for losing a seat to a mistake, `win.ts` for winning the run and
@@ -172,9 +179,10 @@ How to run the checks and tests is in [AGENTS.md](AGENTS.md#verifying).
   [AGENTS.md](AGENTS.md) says. `content-checks.ts` checks data across files, with each mechanic's
   checks beside it: `truth-checks.ts` for the hidden truth and its signs, `boss-checks.ts` for the
   boss, going over the head, Demands and reputation, `consequence-checks.ts` for what choices lead
-  to, `word-checks.ts` for Promises and Deals, and `floor-checks.ts`, `review-checks.ts`,
-  `rival-checks.ts`, `plan-checks.ts` and `vacancy-checks.ts` for floors, reviews, Rivals, Grand
-  Plans and seats.
+  to, `escape-checks.ts` for Escapes, `word-checks.ts` for Promises and Deals, and
+  `floor-checks.ts`, `review-checks.ts`, `rival-checks.ts`, `plan-checks.ts`, `vacancy-checks.ts`
+  and `scene-checks.ts` for floors, reviews, Rivals, Grand Plans, seats and each Scene's word
+  budget.
 - `src/tower/` draws the floor the view names, and holds no rules.
 - `src/ui/` holds the React panels over the tower: `App.tsx` wires them to the run, and rides the
   lift when the floor changes, and `TowerStage.tsx` the tower's hotspots. `panels.tsx` picks each
