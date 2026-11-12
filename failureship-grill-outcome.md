@@ -57,7 +57,7 @@ What works depends on the boss's kind. The higher you go, the fewer Believers th
 | Boss         | What impresses them                                                       |
 | ------------ | ------------------------------------------------------------------------- |
 | Believer     | Real results. Theatre puts them off, so a Practitioner player must adapt. |
-| Incompetent  | Slides and confidence. They cannot tell the difference.                   |
+| Incompetent  | Slides and confidence. Real results go unnoticed: only looks count.       |
 | Practitioner | Making them look good, or giving them something they want.                |
 
 Showing a true chart is a mistake in most rooms, but it can win over a Believer.
@@ -139,7 +139,7 @@ Winning is reaching the penthouse and securing your payout, and how you got ther
 
 - Floors 1–3 are playable. Only the current floor is shown, with a lift indicating the route to a higher floor (changed at the Phase 1 checkpoint).
 - The player's job title leads, in the header and the official story, and the floor is a side-effect of it (changed at the Phase 2 checkpoint).
-- About 18 months at three actions each, aiming for about 25 minutes.
+- About 18 months at three actions each, aiming for about 25 minutes (confirmed at the Phase 5 checkpoint, issue 112).
 - About eight Characters: your bosses, one or two Rivals, Believers and Incompetents.
 - A comic stand-in for winning at the end of Floor 3.
 - Board and CFO material mostly waits for later floors, though a boss's boss or the CFO can still send a Demand down.
@@ -182,7 +182,7 @@ All the numbers are starting points, to be tuned through playtesting.
 ## Sequencing
 
 - The first piece of work is one playable month on a blocked-out floor.
-- The game is proved fun before any tower detail is added. (changed after the Phase 2 checkpoint: the owner asked for Floor 1 to be furnished now, before the game is proved fun. Richer floors, and everything else in Phase 6, still wait.)
+- The game is proved fun before any tower detail is added. (changed after the Phase 2 checkpoint: the owner asked for Floor 1 to be furnished now, before the game is proved fun. Richer floors, and everything else in Phase 6, still wait.) At the Phase 5 checkpoint (issue 112) the owner judged the game fun enough, and Phase 6 can start.
 - The owner runs the `to-spec` skill and then the `to-tickets` skill after a grilling.
 - Scenario collection is closed for now: "I can always revisit them when the app is in progress."
 
