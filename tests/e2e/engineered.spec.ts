@@ -11,8 +11,9 @@ import {
 // never completes the Grand Plan, so the seat stays filled until month 8, when
 // ringing the Speak Up line about your boss gets them fired. Their seat is
 // open in months 9 and 10, and it is yours. Only the Office Co-ordinator knows
-// who rang, and in month 12 their log reaches Human Resources: a big mistake
-// in the seat, which takes you back down the lift.
+// who rang, and in month 12 their log reaches Human Resources. Blaming the
+// Senior Analyst for the call fails, as their Hidden Fact is dangerous: a big
+// mistake in the seat, which takes you back down the lift.
 test("get rid of your boss, take their seat, and lose it when the call is traced", async ({
   page,
 }) => {
@@ -48,12 +49,14 @@ test("get rid of your boss, take their seat, and lose it when the call is traced
   );
   await page.getByTestId("close-org-chart").click();
 
-  // The call is traced, and the lift takes you back down.
+  // The call is traced, the wrong person is blamed, and the lift takes you
+  // back down.
   await finishMonth(page);
-  await playUntil(page, "panel-story");
-  await expect(
-    page.getByTestId("landed").filter({ hasText: "A note for the file" }),
-  ).toHaveAttribute("data-kind", "move");
+  await playUntil(page, "escape-line-blame-the-analyst");
+  await expect(page.getByTestId("panel-escape")).toContainText(
+    "A note for the file",
+  );
+  await page.getByTestId("escape-line-blame-the-analyst").click();
   await playUntil(page, "lift-ride-floors");
   await expect(page.getByTestId("lift-ride-floors")).toContainText(
     /Floor 1\.$/,

@@ -31,7 +31,47 @@
       "title": "A question about the door logs",
       "body": "The Senior Analyst has asked Internal Audit who stopped the review of the door logs. Internal Audit has found a form, and on the form is your name. They would like a word, and they have booked a room with no windows for it.",
       "sets": ["security-traced"],
-      "mistake": "big"
+      "opinion": -1,
+      "headOpinion": -2,
+      "escapes": [
+        {
+          "id": "security-blame-the-office",
+          "kind": "blame",
+          "label": "Say the Office Co-ordinator filled in the form for you",
+          "blames": "admin",
+          "worked": {
+            "body": "Internal Audit asks the Office Co-ordinator about the form. The Office Co-ordinator says they fill in a great many forms, and cannot be expected to remember them all, which Internal Audit accepts as a control weakness.",
+            "reported": "A form was found to have been completed on someone's behalf.",
+            "happened": "You said the Office Co-ordinator filled in the form that stopped the door logs. It was in your handwriting."
+          },
+          "failed": {
+            "body": "The Office Co-ordinator sends Internal Audit the form's history, which shows who opened it, who filled it in and who pressed submit. It was you, three times.",
+            "headOpinion": -1,
+            "mistake": "big"
+          }
+        },
+        {
+          "id": "security-new-system",
+          "kind": "lie",
+          "label": "Say the review moved to a new system, which is better",
+          "worked": {
+            "body": "Internal Audit asks to see the new system. You send a link to a page that is under construction, and they mark the finding as in progress.",
+            "reported": "Door log reviews are being migrated to a new system.",
+            "happened": "You said the door logs were reviewed by a new system. There was no new system."
+          },
+          "failed": {
+            "body": "Your boss tells Internal Audit that there is no new system, because your boss would have had to sign for it, and did not.",
+            "headOpinion": -1,
+            "mistake": "big"
+          }
+        },
+        {
+          "id": "security-take-it",
+          "kind": "take",
+          "label": "Go to the room with no windows",
+          "body": "Internal Audit takes you through the form, slowly. It goes on your file as a finding, not an incident, and the room is booked again for next quarter."
+        }
+      ]
     },
     "onSomeoneElse": {
       "id": "security-elsewhere",
@@ -154,7 +194,45 @@
       "title": "A correction to the minutes",
       "body": "The Office Co-ordinator has issued a correction to the minutes, to the whole floor. It says that the action you reported as done was not done, and it attaches your email saying that it was. There is no comment. The Office Co-ordinator has never needed one.",
       "sets": ["demand-traced"],
-      "mistake": "big"
+      "opinion": -2,
+      "headOpinion": -1,
+      "escapes": [
+        {
+          "id": "correction-blame-the-associate",
+          "kind": "blame",
+          "label": "Say the Junior Associate told you it was done",
+          "blames": "associate",
+          "worked": {
+            "body": "The Junior Associate apologises to the whole floor for the confusion, without being sure what it was. The Office Co-ordinator issues a correction to the correction.",
+            "reported": "A handover misunderstanding has been corrected in the minutes.",
+            "happened": "You said the Junior Associate told you the action was done. Nobody had told you anything."
+          },
+          "failed": {
+            "body": "The Junior Associate replies to all that they were on leave that week, and attaches the out-of-office, and the e-mail you sent while they were away.",
+            "mistake": "big"
+          }
+        },
+        {
+          "id": "correction-done-since",
+          "kind": "lie",
+          "label": "Reply to all that it has been done since",
+          "worked": {
+            "body": "The Office Co-ordinator notes that the action is now complete, and closes it, which is the most anyone has asked of it.",
+            "reported": "An outstanding action was closed.",
+            "happened": "You said the action had been done since. It still has not been."
+          },
+          "failed": {
+            "body": "Your boss replies to all, asking to see it. There is nothing to see, and everyone on the floor now knows that too.",
+            "mistake": "big"
+          }
+        },
+        {
+          "id": "correction-take-it",
+          "kind": "take",
+          "label": "Thank the Office Co-ordinator for keeping the minutes",
+          "body": "The Office Co-ordinator accepts your thanks in writing. Your boss reads the correction, and the thanks, and says nothing about either."
+        }
+      ]
     },
     "onSomeoneElse": {
       "id": "demand-elsewhere",
@@ -447,8 +525,45 @@
       "title": "A note for the file",
       "body": "The Office Co-ordinator has sent Human Resources a note for the file, with the line's log attached, about who it was that raised the concerns about your old boss, and when. Human Resources would like to discuss your approach to collaboration. They have booked the room with the box of tissues in it.",
       "sets": ["line-call-traced"],
-      "headOpinion": -1,
-      "mistake": "big"
+      "headOpinion": -2,
+      "opinion": -1,
+      "escapes": [
+        {
+          "id": "line-blame-the-analyst",
+          "kind": "blame",
+          "label": "Say the Senior Analyst used your extension",
+          "blames": "analyst",
+          "worked": {
+            "body": "Human Resources asks the Senior Analyst about your extension. The Senior Analyst says they have their own, which Human Resources takes as an admission that they know how phones work.",
+            "reported": "A call to the Speak Up line was made from a shared extension.",
+            "happened": "You said the Senior Analyst rang the line from your phone. You rang it."
+          },
+          "failed": {
+            "body": "The Senior Analyst was in a meeting with Human Resources at the time of the call, which Human Resources can confirm, as it was their meeting.",
+            "mistake": "big"
+          }
+        },
+        {
+          "id": "line-about-the-printer",
+          "kind": "lie",
+          "label": "Say you rang about the printer, and the log is wrong",
+          "worked": {
+            "body": "Human Resources agrees that the log is not always right, and adds the printer to its own concerns.",
+            "reported": "A Speak Up call was reclassified as a facilities matter.",
+            "happened": "You said you rang the Speak Up line about the printer. You rang it about your boss."
+          },
+          "failed": {
+            "body": "The log has a recording. Human Resources plays it to you. It does not mention the printer.",
+            "mistake": "big"
+          }
+        },
+        {
+          "id": "line-take-it",
+          "kind": "take",
+          "label": "Go to the room with the box of tissues",
+          "body": "Human Resources discusses your approach to collaboration for an hour, and gives you a leaflet about it. It goes on your file as a conversation."
+        }
+      ]
     },
     "onSomeoneElse": {
       "id": "line-call-kept",
@@ -493,8 +608,45 @@
       "title": "Where it started",
       "body": "Human Resources has asked the Senior Analyst where the story about your old boss started. The Senior Analyst said the kettle, and then, when pressed, you. Human Resources would like a word about the kettle.",
       "sets": ["boss-rumour-traced"],
-      "headOpinion": -1,
-      "mistake": "big"
+      "headOpinion": -2,
+      "opinion": -1,
+      "escapes": [
+        {
+          "id": "rumour-blame-the-associate",
+          "kind": "blame",
+          "label": "Say you heard it from the Junior Associate",
+          "blames": "associate",
+          "worked": {
+            "body": "Human Resources has a word with the Junior Associate about the kettle. The Junior Associate agrees to make their own tea for a while.",
+            "reported": "The source of an unhelpful story was identified and spoken to.",
+            "happened": "You said the Junior Associate started the story about your old boss. You started it."
+          },
+          "failed": {
+            "body": "The Junior Associate was not at the kettle, or on the floor, or in the country, that week, and has the photographs.",
+            "mistake": "big"
+          }
+        },
+        {
+          "id": "rumour-only-the-kettle",
+          "kind": "lie",
+          "label": "Say you were at the kettle only for the kettle",
+          "worked": {
+            "body": "Human Resources accepts that people go to the kettle for the kettle, and closes the matter.",
+            "reported": "A story about a former manager was found to have no single source.",
+            "happened": "You said you had nothing to do with the story. You told it at the kettle, twice."
+          },
+          "failed": {
+            "body": "Your boss heard you tell it, at the kettle, and tells Human Resources so, with the time.",
+            "mistake": "big"
+          }
+        },
+        {
+          "id": "rumour-take-it",
+          "kind": "take",
+          "label": "Go and have the word about the kettle",
+          "body": "Human Resources talks to you about the kettle for some time. It goes on your file as a conversation, and the kettle gets a notice of its own."
+        }
+      ]
     },
     "landedOnYou": "It came out, and the Senior Analyst said where it had started: with you, by the kettle.",
     "landedElsewhere": "It came out, but the Senior Analyst thought well of you, and said that nobody could say where it had started.",
@@ -1063,9 +1215,46 @@
       "from": "From: The Service Delivery Lead, Owen Hale",
       "title": "Ticket closed",
       "body": "The Service Delivery Lead has closed Internal Audit's ticket, and copied the closure note to People and Culture. It says who raised the concern about your old boss, and when, and has a satisfaction survey attached. People and Culture would like to discuss your approach to collaboration.",
-      "headOpinion": -1,
+      "headOpinion": -2,
       "sets": ["audit-call-traced"],
-      "mistake": "big"
+      "opinion": -1,
+      "escapes": [
+        {
+          "id": "ticket-blame-the-programme",
+          "kind": "blame",
+          "label": "Say the Programme Manager raised it from your login",
+          "blames": "programme",
+          "worked": {
+            "body": "People and Culture asks the Programme Manager about the ticket. The Programme Manager says they raise a great many tickets, which is true, and is taken as an answer.",
+            "reported": "A service desk ticket was raised from a shared login.",
+            "happened": "You said the Programme Manager raised the ticket about your old boss. You raised it."
+          },
+          "failed": {
+            "body": "The Programme Manager sends People and Culture their own tickets for the month, all of them, sorted by date. Yours is not among them, and is from your desk.",
+            "mistake": "big"
+          }
+        },
+        {
+          "id": "ticket-wrong-queue",
+          "kind": "lie",
+          "label": "Say it was about the coffee machine, logged in the wrong queue",
+          "worked": {
+            "body": "People and Culture moves the ticket to Facilities, who close it, as the coffee machine is fine.",
+            "reported": "A misrouted ticket was closed by Facilities.",
+            "happened": "You said your ticket to Internal Audit was about the coffee machine. It was about your old boss."
+          },
+          "failed": {
+            "body": "Your boss read the ticket before it was closed. It does not mention coffee, and your boss says so, to People and Culture, in person.",
+            "mistake": "big"
+          }
+        },
+        {
+          "id": "ticket-take-it",
+          "kind": "take",
+          "label": "Discuss your approach to collaboration",
+          "body": "People and Culture discusses it with you, and sends you the satisfaction survey. It goes on your file as a conversation."
+        }
+      ]
     },
     "onSomeoneElse": {
       "id": "audit-call-kept",
@@ -1109,10 +1298,46 @@
       "from": "From: The Head of Transformation, Simone Fairley",
       "title": "About your nomination",
       "body": "The Head of Transformation has mentioned to your old boss who nominated them for the refurbishment, and your old boss has written to everyone on Floor 3 to thank you, by name, for thinking of them. Several people have asked to be told if you ever think of them.",
-      "opinion": -1,
+      "opinion": -2,
       "headOpinion": -2,
       "sets": ["nomination-traced"],
-      "mistake": "big"
+      "escapes": [
+        {
+          "id": "nomination-blame-delivery",
+          "kind": "blame",
+          "label": "Say the Service Delivery Lead put the name forward",
+          "blames": "delivery",
+          "worked": {
+            "body": "Your old boss writes again, to thank the Service Delivery Lead instead. The Service Delivery Lead replies that it was nothing, which it was.",
+            "reported": "A nomination was correctly attributed.",
+            "happened": "You said the Service Delivery Lead nominated your old boss. You did."
+          },
+          "failed": {
+            "body": "The Head of Transformation forwards the nomination form, which has your name on it, in the box marked Your name.",
+            "mistake": "big"
+          }
+        },
+        {
+          "id": "nomination-the-whole-team",
+          "kind": "lie",
+          "label": "Say the nomination came from the whole team",
+          "worked": {
+            "body": "Your old boss thanks the whole team instead, which takes longer, and lands on nobody.",
+            "reported": "A nomination was made on behalf of the whole team.",
+            "happened": "You said the whole team nominated your old boss. Nobody else knew."
+          },
+          "failed": {
+            "body": "Your boss asks the team who else signed it. Nobody did, and your boss tells Floor 3 so.",
+            "mistake": "big"
+          }
+        },
+        {
+          "id": "nomination-take-it",
+          "kind": "take",
+          "label": "Thank your old boss for thanking you",
+          "body": "You reply to all. It goes on your file as a conversation, and on Floor 3 as something else."
+        }
+      ]
     },
     "onSomeoneElse": {
       "id": "nomination-kept",

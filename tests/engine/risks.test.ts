@@ -427,10 +427,14 @@ describe("the real risks", () => {
     expect([...late]).toEqual([]);
   });
 
-  it("can land as a big mistake", () => {
-    expect(gameContent.risks.some((r) => r.onPlayer.mistake === "big")).toBe(
-      true,
-    );
+  it("can land as a big mistake, when a way out of it fails", () => {
+    expect(
+      gameContent.risks.some((r) =>
+        r.onPlayer.escapes.some(
+          (e) => e.kind !== "take" && e.failed.mistake === "big",
+        ),
+      ),
+    ).toBe(true);
   });
 
   it("brings the bonus pot back through what a Character remembers", () => {
