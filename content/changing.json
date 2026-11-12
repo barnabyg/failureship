@@ -212,18 +212,18 @@
     "signs": [
       {
         "id": "keeps-a-file",
-        "text": "{who} writes down the time whenever you speak, and underlines it.",
+        "text": "Writes down when you speak.",
         "clue": "{who} has started writing down the time whenever you speak.",
         "weight": 4
       },
       {
         "id": "forwards-to-self",
-        "text": "{who} forwards something to their personal address, and closes the laptop when you look over.",
+        "text": "Forwards something home, guiltily.",
         "weight": 3
       },
       {
         "id": "asks-for-it-in-writing",
-        "text": "{who} asks for that in writing, please, and smiles while asking.",
+        "text": "Wants that in writing, smiling.",
         "weight": 3
       }
     ],

@@ -3,32 +3,32 @@
   "signs": [
     {
       "id": "head-knows-your-name",
-      "text": "Your boss's boss nods to you across the room, by name, and asks how your project is going. It is the right project.",
+      "text": "Asks after your project, by name.",
       "likelihood": { "warm": 6, "neutral": 1, "cold": 0 }
     },
     {
       "id": "head-holds-the-lift",
-      "text": "Your boss's boss holds the lift for you afterwards, and asks what you would do differently around here. It sounds like a real question.",
+      "text": "Holds the lift. Asks a real question.",
       "likelihood": { "warm": 5, "neutral": 1, "cold": 0 }
     },
     {
       "id": "head-glances",
-      "text": "Your boss's boss glances down the table, and it passes over you at the same speed as over the water jug.",
+      "text": "Gives you the water-jug glance.",
       "likelihood": { "warm": 1, "neutral": 6, "cold": 2 }
     },
     {
       "id": "head-reads-badge",
-      "text": "Your boss's boss reads your badge, says that it is good to finally meet you, and says it warmly. You have met four times.",
+      "text": "Finally meets you, a fifth time.",
       "likelihood": { "warm": 1, "neutral": 5, "cold": 2 }
     },
     {
       "id": "head-looks-through",
-      "text": "You say good morning to your boss's boss. Your boss's boss says it to the person behind you.",
+      "text": "Greets the person behind you.",
       "likelihood": { "warm": 0, "neutral": 2, "cold": 6 }
     },
     {
       "id": "head-asks-your-boss",
-      "text": "Your boss's boss asks your boss a question about you, while you are sitting there, and uses the word \"still\".",
+      "text": "Asks your boss if you're \"still\" here.",
       "likelihood": { "warm": 0, "neutral": 1, "cold": 6 }
     }
   ],

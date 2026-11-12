@@ -74,9 +74,6 @@ export function findBrokenChanging(content: Content): string[] {
     }
   }
   for (const sign of written.whistleblower.signs) {
-    if (!sign.text.includes("{who}")) {
-      problems.push(`Whistleblower sign "${sign.id}" needs to say {who}.`);
-    }
     if (content.behaviours.some((b) => b.id === sign.id)) {
       problems.push(`Whistleblower sign "${sign.id}" shares a behaviour's id.`);
     }

@@ -16,12 +16,19 @@ const WITH_YOU_TEST_ID = {
   head: "head-treatment",
 } as const;
 
-/** Everything seen of one Character, led by their role, with the name smaller. */
+/**
+ * Everything seen of one Character, led by their role, with the name smaller:
+ * one line, with how they are with you folded in, except for the bosses, who
+ * say it on a line of its own.
+ */
 function PersonRow({ person }: { person: ScenePerson }) {
-  const { withYou } = person;
+  const { behaviour, withYou, place } = person;
+  const regard = place === null && withYou !== null && (
+    <span data-testid="regard">{withYou}</span>
+  );
   return (
     <li
-      className={person.place ? "scene-person scene-boss" : "scene-person"}
+      className={place ? "scene-person scene-boss" : "scene-person"}
       data-testid="person"
     >
       <div className="scene-person-who">
@@ -29,18 +36,18 @@ function PersonRow({ person }: { person: ScenePerson }) {
         <span className="scene-person-name">{person.name}</span>
       </div>
       <div className="scene-person-seen">
-        {person.behaviour !== null && (
-          <p data-testid="behaviour">{person.behaviour}</p>
+        {behaviour !== null ? (
+          <p data-testid="behaviour">
+            {behaviour}
+            {regard && <> {regard}</>}
+          </p>
+        ) : (
+          regard && <p>{regard}</p>
         )}
-        {withYou !== null && (
-          <p
-            className={withYou.plain ? "scene-plain" : undefined}
-            data-testid={
-              person.place ? WITH_YOU_TEST_ID[person.place] : "regard"
-            }
-          >
+        {place && withYou !== null && (
+          <p data-testid={WITH_YOU_TEST_ID[place]}>
             <span className="scene-with-you">{panelText.withYouLabel}</span>{" "}
-            {withYou.text}
+            {withYou}
           </p>
         )}
         {person.signs.map((sign) => (
@@ -48,6 +55,15 @@ function PersonRow({ person }: { person: ScenePerson }) {
         ))}
       </div>
     </li>
+  );
+}
+
+/** Someone with nothing telling to show this time has no row. */
+function shows(person: ScenePerson): boolean {
+  return (
+    person.behaviour !== null ||
+    person.withYou !== null ||
+    person.signs.length > 0
   );
 }
 
@@ -77,7 +93,7 @@ export function ScenePanel({
           )}
           <h3>{panelText.castHeading}</h3>
           <ul className="scene-people">
-            {step.people.map((person) => (
+            {step.people.filter(shows).map((person) => (
               <PersonRow key={person.name} person={person} />
             ))}
           </ul>

@@ -334,14 +334,18 @@ describe("the room, by person", () => {
     }
   });
 
-  it("puts how the boss and everyone else are with you in their own rows", () => {
+  const withYouIn = (plain?: boolean) => {
     // Every sign says the same, so whichever is drawn reads the same.
-    const sign = (text: string, plain?: boolean) =>
+    const sign = (text: string, quiet?: boolean) =>
       [
         { id: "warm", likelihood: { warm: 2, neutral: 1, cold: 0 } },
         { id: "cold", likelihood: { warm: 0, neutral: 1, cold: 2 } },
         { id: "flat", likelihood: { warm: 1, neutral: 2, cold: 1 } },
-      ].map((s) => ({ ...s, text, ...(plain === undefined ? {} : { plain }) }));
+      ].map((s) => ({
+        ...s,
+        text,
+        ...(quiet === undefined ? {} : { plain: quiet }),
+      }));
     const raw = {
       ...sceneFixtureRaw(),
       reputation: {
@@ -352,7 +356,7 @@ describe("the room, by person", () => {
           shift: { good: 1, bad: -1 },
         },
         mood: { warmAt: 1, coldAt: -1 },
-        signs: sign("{who} looks up.", true),
+        signs: sign("{who} looks up.", plain),
         believes: { warm: "W", neutral: "N", cold: "C" },
         how: { direct: "D", heardFrom: "H {who}" },
       },
@@ -360,13 +364,19 @@ describe("the room, by person", () => {
     raw.boss.signs = sign("Your boss waves.");
     const run = startRun({ seed: 1, content: parseContent(raw) });
 
-    const { people } = sceneOf(openMeeting(run));
+    return sceneOf(openMeeting(run)).people.map((p) => p.withYou);
+  };
 
-    expect(people.map((p) => p.withYou)).toEqual([
-      { text: "Your boss waves.", plain: false },
-      { text: "Ben Bird looks up.", plain: true },
-      { text: "Cal Cope looks up.", plain: true },
+  it("puts how the boss and everyone else are with you in their own rows", () => {
+    expect(withYouIn()).toEqual([
+      "Your boss waves.",
+      "Ben Bird looks up.",
+      "Cal Cope looks up.",
     ]);
+  });
+
+  it("leaves out a line that says nothing of note, rather than dimming it", () => {
+    expect(withYouIn(true)).toEqual(["Your boss waves.", null, null]);
   });
 });
 

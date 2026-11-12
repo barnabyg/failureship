@@ -76,9 +76,10 @@ export interface ScenePerson {
   behaviour: string | null;
   /**
    * How they are with the player: the bosses' treatment, or anyone else's
-   * regard. Signs, and no more. A plain one says nothing of note.
+   * regard. Signs, and no more. A plain one, such as a nod hello, says nothing
+   * of note, so it is left out.
    */
-  withYou: { text: string; plain: boolean } | null;
+  withYou: string | null;
   /** The signs from What you notice that name them and nobody else. */
   signs: SceneSign[];
 }

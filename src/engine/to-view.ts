@@ -173,12 +173,9 @@ function toSceneView(
         : character === head
           ? content.overHead?.signs.find((s) => s.id === headTreatment)
           : content.reputation?.signs.find((s) => s.id === regarded?.sign);
-    if (written === undefined) return null;
+    if (written === undefined || written.plain) return null;
     const who = calledBy(state, content, character);
-    return {
-      text: sayPeople(written.text, { "{who}": who }),
-      plain: written.plain,
-    };
+    return sayPeople(written.text, { "{who}": who });
   };
   return {
     kind: "scene",
