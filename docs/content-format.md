@@ -138,8 +138,8 @@ is, so with 3 the reviews come in months 3, 6, 9 and so on of the run, not of a 
 run's length and whichever floor the player is on. Each quarter has a review of its own, so each
 reads differently: a longer run needs one more review for each quarter it adds, and nothing else.
 
-A review opens by itself, after the month's Notifications and any flagged Project and before the
-player's actions. Nobody can stay away, and it takes none of the player's actions. It is staged:
+A review opens by itself once the inbox is clear of the month's Notifications, after any flagged
+Project, so before the player's actions if they answer the inbox first. Nobody can stay away, and it takes none of the player's actions. It is staged:
 everyone is on their best behaviour, so the cast shows none of the behaviours in
 [`behaviours.json`](#behavioursjson), only the review's own signs, the boss's treatment and
 everyone's regard. Otherwise it is written like any Scene, with a `cast`, `signs` and `options`.
@@ -368,8 +368,8 @@ outcome that moves the Escapes' Gauge down must offer them, unless it is `"mista
 is past the point of escape. Grand Plan blame offers them even so. Nothing else may: not
 `onSomeoneElse`, a whistleblower's report or any other Thread outcome.
 
-The player chooses one where the Bill would have arrived: a Move's where Moves land, and any other
-as the month opens. Only then does the Bill take effect, if it does, and only then do its Thread's
+The player chooses one where the Bill would have arrived: a Move's where Moves land, asking before
+the official story, and any other in the inbox, any time before the month closes. Only then does the Bill take effect, if it does, and only then do its Thread's
 Gauges move. Each Escape has a unique `id`, a `label` and a `kind`:
 
 - `"take"` accepts the consequence as written, with an optional `body` to tell the player. Each
@@ -394,7 +394,8 @@ big mistake on top of a Bill's own.
 ## `events.json`
 
 Company Events: things that happen to the company as a whole. They land after the player's
-actions and before the month closes, ahead of the month's Character Move.
+actions and before the month closes, ahead of the month's Character Move, and the official story
+tells of them first.
 
 Each has `from`, `title`, `body`, and `story`, the official story's own `reported` and optional
 `happened` words for it. It can carry `sets` and `project`. It has no `mistake`, so a surprise is
@@ -1059,10 +1060,11 @@ arrives through someone else.
 
 A `bill` has a unique `id`, a `title` and a `body`, and `as` says how it arrives:
 
-- `"notice"` tells the player as the month opens.
+- `"notice"` tells the player as the month opens, as a note in the inbox to read.
 - `"notification"` arrives as a Notification, and needs `from` and `options`, at least one of
   them free. The options are written as in [`notifications.json`](#notificationsjson).
-- `"move"` lands where Character Moves do, beside the month's own, and needs `from`.
+- `"move"` lands where Character Moves do, beside the month's own, told in the official story,
+  and needs `from`.
 
 An outcome's `gauges` move the player's Gauges as the month it plays out closes, each with the
 `gauge`, how far it moves it `by`, and the `note` the player sees. Only a Thread or an
@@ -1080,3 +1082,9 @@ the hints in month 1, so a newcomer has it at once, and after that in the hints'
 to a line or two. `gaugeTitles` gives each Gauge in [`gauges.json`](#gaugesjson), by its `id`, the
 tooltip saying what it is; a Gauge without one is refused. `hints.win` is
 the hint beside the stand-in for [winning](#winning).
+
+`hints.inbox` is the hint on the floor while the inbox has something to answer, saying
+`{actions}`, how many actions are left, and `{n}`, how many things are left to answer, and
+`hints.inboxOnly` says, with `{n}`, that the actions are spent and the inbox is all that holds the
+month open. The panel texts starting `inbox` label the inbox, and those starting `landed` head
+what the official story tells of what landed as the month closed.

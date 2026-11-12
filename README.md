@@ -30,14 +30,15 @@ has seeds for each way up, a Rival winning, a demotion, being fired and the win.
 
 Every run has a seed, on the **Run** menu at the top right, and `?seed=8` picks one. Each month has the same shape:
 
-1. **A Notification arrives.** Answer it. An answer may cost one of your 3 actions, and one always
-   costs nothing. A month always leaves you something to decide, on any floor. Every third
-   month the **Quarterly Business Review** follows by itself, at no cost, and goes on the record.
-2. **Spend your remaining actions** by clicking places on the floor, as the guide at the foot says.
-3. **Any Company Event, then a Character Move, lands on you.** You do not get a choice, unless it
-   comes back from something you did: then you are offered **Escapes**, such as blaming someone,
-   lying or burying it, or taking it. One that fails is worse than taking it.
-4. **The month closes** with the official story beside what actually happened.
+1. **Your inbox and the floor open together.** Open the Notifications from the inbox's list and
+   answer them in any order, between actions if you like; one answer always costs nothing.
+   Anything that comes back on you waits there with its **Escapes**, such as blaming someone or
+   taking it, and one that fails is worse. Every third month the **Quarterly Business Review**
+   follows once the inbox is clear.
+2. **Spend your 3 actions** by clicking places on the floor, as the guide at the foot says. The
+   month closes once they are spent and the inbox is answered.
+3. **The official story** tells any Company Event and Character Move, then what was reported
+   beside what actually happened. A Move that comes back on you asks for its Escape first.
 
 There are four ways to spend an action:
 
