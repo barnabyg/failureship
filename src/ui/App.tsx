@@ -16,6 +16,7 @@ import { LiftRide, readRide, writeRide, type Ride } from "./LiftRide";
 import { endsAfter, playToMonth } from "./later-month";
 import { Modal } from "./Modal";
 import { Notebook, monthLabel } from "./Notebook";
+import { StepTag, stepTag } from "./Panel";
 import { StepPanel } from "./panels";
 import { readSavedRun, writeSavedRun } from "./saved-run";
 import { TowerStage } from "./TowerStage";
@@ -168,6 +169,7 @@ export function App() {
         legal={view.choices}
         onChoose={choose}
         unlabelled={view.step.kind === "results"}
+        waiting={view.step.kind !== "actions"}
       />
       <Header
         view={view}
@@ -220,14 +222,16 @@ export function App() {
           <p data-testid="hint">{view.hint}</p>
         </div>
       </aside>
-      <StepPanel
-        view={view}
-        onChoose={choose}
-        onRestart={restart}
-        onNewRun={() => {
-          restart(randomSeed());
-        }}
-      />
+      <StepTag.Provider value={stepTag(view.step)}>
+        <StepPanel
+          view={view}
+          onChoose={choose}
+          onRestart={restart}
+          onNewRun={() => {
+            restart(randomSeed());
+          }}
+        />
+      </StepTag.Provider>
       <div className="too-narrow" role="alert" data-testid="too-narrow">
         <h2>{panelText.tooNarrowHeading}</h2>
         <p>{panelText.tooNarrowText}</p>

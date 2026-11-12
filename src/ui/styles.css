@@ -77,6 +77,24 @@ body {
   display: block;
 }
 
+/*
+ * While a step waits for an answer the floor goes dark behind its panel, labels
+ * and all, so it is plain that the floor is not what to answer.
+ */
+.stage::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: rgb(12 16 20 / 55%);
+  opacity: 0;
+  transition: opacity 150ms ease-out;
+  pointer-events: none;
+}
+
+.stage[data-floor="waiting"]::after {
+  opacity: 1;
+}
+
 .hotspot {
   position: absolute;
   display: flex;
@@ -340,6 +358,30 @@ body {
   border-radius: 4px;
   background: var(--paper);
   box-shadow: 0 8px 28px rgb(0 0 0 / 45%);
+}
+
+/* A step waiting for an answer stands plainly in front of the header's cards. */
+.panel:not(.panel-result) {
+  outline: 3px solid var(--highlight);
+  box-shadow:
+    0 0 0 6px rgb(12 16 20 / 35%),
+    0 16px 48px rgb(0 0 0 / 65%);
+}
+
+/* What kind of step it is, and where it stands, in a band across the panel's top. */
+.panel > p.step-tag {
+  margin: -14px -20px 8px;
+  padding: 5px 20px;
+  background: var(--ink);
+  color: var(--highlight);
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.panel[data-look] > p.step-tag {
+  margin: 0 -20px;
 }
 
 .panel-wide {
