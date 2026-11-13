@@ -822,21 +822,40 @@ body {
   font-size: 0.875rem;
 }
 
-.status .run-controls > button {
+.status .run-controls > button,
+.status .run-menu-toggle {
   padding: 4px 14px;
 }
 
 .run-menu {
   position: relative;
-  font-size: 0.8125rem;
 }
 
-.run-menu-toggle::after {
-  content: " \25BE";
+.run-menu-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+/* A chevron as tall as the label, turned up while the menu is open. */
+.run-menu-chevron {
+  width: 0.875em;
+  height: 0.875em;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  transition: transform 120ms ease-out;
+}
+
+.run-menu-toggle[aria-expanded="true"] .run-menu-chevron {
+  transform: rotate(180deg);
 }
 
 .run-menu-panel {
   position: absolute;
+  font-size: 0.8125rem;
   top: calc(100% + 6px);
   right: 0;
   display: flex;
