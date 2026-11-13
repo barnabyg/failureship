@@ -121,14 +121,16 @@ test("the end of a run needs no confirmation to leave", async ({ page }) => {
   await expect(page.getByTestId("panel-notification")).toBeVisible();
 });
 
-test("the Run menu holds the seed, New run and Restart from seed, and only Org Chart and Notebook sit beside it", async ({
+test("the Run menu holds New run and Restart from seed, the seed shows beside it, and only Org Chart and Notebook sit beside it", async ({
   page,
 }) => {
   await page.goto("/?seed=3");
   await answerAnyNotification(page);
 
   const menu = page.getByTestId("run-menu");
-  await expect(menu).toContainText("3");
+  // The seed is a fact in the header, not part of the menu's button.
+  await expect(page.getByTestId("seed-shown")).toContainText("3");
+  await expect(menu).toHaveText(/^\s*Run\s*$/);
   await expect(menu).toHaveAttribute("aria-expanded", "false");
   await expect(page.getByTestId("new-run")).toHaveCount(0);
   await expect(page.getByTestId("seed-input")).toHaveCount(0);

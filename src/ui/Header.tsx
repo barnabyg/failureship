@@ -294,9 +294,12 @@ export function Header(props: {
           buzzwords={view.buzzwords}
           onOpen={props.onOpenBuzzwords}
         />
+        <div data-testid="seed-shown">
+          <dt>{panelText.seedLabel}</dt>
+          <dd data-testid="seed">{view.seed}</dd>
+        </div>
       </dl>
       <RunControls
-        seed={view.seed}
         onNewRun={props.onNewRun}
         onRestart={props.onRestart}
         onRefused={props.onRefused}
