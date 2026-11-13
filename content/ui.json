@@ -29,7 +29,6 @@
   "readInFull": "Read it in full",
   "readLess": "Show it short",
   "doneLabel": "Done this month",
-  "unavailableLabel": "No actions left",
   "stepScene": "Meeting",
   "stepFindOut": "Finding out",
   "stepNotice": "Notice",
@@ -109,7 +108,7 @@
   "resultsEscapeWorked": "It worked.",
   "resultsEscapeFailed": "It did not work.",
   "escapeHeading": "What do you do?",
-  "escapeNeeds": "Needs {gauge} {at}",
+  "escapeNeeds": "Needs {gauge} {at}, and you have {have}",
   "resultsChangesHeading": "What moved the charts",
   "resultsBeliefsHeading": "What each of them ended up believing, and why",
   "resultsHeardNothing": "Nothing about you ever reached them.",
@@ -186,6 +185,11 @@
   },
   "costLabel": "Costs {actions}",
   "freeLabel": "Costs nothing",
+  "blocked": {
+    "noActions": "No actions left",
+    "tooFew": "Costs {actions}, and you have {left}",
+    "keptForInbox": "Actions kept for your inbox"
+  },
   "bossLanded": {
     "warmer": "Went down well",
     "cooler": "Cost you",

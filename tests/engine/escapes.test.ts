@@ -364,7 +364,11 @@ describe("an Escape with a minimum Teflon", () => {
     expect(view.step).toMatchObject({
       kind: "escape",
       escapes: expect.arrayContaining([
-        { id: "lose-it", label: "LOSE-IT", needs: { label: "Teflon", at: 60 } },
+        {
+          id: "lose-it",
+          label: "LOSE-IT",
+          needs: { label: "Teflon", at: 60, have: 50 },
+        },
       ]) as unknown,
     });
     const ids = view.choices.map((c) =>
@@ -442,7 +446,10 @@ describe("an Escape with a minimum Teflon", () => {
       escapes: expect.arrayContaining([
         expect.objectContaining({
           id: "one-tool-validation",
-          needs: { label: "Teflon", at: 60 },
+          needs: expect.objectContaining({
+            label: "Teflon",
+            at: 60,
+          }) as unknown,
         }),
       ]) as unknown,
     });

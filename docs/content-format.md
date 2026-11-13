@@ -1101,3 +1101,9 @@ the hint beside the stand-in for [winning](#winning).
 `hints.inboxOnly` says, with `{n}`, that the actions are spent and the inbox is all that holds the
 month open. The panel texts starting `inbox` label the inbox, and those starting `landed` head
 what the official story tells of what landed as the month closed.
+
+`blocked` says why a place on the floor, or an answer in the inbox, cannot be chosen now, in place
+of what it costs: `noActions` when none are left, `tooFew` when it costs more than is left, saying
+`{actions}`, what it costs, and `{left}`, and `keptForInbox` when the actions left are kept for
+answering the inbox. `escapeNeeds` says why an Escape is locked, with `{gauge}`, `{at}`, the level
+it needs, and `{have}`, what the player has.

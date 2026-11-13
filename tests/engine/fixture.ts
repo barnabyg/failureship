@@ -308,6 +308,11 @@ export function fixtureRaw() {
       },
       costLabel: "Costs {actions}",
       freeLabel: "Costs nothing",
+      blocked: {
+        noActions: "BLOCKED-NO-ACTIONS",
+        tooFew: "BLOCKED-TOO-FEW {actions} {left}",
+        keptForInbox: "BLOCKED-KEPT",
+      },
       bossLanded: {
         warmer: "LANDED-WARMER",
         cooler: "LANDED-COOLER",

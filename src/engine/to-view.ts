@@ -155,13 +155,17 @@ function notificationOptions(
 ): NotificationOption[] {
   const notification = everyNotification(content).find((n) => n.id === id);
   return optionsOnOffer(state, content, notification?.options ?? []).map(
-    (o) => ({
-      id: o.id,
-      label: o.label,
-      costLabel: costLabel(content, o.cost),
-      affordable: costOf(content, o.cost) <= remaining(state, content),
-      stakes: o.stakes,
-    }),
+    (o) => {
+      const affordable = costOf(content, o.cost) <= remaining(state, content);
+      return {
+        id: o.id,
+        label: o.label,
+        costLabel: costLabel(content, o.cost),
+        affordable,
+        blockedBy: affordable ? undefined : shortOf(state, content, o.cost),
+        stakes: o.stakes,
+      };
+    },
   );
 }
 
@@ -715,19 +719,40 @@ function toHotspot(
   content: Content,
   action: Content["actions"][number],
 ): Hotspot {
-  const done = isDone(state, action);
+  const shown: Hotspot["state"] = isDone(state, action)
+    ? "done"
+    : canTakeNow(state, content, action)
+      ? "available"
+      : "unavailable";
   return {
     id: action.id,
     label: action.label,
     description: action.description,
     place: action.place,
     costLabel: costLabel(content, action.cost),
-    state: done
-      ? "done"
-      : canTakeNow(state, content, action)
-        ? "available"
-        : "unavailable",
+    state: shown,
+    blockedBy:
+      shown !== "unavailable"
+        ? undefined
+        : costOf(content, action.cost) > remaining(state, content)
+          ? shortOf(state, content, action.cost)
+          : content.ui.blocked.keptForInbox,
   };
+}
+
+/** Why something costing this many actions cannot be paid for now. */
+function shortOf(
+  state: State,
+  content: Content,
+  key: string | undefined,
+): string {
+  const left = remaining(state, content);
+  const { noActions, tooFew } = content.ui.blocked;
+  return left <= 0
+    ? noActions
+    : tooFew
+        .replaceAll("{actions}", countActions(content, costOf(content, key)))
+        .replaceAll("{left}", countActions(content, left));
 }
 
 function costLabel(content: Content, key: string | undefined): string {

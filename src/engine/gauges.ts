@@ -49,17 +49,17 @@ export function gaugeFromEscape(
 
 /**
  * What an Escape with a minimum needs, while the Gauge Escapes raise is below it:
- * the Gauge's label and the level. Undefined if it can be played.
+ * the Gauge's label, the level, and what the player has. Undefined if it can be played.
  */
 export function gaugeNeeded(
   state: State,
   content: Content,
   min: number | undefined,
-): { label: string; at: number } | undefined {
+): { label: string; at: number; have: number } | undefined {
   const gauge = content.gauges?.find((g) => g.id === content.escapes?.gauge);
   if (min === undefined || !gauge) return undefined;
   const now = state.gauges[gauge.id] ?? gauge.start;
-  return now < min ? { label: gauge.label, at: min } : undefined;
+  return now < min ? { label: gauge.label, at: min, have: now } : undefined;
 }
 
 function clamp(gauge: Written, value: number): number {
