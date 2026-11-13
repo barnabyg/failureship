@@ -13,14 +13,14 @@ import { FindOutPanel } from "./FindOutPanel";
 import { ConfidentialStamp, type Look, type Sent } from "./Intranet";
 import {
   Continue,
+  ContinueButton,
   InboxHead,
   Panel,
   Reaction,
-  ResultBefore,
   Stakes,
   StepTag,
 } from "./Panel";
-import { ResultAtHead } from "./Result";
+import { ResultBody } from "./Result";
 import { ResultsPanel } from "./ResultsPanel";
 import { ScenePanel } from "./ScenePanel";
 import { StandingBar } from "./StandingBar";
@@ -317,25 +317,34 @@ interface StepPanelProps {
   opened: string | null;
   onOpen: (key: string) => void;
   onHideInbox: () => void;
+  /** Whether what the player's last choice led to is still to be read. */
+  resultOpen: boolean;
+  onResultRead: () => void;
 }
 
-/** What the player did last, on the floor: small, and taking no focus. */
-function ResultCard({ view }: { view: PlayerView }) {
+/**
+ * What the player's last choice led to, on its own, so that the player reads
+ * one thing at a time: nothing else shows, and the floor waits, until Continue.
+ */
+function ResultPanel({
+  view,
+  onContinue,
+}: {
+  view: PlayerView;
+  onContinue: () => void;
+}) {
   const { result, actions, inbox } = view;
   if (result === null) return null;
   return (
-    <section
-      className="panel panel-result"
-      data-testid="panel-result"
-      aria-label={panelText.resultHeading}
-    >
-      <ResultAtHead result={result} actions={actions} />
+    <Panel testId="panel-result" title={panelText.resultHeading}>
+      <ResultBody result={result} actions={actions} />
       {result.kind === "answer" && inbox.toAnswer === 0 && (
         <p className="inbox-count" data-testid="inbox-count">
           {panelText.inboxEmpty}
         </p>
       )}
-    </section>
+      <ContinueButton onClick={onContinue} />
+    </Panel>
   );
 }
 
@@ -368,16 +377,16 @@ function InboxClosed({
 }
 
 /**
- * The panel for the current step of the month, if it needs one, headed by what
- * the player's last choice led to. On the floor, it is the inbox, which waits
- * for nothing: closed, it is only its list, beside the card of what the player
- * last did, which goes once they choose again.
+ * The panel for the current step of the month, if it needs one, once what the
+ * player's last choice led to has been read. On the floor, it is the inbox,
+ * which waits for nothing: closed, it is only its list.
  */
 export function StepPanel(props: StepPanelProps) {
   const { view } = props;
-  const { result, actions, inbox } = view;
-  const before =
-    result === null ? null : <ResultAtHead result={result} actions={actions} />;
+  const { inbox } = view;
+  if (props.resultOpen && view.result !== null) {
+    return <ResultPanel view={view} onContinue={props.onResultRead} />;
+  }
   if (!view.waiting) {
     const open = props.inboxOpen ? openInInbox(view, props.opened) : null;
     const index = inbox.items.findIndex(
@@ -385,37 +394,26 @@ export function StepPanel(props: StepPanelProps) {
     );
     const item = inbox.items[index];
     if (open === null || item === undefined) {
-      return (
-        <>
-          {inbox.items.length > 0 && (
-            <InboxClosed view={view} onOpen={props.onOpen} />
-          )}
-          <ResultCard view={view} />
-        </>
-      );
+      return inbox.items.length > 0 ? (
+        <InboxClosed view={view} onOpen={props.onOpen} />
+      ) : null;
     }
     return (
-      <ResultBefore.Provider value={before}>
-        <InboxHead.Provider
-          value={
-            <InboxList
-              items={inbox.items}
-              open={open}
-              onOpen={props.onOpen}
-              onHide={props.onHideInbox}
-            />
-          }
-        >
-          <StepBody {...props} view={{ ...view, step: asStep(item) }} />
-        </InboxHead.Provider>
-      </ResultBefore.Provider>
+      <InboxHead.Provider
+        value={
+          <InboxList
+            items={inbox.items}
+            open={open}
+            onOpen={props.onOpen}
+            onHide={props.onHideInbox}
+          />
+        }
+      >
+        <StepBody {...props} view={{ ...view, step: asStep(item) }} />
+      </InboxHead.Provider>
     );
   }
-  return (
-    <ResultBefore.Provider value={before}>
-      <StepBody {...props} />
-    </ResultBefore.Provider>
-  );
+  return <StepBody {...props} />;
 }
 
 /** A thing in the inbox, shown in the panel its kind of step has. */

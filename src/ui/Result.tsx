@@ -28,7 +28,6 @@ export function HappenedCard({
 }) {
   return (
     <div className="happened" data-testid="result" data-kind={result.kind}>
-      <p className="happened-heading">{panelText.resultHeading}</p>
       <h3 className="happened-title" data-testid="result-title">
         {result.title}
       </h3>
@@ -114,8 +113,8 @@ export function AnsweredMail({ result }: { result: Answer }) {
   );
 }
 
-/** The result as it heads another panel, in its own look. */
-export function ResultAtHead({
+/** What the player's last choice led to, in its own look. */
+export function ResultBody({
   result,
   actions,
 }: {

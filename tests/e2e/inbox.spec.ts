@@ -1,5 +1,12 @@
 import { expect, test, type Page } from "@playwright/test";
-import { blockingPanel, freshRun, openInbox, openMeeting } from "./play";
+import {
+  blockingPanel,
+  freshRun,
+  openInbox,
+  openMeeting,
+  readAnyResult,
+  readResult,
+} from "./play";
 
 /** Answers every e-mail in the inbox with its first answer, from the top. */
 async function answerInboxFirst(page: Page) {
@@ -9,6 +16,7 @@ async function answerInboxFirst(page: Page) {
     const subject = await mail.locator("h2").innerText();
     await mail.locator('[data-testid^="option-"]:enabled').first().click();
     await expect(mail.locator("h2", { hasText: subject })).toHaveCount(0);
+    await readAnyResult(page);
   }
 }
 
@@ -42,12 +50,15 @@ test.describe("the inbox", () => {
 
     // An action first: the e-mails still wait, to be answered in any order.
     await page.getByTestId("hotspot-work").click();
+    await readResult(page);
     await expect(page.getByTestId("inbox-item")).toHaveCount(4);
     await page.getByTestId("inbox-item").last().click();
     await expect(mail.locator("h2")).toHaveText("Hot-desking: where are we?");
     await mail.locator('[data-testid^="option-"]').first().click();
     await expect(page.getByTestId("open-inbox")).toHaveText("3 to answer");
-    // Answered, the next one opens in its place.
+    // Answered, its result shows alone, and then the next one opens in its place.
+    await expect(mail).toHaveCount(0);
+    await readResult(page);
     await expect(mail.locator("h2")).toHaveText(
       "A quick word, if you have a moment",
     );
@@ -80,9 +91,12 @@ test.describe("the inbox", () => {
     // All three actions on the floor, with the inbox left alone.
     await openMeeting(page);
     await page.locator('[data-testid^="scene-option-"]').first().click();
+    await readResult(page);
     await page.getByTestId("hotspot-work").click();
+    await readResult(page);
     await page.getByTestId("hotspot-ask-around").click();
     await page.locator('[data-testid^="subject-"]').first().click();
+    await readResult(page);
 
     await expect(page.getByTestId("actions-left")).toContainText("0 actions");
     await expect(page.getByTestId("month")).toContainText("7 of 18");
@@ -103,6 +117,7 @@ test.describe("the inbox", () => {
     await answerInboxFirst(page);
     await openMeeting(page);
     await page.locator('[data-testid^="scene-option-"]').first().click();
+    await readResult(page);
     await expect(blockingPanel(page)).toHaveCount(0);
     await page.getByTestId("hotspot-work").click();
 
@@ -130,6 +145,7 @@ test.describe("the inbox", () => {
       "open",
     );
     expect(seen.length).toBeLessThanOrEqual(3);
-    expect(seen).toEqual(["panel-story"]);
+    // The desk's result, read alone, and then the official story.
+    expect(seen).toEqual(["panel-result", "panel-story"]);
   });
 });

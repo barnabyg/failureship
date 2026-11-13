@@ -4,6 +4,8 @@ import {
   answerNotification,
   finishMonth,
   openInboxIfAny,
+  readAnyResult,
+  readResult,
 } from "./play";
 
 test("a skipped meeting comes back as a Demand in a later month", async ({
@@ -14,7 +16,9 @@ test("a skipped meeting comes back as a Demand in a later month", async ({
 
   // Stays away from the meeting, and spends the rest elsewhere.
   await page.getByTestId("hotspot-kitchen").click();
+  await readResult(page);
   await page.getByTestId("hotspot-work").click();
+  await readResult(page);
 
   await expect(
     page.getByTestId("landed").filter({ hasText: "minutes" }).first(),
@@ -28,7 +32,10 @@ test("a skipped meeting comes back as a Demand in a later month", async ({
   const demand = page
     .getByTestId("panel-notification")
     .filter({ has: page.locator("h2", { hasText: "ACTION:" }) });
-  while (!(await demand.isVisible())) await answerNotification(page);
+  while (!(await demand.isVisible())) {
+    await answerNotification(page);
+    await readAnyResult(page);
+  }
 
   await expect(page.getByTestId("option-deliver")).toBeVisible();
   await expect(page.getByTestId("option-push-back")).toBeVisible();

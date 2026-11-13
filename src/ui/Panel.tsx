@@ -9,9 +9,6 @@ import { panelText } from "../content";
 import type { Choice, PlayerView } from "../engine";
 import { MailFoot, MailHead, Masthead, type Look } from "./Intranet";
 
-/** What the player did last, shown at the head of whatever panel comes next. */
-export const ResultBefore = createContext<ReactNode>(null);
-
 /**
  * What kind of step is waiting atop its panel, or, on the floor, that the
  * inbox's panel waits for nothing, and how much in it is left to answer.
@@ -73,7 +70,6 @@ export function Panel({
   look,
   children,
 }: PanelProps) {
-  const before = useContext(ResultBefore);
   const tag = useContext(StepTag);
   const inbox = useContext(InboxHead);
   const heading = useRef<HTMLHeadingElement>(null);
@@ -99,7 +95,6 @@ export function Panel({
         </p>
       )}
       {inbox}
-      {before}
       {look && "sent" in look ? (
         <MailHead sent={look.sent} to={look.to} from={eyebrow} subject={h2} />
       ) : (
@@ -117,13 +112,22 @@ export function Panel({
 
 export function Continue({ onChoose }: { onChoose: (choice: Choice) => void }) {
   return (
+    <ContinueButton
+      onClick={() => {
+        onChoose({ type: "continue" });
+      }}
+    />
+  );
+}
+
+/** Continue, for something the UI holds rather than the run, such as a result. */
+export function ContinueButton({ onClick }: { onClick: () => void }) {
+  return (
     <button
       type="button"
       className="primary"
       data-testid="continue"
-      onClick={() => {
-        onChoose({ type: "continue" });
-      }}
+      onClick={onClick}
     >
       {panelText.continueLabel}
     </button>

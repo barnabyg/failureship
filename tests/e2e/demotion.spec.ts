@@ -1,5 +1,5 @@
 import { expect, test } from "@playwright/test";
-import { finishMonth, freshRun, playUntil } from "./play";
+import { finishMonth, freshRun, playUntil, readAnyResult } from "./play";
 
 // tests/engine/real-vacancies.test.ts keeps these deals true. On seed 2,
 // taking the blame in month 2 keeps the record clean, and faking the Plan at
@@ -19,6 +19,7 @@ test("a big mistake while the seat is open costs it, and the decision says so", 
 
   await playUntil(page, "scene-option-sink-the-projects-candidate");
   await page.getByTestId("scene-option-sink-the-projects-candidate").click();
+  await readAnyResult(page);
   await expect(page.getByTestId("panel-notice")).toContainText(
     "A letter in a plain envelope",
   );
@@ -44,6 +45,7 @@ test("a big mistake on Floor 2 demotes you, and the lift takes you down", async 
 
   await playUntil(page, "scene-option-blame-your-analyst");
   await page.getByTestId("scene-option-blame-your-analyst").click();
+  await readAnyResult(page);
 
   await expect(page.getByTestId("panel-notice")).toContainText(
     "A letter in a plain envelope",

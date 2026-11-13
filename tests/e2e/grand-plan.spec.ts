@@ -5,6 +5,7 @@ import {
   openInboxIfAny,
   openMeeting,
   playUntil,
+  readResult,
 } from "./play";
 
 // "the Grand Plan browser test's seed" in tests/engine/real-grand-plans.test.ts
@@ -30,6 +31,7 @@ test("hear of your boss's Grand Plan, and complete it", async ({ page }) => {
   await openInboxIfAny(page);
   await page.getByTestId("option-fake").click();
   await expect(answered(page)).toContainText("This solves ALL your problems");
+  await readResult(page);
 
   const told = page.getByTestId("panel-notice");
   await expect(told).toContainText("Your boss's Grand Plan: done");

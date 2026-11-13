@@ -187,8 +187,8 @@ How to run the checks and tests is in [AGENTS.md](AGENTS.md#verifying).
 - `src/ui/` holds the React panels over the tower: `App.tsx` wires them to the run, and rides the
   lift when the floor changes, and `TowerStage.tsx` the tower's hotspots. `panels.tsx` picks each
   step's panel, the larger being `ScenePanel.tsx`, `FindOutPanel.tsx` and `ResultsPanel.tsx`;
-  `Panel.tsx` holds their frame and buttons, `Result.tsx` what the player's own choices led to, which
-  waits beside what comes next, and `Intranet.tsx` the e-mails and newsletter. `Header.tsx` draws
+  `Panel.tsx` holds their frame and buttons, `Result.tsx` what the player's own choices led to, shown
+  alone until Continue, and `Intranet.tsx` the e-mails and newsletter. `Header.tsx` draws
   the header and status card, with `RunControls.tsx` (the Run menu) and `StandingBar.tsx`.
   `Chart.tsx` and `Notebook.tsx` open in a `Modal.tsx`. `saved-run.ts` saves the run, and
   `later-month.ts` plays the e2e build to `?month=N` and ends it at `&last=N`.

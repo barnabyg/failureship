@@ -4,6 +4,7 @@ import {
   askAtPhotocopier,
   openInboxIfAny,
   playToResults,
+  readResult,
   skipTheReport,
 } from "./play";
 
@@ -76,9 +77,11 @@ test("the Notebook opens from every step of a month", async ({ page }) => {
   await opensAndCloses("panel-find-out");
   await page.locator('[data-testid^="subject-"]').first().click();
   await opensAndCloses("panel-result");
+  await readResult(page);
   await page.getByTestId("hotspot-meeting").click();
   await opensAndCloses("panel-scene");
   await page.getByTestId("scene-option-say-nothing").click();
+  await readResult(page);
   await opensAndCloses("panel-story");
 });
 
