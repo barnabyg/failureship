@@ -51,6 +51,7 @@ describe("the report-or-pub Notification", () => {
     expect(
       kept.hotspots.filter((h) => h.state === "available").map((h) => h.id),
     ).toEqual([]);
+    expect(kept.hotspots.map((h) => h.blockedBy)).toContain("BLOCKED-KEPT");
     expect(kept.hint).toBe(
       "Answer your inbox to close the month: 1 to answer.",
     );
@@ -185,6 +186,9 @@ describe("the report-or-pub Notification", () => {
     if (step.kind !== "notification") throw new Error(step.kind);
 
     expect(step.options[0]?.affordable).toBe(false);
+    expect(step.options[0]?.blockedBy).toBe(
+      "BLOCKED-TOO-FEW 4 actions 3 actions",
+    );
     expect(() => chooseReport(run)).toThrow(/not available/i);
   });
 

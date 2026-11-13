@@ -62,6 +62,24 @@ describe("a month", () => {
     expect(run.view().actions.remaining).toBe(0);
   });
 
+  it("says why a place costing more than is left cannot be taken", () => {
+    const raw = emptyMonthRaw();
+    raw.balance.actionCosts.standard = 2;
+    const run = startRun({ seed: 1, content: parseContent(raw) });
+    spendAction(run, "kettle");
+
+    expect(run.view().hotspots.find((h) => h.id === "desk")).toMatchObject({
+      state: "unavailable",
+      blockedBy: "BLOCKED-TOO-FEW 2 actions 1 action",
+    });
+  });
+
+  it("says nothing is blocked while a place can be taken", () => {
+    const view = startRun({ seed: 1, content: emptyMonth() }).view();
+
+    expect(view.hotspots.every((h) => h.blockedBy === undefined)).toBe(true);
+  });
+
   it("lets a place be visited again this month", () => {
     const run = startRun({ seed: 1, content: emptyMonth() });
     spendAction(run, "kettle");

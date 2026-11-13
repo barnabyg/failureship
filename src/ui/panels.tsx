@@ -201,7 +201,12 @@ function MailPanel({
             }}
           >
             <span>{option.label}</span>
-            <span className="option-cost">{option.costLabel}</span>
+            <span
+              className="option-cost"
+              data-testid={option.blockedBy ? "blocked-by" : undefined}
+            >
+              {option.blockedBy ?? option.costLabel}
+            </span>
             <Stakes text={option.stakes} />
           </button>
         ))}
@@ -482,10 +487,11 @@ function StepBody({ view, onChoose, onRestart, onNewRun }: StepPanelProps) {
               >
                 <span>{escape.label}</span>
                 {escape.needs && (
-                  <span className="option-cost">
+                  <span className="option-cost" data-testid="blocked-by">
                     {panelText.escapeNeeds
                       .replace("{gauge}", escape.needs.label)
-                      .replace("{at}", String(escape.needs.at))}
+                      .replace("{at}", String(escape.needs.at))
+                      .replace("{have}", String(escape.needs.have))}
                   </span>
                 )}
               </button>

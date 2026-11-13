@@ -272,6 +272,16 @@ export const contentSchema = z.strictObject({
     clueVerdicts: z.strictObject({ held: text, wrong: text, idle: text }),
     costLabel: text,
     freeLabel: text,
+    /**
+     * Why a place on the floor, or an answer, cannot be chosen now: no actions
+     * left; too few, saying {actions}, what it costs, and {left}; or those left
+     * kept for answering the inbox.
+     */
+    blocked: z.strictObject({
+      noActions: text,
+      tooFew: text,
+      keptForInbox: text,
+    }),
     /** How the results screen says a choice landed with the boss. */
     bossLanded: z.strictObject({ warmer: text, cooler: text, unmoved: text }),
     results: z.strictObject({ title: text, intro: text }),

@@ -57,6 +57,6 @@ test("a locked Escape shows the Teflon it needs, and cannot be chosen", async ({
   await playUntil(page, "panel-escape");
   const locked = page.getByTestId("escape-one-tool-validation");
   await expect(locked).toBeDisabled();
-  await expect(locked).toContainText("Needs Teflon 60");
+  await expect(locked).toContainText(/Needs Teflon 60, and you have \d+/);
   await expect(page.getByTestId("escape-one-tool-take-it")).toBeEnabled();
 });

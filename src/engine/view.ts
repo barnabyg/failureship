@@ -22,6 +22,8 @@ export interface Hotspot {
   place: string;
   costLabel: string;
   state: "available" | "done" | "unavailable";
+  /** Why it cannot be taken now, while it is unavailable. */
+  blockedBy?: string | undefined;
 }
 
 export interface Buzzword {
@@ -35,6 +37,8 @@ export interface NotificationOption {
   label: string;
   costLabel: string;
   affordable: boolean;
+  /** Why it cannot be given now, while it is not affordable. */
+  blockedBy?: string | undefined;
   /** What is at stake, if this could end things on the spot. */
   stakes?: string | undefined;
 }
@@ -127,7 +131,7 @@ export interface EscapeView {
   escapes: {
     id: string;
     label: string;
-    needs?: { label: string; at: number } | undefined;
+    needs?: { label: string; at: number; have: number } | undefined;
   }[];
 }
 

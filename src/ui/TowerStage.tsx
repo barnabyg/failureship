@@ -118,9 +118,7 @@ export function TowerStage({
               <span className="hotspot-detail">
                 {hotspot.state === "done"
                   ? panelText.doneLabel
-                  : hotspot.state === "unavailable"
-                    ? panelText.unavailableLabel
-                    : hotspot.costLabel}
+                  : (hotspot.blockedBy ?? hotspot.costLabel)}
               </span>
             )}
           </button>

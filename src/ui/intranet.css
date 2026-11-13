@@ -155,6 +155,21 @@
   color: #5b6b7d;
 }
 
+/* An answer that cannot be given now: greyed and dashed, with why in its pill. */
+.panel[data-look] button.option:disabled {
+  border-style: dashed;
+  border-color: #c3ccd6;
+  background: #f1f3f6;
+  box-shadow: none;
+  color: #7d8a98;
+  cursor: not-allowed;
+}
+
+.panel[data-look] button.option:disabled .option-cost {
+  background: #fbe9e7;
+  color: #8c2f24;
+}
+
 .panel[data-look] button.primary {
   border-color: var(--company-blue);
   border-radius: 3px;
