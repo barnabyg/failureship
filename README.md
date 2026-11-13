@@ -3,6 +3,8 @@
 A satirical, single-player browser game. You climb a ten-storey office tower by reading people. The
 design is in [failureship-grill-outcome.md](failureship-grill-outcome.md).
 
+![Floor 1 in month 1: the office floor with its places to spend actions, the inbox and the header](docs/screenshot.png)
+
 Phase 5, ready to steer: eighteen months from a furnished Floor 1 to the top of a blocked-out
 Floor 3, with kinds of boss, the Monthly Status Report, Demands, Budgets, every family of Moves,
 Threads, hidden risks, news that travels, Company Events, your word and Deals, Believers who change,
