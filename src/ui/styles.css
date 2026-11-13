@@ -310,12 +310,8 @@ body {
   line-height: 1.35;
 }
 
-/*
- * Beside a wide step panel, such as a Scene, or the card of what just happened,
- * which starts at 384 px, it keeps to a narrow column.
- */
-.game:has(.panel-wide) .next,
-.game:has(.panel-result) .next {
+/* Beside a wide step panel, such as a Scene, it keeps to a narrow column. */
+.game:has(.panel-wide) .next {
   max-width: 360px;
 }
 
@@ -357,11 +353,7 @@ body {
   padding: 14px 20px;
   border-radius: 4px;
   background: var(--paper);
-  box-shadow: 0 8px 28px rgb(0 0 0 / 45%);
-}
-
-/* A step waiting for an answer stands plainly in front of the header's cards. */
-.panel:not(.panel-result) {
+  /* A step waiting for an answer stands plainly in front of the header's cards. */
   outline: 3px solid var(--highlight);
   box-shadow:
     0 0 0 6px rgb(12 16 20 / 35%),
@@ -1132,23 +1124,7 @@ body {
   font-weight: 700;
 }
 
-/*
- * What came of the player's own action on the floor: one look, a card that
- * leaves the floor free, or heads whatever panel lands next. On the floor it
- * lies along the front, below every place's label, and lets clicks through.
- */
-.panel-result {
-  top: auto;
-  right: auto;
-  bottom: 12px;
-  left: 384px;
-  width: min(880px, calc(100% - 396px));
-  max-height: calc(100% - 104px);
-  padding: 10px 14px;
-  font-size: 0.9375rem;
-  pointer-events: none;
-}
-
+/* What came of the player's last choice, in its own panel, read before anything else. */
 .happened {
   padding: 10px 14px;
   border-left: 4px solid var(--highlight);
@@ -1159,20 +1135,6 @@ body {
 
 .panel > .happened {
   margin: 14px 0;
-}
-
-.panel-result > .happened,
-.panel-result > .answered {
-  margin: 0;
-}
-
-.panel .happened-heading {
-  margin: 0;
-  color: var(--muted);
-  font-size: 0.75rem;
-  font-weight: 600;
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
 }
 
 .panel .happened-title {

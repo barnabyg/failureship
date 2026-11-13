@@ -5,6 +5,7 @@ import {
   freshRun,
   openInboxIfAny,
   playUntil,
+  readResult,
 } from "./play";
 
 // tests/engine/real-routes.test.ts keeps this deal true. Played plainly, seed 43
@@ -24,6 +25,7 @@ test("get rid of your boss, take their seat, and lose it when the call is traced
   await openInboxIfAny(page);
   await page.getByTestId("option-ring-about-your-boss").click();
   await expect(answered(page)).toContainText("Speak Up");
+  await readResult(page);
 
   // The boss goes, and the seat opens.
   const told = page.getByTestId("panel-notice");

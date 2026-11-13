@@ -1,5 +1,5 @@
 import { expect, test } from "@playwright/test";
-import { freshRun, openInboxIfAny, playUntil } from "./play";
+import { freshRun, openInboxIfAny, playUntil, readAnyResult } from "./play";
 
 // tests/engine/browser-seeds.test.ts keeps this deal true. On seed 2, taking
 // the blame in month 2, faking the Plan in month 5, claiming its credit and a
@@ -47,6 +47,7 @@ test("ride the lift to Floor 3, do its Grand Plan, and win the way out of it", a
     "The Board Offsite",
   );
   await page.getByTestId("scene-option-draw-swimlanes").click();
+  await readAnyResult(page);
 
   await expect(page.getByTestId("panel-notice")).toContainText(
     "One Roadmap is done, as far as anyone can see",

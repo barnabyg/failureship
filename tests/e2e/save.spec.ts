@@ -3,6 +3,7 @@ import {
   answerAnyNotification,
   attendAndFinishMonth,
   openInboxIfAny,
+  readAnyResult,
 } from "./play";
 import { openRunMenu } from "./run-menu";
 
@@ -16,8 +17,10 @@ test("a reload carries on where the player left off", async ({ page }) => {
   await attendAndFinishMonth(page);
   await openInboxIfAny(page);
   await page.getByTestId("option-skip-training").click();
+  await readAnyResult(page);
   // The Demand from your boss's boss, stalled, so that it stays open.
   await page.getByTestId("option-stall").click();
+  await readAnyResult(page);
   await answerAnyNotification(page);
   await page.getByTestId("hotspot-kitchen").click();
 

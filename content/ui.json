@@ -13,6 +13,7 @@
   "buzzwordsListHeading": "Buzzwords you have learned",
   "continueLabel": "Continue",
   "resultHeading": "What happened",
+  "resultHint": "Read what came of it, then press Continue.",
   "resultSpent": "Done: {place}. That action is spent, and you have {actions} left. Click your next place on the floor.",
   "resultSpentLast": "Done: {place}. That was your last action this month.",
   "answerLabel": "You answered",

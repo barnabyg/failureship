@@ -5,14 +5,15 @@ import {
   freshRun,
   happened,
   openInboxIfAny,
+  resultPanel,
 } from "./play";
 
 /*
- * What reading a result costs. A result that nothing else waits on costs no
- * click of its own: it stays beside the next thing, until the player does it.
+ * What reading a result costs: one click, Continue, since a result shows alone,
+ * so that the player has one thing in front of them at a time.
  */
 
-test("plainly playing month 7 on seed 2 takes at most 10 clicks to its official story", async ({
+test("plainly playing month 7 on seed 2 takes at most 13 clicks to its official story", async ({
   page,
 }) => {
   await freshRun(page, "/?seed=2&month=7");
@@ -23,6 +24,7 @@ test("plainly playing month 7 on seed 2 takes at most 10 clicks to its official 
   };
   await openInboxIfAny(page);
   const notification = page.getByTestId("panel-notification");
+  const result = resultPanel(page);
   const carryOn = page.getByTestId("continue");
   const story = page.getByTestId("panel-story");
   const meeting = page.locator('[data-testid^="hotspot-meeting"]:enabled');
@@ -37,14 +39,15 @@ test("plainly playing month 7 on seed 2 takes at most 10 clicks to its official 
       hasText: "Costs nothing",
     });
     await click((await report.isVisible()) ? report : free.first());
-    await expect(answered(page)).toBeVisible();
     await expect(notification.locator("h2", { hasText: before })).toHaveCount(
       0,
     );
+    if (await result.isVisible()) await click(result.getByTestId("continue"));
   }
   await click(meeting);
   await click(page.locator('[data-testid^="scene-option-"]').first());
   await expect(happened(page)).toBeVisible();
+  await click(result.getByTestId("continue"));
   await click(desk);
   await expect(happened(page)).toContainText("Your desk");
   while (!(await story.isVisible())) {
@@ -52,14 +55,15 @@ test("plainly playing month 7 on seed 2 takes at most 10 clicks to its official 
     if (await carryOn.isVisible()) await click(carryOn);
   }
 
-  expect(clicks).toBeLessThanOrEqual(10);
+  expect(clicks).toBeLessThanOrEqual(13);
 });
 
-test("says how many e-mails are waiting, and keeps each answer's result over the next", async ({
+test("shows an answer's result alone, with the floor waiting, until Continue, even over a reload", async ({
   page,
 }) => {
   await freshRun(page, "/?seed=2&month=7");
   const count = page.getByTestId("open-inbox");
+  const result = resultPanel(page);
 
   await expect(count).toHaveText("4 to answer");
   await openInboxIfAny(page);
@@ -72,9 +76,24 @@ test("says how many e-mails are waiting, and keeps each answer's result over the
   await expect(answered(page)).toContainText("You answered");
   await expect(page.getByTestId("answer-result")).not.toBeEmpty();
   await expect(count).toHaveText("3 to answer");
+  await expect(page.locator("section.panel")).toHaveCount(1);
+  await expect(page.getByTestId("stage")).toHaveAttribute(
+    "data-floor",
+    "waiting",
+  );
+  await expect(page.getByTestId("hint")).toHaveText(
+    "Read what came of it, then press Continue.",
+  );
+
+  await page.reload();
+  await expect(answered(page)).toBeVisible();
+
+  await result.getByTestId("continue").click();
+  await expect(result).toHaveCount(0);
+  await expect(page.getByTestId("inbox-item").first()).toBeVisible();
 });
 
-test("keeps a result on the floor until the player goes somewhere else", async ({
+test("shows what happened at a place alone, and frees the floor on Continue", async ({
   page,
 }) => {
   await freshRun(page, "/?seed=2&month=7");
@@ -82,16 +101,18 @@ test("keeps a result on the floor until the player goes somewhere else", async (
 
   await page.locator('[data-testid="hotspot-work"]:enabled').click();
 
-  const card = page.getByTestId("panel-result");
+  const card = resultPanel(page);
   await expect(card).toContainText("What happened");
   await expect(card).toContainText("Your desk");
   await expect(page.getByTestId("result-spent")).toContainText(
     "That action is spent",
   );
-  await expect(page.locator('[data-testid^="hotspot-meeting"]')).toBeEnabled();
+  await expect(page.locator("section.panel")).toHaveCount(1);
+  await expect(page.locator('[data-testid^="hotspot-meeting"]')).toBeDisabled();
 
-  await page.locator('[data-testid^="hotspot-meeting"]').click();
+  await card.getByTestId("continue").click();
 
   await expect(card).toHaveCount(0);
+  await page.locator('[data-testid^="hotspot-meeting"]').click();
   await expect(page.getByTestId("panel-scene")).toBeVisible();
 });

@@ -1,5 +1,5 @@
 import { expect, test, type Locator } from "@playwright/test";
-import { answerAnyNotification, openInboxIfAny } from "./play";
+import { answerAnyNotification, openInboxIfAny, readResult } from "./play";
 
 /** Nothing in the panel is wider than it, so nothing is cut off. */
 async function fits(panel: Locator) {
@@ -32,7 +32,9 @@ for (const [name, size] of [
     await expect(result).not.toContainText("To:");
     await expect(result).not.toHaveAttribute("data-look");
     expect(await fits(result)).toBe(true);
+    await readResult(page);
     await page.getByTestId("hotspot-work").click();
+    await readResult(page);
 
     // The minutes of the meeting missed, and the Move, head the newsletter.
     const story = page.getByTestId("panel-story");

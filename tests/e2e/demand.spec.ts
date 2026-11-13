@@ -3,6 +3,7 @@ import {
   answerAnyNotification,
   attendAndFinishMonth,
   openInboxIfAny,
+  readAnyResult,
 } from "./play";
 
 /** Reaches month 2's Demand from your boss's boss, and stalls it. */
@@ -12,6 +13,7 @@ async function stallTheDemand(page: Page, seed: number) {
   await attendAndFinishMonth(page);
   await openInboxIfAny(page);
   await page.getByTestId("option-skip-training").click();
+  await readAnyResult(page);
   await expect(page.getByTestId("panel-notification")).toContainText(
     "Hugh Lamb",
   );

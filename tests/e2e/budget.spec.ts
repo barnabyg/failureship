@@ -1,5 +1,5 @@
 import { expect, test } from "@playwright/test";
-import { answered, openInboxIfAny } from "./play";
+import { answered, openInboxIfAny, readAnyResult } from "./play";
 
 test("decides who gets the bonus pot, and sees how it lands", async ({
   page,
@@ -9,6 +9,7 @@ test("decides who gets the bonus pot, and sees how it lands", async ({
 
   await openInboxIfAny(page);
   await page.getByTestId("option-invent-dates").click();
+  await readAnyResult(page);
 
   const budget = page.getByTestId("panel-notification");
   await expect(budget).toContainText("Bonus pot");

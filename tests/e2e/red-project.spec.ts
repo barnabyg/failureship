@@ -4,6 +4,7 @@ import {
   attendAndFinishMonth,
   happened,
   openInboxIfAny,
+  readAnyResult,
   skipTheReport,
 } from "./play";
 
@@ -12,11 +13,14 @@ async function turnProjectRed(page: Page) {
   await page.goto("/?seed=4");
   await openInboxIfAny(page);
   await page.getByTestId("option-decline").click();
+  await readAnyResult(page);
   await skipTheReport(page);
   await attendAndFinishMonth(page);
   await openInboxIfAny(page);
   await page.getByTestId("option-skip-training").click();
+  await readAnyResult(page);
   await page.getByTestId("option-push-back").click();
+  await readAnyResult(page);
   await skipTheReport(page);
 }
 
@@ -52,6 +56,7 @@ test("telling the truth leaves the Project red, and is not asked for twice", asy
 
   expect(await reportedStatus(page)).toBe("Red");
   await expect(page.getByTestId("panel-scene")).toHaveCount(0);
+  await readAnyResult(page);
   await expect(page.getByTestId("hotspot-meeting-lessons")).toBeEnabled();
 });
 

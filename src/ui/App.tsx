@@ -18,7 +18,12 @@ import { Modal } from "./Modal";
 import { Notebook, monthLabel } from "./Notebook";
 import { StepTag, stepTag } from "./Panel";
 import { inboxKey, StepPanel } from "./panels";
-import { readSavedRun, writeSavedRun } from "./saved-run";
+import {
+  readResultOpen,
+  readSavedRun,
+  writeResultOpen,
+  writeSavedRun,
+} from "./saved-run";
 import { TowerStage } from "./TowerStage";
 
 function refusedMessage(typed: string): string {
@@ -121,6 +126,10 @@ export function App() {
     const saved = readRide();
     return saved?.to === first.game.view.job.id ? saved : null;
   });
+  // Whether what the last choice led to is still to be read, alone, before
+  // anything else shows. The run keeps the result; only reading it is the UI's.
+  const [resultOpen, setResultOpen] = useState(readResultOpen);
+  const showingResult = resultOpen && view.result !== null;
   // Each run's header starts afresh, even on the same seed.
   const [runNumber, setRunNumber] = useState(0);
   // Whether the player has opened the inbox this month, and what in it.
@@ -144,6 +153,10 @@ export function App() {
     writeRide(ride);
   }, [ride]);
 
+  useEffect(() => {
+    writeResultOpen(showingResult);
+  }, [showingResult]);
+
   const choose = useCallback(
     (choice: Choice) => {
       const next = run.choose(choice);
@@ -161,6 +174,7 @@ export function App() {
         }
         return current;
       });
+      setResultOpen(next.result !== null);
       setGame({ run, view: next });
     },
     [run, view.job.id],
@@ -173,6 +187,7 @@ export function App() {
     setMessage(null);
     setLeavingFor(null);
     setRide(null);
+    setResultOpen(false);
   };
 
   /** Leaving a run still in play needs confirming. A finished one does not. */
@@ -190,7 +205,7 @@ export function App() {
         legal={view.choices}
         onChoose={choose}
         unlabelled={view.step.kind === "results"}
-        waiting={view.waiting}
+        waiting={view.waiting || showingResult}
       />
       <Header
         view={view}
@@ -249,10 +264,12 @@ export function App() {
         )}
         <div className="next-line">
           <h2>{panelText.whatNext}</h2>
-          <p data-testid="hint">{view.hint}</p>
+          <p data-testid="hint">
+            {showingResult ? panelText.resultHint : view.hint}
+          </p>
         </div>
       </aside>
-      <StepTag.Provider value={stepTag(view)}>
+      <StepTag.Provider value={showingResult ? null : stepTag(view)}>
         <StepPanel
           view={view}
           onChoose={choose}
@@ -267,6 +284,10 @@ export function App() {
           }}
           onHideInbox={() => {
             setInbox(freshInbox(view.month));
+          }}
+          resultOpen={showingResult}
+          onResultRead={() => {
+            setResultOpen(false);
           }}
         />
       </StepTag.Provider>

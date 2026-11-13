@@ -5,6 +5,7 @@ import {
   happened,
   openInboxIfAny,
   openMeeting,
+  readResult,
   skipTheReport,
 } from "./play";
 
@@ -18,6 +19,7 @@ async function reachMeeting(page: Page, answer: "pub" | "report", seed = 1) {
   if (answer === "pub") {
     await openInboxIfAny(page);
     await page.getByTestId("option-pub").click();
+    await readResult(page);
     await skipTheReport(page);
   } else {
     await answerAnyNotification(page);
@@ -39,6 +41,7 @@ test("opens the meeting Scene from the tower and makes a choice", async ({
 
   await expect(happened(page)).toBeVisible();
   await expect(page.getByTestId("hotspot-meeting")).toBeDisabled();
+  await readResult(page);
   await expect(page.getByTestId("hotspot-kitchen")).toBeEnabled();
 });
 
@@ -109,13 +112,16 @@ test("the full month reads differently for different choices", async ({
   await openInboxIfAny(page);
   await page.getByTestId("option-pub").click();
   await expectToSayWhatIsNext(page);
+  await readResult(page);
   await skipTheReport(page);
   await expectToSayWhatIsNext(page);
   await page.getByTestId("hotspot-meeting").click();
   await expectToSayWhatIsNext(page);
   await page.getByTestId("scene-option-use-buzzword").click();
   await expectToSayWhatIsNext(page);
+  await readResult(page);
   await page.getByTestId("hotspot-kitchen").click();
+  await readResult(page);
 
   await expect(page.getByTestId("panel-story")).toBeVisible();
   await expect(page.getByTestId("landed")).toHaveAttribute("data-kind", "move");
@@ -130,7 +136,9 @@ test("the full month reads differently for different choices", async ({
     "strategic patience",
   );
   await page.getByTestId("scene-option-say-nothing").click();
+  await readResult(page);
   await page.getByTestId("hotspot-kitchen").click();
+  await readResult(page);
   await page.getByTestId("continue").click();
 
   await expect(page.getByTestId("story-reported")).not.toHaveText(afterPub);

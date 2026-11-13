@@ -120,6 +120,7 @@ const panelSchema = z.strictObject(
       "buzzwordsListHeading",
       "continueLabel",
       "resultHeading",
+      "resultHint",
       "resultSpent",
       "resultSpentLast",
       "answerLabel",

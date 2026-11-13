@@ -4,6 +4,8 @@ import {
   answered,
   attendAndFinishMonth,
   openInboxIfAny,
+  readAnyResult,
+  readResult,
 } from "./play";
 
 // The real-content test keeps the report's input late in month 2 on seed 1.
@@ -13,7 +15,9 @@ async function reachLateInput(page: Page) {
   await attendAndFinishMonth(page);
   await openInboxIfAny(page);
   await page.getByTestId("option-skip-training").click();
+  await readAnyResult(page);
   await page.getByTestId("option-push-back").click();
+  await readAnyResult(page);
   await expect(page.getByTestId("panel-notification")).toContainText(
     "Waiting on",
   );
@@ -26,6 +30,7 @@ test("chasing late input spends an action, then the report can be filed", async 
   await expect(page.getByTestId("actions-left")).toContainText("3");
 
   await page.getByTestId("option-chase").click();
+  await readAnyResult(page);
 
   await expect(page.getByTestId("actions-left")).toContainText("2");
   await expect(page.getByTestId("option-report")).toBeVisible();
@@ -38,6 +43,7 @@ test("filing without the input settles the report as an estimate", async ({
 
   await page.getByTestId("option-file-without").click();
   await expect(answered(page)).toContainText("indicative");
+  await readResult(page);
 
   await expect(page.getByTestId("option-report")).toHaveCount(0);
   await expect(page.getByTestId("hotspot-kitchen")).toBeEnabled();

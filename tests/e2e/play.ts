@@ -22,10 +22,27 @@ function takeIt(page: Page): Locator {
 
 /**
  * A panel that waits for an answer before anything else can be done, with the
- * floor dimmed behind it. The inbox, and the card of what just happened, never wait.
+ * floor dimmed behind it, as what just happened does. Only the inbox never waits.
  */
 export function blockingPanel(page: Page): Locator {
-  return page.locator("section.panel:not(.panel-result):not(.panel-inbox)");
+  return page.locator("section.panel:not(.panel-inbox)");
+}
+
+/** What the last choice led to, shown alone until it is read. */
+export function resultPanel(page: Page): Locator {
+  return page.getByTestId("panel-result");
+}
+
+/** Presses Continue on what the last choice led to, once it shows. */
+export async function readResult(page: Page) {
+  const panel = resultPanel(page);
+  await panel.getByTestId("continue").click();
+  await expect(panel).toHaveCount(0);
+}
+
+/** Presses Continue on what the last choice led to, if it is up. */
+export async function readAnyResult(page: Page) {
+  if (await resultPanel(page).isVisible()) await readResult(page);
 }
 
 /** Goes to an address as a new player would, with no saved run to come back to. */
@@ -96,6 +113,7 @@ function toAnswer(page: Page): Locator {
  * there shows: an e-mail, or a consequence with its ways out.
  */
 export async function openInbox(page: Page) {
+  await readAnyResult(page);
   const open = page
     .getByTestId("panel-notification")
     .or(page.getByTestId("panel-escape"));
@@ -128,10 +146,14 @@ export async function answerAnyNotification(page: Page) {
   const told = page.getByTestId("panel-notice");
   const escape = takeIt(page);
   const unanswered = toAnswer(page);
-  await expect(panel.or(told).or(escape).or(unanswered).first()).toBeVisible();
+  const read = resultPanel(page);
+  await expect(
+    panel.or(told).or(escape).or(unanswered).or(read).first(),
+  ).toBeVisible();
   if (await told.isVisible()) await page.getByTestId("continue").click();
   for (;;) {
-    if (await escape.isVisible()) await escape.click();
+    if (await read.isVisible()) await readAnyResult(page);
+    else if (await escape.isVisible()) await escape.click();
     else if (await panel.isVisible()) await answerNotification(page);
     else if (await unanswered.first().isVisible()) {
       await unanswered.first().click();
@@ -142,12 +164,13 @@ export async function answerAnyNotification(page: Page) {
   if (await review.isVisible()) {
     await page.locator('[data-testid^="scene-option-"]').first().click();
   }
+  await readAnyResult(page);
 }
 
 /**
  * Files the report, or says no, to the Notification open in the inbox, opening
- * the inbox if it is closed, and waits for it to go. Its result stays over the
- * next one, which opens in its place, at no extra click.
+ * the inbox if it is closed, and waits for it to go. Its result, if it has one,
+ * is left up, alone, until `readResult`.
  */
 export async function answerNotification(page: Page) {
   const panel = page.getByTestId("panel-notification");
@@ -218,10 +241,12 @@ export async function skipTheReport(page: Page) {
   await openInbox(page);
   await page.getByTestId("option-skip").click();
   await expect(page.getByTestId("option-skip")).toHaveCount(0);
+  await readAnyResult(page);
 }
 
 /** Goes to whatever is on in the meeting room this month. */
 export async function openMeeting(page: Page) {
+  await readAnyResult(page);
   await page.locator('[data-testid^="hotspot-meeting"]:enabled').click();
   await expect(page.getByTestId("panel-scene")).toBeVisible();
 }
@@ -246,12 +271,13 @@ export async function playToResults(page: Page) {
 
 /** Asks whoever is at the photocopier about the first person on the list. */
 export async function askAtPhotocopier(page: Page) {
+  await readAnyResult(page);
   await page.getByTestId("hotspot-ask-around").click();
   await page.locator('[data-testid^="subject-"]').first().click();
   await expect(claimHeard(page)).toBeVisible();
 }
 
-/** What the player was told at Find Out, which stays until they do something else. */
+/** What the player was told at Find Out, which stays until they read it. */
 export function claimHeard(page: Page): Locator {
   return page.locator('[data-testid="result"][data-kind="claim"]');
 }

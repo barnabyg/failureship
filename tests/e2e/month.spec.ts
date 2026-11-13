@@ -1,8 +1,14 @@
 import { expect, test, type Page } from "@playwright/test";
-import { answerAnyNotification, happened, openInboxIfAny } from "./play";
+import {
+  answerAnyNotification,
+  happened,
+  openInboxIfAny,
+  readResult,
+} from "./play";
 
 async function spendAction(page: Page, id: string) {
   await page.getByTestId(`hotspot-${id}`).click();
+  await readResult(page);
 }
 
 async function fileTheReport(page: Page) {

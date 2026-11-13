@@ -1,5 +1,10 @@
 import { expect, test } from "@playwright/test";
-import { answerAnyNotification, happened, openMeeting } from "./play";
+import {
+  answerAnyNotification,
+  happened,
+  openMeeting,
+  readResult,
+} from "./play";
 
 test("the floor stays open beside the inbox, and is dimmed and shut while a step waits", async ({
   page,
@@ -46,6 +51,11 @@ test("the floor stays open beside the inbox, and is dimmed and shut while a step
 
   // Answered, the floor is the player's again, and nothing is dimmed.
   await page.locator('[data-testid^="scene-option-"]').first().click();
+  // What came of it first, alone, with the floor still waiting.
+  await expect(happened(page)).toBeVisible();
+  await expect(stage).toHaveAttribute("data-floor", "waiting");
+  await expect(page.getByTestId("step-tag")).toHaveCount(0);
+  await readResult(page);
   await expect(stage).toHaveAttribute("data-floor", "open");
   await expect(page.getByTestId("step-tag")).toHaveCount(0);
   await expect(desk).toBeEnabled();

@@ -62,7 +62,7 @@ for (const size of [
   { width: 1440, height: 900 },
   { width: 1280, height: 720 },
 ]) {
-  test(`at ${String(size.width)}×${String(size.height)} what happened at a place sits clear of the guide and the labels`, async ({
+  test(`at ${String(size.width)}×${String(size.height)} what happened at a place leaves the guide readable`, async ({
     page,
   }) => {
     await page.setViewportSize(size);
@@ -74,15 +74,6 @@ for (const size of [
     const guide = await page.locator(".next").boundingBox();
     if (!card || !guide) throw new Error("Nothing to measure.");
     expect(overlaps(card, guide), "the card is over the guide").toBe(false);
-    await expectLabelsClear(page);
-    for (const label of await page
-      .locator('[data-testid^="hotspot-"], [data-testid^="room-sign-"]')
-      .all()) {
-      const box = await label.boundingBox();
-      if (!box) continue;
-      const name = (await label.getAttribute("data-testid")) ?? "";
-      expect(overlaps(box, card), `${name} is under the card`).toBe(false);
-    }
   });
 }
 
