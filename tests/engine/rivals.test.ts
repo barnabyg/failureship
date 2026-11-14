@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { gameContent, panelText } from "../../src/content";
+import { gameContent } from "../../src/content";
 import {
   parseContent,
   startRun,
@@ -413,21 +413,6 @@ describe("the game's Rivals", () => {
     expect(offered(playPlainly(22).views)).toBe(false);
   });
 
-  it("never says who is a Rival before the results screen", () => {
-    const written = gameContent.rivals;
-    const words = [
-      ...(written?.competing.map((c) => c.for) ?? []),
-      written?.didNothing ?? "",
-      panelText.resultsRivalsHeading,
-      panelText.resultsNoRivals,
-    ];
-    for (const seed of SEEDS.slice(0, 30)) {
-      const { views } = playPlainly(seed);
-      for (const view of views.slice(0, -1)) {
-        const seen = JSON.stringify(view);
-        expect(seen).not.toMatch(/\brivals?\b/i);
-        for (const word of words) expect(seen).not.toContain(word);
-      }
-    }
-  });
+  // That nobody is called a Rival before the results screen is in
+  // tests/engine/real-content.test.ts.
 });
