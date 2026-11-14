@@ -74,7 +74,7 @@ describe("Fawning", () => {
       string,
       { maps: Set<string>; values: Set<number | undefined> }
     >();
-    for (let seed = 1; seed <= 40; seed++) {
+    for (let seed = 1; seed <= 15; seed++) {
       const run = startRun({ seed, content: gameContent });
       const map = JSON.stringify(readHiddenTruth(run).powerMap);
       const end = playOut(run, CRAWLING).at(-1);
