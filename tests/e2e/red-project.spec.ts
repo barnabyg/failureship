@@ -1,21 +1,18 @@
 import { expect, test, type Page } from "@playwright/test";
 import {
   answerAnyNotification,
-  attendAndFinishMonth,
   happened,
   openInboxIfAny,
   readAnyResult,
   skipTheReport,
 } from "./play";
 
-/** Two skipped reports turn the Project from green to red. Seed 4 has no late input. */
+/**
+ * Two skipped reports turn the Project from green to red: month 1's, skipped on
+ * the way to month 2, and month 2's. Seed 4 has no late input.
+ */
 async function turnProjectRed(page: Page) {
-  await page.goto("/?seed=4");
-  await openInboxIfAny(page);
-  await page.getByTestId("option-decline").click();
-  await readAnyResult(page);
-  await skipTheReport(page);
-  await attendAndFinishMonth(page);
+  await page.goto("/?seed=4&month=2&choose=decline,skip");
   await openInboxIfAny(page);
   await page.getByTestId("option-skip-training").click();
   await readAnyResult(page);

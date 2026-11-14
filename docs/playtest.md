@@ -9,7 +9,8 @@ thing, and press Continue on the official story. A month takes three or four min
 ## What the balance pass found
 
 Scripted players who know every option played seeds 1 to 100, with Company Events, in
-`tests/balance/ways-of-playing.test.ts`. No route reaches the top without bad behaviour. Of 100 runs:
+the `tests/balance/ways-*.test.ts` files. No route reaches the top without bad behaviour. Of 100
+runs:
 
 | Way of playing                                     | Won | Passed over | Demoted | Fired |
 | -------------------------------------------------- | --- | ----------- | ------- | ----- |
@@ -22,7 +23,7 @@ Scripted players who know every option played seeds 1 to 100, with Company Event
 | Mostly amoral, reading well from what it is shown  | 39  | 62          | 8       | 7     |
 | Always amoral, picking its ways out at random      | 4   | 37          | 10      | 71    |
 | Always amoral, with the hidden truth, the ceiling  | 42  | 58          | 1       | 0     |
-| Clicks about                                       | 1   | 62          | 6       | 34    |
+| Clicks about                                       | 2   | 60          | 5       | 36    |
 
 The winner is amoral three times in four: it buys what people know, fakes a Plan unless the boss
 reads as a Believer, and blames nobody it has not found out about. Reading people still pays, in

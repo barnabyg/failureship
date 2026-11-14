@@ -106,20 +106,25 @@ const average = (values: number[]) =>
   values.reduce((sum, v) => sum + v, 0) / values.length;
 
 describe("playing the boss you have", () => {
-  it("ends warmer for a player who adapts than one with one approach for all", () => {
-    // Ten is plenty: the gap is over 2.5 on all 30 sets of ten tried, and over
-    // seven on this one.
-    const seeds = SEEDS.slice(0, 10);
-    const adapted = average(seeds.map((seed) => playOut(seed, adapts).belief));
+  // Ten is plenty: the gap is over 2.5 on all 30 sets of ten tried, and over
+  // seven on this one.
+  const seeds = SEEDS.slice(0, 10);
+  // Played once, by whichever approach's test comes first. One test per
+  // approach keeps each well under the 30 s a balance test may take.
+  let adapted: number | undefined;
+  const adaptedBelief = () =>
+    (adapted ??= average(seeds.map((seed) => playOut(seed, adapts).belief)));
 
-    for (const { id } of gameContent.boss.approaches) {
+  it.each(gameContent.boss.approaches.map(({ id }) => id))(
+    "ends warmer for a player who adapts than one who always uses %s",
+    (id) => {
       const fixed = average(
         seeds.map((seed) => playOut(seed, alwaysUses(id)).belief),
       );
 
-      expect(adapted, id).toBeGreaterThan(fixed);
-    }
-  });
+      expect(adaptedBelief(), id).toBeGreaterThan(fixed);
+    },
+  );
 });
 
 describe("the Annual Calibration's verdict", () => {
@@ -130,15 +135,20 @@ describe("the Annual Calibration's verdict", () => {
   };
 
   it("depends on the boss's mood, with no number shown", () => {
-    const seeds = SEEDS.slice(0, 60);
-    const verdicts = new Set<string | null>();
-    for (const seed of seeds) {
-      verdicts.add(verdictFor(seed, adapts));
-      verdicts.add(verdictFor(seed, alwaysUses("over-head")));
-    }
     const written = gameContent.scenes.find(
       (s) => s.id === "calibration",
     )?.verdict;
+    // Plays the deals in turn, up to sixty, until both verdicts have come.
+    const verdicts = new Set<string | null>();
+    for (const seed of SEEDS) {
+      verdicts.add(verdictFor(seed, adapts));
+      verdicts.add(verdictFor(seed, alwaysUses("over-head")));
+      if (
+        verdicts.has(written?.warm ?? "") &&
+        verdicts.has(written?.cold ?? "")
+      )
+        break;
+    }
 
     expect(verdicts).toContain(written?.warm);
     expect(verdicts).toContain(written?.cold);

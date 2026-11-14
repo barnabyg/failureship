@@ -30,13 +30,17 @@ function familyOf(choice: Choice) {
   return undefined;
 }
 
-/** Plays a run, always taking a family it has not yet tried if one is on offer. */
-function tryEverything(seed: number) {
+/**
+ * Plays a run, always taking a family it has not yet tried if one is on offer,
+ * to the end, or only until every family is tried when told to stop then.
+ */
+function tryEverything(seed: number, stopWhenAllSeen = false) {
   const run = startRun({ seed, content: gameContent });
   const seen = new Set<string>();
   const views: PlayerView[] = [run.view()];
   let view = run.view();
   while (view.choices.length > 0) {
+    if (stopWhenAllSeen && seen.size === MOVE_FAMILIES.length) break;
     const fresh = view.choices.find((c) => {
       const family = familyOf(c);
       return family !== undefined && !seen.has(family);
@@ -49,6 +53,14 @@ function tryEverything(seed: number) {
     views.push(view);
   }
   return { seen, views };
+}
+
+// Whole runs, played once for each test that reads them.
+const played = new Map<number, ReturnType<typeof tryEverything>>();
+function playedThrough(seed: number) {
+  const found = played.get(seed) ?? tryEverything(seed);
+  played.set(seed, found);
+  return found;
 }
 
 describe("the Move families", () => {
@@ -89,7 +101,7 @@ describe("the Move families", () => {
 
   it("can reach every family in a run, on any seed", () => {
     for (const seed of SEEDS) {
-      const { seen } = tryEverything(seed);
+      const { seen } = tryEverything(seed, true);
 
       expect(seen, `seed ${String(seed)}`).toEqual(new Set(MOVE_FAMILIES));
     }
@@ -102,7 +114,7 @@ describe("the Move families", () => {
     const shown = new RegExp(`\\b(${labels.join("|")})\\b`);
     expect(labels).toHaveLength(MOVE_FAMILIES.length);
     for (const seed of SEEDS.slice(0, 10)) {
-      for (const view of tryEverything(seed).views) {
+      for (const view of playedThrough(seed).views) {
         if (view.step.kind === "results") continue;
         const seen = JSON.stringify(view);
         expect(seen).not.toMatch(shown);
@@ -112,7 +124,7 @@ describe("the Move families", () => {
   });
 
   it("shows on the results screen how the player played, by family", () => {
-    const { views, seen } = tryEverything(5);
+    const { views, seen } = playedThrough(5);
     const last = views.at(-1);
     if (last?.step.kind !== "results") throw new Error(last?.step.kind);
     const { played } = last.step;

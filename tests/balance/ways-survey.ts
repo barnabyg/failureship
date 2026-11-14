@@ -24,6 +24,8 @@ import {
  * The balance of the whole climb, played through the real game, Company
  * Events and all, on the same deals in different ways. It counts how runs end
  * for each way of playing, and checks every step of every run on the way.
+ * Each `ways-*.test.ts` file plays some of the ways, so that workers share
+ * them, and keeps its own tally: a file's tests read only the ways it plays.
  */
 
 const SEEDS = Array.from({ length: 100 }, (_, i) => i + 1);
@@ -87,7 +89,7 @@ const STYLES = {
     player: (seed) => ({ otherwise: clicksAbout(seed) }),
   },
 } satisfies Record<string, Style>;
-type StyleName = keyof typeof STYLES;
+export type StyleName = keyof typeof STYLES;
 
 interface Tally {
   runs: number;
@@ -136,6 +138,7 @@ function aChoiceAbout(views: readonly PlayerView[]): boolean {
   );
 }
 
+// What the ways this file plays have shown, over every run played so far.
 const survey = new Map<StyleName, Tally>();
 const problems: string[] = [];
 const kindsSeen = new Set<string>();
@@ -203,7 +206,16 @@ function play(seed: number, name: StyleName, style: Style) {
   survey.set(name, tally);
 }
 
-const rate = (name: StyleName, of: keyof Omit<Tally, "runs">) => {
+/**
+ * How often a way other than reading well or knowing may win: under a quarter
+ * of the 0.40 cap on reading well in ways-reads-well.test.ts. Reading well wins
+ * 39 of these deals, so this is close to the quarter of it the comparison used
+ * when every way was in one file.
+ */
+export const FEW = 0.4 / 4;
+
+/** The share of runs played this way that ended so. */
+export const rate = (name: StyleName, of: keyof Omit<Tally, "runs">) => {
   const tally = survey.get(name);
   return tally ? tally[of] / tally.runs : NaN;
 };
@@ -218,95 +230,58 @@ function playPart(name: StyleName, q: number) {
   played.add(key);
 }
 
-const NAMES = Object.keys(STYLES) as StyleName[];
-const PARTS = NAMES.flatMap((name) =>
-  QUARTERS.map((_, q) => [name, q] as const),
-);
-
-// Each way of playing is played a quarter of the deals at a time, each its own
-// test, so that none runs long. The tests after read them all, and play any
-// not yet played.
-describe("ways of playing the whole climb", { timeout: 60_000 }, () => {
-  it.each(PARTS)(
-    "plays a quarter of the deals to the end: %s, %i",
-    (name, q) => {
-      playPart(name, q);
-
-      expect(survey.get(name)?.runs).toBeGreaterThanOrEqual(25);
-    },
+/**
+ * Plays these ways of playing the whole climb, a quarter of the deals at a
+ * time, each its own test, so that none runs long. The tests that `together`
+ * declares read them all, and play any not yet played, as under `-t`. Every
+ * run of every way must give a hint and finished text at every step, and a
+ * real choice about an action every month.
+ */
+export function playsTheWholeClimb(
+  title: string,
+  names: readonly StyleName[],
+  together: () => void,
+) {
+  const parts = names.flatMap((name) =>
+    QUARTERS.map((_, q) => [name, q] as const),
   );
+  describe(title, { timeout: 60_000 }, () => {
+    it.each(parts)(
+      "plays a quarter of the deals to the end: %s, %i",
+      (name, q) => {
+        playPart(name, q);
 
-  describe("taken together", () => {
-    beforeAll(() => {
-      for (const [name, q] of PARTS) playPart(name, q);
-    }, 600_000);
+        expect(survey.get(name)?.runs).toBeGreaterThanOrEqual(25);
+      },
+    );
 
-    // Of these 100 deals, reading well and mostly amoral wins 39, and the
-    // amoral ceiling, which knows the hidden truth, 42. A person will likely
-    // win less.
-    it("takes a mostly amoral player who reads well to the top most often, short of the ceiling", () => {
-      expect(rate("readsWell", "won")).toBeGreaterThanOrEqual(0.25);
-      expect(rate("readsWell", "won")).toBeLessThanOrEqual(0.4);
-      for (const name of NAMES) {
-        if (name !== "readsWell" && name !== "knowing")
-          expect(rate(name, "won"), name).toBeLessThan(
-            rate("readsWell", "won") / 4,
-          );
-      }
-      expect(rate("knowing", "won")).toBeGreaterThanOrEqual(
-        rate("readsWell", "won"),
-      );
-      expect(rate("knowing", "fired")).toBe(0);
-    });
+    describe("taken together", () => {
+      beforeAll(() => {
+        for (const [name, q] of parts) playPart(name, q);
+      }, 600_000);
 
-    // There is no route to the top without bad behaviour: honest play wins 3,
-    // the planner, who fakes only Floor 1's Plan, 5, and plain play none.
-    it("takes nobody to the top without bad behaviour more than a handful of times", () => {
-      expect(rate("honest", "won")).toBeLessThanOrEqual(0.03);
-      expect(rate("planner", "won")).toBeLessThanOrEqual(0.05);
-      expect(rate("plain", "won")).toBeLessThanOrEqual(0.03);
-    });
+      it("gives a hint and finished text at every step, on every floor, of every run", () => {
+        expect(problems.filter((p) => !p.endsWith("no real choice"))).toEqual(
+          [],
+        );
+      });
 
-    // Of these 100 deals, the amoral climber who picks its ways out at random
-    // wins 4 and is fired on 71.
-    it("fires an always amoral climber who picks its ways out blindly, and rarely takes it to the top", () => {
-      expect(rate("amoral", "won")).toBeLessThanOrEqual(0.05);
-      expect(rate("amoral", "fired")).toBeGreaterThan(0.5);
-    });
+      it("leaves a real choice about an action in every month, on every floor", () => {
+        expect(problems.filter((p) => p.endsWith("no real choice"))).toEqual(
+          [],
+        );
+      });
 
-    it("never fires a player who only plays plainly", () => {
-      expect(rate("plain", "fired")).toBe(0);
-      for (const name of NAMES) {
-        if (name !== "plain")
-          expect(rate(name, "passedOver"), name).toBeGreaterThan(0);
-      }
-    });
-
-    // Doing the Plans, for real or for show, never fires on these deals. A
-    // big mistake demotes the reader on 8, who climbs back by not making it
-    // again.
-    it("rarely fires those who do the Plans, and demotes after a big mistake", () => {
-      for (const careful of ["planner", "honest", "forShow"] as const) {
-        expect(rate(careful, "fired")).toBeLessThanOrEqual(0.02);
-      }
-      expect(rate("readsWell", "demoted")).toBeGreaterThan(0.05);
-      expect(rate("readsWell", "fired")).toBeLessThan(0.1);
-    });
-
-    it("gives a hint and finished text at every step, on every floor, of every run", () => {
-      expect(problems.filter((p) => !p.endsWith("no real choice"))).toEqual([]);
-      // Every step there is a hint for, from a Notification to the win.
-      expect([...kindsSeen].sort()).toEqual(
-        Object.keys(gameContent.ui.hints).sort(),
-      );
-    });
-
-    it("leaves a real choice about an action in every month, on every floor, and after a demotion", () => {
-      expect(problems.filter((p) => p.endsWith("no real choice"))).toEqual([]);
-      for (const { job } of gameContent.floors) {
-        expect(monthsOn.get(job) ?? 0, job).toBeGreaterThan(100);
-      }
-      expect(monthsAfterADemotion).toBeGreaterThan(50);
+      together();
     });
   });
-});
+}
+
+/** Every hint shown, over every run played in this file. */
+export const hintsSeen = () => [...kindsSeen].sort();
+
+/** Months played on each floor, over every run played in this file. */
+export const monthsOnFloor = (job: string) => monthsOn.get(job) ?? 0;
+
+/** Months played after a run's first demotion, over every run in this file. */
+export const monthsAfterDemotion = () => monthsAfterADemotion;

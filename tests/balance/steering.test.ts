@@ -5,31 +5,13 @@ import { readHiddenTruth } from "../../src/engine/hidden-truth";
 import { attendsEverything, walk } from "../engine/walk";
 import { behavioursIn } from "../engine/scene-view";
 
-describe("the whole run", () => {
-  it("always says what the player can do, on every seed and pick", () => {
-    for (let seed = 1; seed <= 40; seed++) {
-      const { views } = walk(seed, (view, turn) => {
-        const choice =
-          view.choices[(seed * 7 + turn * 3) % view.choices.length];
-        if (!choice) throw new Error("No choice.");
-        return choice;
-      });
-
-      for (const view of views) {
-        expect(view.hint.trim()).not.toBe("");
-        expect(JSON.stringify(view)).not.toMatch(
-          /\{(holder|ignored|bystander|subject|who|name|fact|source|said)\}/,
-        );
-      }
-      expect(views.at(-1)?.step.kind).toBe("results");
-    }
-  });
-});
-
+// That every step of a run gives a hint and finished text is checked over
+// many more runs, and more ways of playing, in the ways-*.test.ts files.
 describe("the balance of the deal", () => {
-  // Half the seeds move each average below by under 0.01. Their thin limit is
-  // `perfect`, at 0.36 against 0.40, and that is about the limit and not the count.
-  const SEEDS = Array.from({ length: 200 }, (_, i) => i + 1);
+  // Over these 100 deals the reader is right on 0.68 of people, against 0.35
+  // for a guess, and right about everyone on 0.03 of runs; over 200 deals,
+  // 0.69, 0.35 and 0.05. Each limit below is far from both.
+  const SEEDS = Array.from({ length: 100 }, (_, i) => i + 1);
 
   /** The kind a careful reader would guess from the signs seen in a run. */
   function readerGuesses(
@@ -96,7 +78,7 @@ describe("the balance of the deal", () => {
 
   // The runs are read a quarter at a time, each quarter once, so that no test
   // runs long. The test after reads any quarter not yet read.
-  const QUARTERS = [0, 1, 2, 3].map((q) => SEEDS.slice(q * 50, q * 50 + 50));
+  const QUARTERS = [0, 1, 2, 3].map((q) => SEEDS.slice(q * 25, q * 25 + 25));
   const read = new Map<number, ReturnType<typeof readRun>[]>();
   function readQuarter(q: number) {
     const known = read.get(q);
@@ -134,7 +116,7 @@ describe("the balance of the deal", () => {
   it.each([0, 1, 2, 3])(
     "reads every sign in a quarter of the runs: quarter %i",
     (q) => {
-      expect(readQuarter(q)).toHaveLength(50);
+      expect(readQuarter(q)).toHaveLength(25);
     },
   );
 

@@ -93,7 +93,14 @@ describe("the real month", () => {
     expect(told).not.toMatch(/\{(holder|ignored|bystander)\}/);
   });
 
-  it("never shows a dealt kind or Hidden Fact before the end of a run", () => {
+  it("never shows a dealt kind, Hidden Fact or Rival before the end of a run", () => {
+    const { rivals } = gameContent;
+    const rivalWords = [
+      ...(rivals?.competing.map((c) => c.for) ?? []),
+      rivals?.didNothing ?? "",
+      panelText.resultsRivalsHeading,
+      panelText.resultsNoRivals,
+    ];
     for (const seed of SEEDS) {
       const run = startRun({ seed, content: gameContent });
       const { characters } = readHiddenTruth(run);
@@ -102,7 +109,12 @@ describe("the real month", () => {
       while (view.step.kind !== "results") {
         const seen = JSON.stringify(view);
         expect(seen).not.toMatch(/Believer|Incompetent|Practitioner/i);
+        expect(seen).not.toMatch(
+          /"(kind|approach)":"(believer|incompetent|practitioner|theatre|truth)"/,
+        );
         expect(seen).not.toContain("powerMap");
+        expect(seen).not.toMatch(/\brivals?\b/i);
+        for (const word of rivalWords) expect(seen).not.toContain(word);
         for (const { fact } of characters) {
           if (fact) expect(seen).not.toContain(fact.text);
         }

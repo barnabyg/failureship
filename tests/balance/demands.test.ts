@@ -30,6 +30,8 @@ describe("Demands in the game", () => {
         }
         view = run.choose(pickToward(view));
       }
+      // Up to sixty deals, until both have come.
+      if (outcomes.has("forgotten") && outcomes.has("chased")) break;
     }
 
     expect(outcomes).toEqual(new Set(["forgotten", "chased"]));

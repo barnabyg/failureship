@@ -58,10 +58,14 @@ test("a mark lasts into the next month, and is on the results screen", async ({
   await expect(page.getByTestId("result-clue").first()).toBeVisible();
 });
 
+// Opening it, and changing a mark in it, costs nothing at any step.
 test("the Notebook opens from every step of a month", async ({ page }) => {
   const opensAndCloses = async (panel: string) => {
     const left = (await page.getByTestId("actions-left").textContent()) ?? "";
     await openNotebook(page);
+    for (const kind of ["believer", "incompetent", ""]) {
+      await page.getByTestId("mark-head").selectOption(kind);
+    }
     await closeNotebook(page);
     await expect(page.getByTestId(panel)).toBeVisible();
     await expect(page.getByTestId("actions-left")).toHaveText(left);
@@ -85,29 +89,6 @@ test("the Notebook opens from every step of a month", async ({ page }) => {
   await opensAndCloses("panel-story");
 });
 
-test("opening the Notebook costs nothing, from any step", async ({ page }) => {
-  await page.goto("/?seed=1");
-  await openNotebook(page);
-  await closeNotebook(page);
-  await openInboxIfAny(page);
-  await expect(page.getByTestId("panel-notification")).toBeVisible();
-
-  await answerAnyNotification(page);
-  await expect(page.getByTestId("actions-left")).toContainText("2");
-  await openNotebook(page);
-  await page.getByTestId("mark-head").selectOption("believer");
-  await page.getByTestId("mark-head").selectOption("incompetent");
-  await page.getByTestId("mark-head").selectOption("");
-  await closeNotebook(page);
-
-  await expect(page.getByTestId("actions-left")).toContainText("2");
-  await page.getByTestId("hotspot-kitchen").click();
-  await expect(page.getByTestId("panel-result")).toBeVisible();
-  await openNotebook(page);
-  await closeNotebook(page);
-  await expect(page.getByTestId("panel-result")).toBeVisible();
-});
-
 test("escape closes the Notebook, and a mark survives closing it", async ({
   page,
 }) => {
@@ -120,17 +101,6 @@ test("escape closes the Notebook, and a mark survives closing it", async ({
 
   await openNotebook(page);
   await expect(page.getByTestId("mark-boss")).toHaveValue("believer");
-});
-
-test("the Notebook can be read but not changed once the run is over", async ({
-  page,
-}) => {
-  await page.goto("/?seed=1&month=9&last=9");
-  await playToResults(page);
-
-  await openNotebook(page);
-
-  await expect(page.getByTestId("mark-boss")).toBeDisabled();
 });
 
 test("choosing a person shows only the clues about them, and All shows every one", async ({

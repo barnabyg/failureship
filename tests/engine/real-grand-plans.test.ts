@@ -187,33 +187,34 @@ describe("the game's Grand Plans", { timeout: 60_000 }, () => {
   });
 
   it("is blamed on a player who handed it off on some deals, and never on one who asked in writing", () => {
-    const blamedFor = (answer: string) =>
-      SEEDS.slice(0, 40).filter((seed) => {
-        const run = newRun(seed);
-        playToMonth(run, "4");
-        take(run, answer);
-        for (let view = run.view(); view.month < 8;) {
-          // Blamed on you, it offers Escapes. Blamed on someone else, it
-          // arrives as a Move, without your name.
-          const told = [view.step, ...landedIn(view)];
-          if (
-            told.some(
-              (s) =>
-                (s.kind === "move" || s.kind === "escape") &&
-                s.title === "Lessons from the new tool" &&
-                s.body.includes("your name"),
-            )
-          ) {
-            return true;
-          }
-          if (view.choices.length === 0) return false;
-          view = run.choose(plainChoice(view));
+    const blamed = (answer: string, seed: number) => {
+      const run = newRun(seed);
+      playToMonth(run, "4");
+      take(run, answer);
+      for (let view = run.view(); view.month < 8;) {
+        // Blamed on you, it offers Escapes. Blamed on someone else, it
+        // arrives as a Move, without your name.
+        const told = [view.step, ...landedIn(view)];
+        if (
+          told.some(
+            (s) =>
+              (s.kind === "move" || s.kind === "escape") &&
+              s.title === "Lessons from the new tool" &&
+              s.body.includes("your name"),
+          )
+        ) {
+          return true;
         }
-        return false;
-      });
+        if (view.choices.length === 0) return false;
+        view = run.choose(plainChoice(view));
+      }
+      return false;
+    };
+    const seeds = SEEDS.slice(0, 40);
 
-    expect(blamedFor("hand-off").length).toBeGreaterThan(0);
-    expect(blamedFor("push-back")).toEqual([]);
+    // One deal on which it is blamed is enough, so this stops at the first.
+    expect(seeds.some((seed) => blamed("hand-off", seed))).toBe(true);
+    expect(seeds.filter((seed) => blamed("push-back", seed))).toEqual([]);
   });
 
   it("brings a new Plan with a new boss, which can be done in appearance", () => {

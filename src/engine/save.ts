@@ -12,13 +12,23 @@ export class UnusableSaveError extends Error {
   override name = "UnusableSaveError";
 }
 
+/**
+ * Hashing the whole content takes milliseconds, and a run saves at every step.
+ * Parsed content is never changed afterwards, so each one is hashed once.
+ */
+const fingerprints = new WeakMap<Content, string>();
+
 /** Changes whenever the content does, since a run is only sure on what dealt it. */
 function fingerprintOf(content: Content): string {
+  const known = fingerprints.get(content);
+  if (known !== undefined) return known;
   let hash = 0x811c9dc5;
   for (const unit of JSON.stringify(content)) {
     hash = Math.imul(hash ^ (unit.codePointAt(0) ?? 0), 0x01000193);
   }
-  return (hash >>> 0).toString(16);
+  const fingerprint = (hash >>> 0).toString(16);
+  fingerprints.set(content, fingerprint);
+  return fingerprint;
 }
 
 export function writeSave(state: State, content: Content): string {

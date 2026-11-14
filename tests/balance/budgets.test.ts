@@ -1,8 +1,22 @@
 import { describe, expect, it } from "vitest";
-import type { Kind } from "../../src/engine";
+import { KINDS, type Kind } from "../../src/engine";
 import { DECISIONS, decide } from "../engine/budget-runs";
 
 const SEEDS = Array.from({ length: 200 }, (_, i) => i + 1);
+
+/**
+ * The same Budget choice on the deals in turn, up to `most` of them, until it
+ * has landed on a boss of each kind. The tests read the first landing on each
+ * kind, so the deals after it would say nothing more.
+ */
+function landingsOn(id: string, option: string, most: number) {
+  const landings: ReturnType<typeof decide>[] = [];
+  for (const seed of SEEDS.slice(0, most)) {
+    landings.push(decide(seed, id, option));
+    if (KINDS.every((kind) => landings.some((l) => l.kind === kind))) break;
+  }
+  return landings;
+}
 
 describe("one-off Budgets", () => {
   it.each(
@@ -10,7 +24,7 @@ describe("one-off Budgets", () => {
       options.map((option) => [id, option] as const),
     ),
   )("lands %s %s differently with different boss kinds", (id, option) => {
-    const landings = SEEDS.slice(0, 60).map((s) => decide(s, id, option));
+    const landings = landingsOn(id, option, 60);
     const byKind = (kind: Kind) => landings.filter((l) => l.kind === kind);
 
     expect(byKind("believer").length).toBeGreaterThan(0);
@@ -22,7 +36,7 @@ describe("one-off Budgets", () => {
   });
 
   it("gives an ally's bonus a worse reception from a Believer", () => {
-    const landings = SEEDS.map((s) => decide(s, "bonus-pot", "bonus-allies"));
+    const landings = landingsOn("bonus-pot", "bonus-allies", 200);
     const of = (kind: Kind) =>
       landings.find((l) => l.kind === kind)?.shift ?? NaN;
 

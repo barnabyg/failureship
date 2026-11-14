@@ -14,6 +14,10 @@ export default defineConfig({
   // take as long in all as 10, but the slowest test falls from 51 s to 21 s.
   // Half the threads is Playwright's own default, so a small CI runner is unchanged.
   workers: Math.max(1, Math.min(3, Math.floor(availableParallelism() / 2))),
+  // Tests, not just files, spread across the workers, so a file of slow tests does
+  // not hold one worker while the others stand idle. Specs that start their own
+  // dev server give it a port and Vite cache per worker: see tests/e2e/dev-server.ts.
+  fullyParallel: true,
   maxFailures: process.env.CI ? 1 : 0,
   forbidOnly: Boolean(process.env.CI),
   reporter: "list",
