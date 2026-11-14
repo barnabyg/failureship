@@ -1,18 +1,10 @@
 import { describe, expect, it } from "vitest";
-import { gameContent } from "../../src/content";
-import {
-  parseContent,
-  startRun,
-  type Content,
-  type PlayerView,
-} from "../../src/engine";
-import { castDealtFirst } from "../../src/engine/deal";
+import { parseContent, type Content } from "../../src/engine";
 import { readHiddenTruth } from "../../src/engine/hidden-truth";
-import { calledAtStart, sceneFixtureRaw } from "./fixture";
+import { sceneFixtureRaw } from "./fixture";
 import { behavioursIn } from "./scene-view";
 import { everySign } from "./scene-view";
-
-const KINDS = ["believer", "incompetent", "practitioner"] as const;
+import { KINDS, openMeeting, sceneOf, tally } from "./signs-tally";
 
 function signsFixtureRaw() {
   const raw = sceneFixtureRaw();
@@ -34,51 +26,6 @@ function signsFixtureRaw() {
     },
   ];
   return raw;
-}
-
-function sceneOf(view: PlayerView) {
-  if (view.step.kind !== "scene") throw new Error(view.step.kind);
-  return view.step;
-}
-
-function openMeeting(seed: number, content: Content) {
-  const run = startRun({ seed, content });
-  let view = run.view();
-  while (view.step.kind !== "actions") {
-    const choice = view.choices[0];
-    if (!choice) throw new Error("Stuck before the meeting.");
-    view = run.choose(choice);
-  }
-  return {
-    run,
-    step: sceneOf(run.choose({ type: "action", actionId: "meeting" })),
-  };
-}
-
-/** How often each kind shows each behaviour, across many deals. */
-function tally(content: Content, seeds = 3000) {
-  const counts = new Map(
-    content.behaviours.map((b) => [
-      b.text,
-      { believer: 0, incompetent: 0, practitioner: 0 },
-    ]),
-  );
-  const totals = { believer: 0, incompetent: 0, practitioner: 0 };
-  for (let seed = 1; seed <= seeds; seed++) {
-    const { run, step } = openMeeting(seed, content);
-    const { characters } = readHiddenTruth(run);
-    for (const { who, text } of behavioursIn(step, content)) {
-      const known = content.characters.find(
-        (c) => calledAtStart(content, c.id) === who,
-      );
-      const kind = characters.find((c) => c.id === known?.id)?.kind;
-      const count = counts.get(text.replace(new RegExp(who, "gi"), "{who}"));
-      if (!kind || !count) throw new Error(`Unknown sign: ${text}`);
-      count[kind] += 1;
-      totals[kind] += 1;
-    }
-  }
-  return { counts, totals };
 }
 
 describe("signs written per kind", () => {
@@ -253,8 +200,13 @@ describe("signs of who holds influence", () => {
 });
 
 describe("what watching can tell the player", () => {
+  // Tallied once, for the two tests that read the fixture's likelihoods.
+  let fixtureTally: ReturnType<typeof tally> | undefined;
+  const fixtureTallied = () =>
+    (fixtureTally ??= tally(parseContent(signsFixtureRaw())));
+
   it("sees every behaviour from at least two kinds", () => {
-    const { counts } = tally(parseContent(signsFixtureRaw()));
+    const { counts } = fixtureTallied();
 
     for (const [text, count] of counts) {
       const kinds = KINDS.filter((k) => count[k] > 0);
@@ -263,7 +215,7 @@ describe("what watching can tell the player", () => {
   });
 
   it("sees a behaviour more often from the kinds it favours", () => {
-    const { counts, totals } = tally(parseContent(signsFixtureRaw()));
+    const { counts, totals } = fixtureTallied();
     const rate = (text: string, kind: (typeof KINDS)[number]) =>
       (counts.get(text)?.[kind] ?? 0) / totals[kind];
 
@@ -291,34 +243,7 @@ describe("what watching can tell the player", () => {
       (count?.incompetent ?? 0) / totals.incompetent,
     );
   });
-
-  it("gives real evidence with the game's own signs", () => {
-    const { counts, totals } = tally(gameContent, 2000);
-
-    // Every sign a role of Floor 1's cast can show: a later floor's are not at its meeting.
-    const first = new Set(
-      castDealtFirst(gameContent).map(
-        (id) => gameContent.characters.find((c) => c.id === id)?.role,
-      ),
-    );
-    const onFloor1 = new Set(
-      gameContent.behaviours
-        .filter((b) => b.roles?.some((r) => first.has(r)) ?? true)
-        .map((b) => b.text),
-    );
-    const seen = [...counts].filter(([text]) => onFloor1.has(text));
-    expect(seen.length).toBeGreaterThanOrEqual(8);
-    for (const [text, count] of seen) {
-      const rates = KINDS.map((k) => count[k] / totals[k]);
-      expect(
-        KINDS.filter((k) => count[k] > 0).length,
-        text,
-      ).toBeGreaterThanOrEqual(2);
-      expect(Math.max(...rates), text).toBeGreaterThan(
-        Math.min(...rates) * 1.3,
-      );
-    }
-  });
+  // How the game's own signs tell the kinds apart is in tests/balance/engine-signs.
 });
 
 describe("signs in content", () => {
