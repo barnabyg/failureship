@@ -43,7 +43,7 @@ test("hear of your boss's Grand Plan, and complete it", async ({ page }) => {
   await page.getByTestId("open-project").click();
   await expect(page.getByTestId("grand-plan-status")).toHaveText("Completed");
   await expect(page.getByTestId("grand-plan-opens")).toContainText(
-    "your boss's ticket upstairs",
+    "If your boss counts it done, it is their ticket upstairs",
   );
   await expect(page.getByTestId("grand-plan")).toContainText(
     "single new tool for the whole floor",
