@@ -79,8 +79,11 @@ describe("months that do not feel like one month repeated", () => {
         .filter((s) => s.quarter !== undefined)
         .map((s) => s.id),
     );
+    // The red Project's review and a catch-up with the boss are not meetings.
     const held = views.flatMap((v) =>
-      v.step.kind === "scene" && v.step.id !== "red-project"
+      v.step.kind === "scene" &&
+      v.step.id !== "red-project" &&
+      v.step.id !== "catch-up"
         ? [{ month: v.month, id: v.step.id, title: v.step.title }]
         : [],
     );

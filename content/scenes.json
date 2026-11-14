@@ -5132,5 +5132,81 @@
         ]
       }
     ]
+  },
+  {
+    "id": "catch-up",
+    "title": "Catch-up",
+    "location": "Your boss's office",
+    "narration": [
+      "Your boss has ten minutes before the next thing and gives you four of them, with the door open and one eye on the inbox."
+    ],
+    "cast": ["{boss}"],
+    "signs": [],
+    "options": [
+      {
+        "id": "learn-from-boss",
+        "family": "impress",
+        "label": "Say how much you learn from your boss",
+        "results": [
+          {
+            "body": "You tell your boss how much you have learned from them this year, and manage to name two things, which is one more than you had ready.",
+            "approach": "flatter",
+            "reaction": {
+              "believer": "Your boss thanks you, a little awkwardly, and asks what you would do differently, and then waits for the answer.",
+              "incompetent": "Your boss beams, says that mentoring has always come naturally, and books a fortnightly slot for more of it.",
+              "practitioner": "Your boss accepts it the way one accepts a receipt, and files it somewhere you will never see."
+            }
+          }
+        ]
+      },
+      {
+        "id": "draw-a-rocket",
+        "family": "impress",
+        "label": "Talk the project up, with a diagram",
+        "results": [
+          {
+            "body": "You draw the project on the whiteboard as a rocket, with the risks as small clouds a long way below it.",
+            "approach": "theatre",
+            "reaction": {
+              "believer": "Your boss studies the rocket, then asks where the actual project is on it, and you find yourself pointing at the clouds.",
+              "incompetent": "Your boss photographs the whiteboard and asks whether the rocket could go in the next board pack, only bigger.",
+              "practitioner": "Your boss admires the rocket and asks, pleasantly, who else has seen it, and whether they need to."
+            }
+          }
+        ]
+      },
+      {
+        "id": "real-figures",
+        "family": "deliver",
+        "label": "Show your boss the real figures",
+        "results": [
+          {
+            "body": "You go through the real figures line by line, including the two lines that nobody upstairs has asked about yet.",
+            "approach": "results",
+            "reaction": {
+              "believer": "Your boss reads every line, asks a good question about the third, and says that this is what the job is meant to be.",
+              "incompetent": "Your boss asks whether there is a version with fewer numbers in it and more of a story.",
+              "practitioner": "Your boss takes a copy and thanks you, and by the afternoon the figures are upstairs under your boss's name."
+            }
+          }
+        ]
+      },
+      {
+        "id": "what-is-going-wrong",
+        "family": "deliver",
+        "label": "Tell your boss what is really going wrong",
+        "results": [
+          {
+            "body": "You close the door and tell your boss what is really going wrong with the project, in the order it is going wrong in.",
+            "approach": "truth",
+            "reaction": {
+              "believer": "Your boss listens to all of it, then asks what you would need to fix it, and writes the answer down.",
+              "incompetent": "Your boss says that this has come as a complete surprise, and asks whether it has to be a problem or could be a learning.",
+              "practitioner": "Your boss thanks you for your candour, which is a word your boss keeps for things that will be remembered later."
+            }
+          }
+        ]
+      }
+    ]
   }
 ]
