@@ -28,8 +28,8 @@ const notifications = everyNotification(gameContent);
 
 /**
  * The run's save at a view, made once per view and shared by every player and
- * watcher that reads it. A save fingerprints the whole content, so it is the
- * dearest read a player makes. Each view is a new object, and the run does not
+ * watcher that reads it. Serialising the whole state makes it the dearest
+ * read a player makes. Each view is a new object, and the run does not
  * change between handing out a view and the next choice, so a view stands for
  * the run as it was then.
  */
