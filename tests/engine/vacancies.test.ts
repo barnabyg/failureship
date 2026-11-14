@@ -119,7 +119,7 @@ describe("a seat falling vacant", () => {
 
   it("does not open when the Plan is left undone", () => {
     const run = startRun({ seed: 1, content });
-    play(run, "leave");
+    play(run, "leave", "paper-trail");
 
     expect(readHiddenTruth(run).vacancies).toEqual([]);
   });
