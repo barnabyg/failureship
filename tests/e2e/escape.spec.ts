@@ -38,7 +38,7 @@ test("an Escape that fails is worse, and the results screen says why", async ({
   await page.goto("/?seed=1&month=5&last=5");
   await playUntil(page, "panel-escape");
   await page.getByTestId("escape-minutes-blame-the-associate").click();
-  await expect(happened(page)).toContainText("It was you.");
+  await expect(happened(page)).toContainText("which was you.");
 
   await playUntil(page, "panel-results");
   const row = page.getByTestId("result-escape");
