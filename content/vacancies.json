@@ -212,6 +212,28 @@
       }
     }
   ],
+  "asides": {
+    "plan": {
+      "title": "Overheard by the kettle",
+      "body": "Someone who has been here longer than the kettle says it quietly, by the kettle: \"It isn't {holder}'s call, whatever {holder} says. It never is. Find out who {holder} really answers to, and who owes them. And watch who suddenly starts making the tea.\""
+    },
+    "movedUp": {
+      "title": "Overheard by the kettle",
+      "body": "Someone by the kettle, quietly: \"Seconded. That was somebody's idea, and it wasn't {holder}'s. Whoever had it has the say on the seat, too. Find out who has the ear upstairs, and who else is already bending it.\""
+    },
+    "left": {
+      "title": "Overheard by the kettle",
+      "body": "Someone by the kettle, quietly: \"Nobody gets a seat by expression of interest. Whoever {holder} really answered to will decide, and is already being asked out for coffee. Find out who that is before the coffee runs out.\""
+    },
+    "fired": {
+      "title": "Overheard by the kettle",
+      "body": "Someone by the kettle, quietly: \"Fair and transparent. Whoever was looking after {holder} still has the say in who comes next, and probably a grudge. Find out who that was, and who is calling in favours.\""
+    },
+    "created": {
+      "title": "Overheard by the kettle",
+      "body": "Someone by the kettle, quietly: \"A new post under {holder}, and {holder} won't be the one who fills it. Find out who {holder} really listens to. And watch who is suddenly in everyone's diary.\""
+    }
+  },
   "you": "you",
   "passedOver": {
     "forYou": {

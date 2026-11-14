@@ -179,6 +179,16 @@ export function vacancyRaw() {
           blocked: { title: "SEAT-BLOCKED", body: "{winner} HAS-IT-AFTER-ALL" },
         },
       ],
+      asides: {
+        plan: {
+          title: "ASIDE-PLAN",
+          body: "NOT-THE-CALL-OF {holder}, ASK-UPSTAIRS",
+        },
+        movedUp: { title: "ASIDE-MOVED-UP", body: "ASK-UPSTAIRS" },
+        left: { title: "ASIDE-LEFT", body: "ASK-UPSTAIRS" },
+        fired: { title: "ASIDE-FIRED", body: "ASK-UPSTAIRS" },
+        created: { title: "ASIDE-CREATED", body: "ASK-UPSTAIRS" },
+      },
       you: "YOU-IN-WORDS",
       passedOver: {
         forYou: {

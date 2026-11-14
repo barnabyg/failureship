@@ -453,6 +453,12 @@ const passed = z.strictObject({
 
 export const vacancies = z.strictObject({
   seats: z.array(seat).min(1),
+  /**
+   * Told after the official notice as any seat opens, in each way it can fall
+   * vacant: something unofficial that points at whoever really decides, without
+   * naming them or their kind. Says {holder}, and nothing else.
+   */
+  asides: byWay(notice),
   /** How the decision's words call the player. */
   you: text,
   /** What each candidate passed over keeps, by whether the player had the seat. */

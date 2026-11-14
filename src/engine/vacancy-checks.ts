@@ -152,6 +152,14 @@ export function findBrokenVacancies(
   if (written.seats.filter((s) => s.win).length > 1) {
     problems.push("Only one seat can win the run.");
   }
+  for (const [way, aside] of Object.entries(written.asides)) {
+    const said = `${aside.title} ${aside.body}`.match(/\{\w+\}/g) ?? [];
+    for (const token of said.filter((t) => t !== "{holder}")) {
+      problems.push(
+        `vacancies.json's aside when it opens as ${way} says "${token}", but an aside says only {holder}, never who decides.`,
+      );
+    }
+  }
   const floors = new Set<string>();
   for (const seat of written.seats) {
     const owner = `Seat "${seat.id}"`;

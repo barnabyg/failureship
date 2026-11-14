@@ -950,6 +950,10 @@ the player a boss's boss, unless it wins the run.
   what is told as it opens in each way, and says `{holder}` and `{month}`, the month it is decided
   in; `won` and `lost` as it is decided, and `lost` says `{winner}`;
   `blocked`, which says `{winner}`, instead of `lost` when a big mistake cost the player the seat.
+- `asides` has, for each way a seat can open, a `title` and `body` told straight after `opened`,
+  whatever the floor: something unofficial that points the player at whoever really decides, such
+  as who the holder answers to, without naming them or their kind. It can say `{holder}`, and a
+  check refuses any other placeholder.
 - Whoever holds influence over the holder on the Power Map decides, or the holder if nobody does.
   For a holder who has left or been fired, it is whoever held influence over them as they went; if
   that person goes too, whoever held influence over them, and so on up, or with nobody above, the

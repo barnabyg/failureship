@@ -83,12 +83,20 @@ export function openSeat(
     decided: null,
   });
   const opened = seat.opened[way];
+  const people = { "{holder}": calledBy(state, content, holder) };
   state.noticesDue.push({
     title: opened.title,
-    body: sayPeople(opened.body, {
-      "{holder}": calledBy(state, content, holder),
-    }).replaceAll("{month}", String(decides)),
+    body: sayPeople(opened.body, people).replaceAll("{month}", String(decides)),
   });
+  // The official word, and then the unofficial one: who really decides is
+  // pointed at, never named.
+  const aside = content.vacancies?.asides[way];
+  if (aside) {
+    state.noticesDue.push({
+      title: aside.title,
+      body: sayPeople(aside.body, people),
+    });
+  }
 }
 
 /**

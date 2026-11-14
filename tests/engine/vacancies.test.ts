@@ -10,7 +10,7 @@ import {
 } from "../../src/engine";
 import { readHiddenTruth } from "../../src/engine/hidden-truth";
 import { answer, play } from "./grand-plan-fixture";
-import { firstTold } from "./landed";
+import { everyNotice, everyTold, firstTold } from "./landed";
 import {
   decidedOn,
   edited,
@@ -96,9 +96,30 @@ describe("a seat falling vacant", () => {
     ]);
   });
 
+  it("is followed by an aside that points at whoever really decides, without naming them", () => {
+    const run = startRun({ seed: 1, content });
+    const views = playThrough(run);
+
+    const told = everyTold(views).map(({ told }) => told.title);
+    const opened = told.indexOf("SEAT-OPEN");
+    expect(opened).toBeGreaterThanOrEqual(0);
+    expect(told[opened + 1]).toBe("ASIDE-PLAN");
+    const aside = everyNotice(views).find((n) => n.title === "ASIDE-PLAN");
+    expect(aside?.body).toBe("NOT-THE-CALL-OF your boss, ASK-UPSTAIRS");
+  });
+
+  it("refuses an aside that would name whoever decides", () => {
+    const raw = vacancyRaw();
+    raw.vacancies.asides.left.body = "{decider} DECIDES";
+
+    expect(() => parseContent(raw)).toThrow(
+      /aside when it opens as left says "\{decider\}"/,
+    );
+  });
+
   it("does not open when the Plan is left undone", () => {
     const run = startRun({ seed: 1, content });
-    play(run, "leave", "paper-trail");
+    play(run, "leave");
 
     expect(readHiddenTruth(run).vacancies).toEqual([]);
   });
