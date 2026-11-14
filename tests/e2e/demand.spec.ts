@@ -8,9 +8,7 @@ import {
 
 /** Reaches month 2's Demand from your boss's boss, and stalls it. */
 async function stallTheDemand(page: Page, seed: number) {
-  await page.goto(`/?seed=${String(seed)}`);
-  await answerAnyNotification(page);
-  await attendAndFinishMonth(page);
+  await page.goto(`/?seed=${String(seed)}&month=2`);
   await openInboxIfAny(page);
   await page.getByTestId("option-skip-training").click();
   await readAnyResult(page);

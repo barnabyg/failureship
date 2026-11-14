@@ -1,10 +1,5 @@
 import { expect, test, type Page } from "@playwright/test";
-import {
-  answerAnyNotification,
-  attendAndFinishMonth,
-  openInboxIfAny,
-  readAnyResult,
-} from "./play";
+import { answerAnyNotification, openInboxIfAny, readAnyResult } from "./play";
 import { openRunMenu } from "./run-menu";
 
 async function savedText(page: Page) {
@@ -12,9 +7,7 @@ async function savedText(page: Page) {
 }
 
 test("a reload carries on where the player left off", async ({ page }) => {
-  await page.goto("/?seed=4");
-  await answerAnyNotification(page);
-  await attendAndFinishMonth(page);
+  await page.goto("/?seed=4&month=2");
   await openInboxIfAny(page);
   await page.getByTestId("option-skip-training").click();
   await readAnyResult(page);
