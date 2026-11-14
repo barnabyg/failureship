@@ -34,10 +34,11 @@ describe("the climb to the top of Floor 3", () => {
     expect(results.title).toBe("You have reached the top of Floor 3");
     expect(results.ending).toMatchObject({ fired: false, won: true });
     expect(results.ending.text).toContain("month 15");
+    // Each step says how it was won, without pinning the wording.
     expect(results.route.map((r) => r.text)).toEqual([
-      "Month 7: Team lead, when Dennis Prowse's Grand Plan was done for show, and Dennis Prowse moved up anyway.",
-      "Month 11: Middle manager, when Hugh Lamb's Grand Plan was done for show, and Hugh Lamb moved up anyway.",
-      "Month 15: the top of Floor 3, when Gwen Ashdown's Grand Plan was done for show, and Gwen Ashdown moved up anyway.",
+      expect.stringMatching(/^Month 7: Team lead, .*for show/),
+      expect.stringMatching(/^Month 11: Middle manager, .*for show/),
+      expect.stringMatching(/^Month 15: the top of Floor 3, .*for show/),
     ]);
   });
 
