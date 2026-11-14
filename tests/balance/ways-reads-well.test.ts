@@ -11,8 +11,8 @@ import {
 // The winning way: mostly amoral, reading well from the player view. The other
 // ways of playing are in the other ways-*.test.ts files, each with its own
 // tally, so the bounds there that compare a way with this one go by this
-// file's bounds: under a quarter of 0.25 to the top, or at least 0.40 for the
-// ceiling.
+// file's 0.40 cap: under a quarter of it to the top (FEW in ways-survey.ts),
+// or at least it for the ceiling.
 playsTheWholeClimb("reading well up the whole climb", ["readsWell"], () => {
   // Of these 100 deals, reading well and mostly amoral wins 39, and the
   // amoral ceiling, which knows the hidden truth, 42. A person will likely

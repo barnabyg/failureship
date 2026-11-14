@@ -206,6 +206,14 @@ function play(seed: number, name: StyleName, style: Style) {
   survey.set(name, tally);
 }
 
+/**
+ * How often a way other than reading well or knowing may win: under a quarter
+ * of the 0.40 cap on reading well in ways-reads-well.test.ts. Reading well wins
+ * 39 of these deals, so this is close to the quarter of it the comparison used
+ * when every way was in one file.
+ */
+export const FEW = 0.4 / 4;
+
 /** The share of runs played this way that ended so. */
 export const rate = (name: StyleName, of: keyof Omit<Tally, "runs">) => {
   const tally = survey.get(name);

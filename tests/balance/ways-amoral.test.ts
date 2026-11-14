@@ -1,9 +1,10 @@
 import { expect, it } from "vitest";
-import { monthsAfterDemotion, playsTheWholeClimb, rate } from "./ways-survey";
-
-// Under a quarter of the 0.25 that bounds reading well in
-// ways-reads-well.test.ts, so under a quarter of what reading well wins.
-const FEW = 0.25 / 4;
+import {
+  FEW,
+  monthsAfterDemotion,
+  playsTheWholeClimb,
+  rate,
+} from "./ways-survey";
 
 playsTheWholeClimb(
   "blind amoral play and clicking about up the whole climb",
