@@ -13,7 +13,7 @@ describe("the climb to the top of Floor 3, by doing the Plans", () => {
 
   // Doing the Plans, for real or for show, and nothing else amoral, rarely
   // reaches the top: of these 200 deals the planner wins 7 and faking every
-  // Plan 3, each seat by its Plan. The winning way is in ways-of-playing.
+  // Plan 3, each seat by its Plan. The winning way is in ways-reads-well.
   it("is rarely reached by doing the Plans and little else", () => {
     const { wins, routes } = planner.whole();
 
