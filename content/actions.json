@@ -128,6 +128,15 @@
     ]
   },
   {
+    "id": "boss-office",
+    "label": "Your boss's office",
+    "description": "A catch-up with your boss, who has ten minutes before the next thing and will give you four of them.",
+    "place": "boss-office",
+    "cost": "standard",
+    "scene": "catch-up",
+    "oncePerMonth": true
+  },
+  {
     "id": "one-to-one",
     "family": "find-out",
     "label": "The Senior Analyst's desk",
@@ -420,6 +429,15 @@
         "body": "The milk on Floor 2 is labelled by team, and your team's is the one that has run out."
       }
     ]
+  },
+  {
+    "id": "boss-office-2",
+    "label": "Your boss's office",
+    "description": "A catch-up with your boss, who has ten minutes before the next thing and will give you four of them.",
+    "place": "boss-office-2",
+    "cost": "standard",
+    "scene": "catch-up",
+    "oncePerMonth": true
   },
   {
     "id": "team-one-to-one",
@@ -798,6 +816,15 @@
         "body": "Someone from Floor 2 is up for a meeting, and holds the door for you, and calls you by your title."
       }
     ]
+  },
+  {
+    "id": "boss-office-3",
+    "label": "Your boss's office",
+    "description": "A catch-up with your boss, who has ten minutes before the next thing and will give you four of them.",
+    "place": "boss-office-3",
+    "cost": "standard",
+    "scene": "catch-up",
+    "oncePerMonth": true
   },
   {
     "id": "managers-one-to-one",

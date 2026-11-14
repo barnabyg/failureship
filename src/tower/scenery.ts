@@ -152,7 +152,6 @@ export function floorScenery(
     ...pottedPlant(-7.4, 0, 1.4, 3.4),
     bin(1.5, 0.9),
     bin(-2.75, 1.7),
-    ...moved(deskParts(2, 1.2, "#8f8c80", false), -1.65, -0.4),
     ...moved(deskParts(2, 1.2, "#8f8c80", false), 2.9, 0.15),
     ...fluorescentTubes(3.7),
   ];

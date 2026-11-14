@@ -42,7 +42,7 @@ Every run has a seed, shown at the right of the header, and `?seed=8` picks one.
 3. **The official story** tells any Company Event and Character Move, then what was reported
    beside what actually happened. A Move that comes back on you asks for its Escape first.
 
-There are four ways to spend an action:
+There are five ways to spend an action:
 
 - **Meeting Room 1B** opens that month's Scene. You can stay away: it saves the action, but you see
   none of its signs, your boss may take it badly, and the minutes give you an action that follows
@@ -51,6 +51,9 @@ There are four ways to spend an action:
 - **The photocopier** and **the loading bay** are Find Out: ask whoever is there about someone, or
   buy from someone, for a claim that may be true, mistaken, out of date or deliberately false.
   Asking is mostly about people. Buying is mostly about Hidden Facts.
+- **Your boss's office** is a catch-up with your boss alone, once a month: you see how they
+  behave and how they are with you, then flatter them, talk the project up, show the real figures
+  or tell them what is going wrong. Each kind of boss takes each of those differently.
 - **Your boss's boss's office** goes over your boss's head. It can pay off better than
   anything else you can do, or cost you more if your boss finds out. You are not told the odds.
 - **The kitchen, the Senior Analyst's desk and your desk** do what they look like.
