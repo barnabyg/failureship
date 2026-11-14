@@ -2,6 +2,10 @@ import { expect, test, type Page } from "@playwright/test";
 import { answerAnyNotification, openInboxIfAny, playToResults } from "./play";
 import { openRunMenu } from "./run-menu";
 
+function savedText(page: Page) {
+  return page.evaluate(() => window.localStorage.getItem("failureship.run"));
+}
+
 async function reachSecondAction(page: Page) {
   await answerAnyNotification(page);
   await page.getByTestId("hotspot-kitchen").click();
@@ -35,9 +39,12 @@ test("restarts from a typed seed in the middle of a run", async ({ page }) => {
   expect(await page.getByTestId("panel-scene").innerText()).toBe(signs);
 });
 
-test("declining the confirmation keeps the run", async ({ page }) => {
+test("declining the confirmation keeps the run, and its save", async ({
+  page,
+}) => {
   await page.goto("/?seed=1");
   await reachSecondAction(page);
+  const saved = await savedText(page);
 
   await openRunMenu(page);
   await page.getByTestId("new-run").click();
@@ -46,6 +53,7 @@ test("declining the confirmation keeps the run", async ({ page }) => {
   await expect(page.getByTestId("confirm-leave")).toHaveCount(0);
   await expect(page.getByTestId("seed")).toHaveText("1");
   await expect(page.getByTestId("actions-left")).toContainText("1");
+  expect(await savedText(page)).toBe(saved);
 });
 
 test("escape also keeps the run", async ({ page }) => {
@@ -59,21 +67,6 @@ test("escape also keeps the run", async ({ page }) => {
 
   await expect(page.getByTestId("confirm-leave")).toHaveCount(0);
   await expect(page.getByTestId("actions-left")).toContainText("1");
-});
-
-test("a new run deals a new seed from any step", async ({ page }) => {
-  await page.goto("/?seed=1");
-  await openInboxIfAny(page);
-  await page.getByTestId("option-pub").click();
-
-  await openRunMenu(page);
-  await page.getByTestId("new-run").click();
-  await page.getByTestId("confirm-leave-yes").click();
-
-  await expect(page.getByTestId("seed")).not.toHaveText("1");
-  await expect(page.getByTestId("buzzwords")).toHaveCount(0);
-  await openInboxIfAny(page);
-  await expect(page.getByTestId("panel-notification")).toBeVisible();
 });
 
 test("a seed that cannot be used is refused and the run carries on", async ({

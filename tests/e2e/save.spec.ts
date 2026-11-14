@@ -1,10 +1,6 @@
-import { expect, test, type Page } from "@playwright/test";
+import { expect, test } from "@playwright/test";
 import { answerAnyNotification, openInboxIfAny, readAnyResult } from "./play";
 import { openRunMenu } from "./run-menu";
-
-async function savedText(page: Page) {
-  return page.evaluate(() => window.localStorage.getItem("failureship.run"));
-}
 
 test("a reload carries on where the player left off", async ({ page }) => {
   await page.goto("/?seed=4&month=2");
@@ -85,25 +81,18 @@ test("new run and restart from seed replace the saved run", async ({
   await openInboxIfAny(page);
   await expect(page.getByTestId("panel-notification")).toBeVisible();
 
+  // New run from the middle of a step, with a Buzzword learnt, leaves it behind.
+  await page.getByTestId("option-pub").click();
   await openRunMenu(page);
   await page.getByTestId("new-run").click();
   await page.getByTestId("confirm-leave-yes").click();
   const seed = await page.getByTestId("seed").innerText();
   expect(seed).not.toBe("5");
+  await expect(page.getByTestId("buzzwords")).toHaveCount(0);
+  await openInboxIfAny(page);
+  await expect(page.getByTestId("panel-notification")).toBeVisible();
   await page.reload();
   await expect(page.getByTestId("seed")).toHaveText(seed);
-});
-
-test("declining to leave keeps the saved run", async ({ page }) => {
-  await page.goto("/?seed=8");
-  await answerAnyNotification(page);
-  const saved = await savedText(page);
-
-  await openRunMenu(page);
-  await page.getByTestId("new-run").click();
-  await page.getByTestId("confirm-leave-no").click();
-
-  expect(await savedText(page)).toBe(saved);
 });
 
 for (const { what, broken } of [

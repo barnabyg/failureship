@@ -1,5 +1,10 @@
 import { expect, test, type Page } from "@playwright/test";
-import { answerAnyNotification, freshRun, openInboxIfAny } from "./play";
+import {
+  answerAnyNotification,
+  freshRun,
+  openInboxIfAny,
+  readResult,
+} from "./play";
 
 // The smallest screen the game supports is 1920×1080. A browser there shows
 // less than the whole screen, and a laptop that scales its display shows less
@@ -30,6 +35,35 @@ async function hotspotIds(page: Page) {
     .locator('[data-testid^="hotspot-"]')
     .evaluateAll((els) => els.map((el) => el.getAttribute("data-testid")));
   return ids.filter((id): id is string => id !== null);
+}
+
+type Box = { x: number; y: number; width: number; height: number };
+
+function overlaps(a: Box, b: Box) {
+  return !(
+    a.x >= b.x + b.width ||
+    a.x + a.width <= b.x ||
+    a.y >= b.y + b.height ||
+    a.y + a.height <= b.y
+  );
+}
+
+/** No place's label on the floor is under the status card or the guide. */
+async function expectLabelsClear(page: Page) {
+  const card = await page.getByTestId("status-card").boundingBox();
+  const guide = await page.locator(".next").boundingBox();
+  if (!card || !guide) throw new Error("Nothing to measure.");
+  const labels = page.locator(
+    '[data-testid^="hotspot-"], [data-testid^="room-sign-"]',
+  );
+  expect(await labels.count()).toBeGreaterThan(0);
+  for (const label of await labels.all()) {
+    const box = await label.boundingBox();
+    if (!box) continue;
+    const name = (await label.getAttribute("data-testid")) ?? "";
+    expect(overlaps(box, card), `${name} is under the status card`).toBe(false);
+    expect(overlaps(box, guide), `${name} is under the guide`).toBe(false);
+  }
 }
 
 test.describe("at 1920×1080", () => {
@@ -76,39 +110,51 @@ test.describe("at 1920×1080", () => {
 
     await expect(page.getByTestId("notebook")).toBeVisible();
   });
+});
 
-  for (const [floor, address] of [
-    [
-      2,
-      "/?seed=16&month=11&choose=take-the-blame,screenshot-on-the-note,claim-the-credit,word-with-the-analyst",
-    ],
-    [
-      3,
-      "/?seed=24&month=14&choose=take-the-blame,screenshot-on-the-note,claim-the-credit,word-with-the-analyst,staff-the-centre",
-    ],
-  ] as const) {
-    test(`every place on Floor ${String(floor)} can be pressed`, async ({
-      page,
-    }) => {
+// Each floor, as its first spare action waits, at each size kept. Floors 2 and 3
+// are reached by later-month starts.
+const FLOORS = [
+  "/?seed=5",
+  "/?seed=16&month=11&choose=take-the-blame,screenshot-on-the-note,claim-the-credit,word-with-the-analyst",
+  "/?seed=24&month=14&choose=take-the-blame,screenshot-on-the-note,claim-the-credit,word-with-the-analyst,staff-the-centre",
+];
+
+for (const size of [
+  FULL_HD,
+  { width: 1440, height: 900 },
+  { width: 1280, height: 720 },
+]) {
+  test(`at ${String(size.width)}×${String(size.height)} every place can be pressed, clear of the status card and the guide, and what follows sits beside them`, async ({
+    page,
+  }) => {
+    await page.setViewportSize(size);
+    for (const address of FLOORS) {
       await freshRun(page, address);
       await answerAnyNotification(page);
+      await expect(page.locator(".hotspot:enabled").first()).toBeVisible();
       await expectReachable(page, await hotspotIds(page));
-    });
-  }
-});
+      await expectLabelsClear(page);
+    }
 
-test("at 1280 px the Scene sits beside the cards, not over them", async ({
-  page,
-}) => {
-  await page.setViewportSize({ width: 1280, height: 720 });
-  await freshRun(page, "/?seed=5");
-  await answerAnyNotification(page);
-  await page.getByTestId("hotspot-meeting").click();
-  const scene = await page.getByTestId("panel-scene").boundingBox();
-  const cards = await page.locator(".top-left").boundingBox();
-  if (!scene || !cards) throw new Error("Nothing to measure.");
-  expect(scene.x).toBeGreaterThanOrEqual(cards.x + cards.width);
-});
+    // Back on Floor 1, what happened at a place leaves the guide readable.
+    await freshRun(page, FLOORS[0] ?? "");
+    await answerAnyNotification(page);
+    await page.locator('[data-testid="hotspot-work"]:enabled').click();
+    const result = await page.getByTestId("panel-result").boundingBox();
+    const guide = await page.locator(".next").boundingBox();
+    if (!result || !guide) throw new Error("Nothing to measure.");
+    expect(overlaps(result, guide), "the card is over the guide").toBe(false);
+    await readResult(page);
+
+    // The Scene sits beside the cards, not over them.
+    await page.getByTestId("hotspot-meeting").click();
+    const scene = await page.getByTestId("panel-scene").boundingBox();
+    const cards = await page.locator(".top-left").boundingBox();
+    if (!scene || !cards) throw new Error("Nothing to measure.");
+    expect(scene.x).toBeGreaterThanOrEqual(cards.x + cards.width);
+  });
+}
 
 /**
  * Whether the tagline is on its one line, and if so whether all of it fits.
