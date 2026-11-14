@@ -15,7 +15,7 @@ import { remember } from "./reputation";
 import { competitionNow } from "./rivals";
 import { drawFor } from "./rng";
 import { calledBy, sayPeople } from "./say";
-import { standingOnPaper } from "./standing";
+import { standingAtTop, standingOnPaper } from "./standing";
 import type { Candidate, State, Vacancy } from "./state";
 import type { StepView } from "./view";
 
@@ -83,11 +83,46 @@ export function openSeat(
     decided: null,
   });
   const opened = seat.opened[way];
+  const people = { "{holder}": calledBy(state, content, holder) };
   state.noticesDue.push({
     title: opened.title,
-    body: sayPeople(opened.body, {
-      "{holder}": calledBy(state, content, holder),
-    }).replaceAll("{month}", String(decides)),
+    body: sayPeople(opened.body, people).replaceAll("{month}", String(decides)),
+  });
+  // The official word, and then the unofficial one: who really decides is
+  // pointed at, never named.
+  const aside = content.vacancies?.asides[way];
+  if (aside) {
+    state.noticesDue.push({
+      title: aside.title,
+      body: sayPeople(aside.body, people),
+    });
+  }
+}
+
+/**
+ * As a month opens, from `nudgeAt`: a player at the top of Official standing,
+ * with no seat ever open, hears once from a Character still here that waiting
+ * will not help. It is never told while a seat is open or once one is decided.
+ */
+export function nudgeTheWaiting(state: State, content: Content): void {
+  const nudge = content.vacancies?.nudge;
+  const from = content.balance.nudgeAt;
+  if (
+    !nudge ||
+    from === undefined ||
+    state.month < from ||
+    state.nudgedIn !== null ||
+    state.vacancies.length > 0 ||
+    !standingAtTop(state, content)
+  ) {
+    return;
+  }
+  const who = nudge.from.find((id) => !isGone(state, id));
+  if (who === undefined) return;
+  state.nudgedIn = state.month;
+  state.noticesDue.push({
+    title: nudge.title,
+    body: sayPeople(nudge.body, { "{who}": calledBy(state, content, who) }),
   });
 }
 

@@ -350,6 +350,7 @@ export function App() {
                 <strong>{view.grandPlan.title}. </strong>
                 {view.grandPlan.what}
               </p>
+              <p data-testid="grand-plan-opens">{panelText.grandPlanOpens}</p>
               <p data-testid="grand-plan-status">{view.grandPlan.status}</p>
             </div>
           )}

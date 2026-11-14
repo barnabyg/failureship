@@ -13,5 +13,6 @@
     "warmAt": 5,
     "coldAt": -5
   },
-  "bossBeliefKeeps": 0.5
+  "bossBeliefKeeps": 0.5,
+  "nudgeAt": 4
 }

@@ -47,6 +47,10 @@ function plan(id: string, heardIn: string, prefix: string, blame = certain) {
     what: `${id.toUpperCase()}-WHAT`,
     lasts: 2,
     heardIn: [heardIn],
+    upstairs: {
+      title: "BOSS-UPSTAIRS",
+      body: `${id.toUpperCase()}-IF-THIS-LANDS`,
+    },
     needs: {
       from: [
         { character: "ben", asked: `${prefix}asked-ben` },

@@ -188,6 +188,9 @@ Actions a month, months in a run and the cost of each choice.
   makes their mood `warm` or `cold`.
 - `bossBeliefKeeps` is how much of the boss's belief carries into each new month, so that it is
   mostly about lately.
+- `nudgeAt` is the month from which a player at the top of Official standing, with no seat yet
+  open, is told that waiting will not help: `nudge` in [`vacancies.json`](#vacanciesjson), which
+  needs it.
 
 ## `behaviours.json`
 
@@ -493,6 +496,11 @@ brings a new one. A Plan is followed to its end whoever the player works for by 
   project** card shows its `title`, and its details its `what`, with where it has got to from
   `statuses`, of which `running` says `{month}`, the month it is due by. Text about a Plan should
   leave its deadline to that: a Scene can say `{plan}` for the title of your boss's Plan.
+- `upstairs` is a `title` and `body` left in the inbox as the player first hears of it, wherever
+  that is: the boss, in their own words, saying that the Plan done takes them upstairs and leaves
+  their seat behind. It says nothing of who would fill it, and is told as written, so a check
+  refuses any placeholder in it. The card's line saying the same is
+  `grandPlanOpens` in [`ui.json`](#uijson).
 - `ways` are how it can be completed, each `how` it is done: `reality` or `appearance`. Every Plan
   needs at least one of each. The first way whose `when` holds, in time, completes it at once. A
   `when` reads only what the player did while the Plan ran, usually a flag set by a choice offered
@@ -946,6 +954,16 @@ the player a boss's boss, unless it wins the run.
   what is told as it opens in each way, and says `{holder}` and `{month}`, the month it is decided
   in; `won` and `lost` as it is decided, and `lost` says `{winner}`;
   `blocked`, which says `{winner}`, instead of `lost` when a big mistake cost the player the seat.
+- `asides` has, for each way a seat can open, a `title` and `body` told straight after `opened`,
+  whatever the floor: something unofficial that points the player at whoever really decides, such
+  as who the holder answers to, without naming them or their kind. It can say `{holder}`, and a
+  check refuses any other placeholder.
+- `nudge` is told once in a run, as a month opens from `nudgeAt` in
+  [`balance.json`](#balancejson), to a player whose Official standing is in its top band while no
+  seat has ever opened: that standing gets nobody a seat, and seats open when someone above moves.
+  It is never told while a seat is open or once one has been decided. `from` lists the Characters
+  who can say it, the first still here as `{who}`, with its `title` and `body`, which a check
+  refuses any other placeholder in. Left out, it is never told.
 - Whoever holds influence over the holder on the Power Map decides, or the holder if nobody does.
   For a holder who has left or been fired, it is whoever held influence over them as they went; if
   that person goes too, whoever held influence over them, and so on up, or with nobody above, the

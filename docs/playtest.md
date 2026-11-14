@@ -103,6 +103,16 @@ the seat is open, its e-mail asks how to go about it: leave it to the process un
 | Seed 106, a Believer boss                                                                                         | Your boss calls the Plan done, but does not move up on a screenshot, and no seat opens. Book the desks for your boss when Hot-desking comes in month 6, and the seat is open in months 7 and 8 instead.                                                                                                   |
 | Seed 2, with the word. At month 7's Recruitment Panel, raise a concern about the Project Co-ordinator's candidate | A Final Warning. Month 8 opens with the seat going to the Junior Associate: the incident was taken into account, the decision says, and the results screen says what it cost you. Without the concern, the seat is yours.                                                                                 |
 
+## Signposts to the way up
+
+What tells a newcomer how a seat comes to open, kept true by `tests/engine/playtest-seeds.test.ts`.
+
+| Seed and what to do                 | Expect                                                                                                                                                                                                                                     |
+| ----------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| Seed 3. Play plainly                | Month 1's meeting leaves A word from your boss in the inbox: if the tool lands, your boss is going upstairs. The Grand Plan's tooltip on the status card says its seat opens behind them, and Official standing's that it decides nothing. |
+| The same run, month 5               | Official standing is green and no seat has opened, so the month opens with A word over the partition: the Senior Analyst says nobody was ever promoted for a good review. It comes once, and never while a seat is open.                   |
+| Seed 2. As for the Grand Plan route | Month 6's An exciting opportunity is followed by Overheard by the kettle: it is not your boss's call, so find out who your boss really answers to. It names nobody, and comes after every seat that opens.                                 |
+
 ## Floor 2's bigger Moves
 
 Play as for the Grand Plan route among the seven seeds: take the blame, fake the Plan, claim its

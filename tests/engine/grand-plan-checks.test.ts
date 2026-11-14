@@ -26,6 +26,14 @@ describe("Grand Plans in the data", () => {
     expect(() => parseContent(raw())).not.toThrow();
   });
 
+  it("refuse a boss's words on the Plan that say a placeholder, which they are told without", () => {
+    expect(
+      refused((r) => {
+        firstPlan(r).upstairs.body = "{plan} TAKES-ME-UP";
+      }),
+    ).toThrow(/upstairs says "\{plan\}"/);
+  });
+
   it("refuse a Plan completed in appearance that adds no hidden risk", () => {
     expect(
       refused((r) => {

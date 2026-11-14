@@ -36,6 +36,13 @@ export function standingOnPaper(state: State, content: Content) {
   return written ? standingOf(state, written) : null;
 }
 
+/** Whether Official standing is in its top band, as high as it shows. */
+export function standingAtTop(state: State, content: Content): boolean {
+  const written = content.standing;
+  if (!written) return false;
+  return standingOf(state, written).band === written.bands.at(-1)?.label;
+}
+
 /** In plain view at every step: a bar, with no number the player sees. */
 export function standingInView(state: State, content: Content) {
   const written = content.standing;

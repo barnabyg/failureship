@@ -13,6 +13,11 @@ test("Official standing moves when the report goes unfiled", async ({
   await expect(bar).toHaveAccessibleName("Official standing: Amber");
   await expect(bar).not.toHaveAttribute("aria-valuenow");
   await expect(bar).not.toContainText(/\d/);
+  // It says it is not what decides a seat, so that pushing it is not mistaken for a way up.
+  await expect(page.getByTestId("standing-card")).toHaveAttribute(
+    "title",
+    /It decides nothing: nobody here was ever given a seat/,
+  );
   const before = await marker.evaluate((m) => m.style.left);
 
   await openInboxIfAny(page);

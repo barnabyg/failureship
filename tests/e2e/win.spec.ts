@@ -17,7 +17,7 @@ test("says the goal on the first screen", async ({ page }) => {
   await openInboxIfAny(page);
   await expect(page.getByTestId("panel-notification")).toBeVisible();
   await expect(page.getByTestId("goal")).toHaveText(
-    "Your goal: get promoted, seat by seat, to the top of Floor 3. Work out who really decides.",
+    "Your goal: get promoted, seat by seat, to the top of Floor 3. A seat opens when your boss moves up or out, and a Grand Plan they count done moves them up. Work out who really decides.",
   );
 });
 

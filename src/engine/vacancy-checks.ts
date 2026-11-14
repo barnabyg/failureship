@@ -2,6 +2,18 @@ import { everyNotification, type Condition, type Content } from "./content";
 import { isUnder } from "./deal";
 import { bossesAtStart, managerAtStart, meantBy } from "./places";
 
+/**
+ * The placeholders a notice says beyond those it is told with, which would be
+ * shown as written, or, said of a seat, could name whoever decides it.
+ */
+export function placeholdersBeyond(
+  told: { title: string; body: string },
+  allowed: readonly string[],
+): string[] {
+  const said = `${told.title} ${told.body}`.match(/\{\w+\}/g) ?? [];
+  return said.filter((token) => !allowed.includes(token));
+}
+
 /** Everything that can act for a seat, and whether a Character's Move makes it. */
 function seatActs(content: Content) {
   return [
@@ -151,6 +163,30 @@ export function findBrokenVacancies(
   }
   if (written.seats.filter((s) => s.win).length > 1) {
     problems.push("Only one seat can win the run.");
+  }
+  if (written.nudge) {
+    if (content.balance.nudgeAt === undefined) {
+      problems.push(
+        "vacancies.json's nudge is written, so balance.json needs its month, nudgeAt.",
+      );
+    }
+    for (const who of written.nudge.from) {
+      if (!characters.has(who)) {
+        problems.push(`vacancies.json's nudge is said by unknown "${who}".`);
+      }
+    }
+    for (const token of placeholdersBeyond(written.nudge, ["{who}"])) {
+      problems.push(
+        `vacancies.json's nudge says "${token}", but it says only {who}, never who decides.`,
+      );
+    }
+  }
+  for (const [way, aside] of Object.entries(written.asides)) {
+    for (const token of placeholdersBeyond(aside, ["{holder}"])) {
+      problems.push(
+        `vacancies.json's aside when it opens as ${way} says "${token}", but an aside says only {holder}, never who decides.`,
+      );
+    }
   }
   const floors = new Set<string>();
   for (const seat of written.seats) {
