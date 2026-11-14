@@ -58,11 +58,13 @@ test.describe("at 1440×900", () => {
   }
 });
 
-test("the rest folds, and the Notebook's worth starts folded", async ({
+// One walk to the end for every check that only reads the results screen.
+test("at the end the rest folds, the floor and header go quiet, and the Notebook is read-only", async ({
   page,
 }) => {
   await reachResults(page);
 
+  // The rest folds, and the Notebook's worth starts folded.
   await expect(page.getByTestId("results-section-vacancies")).toHaveAttribute(
     "open",
   );
@@ -83,15 +85,22 @@ test("the rest folds, and the Notebook's worth starts folded", async ({
       .filter({ hasText: "An automatic reply" })
       .getByTestId("result-clue-count"),
   ).toHaveText("Told 9 times");
-});
 
-test("the floor's places are not labelled once the run is over", async ({
-  page,
-}) => {
-  await reachResults(page);
-
+  // The floor's places are not labelled once the run is over.
   await expect(page.locator('[data-testid^="room-sign-"]')).toHaveCount(0);
   await expect(page.locator('[data-testid^="hotspot-"]')).toHaveCount(0);
+
+  // No status card and no Actions in the header.
+  await expect(page.getByTestId("status-card")).toHaveCount(0);
+  await expect(page.getByTestId("open-project")).toHaveCount(0);
+  await expect(page.getByTestId("actions-left")).toHaveCount(0);
+  await expect(page.getByTestId("month")).toBeVisible();
+  await expect(page.getByTestId("run-menu")).toBeVisible();
+
+  // The Notebook can be read but not changed.
+  await page.getByTestId("open-notebook").click();
+  await expect(page.getByTestId("notebook")).toBeVisible();
+  await expect(page.getByTestId("mark-boss")).toBeDisabled();
 });
 
 test("Play this seed again starts the same deal, without asking", async ({

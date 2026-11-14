@@ -122,17 +122,6 @@ test("escape closes the Notebook, and a mark survives closing it", async ({
   await expect(page.getByTestId("mark-boss")).toHaveValue("believer");
 });
 
-test("the Notebook can be read but not changed once the run is over", async ({
-  page,
-}) => {
-  await page.goto("/?seed=1&month=9&last=9");
-  await playToResults(page);
-
-  await openNotebook(page);
-
-  await expect(page.getByTestId("mark-boss")).toBeDisabled();
-});
-
 test("choosing a person shows only the clues about them, and All shows every one", async ({
   page,
 }) => {

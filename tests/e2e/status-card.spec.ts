@@ -3,7 +3,6 @@ import {
   answerAnyNotification,
   freshRun,
   openInboxIfAny,
-  playToResults,
   playUntil,
 } from "./play";
 
@@ -118,17 +117,4 @@ test("the goal is said in full in month 1 only, and after that in the guide's to
     "title",
     /get promoted, seat by seat/,
   );
-});
-
-test("the results screen has no status card and no Actions in the header", async ({
-  page,
-}) => {
-  await freshRun(page, "/?seed=1&month=9&last=9");
-  await playToResults(page);
-
-  await expect(page.getByTestId("status-card")).toHaveCount(0);
-  await expect(page.getByTestId("open-project")).toHaveCount(0);
-  await expect(page.getByTestId("actions-left")).toHaveCount(0);
-  await expect(page.getByTestId("month")).toBeVisible();
-  await expect(page.getByTestId("run-menu")).toBeVisible();
 });
