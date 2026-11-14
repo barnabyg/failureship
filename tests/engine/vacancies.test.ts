@@ -184,6 +184,13 @@ describe("a player high on paper with no seat open", () => {
     expect(nudges(views)).toEqual([]);
   });
 
+  it("refuses words that say anyone but {who}", () => {
+    const raw = vacancyRaw();
+    raw.vacancies.nudge.body = "{decider} DECIDES";
+
+    expect(() => parseContent(raw)).toThrow(/nudge says "\{decider\}"/);
+  });
+
   it("needs its month in balance.json once its words are written", () => {
     const raw = vacancyRaw();
     raw.balance.nudgeAt = undefined;

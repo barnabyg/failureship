@@ -498,7 +498,8 @@ brings a new one. A Plan is followed to its end whoever the player works for by 
   leave its deadline to that: a Scene can say `{plan}` for the title of your boss's Plan.
 - `upstairs` is a `title` and `body` left in the inbox as the player first hears of it, wherever
   that is: the boss, in their own words, saying that the Plan done takes them upstairs and leaves
-  their seat behind. It says nothing of who would fill it. The card's line saying the same is
+  their seat behind. It says nothing of who would fill it, and is told as written, so a check
+  refuses any placeholder in it. The card's line saying the same is
   `grandPlanOpens` in [`ui.json`](#uijson).
 - `ways` are how it can be completed, each `how` it is done: `reality` or `appearance`. Every Plan
   needs at least one of each. The first way whose `when` holds, in time, completes it at once. A
@@ -961,8 +962,8 @@ the player a boss's boss, unless it wins the run.
   [`balance.json`](#balancejson), to a player whose Official standing is in its top band while no
   seat has ever opened: that standing gets nobody a seat, and seats open when someone above moves.
   It is never told while a seat is open or once one has been decided. `from` lists the Characters
-  who can say it, the first still here as `{who}`, with its `title` and `body`. Left out, it is
-  never told.
+  who can say it, the first still here as `{who}`, with its `title` and `body`, which a check
+  refuses any other placeholder in. Left out, it is never told.
 - Whoever holds influence over the holder on the Power Map decides, or the holder if nobody does.
   For a holder who has left or been fired, it is whoever held influence over them as they went; if
   that person goes too, whoever held influence over them, and so on up, or with nobody above, the

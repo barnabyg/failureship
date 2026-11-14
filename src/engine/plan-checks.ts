@@ -7,6 +7,7 @@ import {
 } from "./content";
 import { findNamedKinds } from "./consequence-checks";
 import { dependsOnHiddenTruth } from "./truth-checks";
+import { placeholdersBeyond } from "./vacancy-checks";
 
 type CheckCondition = (owner: string, condition: Condition) => void;
 
@@ -43,6 +44,11 @@ export function findBrokenPlans(
     if (plan.lasts < 2 || plan.lasts > content.balance.monthsPerRun) {
       problems.push(
         `${owner} lasts ${String(plan.lasts)} months, which must be several and within the run.`,
+      );
+    }
+    for (const token of placeholdersBeyond(plan.upstairs, [])) {
+      problems.push(
+        `${owner}'s upstairs says "${token}", but the boss's words are told as written.`,
       );
     }
     for (const where of plan.heardIn) {
