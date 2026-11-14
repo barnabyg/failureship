@@ -45,30 +45,6 @@ test("opens the meeting Scene from the tower and makes a choice", async ({
   await expect(page.getByTestId("hotspot-kitchen")).toBeEnabled();
 });
 
-test("the Scene leaves the hint readable at 1280x800", async ({ page }) => {
-  await reachMeeting(page, "pub");
-
-  const panel = await page.getByTestId("panel-scene").boundingBox();
-  const hint = await page.locator(".next").boundingBox();
-  if (!panel || !hint) throw new Error("Nothing to measure.");
-
-  expect(hint.x + hint.width).toBeLessThanOrEqual(panel.x);
-});
-
-test("the meeting shows a dealt sign for each person present", async ({
-  page,
-}) => {
-  await reachMeeting(page, "report");
-
-  const signs = page.getByTestId("behaviour");
-  await expect(signs).toHaveCount(6);
-  const boss = page
-    .getByTestId("person")
-    .filter({ has: page.getByTestId("treatment") });
-  await expect(boss.getByTestId("behaviour")).toHaveCount(1);
-  await expect(signs.filter({ hasText: "{who}" })).toHaveCount(0);
-});
-
 /** What the person with this job title was seen doing, in their own row. */
 function behaviourOf(page: Page, title: RegExp) {
   return page
@@ -118,6 +94,8 @@ test("the full month reads differently for different choices", async ({
   await page.getByTestId("hotspot-meeting").click();
   await expectToSayWhatIsNext(page);
   await page.getByTestId("scene-option-use-buzzword").click();
+  await expect(happened(page)).toBeVisible();
+  await expect(page.getByTestId("hotspot-meeting")).toBeDisabled();
   await expectToSayWhatIsNext(page);
   await readResult(page);
   await page.getByTestId("hotspot-kitchen").click();
@@ -132,9 +110,11 @@ test("the full month reads differently for different choices", async ({
   await freshRun(page, "/?seed=1");
   await answerAnyNotification(page);
   await page.getByTestId("hotspot-meeting").click();
+  // Filing the report instead of the pub leaves no Buzzword to use.
   await expect(page.getByTestId("panel-scene")).not.toContainText(
     "strategic patience",
   );
+  await expect(page.getByTestId("scene-option-use-buzzword")).toHaveCount(0);
   await page.getByTestId("scene-option-say-nothing").click();
   await readResult(page);
   await page.getByTestId("hotspot-kitchen").click();
@@ -144,39 +124,6 @@ test("the full month reads differently for different choices", async ({
   await expect(page.getByTestId("story-reported")).not.toHaveText(afterPub);
 });
 
-test("the report leaves no Buzzword option in the meeting", async ({
-  page,
-}) => {
-  await reachMeeting(page, "report");
-
-  await expect(page.getByTestId("panel-scene")).toBeVisible();
-  await expect(page.getByTestId("scene-option-use-buzzword")).toHaveCount(0);
-});
-
-test("the pub, then the meeting, then using the Buzzword", async ({ page }) => {
-  await reachMeeting(page, "pub");
-
-  await page.getByTestId("scene-option-use-buzzword").click();
-
-  await expect(happened(page)).toBeVisible();
-  await expect(page.getByTestId("hotspot-meeting")).toBeDisabled();
-});
-
-test("every Scene choice is visible without scrolling at 1280x800", async ({
-  page,
-}) => {
-  await reachMeeting(page, "pub");
-
-  await expect(page.getByTestId("scene-option-say-nothing")).toBeInViewport({
-    ratio: 1,
-  });
-  const panel = page.getByTestId("panel-scene");
-  const scrolls = await panel.evaluate(
-    (el) => el.scrollHeight > el.clientHeight,
-  );
-  expect(scrolls).toBe(false);
-});
-
 test("each Character's row holds what they were seen doing", async ({
   page,
 }) => {
@@ -184,7 +131,12 @@ test("each Character's row holds what they were seen doing", async ({
 
   const rows = page.getByTestId("person");
   await expect(rows).toHaveCount(6);
-  await expect(page.getByTestId("behaviour")).toHaveCount(6);
+  // A dealt sign for each person present, the boss's too.
+  const signs = page.getByTestId("behaviour");
+  await expect(signs).toHaveCount(6);
+  await expect(signs.filter({ hasText: "{who}" })).toHaveCount(0);
+  const boss = rows.filter({ has: page.getByTestId("treatment") });
+  await expect(boss.getByTestId("behaviour")).toHaveCount(1);
   // Only a Senior Analyst can rework the figures, and how they are with you
   // is folded into the same line.
   const analyst = behaviourOf(page, /^Senior Analyst$/);
@@ -224,18 +176,24 @@ test("a meeting's people and choices fit without scrolling at 1600x900", async (
   );
 });
 
-for (const [width, height] of [
-  [1280, 720],
-  [1920, 1080],
+// 1280x720 is the smallest screen kept. The pub's Buzzword adds a choice, so its
+// meeting is the longest list of them.
+for (const [width, height, answer, seed] of [
+  [1280, 720, "report", 5],
+  [1280, 720, "pub", 1],
+  [1920, 1080, "report", 5],
 ] as const) {
-  test(`keeps every choice in view, in text of 15 px or more, at ${String(width)}x${String(height)}`, async ({
+  test(`keeps every choice in view, in text of 15 px or more, and the hint readable, at ${String(width)}x${String(height)} after the ${answer}`, async ({
     page,
   }) => {
     await page.setViewportSize({ width, height });
-    await reachMeeting(page, "report", 5);
+    await reachMeeting(page, answer, seed);
 
     const options = page.locator('[data-testid^="scene-option-"]');
     expect(await options.count()).toBeGreaterThan(1);
+    if (answer === "pub") {
+      await expect(page.getByTestId("scene-option-use-buzzword")).toBeVisible();
+    }
     for (const option of await options.all()) {
       await expect(option).toBeInViewport({ ratio: 1 });
     }
@@ -251,5 +209,11 @@ for (const [width, height] of [
         els.map((el) => parseFloat(getComputedStyle(el).fontSize)),
       );
     expect(Math.min(...sizes)).toBeGreaterThanOrEqual(15);
+
+    // The Scene leaves the hint beside it readable.
+    const box = await panel.boundingBox();
+    const hint = await page.locator(".next").boundingBox();
+    if (!box || !hint) throw new Error("Nothing to measure.");
+    expect(hint.x + hint.width).toBeLessThanOrEqual(box.x);
   });
 }
