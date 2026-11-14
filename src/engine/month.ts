@@ -33,7 +33,7 @@ import {
   noteRivals,
 } from "./rivals";
 import { drawFor, pick } from "./rng";
-import { fillVacancies } from "./vacancies";
+import { fillVacancies, nudgeTheWaiting } from "./vacancies";
 import { openScene } from "./scenes";
 import type { Landing, MonthRecord, State, Step, World } from "./state";
 
@@ -82,6 +82,7 @@ function happenAsMonthOpens(state: State, content: Content): void {
   surfaceRisks(state, content);
   blowWhistles(state, content);
   scheduleEvents(state, content);
+  nudgeTheWaiting(state, content);
   const { input } = content.project;
   const colleague = state.truth.characters.find(
     (c) => c.id === input?.character && !isGone(state, c.id),

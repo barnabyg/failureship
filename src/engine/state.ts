@@ -481,6 +481,8 @@ export interface State extends MonthRecord {
   plans: TakenPlan[];
   /** Every seat that has fallen vacant, and who really decided it. Never shown until decided. */
   vacancies: Vacancy[];
+  /** The month the player was told that waiting for a seat will not help, if they have been. */
+  nudgedIn: number | null;
   /** Everyone who has left the company, for the rest of the run, and how. */
   gone: { character: string; month: number; how: "left" | "fired" }[];
   /** Job titles taken by moving up, which stand in for those written. */

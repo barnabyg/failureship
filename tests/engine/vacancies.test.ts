@@ -9,7 +9,7 @@ import {
   type Run,
 } from "../../src/engine";
 import { readHiddenTruth } from "../../src/engine/hidden-truth";
-import { answer, play } from "./grand-plan-fixture";
+import { answer, never, play } from "./grand-plan-fixture";
 import { everyNotice, everyTold, firstTold } from "./landed";
 import {
   decidedOn,
@@ -137,6 +137,58 @@ describe("a seat falling vacant", () => {
         ["ben", "cal", "you"].sort(),
       );
     }
+  });
+});
+
+describe("a player high on paper with no seat open", () => {
+  /**
+   * The fixture with the nudge from month 3, standing starting this high, and
+   * a Plan left undone never blamed on the player, so that it stays there.
+   */
+  function nudgingRaw(start: number, at = 3) {
+    const raw = vacancyRaw();
+    raw.balance.nudgeAt = at;
+    raw.standing.start = start;
+    for (const plan of raw.grandPlans.plans) plan.failed.blame.chance = never;
+    return raw;
+  }
+  const nudging = (start: number) => parseContent(nudgingRaw(start));
+  const nudges = (views: PlayerView[]) =>
+    everyTold(views).filter(({ told }) => told.title === "NUDGE");
+
+  it("is told once, by a Character, that waiting will not help", () => {
+    const views = play(startRun({ seed: 1, content: nudging(80) }), "leave");
+
+    const told = nudges(views);
+    expect(told.map(({ month }) => month)).toEqual([3]);
+    expect(told[0]?.told.body).toMatch(/^\S.* WAITING-WONT-HELP$/);
+  });
+
+  it("is not told while standing is anything less than its top band", () => {
+    const views = play(startRun({ seed: 1, content: nudging(50) }), "leave");
+
+    expect(nudges(views)).toEqual([]);
+  });
+
+  it("is not told once a seat has opened", () => {
+    const views = playThrough(startRun({ seed: 1, content: nudging(80) }));
+
+    expect(firstTold(views, "SEAT-OPEN")?.month).toBe(3);
+    expect(nudges(views)).toEqual([]);
+  });
+
+  it("is not told before its month", () => {
+    const content = parseContent(nudgingRaw(80, 5));
+    const views = play(startRun({ seed: 1, content }), "leave");
+
+    expect(nudges(views)).toEqual([]);
+  });
+
+  it("needs its month in balance.json once its words are written", () => {
+    const raw = vacancyRaw();
+    raw.balance.nudgeAt = undefined;
+
+    expect(() => parseContent(raw)).toThrow(/nudge.*balance\.json/);
   });
 });
 

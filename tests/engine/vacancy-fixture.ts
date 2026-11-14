@@ -58,6 +58,7 @@ export function vacancyRaw() {
   return {
     ...base,
     hiddenTruth: { ...base.hiddenTruth, charactersWithFact: 3 },
+    balance: { ...base.balance, nudgeAt: 3 as number | undefined },
     characters: [
       { id: "ana", name: "Ana Abel", title: "Boss", reportsTo: "dee" },
       { id: "ben", name: "Ben Bird", title: "Analyst", reportsTo: "ana" },
@@ -188,6 +189,11 @@ export function vacancyRaw() {
         left: { title: "ASIDE-LEFT", body: "ASK-UPSTAIRS" },
         fired: { title: "ASIDE-FIRED", body: "ASK-UPSTAIRS" },
         created: { title: "ASIDE-CREATED", body: "ASK-UPSTAIRS" },
+      },
+      nudge: {
+        from: ["ben", "cal"],
+        title: "NUDGE",
+        body: "{who} WAITING-WONT-HELP",
       },
       you: "YOU-IN-WORDS",
       passedOver: {

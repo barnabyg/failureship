@@ -38,7 +38,7 @@ seed 3 plain m1: 87281ccf 4ca89a12 50cfd3dc c8ab1486 6e71e159 8aeab574
 seed 3 plain m2: 920ab304 b966b4db 63aea68f dfdf74f6 cfe6559e e5b6b39d a3dabce3
 seed 3 plain m3: 45daf577 6053afc0 891fc8a3 c65caddf 699f6943 4689dd29 76e33ad0 a9d48f8c
 seed 3 plain m4: f4fef613 dbd77077 137fa9d0 4344a90f 826a6084 54069fd3 b64aca4e cd3e89f3
-seed 3 plain m5: ed7e4356 e2a4684c bcd7836b e417eb1a 0f3201be a1583855 ecb898d7
+seed 3 plain m5: 6e13c5eb 74622709 c68835f2 df8a0402 2c14c2d8 a268ff9a ecb898d7
 seed 3 plain m6: a300eba4 90d1ded5 accff892 a6e0887f a94f0aee a70a6ff7 0a3e4a89 cd2b37eb
 seed 3 plain m7: 113e3431 8bfb3ed0 b7f8a032 4ffb7987 0ecc40cd 8c83a4ee 61f885b2 3391a45c
 seed 3 plain m8: 3fb8da85 82f38dcc 618d1412 5bc2d4dc 66b6d84d 1f228791 28d28ae6 45801886 3f08f29b
@@ -74,7 +74,7 @@ seed 1 first m1: 99a6186b e1001725 9d435660 31ae9d90 94dabea6
 seed 1 first m2: 5fac1c97 588e02d5 32398732 883b1178 3f4588b4
 seed 1 first m3: b9f37f8a 77781fe4 a26fc052 0f68ac6d d44f7075 1c56787b
 seed 1 first m4: 39919cb1 5e44c8f6 3f777dd7 b89d2303 acaca015 41bc35f0
-seed 1 first m5: 2363163c 9bbedc2c f9266720 07fd2fa2 f321407a 7b45ed79 8320435c
+seed 1 first m5: 2be774ef 71dbbf5a 845e85fc 12b0c02c e6adb242 05317d02 8320435c
 seed 1 first m6: 4ac4b6bd c3336236 08f744f4 cd02231a 2a12512a 452c6152 5ef0d012
 seed 1 first m7: cde34169 dd0c4796 1525af6e d13af28f fa78466d 01a77343 6b109585 0612b57c b0f23a3d
 seed 1 first m8: c60a2b09 7f5ae2a6 3650faa8 d86b2505 db7570a4 190853c0 748eabab defff08e
@@ -110,7 +110,7 @@ seed 3 first m1: 87281ccf a875f766 4d994ea2 e72ce0dc 7e3fc0b8
 seed 3 first m2: cc2d6b04 2432458a 258ad4d5 d37fa275 deeebe26 32bd3562
 seed 3 first m3: 50abbc88 2019d3ea 980d6b5a 572bafef 5455b73a 2f4306bf
 seed 3 first m4: 73cdc0e6 d0a69473 0ef1e120 98008b82 f184559f 66527691
-seed 3 first m5: e8780879 3e5a2597 6f1888d1 ca594526 2ceb4afd 115a6190
+seed 3 first m5: 065a948d 89f7df49 e6adb717 82f6497f 262fcfcf 115a6190
 seed 3 first m6: 805cdc24 458e1b11 782746e3 faf98e08 f8e62c9b 8c23c37c ee0109c7
 seed 3 first m7: 396a3609 e1fecaa8 669d4ed1 ae3f6197 0d5b80aa 513b2cc1 77864d87
 seed 3 first m8: 75a98f2c 277d162a 3531d6ac 69efb72f 901a55ac aaee060e 4f0a0412 51d754a5 ccae35ea
@@ -128,7 +128,7 @@ seed 8 first m1: ea982af3 3b83bd1b 0e29092c 51ce402d cae773ce
 seed 8 first m2: 885efd84 96fc28e9 2c0e9758 b11d742e b22cc1bb
 seed 8 first m3: e90c61a1 1beb946e 5c847821 2002c83b e221789d d0c4a439
 seed 8 first m4: f22e8ad4 20995727 70076e7a 67bae7f1 0966566d 051996b6
-seed 8 first m5: f2ee353b a4fd81e3 a76acb57 549da899 db7c6a8b 8c7436c0
+seed 8 first m5: fdbae7a4 a8b9a5d6 7c665e2e cc1c2ef0 e032ae4e 8c7436c0
 seed 8 first m6: f07b5a65 7f9239d0 d94f6991 c1485f9c 9ff681b2 71aacafd 52ea0bf7
 seed 8 first m7: f0b3fa95 f5f1ea66 32eedf00 0dbaec84 f13d8cf9 c840cb97 a61ee4cb
 seed 8 first m8: 6663a12e 33fdc47f 190aefc6 7c41f937 a22e5718 0cf1cef5 f1ea514d 6617150f
@@ -266,7 +266,7 @@ seed 3 reckless m1: 87281ccf 4ca89a12 50cfd3dc c8ab1486 6e71e159 8aeab574
 seed 3 reckless m2: 920ab304 b966b4db 63aea68f dfdf74f6 cfe6559e e5b6b39d a3dabce3
 seed 3 reckless m3: 45daf577 6053afc0 891fc8a3 c65caddf 699f6943 4689dd29 76e33ad0 a9d48f8c
 seed 3 reckless m4: f4fef613 dbd77077 137fa9d0 4344a90f 826a6084 7b5aef88 b64aca4e 6cc39306
-seed 3 reckless m5: ed7e4356 e2a4684c bcd7836b e417eb1a 0f3201be a1583855 ecb898d7
+seed 3 reckless m5: 6e13c5eb 74622709 c68835f2 df8a0402 2c14c2d8 a268ff9a ecb898d7
 seed 3 reckless m6: a300eba4 90d1ded5 accff892 a6e0887f fd16efcf fc46bf8c a5b4921e aec8935c
 seed 3 reckless m7: c42e63fc 34523575 f088cbd3 ba3c2ebd e7904f3a c7a7a42e d1ebc25f f183ce2d
 seed 3 reckless m8: 92402472 ee16e457 26a2396c 0f8f8904 b4d6fbf1 4ae3412b 1449bd42 858a8954

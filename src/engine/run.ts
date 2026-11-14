@@ -106,6 +106,7 @@ function dealtState(seed: number, content: Content): State {
     deals: [],
     plans: [],
     vacancies: [],
+    nudgedIn: null,
     gone: [],
     titles: {},
     ...startingGauges(content),

@@ -234,6 +234,11 @@
       "body": "Someone by the kettle, quietly: \"A new post under {holder}, and {holder} won't be the one who fills it. Find out who {holder} really listens to. And watch who is suddenly in everyone's diary.\""
     }
   },
+  "nudge": {
+    "from": ["analyst", "admin", "projects"],
+    "title": "A word over the partition",
+    "body": "{who} glances at your latest review, which is glowing, and hands it back. \"Lovely. Nobody here was ever promoted for a good review. Seats open when someone above moves, up or out, and nothing moves your boss up like a Grand Plan done. Waiting is just sitting, with better paperwork.\""
+  },
   "you": "you",
   "passedOver": {
     "forYou": {

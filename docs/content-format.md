@@ -188,6 +188,9 @@ Actions a month, months in a run and the cost of each choice.
   makes their mood `warm` or `cold`.
 - `bossBeliefKeeps` is how much of the boss's belief carries into each new month, so that it is
   mostly about lately.
+- `nudgeAt` is the month from which a player at the top of Official standing, with no seat yet
+  open, is told that waiting will not help: `nudge` in [`vacancies.json`](#vacanciesjson), which
+  needs it.
 
 ## `behaviours.json`
 
@@ -954,6 +957,12 @@ the player a boss's boss, unless it wins the run.
   whatever the floor: something unofficial that points the player at whoever really decides, such
   as who the holder answers to, without naming them or their kind. It can say `{holder}`, and a
   check refuses any other placeholder.
+- `nudge` is told once in a run, as a month opens from `nudgeAt` in
+  [`balance.json`](#balancejson), to a player whose Official standing is in its top band while no
+  seat has ever opened: that standing gets nobody a seat, and seats open when someone above moves.
+  It is never told while a seat is open or once one has been decided. `from` lists the Characters
+  who can say it, the first still here as `{who}`, with its `title` and `body`. Left out, it is
+  never told.
 - Whoever holds influence over the holder on the Power Map decides, or the holder if nobody does.
   For a holder who has left or been fired, it is whoever held influence over them as they went; if
   that person goes too, whoever held influence over them, and so on up, or with nobody above, the

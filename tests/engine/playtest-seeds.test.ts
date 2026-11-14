@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 import type { PlayerView } from "../../src/engine";
 import { readHiddenTruth } from "../../src/engine/hidden-truth";
-import { firstTold } from "./landed";
+import { everyTold, firstTold, monthsTold } from "./landed";
 import { CLEAN, CLIMB, FAKED, REPORT, playRun } from "./real-runs";
 
 /** The month a notice with this title was told, if it was. */
@@ -17,6 +17,27 @@ const endOf = (views: readonly PlayerView[]) => {
   if (step?.kind !== "results") throw new Error("No results.");
   return step;
 };
+
+// docs/playtest.md's "Signposts to the way up", each played as its row says.
+describe("the signposts to the way up", () => {
+  it("seed 3, played plainly, hears the boss's ticket upstairs in month 1, and is nudged once in month 5", () => {
+    const { run, views } = playRun(3);
+
+    expect(told(views, "A word from your boss")).toBe(1);
+    expect(monthsTold(views, "A word over the partition")).toEqual([5]);
+    expect(readHiddenTruth(run).vacancies[0]?.opened).toBeGreaterThan(5);
+  });
+
+  it("seed 2, on the Grand Plan route, hears an aside as the seat opens, and is never nudged", () => {
+    const { views } = playRun(2, CLEAN);
+    const titles = everyTold(views).map(({ told }) => told.title);
+    const opened = titles.indexOf("An exciting opportunity");
+
+    expect(told(views, "An exciting opportunity")).toBe(6);
+    expect(titles[opened + 1]).toBe("Overheard by the kettle");
+    expect(titles).not.toContain("A word over the partition");
+  });
+});
 
 // docs/playtest.md's "Seven seeds to start with", each played as its row says.
 describe("the seven seeds the playtest starts with", () => {

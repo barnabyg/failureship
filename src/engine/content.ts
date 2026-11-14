@@ -167,6 +167,12 @@ export const contentSchema = z.strictObject({
     }),
     /** How much of the boss's belief carries into each new month. */
     bossBeliefKeeps: z.number().min(0).max(1).default(1),
+    /**
+     * The month from which a player at the top of Official standing, with no
+     * seat ever open, is told once that waiting will not help: `nudge` in
+     * `vacancies.json`. Needed once that is written.
+     */
+    nudgeAt: z.number().int().positive().optional(),
   }),
   boss,
   hiddenTruth,

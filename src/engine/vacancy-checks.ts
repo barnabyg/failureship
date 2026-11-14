@@ -152,6 +152,18 @@ export function findBrokenVacancies(
   if (written.seats.filter((s) => s.win).length > 1) {
     problems.push("Only one seat can win the run.");
   }
+  if (written.nudge) {
+    if (content.balance.nudgeAt === undefined) {
+      problems.push(
+        "vacancies.json's nudge is written, so balance.json needs its month, nudgeAt.",
+      );
+    }
+    for (const who of written.nudge.from) {
+      if (!characters.has(who)) {
+        problems.push(`vacancies.json's nudge is said by unknown "${who}".`);
+      }
+    }
+  }
   for (const [way, aside] of Object.entries(written.asides)) {
     const said = `${aside.title} ${aside.body}`.match(/\{\w+\}/g) ?? [];
     for (const token of said.filter((t) => t !== "{holder}")) {

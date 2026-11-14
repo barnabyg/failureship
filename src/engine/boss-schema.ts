@@ -459,6 +459,13 @@ export const vacancies = z.strictObject({
    * naming them or their kind. Says {holder}, and nothing else.
    */
   asides: byWay(notice),
+  /**
+   * Told once in a run, as a month opens from `nudgeAt` in `balance.json`, to a
+   * player at the top of Official standing while no seat has ever opened: that
+   * standing gets nobody promoted, and seats open when someone above moves. Said
+   * by the first of `from` still here, as {who}. Left out, it is never told.
+   */
+  nudge: notice.extend({ from: z.array(id).min(1) }).optional(),
   /** How the decision's words call the player. */
   you: text,
   /** What each candidate passed over keeps, by whether the player had the seat. */
