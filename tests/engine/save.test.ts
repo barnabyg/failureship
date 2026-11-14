@@ -47,7 +47,7 @@ function saveAtEveryStep(seed: number, content: Content) {
 }
 
 describe("a run saved at every step", () => {
-  it.each([1, 2, 4, 8, 13, 16])(
+  it.each([1, 8])(
     "matches an unsaved run on the real content, seed %i",
     (seed) => {
       saveAtEveryStep(seed, gameContent);

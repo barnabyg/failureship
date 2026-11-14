@@ -402,7 +402,7 @@ function namesSomeoneGone(view: PlayerView, gone: readonly string[]): boolean {
   });
 }
 
-describe("a run in which someone leaves", { timeout: 120_000 }, () => {
+describe("a run in which someone leaves", () => {
   const leavers = Object.keys(gameContent.changing?.leaving ?? {});
 
   // The Head of Operations, your boss's boss on Floor 1 and your boss on Floor
@@ -423,16 +423,18 @@ describe("a run in which someone leaves", { timeout: 120_000 }, () => {
   for (const who of [...leavers.map((id) => [id]), team]) {
     it(`completes, Scenes, report and Find Out included, when ${who.join(" and ")} leave`, () => {
       const content = leavingContent(...who);
-      // Four Believers at once are rare, so this looks further than the rest.
-      const seeds = WIDE.filter((seed) =>
+      // The leaving is forced in month 1, so the variety worth having is in who
+      // leaves, one case each, not in the deal: one deal on which they are all
+      // Believers will do. Four at once are rare, so this looks far for it.
+      const seed = WIDE.find((seed) =>
         who.every(
           (id) =>
             kindsAtStart(seed, content).find((c) => c.id === id)?.kind ===
             "believer",
         ),
-      ).slice(0, 4);
-      expect(seeds.length).toBeGreaterThan(0);
-      for (const seed of seeds) {
+      );
+      expect(seed).toBeDefined();
+      if (seed !== undefined) {
         for (const style of ["plain", "walk"] as const) {
           const run = startRun({ seed, content });
           let view = run.view();
@@ -469,37 +471,34 @@ describe("a run in which someone leaves", { timeout: 120_000 }, () => {
   }
 });
 
-describe("the real Believers", () => {
-  // tests/e2e/changes.spec.ts plays this: blamed in month 2 and let down over the
-  // laptops, the Senior Analyst changes before the end of the run.
-  it("keeps the deal that the browser test uses", () => {
-    const run = startRun({ seed: CHANGE_SEED, content: gameContent });
-    const truth = readHiddenTruth(run);
-
-    expect(truth.characters.find((c) => c.id === "analyst")?.kind).toBe(
-      "believer",
+// The playtest's scenario: the same choices change the Senior Analyst three ways.
+// tests/e2e/changes.spec.ts plays seed 24 too: blamed in month 2 and let down
+// over the laptops, the Senior Analyst, a Believer, changes before the end.
+it("keeps the playtest's seeds, on which the Senior Analyst changes each way", () => {
+  const became = (seed: number) => {
+    const run = startRun({ seed, content: gameContent });
+    const analyst = readHiddenTruth(run).characters.find(
+      (c) => c.id === "analyst",
     );
     const view = playBurningTheAnalyst(run);
     if (view.step.kind !== "results") throw new Error("No results.");
-    expect(view.step.changed.map((c) => c.title)).toContain("Senior Analyst");
-  });
-});
-
-const CHANGE_SEED = 24;
-
-// The playtest's scenario: the same choices change the Senior Analyst three ways.
-it("keeps the playtest's seeds, on which the Senior Analyst changes each way", () => {
-  const became = (seed: number) => {
-    const view = playBurningTheAnalyst(
-      startRun({ seed, content: gameContent }),
-    );
-    if (view.step.kind !== "results") throw new Error("No results.");
-    return view.step.changed.map((c) => [c.month, c.to]);
+    return {
+      kind: analyst?.kind,
+      titles: view.step.changed.map((c) => c.title),
+      changed: view.step.changed.map((c) => [c.month, c.to]),
+    };
   };
 
-  expect(became(24)).toEqual([[6, gameContent.changing?.became.whistleblower]]);
-  expect(became(107)).toEqual([[6, gameContent.changing?.became.left]]);
-  expect(became(4)).toEqual([[5, gameContent.changing?.became.practitioner]]);
+  const browsers = became(24);
+  expect(browsers.kind).toBe("believer");
+  expect(browsers.titles).toContain("Senior Analyst");
+  expect(browsers.changed).toEqual([
+    [6, gameContent.changing?.became.whistleblower],
+  ]);
+  expect(became(107).changed).toEqual([[6, gameContent.changing?.became.left]]);
+  expect(became(4).changed).toEqual([
+    [5, gameContent.changing?.became.practitioner],
+  ]);
 });
 
 /** Plays plainly, but blames the Senior Analyst, and lets them down over laptops. */

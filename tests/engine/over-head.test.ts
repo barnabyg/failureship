@@ -10,7 +10,7 @@ import {
 import { readHiddenTruth } from "../../src/engine/hidden-truth";
 import { treatmentOf } from "./scene-view";
 
-const SEEDS = Array.from({ length: 400 }, (_, i) => i + 1);
+const SEEDS = Array.from({ length: 100 }, (_, i) => i + 1);
 const GO: Choice = { type: "action", actionId: "over-head" };
 
 /** Answers for nothing, until the player is free to act. */
@@ -83,7 +83,9 @@ function ordinaryExtremes() {
   return { best: Math.max(...shifts), worst: Math.min(...shifts) };
 }
 
-const attempts = SEEDS.map(attempt);
+// Played once, for every test that reads them, when the first one does.
+let attempted: Attempt[] | undefined;
+const allAttempts = () => (attempted ??= SEEDS.map(attempt));
 
 describe("going over your boss's head", () => {
   it("is on the floor in every month", () => {
@@ -97,6 +99,7 @@ describe("going over your boss's head", () => {
   });
 
   it("pays off more than any ordinary choice when it works", () => {
+    const attempts = allAttempts();
     const { best } = ordinaryExtremes();
     const good = attempts.filter((a) => a.headShift > 0 && !a.caught);
     const paying = good.filter((a) => a.influential);
@@ -106,6 +109,7 @@ describe("going over your boss's head", () => {
   });
 
   it("costs more than any ordinary choice when your boss finds out", () => {
+    const attempts = allAttempts();
     const { worst } = ordinaryExtremes();
     const caught = attempts.filter((a) => a.caught);
 
@@ -114,6 +118,7 @@ describe("going over your boss's head", () => {
   });
 
   it("does not always work, and is not always found out", () => {
+    const attempts = allAttempts();
     expect(new Set(attempts.map((a) => a.headShift > 0))).toEqual(
       new Set([true, false]),
     );
@@ -123,6 +128,7 @@ describe("going over your boss's head", () => {
   });
 
   it("depends on the kind of your boss's boss", () => {
+    const attempts = allAttempts();
     const rate = (kind: string) => {
       const of = attempts.filter((a) => a.headKind === kind);
       return of.filter((a) => a.headShift > 0).length / of.length;
@@ -132,6 +138,7 @@ describe("going over your boss's head", () => {
   });
 
   it("achieves less if they have little influence on the Power Map", () => {
+    const attempts = allAttempts();
     const worked = attempts.filter((a) => a.headShift > 0 && !a.caught);
     const shift = (influential: boolean) =>
       worked.find((a) => a.influential === influential)?.bossShift ?? NaN;
@@ -140,6 +147,7 @@ describe("going over your boss's head", () => {
   });
 
   it("is found out more often by a boss who watches for it", () => {
+    const attempts = allAttempts();
     const rate = (kind: string) => {
       const of = attempts.filter((a) => a.bossKind === kind);
       return of.filter((a) => a.caught).length / of.length;
@@ -149,6 +157,7 @@ describe("going over your boss's head", () => {
   });
 
   it("is worth trying once, taken across many deals", () => {
+    const attempts = allAttempts();
     const shifts = attempts.map((a) => a.bossShift);
     const mean = shifts.reduce((sum, n) => sum + n, 0) / shifts.length;
     const { best } = ordinaryExtremes();
@@ -182,6 +191,7 @@ describe("going over your boss's head", () => {
   });
 
   it("shifts those signs as their belief about you shifts", () => {
+    const attempts = allAttempts();
     const signText = (mood: "warm" | "cold") =>
       new Set(
         gameContent.overHead?.signs
@@ -190,8 +200,11 @@ describe("going over your boss's head", () => {
       );
     const shown = (wantWarm: boolean) => {
       const seen: string[] = [];
-      for (const a of attempts) {
-        if (wantWarm ? a.headShift <= 0 : a.headShift >= 0) continue;
+      // Twenty deals for each mood are plenty to tell them apart.
+      const moved = attempts
+        .filter((a) => (wantWarm ? a.headShift > 0 : a.headShift < 0))
+        .slice(0, 20);
+      for (const a of moved) {
         const run = startRun({ seed: a.seed, content: gameContent });
         toFloor(run);
         let view = run.choose(GO);

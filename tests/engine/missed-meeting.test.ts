@@ -248,7 +248,8 @@ describe("a meeting you do not go to", () => {
 
   it("follows the stalling bet like any other Demand", () => {
     const outcomes = new Set<string>();
-    for (let seed = 1; seed <= 120; seed++) {
+    // Stops once it has seen both, which the first few deals usually show.
+    for (let seed = 1; seed <= 120 && outcomes.size < 2; seed++) {
       const run = startRun({ seed, content: gameContent });
       playMonth(run, true);
       playMonth(run, false);

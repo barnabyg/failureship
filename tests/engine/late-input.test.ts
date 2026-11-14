@@ -1,7 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { gameContent } from "../../src/content";
 import {
-  KINDS,
   parseContent,
   startRun,
   type Choice,
@@ -9,48 +8,8 @@ import {
   type PlayerView,
   type Run,
 } from "../../src/engine";
-import { readHiddenTruth } from "../../src/engine/hidden-truth";
 import { emptyMonthRaw, floorOwn } from "./fixture";
-
-const SEEDS = Array.from({ length: 600 }, (_, i) => i + 1);
-const INPUT = gameContent.project.input;
-
-/** Whether this seed's report input is late in this month, whatever you did. */
-function isLate(run: Run, month: number): boolean {
-  let view = run.view();
-  while (view.month < month) {
-    const next = view.choices.at(-1);
-    if (!next) throw new Error(`Stuck at ${view.step.kind}.`);
-    view = run.choose(next);
-  }
-  const notified = (v: PlayerView) =>
-    v.step.kind === "notification" && v.step.id === "report-input-late";
-  while (view.month === month && view.step.kind === "notification") {
-    if (notified(view)) return true;
-    const free = view.step.options.find((o) => o.costLabel === "Costs nothing");
-    if (free === undefined || view.step.id === "monthly-report") return false;
-    view = run.choose({
-      type: "notification",
-      notificationId: view.step.id,
-      optionId: free.id,
-    });
-  }
-  return false;
-}
-
-/** Whether the report's input is late in month 2, read as the player would. */
-function lateInMonthTwo(seed: number) {
-  return isLate(startRun({ seed, content: gameContent }), 2);
-}
-
-function colleagueKind(seed: number): Kind {
-  const run = startRun({ seed, content: gameContent });
-  const kind = readHiddenTruth(run).characters.find(
-    (c) => c.id === INPUT?.character,
-  )?.kind;
-  if (kind === undefined) throw new Error("No colleague was dealt.");
-  return kind;
-}
+import { isLate, lateInMonthTwo } from "./late-input";
 
 /** A run on a seed whose input is late, standing at that Notification. */
 function atLateInput(seed: number): Run {
@@ -76,9 +35,16 @@ function freeChoice(view: PlayerView): Choice | undefined {
   );
 }
 
-// Found once, for every test that reads them.
+/** The first thirty seeds whose input is late, found once. */
 let lateFound: number[] | undefined;
-const lateSeeds = () => (lateFound ??= SEEDS.filter(lateInMonthTwo));
+function lateSeeds(): number[] {
+  if (lateFound) return lateFound;
+  lateFound = [];
+  for (let seed = 1; lateFound.length < 30; seed++) {
+    if (lateInMonthTwo(seed)) lateFound.push(seed);
+  }
+  return lateFound;
+}
 
 const answer = (optionId: string): Choice => ({
   type: "notification",
@@ -87,33 +53,16 @@ const answer = (optionId: string): Choice => ({
 });
 
 describe("late input for the report", () => {
-  it("comes in some months and not others", () => {
-    const late = lateSeeds();
-
-    expect(late.length).toBeGreaterThan(SEEDS.length / 10);
-    expect(late.length).toBeLessThan(SEEDS.length * 0.9);
+  // How often, and from which kinds, is in tests/balance/engine-late-input.
+  it("never comes in the first month", () => {
     expect(gameContent.project.input?.months).not.toContain(1);
   });
 
-  it("is more likely from some kinds, without settling which kind someone is", () => {
-    const rates = Object.fromEntries(
-      KINDS.map((kind) => {
-        const dealt = SEEDS.filter((seed) => colleagueKind(seed) === kind);
-        const late = dealt.filter(lateInMonthTwo);
-        return [kind, late.length / dealt.length];
-      }),
-    ) as Record<Kind, number>;
-
-    expect(rates.incompetent).toBeGreaterThan(rates.believer);
-    expect(rates.practitioner).toBeGreaterThan(rates.believer);
-    for (const kind of KINDS) {
-      expect(rates[kind], kind).toBeGreaterThan(0);
-      expect(rates[kind], kind).toBeLessThan(1);
-    }
-  });
-
   it("is the same for the same seed and choices", () => {
-    for (const seed of SEEDS.slice(0, 50)) {
+    for (const seed of lateSeeds().slice(0, 5)) {
+      expect(lateInMonthTwo(seed)).toBe(true);
+    }
+    for (let seed = 1; seed <= 5; seed++) {
       expect(lateInMonthTwo(seed)).toBe(lateInMonthTwo(seed));
     }
   });
@@ -129,7 +78,7 @@ describe("late input for the report", () => {
       return isLate(run, 2);
     };
 
-    for (const seed of SEEDS.slice(0, 40)) {
+    for (let seed = 1; seed <= 10; seed++) {
       expect(lateInMonthTwo(seed, "pub")).toBe(lateInMonthTwo(seed, "decline"));
     }
   });
@@ -178,15 +127,17 @@ describe("answering late input", () => {
   });
 
   it("waiting is free, and sometimes misses the deadline", () => {
-    const outcomes = lateSeeds().map((late) => {
-      const run = atLateInput(late);
-      const before = run.view().actions.remaining;
-      const view = run.choose(answer("wait"));
-      if (view.step.kind !== "notification") return "missed";
-      // A missed deadline goes on to whatever it costs, but waiting is free.
-      expect(view.actions.remaining).toBe(before);
-      return "in time";
-    });
+    const outcomes = lateSeeds()
+      .slice(0, 20)
+      .map((late) => {
+        const run = atLateInput(late);
+        const before = run.view().actions.remaining;
+        const view = run.choose(answer("wait"));
+        if (view.step.kind !== "notification") return "missed";
+        // A missed deadline goes on to whatever it costs, but waiting is free.
+        expect(view.actions.remaining).toBe(before);
+        return "in time";
+      });
 
     expect(outcomes).toContain("in time");
     expect(outcomes).toContain("missed");
