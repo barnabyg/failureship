@@ -1,66 +1,35 @@
-import { expect, test, type Page } from "@playwright/test";
+import { expect, test } from "@playwright/test";
 import {
   answerAnyNotification,
   finishMonth,
   openMeeting,
   playToResults,
-  freshRun,
 } from "./play";
 
-/** One choice in month 1's meeting, then how the boss is with you in month 2. */
-async function treatmentAfter(page: Page, seed: number, option: string) {
-  await freshRun(page, `/?seed=${String(seed)}`);
+// What the boss comes to think, how each kind takes a choice, and that a choice
+// changes how the boss treats you are the engine's: tests/engine/boss.test.ts and
+// boss-kinds.test.ts. This checks the browser shows the reaction and then the
+// treatment, in words alone.
+test("the boss reacts to a choice, and treats you by it the next month, in words alone", async ({
+  page,
+}) => {
+  await page.goto("/?seed=4");
   await answerAnyNotification(page);
   await openMeeting(page);
-  await page.getByTestId(`scene-option-${option}`).click();
+  await page.getByTestId("scene-option-back-boss").click();
+  const reaction = page.getByTestId("boss-reaction");
+  await expect(reaction).not.toBeEmpty();
+  await expect(reaction).not.toContainText(
+    /Believer|Incompetent|Practitioner/i,
+  );
+
   await finishMonth(page);
   await answerAnyNotification(page);
   await openMeeting(page);
-  return page.getByTestId("treatment").innerText();
-}
-
-test("the boss treats you differently after a choice", async ({ page }) => {
-  const changed: number[] = [];
-  // Seed 4 shows it, so it goes first. The rest are there if the content moves it.
-  for (const seed of [4, 1, 2, 3, 5, 6, 7, 8, 9, 10, 11, 12]) {
-    const pleased = await treatmentAfter(page, seed, "back-boss");
-    const snubbed = await treatmentAfter(page, seed, "back-head");
-    if (pleased !== snubbed) changed.push(seed);
-    if (changed.length > 0) break;
-  }
-
-  expect(changed.length).toBeGreaterThan(0);
-});
-
-test("the boss's opinion never appears as a number or label", async ({
-  page,
-}) => {
-  await treatmentAfter(page, 1, "back-boss");
-
+  await expect(page.getByTestId("treatment")).not.toBeEmpty();
   const seen = await page.locator("main").innerText();
   expect(seen).not.toMatch(/opinion|\d+\s*%/i);
   await expect(page.locator(".status")).not.toContainText(/opinion|mood/i);
-});
-
-// The real-content test keeps seed 106's boss a Believer and seed 283's Incompetent.
-test("the same choice lands differently with a different kind of boss", async ({
-  page,
-}) => {
-  const reactionOnSeed = async (seed: number) => {
-    await page.goto(`/?seed=${String(seed)}`);
-    await answerAnyNotification(page);
-    await openMeeting(page);
-    await page.getByTestId("scene-option-back-boss").click();
-    return page.getByTestId("boss-reaction").innerText();
-  };
-
-  const believer = await reactionOnSeed(106);
-  const incompetent = await reactionOnSeed(283);
-
-  expect(believer).not.toEqual(incompetent);
-  expect(`${believer} ${incompetent}`).not.toMatch(
-    /Believer|Incompetent|Practitioner/i,
-  );
 });
 
 // Flattery in the last month's meeting, so the results screen is a month away.

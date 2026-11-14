@@ -37,11 +37,9 @@ test("a later-month start is where the browser helpers would have got to", async
 });
 
 // `npm run play` is the dev server. tests/engine/later-month.test.ts covers the
-// production build. A cache of its own, so as not to race broken-content.spec.ts.
+// production build.
 test("the dev server ignores a later month", async ({ page }) => {
-  const { server, origin } = await startDevServer({
-    cacheDir: "node_modules/.vite-later-month",
-  });
+  const { server, origin } = await startDevServer("later-month");
   try {
     await page.goto(`${origin}?seed=2&month=6`);
 

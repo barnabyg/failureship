@@ -19,6 +19,7 @@ test("plays through a month on a fixed-camera Floor 1", async ({ page }) => {
   await page.goto("/?seed=1");
 
   await expect(page.locator("canvas")).toBeVisible();
+  await expect(page.getByTestId("month")).toContainText("1 of 18");
   await expect(page.getByTestId("actions-left")).toContainText("3");
   await fileTheReport(page);
   await expect(page.getByTestId("actions-left")).toContainText("2");
@@ -44,17 +45,9 @@ test("plays through a month on a fixed-camera Floor 1", async ({ page }) => {
   await expect(story).toContainText("Junior employee Monthly Summary");
   await expect(page.getByTestId("job-title")).toHaveText("Junior employee");
   await expect(page.getByTestId("hotspot-meeting")).toBeDisabled();
-});
-
-test("plays from month 1 into month 2", async ({ page }) => {
-  await page.goto("/?seed=1");
-  await expect(page.getByTestId("month")).toContainText("1 of 18");
-  await fileTheReport(page);
-  await spendAction(page, "kitchen");
-  await spendAction(page, "work");
-  await expect(page.getByTestId("panel-story")).toBeVisible();
   await expect(page.getByTestId("month")).toContainText("1 of 18");
 
+  // Continue on the story opens month 2, with its actions and inbox.
   await page.getByTestId("continue").click();
 
   await expect(page.getByTestId("month")).toContainText("2 of 18");

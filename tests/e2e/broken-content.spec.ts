@@ -20,7 +20,7 @@ let server: ViteDevServer;
 let origin: string;
 
 test.beforeAll(async () => {
-  ({ server, origin } = await startDevServer());
+  ({ server, origin } = await startDevServer("broken-content"));
 });
 
 test.afterAll(async () => {
@@ -56,8 +56,7 @@ test("a data file that is not valid JSON says which and where", async ({
 }) => {
   // The route above fakes what the server sends, but this mistake has to reach
   // the server. So this one reads the file with a key unquoted, and leaves it alone.
-  const notJson = await startDevServer({
-    cacheDir: "node_modules/.vite-not-json",
+  const notJson = await startDevServer("not-json", {
     plugins: [
       {
         name: "unquote-a-key",

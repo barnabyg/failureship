@@ -52,9 +52,7 @@ let server: ViteDevServer;
 let origin: string;
 
 test.beforeAll(async () => {
-  ({ server, origin } = await startDevServer({
-    cacheDir: "node_modules/.vite-buzzwords",
-  }));
+  ({ server, origin } = await startDevServer("buzzwords"));
 });
 
 test.afterAll(async () => {
