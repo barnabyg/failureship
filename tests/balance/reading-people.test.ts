@@ -11,7 +11,7 @@ import { FAKED, FOR_SHOW, climb, type Otherwise } from "../engine/real-runs";
 
 /**
  * Whom a climber asks about each open seat, played through the real game on
- * the same deals as tests/balance/ways-of-playing.test.ts, whose numbers
+ * the same deals as the tests/balance/ways-*.test.ts files, whose numbers
  * docs/playtest.md gives beside these.
  */
 

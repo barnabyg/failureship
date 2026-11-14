@@ -2,20 +2,11 @@ import { describe, expect, it } from "vitest";
 import { gameContent } from "../../src/content";
 import { startRun } from "../../src/engine";
 import { readHiddenTruth } from "../../src/engine/hidden-truth";
-import { SEEDS, playIn, rank, type Style } from "./styles";
+import { SEEDS, rank, type Style } from "./styles";
 
+// How a whole run ends for the boss's belief is in boss-approach.test.ts,
+// which plays the runs it reads.
 describe("the boss's belief stays worth reading", { timeout: 60_000 }, () => {
-  it("ends a run within reach of the thresholds, not many times past them", () => {
-    const { warmAt } = gameContent.balance.mood;
-    const finals = SEEDS.slice(0, 60).flatMap((seed) =>
-      (["straight", "showy", "useful"] as const).map(
-        (style) => playIn(seed, style).bossBelief,
-      ),
-    );
-
-    expect(Math.max(...finals.map(Math.abs))).toBeLessThan(warmAt * 5);
-  });
-
   it("is not settled in the first months, whatever the player does", () => {
     const { warmAt, coldAt } = gameContent.balance.mood;
     const styles: Style[] = ["straight", "showy", "useful"];
