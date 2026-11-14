@@ -107,19 +107,32 @@ test("an address with a seed that cannot be used says so", async ({ page }) => {
   await expect(page).toHaveURL(/seed=\d+/);
 });
 
-test("the end of a run needs no confirmation to leave", async ({ page }) => {
-  await page.goto("/?seed=1&month=9&last=9");
-  await playToResults(page);
+// The Run menu's New run, as well as Restart from seed, leaves the end unasked.
+// results.spec.ts covers the results screen's own New run.
+for (const leave of ["restart-seed", "new-run"] as const) {
+  test(`the end of a run needs no confirmation to leave: ${leave}`, async ({
+    page,
+  }) => {
+    await page.goto("/?seed=1&month=9&last=9");
+    await playToResults(page);
 
-  await openRunMenu(page);
-  await page.getByTestId("seed-input").fill("5");
-  await page.getByTestId("restart-seed").click();
+    await openRunMenu(page);
+    if (leave === "restart-seed") {
+      await page.getByTestId("seed-input").fill("5");
+    }
+    await page.getByTestId(leave).click();
 
-  await expect(page.getByTestId("confirm-leave")).toHaveCount(0);
-  await expect(page.getByTestId("seed")).toHaveText("5");
-  await openInboxIfAny(page);
-  await expect(page.getByTestId("panel-notification")).toBeVisible();
-});
+    await expect(page.getByTestId("confirm-leave")).toHaveCount(0);
+    if (leave === "restart-seed") {
+      await expect(page.getByTestId("seed")).toHaveText("5");
+    } else {
+      await expect(page.getByTestId("seed")).not.toHaveText("1");
+    }
+    await expect(page.getByTestId("month")).toContainText("1 of 18");
+    await openInboxIfAny(page);
+    await expect(page.getByTestId("panel-notification")).toBeVisible();
+  });
+}
 
 test("the Run menu holds New run and Restart from seed, the seed shows beside it, and only Org Chart and Notebook sit beside it", async ({
   page,
@@ -175,15 +188,4 @@ test("the Run menu works from the keyboard, and leaving still asks first", async
   await expect(page.getByTestId("confirm-leave")).toBeVisible();
   await page.getByTestId("confirm-leave-yes").click();
   await expect(page.getByTestId("seed")).toHaveText("8");
-});
-
-test("a new run can be started from the end", async ({ page }) => {
-  await page.goto("/?seed=1&month=9");
-  await playToResults(page);
-
-  await openRunMenu(page);
-  await page.getByTestId("new-run").click();
-
-  await expect(page.getByTestId("seed")).not.toHaveText("1");
-  await expect(page.getByTestId("month")).toContainText("1 of 18");
 });
