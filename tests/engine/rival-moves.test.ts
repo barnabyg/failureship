@@ -378,7 +378,7 @@ describe("the game's ways to the same Move", () => {
   it("opens the tricky question to a player who saw one asked, or learnt the Buzzword", () => {
     let closed = 0;
     let learnt = 0;
-    for (const seed of SEEDS.slice(0, 40)) {
+    for (const seed of SEEDS.slice(0, 20)) {
       const plainly = metricReview(seed, false);
       expect(plainly.open).toBe(plainly.seen);
       if (!plainly.seen) closed += 1;

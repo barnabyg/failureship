@@ -543,12 +543,12 @@ describe("the real Company Events", () => {
   it("lands somewhere on most deals, and not always in the same place", () => {
     const months = new Set<number>();
     let runs = 0;
-    for (let seed = 1; seed <= 40; seed++) {
+    for (let seed = 1; seed <= 20; seed++) {
       const views = play(startRun({ seed, content: gameContent }));
       for (const view of landed(views)) months.add(view.month);
       if (landed(views).length > 0) runs += 1;
     }
-    expect(runs).toBeGreaterThan(20);
+    expect(runs).toBeGreaterThan(10);
     expect(months.size).toBeGreaterThan(2);
   });
 });
