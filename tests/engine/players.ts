@@ -26,6 +26,34 @@ import { everySign } from "./scene-view";
 
 const notifications = everyNotification(gameContent);
 
+/**
+ * The run's save at a view, made once per view and shared by every player and
+ * watcher that reads it. A save fingerprints the whole content, so it is the
+ * dearest read a player makes. Each view is a new object, and the run does not
+ * change between handing out a view and the next choice, so a view stands for
+ * the run as it was then.
+ */
+const saves = new WeakMap<PlayerView, string>();
+function saveAt(view: PlayerView, run: Run): string {
+  let save = saves.get(view);
+  if (save === undefined) {
+    save = run.save();
+    saves.set(view, save);
+  }
+  return save;
+}
+
+/** The run's state at a view, read from its save, once per view. */
+const states = new WeakMap<PlayerView, State>();
+function stateAt(view: PlayerView, run: Run): State {
+  let state = states.get(view);
+  if (state === undefined) {
+    state = (JSON.parse(saveAt(view, run)) as { state: State }).state;
+    states.set(view, state);
+  }
+  return state;
+}
+
 /** The family of Move a choice is, as written in the data, if it has one. */
 function familyOf(choice: Choice): string | undefined {
   if (choice.type === "notification") {
@@ -174,7 +202,7 @@ export function readsTheRoom() {
   const watch = (view: PlayerView, run: Run) => {
     const { step } = view;
     if (step.kind !== "scene") return;
-    const { state } = JSON.parse(run.save()) as { state: State };
+    const state = stateAt(view, run);
     const called = new Map(
       gameContent.characters.map((c) => [
         calledBy(state, gameContent, c.id).toLowerCase(),
@@ -203,9 +231,9 @@ export function readsTheRoom() {
 }
 
 /** Whether an Escape works, by trying it on a copy of the run. */
-function worksOnACopy(run: Run, choice: Choice): boolean {
+function worksOnACopy(view: PlayerView, run: Run, choice: Choice): boolean {
   if (choice.type !== "escape") return false;
-  const copy = resumeRun({ save: run.save(), content: gameContent });
+  const copy = resumeRun({ save: saveAt(view, run), content: gameContent });
   copy.choose(choice);
   const { state } = JSON.parse(copy.save()) as { state: State };
   return state.escapes.at(-1)?.worked ?? false;
@@ -241,7 +269,7 @@ const canBeAMistake = new Set(
 );
 
 /** How many big mistakes a choice adds at once, by trying it on a copy of the run. */
-function mistakesOnACopy(run: Run, choice: Choice): number {
+function mistakesOnACopy(view: PlayerView, run: Run, choice: Choice): number {
   const key =
     choice.type === "scene"
       ? `${choice.sceneId}:${choice.optionId}`
@@ -249,9 +277,8 @@ function mistakesOnACopy(run: Run, choice: Choice): number {
         ? `${choice.notificationId}:${choice.optionId}`
         : "";
   if (!canBeAMistake.has(key)) return 0;
-  const before = (JSON.parse(run.save()) as { state: State }).state.mistakes
-    .length;
-  const copy = resumeRun({ save: run.save(), content: gameContent });
+  const before = stateAt(view, run).mistakes.length;
+  const copy = resumeRun({ save: saveAt(view, run), content: gameContent });
   copy.choose(choice);
   const { state } = JSON.parse(copy.save()) as { state: State };
   return state.mistakes.length - before;
@@ -277,7 +304,7 @@ export const amoralKnowing: Otherwise = (view, run) => {
   const leastHarm = (choices: Choice[]) => {
     if (choices.length < 2) return choices[0];
     const { order } = readHiddenTruth(run).powerMap;
-    const state = stateOf(run);
+    const state = stateAt(view, run);
     const harmless = (c: Choice) =>
       Math.min(
         order.length,
@@ -290,7 +317,7 @@ export const amoralKnowing: Otherwise = (view, run) => {
   const ways = escapesIn(view);
   if (ways.length > 0) {
     return (
-      leastHarm(ways.filter((c) => worksOnACopy(run, c))) ??
+      leastHarm(ways.filter((c) => worksOnACopy(view, run, c))) ??
       takeIt(view) ??
       plainChoice(view)
     );
@@ -298,14 +325,10 @@ export const amoralKnowing: Otherwise = (view, run) => {
   if (approaches(view).length > 0) return knowsThePowerMap(view, run);
   return (
     leastHarm(
-      amoralChoices(view).filter((c) => mistakesOnACopy(run, c) === 0),
+      amoralChoices(view).filter((c) => mistakesOnACopy(view, run, c) === 0),
     ) ?? plainChoice(view)
   );
 };
-
-/** The run's state, read from its save, for the words the screen uses. */
-const stateOf = (run: Run) =>
-  (JSON.parse(run.save()) as { state: State }).state;
 
 /** Whom a label names, by what the player calls them. */
 function namedIn(state: State, label: string): string[] {
@@ -419,9 +442,13 @@ export function readsWell() {
   const seen = new Set<string>();
   const asked = new Set<string>();
   let foundOutIn = 0;
-  let state: State | null = null;
+  // The run as last watched, whose state is read only when something needs
+  // it. Nothing is watched before the first choice, so there is none then.
+  let watched: { view: PlayerView; run: Run } | null = null;
+  const stateNow = () =>
+    watched === null ? null : stateAt(watched.view, watched.run);
   const bossOf = () => {
-    const now = state;
+    const now = stateNow();
     return now
       ? gameContent.characters.find(
           (c) => calledBy(now, gameContent, c.id).toLowerCase() === "your boss",
@@ -430,9 +457,7 @@ export function readsWell() {
   };
   const watch = (view: PlayerView, run: Run) => {
     room.watch(view, run);
-    state = (JSON.parse(run.save()) as { state: State }).state;
-    const boss = bossOf();
-    if (!boss) return;
+    watched = { view, run };
     const texts: string[] = [];
     (function find(node: unknown) {
       if (Array.isArray(node)) node.forEach(find);
@@ -443,6 +468,9 @@ export function readsWell() {
         }
       }
     })({ step: view.step, result: view.result });
+    if (texts.length === 0) return;
+    const boss = bossOf();
+    if (!boss) return;
     for (const text of texts) {
       const key = `${String(view.month)}:${text}`;
       if (seen.has(key)) continue;
@@ -456,6 +484,7 @@ export function readsWell() {
   };
   /** Whether the boss's reactions so far read most like a Believer's. */
   const bossReadsBeliever = () => {
+    if (kindTally.size === 0) return false;
     const tally = kindTally.get(bossOf() ?? "");
     if (!tally) return false;
     const best = [...tally].sort((a, b) => b[1] - a[1])[0];
@@ -475,6 +504,7 @@ export function readsWell() {
    */
   const unreadable = (view: PlayerView, label: string) => {
     const risky = dangerousPeople(view);
+    const state = stateNow();
     const who = state === null ? [] : namedIn(state, label);
     return who.some((id) => risky.has(id) || !asked.has(id));
   };
@@ -496,10 +526,12 @@ export function readsWell() {
       return sure[0] ?? safe[0] ?? takeIt(view) ?? plainChoice(view);
     }
     // Colleagues first: they are whom a climber blames.
-    const above = (c: Choice) =>
-      c.type === "find-out" && state !== null
+    const above = (c: Choice) => {
+      const state = c.type === "find-out" ? stateNow() : null;
+      return c.type === "find-out" && state !== null
         ? Number(calledBy(state, gameContent, c.subjectId).includes("boss"))
         : 0;
+    };
     const askAbout = view.choices
       .filter(
         (c) =>
@@ -540,6 +572,7 @@ export function readsWell() {
       return room.otherwise(view, run);
     const held = (c: Choice) => {
       const label = labelOf(view, c);
+      const state = stateNow();
       const who = state === null ? [] : namedIn(state, label);
       // On a Final Warning, only what can be got out of afterwards.
       if (view.finalWarning && familyOf(c) !== "fabricate") return true;
