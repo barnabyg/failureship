@@ -24,7 +24,7 @@
         "flag": "filed-report"
       },
       "source": "An automatic reply",
-      "text": "Your Monthly Status Report may be read. Worth finding out by whom.",
+      "text": "Your Monthly Status Report may be read, and it would be worth finding out by whom.",
       "verdict": "idle"
     },
     {
@@ -33,7 +33,7 @@
         "flag": "went-to-pub"
       },
       "source": "The Feathers",
-      "text": "Your boss says that nothing on this floor happens without someone upstairs knowing. Your boss says this after the third round.",
+      "text": "After the third round, your boss says that nothing on this floor happens without someone upstairs knowing.",
       "verdict": "idle"
     },
     {
@@ -60,7 +60,7 @@
         "flag": "desk-moved"
       },
       "source": "Facilities",
-      "text": "Someone decided who got the desk with the window. Facilities will not say who.",
+      "text": "Someone decided who got the desk with the window, and Facilities will not say who.",
       "verdict": "idle"
     },
     {
@@ -69,7 +69,7 @@
         "flag": "rumour-spread"
       },
       "source": "The kitchen",
-      "text": "Someone is saying that your project is in trouble. Worth finding out who started it.",
+      "text": "Someone is saying that your project is in trouble, and it would be worth finding out who started it.",
       "verdict": "idle"
     },
     {
@@ -78,7 +78,7 @@
         "flag": "used-buzzword-late"
       },
       "source": "Your own observation",
-      "text": "A phrase you overheard went down well. It may say something about the people who liked it.",
+      "text": "A phrase you overheard went down well, which may say something about the people who liked it.",
       "verdict": "idle"
     },
     {
@@ -87,7 +87,7 @@
         "flag": "burned-by-a-fact"
       },
       "source": "Your own observation",
-      "text": "That went badly, and nobody will say why. There is something you were not told.",
+      "text": "That went badly, and nobody will say why, so there is something you were not told.",
       "verdict": "held"
     },
     {

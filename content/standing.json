@@ -1,6 +1,6 @@
 {
   "label": "Official standing",
-  "title": "How you would fare on paper if a vacancy arose. Paper does not decide who gets it.",
+  "title": "How you would fare on paper if a vacancy arose, although paper does not decide who gets it.",
   "start": 45,
   "reported": {
     "green": 15,
@@ -12,7 +12,7 @@
     {
       "from": 0,
       "label": "Red",
-      "onPaper": "On paper, you would not have been shortlisted. The shortlist would not have mentioned you, as a kindness."
+      "onPaper": "On paper, you would not have been shortlisted, and the shortlist would not have mentioned you, as a kindness."
     },
     {
       "from": 34,
@@ -22,7 +22,7 @@
     {
       "from": 67,
       "label": "Green",
-      "onPaper": "On paper, you were the obvious choice. Paper does not sit on the panel."
+      "onPaper": "On paper, you were the obvious choice, but paper does not sit on the panel."
     }
   ],
   "deeds": [

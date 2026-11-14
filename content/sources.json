@@ -21,7 +21,7 @@
     {
       "id": "buy",
       "title": "At the loading bay",
-      "prompt": "A coffee, a favour, an agreement not to mention something. Only two people on this floor sell, and they sell secrets.",
+      "prompt": "A coffee buys a favour, or an agreement not to mention something, but only two people on this floor sell, and what they sell is secrets.",
       "sources": ["admin", "projects"],
       "topics": {
         "kind": 1,
@@ -42,9 +42,9 @@
       "{said} I'd rather you heard that from me than read it in a restructure."
     ],
     "team-leader": [
-      "Between ourselves, and I'll deny this at your review. {said}",
+      "This is between ourselves, and I'll deny it at your review. {said}",
       "Look, I'm meant to be across everything on this team. {said}",
-      "{said} Let's take that offline. We are offline. You know what I mean."
+      "{said} Let's take that offline, and yes, I know we are offline, but you know what I mean."
     ],
     "office-coordinator": [
       "I take the minutes, so I see what gets left out of them. {said}",
@@ -64,7 +64,7 @@
     "junior-associate": [
       "I only started in the spring, so I still notice things. {said}",
       "We're on the same level, you and me, so I can say this. {said}",
-      "{said} I'm not saying anything. I'm only saying it to you."
+      "{said} I'm not saying anything, I'm only saying it to you."
     ],
     "programme-manager": [
       "I sit across several workstreams, so I hear things in stereo. {said}",
@@ -73,13 +73,13 @@
     ],
     "service-delivery-lead": [
       "It's on my tracker, so it's not gossip, it's a status. {said}",
-      "Within agreed service levels, then. {said}",
+      "This is within agreed service levels, then. {said}",
       "{said} I've raised a ticket, so it's official now."
     ],
     "head-of-transformation": [
       "I look at the whole board, so I see who moves when. {said}",
       "Keep this at the level of the vision, please. {said}",
-      "{said} That is not a decision. It is a direction of travel."
+      "{said} That is not a decision, mind, it is a direction of travel."
     ]
   },
   "influentialCount": 2,
@@ -148,31 +148,31 @@
   "claims": {
     "kind": {
       "believer": [
-        "Have you seen the values statement? {subject} has. Properly, with a pen.",
-        "{subject} was here until nine on Tuesday, and nobody had even asked. I don't think it's for show. I did check.",
+        "Have you seen the values statement? {subject} has, properly, with a pen.",
+        "{subject} was here until nine on Tuesday, and nobody had even asked, and I don't think it's for show, because I did check.",
         "I told {subject} the numbers were a bit off, and {subject} went and fixed them. Who does that?"
       ],
       "incompetent": [
-        "Honestly, ask {subject} what this department does. Go on. I'd like to watch.",
-        "{subject} has been sending round the same spreadsheet since the spring. Nobody has the heart.",
-        "Lovely, {subject}. Really lovely. I wouldn't let {subject} near a budget, mind."
+        "Honestly, go on and ask {subject} what this department does, because I'd like to watch.",
+        "{subject} has been sending round the same spreadsheet since the spring, and nobody has the heart to say.",
+        "{subject} is lovely, really lovely, but I wouldn't let {subject} near a budget, mind."
       ],
       "practitioner": [
         "You'll have noticed {subject} is never in the room when something goes wrong. That takes planning.",
-        "{subject} has been very nice to you, hasn't {subject}? Yes. I'd keep a note of what for.",
+        "{subject} has been very nice to you, hasn't {subject}? I'd keep a note of what for.",
         "I've seen {subject} remember a birthday. It was the birthday of someone's boss."
       ]
     },
     "influence": {
       "high": [
-        "If you want something decided, you'd go to {subject}. Never mind what the chart says.",
+        "If you want something decided, you'd go to {subject}, never mind what the chart says.",
         "Funny, isn't it, how people stop talking when {subject} walks in.",
         "I saw that plan before it went upstairs. {subject} had already been through it in pencil."
       ],
       "low": [
-        "Bless {subject}. Still gets invited to things. Doesn't get told what happened at them.",
+        "Bless {subject}, who still gets invited to things, but doesn't get told what happened at them.",
         "People nod at {subject}, and then they go and ask someone else.",
-        "{subject} thinks that project is still {subject}'s. Nobody has worked out how to say."
+        "{subject} thinks that project is still {subject}'s, and nobody has worked out how to say otherwise."
       ]
     },
     "fact": ["{fact}"]
@@ -180,7 +180,7 @@
   "verdicts": {
     "true": {
       "label": "True",
-      "note": "It was so. Whether that did you any good is another matter."
+      "note": "It was so, although whether that did you any good is another matter."
     },
     "mistaken": {
       "label": "Mistaken",

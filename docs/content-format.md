@@ -7,6 +7,10 @@ editing, see [Change the game](../README.md#change-the-game) in the README.
 The game checks all of this at start-up. Where this page says a mistake is _refused_,
 the game does not start and the page shows what is wrong.
 
+Every player-facing text follows the Prose rule in
+[The game in brief](../failureship-grill-outcome.md#the-game-in-brief): whole, natural
+sentences, not clipped beats.
+
 ## Conditions
 
 A `when` or `requires` holds one of these:
@@ -855,7 +859,7 @@ A Scene is read for who looks at whom, not for prose, so it is held to a word bu
   longest treatment. A plain line is left out, so it is not counted, and a quarterly review shows
   no behaviours. Each part, such as `{holder}` or `{plan}`, counts as one word, as a name is read
   at a glance. Names and job titles at the head of each row are not counted.
-- Write `narration` as one sentence, and each sign as one or two short ones.
+- Write `narration` as one sentence, and each sign as one or two brief ones.
 - An option says at most 8 words, counted the same way, so that it fits on one line.
 
 `scene-checks.ts` refuses a Scene over either limit.

@@ -6,7 +6,7 @@
       "min": 4,
       "max": 5
     },
-    "note": "You took the money out of the security budget in the Budget Round. Your name is on the form.",
+    "note": "You took the money out of the security budget in the Budget Round, and your name is on the form.",
     "route": {
       "character": "analyst",
       "chance": {
@@ -42,7 +42,7 @@
           "worked": {
             "body": "Internal Audit asks the Office Co-ordinator about the form. The Office Co-ordinator says they fill in a great many forms, and cannot be expected to remember them all, which Internal Audit accepts as a control weakness.",
             "reported": "A form was found to have been completed on someone's behalf.",
-            "happened": "You said the Office Co-ordinator filled in the form that stopped the door logs. It was in your handwriting."
+            "happened": "You said the Office Co-ordinator filled in the form that stopped the door logs, but it was in your handwriting."
           },
           "failed": {
             "body": "The Office Co-ordinator sends Internal Audit the form's history, which shows who opened it, who filled it in and who pressed submit. It was you, three times.",
@@ -57,7 +57,7 @@
           "worked": {
             "body": "Internal Audit asks to see the new system. You send a link to a page that is under construction, and they mark the finding as in progress.",
             "reported": "Door log reviews are being migrated to a new system.",
-            "happened": "You said the door logs were reviewed by a new system. There was no new system."
+            "happened": "You said the door logs were reviewed by a new system, but there was no new system."
           },
           "failed": {
             "body": "Your boss tells Internal Audit that there is no new system, because your boss would have had to sign for it, and did not.",
@@ -83,7 +83,7 @@
     },
     "landedOnYou": "It came out, and the form led straight to you.",
     "landedElsewhere": "It came out, and with the form gone, someone in Facilities took it for you.",
-    "neverCameOut": "It never came out. The door logs are still not being reviewed.",
+    "neverCameOut": "It never came out, and the door logs are still not being reviewed.",
     "event": "breach"
   },
   {
@@ -112,7 +112,7 @@
       "id": "metric-landed",
       "as": "notice",
       "title": "How your numbers are made",
-      "body": "The Project Co-ordinator has asked your boss, in the corridor and at some volume, how your numbers are made. Your boss does not know. Your boss would now like to.",
+      "body": "The Project Co-ordinator has asked your boss, in the corridor and at some volume, how your numbers are made, and your boss, who does not know, would now like to.",
       "sets": ["metric-traced"],
       "opinion": -2,
       "escapes": [
@@ -137,9 +137,9 @@
           "kind": "lie",
           "label": "Say the numbers come out of the template, and you only fill it in",
           "worked": {
-            "body": "Your boss nods, and asks for the template. You send one. It has a macro in it that nobody can open, which is how templates are.",
+            "body": "Your boss nods and asks for the template, so you send one with a macro in it that nobody can open, which is how templates are.",
             "reported": "The floor's numbers were confirmed as template-driven.",
-            "happened": "You said the template made your numbers. You made the template."
+            "happened": "You said the template made your numbers, but you made the template."
           },
           "failed": {
             "body": "Your boss opens the template, and finds your initials in the macro. Your boss would like to know why the template says what you taught it to say.",
@@ -163,7 +163,7 @@
     },
     "landedOnYou": "It came out, and your numbers were the ones that could be checked.",
     "landedElsewhere": "It came out, and with the old files gone, it went to a working group.",
-    "neverCameOut": "It never came out. The metric still says what you taught it to say."
+    "neverCameOut": "It never came out, and the metric still says what you taught it to say."
   },
   {
     "id": "demand-faked",
@@ -205,7 +205,7 @@
           "worked": {
             "body": "The Junior Associate apologises to the whole floor for the confusion, without being sure what it was. The Office Co-ordinator issues a correction to the correction.",
             "reported": "A handover misunderstanding has been corrected in the minutes.",
-            "happened": "You said the Junior Associate told you the action was done. Nobody had told you anything."
+            "happened": "You said the Junior Associate told you the action was done, but nobody had told you anything."
           },
           "failed": {
             "body": "The Junior Associate replies to all that they were on leave that week, and attaches the out-of-office, and the e-mail you sent while they were away.",
@@ -219,7 +219,7 @@
           "worked": {
             "body": "The Office Co-ordinator notes that the action is now complete, and closes it, which is the most anyone has asked of it.",
             "reported": "An outstanding action was closed.",
-            "happened": "You said the action had been done since. It still has not been."
+            "happened": "You said the action had been done since, but it still has not been."
           },
           "failed": {
             "body": "Your boss replies to all, asking to see it. There is nothing to see, and everyone on the floor now knows that too.",
@@ -230,7 +230,7 @@
           "id": "correction-take-it",
           "kind": "take",
           "label": "Thank the Office Co-ordinator for keeping the minutes",
-          "body": "The Office Co-ordinator accepts your thanks in writing. Your boss reads the correction, and the thanks, and says nothing about either."
+          "body": "The Office Co-ordinator accepts your thanks in writing, and your boss reads the correction and the thanks, and says nothing about either."
         }
       ]
     },
@@ -244,7 +244,7 @@
     },
     "landedOnYou": "It came out in the minutes, with your email attached.",
     "landedElsewhere": "It came out in the minutes, with nobody's name on it, because you had tidied up.",
-    "neverCameOut": "It never came out. As far as the minutes know, it was done."
+    "neverCameOut": "It never came out, so as far as the minutes know, it was done."
   },
   {
     "id": "tool-hollow",
@@ -286,7 +286,7 @@
           "worked": {
             "body": "The Head of Operations writes to the Office Co-ordinator about data entry. The Office Co-ordinator replies that they will look into it, in the tone of someone who will.",
             "reported": "The new tool's figures were found to be a data-entry issue, and someone in the office has been reminded of the process.",
-            "happened": "You said the Office Co-ordinator had loaded the figures. Nobody had loaded any."
+            "happened": "You said the Office Co-ordinator had loaded the figures, but nobody had loaded any."
           },
           "failed": {
             "body": "The Office Co-ordinator replies to everyone with the tool's access log. Nobody but you has ever logged in to it, and you logged in once, to take the screenshot.",
@@ -305,7 +305,7 @@
             }
           },
           "worked": {
-            "body": "The Head of Operations asks when the pilot ends. You say after the board. The Head of Operations says that is very sensible, and takes a different slide.",
+            "body": "When the Head of Operations asks when the pilot ends, you say after the board, and the Head of Operations says that is very sensible, and takes a different slide.",
             "reported": "The new tool was re-scoped as a pilot, with illustrative figures.",
             "happened": "You called the tool a pilot, after it had launched."
           },
@@ -319,7 +319,7 @@
           "id": "tool-take-it",
           "kind": "take",
           "label": "Write the short note",
-          "body": "You write the note. It says what the tool does, which is nothing yet. It is shorter than the e-mail."
+          "body": "You write the note, which says what the tool does, which is nothing yet, and is shorter than the e-mail."
         }
       ]
     },
@@ -333,7 +333,7 @@
     },
     "landedOnYou": "It came out when the board wanted the figures, and the launch e-mail led to you.",
     "landedElsewhere": "It came out when the board wanted the figures, and with the shared drive tidied, IT took it.",
-    "neverCameOut": "It never came out. The icon is still there, and people still say it saves them time."
+    "neverCameOut": "It never came out, and the icon is still there, and people still say it saves them time."
   },
   {
     "id": "desks-hollow",
@@ -375,7 +375,7 @@
           "worked": {
             "body": "The Office Co-ordinator changes the plan's owner to the Project Co-ordinator, who is now responsible for having not hot-desked.",
             "reported": "The hot-desking roll-out was delayed by an out-of-date seating plan, which now has an owner.",
-            "happened": "You said the Project Co-ordinator owned the seating plan. You had never told them there was one."
+            "happened": "You said the Project Co-ordinator owned the seating plan, but you had never told them there was one."
           },
           "failed": {
             "body": "The Project Co-ordinator replies that they have never seen the seating plan, and attaches the e-mail in which you said you would keep it to yourself, for now.",
@@ -401,13 +401,13 @@
           "id": "desks-take-it",
           "kind": "take",
           "label": "Say that nothing has moved yet",
-          "body": "You say so. The Office Co-ordinator thanks you for your honesty, and copies the thanks to your boss."
+          "body": "You say so, and the Office Co-ordinator thanks you for your honesty, and copies the thanks to your boss."
         }
       ]
     },
     "landedOnYou": "It came out in the seating plan, which had not changed, beside your e-mail saying it had.",
     "landedElsewhere": "It came out, but nobody could say who had said it was done.",
-    "neverCameOut": "It never came out. Everyone still sits where they sat, at nobody's desk."
+    "neverCameOut": "It never came out, and everyone still sits where they sat, at nobody's desk."
   },
   {
     "id": "centre-empty",
@@ -464,12 +464,12 @@
           "label": "Book the room for a month of workshops, so that nobody opens the door",
           "chance": 0.5,
           "worked": {
-            "body": "The room is booked solid. The Programme Manager's visitor is shown the booking screen instead, and finds it very impressive.",
+            "body": "The room is booked solid, so the Programme Manager's visitor is shown the booking screen instead, and finds it very impressive.",
             "reported": "The Centre of Excellence was fully booked all month.",
             "happened": "You booked the empty room for workshops nobody held, so that the door stayed shut."
           },
           "failed": {
-            "body": "One workshop is cancelled, and the Programme Manager takes the visitor in during the gap. The chair is still there. So is the booking, in your name, for a workshop on excellence.",
+            "body": "One workshop is cancelled, and the Programme Manager takes the visitor in during the gap, where the chair is still there, and so is the booking, in your name, for a workshop on excellence.",
             "opinion": -1,
             "headOpinion": -2
           }
@@ -491,7 +491,7 @@
     },
     "landedOnYou": "It came out when the Programme Manager opened the door for a visitor, and it led to you.",
     "landedElsewhere": "It came out when a visitor was shown round, and it was put down to hybrid working.",
-    "neverCameOut": "It never came out. The sign is still on the door, and the door is still shut."
+    "neverCameOut": "It never came out, and the sign is still on the door, and the door is still shut."
   },
   {
     "id": "line-call",
@@ -536,7 +536,7 @@
           "worked": {
             "body": "Human Resources asks the Senior Analyst about your extension. The Senior Analyst says they have their own, which Human Resources takes as an admission that they know how phones work.",
             "reported": "A call to the Speak Up line was made from a shared extension.",
-            "happened": "You said the Senior Analyst rang the line from your phone. You rang it."
+            "happened": "You said the Senior Analyst rang the line from your phone, but you rang it."
           },
           "failed": {
             "body": "The Senior Analyst was in a meeting with Human Resources at the time of the call, which Human Resources can confirm, as it was their meeting.",
@@ -550,10 +550,10 @@
           "worked": {
             "body": "Human Resources agrees that the log is not always right, and adds the printer to its own concerns.",
             "reported": "A Speak Up call was reclassified as a facilities matter.",
-            "happened": "You said you rang the Speak Up line about the printer. You rang it about your boss."
+            "happened": "You said you rang the Speak Up line about the printer, but you rang it about your boss."
           },
           "failed": {
-            "body": "The log has a recording. Human Resources plays it to you. It does not mention the printer.",
+            "body": "The log has a recording, which Human Resources plays to you, and it does not mention the printer.",
             "mistake": "big"
           }
         },
@@ -574,7 +574,7 @@
     },
     "landedOnYou": "It came out in the line's log, which said who had rung, and about whom.",
     "landedElsewhere": "It came out, but the Office Co-ordinator thought well of you, and the log was archived unread.",
-    "neverCameOut": "It never came out. The log is in a cupboard, with your name in it."
+    "neverCameOut": "It never came out, and the log is in a cupboard, with your name in it."
   },
   {
     "id": "boss-rumour",
@@ -619,7 +619,7 @@
           "worked": {
             "body": "Human Resources has a word with the Junior Associate about the kettle. The Junior Associate agrees to make their own tea for a while.",
             "reported": "The source of an unhelpful story was identified and spoken to.",
-            "happened": "You said the Junior Associate started the story about your old boss. You started it."
+            "happened": "You said the Junior Associate started the story about your old boss, but you started it."
           },
           "failed": {
             "body": "The Junior Associate was not at the kettle, or on the floor, or in the country, that week, and has the photographs.",
@@ -633,7 +633,7 @@
           "worked": {
             "body": "Human Resources accepts that people go to the kettle for the kettle, and closes the matter.",
             "reported": "A story about a former manager was found to have no single source.",
-            "happened": "You said you had nothing to do with the story. You told it at the kettle, twice."
+            "happened": "You said you had nothing to do with the story, but you told it at the kettle, twice."
           },
           "failed": {
             "body": "Your boss heard you tell it, at the kettle, and tells Human Resources so, with the time.",
@@ -650,7 +650,7 @@
     },
     "landedOnYou": "It came out, and the Senior Analyst said where it had started: with you, by the kettle.",
     "landedElsewhere": "It came out, but the Senior Analyst thought well of you, and said that nobody could say where it had started.",
-    "neverCameOut": "It never came out. Everyone knew already, apparently."
+    "neverCameOut": "It never came out, because everyone knew already, apparently."
   },
   {
     "id": "friend-out-of-depth",
@@ -659,7 +659,7 @@
       "min": 4,
       "max": 5
     },
-    "note": "You hired your old friend onto your team. They could not do the job, and somebody else was doing it.",
+    "note": "You hired your old friend onto your team, but they could not do the job, and somebody else was doing it.",
     "route": {
       "character": "analyst",
       "chance": {
@@ -699,9 +699,9 @@
           "label": "Say the Junior Associate has been covering for your friend, not you",
           "blames": "associate",
           "worked": {
-            "body": "Your boss asks the Junior Associate to stop covering for people. The Junior Associate agrees to, puzzled.",
+            "body": "Your boss asks the Junior Associate to stop covering for people, and the Junior Associate agrees to, puzzled.",
             "reported": "Cover arrangements in the team were clarified.",
-            "happened": "You said the Junior Associate had been doing your friend's work. You had."
+            "happened": "You said the Junior Associate had been doing your friend's work, but you had."
           },
           "failed": {
             "body": "The Junior Associate replies that they would have liked to, and that nobody asked them, and copies in the Senior Analyst, who adds them to the spreadsheet in a new colour, for none.",
@@ -739,7 +739,7 @@
     },
     "landedOnYou": "It came out in the Senior Analyst's spreadsheet of who had been doing your friend's job, and it led to you.",
     "landedElsewhere": "It came out after your friend had gone, as work nobody had started.",
-    "neverCameOut": "It never came out. Somebody is still doing your friend's job, and has stopped saying so."
+    "neverCameOut": "It never came out, and somebody is still doing your friend's job, and has stopped saying so."
   },
   {
     "id": "consultant-invoice",
@@ -781,7 +781,7 @@
           },
           "result": {
             "title": "The invoice",
-            "body": "It is paid. Your team learns that this year's training has been transformed into the consultant's travel."
+            "body": "It is paid, and your team learns that this year's training has been transformed into the consultant's travel."
           },
           "remembers": [
             {
@@ -800,7 +800,7 @@
           "opinion": -1,
           "result": {
             "title": "The invoice",
-            "body": "Your boss signs it, as sponsor, and asks whose idea the consultant was. You say it was a team decision. Your boss says that is what they will say too."
+            "body": "Your boss signs it, as sponsor, and asks whose idea the consultant was, and when you say it was a team decision, says that is what they will say too."
           }
         },
         {
@@ -825,7 +825,7 @@
           "worked": {
             "body": "The Programme Manager sends the invoice to your boss, who signs it without reading it, as they sign everything.",
             "reported": "A consultancy invoice was approved at the appropriate level.",
-            "happened": "You said your boss had hired the consultant. Your boss had been in Lisbon."
+            "happened": "You said your boss had hired the consultant, but your boss had been in Lisbon."
           },
           "failed": {
             "body": "Your boss replies that they were in Lisbon that week, and attaches the photographs.",
@@ -870,7 +870,7 @@
     },
     "landedOnYou": "It came out when the Programme Manager reconciled the transformation budget, and the invoice had your team's code on it.",
     "landedElsewhere": "It came out, on the Centre of Excellence's code, where nobody checks.",
-    "neverCameOut": "It never came out. The invoice is in a queue, accruing."
+    "neverCameOut": "It never came out, and the invoice is in a queue, accruing."
   },
   {
     "id": "bonus-letters",
@@ -920,7 +920,7 @@
           "opinion": -1,
           "result": {
             "title": "Your bonus letters",
-            "body": "People and Culture asks you to name the behaviours. You name loyalty. It is written down, underlined and filed."
+            "body": "When People and Culture asks you to name the behaviours, you name loyalty, and it is written down, underlined and filed."
           }
         },
         {
@@ -955,7 +955,7 @@
           "worked": {
             "body": "People and Culture move the conversation to your boss, who is very busy until the end of the year.",
             "reported": "The team's bonus split was referred to the budget holder.",
-            "happened": "You said your boss set the split. You set it, and your boss signed the cover sheet."
+            "happened": "You said your boss set the split, but you set it, and your boss signed the cover sheet."
           },
           "failed": {
             "body": "Your boss replies that they delegated the split to you, in writing, and is glad they did. People and Culture move the room with no windows to a smaller one.",
@@ -969,7 +969,7 @@
           "worked": {
             "body": "People and Culture apologise for the matrix, and say they will look at it. The matrix is retired, and a new one drawn up, with the same numbers.",
             "reported": "An old bonus matrix was retired.",
-            "happened": "You said People and Culture's own matrix had decided the split. There is no matrix."
+            "happened": "You said People and Culture's own matrix had decided the split, but there is no matrix."
           },
           "failed": {
             "body": "Your boss saw you do the split, on the back of the seating plan, and People and Culture now have the seating plan.",
@@ -993,7 +993,7 @@
     },
     "landedOnYou": "It came out when the Senior Analyst found the other bonus letters in the printer tray, and took them to People and Culture.",
     "landedElsewhere": "It came out, but the Senior Analyst thought well enough of you to shred the letters.",
-    "neverCameOut": "It never came out. The letters are in three drawers, and the drawers are not talking."
+    "neverCameOut": "It never came out, and the letters are in three drawers, and the drawers are not talking."
   },
   {
     "id": "fire-door-desk",
@@ -1098,7 +1098,7 @@
     },
     "landedOnYou": "It came out when the Project Co-ordinator, Floor 2's Health and Safety representative, measured the gap to the fire door.",
     "landedElsewhere": "It came out on the committee's walk round, but you had walked the route yourself, and moved the desk.",
-    "neverCameOut": "It never came out. The desk is still beside the fire door, and so is the Project Co-ordinator."
+    "neverCameOut": "It never came out, and the desk is still beside the fire door, and so is the Project Co-ordinator."
   },
   {
     "id": "roadmap-no-dates",
@@ -1141,7 +1141,7 @@
           "worked": {
             "body": "The Head of Transformation asks the Programme Manager for the dates. The Programme Manager says they will get back to them, which is a date of sorts.",
             "reported": "Programme dates were referred to the Programme Manager.",
-            "happened": "You said the Programme Manager owned the dates. There were none to own."
+            "happened": "You said the Programme Manager owned the dates, but there were none to own."
           },
           "failed": {
             "body": "The Programme Manager sends the Head of Transformation the meeting note in which you said that dates were a Floor 3 thing.",
@@ -1168,7 +1168,7 @@
           "id": "roadmap-take-it",
           "kind": "take",
           "label": "Give a date, and go to the word",
-          "body": "You give a date. It is a Thursday. The Head of Transformation writes it down, which is worse."
+          "body": "You give a date, a Thursday, and the Head of Transformation writes it down, which is worse."
         }
       ]
     },
@@ -1182,7 +1182,7 @@
     },
     "landedOnYou": "It came out when the Board asked the Head of Transformation for a date, and the slide led to you.",
     "landedElsewhere": "It came out when the Board asked for a date, and the checked Board pack had one.",
-    "neverCameOut": "It never came out. The slide is still outside the lift, and nobody has asked it anything."
+    "neverCameOut": "It never came out, and the slide is still outside the lift, and nobody has asked it anything."
   },
   {
     "id": "audit-call",
@@ -1191,7 +1191,7 @@
       "min": 3,
       "max": 5
     },
-    "note": "You told Internal Audit about your boss's expenses. It was confidential, and logged on the service desk.",
+    "note": "You told Internal Audit about your boss's expenses, confidentially, and it was logged on the service desk.",
     "route": {
       "character": "delivery",
       "chance": {
@@ -1227,7 +1227,7 @@
           "worked": {
             "body": "People and Culture asks the Programme Manager about the ticket. The Programme Manager says they raise a great many tickets, which is true, and is taken as an answer.",
             "reported": "A service desk ticket was raised from a shared login.",
-            "happened": "You said the Programme Manager raised the ticket about your old boss. You raised it."
+            "happened": "You said the Programme Manager raised the ticket about your old boss, but you raised it."
           },
           "failed": {
             "body": "The Programme Manager sends People and Culture their own tickets for the month, all of them, sorted by date. Yours is not among them, and is from your desk.",
@@ -1241,7 +1241,7 @@
           "worked": {
             "body": "People and Culture moves the ticket to Facilities, who close it, as the coffee machine is fine.",
             "reported": "A misrouted ticket was closed by Facilities.",
-            "happened": "You said your ticket to Internal Audit was about the coffee machine. It was about your old boss."
+            "happened": "You said your ticket to Internal Audit was about the coffee machine, but it was about your old boss."
           },
           "failed": {
             "body": "Your boss read the ticket before it was closed. It does not mention coffee, and your boss says so, to People and Culture, in person.",
@@ -1252,7 +1252,7 @@
           "id": "ticket-take-it",
           "kind": "take",
           "label": "Discuss your approach to collaboration",
-          "body": "People and Culture discusses it with you, and sends you the satisfaction survey. It goes on your file as a conversation."
+          "body": "People and Culture discusses it with you and sends you the satisfaction survey, and it goes on your file as a conversation."
         }
       ]
     },
@@ -1265,7 +1265,7 @@
     },
     "landedOnYou": "It came out on the service desk, where Internal Audit's ticket said who had raised it.",
     "landedElsewhere": "It came out, but the Service Delivery Lead thought well of you, and cleared the requester field.",
-    "neverCameOut": "It never came out. The ticket is closed, with your name in it."
+    "neverCameOut": "It never came out, and the ticket is closed, with your name in it."
   },
   {
     "id": "nomination-traced",
@@ -1310,7 +1310,7 @@
           "worked": {
             "body": "Your old boss writes again, to thank the Service Delivery Lead instead. The Service Delivery Lead replies that it was nothing, which it was.",
             "reported": "A nomination was correctly attributed.",
-            "happened": "You said the Service Delivery Lead nominated your old boss. You did."
+            "happened": "You said the Service Delivery Lead nominated your old boss, but you did."
           },
           "failed": {
             "body": "The Head of Transformation forwards the nomination form, which has your name on it, in the box marked Your name.",
@@ -1324,10 +1324,10 @@
           "worked": {
             "body": "Your old boss thanks the whole team instead, which takes longer, and lands on nobody.",
             "reported": "A nomination was made on behalf of the whole team.",
-            "happened": "You said the whole team nominated your old boss. Nobody else knew."
+            "happened": "You said the whole team nominated your old boss, but nobody else knew."
           },
           "failed": {
-            "body": "Your boss asks the team who else signed it. Nobody did, and your boss tells Floor 3 so.",
+            "body": "Your boss asks the team who else signed it, and since nobody did, your boss tells Floor 3 so.",
             "mistake": "big"
           }
         },
@@ -1335,7 +1335,7 @@
           "id": "nomination-take-it",
           "kind": "take",
           "label": "Thank your old boss for thanking you",
-          "body": "You reply to all. It goes on your file as a conversation, and on Floor 3 as something else."
+          "body": "You reply to all, and it goes on your file as a conversation, and on Floor 3 as something else."
         }
       ]
     },
@@ -1348,7 +1348,7 @@
     },
     "landedOnYou": "It came out when the Head of Transformation told your old boss who had nominated them.",
     "landedElsewhere": "It came out, but the Head of Transformation thought well of you, and shredded the nominations.",
-    "neverCameOut": "It never came out. Your nomination is in a drawer on Floor 3, signed."
+    "neverCameOut": "It never came out, and your nomination is in a drawer on Floor 3, signed."
   },
   {
     "id": "board-number",
@@ -1412,7 +1412,7 @@
           "worked": {
             "body": "The Board Office thanks you, and writes to the Junior Associate about version control.",
             "reported": "A version-control issue in the Board pack was traced to a junior member of staff.",
-            "happened": "You said the Junior Associate had given you the figure. You made it up in the lift."
+            "happened": "You said the Junior Associate had given you the figure, but you made it up in the lift."
           },
           "failed": {
             "body": "The Junior Associate replies that they have never been sent the Board pack, and that they would like to be.",
@@ -1436,7 +1436,7 @@
     },
     "landedOnYou": "It came out when the Senior Analyst wrote to the Board Office about the figure in the minutes, and it led to you.",
     "landedElsewhere": "It came out after you had corrected the minutes yourself, as a query about nothing.",
-    "neverCameOut": "It never came out. Eleven per cent is in the Board's minutes, and will be in next year's pack."
+    "neverCameOut": "It never came out, and eleven per cent is in the Board's minutes, and will be in next year's pack."
   },
   {
     "id": "checks-cut",
@@ -1487,10 +1487,10 @@
           "worked": {
             "body": "The incident review gets a new section, headed Contributing Factors, and the Project Co-ordinator is in it.",
             "reported": "The incident review found contributing factors in how changes are signed off.",
-            "happened": "You said the Project Co-ordinator signed off the change. The sign-off was yours, and they were on leave."
+            "happened": "You said the Project Co-ordinator signed off the change, but the sign-off was yours, and they were on leave."
           },
           "failed": {
-            "body": "The Project Co-ordinator sends the review their leave form. It is approved, by you.",
+            "body": "The Project Co-ordinator sends the review their leave form, which was approved by you.",
             "opinion": -1,
             "headOpinion": -2
           }
@@ -1507,7 +1507,7 @@
             }
           },
           "worked": {
-            "body": "The review is reopened, and given terms of reference and a steering group. It will report after the next incident.",
+            "body": "The review is reopened and given terms of reference and a steering group, and will report after the next incident.",
             "reported": "The incident review was extended, so that every lesson is learned.",
             "happened": "You had the review reopened, so that it would never finish."
           },
@@ -1533,7 +1533,7 @@
     },
     "landedOnYou": "It came out when something went wrong that a check would have caught, and the incident review listed the checks you cut.",
     "landedElsewhere": "It came out as something going wrong, but you had put the checks back, and one of them caught it.",
-    "neverCameOut": "It never came out. Nothing has gone wrong yet that a check would have caught, and nobody is checking."
+    "neverCameOut": "It never came out, and nothing has gone wrong yet that a check would have caught, and nobody is checking."
   },
   {
     "id": "costs-downstairs",
@@ -1623,7 +1623,7 @@
     },
     "landedOnYou": "It came out when the Office Co-ordinator reconciled the cost codes, and the costs on Floor 2 had your codes' names on them.",
     "landedElsewhere": "It came out, but the Office Co-ordinator thought well of you, and Floor 2 was asked to find thirty per cent.",
-    "neverCameOut": "It never came out. A third of Floor 3 is still being paid for by Floor 2."
+    "neverCameOut": "It never came out, and a third of Floor 3 is still being paid for by Floor 2."
   },
   {
     "id": "offsite-recycled",
@@ -1667,7 +1667,7 @@
           "worked": {
             "body": "The Head of Transformation tells the Junior Associate to stop using the archive. The Junior Associate did not know there was one, and now does.",
             "reported": "The team has been reminded how to use archived material.",
-            "happened": "You said the Junior Associate had recycled the slide. You recycled it."
+            "happened": "You said the Junior Associate had recycled the slide, but you recycled it."
           },
           "failed": {
             "body": "The Junior Associate replies that they joined after last year's offsite, and attaches their start date.",
@@ -1693,7 +1693,7 @@
           "id": "offsite-take-it",
           "kind": "take",
           "label": "Reply: Same plan.",
-          "body": "You reply: Same plan. Without the question mark, it reads as a commitment."
+          "body": "You reply \"Same plan\", which without the question mark reads as a commitment."
         }
       ]
     },
@@ -1706,6 +1706,6 @@
     },
     "landedOnYou": "It came out when the Head of Transformation remembered last year's offsite, and the photograph.",
     "landedElsewhere": "It came out, but the Head of Transformation thought well of you, and called it consistency.",
-    "neverCameOut": "It never came out. Next year's offsite will be shown the same plan, with next year's dates."
+    "neverCameOut": "It never came out, and next year's offsite will be shown the same plan, with next year's dates."
   }
 ]

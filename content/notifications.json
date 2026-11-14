@@ -3,7 +3,7 @@
     "id": "pub-invite",
     "from": "From: Your boss, {boss}",
     "subject": "RE: RE: FW: the Feathers at five",
-    "body": "A few of us are going to the Feathers at five. Your Monthly Status Report is also due tonight, and I am sure you have that in hand. No pressure either way. I will remember which you chose.",
+    "body": "A few of us are going to the Feathers at five. Your Monthly Status Report is also due tonight, and I am sure you have that in hand, so there is no pressure either way, although I will remember which you chose.",
     "options": [
       {
         "id": "pub",
@@ -43,7 +43,7 @@
         "sets": ["did-training"],
         "result": {
           "title": "Speaking Up: completed",
-          "body": "You score 100%. The certificate says that you feel safe to raise concerns. There is a box for concerns about the certificate, and it is not working."
+          "body": "You score 100%, and the certificate says that you feel safe to raise concerns, although the box for concerns about the certificate is not working."
         },
         "approach": "results"
       },
@@ -54,7 +54,7 @@
         "sets": ["skipped-training"],
         "result": {
           "title": "Speaking Up: completed",
-          "body": "It finishes while you are at lunch. You score 100%."
+          "body": "It finishes while you are at lunch, and you score 100%."
         },
         "approach": "theatre",
         "reaction": {
@@ -71,7 +71,7 @@
     "months": [3],
     "from": "From: Office of the Chief Executive",
     "subject": "All-Colleague Town Hall: seats available",
-    "body": "The Chief Executive will share the company's direction in person, on a large screen. Attendance is voluntary. Your attendance has been recorded.",
+    "body": "The Chief Executive will share the company's direction in person, on a large screen. Attendance is voluntary, and yours has been recorded.",
     "options": [
       {
         "id": "front-row",
@@ -90,7 +90,7 @@
         "opinion": -1,
         "result": {
           "title": "Town Hall recording",
-          "body": "You watch it at twice the speed. The direction is the same, but more urgent."
+          "body": "You watch it at twice the speed, and the direction is the same, but more urgent."
         }
       }
     ]
@@ -110,11 +110,11 @@
         "sets": ["animated-deck"],
         "result": {
           "title": "Slides for upstairs",
-          "body": "Each bullet point arrives from a different direction. The word Growth spins."
+          "body": "Each bullet point arrives from a different direction, while the word Growth spins."
         },
         "approach": "theatre",
         "reaction": {
-          "believer": "Your boss watches it to the end, and asks which of the slides says what is happening. None of them does. Your boss asks you to try again, gently, which is worse.",
+          "believer": "Your boss watches it to the end and asks which of the slides says what is happening, and since none of them does, asks you, gently, to try again, which is worse.",
           "incompetent": "Your boss watches it twice, in silence, and asks whether you have ever thought about moving up.",
           "practitioner": "Your boss takes the file without comment. It goes upstairs that evening with a different name in the corner, and you are told that it went well."
         }
@@ -126,11 +126,11 @@
         "sets": ["plain-deck"],
         "result": {
           "title": "Slides for upstairs",
-          "body": "Three slides. Each of them says what is happening. It takes you twenty minutes."
+          "body": "It takes you twenty minutes to make three slides, each of which says what is happening."
         },
         "approach": "truth",
         "reaction": {
-          "believer": "Your boss reads all three, then rings you to ask about the second. It is a real question. You have not been asked one here before.",
+          "believer": "Your boss reads all three, then rings you to ask about the second, and it is a real question, which nobody has asked you here before.",
           "incompetent": "Your boss replies at 07:12 asking whether this is the draft.",
           "practitioner": "Your boss replies at 07:12: let's not put this in writing. The slides are not mentioned again, and neither, for a while, are you."
         }
@@ -143,7 +143,7 @@
     "months": [9],
     "from": "From: Human Resources",
     "subject": "Your Self-Assessment closes today",
-    "body": "Please rate your own performance this year as Exceeds, Meets or Developing. There is no right answer. Developing is not available at your grade this year, because of the curve.",
+    "body": "Please rate your own performance this year as Exceeds, Meets or Developing. There is no right answer, although Developing is not available at your grade this year, because of the curve.",
     "options": [
       {
         "id": "exceeds",
@@ -153,7 +153,7 @@
         "sets": ["said-exceeds"],
         "result": {
           "title": "Self-Assessment submitted",
-          "body": "You use the word impact eleven times. An automatic reply thanks you for your honesty, which it has rated Meets."
+          "body": "You use the word impact eleven times, and an automatic reply thanks you for your honesty, which it has rated Meets."
         },
         "approach": "theatre"
       },
@@ -185,7 +185,7 @@
         "sets": ["input-arrived", "chased-input"],
         "result": {
           "title": "The figures",
-          "body": "You stand beside the Project Co-ordinator's desk until the figures exist. You are thanked for your patience. You have lost most of an afternoon, and you still have a report to write."
+          "body": "You stand beside the Project Co-ordinator's desk until the figures exist, and are thanked for your patience, having lost most of an afternoon with a report still to write."
         }
       },
       {
@@ -202,7 +202,7 @@
             "approach": "neglect",
             "result": {
               "title": "The figures",
-              "body": "They come in at 00:04, with an apology and the whole team copied in. The deadline was midnight. Someone upstairs, having nothing to go on, has coloured your project in for you."
+              "body": "They come in at 00:04, with an apology and the whole team copied in, but the deadline was midnight, and someone upstairs, having nothing to go on, has coloured your project in for you."
             }
           }
         },
@@ -222,13 +222,13 @@
         },
         "approach": "theatre",
         "reaction": {
-          "believer": "Your boss asks where the figures in your report came from. You say that they are indicative. Your boss asks what they indicate.",
+          "believer": "When your boss asks where the figures in your report came from, you say that they are indicative, and your boss asks what they indicate.",
           "incompetent": "Your boss says that the report reads very confidently, and asks you to do them all like that.",
           "practitioner": "Your boss notes that the figures are estimates, and that they have your name on them, and files a copy."
         },
         "result": {
           "title": "Monthly Status Report filed",
-          "body": "You file it at 23:58, marked amber, with the figures described as indicative. Nobody has ever asked what that means. Someone may."
+          "body": "You file it at 23:58, marked amber, with the figures described as indicative, and although nobody has ever asked what that means, someone may."
         }
       }
     ]
@@ -237,7 +237,7 @@
     "id": "monthly-report",
     "from": "From: Your boss, {boss}",
     "subject": "Monthly Status Report: due tonight",
-    "body": "Your Monthly Status Report is due tonight, and nothing matters more to the people upstairs. Your project is really {real}. It was last reported as {reported}.",
+    "body": "Your Monthly Status Report is due tonight, and nothing matters more to the people upstairs. Your project is really {real}, and was last reported as {reported}.",
     "options": [
       {
         "id": "report",
@@ -251,7 +251,7 @@
         "approach": "plain-report",
         "result": {
           "title": "Monthly Status Report filed",
-          "body": "You file it at 23:58. An automatic reply confirms that your report has been received and may be read."
+          "body": "You file it at 23:58, and an automatic reply confirms that your report has been received and may be read."
         }
       },
       {
@@ -271,7 +271,7 @@
         },
         "result": {
           "title": "Monthly Status Report filed",
-          "body": "You file it at 23:58. It is the greenest thing you have ever made. An automatic reply says that it may be read."
+          "body": "You file it at 23:58, and it is the greenest thing you have ever made, which an automatic reply says may be read."
         }
       },
       {
@@ -329,7 +329,7 @@
         "approach": "theatre",
         "result": {
           "title": "The schedule",
-          "body": "It takes ten minutes. The dates are very good. The last one falls on a Tuesday, for realism, and it has been entered into a system."
+          "body": "It takes ten minutes, and the dates are very good, the last one falling on a Tuesday for realism, and they have been entered into a system."
         }
       },
       {
@@ -340,7 +340,7 @@
         "approach": "truth",
         "result": {
           "title": "The schedule",
-          "body": "You ring the supplier and go through it line by line. The date you arrive at is the first accurate date this project has had. It is next year."
+          "body": "You ring the supplier and go through it line by line, and arrive at the first accurate date this project has had, which is next year."
         }
       },
       {
@@ -351,7 +351,7 @@
         "approach": "hand-off",
         "result": {
           "title": "RE: The schedule",
-          "body": "Your boss replies with some dates. They are the same as the dates last year, with the year changed. You put your name on them, under your boss's."
+          "body": "Your boss replies with some dates, which are last year's with the year changed, and you put your name on them, under your boss's."
         }
       }
     ]
@@ -394,7 +394,7 @@
         },
         "result": {
           "title": "The printer",
-          "body": "The Senior Analyst carries everything across in one trip, without a word, and sets up facing you. The printer starts up. It will not stop for some time."
+          "body": "The Senior Analyst carries everything across in one trip, without a word, and sets up facing you, and the printer starts up, and will not stop for some time."
         },
         "news": {
           "about": "moved-to-the-printer",
@@ -422,7 +422,7 @@
         },
         "result": {
           "title": "The printer",
-          "body": "The Project Co-ordinator takes it calmly, and asks whether this is about the figures. You say no. It is now about the figures."
+          "body": "The Project Co-ordinator takes it calmly and asks whether this is about the figures, and although you say no, it is now about the figures."
         },
         "news": {
           "about": "moved-to-the-printer",
@@ -458,7 +458,7 @@
         "approach": "favour",
         "result": {
           "title": "A quick word",
-          "body": "You mention them to your boss, who asks who that is. You report that it went very well. In return you are told where several things are kept. None of them is what you had in mind."
+          "body": "You mention them to your boss, who asks who that is, so you report that it went very well, and in return you are told where several things are kept, none of which is what you had in mind."
         }
       },
       {
@@ -496,7 +496,7 @@
         "sets": ["left-your-files"],
         "result": {
           "title": "Housekeeping",
-          "body": "Someone else does. It is not clear who, or what they removed, and on Monday the shared drive is 99% full."
+          "body": "Someone else does, although it is not clear who, or what they removed, and on Monday the shared drive is 99% full."
         }
       }
     ]
@@ -516,7 +516,7 @@
         "sets": ["bonus-to-allies", "bonus-pot-decided"],
         "approach": "cronyism",
         "reaction": {
-          "believer": "Your boss reads the list, and asks you to take them through what each person did to earn it. You take them through it. It does not take long.",
+          "believer": "Your boss reads the list and asks you to take them through what each person did to earn it, which you do, and it does not take long.",
           "incompetent": "Your boss signs the list, and says that it is great to see you backing the team.",
           "practitioner": "Your boss reads the list, and adds one name to it, in pencil, and says that you are learning."
         },
@@ -619,7 +619,7 @@
         },
         "result": {
           "title": "The underspend",
-          "body": "Forty ergonomic chairs arrive, and are stacked in the corridor. The Office Co-ordinator has to sign for them, and looks at you while doing so. There is now nowhere to walk."
+          "body": "Forty ergonomic chairs arrive and are stacked in the corridor, leaving nowhere to walk, and the Office Co-ordinator, who has to sign for them, looks at you while doing so."
         }
       },
       {
@@ -679,7 +679,7 @@
         "label": "Delete it",
         "result": {
           "title": "Speak Up",
-          "body": "You delete it. It comes back the next day as a reminder, marked important."
+          "body": "You delete it, and it comes back the next day as a reminder, marked important."
         }
       },
       {
@@ -755,7 +755,7 @@
         "approach": "stall",
         "result": {
           "title": "RE: Hot-desking",
-          "body": "Your boss asks which phase it is in. You say the first. Your boss writes that down."
+          "body": "When your boss asks which phase it is in, you say the first, and your boss writes that down."
         }
       },
       {
@@ -809,7 +809,7 @@
     },
     "from": "From: The new tool, no-reply",
     "subject": "Welcome! Let's get your figures in",
-    "body": "The new tool is installed, and empty. It would like the real figures, and says it will not be fully transformative without them. Nobody has said who has them.",
+    "body": "The new tool is installed and empty, and would like the real figures, without which it says it will not be fully transformative, but nobody has said who has them.",
     "options": [
       {
         "id": "ask-analyst-for-figures",
@@ -818,7 +818,7 @@
         "sets": ["asked-analyst-for-figures", "asked-for-figures"],
         "result": {
           "title": "The real figures",
-          "body": "The Senior Analyst says that they will send something over. Something arrives, in a spreadsheet called FINAL final."
+          "body": "The Senior Analyst says that they will send something over, and something arrives, in a spreadsheet called FINAL final."
         }
       },
       {
@@ -828,7 +828,7 @@
         "sets": ["asked-admin-for-figures", "asked-for-figures"],
         "result": {
           "title": "The real figures",
-          "body": "The Office Co-ordinator says that they will send something over. Something arrives, in a spreadsheet called FINAL final."
+          "body": "The Office Co-ordinator says that they will send something over, and something arrives, in a spreadsheet called FINAL final."
         }
       },
       {
@@ -838,7 +838,7 @@
         "sets": ["asked-projects-for-figures", "asked-for-figures"],
         "result": {
           "title": "The real figures",
-          "body": "The Project Co-ordinator says that they will send something over. Something arrives, in a spreadsheet called FINAL final."
+          "body": "The Project Co-ordinator says that they will send something over, and something arrives, in a spreadsheet called FINAL final."
         }
       },
       {
@@ -864,7 +864,7 @@
         "label": "Leave with everyone, and be counted",
         "result": {
           "title": "Fire drill",
-          "body": "You are counted twice. The fire wardens agree to call it a rounding error."
+          "body": "You are counted twice, which the fire wardens agree to call a rounding error."
         }
       },
       {
@@ -895,7 +895,7 @@
         "sets": ["clicked-through"],
         "result": {
           "title": "Mandatory e-learning",
-          "body": "You pass on the fourth attempt. Your certificate is emailed to your boss, who is pleased with your commitment to learning."
+          "body": "You pass on the fourth attempt, and your certificate is emailed to your boss, who is pleased with your commitment to learning."
         }
       },
       {
@@ -905,7 +905,7 @@
         "sets": ["did-the-module"],
         "result": {
           "title": "Mandatory e-learning",
-          "body": "You learn that the modules are mandatory because they are recorded. You pass first time. Nobody is told."
+          "body": "You learn that the modules are mandatory because they are recorded, and you pass first time, although nobody is told."
         },
         "approach": "truth"
       }
@@ -917,14 +917,14 @@
     "pool": true,
     "from": "From: The Office Co-ordinator, Marjorie Tull",
     "subject": "A card for someone in Accounts",
-    "body": "Someone in Accounts is leaving, and there is a card going round. Nobody on this floor knows them. There is also an envelope, which is heavier than the card.",
+    "body": "Someone in Accounts whom nobody on this floor knows is leaving, and there is a card going round, along with an envelope that is heavier than the card.",
     "options": [
       {
         "id": "sign-the-card",
         "label": "Sign it \"All the best\", like everyone else",
         "result": {
           "title": "A card for someone in Accounts",
-          "body": "Your All the best is the ninth on the card. The tenth says All the very best, which looks keen."
+          "body": "Your All the best is the ninth on the card, and the tenth says All the very best, which looks keen."
         }
       },
       {
@@ -954,7 +954,7 @@
         "sets": ["profiled-honestly"],
         "result": {
           "title": "Your Leadership Profile",
-          "body": "You are a Completer-Finisher. The profile recommends that you delegate the finishing."
+          "body": "You are a Completer-Finisher, and the profile recommends that you delegate the finishing."
         }
       },
       {
@@ -965,7 +965,7 @@
         "sets": ["profiled-visionary"],
         "result": {
           "title": "Your Leadership Profile",
-          "body": "You are a Visionary. The report has a picture of a mountain on it, and is copied to your boss."
+          "body": "You are a Visionary, according to a report with a picture of a mountain on it, which is copied to your boss."
         },
         "approach": "theatre"
       }
@@ -985,7 +985,7 @@
         "sets": ["copied-objectives"],
         "result": {
           "title": "Your team's objectives",
-          "body": "Your team's objectives are submitted. They are stretching, and familiar."
+          "body": "Your team's objectives are submitted, and they are stretching, and familiar."
         }
       },
       {
@@ -996,7 +996,7 @@
         "sets": ["wrote-real-objectives"],
         "result": {
           "title": "Your team's objectives",
-          "body": "It takes a morning. The objectives are real, and so are the arguments about them."
+          "body": "It takes a morning, and the objectives are real, and so are the arguments about them."
         },
         "approach": "truth"
       }
@@ -1015,7 +1015,7 @@
         "label": "Say that you have no concerns",
         "result": {
           "title": "Internal Audit",
-          "body": "You have no concerns. The auditor writes that down, and underlines it."
+          "body": "You have no concerns, which the auditor writes down, and underlines."
         }
       },
       {
@@ -1047,7 +1047,7 @@
         "label": "Say that your team will join when it is ready",
         "result": {
           "title": "The Centre of Excellence",
-          "body": "Your boss says that readiness is a mindset. You are put down as a mindset."
+          "body": "Your boss says that readiness is a mindset, and you are put down as a mindset."
         }
       },
       {
@@ -1058,7 +1058,7 @@
         "sets": ["centre-sign-up"],
         "result": {
           "title": "The Centre of Excellence",
-          "body": "The lanyards arrive. They say Excellence on them, in a font that is excellent. The e-mail goes out, and the Centre is open, on the e-mail."
+          "body": "The lanyards arrive with Excellence on them, in a font that is excellent, and the e-mail goes out, so the Centre is open, on the e-mail."
         },
         "approach": "theatre"
       }
@@ -1088,7 +1088,7 @@
         "sets": ["read-the-timesheets"],
         "result": {
           "title": "Timesheets",
-          "body": "It was the cables, in the box, on the chair. Someone has been sorting them. They would like a code."
+          "body": "It was the cables in the box on the chair, which someone has been sorting, and they would like a code."
         },
         "approach": "truth"
       }
@@ -1107,7 +1107,7 @@
         "label": "Say that your team has no vacancies",
         "result": {
           "title": "Headcount freeze",
-          "body": "You are thanked for your lean team. Lean has been circled."
+          "body": "You are thanked for your lean team, and lean has been circled."
         }
       },
       {
@@ -1117,7 +1117,7 @@
         "sets": ["made-the-case"],
         "result": {
           "title": "Headcount freeze",
-          "body": "You make the case. It is a good case, and it is frozen."
+          "body": "You make the case, which is a good case, and it is frozen."
         },
         "approach": "truth"
       }
@@ -1129,7 +1129,7 @@
     "pool": true,
     "from": "From: People and Culture",
     "subject": "How was your leader this quarter?",
-    "body": "Your team has been invited to rate you anonymously. The survey closes on Friday. You may, if you wish, remind them that it is anonymous.",
+    "body": "Your team has been invited to rate you anonymously, in a survey that closes on Friday, and you may, if you wish, remind them that it is anonymous.",
     "options": [
       {
         "id": "leave-it",
@@ -1146,7 +1146,7 @@
         "sets": ["leaned-on-the-survey"],
         "result": {
           "title": "The survey",
-          "body": "You remind each of them, one at a time, at their desk. The results are excellent, and unanimous."
+          "body": "You remind each of them, one at a time, at their desk, and the results are excellent, and unanimous."
         },
         "approach": "theatre"
       }
@@ -1167,7 +1167,7 @@
         "label": "Leave it to the process",
         "result": {
           "title": "The seat",
-          "body": "You leave it to the process. The process thanks you for your patience, automatically."
+          "body": "You leave it to the process, which thanks you for your patience, automatically."
         }
       },
       {
@@ -1248,7 +1248,7 @@
         "label": "Add a number to the end of your old one",
         "result": {
           "title": "Your password",
-          "body": "Your password is now the old one, with a 4 on the end. It is accepted, securely."
+          "body": "Your password is now the old one with a 4 on the end, and it is accepted, securely."
         }
       },
       {
@@ -1257,7 +1257,7 @@
         "sets": ["asked-it"],
         "result": {
           "title": "Your password",
-          "body": "IT replies that the question has been logged. A ticket number arrives, which you could use."
+          "body": "IT replies that the question has been logged, and a ticket number arrives, which you could use."
         }
       }
     ]
@@ -1275,7 +1275,7 @@
         "label": "Clear your desk into a drawer",
         "result": {
           "title": "Clear desk audit",
-          "body": "Your desk is clear. Your drawer does not close."
+          "body": "Your desk is clear, although your drawer no longer closes."
         }
       },
       {
@@ -1284,7 +1284,7 @@
         "sets": ["lost-the-plant"],
         "result": {
           "title": "Clear desk audit",
-          "body": "The plant is removed for your convenience. It is not seen again."
+          "body": "The plant is removed for your convenience, and is not seen again."
         }
       }
     ]
@@ -1302,7 +1302,7 @@
         "label": "Buy a cake on the day",
         "result": {
           "title": "The bake sale",
-          "body": "You buy a lemon slice. It is from a supermarket, with the label taken off."
+          "body": "You buy a lemon slice from a supermarket and take the label off."
         }
       },
       {
@@ -1313,7 +1313,7 @@
         "sets": ["baked-for-charity"],
         "result": {
           "title": "The bake sale",
-          "body": "You bake flapjacks the night before. They sell out by ten, which the Office Co-ordinator notes."
+          "body": "You bake flapjacks the night before, and they sell out by ten, which the Office Co-ordinator notes."
         },
         "approach": "favour"
       }
@@ -1362,7 +1362,7 @@
         "label": "Confirm, with no dietary requirements",
         "result": {
           "title": "The offsite",
-          "body": "You are confirmed. The hotel has a lake, and an agenda, and only one of them is long."
+          "body": "You are confirmed for a hotel with a lake and an agenda, only one of which is long."
         }
       },
       {
@@ -1402,7 +1402,7 @@
         "sets": ["hired-the-consultant"],
         "approach": "theatre",
         "reaction": {
-          "believer": "Your boss asks what the consultant will actually do. You read out the proposal. Your boss asks again.",
+          "believer": "When your boss asks what the consultant will actually do, you read out the proposal, and your boss asks again.",
           "incompetent": "Your boss meets the consultant, comes out holding a framework, and has started saying quadrant.",
           "practitioner": "Your boss asks to be named as sponsor on the first slide, and to be left off the invoice."
         },
@@ -1450,7 +1450,7 @@
         "sets": ["confirmed-the-codes"],
         "result": {
           "title": "Cost codes",
-          "body": "Finance thanks you. Your costs are confirmed. Whether they are right is a separate workstream."
+          "body": "Finance thanks you and confirms your costs, although whether they are right is a separate workstream."
         }
       },
       {
@@ -1472,7 +1472,7 @@
         "approach": "truth",
         "result": {
           "title": "Cost codes",
-          "body": "It takes a day. You find a printer lease from 2019 and a subscription to a magazine about leadership. Finance thanks you, and would prefer it to be a one-off."
+          "body": "It takes a day, in which you find a printer lease from 2019 and a subscription to a magazine about leadership, and Finance thanks you, and would prefer it to be a one-off."
         }
       }
     ]
@@ -1502,7 +1502,7 @@
         "approach": "theatre",
         "result": {
           "title": "Leave requests",
-          "body": "Your whole team works the week of the deadline. It is minuted as focus, and remembered as something else."
+          "body": "Your whole team works the week of the deadline, which is minuted as focus, and remembered as something else."
         }
       },
       {
@@ -1536,7 +1536,7 @@
         "sets": ["signed-the-fire-form"],
         "result": {
           "title": "Fire routes",
-          "body": "Signed. Your team's fire route is clear, on the form."
+          "body": "You sign it, and your team's fire route is clear, on the form."
         }
       },
       {
@@ -1566,7 +1566,7 @@
         "label": "Put personal reasons",
         "result": {
           "title": "The exit report",
-          "body": "Personal reasons. The report is filed, and agrees with every other report."
+          "body": "You put down personal reasons, and the report is filed, and agrees with every other report."
         }
       },
       {
@@ -1606,7 +1606,7 @@
         "label": "Ask for a volunteer",
         "result": {
           "title": "Bank holiday cover",
-          "body": "Nobody volunteers. The newest person on your team is volunteered by everybody else, and accepts."
+          "body": "Nobody volunteers, so the newest person on your team is volunteered by everybody else, and accepts."
         }
       },
       {
@@ -1618,7 +1618,7 @@
         "approach": "results",
         "result": {
           "title": "Bank holiday cover",
-          "body": "The phone rings once, on Sunday, to ask whether anyone is there. You say yes. Your team hears that you did it, and does not know what to do with that."
+          "body": "The phone rings once, on Sunday, to ask whether anyone is there, and you say yes, and when your team hears that you did it, they do not know what to do with that."
         }
       },
       {
@@ -1655,7 +1655,7 @@
         "label": "Confirm their dates, and nothing else",
         "result": {
           "title": "The reference",
-          "body": "You confirm the dates. Floor 3 reads it as you meant it, and as you did not."
+          "body": "You confirm the dates, and Floor 3 reads it as you meant it, and as you did not."
         }
       },
       {
@@ -1666,7 +1666,7 @@
         "approach": "truth",
         "result": {
           "title": "The reference",
-          "body": "You give one weakness, which is honest. Floor 3 appoints someone whose referee gave none."
+          "body": "You give one weakness, which is honest, and Floor 3 appoints someone whose referee gave none."
         }
       },
       {
@@ -1737,7 +1737,7 @@
         "label": "Nominate nobody",
         "result": {
           "title": "Nominations",
-          "body": "You nominate nobody. The Board Office thanks you for engaging with the process."
+          "body": "You nominate nobody, and the Board Office thanks you for engaging with the process."
         }
       },
       {
@@ -1777,7 +1777,7 @@
         "sets": ["checked-the-pack"],
         "result": {
           "title": "The Board pack",
-          "body": "You check it. Three of the figures are last year's, and one of the dates has already passed. You fix them, quietly, and nobody will ever know, which is the point."
+          "body": "You check it and find that three of the figures are last year's and one of the dates has already passed, so you fix them quietly, and nobody will ever know, which is the point."
         },
         "approach": "results"
       }
@@ -1789,14 +1789,14 @@
     "months": [4],
     "from": "From: The Board Office",
     "subject": "Minutes of the Board: for approval",
-    "body": "The minutes of last month's Board are attached, for approval. Floor 3's fifteen minutes are minuted in four lines. Comments are welcome by Thursday, and will be minuted.",
+    "body": "The minutes of last month's Board are attached for approval, with Floor 3's fifteen minutes minuted in four lines, and comments are welcome by Thursday, and will be minuted.",
     "options": [
       {
         "id": "approve-the-minutes",
         "label": "Approve the minutes",
         "result": {
           "title": "The minutes",
-          "body": "Approved. The four lines are now what happened, and will be for some years."
+          "body": "Once approved, the four lines are what happened, and will be for some years."
         }
       },
       {
@@ -1825,7 +1825,7 @@
         "label": "Send a page saying that each meeting is essential",
         "result": {
           "title": "The question",
-          "body": "You send it. The Board Office replies that a meeting has been set up to discuss it."
+          "body": "You send it, and the Board Office replies that a meeting has been set up to discuss it."
         }
       },
       {
@@ -1856,7 +1856,7 @@
         "label": "Bring what you have, and see how far it goes",
         "result": {
           "title": "The offsite",
-          "body": "What you have is nine slides and a last one that says Questions. You pack it, and a spare cable."
+          "body": "What you have is nine slides and a last one that says Questions, which you pack, with a spare cable."
         }
       },
       {
@@ -1917,7 +1917,7 @@
         "approach": "theatre",
         "result": {
           "title": "The offsite",
-          "body": "It takes until nine. Everything fits, in eight-point type, and nothing has a date, so nothing is late. Your boss calls it a milestone, which it does not have."
+          "body": "It takes until nine, but everything fits, in eight-point type, and since nothing has a date, nothing is late, and your boss calls it a milestone, which it does not have."
         }
       }
     ]
@@ -1939,7 +1939,7 @@
         "sets": ["signed-the-waiver"],
         "result": {
           "title": "The waiver",
-          "body": "Signed. The Service Delivery Lead files it in a folder marked For Later, which is a thick folder."
+          "body": "Once signed, it is filed by the Service Delivery Lead in a folder marked For Later, which is a thick folder."
         }
       },
       {
@@ -1950,7 +1950,7 @@
         "approach": "results",
         "result": {
           "title": "The waiver",
-          "body": "The checks come back, quietly, and the offsite goes without lanyards. Nobody upstairs notices either."
+          "body": "The checks come back quietly, and the offsite goes without lanyards, and nobody upstairs notices either."
         }
       }
     ]
@@ -1968,7 +1968,7 @@
         "label": "Fill it in so that each column adds up",
         "result": {
           "title": "The resourcing matrix",
-          "body": "Each column adds up. Nobody's actual week does, but that was not one of the columns."
+          "body": "Each column adds up, although nobody's actual week does, but that was not one of the columns."
         }
       },
       {
@@ -1998,7 +1998,7 @@
         "label": "Fill in the template",
         "result": {
           "title": "Status reports",
-          "body": "You report that you produce eleven status reports a month. It is now twelve."
+          "body": "You report that you produce eleven status reports a month, which makes it twelve."
         }
       },
       {
@@ -2058,7 +2058,7 @@
         "label": "Write the business cases as they come",
         "result": {
           "title": "Spend control",
-          "body": "You write nine. Three are approved, each after the thing it was for has happened."
+          "body": "You write nine, and three are approved, each after the thing it was for has happened."
         }
       },
       {
@@ -2119,7 +2119,7 @@
         "label": "Leave it to the process",
         "result": {
           "title": "The seat",
-          "body": "You leave it to the process. The process sends you a survey about how it is doing."
+          "body": "You leave it to the process, which sends you a survey about how it is doing."
         }
       },
       {
@@ -2182,7 +2182,7 @@
         },
         "result": {
           "title": "The seat",
-          "body": "Your reply all thanks your team for your Grand Plan. Your team replies all to say thank you for the thanks."
+          "body": "Your reply all thanks your team for your Grand Plan, and your team replies all to say thank you for the thanks."
         }
       }
     ]
@@ -2202,7 +2202,7 @@
         "label": "Leave it to the process",
         "result": {
           "title": "The seat",
-          "body": "You leave it to the process. The process sends you a survey about how it is doing."
+          "body": "You leave it to the process, which sends you a survey about how it is doing."
         }
       },
       {
@@ -2265,7 +2265,7 @@
         },
         "result": {
           "title": "The seat",
-          "body": "Your reply all thanks your team for your Grand Plan. Your team replies all to say thank you for the thanks."
+          "body": "Your reply all thanks your team for your Grand Plan, and your team replies all to say thank you for the thanks."
         }
       }
     ]

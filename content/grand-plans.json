@@ -92,7 +92,7 @@
             "practitioner": 0
           },
           "reaction": {
-            "believer": "Your boss opens the tool, reads the first page of figures, and asks you where they came from. You say. Your boss nods, slowly, as if filing it.",
+            "believer": "Your boss opens the tool, reads the first page of figures and asks you where they came from, and when you say, nods slowly, as if filing it.",
             "incompetent": "Your boss opens the tool, sees that it is full, and says that this is what a single source of truth looks like.",
             "practitioner": "Your boss opens the tool, sees that the figures are flattering, and asks no questions about them, which is a kind of answer."
           },
@@ -129,7 +129,7 @@
           "sets": ["delivered-grand-plan", "tool-is-hollow"],
           "done": {
             "title": "Your boss's Grand Plan: done",
-            "body": "The new tool is live, as far as anyone can see. It has an icon and a launch e-mail. What it does not have yet is anything in it."
+            "body": "The new tool is live, as far as anyone can see, with an icon and a launch e-mail, but what it does not have yet is anything in it."
           }
         }
       ],
@@ -168,12 +168,12 @@
               "label": "Say the Junior Associate ran the roll-out",
               "blames": "associate",
               "worked": {
-                "body": "The write-up is revised. The Junior Associate's name is on page two now, and yours has moved to the acknowledgements.",
+                "body": "The write-up is revised, so the Junior Associate's name is on page two now, and yours has moved to the acknowledgements.",
                 "reported": "Lessons from the new tool were assigned to the roll-out team.",
                 "happened": "You put the new tool down to the Junior Associate, who had been asked to make the icon."
               },
               "failed": {
-                "body": "The Junior Associate replies with the brief you gave them. It was one line: Make an icon.",
+                "body": "The Junior Associate replies with the brief you gave them, which was one line: Make an icon.",
                 "opinion": -1,
                 "headOpinion": -2
               }
@@ -185,7 +185,7 @@
               "label": "Reply that the write-up's findings are being validated",
               "chance": 0.4,
               "worked": {
-                "body": "The write-up goes for validation, to a team that validates things. It is not seen again.",
+                "body": "The write-up goes for validation to a team that validates things, and is not seen again.",
                 "reported": "Lessons from the new tool are being validated.",
                 "happened": "You sent the write-up to be validated, which is where write-ups go to rest."
               },
@@ -199,7 +199,7 @@
               "id": "one-tool-take-it",
               "kind": "take",
               "label": "Wait to be told when",
-              "body": "Nobody tells you when. It is on your record anyway."
+              "body": "Nobody tells you when, but it is on your record anyway."
             }
           ]
         },
@@ -247,7 +247,7 @@
           "sets": ["delivered-grand-plan"],
           "done": {
             "title": "Your boss's Grand Plan: done",
-            "body": "Every desk can now be booked, and is. The booking system is yours, and says so at the bottom."
+            "body": "Every desk can now be booked, and is, through a booking system that is yours, and says so at the bottom."
           }
         },
         {
@@ -270,7 +270,7 @@
           "sets": ["delivered-grand-plan"],
           "done": {
             "title": "Your boss's Grand Plan: done",
-            "body": "Every desk can now be booked, and the announcement is from your boss. Your part in it is described as support."
+            "body": "Every desk can now be booked, and the announcement is from your boss, with your part in it described as support."
           }
         },
         {
@@ -293,7 +293,7 @@
           "sets": ["delivered-grand-plan", "desks-are-hollow"],
           "done": {
             "title": "Your boss's Grand Plan: done",
-            "body": "The name labels are off the desks. Everyone is at the desk they had before, which is now nobody's, officially."
+            "body": "The name labels are off the desks, and everyone is at the desk they had before, which is now officially nobody's."
           }
         }
       ],
@@ -348,7 +348,7 @@
           "as": "move",
           "from": "From: Lessons Learned, copied upstairs",
           "title": "Hot-desking: a review",
-          "body": "A review has found why everyone still has a desk. It was Facilities, who have been asked to reflect. Hot-desking is now described as a phase two.",
+          "body": "A review has found that everyone still has a desk because of Facilities, who have been asked to reflect, and hot-desking is now described as a phase two.",
           "sets": ["plan-blamed-elsewhere"]
         }
       },
@@ -381,13 +381,13 @@
           },
           "reaction": {
             "believer": "Your boss walks round the Centre, sees work being done in it, and says nothing for a while. Then your boss says that this is what Excellence was supposed to mean.",
-            "incompetent": "Your boss visits the Centre, and is puzzled that there is no ribbon. You offer to find one.",
+            "incompetent": "Your boss visits the Centre and is puzzled that there is no ribbon, so you offer to find one.",
             "practitioner": "Your boss visits the Centre, counts the people in it, and asks you whose budget they are on. They are on yours."
           },
           "sets": ["delivered-grand-plan"],
           "done": {
             "title": "Your boss's Grand Plan: done",
-            "body": "The Centre of Excellence is open, with your best people in it, doing the work that used to be done at their desks. It is going well. Your team is smaller."
+            "body": "The Centre of Excellence is open, with your best people in it doing the work that used to be done at their desks, and it is going well, although your team is smaller."
           }
         },
         {
@@ -410,7 +410,7 @@
           "sets": ["delivered-grand-plan", "centre-is-a-sign"],
           "done": {
             "title": "Your boss's Grand Plan: done",
-            "body": "The Centre of Excellence is open, as far as anyone can see. It has a sign, a launch e-mail and a lanyard. What it does not have yet is anybody in it."
+            "body": "The Centre of Excellence is open, as far as anyone can see, with a sign, a launch e-mail and a lanyard, but what it does not have yet is anybody in it."
           }
         }
       ],
@@ -437,7 +437,7 @@
           "as": "move",
           "from": "From: Lessons Learned, copied to Floor 3",
           "title": "Lessons from the Centre of Excellence",
-          "body": "A write-up has gone round of why the Centre of Excellence never opened. It finds that it lacked leadership at team level, and names the team. It is yours.",
+          "body": "A write-up has gone round of why the Centre of Excellence never opened, finding that it lacked leadership at team level and naming the team, which is yours.",
           "opinion": -1,
           "headOpinion": -2,
           "sets": ["blamed-for-the-plan"],
@@ -520,7 +520,7 @@
           },
           "reaction": {
             "believer": "Your boss reads the Roadmap twice, sees what has stopped, and says that this is the first one that could actually be followed.",
-            "incompetent": "Your boss is surprised that it is shorter than last year's, and asks whether shorter is good. You say it is. Your boss says so too, to Floor 4's scaffolding.",
+            "incompetent": "Your boss is surprised that it is shorter than last year's and asks whether shorter is good, and when you say it is, says so too, to Floor 4's scaffolding.",
             "practitioner": "Your boss reads which programmes have stopped, notes whose they were, and sends the Roadmap upstairs with a covering note that does not mention you."
           },
           "sets": ["delivered-grand-plan"],

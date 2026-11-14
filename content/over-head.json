@@ -38,7 +38,7 @@
       "worked": {
         "influential": [
           "Your boss's boss hears you out, asks two good questions, and writes something down. By the end of the week your project has been talked about upstairs, and your boss has been told to give you more room.",
-          "Your boss's boss thanks you for saying it plainly, and rings someone while you are still in the room. Things move. People are suddenly very pleased to have always agreed with you."
+          "Your boss's boss thanks you for saying it plainly and rings someone while you are still in the room, and things move, so that people are suddenly very pleased to have always agreed with you."
         ],
         "sidelined": [
           "Your boss's boss hears you out, and thanks you, and means it, and says that they will raise it. They raise it. It is the kind of thing they raise, and it is minuted.",
@@ -46,7 +46,7 @@
         ]
       },
       "failed": [
-        "Your boss's boss listens, and then asks whether you have spoken to your boss first. You have not. Your boss's boss looks disappointed, in you, and is too honest to hide it.",
+        "Your boss's boss listens, and then asks whether you have spoken to your boss first, and when you have not, looks disappointed in you, and is too honest to hide it.",
         "Your boss's boss says that they would rather hear this from your boss, and that this is how things are meant to work. They seem to believe that. You are shown out kindly."
       ]
     },
@@ -55,7 +55,7 @@
       "worked": {
         "influential": [
           "Your boss's boss does not follow all of it, but likes the way you said it, and repeats two of your phrases at the next board. Your boss has now been told to listen to you, by someone who could not say why.",
-          "Your boss's boss asks you to send over a slide. You send one. It is shown to people. You seem to have become a person whom people mention."
+          "Your boss's boss asks you to send over a slide, which is shown to people, and you seem to have become a person whom people mention."
         ],
         "sidelined": [
           "Your boss's boss says that this is exactly the sort of thing they have been saying, and asks you to remind them what it was. Nothing comes of it, warmly.",
@@ -72,7 +72,7 @@
       "worked": {
         "influential": [
           "Your boss's boss listens with great stillness, then says that it is good to know who is paying attention. Within days your boss is being unusually careful around you, and nobody says why.",
-          "Your boss's boss asks one question, about who else knows. You say nobody. Your boss's boss smiles, and you are now, it seems, someone's. It helps."
+          "Your boss's boss asks one question, about who else knows, and when you say nobody, smiles, and you are now, it seems, someone's, which helps."
         ],
         "sidelined": [
           "Your boss's boss says that they will remember this, and that it is good to know who is paying attention. There is less behind that than they would like you to think.",
@@ -99,7 +99,7 @@
     "title": "Your boss knows",
     "reaction": {
       "believer": [
-        "Your boss knows where you were. Your boss comes over and says so, quietly, and says that the door was always open. It was. Your boss goes back to their desk and does not look up for the rest of the day.",
+        "Your boss knows where you were, and comes over to say so, quietly, and to say that the door was always open, which it was, and then goes back to their desk and does not look up for the rest of the day.",
         "Your boss has heard. There is no scene. You are asked to go through things in writing from now on, so that everyone is clear, and your boss will not meet your eye."
       ],
       "incompetent": [
@@ -108,7 +108,7 @@
       ],
       "practitioner": [
         "Your boss knows. Your boss mentions it only to say how much your initiative is appreciated. Your next three pieces of work go upstairs under your boss's name, with a note about your attention to detail.",
-        "Your boss knows. Nothing is said. You are simply no longer told about things, and the meeting invitations stop, one at a time, as if they had been on a timer."
+        "Your boss knows, and although nothing is said, you are simply no longer told about things, and the meeting invitations stop, one at a time, as if they had been on a timer."
       ]
     }
   },

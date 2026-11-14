@@ -58,12 +58,12 @@
             "when": {
               "holderIs": "{boss}"
             },
-            "body": "You agree warmly with your boss. People look up, and two of them write something down. It seems that this was the thing to agree with.",
+            "body": "When you agree warmly with your boss, people look up and two of them write something down, so it seems that this was the thing to agree with.",
             "sets": ["backed-holder", "agreed-with-boss", "agreed-up-the-line"],
             "approach": "flatter"
           },
           {
-            "body": "You agree warmly with your boss. Nobody else looks up. Your agreement with your official boss has been noted by your official boss.",
+            "body": "You agree warmly with your boss, but nobody else looks up, and your agreement with your official boss is noted only by your official boss.",
             "sets": [
               "backed-wrong-person",
               "agreed-with-boss",
@@ -82,7 +82,7 @@
             "when": {
               "holderIs": "analyst"
             },
-            "body": "The Senior Analyst writes your name down. It is the first time anyone here has. Two people notice, and one of them passes you a biscuit.",
+            "body": "The Senior Analyst writes your name down, which nobody here has done before, and of the two people who notice, one passes you a biscuit.",
             "sets": ["backed-holder"],
             "opinion": -1
           },
@@ -102,7 +102,7 @@
             "when": {
               "holderIs": "admin"
             },
-            "body": "The Office Co-ordinator looks at you over the top of the reading glasses for some time. The next morning your broken chair has been replaced. No ticket was raised.",
+            "body": "The Office Co-ordinator looks at you over the top of the reading glasses for some time, and the next morning your broken chair has been replaced without anyone raising a ticket.",
             "sets": ["backed-holder"]
           },
           {
@@ -146,7 +146,7 @@
             "approach": "theatre"
           },
           {
-            "body": "There is a silence, of the respectful kind. You are asked to say more. You say the same thing again, more slowly. You have been asked to lead a working group on it.",
+            "body": "After a respectful silence you are asked to say more, so you say the same thing again, more slowly, and find that you have been asked to lead a working group on it.",
             "sets": ["used-buzzword"],
             "approach": "theatre"
           }
@@ -157,7 +157,7 @@
         "label": "Say nothing and write something down",
         "results": [
           {
-            "body": "You write key takeaways on your pad and underline it. Nobody asks you anything. You are recorded as present, which is the highest rating available at your grade.",
+            "body": "You write key takeaways on your pad and underline it, and since nobody asks you anything, you are recorded as present, which is the highest rating available at your grade.",
             "sets": ["said-nothing"]
           }
         ]
@@ -212,7 +212,7 @@
             "mistake": "big"
           },
           {
-            "body": "The Project Co-ordinator goes pink and apologises to the room. It works. The minutes record a learning opportunity, and it is the Project Co-ordinator's.",
+            "body": "The Project Co-ordinator goes pink and apologises to the room, which works, and the minutes record a learning opportunity for the Project Co-ordinator.",
             "sets": ["blamed-a-colleague"],
             "approach": "blame",
             "news": {
@@ -326,7 +326,7 @@
         "label": "Say that it was your fault",
         "results": [
           {
-            "body": "There is a long, relieved silence. You are now the person this happened to.",
+            "body": "There is a long, relieved silence, after which you are the person this happened to.",
             "sets": ["took-the-blame"],
             "approach": "ownership",
             "news": {
@@ -344,7 +344,7 @@
         "label": "Say that it was the supplier",
         "results": [
           {
-            "body": "Everyone agrees at once. The supplier is not present and has no idea. Nothing is learned, which is noted as a lesson.",
+            "body": "Everyone agrees at once, since the supplier is not here and has no idea, and nothing is learned, which is noted as a lesson.",
             "sets": ["blamed-the-supplier"],
             "approach": "blame"
           }
@@ -366,10 +366,10 @@
             "factNote": "What you were told about {subject} was so, and you knew to use it."
           },
           {
-            "body": "{subject} has no idea what you mean, and asks you to send it over in writing. You now have an action.",
+            "body": "{subject} has no idea what you mean and asks you to send it over in writing, so now you have an action.",
             "sets": ["misused-a-fact"],
             "opinion": -1,
-            "factNote": "You acted on something you were told about {subject}. It was not so."
+            "factNote": "You acted on something you were told about {subject}, and it was not so."
           }
         ]
       },
@@ -383,7 +383,7 @@
             "when": {
               "heardTrue": "values-statement"
             },
-            "body": "{subject} looks at you, then laughs for the first time on record. The following week you are asked to join something with a name. The delay is not raised again.",
+            "body": "{subject} looks at you and then laughs, for the first time on record, and the following week you are asked to join something with a name, after which the delay is never raised again.",
             "sets": ["used-a-fact"],
             "opinion": 1,
             "factNote": "What you were told about {subject} was so, and you knew to use it."
@@ -391,7 +391,7 @@
           {
             "body": "{subject} nods gravely and says those values mean a great deal. You have made a sincere impression on someone you were trying to make laugh.",
             "sets": ["misused-a-fact"],
-            "factNote": "You acted on something you were told about {subject}. It was not so."
+            "factNote": "You acted on something you were told about {subject}, and it was not so."
           }
         ]
       },
@@ -411,10 +411,10 @@
             "factNote": "What you were told about {subject} was so, and you knew to use it."
           },
           {
-            "body": "{subject} asks which list. You say it does not matter. It now does, and {subject} has mentioned it to the Office Co-ordinator.",
+            "body": "When {subject} asks which list, you say that it does not matter, but it does now, because {subject} has mentioned it to the Office Co-ordinator.",
             "sets": ["misused-a-fact"],
             "opinion": -1,
-            "factNote": "You acted on something you were told about {subject}. It was not so."
+            "factNote": "You acted on something you were told about {subject}, and it was not so."
           }
         ]
       },
@@ -436,7 +436,7 @@
           {
             "body": "{subject} says they are doing rather well, and sends you the market report. You have fifty pages to read and nothing to show for it.",
             "sets": ["misused-a-fact"],
-            "factNote": "You acted on something you were told about {subject}. It was not so."
+            "factNote": "You acted on something you were told about {subject}, and it was not so."
           }
         ]
       }
@@ -473,13 +473,13 @@
             "when": {
               "flag": "sat-at-front"
             },
-            "body": "The Chief Executive reads it out, delighted, and talks for eleven minutes. Afterwards three people you have never met know your name. Your boss is one of the people who has noticed.",
+            "body": "The Chief Executive reads it out, delighted, and talks about it for eleven minutes, after which three people you have never met know your name, and your boss is among those who have noticed.",
             "headOpinion": 1,
             "sets": ["asked-the-question"],
             "opinion": 1
           },
           {
-            "body": "Your question goes into a queue with four hundred others. It is answered in writing, by a chatbot, in March.",
+            "body": "Your question joins a queue of four hundred others and is answered in writing, by a chatbot, in March.",
             "headOpinion": 1,
             "sets": ["asked-the-question"]
           }
@@ -500,7 +500,7 @@
             "opinion": -1
           },
           {
-            "body": "You nod throughout. Your boss's boss is looking at a phone. You have nodded at a video of a stranger for forty minutes, and been seen doing it.",
+            "body": "You nod throughout while your boss's boss looks at a phone, so you have spent forty minutes being seen nodding at a video of a stranger.",
             "headOpinion": 1,
             "sets": ["backed-wrong-person", "sat-by-head", "sat-by-a-manager"],
             "opinion": -1
@@ -516,12 +516,12 @@
             "when": {
               "holderIs": "{boss}"
             },
-            "body": "Your boss laughs at the joke about synergy. You laugh too. By the afternoon people are asking you what your boss thinks.",
+            "body": "When your boss laughs at the joke about synergy you laugh too, and by the afternoon people are asking you what your boss thinks.",
             "sets": ["backed-holder", "sat-by-boss", "sat-by-a-manager"],
             "approach": "flatter"
           },
           {
-            "body": "Your boss laughs at the joke about synergy. You laugh too. You are now, officially, one of your boss's people. There do not seem to be others.",
+            "body": "When your boss laughs at the joke about synergy you laugh too, which makes you, officially, one of your boss's people, although there do not seem to be any others.",
             "sets": ["backed-wrong-person", "sat-by-boss", "sat-by-a-manager"],
             "approach": "flatter"
           }
@@ -565,7 +565,7 @@
         "label": "Applaud when everyone else applauds",
         "results": [
           {
-            "body": "You time it well. There is nothing to report, which is why you have kept this job.",
+            "body": "You time it well, and there is nothing to report, which is why you have kept this job.",
             "sets": ["applauded"]
           }
         ]
@@ -612,7 +612,7 @@
         "label": "Propose a consultant to find the savings",
         "results": [
           {
-            "body": "The consultant costs more than the thirty per cent, and recommends a further consultant. It has stopped being your problem.",
+            "body": "The consultant costs more than the thirty per cent and recommends a further consultant, but by then it has stopped being your problem.",
             "sets": ["hired-consultant"],
             "approach": "theatre"
           }
@@ -659,7 +659,7 @@
                 "nature": "dangerous"
               }
             },
-            "body": "The Office Co-ordinator thanks you for thinking of the office. Your access card stops working on Tuesday, your expenses on Wednesday. There is an email from someone important about both.",
+            "body": "The Office Co-ordinator thanks you for thinking of the office. Your access card stops working on Tuesday and your expenses on Wednesday, and someone important sends an email about both.",
             "sets": ["burned-by-a-fact"],
             "opinion": -2,
             "factAt": "admin",
@@ -667,7 +667,7 @@
             "mistake": "big"
           },
           {
-            "body": "The office budget goes. So do the good biscuits, and people know who to thank. It saves almost nothing, and everyone agrees that it shows intent.",
+            "body": "The office budget goes, and the good biscuits with it, and people know who to thank. It saves almost nothing, but everyone agrees that it shows intent.",
             "sets": ["cut-a-colleague"],
             "approach": "blame"
           }
@@ -679,7 +679,7 @@
         "label": "Offer to cut your own work",
         "results": [
           {
-            "body": "Everyone is very moved. Your work is cut. You are still expected to do it, but now without the budget.",
+            "body": "Everyone is very moved, and your work is cut, although you are still expected to do it, now without the budget.",
             "project": {
               "real": "worse"
             },
@@ -697,7 +697,7 @@
         },
         "results": [
           {
-            "body": "The meeting agrees, with obvious relief, that nothing can be cut until the numbers are agreed. The numbers will never be agreed. You have saved everyone's budget for a year.",
+            "body": "The meeting agrees, with obvious relief, that nothing can be cut until the numbers are agreed, and since the numbers will never be agreed, you have saved everyone's budget for a year.",
             "sets": ["used-buzzword-late"],
             "approach": "theatre"
           }
@@ -719,10 +719,10 @@
             "factNote": "What you were told about {subject} was so, and you knew to use it."
           },
           {
-            "body": "{subject} has no idea what you mean, and asks you to send it over in writing. You now have an action.",
+            "body": "{subject} has no idea what you mean and asks you to send it over in writing, so now you have an action.",
             "sets": ["misused-a-fact"],
             "opinion": -1,
-            "factNote": "You acted on something you were told about {subject}. It was not so."
+            "factNote": "You acted on something you were told about {subject}, and it was not so."
           }
         ]
       },
@@ -736,7 +736,7 @@
             "when": {
               "heardTrue": "values-statement"
             },
-            "body": "{subject} looks at you, then laughs for the first time on record. The following week you are asked to join something with a name. The delay is not raised again.",
+            "body": "{subject} looks at you and then laughs, for the first time on record, and the following week you are asked to join something with a name, after which the delay is never raised again.",
             "sets": ["used-a-fact"],
             "opinion": 1,
             "factNote": "What you were told about {subject} was so, and you knew to use it."
@@ -744,7 +744,7 @@
           {
             "body": "{subject} nods gravely and says those values mean a great deal. You have made a sincere impression on someone you were trying to make laugh.",
             "sets": ["misused-a-fact"],
-            "factNote": "You acted on something you were told about {subject}. It was not so."
+            "factNote": "You acted on something you were told about {subject}, and it was not so."
           }
         ]
       },
@@ -764,10 +764,10 @@
             "factNote": "What you were told about {subject} was so, and you knew to use it."
           },
           {
-            "body": "{subject} asks which list. You say it does not matter. It now does, and {subject} has mentioned it to the Office Co-ordinator.",
+            "body": "When {subject} asks which list, you say that it does not matter, but it does now, because {subject} has mentioned it to the Office Co-ordinator.",
             "sets": ["misused-a-fact"],
             "opinion": -1,
-            "factNote": "You acted on something you were told about {subject}. It was not so."
+            "factNote": "You acted on something you were told about {subject}, and it was not so."
           }
         ]
       },
@@ -789,7 +789,7 @@
           {
             "body": "{subject} says they are doing rather well, and sends you the market report. You have fifty pages to read and nothing to show for it.",
             "sets": ["misused-a-fact"],
-            "factNote": "You acted on something you were told about {subject}. It was not so."
+            "factNote": "You acted on something you were told about {subject}, and it was not so."
           }
         ]
       },
@@ -909,7 +909,7 @@
         },
         "results": [
           {
-            "body": "The figures you were sent are in a spreadsheet called FINAL final. It takes an afternoon to load them. The launch e-mail goes out under your name, with a chart in it.",
+            "body": "The figures you were sent are in a spreadsheet called FINAL final, which takes an afternoon to load, and the launch e-mail goes out under your name with a chart in it.",
             "sets": ["tool-real-figures"],
             "approach": "results"
           }
@@ -981,7 +981,7 @@
         "label": "Credit the arrow to your boss",
         "results": [
           {
-            "body": "You say it clearly, and it is minuted. Several people write something down. Whether it was the right name, the minutes do not say.",
+            "body": "You say it clearly and it is minuted, and several people write something down, although the minutes do not say whether it was the right name.",
             "sets": ["credited-boss", "gave-credit-upstairs"],
             "approach": "flatter"
           }
@@ -1006,7 +1006,7 @@
         "label": "Offer a steeper arrow for next quarter",
         "results": [
           {
-            "body": "You are thanked for your energy, and given the slide. It is now yours, along with everything that it says.",
+            "body": "You are thanked for your energy and given the slide, which is now yours, along with everything that it says.",
             "sets": ["offered-arrow"],
             "approach": "theatre"
           }
@@ -1018,7 +1018,7 @@
         "label": "Say the figures do not show an arrow",
         "results": [
           {
-            "body": "You put the figures on the screen. They go along, and slightly down. There is a pause, and someone asks whether this has been through the proper process.",
+            "body": "You put the figures on the screen, where they go along and slightly down, and after a pause someone asks whether this has been through the proper process.",
             "headOpinion": 1,
             "sets": ["showed-figures"],
             "approach": "truth"
@@ -1034,7 +1034,7 @@
         },
         "results": [
           {
-            "body": "Everyone agrees, gravely. The review is adjourned until the truth has been sourced. You have saved the room an hour and a half.",
+            "body": "Everyone agrees, gravely, and the review is adjourned until the truth has been sourced, which saves the room an hour and a half.",
             "sets": ["used-buzzword-late"],
             "approach": "theatre"
           }
@@ -1045,7 +1045,7 @@
         "label": "Nod at the arrow",
         "results": [
           {
-            "body": "You nod at the arrow. Other people are nodding at it too. It is, for a moment, a real team.",
+            "body": "You nod at the arrow, and since other people are nodding at it too, it is for a moment a real team.",
             "sets": ["nodded-at-arrow"]
           }
         ]
@@ -1103,7 +1103,7 @@
         "label": "Say your arrow went down, and why",
         "results": [
           {
-            "body": "You explain the dip. It takes four minutes, and all of it is true. The minutes record that you raised a timing difference, which is to be restated.",
+            "body": "You explain the dip, which takes four minutes, all of them true, and the minutes record that you raised a timing difference, which is to be restated.",
             "headOpinion": 1,
             "sets": ["owned-the-dip"],
             "approach": "truth"
@@ -1139,7 +1139,7 @@
         "label": "Nod at both arrows",
         "results": [
           {
-            "body": "You nod at last quarter's arrow, and then at this one. You have, on the record, agreed with both.",
+            "body": "You nod at last quarter's arrow and then at this one, and so have agreed, on the record, with both.",
             "sets": ["nodded-at-arrow"]
           }
         ]
@@ -1234,7 +1234,7 @@
         "label": "Say only the handle has actually happened",
         "results": [
           {
-            "body": "You point at the handle. It is flat. There is a silence, and then the slide is moved along to the blade, where things are better.",
+            "body": "You point out that the handle is flat, and after a silence the slide is moved along to the blade, where things are better.",
             "headOpinion": 1,
             "sets": ["pointed-at-the-handle"],
             "approach": "truth"
@@ -1246,7 +1246,7 @@
         "label": "Nod at the blade",
         "results": [
           {
-            "body": "You nod at the blade. It is going up, and so, for a moment, are you.",
+            "body": "You nod at the blade, which is going up, and so, for a moment, are you.",
             "sets": ["nodded-at-arrow"]
           }
         ]
@@ -1279,7 +1279,7 @@
         "label": "Make it amber, and add a footnote",
         "results": [
           {
-            "body": "It is amber now. The footnote says amber pending review. The project is still late, but it is no longer red about it.",
+            "body": "It is amber now, with a footnote saying amber pending review, and the project is still late, but no longer red about it.",
             "sets": ["made-it-amber"],
             "approach": "theatre",
             "project": {
@@ -1294,7 +1294,7 @@
         "label": "Tell them the chart is right",
         "results": [
           {
-            "body": "You explain what is going wrong, and why, and what it would take. It is the best thing anyone has said in this room for a year. The silence goes on for some time. Someone asks who approved the chart.",
+            "body": "You explain what is going wrong, and why, and what it would take to fix it, which is the best thing anyone has said in this room for a year. The silence goes on for some time, until someone asks who approved the chart.",
             "sets": ["told-the-truth"],
             "approach": "truth"
           }
@@ -1312,7 +1312,7 @@
                 "nature": "dangerous"
               }
             },
-            "body": "The Senior Analyst offers to go through them with you, in front of everyone. They are not wrong. By the evening somebody senior has started going through yours.",
+            "body": "The Senior Analyst offers to go through them with you in front of everyone, and they turn out not to be wrong, so by the evening somebody senior has started going through yours.",
             "sets": ["burned-by-a-fact"],
             "opinion": -2,
             "factAt": "analyst",
@@ -1371,7 +1371,7 @@
             }
           },
           {
-            "body": "Your boss accepts this graciously. The room does not look convinced, and looks at you for having said it.",
+            "body": "Your boss accepts this graciously, but the room does not look convinced, and looks at you for having said it.",
             "sets": ["backed-wrong-person"],
             "approach": "flatter"
           }
@@ -1428,7 +1428,7 @@
             "when": {
               "holderIs": "{head}"
             },
-            "body": "Your boss's boss nods once. Your own name comes up shortly afterwards, and passes through without being moved. You now understand how this works.",
+            "body": "Your boss's boss nods once, and when your own name comes up shortly afterwards it passes through without being moved, so now you understand how this works.",
             "sets": ["backed-holder"]
           },
           {
@@ -1446,7 +1446,7 @@
             "when": {
               "holderIs": "{boss}"
             },
-            "body": "Your boss nods once. Your own name comes up shortly afterwards, and passes through without being moved. You now understand how this works.",
+            "body": "Your boss nods once, and when your own name comes up shortly afterwards it passes through without being moved, so now you understand how this works.",
             "sets": ["backed-holder"],
             "approach": "flatter"
           },
@@ -1520,7 +1520,7 @@
             "when": {
               "holderIs": "associate"
             },
-            "body": "The Junior Associate smiles, as if this had been arranged. Your name comes up shortly afterwards, and passes through without being moved. You are not sure who arranged it.",
+            "body": "The Junior Associate smiles as if this had been arranged, and when your name comes up shortly afterwards it passes through without being moved, although you are not sure who arranged that.",
             "sets": ["backed-holder"]
           },
           {
@@ -1560,10 +1560,10 @@
             "factNote": "What you were told about {subject} was so, and you knew to use it."
           },
           {
-            "body": "{subject} has no idea what you mean, and asks you to send it over in writing. You now have an action.",
+            "body": "{subject} has no idea what you mean and asks you to send it over in writing, so now you have an action.",
             "sets": ["misused-a-fact"],
             "opinion": -1,
-            "factNote": "You acted on something you were told about {subject}. It was not so."
+            "factNote": "You acted on something you were told about {subject}, and it was not so."
           }
         ]
       },
@@ -1577,7 +1577,7 @@
             "when": {
               "heardTrue": "values-statement"
             },
-            "body": "{subject} looks at you, then laughs for the first time on record. The following week you are asked to join something with a name. The delay is not raised again.",
+            "body": "{subject} looks at you and then laughs, for the first time on record, and the following week you are asked to join something with a name, after which the delay is never raised again.",
             "sets": ["used-a-fact"],
             "opinion": 1,
             "factNote": "What you were told about {subject} was so, and you knew to use it."
@@ -1585,7 +1585,7 @@
           {
             "body": "{subject} nods gravely and says those values mean a great deal. You have made a sincere impression on someone you were trying to make laugh.",
             "sets": ["misused-a-fact"],
-            "factNote": "You acted on something you were told about {subject}. It was not so."
+            "factNote": "You acted on something you were told about {subject}, and it was not so."
           }
         ]
       },
@@ -1605,10 +1605,10 @@
             "factNote": "What you were told about {subject} was so, and you knew to use it."
           },
           {
-            "body": "{subject} asks which list. You say it does not matter. It now does, and {subject} has mentioned it to the Office Co-ordinator.",
+            "body": "When {subject} asks which list, you say that it does not matter, but it does now, because {subject} has mentioned it to the Office Co-ordinator.",
             "sets": ["misused-a-fact"],
             "opinion": -1,
-            "factNote": "You acted on something you were told about {subject}. It was not so."
+            "factNote": "You acted on something you were told about {subject}, and it was not so."
           }
         ]
       },
@@ -1630,7 +1630,7 @@
           {
             "body": "{subject} says they are doing rather well, and sends you the market report. You have fifty pages to read and nothing to show for it.",
             "sets": ["misused-a-fact"],
-            "factNote": "You acted on something you were told about {subject}. It was not so."
+            "factNote": "You acted on something you were told about {subject}, and it was not so."
           }
         ]
       },
@@ -1703,7 +1703,7 @@
         "label": "Fill in the form yourself, several times",
         "results": [
           {
-            "body": "Your Delight goes to ninety-four. Three stakeholders have now expressed delight, and one of them is a meeting room. You are asked to share your approach with the team.",
+            "body": "Your Delight goes to ninety-four, from three stakeholders, one of whom is a meeting room, and you are asked to share your approach with the team.",
             "sets": ["gamed-metric"],
             "approach": "theatre"
           }
@@ -1715,7 +1715,7 @@
         "label": "Report the number you actually got",
         "results": [
           {
-            "body": "Your Delight is eleven. You say that this seems about right. There is a silence, and then someone asks whether eleven is out of eleven.",
+            "body": "Your Delight is eleven, which you say seems about right, and after a silence someone asks whether that is eleven out of eleven.",
             "sets": ["reported-real-metric"],
             "approach": "truth"
           }
@@ -1754,7 +1754,7 @@
             "mistake": "big"
           },
           {
-            "body": "The Senior Analyst has to look it up. The room waits. You say that it is no problem at all, and that you were only curious, and everyone writes that down.",
+            "body": "The Senior Analyst has to look it up while the room waits, and you say that it is no problem at all and that you were only curious, which everyone writes down.",
             "sets": ["asked-tricky-question"],
             "approach": "blame"
           }
@@ -1777,7 +1777,7 @@
         "label": "Look at the screen until it is over",
         "results": [
           {
-            "body": "It is over in forty minutes. You have been delighted, on the form, by somebody.",
+            "body": "It is over in forty minutes, and you have been delighted, on the form, by somebody.",
             "sets": ["said-nothing-metric"]
           }
         ]
@@ -1842,7 +1842,7 @@
         "label": "Argue for the excellent candidate",
         "results": [
           {
-            "body": "You go through the evidence, and they are appointed. They are very good. Everyone has already started to wonder what they are after.",
+            "body": "You go through the evidence and they are appointed, and they are very good, which has already set everyone wondering what they are after.",
             "sets": ["hired-the-best"],
             "approach": "results",
             "news": {
@@ -1934,7 +1934,7 @@
         "label": "Say what is really wrong with your project",
         "results": [
           {
-            "body": "You say it. It takes two minutes. The person from Human Resources thanks you for bringing your whole self to the session, and asks whether you would like to speak to someone.",
+            "body": "You say it, which takes two minutes, and the person from Human Resources thanks you for bringing your whole self to the session and asks whether you would like to speak to someone.",
             "sets": ["raised-the-project"],
             "approach": "truth"
           }
@@ -1987,7 +1987,7 @@
                 "nature": "dangerous"
               }
             },
-            "body": "It gets round quickly. It gets round, in fact, to someone who knows where it started. You are sent a calendar invitation with no subject, and your boss is on it.",
+            "body": "It gets round quickly, and in fact gets round to someone who knows where it started, after which you are sent a calendar invitation with no subject, with your boss on it.",
             "sets": ["burned-by-a-fact"],
             "opinion": -2,
             "factAt": "projects",
@@ -2017,7 +2017,7 @@
         "label": "Say you feel safe, for the record",
         "results": [
           {
-            "body": "It is recorded. You are asked whether you would be willing to say that on a poster. You find that you are.",
+            "body": "It is recorded, and when you are asked whether you would be willing to say that on a poster, you find that you are.",
             "sets": ["felt-safe"],
             "approach": "theatre"
           }
@@ -2027,7 +2027,7 @@
         "id": "tell-them-everything",
         "family": "attack",
         "label": "Take the microphone and name names",
-        "stakes": "It is being recorded. People have been walked out of the building for much less.",
+        "stakes": "It is being recorded, and people have been walked out of the building for much less.",
         "results": [
           {
             "body": "You are thorough. You use the word 'frankly' eleven times. The Listening Session is the first in the company's history to have listened, and the recording reaches the floor above before you have sat down.",
@@ -2041,7 +2041,7 @@
         "label": "Take a biscuit, and say nothing",
         "results": [
           {
-            "body": "It is a good biscuit. It has been noted.",
+            "body": "It is a good biscuit, and it has been noted.",
             "sets": ["took-a-biscuit"]
           }
         ]
@@ -2075,7 +2075,7 @@
         "label": "Say that your team pivoted first",
         "results": [
           {
-            "body": "You are minuted as an early pivoter. Nobody asks which way.",
+            "body": "You are minuted as an early pivoter, and nobody asks which way.",
             "sets": ["pivoted-first"],
             "approach": "theatre"
           }
@@ -2087,7 +2087,7 @@
         "label": "Ask where Beyond is, exactly",
         "results": [
           {
-            "body": "There is a pause. Someone says that is rather the point. Your question is noted, in a smaller font.",
+            "body": "After a pause someone says that is rather the point, and your question is noted in a smaller font.",
             "sets": ["asked-where-beyond-is"],
             "headOpinion": 1,
             "approach": "truth"
@@ -2112,7 +2112,7 @@
         "label": "Turn your chair ninety degrees, like everyone else",
         "results": [
           {
-            "body": "You face Beyond with the rest of the room. It is a wall.",
+            "body": "You face Beyond with the rest of the room, and it turns out to be a wall.",
             "sets": ["turned-with-the-pivot"]
           }
         ]
@@ -2146,7 +2146,7 @@
         "label": "Say you will have delivered the tool",
         "results": [
           {
-            "body": "It is written into next year, in your name. Next year has become a deadline.",
+            "body": "It is written into next year in your name, so next year has become a deadline.",
             "sets": ["claimed-a-future-win"],
             "approach": "theatre"
           }
@@ -2158,7 +2158,7 @@
         "label": "Thank leadership for next year",
         "results": [
           {
-            "body": "Leadership thanks you for thanking them in advance. It is a first, and it is minuted.",
+            "body": "Leadership thanks you for thanking them in advance, which is a first, and is minuted.",
             "sets": ["thanked-leadership"],
             "approach": "flatter"
           }
@@ -2170,7 +2170,7 @@
         "label": "Ask what we learned this year",
         "results": [
           {
-            "body": "The consultant says that this year is out of scope. It is in next year's lessons, as a risk.",
+            "body": "The consultant says that this year is out of scope, and puts it in next year's lessons as a risk.",
             "sets": ["asked-about-this-year"],
             "headOpinion": 1,
             "approach": "truth"
@@ -2182,7 +2182,7 @@
         "label": "Take notes on your future",
         "results": [
           {
-            "body": "Your notes say that things went well. You underline it.",
+            "body": "Your notes say that things went well, and you underline it.",
             "sets": ["noted-the-future"]
           }
         ]
@@ -2216,7 +2216,7 @@
         "label": "Present last year's slide as this year's",
         "results": [
           {
-            "body": "Nobody notices. Someone says it is even better than last year's, which it is not, being the same one.",
+            "body": "Nobody notices, and someone says it is even better than last year's, which it cannot be, being the same one.",
             "sets": ["presented-it-again"],
             "approach": "theatre"
           }
@@ -2228,7 +2228,7 @@
         "label": "Say that it is the same slide",
         "results": [
           {
-            "body": "There is a silence. The slide is advanced, and the next one is also the same.",
+            "body": "After a silence the slide is advanced, and the next one is also the same.",
             "sets": ["said-it-was-the-same"],
             "headOpinion": 1,
             "approach": "truth"
@@ -2252,7 +2252,7 @@
         "label": "Nod at the arrow",
         "results": [
           {
-            "body": "You nod at the arrow. It is going up, and so, for a moment, are you.",
+            "body": "You nod at the arrow, which is going up, and so, for a moment, are you.",
             "sets": ["nodded-at-arrow"]
           }
         ]
@@ -2287,7 +2287,7 @@
         "label": "Say what you actually did",
         "results": [
           {
-            "body": "You say what you did. It takes eleven seconds, and someone asks whether that is everything.",
+            "body": "You say what you did, which takes eleven seconds, and someone asks whether that is everything.",
             "sets": ["said-what-you-did"],
             "approach": "truth"
           }
@@ -2299,7 +2299,7 @@
         "label": "Say that you are blocked by another team",
         "results": [
           {
-            "body": "You are blocked by another team. The other team is not here, and is minuted as a dependency.",
+            "body": "You are blocked by another team, which is not here, and is minuted as a dependency.",
             "sets": ["named-a-blocker"],
             "approach": "theatre"
           }
@@ -2311,7 +2311,7 @@
         "label": "Say that the stand-up keeps everyone aligned",
         "results": [
           {
-            "body": "Your boss agrees. The stand-up is extended by half an hour, so that it can keep everyone more aligned.",
+            "body": "Your boss agrees, and the stand-up is extended by half an hour so that it can keep everyone more aligned.",
             "sets": ["praised-the-stand-up"],
             "approach": "flatter"
           }
@@ -2322,7 +2322,7 @@
         "label": "Stand up",
         "results": [
           {
-            "body": "You stand up. It is a stand-up. Nobody else does, and you sit down again."
+            "body": "You stand up, since it is a stand-up, but nobody else does, and you sit down again."
           }
         ]
       }
@@ -2356,7 +2356,7 @@
         "label": "Offer to organise it all",
         "results": [
           {
-            "body": "You are organising the away day. It is in this room, so the logistics are mostly chairs.",
+            "body": "You are organising the away day, which is in this room, so the logistics are mostly chairs.",
             "sets": ["organised-the-away-day"],
             "approach": "favour"
           }
@@ -2368,7 +2368,7 @@
         "label": "Suggest spending the day on the actual work",
         "results": [
           {
-            "body": "There is a silence. Your boss says that is what the other days are for, and writes AGILITY on the whiteboard.",
+            "body": "After a silence your boss says that is what the other days are for, and writes AGILITY on the whiteboard.",
             "sets": ["suggested-real-work"],
             "approach": "truth"
           }
@@ -2391,7 +2391,7 @@
         "label": "Say you will bring biscuits",
         "results": [
           {
-            "body": "You are minuted as Biscuits. It is the clearest action on the page."
+            "body": "You are minuted as Biscuits, which is the clearest action on the page."
           }
         ]
       }
@@ -2425,7 +2425,7 @@
         "label": "Add a box called Review the Review",
         "results": [
           {
-            "body": "Your box is added. The flowchart is now longer, which is minuted as maturity.",
+            "body": "Your box is added, and the flowchart is now longer, which is minuted as maturity.",
             "sets": ["added-a-box"],
             "approach": "theatre"
           }
@@ -2437,7 +2437,7 @@
         "label": "Point out a step that nobody does",
         "results": [
           {
-            "body": "Everyone agrees that nobody does it. It is kept, so that it can be not done properly.",
+            "body": "Everyone agrees that nobody does it, so it is kept, in order that it can be not done properly.",
             "sets": ["pointed-out-a-step"],
             "approach": "truth"
           }
@@ -2449,7 +2449,7 @@
         "label": "Say you have never seen a clearer flowchart",
         "results": [
           {
-            "body": "Your boss says it took a lot of work. It took a lot of boxes.",
+            "body": "Your boss says it took a lot of work, though what it mostly took was boxes.",
             "sets": ["praised-the-flowchart"],
             "approach": "flatter"
           }
@@ -2460,7 +2460,7 @@
         "label": "Follow the arrow with your finger",
         "results": [
           {
-            "body": "Your finger goes round twice and comes back to the start. You are minuted as engaged."
+            "body": "Your finger goes round twice and comes back to the start, and you are minuted as engaged."
           }
         ]
       }
@@ -2494,7 +2494,7 @@
         "label": "Ask what it will excel at",
         "results": [
           {
-            "body": "There is a pause. Your boss says that is what the Centre is for. Your question is written on a flipchart, under Parked.",
+            "body": "After a pause your boss says that is what the Centre is for, and your question is written on a flipchart under Parked.",
             "sets": ["asked-what-it-excels-at"],
             "approach": "truth"
           }
@@ -2506,7 +2506,7 @@
         "label": "Sign the leadership charter first",
         "results": [
           {
-            "body": "Your signature is the first on the charter, above where your boss's will go. It is moved down.",
+            "body": "Your signature is the first on the charter, above where your boss's will go, until it is moved down.",
             "sets": ["signed-the-charter"],
             "approach": "flatter"
           }
@@ -2517,7 +2517,7 @@
         "label": "Take a pastry",
         "results": [
           {
-            "body": "It is a pain au chocolat. You are a leader now."
+            "body": "It is a pain au chocolat, and you are a leader now."
           }
         ]
       },
@@ -2527,7 +2527,7 @@
         "label": "Say that you are humbled",
         "results": [
           {
-            "body": "You say it. Everyone who has said it before nods, humbly.",
+            "body": "You say it, and everyone who has said it before nods humbly.",
             "sets": ["said-humbled"],
             "approach": "theatre"
           }
@@ -2583,7 +2583,7 @@
         "label": "Say that your team is at capacity",
         "results": [
           {
-            "body": "You say it. It is minuted. Your team is now officially at capacity, which means it can do less.",
+            "body": "You say it and it is minuted, so your team is now officially at capacity, which means it can do less.",
             "sets": ["said-at-capacity"],
             "approach": "theatre"
           }
@@ -2595,7 +2595,7 @@
         "label": "Staff the Centre of Excellence with your best",
         "results": [
           {
-            "body": "Your best people move to the Centre. It has a desk now, and the desk has work on it.",
+            "body": "Your best people move to the Centre, which has a desk now, with work on it.",
             "sets": ["centre-really-staffed"],
             "approach": "results"
           }
@@ -2631,7 +2631,7 @@
                 "nature": "dangerous"
               }
             },
-            "body": "It is minuted. That afternoon someone from upstairs asks, very politely, to see your own capacity, and who signed it off.",
+            "body": "It is minuted, and that afternoon someone from upstairs asks, very politely, to see your own capacity, and who signed it off.",
             "sets": ["burned-by-a-fact"],
             "opinion": -2,
             "factAt": "analyst",
@@ -2675,7 +2675,7 @@
         "label": "Say your team needs more people",
         "results": [
           {
-            "body": "You say it. You are thanked for your advocacy, and your team is reduced by one, for balance.",
+            "body": "You say it, and are thanked for your advocacy, and your team is reduced by one, for balance.",
             "sets": ["backed-your-team"],
             "approach": "truth"
           }
@@ -2687,7 +2687,7 @@
         "label": "Offer to do more with less",
         "results": [
           {
-            "body": "Your boss writes MORE WITH LESS on the whiteboard. Your team will be told by the whiteboard.",
+            "body": "Your boss writes MORE WITH LESS on the whiteboard, which is how your team will be told.",
             "sets": ["offered-a-cut"],
             "approach": "flatter"
           }
@@ -2699,7 +2699,7 @@
         "label": "Report the Centre of Excellence open",
         "results": [
           {
-            "body": "It is minuted as open. Business is welcome, by appointment, which nobody has.",
+            "body": "It is minuted as open, and business is welcome by appointment, which nobody has.",
             "sets": ["centre-sign-up"],
             "approach": "theatre"
           }
@@ -2713,7 +2713,7 @@
         "label": "Stay on mute",
         "results": [
           {
-            "body": "You stay on mute. Your team watches you stay on mute."
+            "body": "You stay on mute, and your team watches you do it."
           }
         ]
       }
@@ -2747,7 +2747,7 @@
         "label": "Share a win from your team",
         "results": [
           {
-            "body": "You share a win. Your boss asks whether it can be a case study. It is now a case study, and nobody on your team was asked.",
+            "body": "You share a win, and your boss asks whether it can be a case study, which it now is, although nobody on your team was asked.",
             "sets": ["shared-a-win"],
             "approach": "theatre"
           }
@@ -2759,7 +2759,7 @@
         "label": "Share a problem from your team",
         "results": [
           {
-            "body": "You share a problem. Your boss says it is good that we can be open, and changes the subject.",
+            "body": "When you share a problem, your boss says it is good that we can be open, and changes the subject.",
             "sets": ["shared-a-problem"],
             "approach": "truth"
           }
@@ -2771,7 +2771,7 @@
         "label": "Move real work into the Centre of Excellence",
         "results": [
           {
-            "body": "Real work moves into the Centre. It is quieter there, and people get on with it.",
+            "body": "Real work moves into the Centre, where it is quieter and people get on with it.",
             "sets": ["centre-really-staffed"],
             "approach": "results"
           }
@@ -2785,7 +2785,7 @@
         "label": "Nod along",
         "results": [
           {
-            "body": "You nod. Huddles run on nodding."
+            "body": "You nod, which is what huddles run on."
           }
         ]
       }
@@ -2819,7 +2819,7 @@
         "label": "Take ownership of a red risk",
         "results": [
           {
-            "body": "The risk is yours. It is still red, and now it has your name on it.",
+            "body": "The risk is yours now, still red, and with your name on it.",
             "sets": ["owned-a-risk"],
             "approach": "results"
           }
@@ -2831,7 +2831,7 @@
         "label": "Suggest that your red risk is really amber",
         "results": [
           {
-            "body": "It is amber now. Nothing about it has changed, except the colour.",
+            "body": "It is amber now, although nothing about it has changed except the colour.",
             "sets": ["downgraded-a-risk"],
             "approach": "theatre"
           }
@@ -2843,7 +2843,7 @@
         "label": "List the Centre of Excellence as every mitigation",
         "results": [
           {
-            "body": "The Centre mitigates thirty risks. It does not yet have anyone in it.",
+            "body": "The Centre mitigates thirty risks, despite not yet having anyone in it.",
             "sets": ["centre-sign-up"],
             "approach": "theatre"
           }
@@ -2883,7 +2883,7 @@
         "label": "Read all ninety",
         "results": [
           {
-            "body": "You read all ninety. The fourth one is the risk that nobody reads the register."
+            "body": "You read all ninety, and the fourth is the risk that nobody reads the register."
           }
         ]
       }
@@ -2917,7 +2917,7 @@
         "label": "Agree with whatever is going to be decided",
         "results": [
           {
-            "body": "You agree in advance. It saves time later, when you will agree again.",
+            "body": "You agree in advance, which saves time later, when you will agree again.",
             "sets": ["agreed-in-advance"],
             "approach": "flatter"
           }
@@ -2929,7 +2929,7 @@
         "label": "Propose something your team could actually do",
         "results": [
           {
-            "body": "It is minuted as an option. Options are what the planning meeting does not choose.",
+            "body": "It is minuted as an option, which is what the planning meeting calls the things it does not choose.",
             "sets": ["proposed-something"],
             "approach": "truth"
           }
@@ -2941,7 +2941,7 @@
         "label": "Suggest a pre-meet for the pre-meet",
         "results": [
           {
-            "body": "It is booked for Thursday. You will chair it, and it will decide what this one decided.",
+            "body": "It is booked for Thursday, with you in the chair, and it will decide what this one decided.",
             "sets": ["booked-a-pre-meet"],
             "approach": "theatre"
           }
@@ -2952,7 +2952,7 @@
         "label": "Offer to take the minutes",
         "results": [
           {
-            "body": "You take the minutes. They record that things were agreed."
+            "body": "You take the minutes, which record that things were agreed."
           }
         ]
       }
@@ -2984,7 +2984,7 @@
         "label": "Say what actually went wrong",
         "results": [
           {
-            "body": "You say it. It is written under What Did Not Go Well, in a smaller pen.",
+            "body": "You say it, and it is written under What Did Not Go Well, in a smaller pen.",
             "sets": ["said-what-went-wrong"],
             "approach": "truth"
           }
@@ -2996,7 +2996,7 @@
         "label": "Say that everything went well",
         "results": [
           {
-            "body": "Everyone agrees, with relief. The retrospective ends early, which is minuted as a success.",
+            "body": "Everyone agrees with relief, and the retrospective ends early, which is minuted as a success.",
             "sets": ["said-it-went-well"],
             "approach": "flatter"
           }
@@ -3008,7 +3008,7 @@
         "label": "Say that the process let everyone down",
         "results": [
           {
-            "body": "The process is blamed, unanimously. It is not present, and takes it well.",
+            "body": "The process is blamed unanimously and, not being present, takes it well.",
             "sets": ["blamed-the-process"],
             "approach": "theatre"
           }
@@ -3034,7 +3034,7 @@
         "label": "Draw the sailboat with the anchors",
         "results": [
           {
-            "body": "You draw the sailboat. The anchors are the things holding the team back. There are a lot of anchors."
+            "body": "You draw the sailboat, whose anchors are the things holding the team back, and there are a lot of anchors."
           }
         ]
       }
@@ -3067,7 +3067,7 @@
         "label": "Breathe in for four, and out for four",
         "results": [
           {
-            "body": "You breathe. The deadline does not."
+            "body": "You breathe, although the deadline does not."
           }
         ]
       },
@@ -3089,7 +3089,7 @@
         "label": "Finish your work under the table",
         "results": [
           {
-            "body": "You finish it. The facilitator thanks everyone for being so present.",
+            "body": "You finish it, and the facilitator thanks everyone for being so present.",
             "sets": ["worked-under-the-table"],
             "approach": "results"
           }
@@ -3149,7 +3149,7 @@
         "label": "Ask for a free trial for the floor",
         "results": [
           {
-            "body": "The supplier is delighted. The trial is free for thirty days, after which it is not.",
+            "body": "The supplier is delighted, and the trial is free for thirty days, after which it is not.",
             "sets": ["asked-for-a-trial"],
             "approach": "theatre"
           }
@@ -3160,7 +3160,7 @@
         "label": "Put on the lanyard",
         "results": [
           {
-            "body": "You put on the lanyard. It says Partner on it."
+            "body": "You put on the lanyard, which says Partner on it."
           }
         ]
       },
@@ -3170,7 +3170,7 @@
         "label": "Agree with whatever your boss says",
         "results": [
           {
-            "body": "Your boss says it looks interesting. You say it looks very interesting.",
+            "body": "Your boss says it looks interesting, and you say it looks very interesting.",
             "sets": ["agreed-with-the-boss"],
             "approach": "flatter"
           }
@@ -3206,7 +3206,7 @@
         "label": "Let your team win the quiz",
         "results": [
           {
-            "body": "Your team wins. The prize is a voucher, which is shared, and is for one.",
+            "body": "Your team wins a voucher, which is shared, and is for one.",
             "sets": ["let-the-team-win"],
             "approach": "favour"
           }
@@ -3218,7 +3218,7 @@
         "label": "Suggest mixing the tables",
         "results": [
           {
-            "body": "The tables are mixed. Everyone talks to someone new for ten minutes, and then moves back.",
+            "body": "The tables are mixed, and everyone talks to someone new for ten minutes before moving back.",
             "sets": ["mixed-the-tables"],
             "approach": "truth"
           }
@@ -3229,7 +3229,7 @@
         "label": "Offer to keep the score",
         "results": [
           {
-            "body": "You keep the score. It is close, and then it is not."
+            "body": "You keep the score, which is close, and then is not."
           }
         ]
       },
@@ -3275,7 +3275,7 @@
         "label": "Argue for your team's real costs",
         "results": [
           {
-            "body": "You argue. Your line is kept, at ninety per cent, as a compromise with itself.",
+            "body": "You argue, and your line is kept at ninety per cent, as a compromise with itself.",
             "sets": ["argued-for-the-team"],
             "approach": "truth"
           }
@@ -3287,7 +3287,7 @@
         "label": "Offer the ten per cent from your team",
         "results": [
           {
-            "body": "You are thanked for your leadership. Your team is told by the spreadsheet.",
+            "body": "You are thanked for your leadership, and your team finds out from the spreadsheet.",
             "sets": ["offered-the-cut"],
             "approach": "flatter"
           }
@@ -3367,14 +3367,14 @@
         "label": "Hire your old friend, who is between things",
         "results": [
           {
-            "body": "Your friend starts on Monday, and on Monday asks what the job is. You tell them. By Friday the Senior Analyst is doing it, and your project has slipped a week.",
+            "body": "Your friend starts on Monday and asks what the job is, so you tell them, and by Friday the Senior Analyst is doing it and your project has slipped a week.",
             "sets": ["hired-your-friend"],
             "approach": "cronyism",
             "project": {
               "real": "worse"
             },
             "reaction": {
-              "believer": "Your boss asks to see the scoring sheet. There is no scoring sheet. Your boss writes something down, and underlines it.",
+              "believer": "Your boss asks to see the scoring sheet, of which there is none, and writes something down, and underlines it.",
               "incompetent": "Your boss says that a lead needs people they can trust, and asks your friend about golf.",
               "practitioner": "Your boss says that everyone needs their own people, and asks, lightly, how far back the two of you go."
             },
@@ -3395,7 +3395,7 @@
         "label": "Hire the candidate your boss mentioned",
         "results": [
           {
-            "body": "Your boss's candidate accepts, and mentions your boss twice in their first week. You are now someone who listens.",
+            "body": "Your boss's candidate accepts and mentions your boss twice in their first week, which makes you someone who listens.",
             "sets": ["hired-the-bosses-pick"],
             "approach": "favour"
           }
@@ -3489,7 +3489,7 @@
             "sets": ["team-bonus-to-allies", "team-bonus-decided"],
             "approach": "cronyism",
             "reaction": {
-              "believer": "Your boss reads the split, and asks what each share was for. You say loyalty. Your boss writes the word down, and looks at it.",
+              "believer": "Your boss reads the split and asks what each share was for, and when you say loyalty, writes the word down and looks at it.",
               "incompetent": "Your boss signs the split, and says that loyalty ought to be rewarded, as if it had been.",
               "practitioner": "Your boss signs the split without reading it, and says that people remember who looked after them."
             },
@@ -3520,7 +3520,7 @@
             "sets": ["team-bonus-to-allies", "team-bonus-decided"],
             "approach": "cronyism",
             "reaction": {
-              "believer": "Your boss reads the split, and asks what each share was for. You say loyalty. Your boss writes the word down, and looks at it.",
+              "believer": "Your boss reads the split and asks what each share was for, and when you say loyalty, writes the word down and looks at it.",
               "incompetent": "Your boss signs the split, and says that loyalty ought to be rewarded, as if it had been.",
               "practitioner": "Your boss signs the split without reading it, and says that people remember who looked after them."
             },
@@ -3557,7 +3557,7 @@
             "sets": ["team-bonus-to-allies", "team-bonus-decided"],
             "approach": "cronyism",
             "reaction": {
-              "believer": "Your boss reads the split, and asks what each share was for. You say loyalty. Your boss writes the word down, and looks at it.",
+              "believer": "Your boss reads the split and asks what each share was for, and when you say loyalty, writes the word down and looks at it.",
               "incompetent": "Your boss signs the split, and says that loyalty ought to be rewarded, as if it had been.",
               "practitioner": "Your boss signs the split without reading it, and says that people remember who looked after them."
             },
@@ -3581,7 +3581,7 @@
             "sets": ["team-bonus-to-allies", "team-bonus-decided"],
             "approach": "cronyism",
             "reaction": {
-              "believer": "Your boss reads the split, and asks what each share was for. You say loyalty. Your boss writes the word down, and looks at it.",
+              "believer": "Your boss reads the split and asks what each share was for, and when you say loyalty, writes the word down and looks at it.",
               "incompetent": "Your boss signs the split, and says that loyalty ought to be rewarded, as if it had been.",
               "practitioner": "Your boss signs the split without reading it, and says that people remember who looked after them."
             },
@@ -3608,7 +3608,7 @@
         "label": "Divide it by the work, with reasons",
         "results": [
           {
-            "body": "The biggest share goes to the Senior Analyst, who did most of the year's work. Each letter gives its reasons, with dates. Your boss asks why your split has an appendix.",
+            "body": "The biggest share goes to the Senior Analyst, who did most of the year's work, and each letter gives its reasons, with dates, so your boss asks why your split has an appendix.",
             "sets": ["team-bonus-by-the-work", "team-bonus-decided"],
             "approach": "results",
             "project": {
@@ -3666,7 +3666,7 @@
         "label": "Leave your team as it sits",
         "results": [
           {
-            "body": "Your team stays where it is. Facilities marks it on the plan as Phase Two, in pencil.",
+            "body": "Your team stays where it is, marked on the Facilities plan as Phase Two, in pencil.",
             "sets": ["kept-the-team-together"]
           }
         ]
@@ -3723,7 +3723,7 @@
         "label": "Take the window, with your team facing you",
         "results": [
           {
-            "body": "You have the window. Your team faces you, with the light behind you, and sees only your outline.",
+            "body": "You have the window, so your team faces you with the light behind you and sees only your outline.",
             "sets": ["took-the-window"],
             "approach": "theatre"
           }
@@ -3803,7 +3803,7 @@
         },
         "results": [
           {
-            "body": "Your friend's name is read out. There is a short silence, which the Senior Analyst uses.",
+            "body": "Your friend's name is read out, and there is a short silence, which the Senior Analyst uses.",
             "sets": ["named-your-friend"],
             "approach": "cronyism",
             "news": {
@@ -3833,7 +3833,7 @@
         },
         "results": [
           {
-            "body": "Your friend takes it well, and asks whether they can keep the laptop. They cannot. The leaving drinks are on your card, and you are not invited.",
+            "body": "Your friend takes it well and asks whether they can keep the laptop, which they cannot, and the leaving drinks go on your card, although you are not invited.",
             "sets": ["let-your-friend-go"],
             "approach": "truth"
           }
@@ -3845,7 +3845,7 @@
         "label": "Write down your boss, as your mentor",
         "results": [
           {
-            "body": "It is read out. Your boss is touched, and points out that they already have a job, which is above yours.",
+            "body": "When it is read out your boss is touched, and points out that they already have a job, which is above yours.",
             "sets": ["named-your-boss"],
             "approach": "flatter"
           }
@@ -3893,7 +3893,7 @@
         "label": "Back the Service Delivery Lead's nominee, for later",
         "results": [
           {
-            "body": "The Service Delivery Lead's nominee wins by one vote, yours. The Service Delivery Lead nods to you, once, like a receipt.",
+            "body": "The Service Delivery Lead's nominee wins by one vote, which was yours, and the Service Delivery Lead nods to you once, like a receipt.",
             "sets": ["traded-a-vote"],
             "approach": "favour",
             "remembers": [
@@ -3913,7 +3913,7 @@
         "label": "Vote for whoever your boss nominated",
         "results": [
           {
-            "body": "Your boss's nominee wins. Your boss notices who voted for them, which is what the vote was for.",
+            "body": "Your boss's nominee wins, and your boss notices who voted for them, which is what the vote was for.",
             "sets": ["voted-with-the-boss"],
             "approach": "flatter"
           }
@@ -3924,7 +3924,7 @@
         "label": "Second whichever name is said first",
         "results": [
           {
-            "body": "You second it. It was decided already, and now it is unanimous."
+            "body": "You second it, so what was decided already is now unanimous."
           }
         ]
       }
@@ -3957,7 +3957,7 @@
         "label": "Keep your box the shape it is",
         "results": [
           {
-            "body": "Your box stays the same shape. Someone draws a dotted line to it, and will not say from where."
+            "body": "Your box stays the same shape, although someone draws a dotted line to it and will not say from where."
           }
         ]
       },
@@ -3967,7 +3967,7 @@
         "label": "Draw another team's line into your box",
         "results": [
           {
-            "body": "Your box is bigger. It has a team in it now that has not been told, and a lead who has.",
+            "body": "Your box is bigger, with a team in it now that has not been told, and a lead who has.",
             "sets": ["absorbed-a-team"],
             "approach": "theatre"
           }
@@ -3979,7 +3979,7 @@
         "label": "Draw the Project Co-ordinator into another box",
         "results": [
           {
-            "body": "The line is moved. The Project Co-ordinator is now in Shared Services, on the whiteboard, until somebody wipes it.",
+            "body": "The line is moved, and the Project Co-ordinator is now in Shared Services, on the whiteboard, until somebody wipes it.",
             "sets": ["drew-out-the-critic"],
             "approach": "blame",
             "remembers": [
@@ -4059,7 +4059,7 @@
         "label": "Propose adopting the Programme Office's charter",
         "results": [
           {
-            "body": "It is adopted. It turns out to be last year's, with this year's date on it.",
+            "body": "It is adopted, and turns out to be last year's with this year's date on it.",
             "sets": ["adopted-the-office-charter"],
             "approach": "flatter"
           }
@@ -4070,7 +4070,7 @@
         "label": "Say nothing, and sign it",
         "results": [
           {
-            "body": "You sign it. The charter is laminated, and goes on the wall beside the last one."
+            "body": "You sign it, and the charter is laminated and goes on the wall beside the last one."
           }
         ]
       }
@@ -4165,7 +4165,7 @@
         "label": "Move a third of your costs downstairs",
         "results": [
           {
-            "body": "A third of your costs go downstairs, to codes on Floor 2 that nobody on Floor 3 owns. Floor 3's budget is thirty per cent lower. The company's is the same.",
+            "body": "A third of your costs go downstairs, to codes on Floor 2 that nobody on Floor 3 owns, so Floor 3's budget is thirty per cent lower and the company's is the same.",
             "sets": ["moved-costs-downstairs"],
             "approach": "theatre"
           }
@@ -4256,7 +4256,7 @@
             "when": {
               "did": "team-wrote-the-offsite"
             },
-            "body": "You present your team's night as your own vision. The Board applauds. The Junior Associate, who wrote slide forty, is in the car park, waiting to drive the deck back.",
+            "body": "You present your team's night as your own vision and the Board applauds, while the Junior Associate, who wrote slide forty, waits in the car park to drive the deck back.",
             "sets": ["took-the-offsite-credit"],
             "approach": "theatre",
             "remembers": [
@@ -4284,7 +4284,7 @@
         },
         "results": [
           {
-            "body": "It takes both hours. Two programmes are stopped, out loud, and their owners take it badly and then, by the coffee, with relief. {plan} is shorter, and true.",
+            "body": "It takes both hours. Two programmes are stopped out loud, and their owners take it badly and then, by the coffee, with relief, so that {plan} ends up shorter, and true.",
             "sets": ["roadmap-really-decided"],
             "approach": "results"
           }
@@ -4365,13 +4365,13 @@
             "when": {
               "did": "checked-the-pack"
             },
-            "body": "You do know, as it turns out, because you checked every figure in the pack on Friday. You say it once. The Board moves on to lunch, and {competitor} closes slide seven.",
+            "body": "You do know, as it turns out, because you checked every figure in the pack on Friday, so you say it once, and the Board moves on to lunch while {competitor} closes slide seven.",
             "sets": ["answered-the-board"],
             "approach": "results",
             "headOpinion": 1
           },
           {
-            "body": "You say that you do not have it to hand, and that the Board will have it by Friday. The Board writes Friday down. So does {competitor}, in a different colour.",
+            "body": "You say that you do not have it to hand and that the Board will have it by Friday, which the Board writes down, as does {competitor}, in a different colour.",
             "sets": ["answered-the-board"],
             "approach": "truth"
           }
@@ -4451,7 +4451,7 @@
         },
         "results": [
           {
-            "body": "You ask it warmly, as a favour to the Board. {competitor} does not have their own figures open, and says so, at length. The Board minutes it as healthy challenge.",
+            "body": "You ask it warmly, as a favour to the Board, and {competitor}, who does not have their own figures open, says so at length, which the Board minutes as healthy challenge.",
             "sets": ["asked-it-back"],
             "approach": "blame"
           }
@@ -4579,7 +4579,7 @@
         "label": "Ask what the portfolio will stop",
         "results": [
           {
-            "body": "There is a pause, of the kind that gets minuted. Your boss says that nothing needs to stop, because everything is aligned. Your question is written on the whiteboard, and photographed.",
+            "body": "There is a pause of the kind that gets minuted, and then your boss says that nothing needs to stop, because everything is aligned. Your question is written on the whiteboard and photographed.",
             "sets": ["asked-what-stops"],
             "approach": "truth"
           }
@@ -4591,7 +4591,7 @@
         "label": "Say that the vision is bold",
         "results": [
           {
-            "body": "You say it. Your boss says that bold is the point. Three other people say bold, in turn, more boldly.",
+            "body": "When you say it, your boss says that bold is the point, and three other people say bold in turn, more boldly.",
             "sets": ["called-it-bold"],
             "approach": "flatter"
           }
@@ -4603,7 +4603,7 @@
         "label": "Volunteer to own the portfolio",
         "results": [
           {
-            "body": "You volunteer. Your boss thanks you for stepping up, and steps back, a long way.",
+            "body": "You volunteer, and your boss thanks you for stepping up, and steps back, a long way.",
             "sets": ["owned-the-portfolio"],
             "approach": "theatre"
           }
@@ -4663,7 +4663,7 @@
         },
         "results": [
           {
-            "body": "You propose it. There is a long silence and then a vote, which nobody has held here before. The programme stops. The Roadmap has one fewer line and one more date.",
+            "body": "You propose it, and after a long silence there is a vote, which nobody has held here before. The programme stops, and the Roadmap has one fewer line and one more date.",
             "sets": ["roadmap-really-decided"],
             "approach": "results"
           }
@@ -4690,7 +4690,7 @@
         "label": "Agree with whoever is chairing",
         "results": [
           {
-            "body": "You agree. The chair agrees with you agreeing, and the meeting ends early, which is minuted as an achievement.",
+            "body": "You agree, the chair agrees with you agreeing, and the meeting ends early, which is minuted as an achievement.",
             "sets": ["agreed-with-the-chair"],
             "approach": "flatter"
           }
@@ -4738,7 +4738,7 @@
         "label": "Count the same saving under two programmes",
         "results": [
           {
-            "body": "The saving appears twice, once under each name. The total goes up. Nobody adds it up the other way.",
+            "body": "The saving appears twice, once under each name, so the total goes up, and nobody adds it up the other way.",
             "sets": ["double-counted"],
             "approach": "theatre"
           }
@@ -4753,7 +4753,7 @@
         },
         "results": [
           {
-            "body": "You tie each benefit to a line. Three lines have none, and you drop them. The Roadmap is shorter, and for the first time it says what it is for.",
+            "body": "You tie each benefit to a line and drop the three lines that have none, so the Roadmap is shorter, and for the first time it says what it is for.",
             "sets": ["roadmap-really-decided"],
             "approach": "results"
           }
@@ -4813,7 +4813,7 @@
         "label": "Put your lesson down to a leaver",
         "results": [
           {
-            "body": "The lesson goes to someone who has left, who cannot attend to accept it. It is accepted on their behalf.",
+            "body": "The lesson goes to someone who has left and so cannot attend to accept it, and it is accepted on their behalf.",
             "sets": ["blamed-a-leaver"],
             "approach": "blame"
           }
@@ -4828,7 +4828,7 @@
         },
         "results": [
           {
-            "body": "You present the Roadmap as what Floor 3 has learned. It has no dates, which you call agility. It is applauded, and filed under Done.",
+            "body": "You present the Roadmap as what Floor 3 has learned, calling its lack of dates agility, and it is applauded and filed under Done.",
             "sets": ["roadmap-is-a-slide"],
             "approach": "theatre"
           }
@@ -4839,7 +4839,7 @@
         "label": "Offer to take the notes",
         "results": [
           {
-            "body": "You take the notes. They are the only record of the forum, so you decide what was learned."
+            "body": "You take the notes, which are the only record of the forum, so you decide what was learned."
           }
         ]
       }
@@ -4872,7 +4872,7 @@
         "label": "Ask the Senior Analyst what is really running",
         "results": [
           {
-            "body": "The Senior Analyst has a list. It is longer than the Roadmap, and includes the Roadmap.",
+            "body": "The Senior Analyst has a list, which is longer than the Roadmap and includes the Roadmap.",
             "sets": ["asked-what-is-running"],
             "approach": "truth"
           }
@@ -4887,7 +4887,7 @@
         },
         "results": [
           {
-            "body": "It takes the whole afternoon. Two programmes are stopped, out loud, and their owners take it badly and then, by six o'clock, with relief. The Roadmap is shorter, and true.",
+            "body": "It takes the whole afternoon. Two programmes are stopped out loud, and their owners take it badly and then, by six o'clock, with relief, so that the Roadmap ends up shorter, and true.",
             "sets": ["roadmap-really-decided"],
             "approach": "results"
           }
@@ -4914,7 +4914,7 @@
         "label": "Move your own sticky note into Now",
         "results": [
           {
-            "body": "Your note goes into Now. Nobody stops you, and nobody will be able to say later that they did.",
+            "body": "Your note goes into Now, and nobody stops you, so nobody will be able to say later that they did.",
             "sets": ["moved-a-note"],
             "approach": "theatre"
           }
@@ -4951,7 +4951,7 @@
         "label": "Forecast what you actually expect",
         "results": [
           {
-            "body": "You forecast what you expect, which is lower. The room goes quiet. The forecast then goes up anyway, by someone else's pen, and yours is kept as a footnote.",
+            "body": "You forecast what you expect, which is lower, and the room goes quiet. The forecast then goes up anyway, by someone else's pen, and yours is kept as a footnote.",
             "sets": ["forecast-honestly"],
             "approach": "truth"
           }
@@ -4963,7 +4963,7 @@
         "label": "Forecast low, so you can beat it",
         "results": [
           {
-            "body": "You forecast low. Next quarter you will beat it, and be thanked for the surprise, which you have scheduled.",
+            "body": "You forecast low, so next quarter you will beat it and be thanked for the surprise, which you have scheduled.",
             "sets": ["forecast-low"],
             "approach": "theatre"
           }
@@ -4975,7 +4975,7 @@
         "label": "Forecast whatever your boss forecast",
         "results": [
           {
-            "body": "Your forecast matches your boss's to the pound. Your boss calls it alignment. The Chief Financial Officer's office calls it a coincidence, and asks for the workings.",
+            "body": "Your forecast matches your boss's to the pound, which your boss calls alignment and the Chief Financial Officer's office calls a coincidence, asking for the workings.",
             "sets": ["forecast-the-bosses"],
             "approach": "flatter"
           }
@@ -5034,7 +5034,7 @@
         "label": "Agree a friendly question with your boss's boss",
         "results": [
           {
-            "body": "Your boss's boss agrees to ask you something easy on the day, and asks what you will do in return. You say anything. Your boss's boss writes anything down.",
+            "body": "Your boss's boss agrees to ask you something easy on the day, and asks what you will do in return, and when you say anything, writes anything down.",
             "sets": ["agreed-an-easy-one"],
             "approach": "favour",
             "headOpinion": 1

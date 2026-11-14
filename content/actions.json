@@ -2,7 +2,7 @@
   {
     "id": "meeting",
     "label": "Meeting Room 1B",
-    "description": "The Monthly Alignment Meeting. Attendance is optional, in the sense that absence is noticed.",
+    "description": "The Monthly Alignment Meeting, which is optional in the sense that absence is noticed.",
     "place": "meeting-room",
     "cost": "standard",
     "scene": "meeting",
@@ -16,7 +16,7 @@
     "floor": "junior-employee",
     "months": [2],
     "label": "Meeting Room 1B",
-    "description": "A Lessons Learned Review. Nobody is to be blamed, and your boss would like to know who.",
+    "description": "A Lessons Learned Review, at which nobody is to be blamed, and your boss would like to know who.",
     "place": "meeting-room",
     "cost": "standard",
     "scene": "lessons-learned",
@@ -40,7 +40,7 @@
     "floor": "junior-employee",
     "months": [4],
     "label": "Meeting Room 1B",
-    "description": "The Budget Round. Thirty per cent has to come from somewhere, and you are near somewhere.",
+    "description": "The Budget Round, in which thirty per cent has to come from somewhere, and you are near somewhere.",
     "place": "meeting-room",
     "cost": "standard",
     "scene": "budget-round",
@@ -52,7 +52,7 @@
     "floor": "junior-employee",
     "months": [5],
     "label": "Meeting Room 1B",
-    "description": "An Ideas Workshop. There are no bad ideas until the prioritisation.",
+    "description": "An Ideas Workshop, where there are no bad ideas until the prioritisation.",
     "place": "meeting-room",
     "cost": "standard",
     "scene": "ideas-workshop",
@@ -75,7 +75,7 @@
     "id": "over-head",
     "family": "attack",
     "label": "Your boss's boss's office",
-    "description": "You could go and tell your boss's boss what is really going on. Your boss need never know.",
+    "description": "You could go and tell your boss's boss what is really going on, and your boss need never know.",
     "place": "head-office",
     "cost": "standard",
     "overHead": true,
@@ -90,7 +90,7 @@
     "sets": ["had-tea"],
     "result": {
       "title": "Kitchen",
-      "body": "You wait four minutes for the kettle beside someone from Accounts Payable. You agree that it is nearly Friday. It is Tuesday."
+      "body": "You wait four minutes for the kettle beside someone from Accounts Payable, and you agree that it is nearly Friday, although it is Tuesday."
     },
     "moreResults": [
       {
@@ -103,11 +103,11 @@
       },
       {
         "title": "Kitchen",
-        "body": "Someone has brought in a cake for a colleague's leaving do. Nobody knows who is leaving. You have a slice, and sign the card."
+        "body": "Someone has brought in a cake for a colleague's leaving do, and although nobody knows who is leaving, you have a slice and sign the card."
       },
       {
         "title": "Kitchen",
-        "body": "You and a man from Facilities watch the kettle in silence. You part on good terms. It is the most honest exchange you have had this month."
+        "body": "You and a man from Facilities watch the kettle in silence and part on good terms, which is the most honest exchange you have had this month."
       },
       {
         "title": "Kitchen",
@@ -119,11 +119,11 @@
       },
       {
         "title": "Kitchen",
-        "body": "A person from another floor asks you whether this kitchen is always this quiet. You say that it depends. They write that down, and leave."
+        "body": "A person from another floor asks you whether this kitchen is always this quiet, and when you say that it depends, they write that down and leave."
       },
       {
         "title": "Kitchen",
-        "body": "The good teabags are in a locked drawer now. Everyone knows who has the key, and nobody has said so. You have the other kind, and hold it up to the light."
+        "body": "The good teabags are in a locked drawer now, and everyone knows who has the key, although nobody has said so, so you have the other kind and hold it up to the light."
       }
     ]
   },
@@ -137,7 +137,7 @@
     "sets": ["had-one-to-one"],
     "result": {
       "title": "One-to-one",
-      "body": "You ask the Senior Analyst how things are going. You are told, at length, about the car park. You may now log this as a one-to-one."
+      "body": "You ask the Senior Analyst how things are going and are told, at length, about the car park, which means that you may now log this as a one-to-one."
     },
     "moreResults": [
       {
@@ -146,7 +146,7 @@
       },
       {
         "title": "One-to-one",
-        "body": "You discuss your objectives. Neither of you has a copy. You agree that they are stretching, and you log the conversation as a success."
+        "body": "You discuss your objectives, although neither of you has a copy, and you agree that they are stretching and log the conversation as a success."
       },
       {
         "title": "One-to-one",
@@ -154,19 +154,19 @@
       },
       {
         "title": "One-to-one",
-        "body": "You are told about the car park again. There has been a development. It sounds worse than last time, and you promise to keep it to yourself."
+        "body": "You are told about the car park again, where there has been a development that sounds worse than last time, and you promise to keep it to yourself."
       },
       {
         "title": "One-to-one",
-        "body": "The Senior Analyst says that this has been really useful, and asks what it was that you wanted. You say that it was nothing. The Senior Analyst makes a note of that."
+        "body": "The Senior Analyst says that this has been really useful and asks what it was that you wanted, and when you say that it was nothing, makes a note of that."
       },
       {
         "title": "One-to-one",
-        "body": "The Senior Analyst has moved the meeting to a walking meeting, and walks off. You catch up by the stairs. The meeting is over."
+        "body": "The Senior Analyst has moved the meeting to a walking meeting and walks off, and by the time you catch up at the stairs, the meeting is over."
       },
       {
         "title": "One-to-one",
-        "body": "You are asked what your biggest learning has been this year. You say that it is still landing. The Senior Analyst nods, and logs it."
+        "body": "When you are asked what your biggest learning has been this year, you say that it is still landing, and the Senior Analyst nods and logs it."
       },
       {
         "title": "One-to-one",
@@ -200,18 +200,18 @@
     "id": "work",
     "family": "deliver",
     "label": "Your desk",
-    "description": "Doing your actual job, on your actual project. It remains an option.",
+    "description": "Doing your actual job, on your actual project, remains an option.",
     "place": "your-desk",
     "cost": "standard",
     "sets": ["did-work"],
     "result": {
       "title": "Your desk",
-      "body": "You do two hours of real work on your project. It goes well, and it does not appear in any report."
+      "body": "You do two hours of real work on your project, which goes well, and does not appear in any report."
     },
     "moreResults": [
       {
         "title": "Your desk",
-        "body": "You fix something that has been broken for a year. Nobody notices, because now it works. You will not be able to prove that it was you."
+        "body": "You fix something that has been broken for a year, and nobody notices, because now it works, so you will never be able to prove that it was you."
       },
       {
         "title": "Your desk",
@@ -227,11 +227,11 @@
       },
       {
         "title": "Your desk",
-        "body": "A full, quiet afternoon of real work. You are startled to find that you enjoyed it, and you tell no one."
+        "body": "You spend a full, quiet afternoon on real work, and are startled to find that you enjoyed it, which you tell no one."
       },
       {
         "title": "Your desk",
-        "body": "You clear the backlog. A new backlog is created for you, and it has a better name."
+        "body": "You clear the backlog, and a new backlog is created for you, with a better name."
       },
       {
         "title": "Your desk",
@@ -239,7 +239,7 @@
       },
       {
         "title": "Your desk",
-        "body": "You spend a morning writing the handover note that nobody wrote for you. You read it through, and it is good. You keep it, in case."
+        "body": "You spend a morning writing the handover note that nobody wrote for you, and when you read it through it is good, so you keep it, in case."
       }
     ],
     "approach": "results",
@@ -264,7 +264,7 @@
     "floor": "junior-employee",
     "months": [7],
     "label": "Meeting Room 1B",
-    "description": "A Recruitment Panel. You are on it, for balance, and one of the candidates knows you.",
+    "description": "A Recruitment Panel, which you are on for balance, and one of the candidates knows you.",
     "place": "meeting-room",
     "cost": "standard",
     "scene": "hiring-panel",
@@ -276,7 +276,7 @@
     "floor": "junior-employee",
     "months": [8],
     "label": "Meeting Room 1B",
-    "description": "A Listening Session, in complete confidence, in front of everybody. There are biscuits.",
+    "description": "A Listening Session, held in complete confidence in front of everybody, with biscuits.",
     "place": "meeting-room",
     "cost": "standard",
     "scene": "speak-up-session",
@@ -367,7 +367,7 @@
     "id": "meeting-risks",
     "floor": "team-lead",
     "label": "Team Room 2A",
-    "description": "The Risk Register Review. Ninety risks, and all of them owned.",
+    "description": "The Risk Register Review, of ninety risks, all of them owned.",
     "place": "team-room",
     "cost": "standard",
     "scene": "risk-register",
@@ -389,7 +389,7 @@
     "id": "over-head-2",
     "family": "attack",
     "label": "Your boss's boss's office",
-    "description": "You could go and tell your boss's boss what is really going on. Your boss need never know.",
+    "description": "You could go and tell your boss's boss what is really going on, and your boss need never know.",
     "place": "programme-office",
     "cost": "standard",
     "overHead": true,
@@ -404,12 +404,12 @@
     "sets": ["had-tea"],
     "result": {
       "title": "The tea point",
-      "body": "The coffee machine is called Barista and asks how you are. You tell it. It makes you a hot chocolate."
+      "body": "The coffee machine is called Barista and asks how you are, and when you tell it, it makes you a hot chocolate."
     },
     "moreResults": [
       {
         "title": "The tea point",
-        "body": "Another lead is at the tea point, and asks how you are finding it up here. You say it is very different. They say that it is not."
+        "body": "Another lead at the tea point asks how you are finding it up here, and when you say it is very different, they say that it is not."
       },
       {
         "title": "The tea point",
@@ -417,7 +417,7 @@
       },
       {
         "title": "The tea point",
-        "body": "The milk on Floor 2 is labelled by team. Your team's milk is the one that has run out."
+        "body": "The milk on Floor 2 is labelled by team, and your team's is the one that has run out."
       }
     ]
   },
@@ -431,7 +431,7 @@
     "sets": ["had-one-to-one"],
     "result": {
       "title": "One-to-one",
-      "body": "You ask one of your team how things are going. They say fine, in the voice people use for their boss. You used to use it."
+      "body": "When you ask one of your team how things are going, they say fine, in the voice people use for their boss, which you used to use yourself."
     },
     "moreResults": [
       {
@@ -440,7 +440,7 @@
       },
       {
         "title": "One-to-one",
-        "body": "You ask whether there is anything you can do. There is: the laptops. You say you will see what you can find out, and hear yourself say it."
+        "body": "You ask whether there is anything you can do, and there is, the laptops, so you say you will see what you can find out, and hear yourself say it."
       },
       {
         "title": "One-to-one",
@@ -469,12 +469,12 @@
     "sets": ["did-work"],
     "result": {
       "title": "Your office",
-      "body": "You do two hours of real work on the project. It goes well. It does not appear in any report, and now nor do you, except as approver."
+      "body": "You do two hours of real work on the project, which goes well, but does not appear in any report, and now nor do you, except as approver."
     },
     "moreResults": [
       {
         "title": "Your office",
-        "body": "You clear the approvals queue. There are forty, and each says that the last approver was you."
+        "body": "You clear the approvals queue of forty, each of which says that the last approver was you."
       },
       {
         "title": "Your office",
@@ -516,7 +516,7 @@
     "id": "meeting-supplier",
     "floor": "junior-employee",
     "label": "Meeting Room 1B",
-    "description": "A Supplier Pitch. There are lanyards.",
+    "description": "A Supplier Pitch, with lanyards.",
     "place": "meeting-room",
     "cost": "standard",
     "scene": "supplier-pitch",
@@ -550,7 +550,7 @@
     "floor": "team-lead",
     "months": [4],
     "label": "Team Room 2A",
-    "description": "A Hiring Decision. The post is on your team, so the decision is yours, subject to everyone.",
+    "description": "A Hiring Decision for a post on your team, so the decision is yours, subject to everyone.",
     "place": "team-room",
     "cost": "standard",
     "scene": "team-hire",
@@ -767,7 +767,7 @@
     "id": "over-head-3",
     "family": "attack",
     "label": "Your boss's boss's office",
-    "description": "You could go and tell your boss's boss what is really going on. Your boss need never know.",
+    "description": "You could go and tell your boss's boss what is really going on, and your boss need never know.",
     "place": "transformation-office",
     "cost": "standard",
     "overHead": true,
@@ -787,11 +787,11 @@
     "moreResults": [
       {
         "title": "The coffee bar",
-        "body": "Another manager is in the queue, and asks how Floor 3 is treating you. You say well. They say that it treats everyone well, at first."
+        "body": "Another manager in the queue asks how Floor 3 is treating you, and when you say well, they say that it treats everyone well, at first."
       },
       {
         "title": "The coffee bar",
-        "body": "The coffee on Floor 3 is free. The price is that everyone can see who you are having it with."
+        "body": "The coffee on Floor 3 is free, and the price is that everyone can see who you are having it with."
       },
       {
         "title": "The coffee bar",
@@ -814,7 +814,7 @@
     "moreResults": [
       {
         "title": "One-to-one",
-        "body": "Your one-to-one brings a list. It is a list of things they need you to unblock. You were the block on four of them."
+        "body": "Your one-to-one brings a list of things they need you to unblock, and you were the block on four of them."
       },
       {
         "title": "One-to-one",
@@ -847,7 +847,7 @@
     "sets": ["did-work"],
     "result": {
       "title": "Your corner office",
-      "body": "You spend two hours on the actual work. It is a decision, and you make it, and three people's weeks get easier. Nobody will ever connect the two."
+      "body": "You spend two hours on the actual work, which is a decision, and when you make it, three people's weeks get easier, although nobody will ever connect the two."
     },
     "moreResults": [
       {

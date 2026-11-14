@@ -39,7 +39,7 @@
       },
       "won": {
         "title": "Congratulations: Team lead",
-        "body": "You have the seat. The decision was unanimous, in that one person made it. Your old colleagues now report to you, and have been asked to be pleased. Your new desk is on Floor 2, and the lift will take you there."
+        "body": "You have the seat, by a decision that was unanimous in that one person made it, and your old colleagues now report to you and have been asked to be pleased. Your new desk is on Floor 2, and the lift will take you there."
       },
       "lost": {
         "title": "Congratulations to {winner}",
@@ -138,7 +138,7 @@
       },
       "won": {
         "title": "Congratulations: the top of Floor 3",
-        "body": "You have the seat. Nobody on Floor 3 is left above you, and upwards is closed. Your name has been sent to Facilities for a nameplate, and to the lift."
+        "body": "You have the seat, with nobody on Floor 3 left above you, and upwards is closed. Your name has been sent to Facilities for a nameplate, and to the lift."
       },
       "lost": {
         "title": "Congratulations to {winner}",

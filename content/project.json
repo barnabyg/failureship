@@ -42,7 +42,7 @@
     {
       "floor": "junior-employee",
       "months": [5],
-      "text": "The old system has been switched off a month early, to save money. Nobody has told the new one.",
+      "text": "The old system has been switched off a month early, to save money, and nobody has told the new one.",
       "project": {
         "real": "worse"
       }
