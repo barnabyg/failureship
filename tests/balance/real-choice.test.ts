@@ -71,14 +71,14 @@ describe("every month leaves a real choice", { timeout: 60_000 }, () => {
     let months = 0;
     let free = 0;
     for (const seed of SEEDS.slice(0, 100)) {
-      for (const { remaining, open } of floorActions(seed, true)) {
+      const left = floorActions(seed, true);
+      for (const { remaining, open } of left) {
         months += 1;
         expect(open).toBeGreaterThanOrEqual(remaining > 0 ? 2 : 0);
         if (remaining > 0) free += 1;
       }
       // A month with nothing left never reaches the floor at all, so it counts too.
-      months +=
-        gameContent.balance.monthsPerRun - floorActions(seed, true).length;
+      months += gameContent.balance.monthsPerRun - left.length;
     }
 
     expect(free / months).toBeGreaterThan(0.6);
