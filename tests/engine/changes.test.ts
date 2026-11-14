@@ -402,7 +402,7 @@ function namesSomeoneGone(view: PlayerView, gone: readonly string[]): boolean {
   });
 }
 
-describe("a run in which someone leaves", { timeout: 120_000 }, () => {
+describe("a run in which someone leaves", () => {
   const leavers = Object.keys(gameContent.changing?.leaving ?? {});
 
   // The Head of Operations, your boss's boss on Floor 1 and your boss on Floor
@@ -423,16 +423,18 @@ describe("a run in which someone leaves", { timeout: 120_000 }, () => {
   for (const who of [...leavers.map((id) => [id]), team]) {
     it(`completes, Scenes, report and Find Out included, when ${who.join(" and ")} leave`, () => {
       const content = leavingContent(...who);
-      // Four Believers at once are rare, so this looks further than the rest.
-      const seeds = WIDE.filter((seed) =>
+      // The leaving is forced in month 1, so the variety worth having is in who
+      // leaves, one case each, not in the deal: one deal on which they are all
+      // Believers will do. Four at once are rare, so this looks far for it.
+      const seed = WIDE.find((seed) =>
         who.every(
           (id) =>
             kindsAtStart(seed, content).find((c) => c.id === id)?.kind ===
             "believer",
         ),
-      ).slice(0, 4);
-      expect(seeds.length).toBeGreaterThan(0);
-      for (const seed of seeds) {
+      );
+      expect(seed).toBeDefined();
+      if (seed !== undefined) {
         for (const style of ["plain", "walk"] as const) {
           const run = startRun({ seed, content });
           let view = run.view();
