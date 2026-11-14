@@ -93,7 +93,7 @@
       "reaction": {
         "believer": [
           "Your boss looks faintly embarrassed, and asks whether you had a view of your own.",
-          "Your boss thanks you, and asks what you actually think. There is a pause in which you could have said."
+          "Your boss thanks you and asks what you actually think, and there follows a pause in which you could have said."
         ],
         "incompetent": [
           "Your boss glows, and tells the room that this is exactly the sort of thing your boss has been saying.",
@@ -144,7 +144,7 @@
           "Your boss says thanks, and asks when you will be doing something with more visibility."
         ],
         "practitioner": [
-          "Your boss takes it upstairs that afternoon. Your name has come off it on the way.",
+          "Your boss takes it upstairs that afternoon, and your name comes off it on the way.",
           "Your boss thanks you, and shows it to the floor above as a thing that your boss's team has done."
         ]
       },
@@ -171,14 +171,14 @@
       "reaction": {
         "believer": [
           "Your boss looks at the chart for some time, then says thank you, and means it. Your boss asks what you would need to fix it.",
-          "Your boss closes the door and asks you to go through it again. Nobody has closed that door to listen before."
+          "Your boss closes the door and asks you to go through it again, and nobody has closed that door to listen before."
         ],
         "incompetent": [
           "Your boss looks at the chart as one looks at a wasp, and asks whether it could be presented in a more positive colour.",
           "Your boss asks who else has seen this, then says that it has come as a complete surprise, to the room."
         ],
         "practitioner": [
-          "Your boss looks at you, not the chart, and thanks you for your candour. You have never been thanked so quietly.",
+          "Your boss looks at you, not the chart, and thanks you for your candour more quietly than you have ever been thanked.",
           "Your boss asks who else has seen this, and writes the answer down, with your name above it."
         ]
       }
@@ -222,7 +222,7 @@
           "Your boss starts copying you in on everything, in case that was the problem."
         ],
         "practitioner": [
-          "Your boss says nothing at all, and smiles when you next meet. You would rather have been shouted at.",
+          "Your boss says nothing at all, and smiles when you next meet, which is worse than being shouted at.",
           "Your boss congratulates you on your initiative, in writing, and keeps a copy."
         ]
       }
@@ -261,7 +261,7 @@
       },
       "reaction": {
         "believer": [
-          "Your boss is furious, in the quiet way, and asks you to explain what your friend is able to do. You begin. Your boss waits.",
+          "Your boss is furious, in the quiet way, and asks you to explain what your friend is able to do, and when you begin, your boss waits.",
           "Your boss has read the file, and asks to speak to you, and it is the first time that you have seen your boss not offer you a chair."
         ],
         "incompetent": [
@@ -270,7 +270,7 @@
         ],
         "practitioner": [
           "Your boss looks at the appointment, and at you, and says that it is good to know that you understand how things work. You feel that something has been agreed.",
-          "Your boss mentions that they have a nephew. They do not say anything further for now."
+          "Your boss mentions that they have a nephew, and does not say anything further for now."
         ]
       }
     },
@@ -284,10 +284,10 @@
       "reaction": {
         "believer": [
           "Your boss asks whether anyone has checked that, and looks at you while asking.",
-          "Your boss frowns, and says that this is not what the session is for. Your boss seems to believe that."
+          "Your boss frowns and says that this is not what the session is for, and seems to believe it."
         ],
         "incompetent": [
-          "Your boss writes it down with visible relief. It was not your boss's fault, then.",
+          "Your boss writes it down with visible relief, since it was not your boss's fault, then.",
           "Your boss nods along and says that this is what your boss had suspected all along."
         ],
         "practitioner": [
@@ -327,7 +327,7 @@
       },
       "reaction": {
         "believer": [
-          "Your boss replies with a question about the second paragraph. Somebody has read it.",
+          "Your boss replies with a question about the second paragraph, so somebody has read it.",
           "Your boss thanks you for being straight about it, and asks if you need anything."
         ],
         "incompetent": [
@@ -336,7 +336,7 @@
         ],
         "practitioner": [
           "Your boss replies with a thumbs up, and takes a copy.",
-          "Your boss says nothing about it. The numbers turn up in a meeting a week later, as your boss's own."
+          "Your boss says nothing about it, and the numbers turn up in a meeting a week later as your boss's own."
         ]
       }
     },
@@ -415,7 +415,7 @@
       },
       "reaction": {
         "believer": [
-          "Your boss asks you to say when it will be done. You say soon. Your boss writes down soon.",
+          "When your boss asks you to say when it will be done, you say soon, and your boss writes down soon.",
           "Your boss says that there is no rush, and looks at you a moment longer than that."
         ],
         "incompetent": [

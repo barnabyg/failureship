@@ -32,7 +32,7 @@
     "id": "report-chased",
     "from": "From: Your boss, {boss}",
     "title": "FW: Monthly Status Report OVERDUE",
-    "body": "Your boss has forwarded you a chaser about the report you did not file. The whole message reads: Thoughts?",
+    "body": "Your boss has forwarded you a chaser about the report you did not file, with a message that reads, in full: Thoughts?",
     "by": "{boss}",
     "when": {
       "flag": "skipped-report"
@@ -81,7 +81,7 @@
     "id": "rumour",
     "from": "Overheard in the kitchen",
     "title": "Your project is apparently in trouble",
-    "body": "Someone from another team asks kindly how you are coping. You did not know that you were coping with anything. It seems to be widely known that your project is in trouble.",
+    "body": "Someone from another team asks kindly how you are coping, which is how you learn that you are coping with anything, and that it is widely known that your project is in trouble.",
     "by": "{competitor}",
     "family": "attack",
     "sets": ["rumour-spread"],
@@ -102,7 +102,7 @@
     "id": "meeting-moved",
     "from": "From: The Office Co-ordinator, Marjorie Tull",
     "title": "Invitation updated",
-    "body": "A meeting you were preparing for has moved to yesterday. The minutes are attached. You were present, and you agreed to several things.",
+    "body": "A meeting you were preparing for has moved to yesterday, and the attached minutes record that you were present, and agreed to several things.",
     "by": "admin",
     "sets": ["meeting-moved"]
   },
@@ -124,7 +124,7 @@
     "id": "tricky-question",
     "from": "From: The Senior Analyst, Priya Venn",
     "title": "A question from the floor",
-    "body": "You gave a short update to people from upstairs. The Senior Analyst asked, very pleasantly, one question about a number on your third slide. Nobody had looked at that number until then. They are all looking at it now.",
+    "body": "You gave a short update to people from upstairs, and the Senior Analyst asked, very pleasantly, one question about a number on your third slide, which nobody had looked at until then, and which they are all looking at now.",
     "by": "analyst",
     "family": "attack",
     "sets": ["tricky-question"]
@@ -332,6 +332,6 @@
     "id": "meeting-about-meetings",
     "from": "From: Your boss's boss's assistant",
     "title": "A meeting about meetings",
-    "body": "You are invited to a meeting about having fewer meetings. It is recurring. The first one overruns, and a follow-up is booked to discuss why."
+    "body": "You are invited to a recurring meeting about having fewer meetings, and the first one overruns, so a follow-up is booked to discuss why."
   }
 ]

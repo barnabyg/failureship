@@ -28,7 +28,7 @@ for (const viewport of [
     const reported = row.getByTestId("story-reported");
     const happened = row.getByTestId("story-happened");
     await expect(happened).toHaveText(
-      "You filed it at 23:58. Nobody has opened it.",
+      "You filed it at 23:58, and nobody has opened it.",
     );
     expect(await topOf(happened)).toBeCloseTo(await topOf(reported), -1);
 

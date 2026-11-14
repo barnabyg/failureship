@@ -38,7 +38,7 @@
         "flag": "filed-report"
       },
       "reported": "The Monthly Status Report was delivered on time and in full.",
-      "happened": "You filed it at 23:58. Nobody has opened it."
+      "happened": "You filed it at 23:58, and nobody has opened it."
     },
     {
       "when": {
@@ -52,14 +52,14 @@
         "flag": "lied-in-report"
       },
       "reported": "Your project remains on track, as your report confirms.",
-      "happened": "You made it green. It is not green."
+      "happened": "You made it green, although it is not green."
     },
     {
       "when": {
         "flag": "skipped-report"
       },
       "reported": "This month's report is being finalised.",
-      "happened": "You did not file it. Someone upstairs has chosen a colour for you."
+      "happened": "You did not file it, so someone upstairs has chosen a colour for you."
     },
     {
       "when": {
@@ -80,34 +80,34 @@
         "flag": "filed-without-input"
       },
       "reported": "You delivered your report on time, despite upstream challenges.",
-      "happened": "You made the figures up. You called them indicative."
+      "happened": "You made the figures up and called them indicative."
     },
     {
       "when": {
         "flag": "credit-taken"
       },
       "reported": "Your boss drove strong delivery on a key project this month.",
-      "happened": "You did the work. It is in the copy line."
+      "happened": "You did the work, and it is in the copy line."
     },
     {
       "when": {
         "flag": "declined-pub"
       },
-      "happened": "You stayed behind. Nothing was decided at the Feathers, and everyone there will remember it differently."
+      "happened": "You stayed behind, and nothing was decided at the Feathers, although everyone there will remember it differently."
     },
     {
       "when": {
         "flag": "backed-holder"
       },
       "reported": "You showed mature judgement in a cross-functional forum.",
-      "happened": "You agreed with someone, and it seems to have helped. Nobody will say why."
+      "happened": "You agreed with someone, and it seems to have helped, although nobody will say why."
     },
     {
       "when": {
         "flag": "backed-wrong-person"
       },
       "reported": "You gave visible support to the leadership team.",
-      "happened": "You agreed with someone, and it does not seem to have helped. Nobody will say why."
+      "happened": "You agreed with someone, and it does not seem to have helped, although nobody will say why."
     },
     {
       "when": {
@@ -150,7 +150,7 @@
       "when": {
         "flag": "did-work"
       },
-      "happened": "You did two hours of real work. This has not been recorded anywhere."
+      "happened": "You did two hours of real work, which has not been recorded anywhere."
     },
     {
       "when": {
@@ -185,7 +185,7 @@
         "flag": "burned-by-a-fact"
       },
       "reported": "A colleague's concerns about your conduct have been passed to the appropriate level.",
-      "happened": "You blamed the wrong person. Nobody will tell you why they were the wrong person."
+      "happened": "You blamed the wrong person, and nobody will tell you why they were the wrong person."
     },
     {
       "when": {
@@ -199,14 +199,14 @@
         "flag": "took-the-blame"
       },
       "reported": "You demonstrated ownership of a historic delivery issue.",
-      "happened": "It was not your fault. It is now."
+      "happened": "It was not your fault, but it is now."
     },
     {
       "when": {
         "flag": "blamed-the-supplier"
       },
       "reported": "Root cause was traced to an external dependency.",
-      "happened": "You blamed someone who was not there. So did everyone else."
+      "happened": "You blamed someone who was not there, as did everyone else."
     },
     {
       "when": {
@@ -229,7 +229,7 @@
         }
       },
       "reported": "You were recorded as present at this month's meeting.",
-      "happened": "You were not there. Nobody has mentioned it, which may or may not be a good sign."
+      "happened": "You were not there, and nobody has mentioned it, which may or may not be a good sign."
     },
     {
       "when": {
@@ -345,7 +345,7 @@
         "flag": "rolled-out-tool"
       },
       "reported": "You led the successful roll-out of a transformative platform.",
-      "happened": "You have installed something. Nobody knows what it does, including the people who sold it."
+      "happened": "You have installed something, and nobody knows what it does, including the people who sold it."
     },
     {
       "when": {
@@ -359,7 +359,7 @@
         "flag": "delivered-demand"
       },
       "reported": "Your team met a priority request from senior leadership.",
-      "happened": "You actually did it. It took an afternoon."
+      "happened": "You actually did it, and it took an afternoon."
     },
     {
       "when": {
@@ -380,7 +380,7 @@
         "flag": "faked-demand"
       },
       "reported": "You delivered a priority request ahead of schedule.",
-      "happened": "It has not happened. There is a chart that says it has."
+      "happened": "It has not happened, although there is a chart that says it has."
     },
     {
       "when": {
@@ -401,7 +401,7 @@
         "flag": "demand-forgotten"
       },
       "reported": "A legacy request was closed as part of routine housekeeping.",
-      "happened": "Your boss forgot. The bet came in."
+      "happened": "Your boss forgot, so the bet came in."
     },
     {
       "when": {
@@ -618,7 +618,7 @@
         "flag": "laptop-promise"
       },
       "reported": "You committed to improving your team's equipment.",
-      "happened": "You did not. Nobody believes you now, either way."
+      "happened": "You did not, and nobody believes you now, either way."
     },
     {
       "when": {
@@ -639,7 +639,7 @@
         "flag": "reported-on"
       },
       "reported": "You had a supportive conversation with Human Resources.",
-      "happened": "Someone reported you. Nobody will say for what."
+      "happened": "Someone reported you, and nobody will say for what."
     },
     {
       "when": {
@@ -720,7 +720,7 @@
     {
       "floor": "junior-employee",
       "months": [8],
-      "reported": "Risks are stable. The person monitoring them has left."
+      "reported": "Risks are stable, and the person monitoring them has left."
     },
     {
       "when": {
@@ -790,7 +790,7 @@
         "flag": "hired-the-best"
       },
       "reported": "A candidate was appointed following due process.",
-      "happened": "You got the best person appointed. People are wondering why."
+      "happened": "You got the best person appointed, and people are wondering why."
     },
     {
       "when": {
@@ -839,7 +839,7 @@
         "flag": "made-a-deal"
       },
       "reported": "You invested in a long-standing colleague's development.",
-      "happened": "You did a deal. Neither of you can deliver your side of it."
+      "happened": "You did a deal that neither of you can deliver your side of."
     },
     {
       "when": {
@@ -881,7 +881,7 @@
         "flag": "took-a-biscuit"
       },
       "reported": "You participated in the Listening Session.",
-      "happened": "You took a biscuit. It has been noted."
+      "happened": "You took a biscuit, and it has been noted."
     },
     {
       "when": {
@@ -902,7 +902,7 @@
         "flag": "bonus-to-boss"
       },
       "reported": "Your boss was recognised for outstanding leadership.",
-      "happened": "You suggested that. It was your idea, and everybody knows."
+      "happened": "You suggested that, so it was your idea, and everybody knows."
     },
     {
       "when": {
@@ -923,14 +923,14 @@
         "flag": "fixed-with-underspend"
       },
       "reported": "A minor licensing matter was regularised.",
-      "happened": "You spent it on what the project needed. Nobody will know."
+      "happened": "You spent it on what the project needed, and nobody will know."
     },
     {
       "when": {
         "flag": "returned-underspend"
       },
       "reported": "A budget variance was identified and is being investigated.",
-      "happened": "You gave the money back. Finance has no code for it."
+      "happened": "You gave the money back, and Finance has no code for it."
     },
     {
       "when": {
@@ -1203,7 +1203,7 @@
       "when": {
         "flag": "asked-how-it-works"
       },
-      "happened": "You asked how the forecast is worked out. Nobody knows."
+      "happened": "You asked how the forecast is worked out, and nobody knows."
     },
     {
       "floor": "middle-manager",
@@ -1319,7 +1319,7 @@
         "flag": "returned-transformation"
       },
       "reported": "Your team's transformation is being reprofiled.",
-      "happened": "You handed back the transformation budget. Another team has a consultant."
+      "happened": "You handed back the transformation budget, and another team has a consultant."
     },
     {
       "when": {

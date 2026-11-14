@@ -17,7 +17,7 @@
     "believed": {
       "believer": [
         "{who} writes it down, thanks you, and tells you what it will mean to people. You had not expected to be thanked for {what}.",
-        "{who} shakes your hand. Nobody here has ever shaken your hand about {what}, and they plainly think it is settled."
+        "{who} shakes your hand, which nobody here has ever done about {what}, and plainly thinks it is settled."
       ],
       "incompetent": [
         "{who} says that is great, and that they knew it would come together. They have not asked how, and {what} is now in their head as something that has already happened.",
@@ -30,24 +30,24 @@
     },
     "doubted": {
       "believer": [
-        "{who} says that is kind of you, and asks who has signed it off. Nobody has. They say they will wait until somebody has, thanks, because {what} has been offered here before.",
-        "{who} asks what the budget line is for {what}. You do not have one. They nod, in a way that closes the matter."
+        "{who} says that is kind of you and asks who has signed it off, and since nobody has, they will wait until somebody has, thanks, because {what} has been offered here before.",
+        "{who} asks what the budget line is for {what}, and when you do not have one, nods in a way that closes the matter."
       ],
       "incompetent": [
         "{who} says they have been told that sort of thing before, they think, by someone. They cannot remember who, but they do remember that {what} did not appear.",
         "{who} laughs, and when you do not laugh, stops, and says no, go on, {what}, really?"
       ],
       "practitioner": [
-        "{who} smiles and asks what you would like in return. You say nothing. They say that is what worries them about {what}.",
+        "{who} smiles and asks what you would like in return, and when you say nothing, says that is what worries them about {what}.",
         "{who} says that people do not offer {what} for nothing, and that they will wait to see what you are really after."
       ]
     },
     "letDown": [
-      "{who} looks at you for some time. \"You told me {what}. I am still waiting. Thank you, but no.\"",
-      "{who} does not look up. \"You said that the last time, about {what}. Put it in an email, and I will file it with the other one.\""
+      "{who} looks at you for some time. \"You told me {what}, and I am still waiting, so thank you, but no.\"",
+      "{who} does not look up. \"You said that the last time, about {what}, so put it in an email, and I will file it with the other one.\""
     ],
     "heard": [
-      "{who} says that you told {victim} {what}, and that it never happened. They heard all about it. They say no thank you.",
+      "{who} says that you told {victim} {what} and that it never happened, which they heard all about, so no thank you.",
       "{who} says they know about {victim} and {what}, because everybody does. They would rather you did not promise them anything, if it is all the same to you."
     ]
   },
@@ -90,7 +90,7 @@
             "sets": ["broke-a-promise"],
             "result": {
               "title": "Those laptops",
-              "body": "The Senior Analyst asks who in Procurement. You say it is more of a process. The shelf stays clear for a while, and then somebody puts a plant on it."
+              "body": "When the Senior Analyst asks who in Procurement, you say it is more of a process, and the shelf stays clear for a while, until somebody puts a plant on it."
             }
           },
           {
@@ -101,7 +101,7 @@
             "sets": ["broke-a-promise"],
             "result": {
               "title": "Those laptops",
-              "body": "You say next quarter, with a confidence you have borrowed from your boss. The Senior Analyst writes down next quarter. Neither of you has said which year."
+              "body": "You say next quarter, with a confidence you have borrowed from your boss, and the Senior Analyst writes down next quarter, although neither of you has said which year."
             }
           }
         ]
@@ -208,7 +208,7 @@
             "sets": ["broke-a-promise"],
             "result": {
               "title": "That opening",
-              "body": "You say it is the next one. The Project Co-ordinator asks whether that is in writing. It has now been asked in writing."
+              "body": "You say it is the next one, and the Project Co-ordinator asks, in writing, whether that is in writing."
             }
           },
           {

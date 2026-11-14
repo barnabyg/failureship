@@ -25,7 +25,7 @@
           {
             "gauge": "teflon",
             "by": 15,
-            "note": "The desk with no window came back, and you had done the training. It cost you a form."
+            "note": "The desk with no window came back, and since you had done the training, it cost you only a form."
           }
         ]
       },
@@ -59,7 +59,7 @@
               "opinion": -1,
               "result": {
                 "title": "The schedule",
-                "body": "You make the schedule that afternoon. The committee thanks you, and points out that the date you chose was a Sunday. It has noted this as well."
+                "body": "You make the schedule that afternoon, and the committee thanks you, and points out that the date you chose was a Sunday, which it has noted as well."
               }
             }
           ],
@@ -72,7 +72,7 @@
               "worked": {
                 "body": "The committee writes to the Office Co-ordinator about the training records, which are in a drawer, as records are.",
                 "reported": "Training records were found to be held locally, and will be digitised.",
-                "happened": "You said the Office Co-ordinator had the training records. There were no records."
+                "happened": "You said the Office Co-ordinator had the training records, but there were no records."
               },
               "failed": {
                 "body": "The Office Co-ordinator sends the committee the drawer's contents: a form for each of the team, unsigned, with your name at the top as the person to chase them.",
@@ -166,10 +166,10 @@
               "worked": {
                 "body": "Your boss asks the Project Co-ordinator to walk them through the report. The Project Co-ordinator does their best, and is thanked for their honesty, about something else.",
                 "reported": "A reporting discrepancy was traced to how the report was put together.",
-                "happened": "You said the Project Co-ordinator wrote your green report. It had your name in the footer."
+                "happened": "You said the Project Co-ordinator wrote your green report, but it had your name in the footer."
               },
               "failed": {
-                "body": "The Project Co-ordinator sends your boss the file's properties. Author: you. Last modified: you, at eleven at night.",
+                "body": "The Project Co-ordinator sends your boss the file's properties, which give you as the author, and as the last to modify it, at eleven at night.",
                 "mistake": "big"
               }
             },
@@ -180,10 +180,10 @@
               "worked": {
                 "body": "Your boss accepts that a forecast is a kind of status, and asks you to label them in future.",
                 "reported": "A status report was clarified as a forecast.",
-                "happened": "You said your green status had been a forecast. It had been a wish."
+                "happened": "You said your green status had been a forecast, but it had been a wish."
               },
               "failed": {
-                "body": "Your boss believes in reports, and has read this one properly. It says Status, at the top, in bold.",
+                "body": "Your boss believes in reports, and has read this one properly, down from the word Status, at the top, in bold.",
                 "mistake": "big"
               }
             },
@@ -220,12 +220,12 @@
               "label": "Say the Project Co-ordinator put that month's report together",
               "blames": "projects",
               "worked": {
-                "body": "Finance thanks the Project Co-ordinator for their engagement. The Project Co-ordinator does not know what they did.",
+                "body": "Finance thanks the Project Co-ordinator for their engagement, although the Project Co-ordinator does not know what they did.",
                 "reported": "A reporting discrepancy was traced to how the report was put together.",
-                "happened": "You said the Project Co-ordinator wrote your green report. It had your name in the footer."
+                "happened": "You said the Project Co-ordinator wrote your green report, but it had your name in the footer."
               },
               "failed": {
-                "body": "The Project Co-ordinator replies with the file's properties. Author: you. Last modified: you, at eleven at night.",
+                "body": "The Project Co-ordinator replies with the file's properties, which give you as the author, and as the last to modify it, at eleven at night.",
                 "opinion": -2
               }
             },
@@ -236,7 +236,7 @@
               "worked": {
                 "body": "Finance replies that forecasting is outside its remit, and closes the query.",
                 "reported": "A status report was clarified as a forecast.",
-                "happened": "You said your green status had been a forecast. It had been a wish."
+                "happened": "You said your green status had been a forecast, but it had been a wish."
               },
               "failed": {
                 "body": "Your boss was in the meeting where you said it was green now, not later, and replies to all to say so.",
@@ -284,7 +284,7 @@
           "as": "move",
           "from": "From: The Project Co-ordinator, Callum Reed",
           "title": "Apologies for the delay",
-          "body": "The Project Co-ordinator is very sorry that your figures are late. They have been very busy doing the work. They mention this twice, and look at your new chair while they do.",
+          "body": "The Project Co-ordinator is very sorry that your figures are late, having been very busy doing the work, and mentions this twice, looking at your new chair while doing so.",
           "sets": ["bonus-resented"],
           "opinion": -1,
           "project": {
@@ -415,7 +415,7 @@
           "as": "move",
           "from": "From: The Office Co-ordinator, Marjorie Tull",
           "title": "Minutes: for information",
-          "body": "The Office Co-ordinator has circulated the minutes of a meeting you went to months ago. They record that you made a valuable contribution. You did not speak. Your boss has read them, and has started nodding at you in the corridor.",
+          "body": "The Office Co-ordinator has circulated the minutes of a meeting you went to months ago, which record that you made a valuable contribution, although you did not speak, and your boss has read them and started nodding at you in the corridor.",
           "sets": ["minuted-kindly"],
           "opinion": 1
         },
@@ -443,12 +443,12 @@
               "label": "Say the action was meant for the Junior Associate",
               "blames": "associate",
               "worked": {
-                "body": "The Junior Associate accepts the cross-team synergy piece, and asks you what it is. You say it is a development opportunity.",
+                "body": "The Junior Associate accepts the cross-team synergy piece and asks you what it is, and you say it is a development opportunity.",
                 "reported": "The synergy action was reassigned as a development opportunity.",
                 "happened": "You gave the Junior Associate an action nobody had agreed to."
               },
               "failed": {
-                "body": "The Junior Associate replies to all, asking what meeting it was, and who was at it. The minutes say who was. It was you.",
+                "body": "The Junior Associate replies to all, asking what meeting it was and who was at it, and the minutes say who was, which was you.",
                 "opinion": -1
               }
             },
@@ -458,7 +458,7 @@
               "label": "Reply to all, asking whether this is the latest version of the minutes",
               "chance": 0.7,
               "worked": {
-                "body": "Three versions of the minutes go round in reply. In two of them the action has nobody's name on it.",
+                "body": "Three versions of the minutes go round in reply, and in two of them the action has nobody's name on it.",
                 "reported": "The minutes were revised following comments.",
                 "happened": "You asked which version was the latest, until there was one without your name."
               },
@@ -560,7 +560,7 @@
           "as": "move",
           "from": "From: A colleague on the fourth floor",
           "title": "Spot the difference",
-          "body": "A colleague you have never met has sent the whole floor two photographs. In one, you agree warmly with your boss. In the other, you nod beside your boss's boss, who is saying the opposite. The subject line is Spot the difference. Nineteen people have replied with the answer, which is you."
+          "body": "A colleague you have never met has sent the whole floor two photographs, one of you agreeing warmly with your boss, and the other of you nodding beside your boss's boss, who is saying the opposite. The subject line is Spot the difference, and nineteen people have replied with the answer, which is you."
         },
         "gauges": [
           {
@@ -587,7 +587,7 @@
           "as": "move",
           "from": "From: A colleague on the fourth floor",
           "title": "Spot the difference",
-          "body": "A colleague you have never met has sent the whole floor two photographs. In one, you agree warmly with your boss's boss. In the other, you laugh beside your boss, at a joke about synergy. The subject line is Spot the difference. Nineteen people have replied with the answer, which is you."
+          "body": "A colleague you have never met has sent the whole floor two photographs, one of you agreeing warmly with your boss's boss, and the other of you laughing beside your boss at a joke about synergy. The subject line is Spot the difference, and nineteen people have replied with the answer, which is you."
         },
         "gauges": [
           {
@@ -835,7 +835,7 @@
               "opinion": -1,
               "result": {
                 "title": "Your new hire",
-                "body": "Your boss asks how long onboarding takes. You say that it varies. Your boss writes down the date."
+                "body": "When your boss asks how long onboarding takes, you say that it varies, and your boss writes down the date."
               }
             },
             {
@@ -862,7 +862,7 @@
               "worked": {
                 "body": "Your boss asks the Senior Analyst why they signed it off. The Senior Analyst, who did not, is now very careful near your desk.",
                 "reported": "The sign-off of recruitment panels is under review.",
-                "happened": "You said the Senior Analyst signed off your friend's hire. They had recommended someone else."
+                "happened": "You said the Senior Analyst signed off your friend's hire, but they had recommended someone else."
               },
               "failed": {
                 "body": "The Senior Analyst sends your boss the e-mail recommending the other candidate, with your reply, which was a thumbs-up.",
@@ -910,10 +910,10 @@
               "worked": {
                 "body": "Your boss says that of course it did, and lets it go, and does not write that down.",
                 "reported": "A hire was confirmed as made through due process.",
-                "happened": "You told your boss there had been a panel. There had been a coffee."
+                "happened": "You told your boss there had been a panel, but there had been a coffee."
               },
               "failed": {
-                "body": "Your boss asks for the panel's notes. There are none. Your boss lets it be known that this, too, can stay between the two of you.",
+                "body": "Your boss asks for the panel's notes, and since there are none, lets it be known that this, too, can stay between the two of you.",
                 "why": "Your boss had already gone off you, and asked for the notes.",
                 "opinion": -1
               }
@@ -971,7 +971,7 @@
         "when": {
           "bossIs": "believer"
         },
-        "playedOut": "The consultant presented their findings. Your boss asked what they meant, and then what they had cost.",
+        "playedOut": "The consultant presented their findings, and your boss asked what they meant, and then what they had cost.",
         "bill": {
           "id": "consultant-unconvincing",
           "as": "move",
@@ -988,9 +988,9 @@
               "label": "Say the Programme Manager chose the consultant",
               "blames": "programme",
               "worked": {
-                "body": "Your boss writes to the Programme Manager about value for money. The Programme Manager adds it to the lessons log.",
+                "body": "Your boss writes to the Programme Manager about value for money, and the Programme Manager adds it to the lessons log.",
                 "reported": "Lessons about value for money were logged for the transformation budget.",
-                "happened": "You said the Programme Manager chose the consultant. You chose them at the coffee machine."
+                "happened": "You said the Programme Manager chose the consultant, but you chose them at the coffee machine."
               },
               "failed": {
                 "body": "The Programme Manager sends your boss the purchase order, which you raised, and the meeting invite, which you sent.",
@@ -1051,7 +1051,7 @@
           "as": "move",
           "from": "From: The Senior Analyst, Priya Venn",
           "title": "Version history",
-          "body": "The Senior Analyst has sent your boss their spreadsheet from last spring, which is the consultant's framework, with the version history attached. The colours are different. Nothing else is.",
+          "body": "The Senior Analyst has sent your boss their spreadsheet from last spring, with the version history attached, and it is the consultant's framework in different colours, with nothing else changed.",
           "sets": ["consultant-work-traced"],
           "opinion": -1,
           "escapes": [
@@ -1060,9 +1060,9 @@
               "kind": "lie",
               "label": "Say the framework is an industry standard, and both of them used it",
               "worked": {
-                "body": "Your boss accepts that frameworks are industry standard. The Senior Analyst adds a footnote to theirs: industry standard since last spring.",
+                "body": "Your boss accepts that frameworks are industry standard, and the Senior Analyst adds a footnote to theirs: industry standard since last spring.",
                 "reported": "The consultancy used a framework that is standard in the industry.",
-                "happened": "You said the Senior Analyst's spreadsheet was an industry standard. It is now."
+                "happened": "You said the Senior Analyst's spreadsheet was an industry standard, which it now is."
               },
               "failed": {
                 "body": "Your boss saw the Senior Analyst's spreadsheet last spring, and liked it then too.",
@@ -1141,7 +1141,7 @@
               "label": "Ask People and Culture to run an engagement survey",
               "chance": 0.5,
               "worked": {
-                "body": "The survey runs for six weeks. Its results are shown as a word cloud, and the biggest word is Valued.",
+                "body": "The survey runs for six weeks, and its results are shown as a word cloud in which the biggest word is Valued.",
                 "reported": "Team engagement was measured, and found to be valued.",
                 "happened": "You buried a resignation in a survey."
               },
@@ -1188,9 +1188,9 @@
               "kind": "lie",
               "label": "Say the letter was People and Culture's template",
               "worked": {
-                "body": "Your boss nods at People and Culture's template. People and Culture are asked to make the template warmer.",
+                "body": "Your boss nods at People and Culture's template, and People and Culture are asked to make it warmer.",
                 "reported": "Bonus letter templates are to be reviewed for tone.",
-                "happened": "You said People and Culture wrote your letter about resilience. You wrote it."
+                "happened": "You said People and Culture wrote your letter about resilience, but you wrote it."
               },
               "failed": {
                 "body": "Your boss signed off the letter, and remembers the word resilience, underlined, in your handwriting.",
@@ -1278,7 +1278,7 @@
               "worked": {
                 "body": "Your boss asks the Office Co-ordinator about the desk by the lift. The Office Co-ordinator says it is a temporary arrangement, which here means the opposite.",
                 "reported": "The desk by the lift is a temporary arrangement.",
-                "happened": "You said the Office Co-ordinator moved the Project Co-ordinator. You did."
+                "happened": "You said the Office Co-ordinator moved the Project Co-ordinator, but you did."
               },
               "failed": {
                 "body": "The Office Co-ordinator sends your boss the request to move the desk. It is from you, and the reason given is Questions.",
@@ -1488,7 +1488,7 @@
               "label": "Book the room at the same lunchtime, for a mandatory briefing",
               "chance": 0.6,
               "worked": {
-                "body": "Your briefing takes the room. Self-Directed Learning moves to the stairwell, where attendance is lower and the acoustics better.",
+                "body": "Your briefing takes the room, and Self-Directed Learning moves to the stairwell, where attendance is lower and the acoustics better.",
                 "reported": "A mandatory briefing was well attended.",
                 "happened": "You took the room away from a session about you."
               },
@@ -1566,7 +1566,7 @@
               "worked": {
                 "body": "Your boss's boss says that is how it should work: the thinking at your level, the typing below.",
                 "reported": "Slide forty was developed by the team lead and formatted by the team.",
-                "happened": "You said you wrote slide forty. You were asleep."
+                "happened": "You said you wrote slide forty, but you were asleep."
               },
               "failed": {
                 "body": "Your boss was copied on the e-mail at five in the morning, with slide forty attached, from the Junior Associate.",
@@ -1624,7 +1624,7 @@
               "label": "Ask IT to switch off the out-of-office",
               "chance": 0.7,
               "worked": {
-                "body": "IT switches it off, and asks if there is anything else. There is not, any more.",
+                "body": "IT switches it off and asks if there is anything else, and there is not, any more.",
                 "reported": "An out-of-office message was corrected.",
                 "happened": "You had an out-of-office switched off because it was true."
               },
@@ -1747,7 +1747,7 @@
               "label": "Forward the Board your own e-mail of the figure, dated Thursday",
               "chance": 0.5,
               "worked": {
-                "body": "The Board Office files both. Someone there notices that one is dated Thursday, and mentions it to someone upstairs.",
+                "body": "The Board Office files both, and someone there notices that one is dated Thursday, and mentions it to someone upstairs.",
                 "reported": "The Board received the figure on time, twice.",
                 "happened": "You made sure the Board saw who sent it first."
               },
@@ -1892,7 +1892,7 @@
               "worked": {
                 "body": "The Board Office accepts that you were checking. It asks whether checking is the same as getting it wrong, and decides not to find out.",
                 "reported": "A Board figure was confirmed as checked by the team lead.",
-                "happened": "You said you had only been checking the Senior Analyst's workings. They were the figure."
+                "happened": "You said you had only been checking the Senior Analyst's workings, but they were the figure."
               },
               "failed": {
                 "body": "Your boss was copied on the e-mail with the workings, and the Board Office has asked your boss.",
@@ -1921,7 +1921,7 @@
           "id": "the-e-mail-kept",
           "as": "notice",
           "title": "Slide seven",
-          "body": "Nobody mentions slide seven again. The Senior Analyst now copies you into everything, with the date in the subject line.",
+          "body": "Nobody mentions slide seven again, but the Senior Analyst now copies you into everything, with the date in the subject line.",
           "sets": ["the-e-mail-kept"]
         },
         "gauges": [

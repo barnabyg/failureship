@@ -10,7 +10,7 @@
     },
     "story": {
       "reported": "The company's security posture was validated by a real-world exercise.",
-      "happened": "Someone read everything, from a car park. Nobody can say how long for."
+      "happened": "Someone read everything from a car park, and nobody can say for how long."
     },
     "sets": ["breach-happened"]
   },
@@ -18,7 +18,7 @@
     "id": "reorganisation",
     "from": "From: Hugh Lamb, Head of Operations",
     "title": "Simplifying how we work",
-    "body": "Following a review, some reporting lines are being simplified. The Senior Analyst now reports directly to your boss's boss, which simplifies things for the Senior Analyst. Your boss remains your boss. A new chart is available, and the old chart has been recalled.",
+    "body": "Following a review, some reporting lines are being simplified, so the Senior Analyst now reports directly to your boss's boss, which simplifies things for the Senior Analyst, while your boss remains your boss. A new chart is available, and the old chart has been recalled.",
     "changed": "A reorganisation moved the Senior Analyst out from under your boss, and up.",
     "schedule": {
       "months": [3, 4],
@@ -40,7 +40,7 @@
     },
     "story": {
       "reported": "The organisation was simplified, and is now more agile.",
-      "happened": "The chart changed. Nothing else did, except who you can complain to."
+      "happened": "The chart changed, and nothing else did, except who you can complain to."
     },
     "sets": ["reorganised"]
   },
@@ -93,7 +93,7 @@
     "vacates": "movedUp",
     "story": {
       "reported": "The floor's leadership was recognised with an opportunity to lead elsewhere.",
-      "happened": "Your boss went upstairs. The seat stayed downstairs, empty, with everyone looking at it."
+      "happened": "Your boss went upstairs, and the seat stayed downstairs, empty, with everyone looking at it."
     },
     "sets": ["boss-seconded"]
   },
@@ -174,7 +174,7 @@
     "body": "A pipe that was not on any plan has emptied itself into the server room. Nobody could have known about it, and Facilities has a form saying so. Everything since Tuesday has gone, including, by coincidence, the good things.",
     "story": {
       "reported": "The company completed an unscheduled review of its data.",
-      "happened": "A pipe burst, and took everyone's work with it. It was nobody's fault, for once."
+      "happened": "A pipe burst and took everyone's work with it, and for once it was nobody's fault."
     },
     "project": {
       "real": "worse"
@@ -198,7 +198,7 @@
     },
     "story": {
       "reported": "The company welcomed a new phase of leadership.",
-      "happened": "The Chief Executive left in a hurry. Nobody on your floor had ever met them, so it changed nothing, and everything."
+      "happened": "The Chief Executive left in a hurry, and since nobody on your floor had ever met them, it changed nothing, and everything."
     },
     "sets": ["chief-executive-gone"]
   },
@@ -210,7 +210,7 @@
     "body": "A regulator has written about something that happened before any of you worked here. Nobody may delete anything until further notice. Everybody has now thought of something they wish they had deleted last week.",
     "story": {
       "reported": "The company is working openly with its regulators.",
-      "happened": "A letter arrived about something older than everyone. Everyone looked guilty anyway."
+      "happened": "A letter arrived about something older than everyone, and everyone looked guilty anyway."
     },
     "sets": ["regulator-wrote"]
   }

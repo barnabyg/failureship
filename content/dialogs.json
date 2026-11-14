@@ -5,7 +5,7 @@
     "lines": [
       {
         "speaker": "Your boss",
-        "text": "Chief Executive's back from that retreat. Goats, I think. Apparently we're not behind any more. We're exercising strategic patience."
+        "text": "The Chief Executive's back from that retreat, the one with the goats, and apparently we're not behind any more, we're exercising strategic patience."
       },
       {
         "speaker": "You",
@@ -13,10 +13,10 @@
       },
       {
         "speaker": "Your boss",
-        "text": "It's more expensive. Don't go spreading it about, nobody on our floor's heard it yet. Same again?"
+        "text": "It's more expensive, so don't go spreading it about, because nobody on our floor's heard it yet. Same again?"
       },
       {
-        "text": "Your boss buys a round and claims it as stakeholder engagement. You are the stakeholder."
+        "text": "Your boss buys a round and claims it as stakeholder engagement, with you as the stakeholder."
       }
     ]
   },
@@ -25,11 +25,11 @@
     "title": "The front row, 09:55",
     "lines": [
       {
-        "text": "You get to the front early. The only other person here is from Facilities, testing the chairs."
+        "text": "You get to the front early, where the only other person is from Facilities, testing the chairs."
       },
       {
         "speaker": "Facilities",
-        "text": "Nobody's early. Mind that one, it's been reported."
+        "text": "Nobody's early, but mind that one, because it's been reported."
       },
       {
         "speaker": "You",
@@ -37,7 +37,7 @@
       },
       {
         "speaker": "Facilities",
-        "text": "New north star, they tell me. I've been asked to keep the fire exit clear of it."
+        "text": "There's a new north star, they tell me, and I've been asked to keep the fire exit clear of it."
       },
       {
         "speaker": "You",
@@ -45,7 +45,7 @@
       },
       {
         "speaker": "Facilities",
-        "text": "You don't get there, as I understand it. You just face it."
+        "text": "As I understand it, you don't get there, you just face it."
       }
     ]
   },
@@ -55,7 +55,7 @@
     "lines": [
       {
         "speaker": "Salesperson",
-        "text": "Love the lanyard. So right now finance has its numbers, you have yours, and it all ends in a meeting. Am I close?"
+        "text": "I love the lanyard. So right now finance has its numbers and you have yours, and it all ends in a meeting. Am I close?"
       },
       {
         "speaker": "You",
@@ -63,7 +63,7 @@
       },
       {
         "speaker": "Salesperson",
-        "text": "With us, that's gone. You have a single source of truth."
+        "text": "With us, that's gone, and you have a single source of truth."
       },
       {
         "speaker": "You",
@@ -71,7 +71,7 @@
       },
       {
         "speaker": "Salesperson",
-        "text": "Yours. While I'm talking to you."
+        "text": "It's yours, while I'm talking to you."
       }
     ]
   }
