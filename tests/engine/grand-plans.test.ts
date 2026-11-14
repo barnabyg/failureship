@@ -17,6 +17,7 @@ import {
   titled,
   toldIn,
 } from "./grand-plan-fixture";
+import { notesIn } from "./landed";
 
 describe("the boss's Grand Plan", () => {
   const content = parseContent(raw());
@@ -32,6 +33,16 @@ describe("the boss's Grand Plan", () => {
       what: "BIG-PLAN-WHAT",
       status: "RUNNING-TO-2",
     });
+  });
+
+  it("is told, once, in the boss's own words as the ticket upstairs where it is first heard", () => {
+    const run = startRun({ seed: 1, content });
+    const view = run.choose(answer("plan-told", "noted"));
+
+    const upstairs = notesIn(view).filter((n) => n.title === "BOSS-UPSTAIRS");
+    expect(upstairs).toEqual([
+      expect.objectContaining({ body: "BIG-PLAN-IF-THIS-LANDS" }),
+    ]);
   });
 
   it("pleases one kind of boss and not another with the same completion", () => {

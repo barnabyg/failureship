@@ -493,6 +493,10 @@ brings a new one. A Plan is followed to its end whoever the player works for by 
   project** card shows its `title`, and its details its `what`, with where it has got to from
   `statuses`, of which `running` says `{month}`, the month it is due by. Text about a Plan should
   leave its deadline to that: a Scene can say `{plan}` for the title of your boss's Plan.
+- `upstairs` is a `title` and `body` left in the inbox as the player first hears of it, wherever
+  that is: the boss, in their own words, saying that the Plan done takes them upstairs and leaves
+  their seat behind. It says nothing of who would fill it. The card's line saying the same is
+  `grandPlanOpens` in [`ui.json`](#uijson).
 - `ways` are how it can be completed, each `how` it is done: `reality` or `appearance`. Every Plan
   needs at least one of each. The first way whose `when` holds, in time, completes it at once. A
   `when` reads only what the player did while the Plan ran, usually a flag set by a choice offered

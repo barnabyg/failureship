@@ -149,12 +149,16 @@ export function dropPlans(state: State, boss: string): void {
   }
 }
 
-/** The player hears of the boss's Plan here, if this is where it is told. */
+/**
+ * The player hears of the boss's Plan here, if this is where it is told, and
+ * the boss's own words on it as their ticket upstairs wait in the inbox.
+ */
 export function hearOfPlan(state: State, content: Content, id: string): void {
   const taken = planNow(state, content);
   const plan = taken && writtenPlan(content, taken.id);
   if (taken?.heard === null && plan?.heardIn.includes(id)) {
     taken.heard = state.month;
+    state.notes.push({ ...plan.upstairs });
   }
 }
 

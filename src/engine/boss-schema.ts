@@ -253,6 +253,12 @@ const grandPlan = z.strictObject({
   /** The Scenes and Notifications in which the player hears of it. */
   heardIn: z.array(id).min(1),
   /**
+   * Told in the inbox as the player first hears of it: the boss, in their own
+   * words, on the Plan as their ticket upstairs, so that the player knows that
+   * completing it opens the boss's seat. It never says who fills the seat.
+   */
+  upstairs: notice,
+  /**
    * What doing it for real needs, which one of `from` really has, dealt as the
    * Plan is taken on. The player has it once they have done `asked` of them.
    */

@@ -57,7 +57,8 @@ test("the floor stays open beside the inbox, and is dimmed and shut while a step
   await expect(page.getByTestId("step-tag")).toHaveCount(0);
   await readResult(page);
   await expect(stage).toHaveAttribute("data-floor", "open");
-  await expect(page.getByTestId("step-tag")).toHaveCount(0);
+  // Only the inbox's own tag is left, for the word from your boss the meeting left there.
+  await expect(page.getByTestId("step-tag")).toHaveText(/^Inbox · /);
   await expect(desk).toBeEnabled();
   await expect(desk).toContainText("Costs 1 action");
 });

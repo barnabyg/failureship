@@ -64,7 +64,8 @@ test.describe("the inbox", () => {
     );
     await page.getByTestId("inbox-hide").click();
     await expect(mail).toHaveCount(0);
-    await expect(page.getByTestId("inbox-item")).toHaveCount(3);
+    // Hearing of Hot-desking left a word from your boss in the inbox, to read.
+    await expect(page.getByTestId("inbox-item")).toHaveCount(4);
   });
 
   test("shows a recurring e-mail short after its first time, with its full text a click away", async ({

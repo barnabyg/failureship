@@ -14,6 +14,10 @@
       "what": "Your boss's Grand Plan is a single new tool for the whole floor, which will solve all of its problems. Nobody has said which problems. Doing it properly will need the real figures, and only one person on the floor really has those.",
       "lasts": 6,
       "heardIn": ["meeting", "new-tool"],
+      "upstairs": {
+        "title": "A word from your boss",
+        "body": "Your boss stops by your desk on the way out. \"If this tool lands, I'm going upstairs, and somebody else will be sitting in this chair.\" Your boss pats the chair, twice, as if it were already somebody else's."
+      },
       "needs": {
         "from": [
           {
@@ -226,6 +230,10 @@
       "what": "Your boss's Grand Plan is that nobody has a desk of their own, so that everyone has every desk. Nobody's desk is to be touched until it happens, which is to be soon.",
       "lasts": 3,
       "heardIn": ["hot-desks"],
+      "upstairs": {
+        "title": "A word from your boss",
+        "body": "Your boss lowers their voice. \"Get the floor hot-desking and I'm on the next lift up. Then my desk won't be mine any more, which is rather the point. Somebody will be at it.\""
+      },
       "ways": [
         {
           "id": "booked",
@@ -366,6 +374,10 @@
       "what": "Your boss's Grand Plan is a Centre of Excellence for the whole floor. Nobody has said what it is to excel at. It needs people in it doing real work, or a sign on a door.",
       "lasts": 4,
       "heardIn": ["leadership-induction", "centre-launch"],
+      "upstairs": {
+        "title": "A word from your boss",
+        "body": "Your boss catches you by the coffee. \"When the Centre opens, I'm going upstairs. This chair will be going spare.\""
+      },
       "ways": [
         {
           "id": "staffed",
@@ -505,6 +517,10 @@
       "what": "Your boss's Grand Plan is One Roadmap: everything Floor 3 is doing, on a single page, in order. It needs someone to decide what stops, or a slide with no dates on it.",
       "lasts": 3,
       "heardIn": ["welcome-floor-3", "board-offsite"],
+      "upstairs": {
+        "title": "A word from your boss",
+        "body": "Your boss closes the door. \"One Roadmap, and I go up to Portfolio. The view from there is mostly scaffolding, but it's a view. This office will be going to someone.\""
+      },
       "ways": [
         {
           "id": "decided",

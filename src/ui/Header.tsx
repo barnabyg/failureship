@@ -136,7 +136,7 @@ function OpenLine({
           type="button"
           className="status-card-part"
           data-testid="grand-plan-card"
-          title={`${panelText.grandPlanHeading}: ${grandPlan.title}. ${grandPlan.what}`}
+          title={`${panelText.grandPlanHeading}: ${grandPlan.title}. ${grandPlan.what} ${panelText.grandPlanOpens}`}
           onClick={onOpenProject}
         >
           <span className="status-card-label">

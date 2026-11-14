@@ -24,6 +24,8 @@ test("hear of your boss's Grand Plan, and complete it", async ({ page }) => {
   );
   await expect(card).toHaveAttribute("title", /One tool for everything/);
   await expect(card).toContainText("To be done by the end of month 6");
+  // Before month 2, the player is told what doing it means for the boss's seat.
+  await expect(card).toHaveAttribute("title", /seat opens behind them/);
 
   await freshRun(page, "/?seed=1&month=4");
   await expect(card).toHaveAttribute("title", /One tool for everything/);
@@ -40,6 +42,9 @@ test("hear of your boss's Grand Plan, and complete it", async ({ page }) => {
 
   await page.getByTestId("open-project").click();
   await expect(page.getByTestId("grand-plan-status")).toHaveText("Completed");
+  await expect(page.getByTestId("grand-plan-opens")).toContainText(
+    "your boss's ticket upstairs",
+  );
   await expect(page.getByTestId("grand-plan")).toContainText(
     "single new tool for the whole floor",
   );
