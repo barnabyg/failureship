@@ -11,10 +11,15 @@ import {
   playRun,
 } from "./real-runs";
 
+// Seed 2 played by CLIMB, once, for the three tests that read it. That it
+// wins in month 15 is also docs/playtest.md's, kept in playtest-seeds.test.ts.
+let climbed: ReturnType<typeof playRun> | undefined;
+const climbedOnSeed2 = () => (climbed ??= playRun(2, CLIMB));
+
 // How often each way of playing reaches the top is in tests/balance/the-climb-*.
 describe("the climb to the top of Floor 3", () => {
   it("can be won by a scripted run, and the results screen says how", () => {
-    const { views } = playRun(2, CLIMB);
+    const { views } = climbedOnSeed2();
     const results = views.at(-1)?.step;
     if (results?.kind !== "results") throw new Error("No results.");
     const won = views.findIndex((v) => v.step.kind === "win");
@@ -42,7 +47,7 @@ describe("the climb to the top of Floor 3", () => {
       const step = views.find((v) => v.step.kind === "win")?.step;
       return step?.kind === "win" ? step.lines.join(" ") : "";
     };
-    const forShow = standIn(playRun(2, CLIMB).views);
+    const forShow = standIn(climbedOnSeed2().views);
     const gotRid = standIn(
       climb(71, CLEAN, [...GET_RID, ...FOR_THE_SEAT], gameContent).views,
     );
@@ -52,7 +57,7 @@ describe("the climb to the top of Floor 3", () => {
   });
 
   it("rides the lift to Floor 3, to its own bosses, and its own rooms", () => {
-    const { views } = playRun(2, CLIMB);
+    const { views } = climbedOnSeed2();
     const floor3 = views.find((v) => v.job.id === "middle-manager");
     const places = new Set(floor3?.hotspots.map((h) => h.place));
 
