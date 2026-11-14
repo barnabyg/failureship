@@ -255,35 +255,9 @@ describe("the boss's approaches in content", () => {
   });
 });
 
-describe("playing the boss you have", () => {
-  // Whether adapting to the boss pays is in tests/balance/boss-kinds.test.ts.
-
-  it("never reveals the boss's kind in the player view before the run ends", () => {
-    const labels = /Believer|Incompetent|Practitioner/;
-    for (const seed of SEEDS.slice(0, 40)) {
-      const run = startRun({ seed, content: gameContent });
-      let view = run.view();
-      let walk = seed;
-      while (view.step.kind !== "results") {
-        expect(JSON.stringify(view)).not.toMatch(labels);
-        expect(JSON.stringify(view)).not.toMatch(
-          /"(kind|approach)":"(believer|incompetent|practitioner|theatre|truth)"/,
-        );
-        walk = (walk * 31 + 7) % 1009;
-        const safe = view.choices.filter(
-          (c) =>
-            !(
-              c.type === "action" &&
-              gameContent.actions.find((a) => a.id === c.actionId)?.findOut
-            ),
-        );
-        const choice = safe[walk % safe.length];
-        if (!choice) throw new Error(`Stuck at ${view.step.kind}.`);
-        view = run.choose(choice);
-      }
-    }
-  });
-});
+// Whether adapting to the boss pays is in tests/balance/boss-kinds.test.ts, and
+// that the player view never shows the boss's kind or an approach is in
+// tests/engine/real-content.test.ts.
 
 describe("the Annual Calibration's verdict", () => {
   // Whether it depends on the mood is in tests/balance/boss-kinds.test.ts.

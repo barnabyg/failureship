@@ -102,6 +102,9 @@ describe("the real month", () => {
       while (view.step.kind !== "results") {
         const seen = JSON.stringify(view);
         expect(seen).not.toMatch(/Believer|Incompetent|Practitioner/i);
+        expect(seen).not.toMatch(
+          /"(kind|approach)":"(believer|incompetent|practitioner|theatre|truth)"/,
+        );
         expect(seen).not.toContain("powerMap");
         for (const { fact } of characters) {
           if (fact) expect(seen).not.toContain(fact.text);
