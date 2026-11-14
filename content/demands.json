@@ -41,7 +41,7 @@
           "approach": "results",
           "result": {
             "title": "Meetings",
-            "body": "You go through the calendar and cancel half of it. Nothing happens. Nobody can find any evidence that anything has ever depended on these meetings, and several people are upset."
+            "body": "You go through the calendar and cancel half of it. Nobody can find any evidence that anything ever depended on those meetings, though several people are upset."
           }
         },
         {
@@ -63,7 +63,7 @@
           "approach": "hand-off",
           "result": {
             "title": "FW: Meetings",
-            "body": "The Office Co-ordinator accepts it without a word, and books a meeting to discuss it. You are invited."
+            "body": "The Office Co-ordinator accepts it without a word, and books a meeting to discuss it, to which you are invited."
           }
         },
         {
@@ -75,7 +75,7 @@
           "approach": "theatre",
           "result": {
             "title": "Meetings",
-            "body": "By Friday meetings are down by half, and workshops are up by the same amount. You send a chart. It has an arrow on it."
+            "body": "By Friday meetings are down by half and workshops are up by the same amount, so you send a chart with an arrow on it."
           }
         },
         {
@@ -93,7 +93,7 @@
       ],
       "forgotten": {
         "title": "Meetings",
-        "body": "A new message from your boss's boss arrives about a different thing entirely, and the meetings are not mentioned again. They continue. You remove the note from your screen."
+        "body": "A new message from your boss's boss arrives about a different thing entirely, and the meetings, which continue, are not mentioned again, so you remove the note from your screen."
       },
       "chased": {
         "from": "From: Your boss's boss, {head}",
@@ -120,7 +120,7 @@
             "approach": "neglect",
             "result": {
               "title": "RE: Meetings",
-              "body": "You say it again, with a date this time. It is a date in the past. Nobody replies, in a way that you can feel."
+              "body": "You say it again, this time with a date, which is in the past, and nobody replies, in a way that you can feel."
             }
           }
         ]
@@ -152,7 +152,7 @@
           "approach": "push-back",
           "result": {
             "title": "RE: FW: This solves ALL your problems",
-            "body": "You ask it as a real question. A long time goes by, in which your boss could be doing anything."
+            "body": "You ask it as a real question, and a long time goes by, in which your boss could be doing anything."
           }
         },
         {
@@ -175,7 +175,7 @@
           "approach": "theatre",
           "result": {
             "title": "This solves ALL your problems",
-            "body": "The icon opens an empty folder. Three people have told you it is already saving them time."
+            "body": "The icon opens an empty folder, which three people have told you is already saving them time."
           }
         },
         {
@@ -187,7 +187,7 @@
           "approach": "stall",
           "result": {
             "title": "RE: FW: This solves ALL your problems",
-            "body": "Your boss replies with a thumbs up. The word evaluated seems to have the force of a finished thing. You make a note to find out what you have evaluated."
+            "body": "Your boss replies with a thumbs up, as the word evaluated seems to have the force of a finished thing, and you make a note to find out what you have evaluated."
           }
         }
       ],
@@ -209,7 +209,7 @@
             "approach": "late-answer",
             "result": {
               "title": "The evaluation",
-              "body": "You write nine pages, from the company's own website. It concludes that further evaluation is needed. You are told it is exactly what was wanted, and that it is late."
+              "body": "You write nine pages from the company's own website, concluding that further evaluation is needed, and are told that it is exactly what was wanted, and late."
             }
           },
           {
@@ -220,7 +220,7 @@
             "approach": "neglect",
             "result": {
               "title": "RE: The evaluation",
-              "body": "You are asked to confirm the end date. You confirm one. It has now been written down, and copied to people you have never met."
+              "body": "When you are asked to confirm the end date you confirm one, and it is written down and copied to people you have never met."
             }
           }
         ]
@@ -265,7 +265,7 @@
           "approach": "hand-off",
           "result": {
             "title": "FW: Travel",
-            "body": "The Project Co-ordinator thanks you, in the voice of someone who has been handed a lot of things. A spreadsheet goes round. Your name is on it, as the sponsor."
+            "body": "The Project Co-ordinator thanks you in the voice of someone who has been handed a lot of things, and a spreadsheet goes round with your name on it, as the sponsor."
           }
         },
         {
@@ -277,7 +277,7 @@
           "approach": "theatre",
           "result": {
             "title": "Travel",
-            "body": "You confirm that it is in hand. People go on travelling, and put it down as something else. The saving is reported upstairs, and looks very good."
+            "body": "You confirm that it is in hand, and people go on travelling and put it down as something else, while the saving is reported upstairs, where it looks very good."
           }
         },
         {
@@ -289,7 +289,7 @@
           "approach": "stall",
           "result": {
             "title": "RE: Travel",
-            "body": "Nobody replies. Implications, you are starting to learn, are something that can take as long as you need."
+            "body": "Nobody replies, and you are starting to learn that implications can take as long as you need."
           }
         }
       ],
@@ -311,7 +311,7 @@
             "approach": "late-answer",
             "result": {
               "title": "Travel",
-              "body": "You send it with four minutes to spare. It has one mistake in it, and that is the part everyone reads."
+              "body": "You send it with four minutes to spare, and it has one mistake in it, which is the part everyone reads."
             }
           },
           {
@@ -343,7 +343,7 @@
         "approach": "results",
         "result": {
           "title": "Your action",
-          "body": "It takes most of a day to establish what the action was. You do it. The next set of minutes records it as completed by the Office Co-ordinator."
+          "body": "It takes you most of a day to establish what the action was and do it, and the next set of minutes records it as completed by the Office Co-ordinator."
         }
       },
       {
@@ -354,7 +354,7 @@
         "approach": "push-back",
         "result": {
           "title": "RE: Your action",
-          "body": "You point out that you were not there. You are sent the minutes, as proof that you were."
+          "body": "When you point out that you were not there, you are sent the minutes, as proof that you were."
         }
       },
       {
@@ -365,7 +365,7 @@
         "approach": "hand-off",
         "result": {
           "title": "FW: Your action",
-          "body": "You forward it with the words \"as discussed\". Nothing was discussed. It has worked before, and it works now."
+          "body": "You forward it with the words \"as discussed\", although nothing was discussed, and it works now, as it has before."
         }
       },
       {
@@ -389,13 +389,13 @@
         "approach": "stall",
         "result": {
           "title": "RE: Your action",
-          "body": "The next set of minutes records that it is being looked at. You are now recorded as looking at it."
+          "body": "The next set of minutes records that it is being looked at, and that you are the one looking at it."
         }
       }
     ],
     "forgotten": {
       "title": "Your action",
-      "body": "The new minutes have a new format, with fewer columns. Your action was in one of the other columns. You do not bring it up."
+      "body": "The new minutes have a new format with fewer columns, and since your action was in one of the other columns, you do not bring it up."
     },
     "chased": {
       "from": "From: The Office Co-ordinator, Marjorie Tull",
@@ -422,7 +422,7 @@
           "approach": "neglect",
           "result": {
             "title": "RE: Your action",
-            "body": "It stays in red. The Office Co-ordinator has started a new column, and it has your name at the top."
+            "body": "It stays in red, and the Office Co-ordinator has started a new column with your name at the top."
           }
         }
       ]
@@ -431,15 +431,15 @@
       {
         "id": "minutes-item",
         "title": "The minutes have been circulated",
-        "body": "You did not go to this month's meeting. The minutes have gone round anyway, and they record an action against your name. Nobody remembers agreeing it, including the person who wrote it down. It is due on Friday.",
+        "body": "You did not go to this month's meeting, but the minutes have gone round anyway, recording an action against your name that nobody remembers agreeing, including the person who wrote it down. It is due on Friday.",
         "from": "From: The Office Co-ordinator, Marjorie Tull",
         "subject": "ACTION: your name is in the minutes",
-        "ask": "The minutes say that you are to \"progress the outstanding item\". There are several outstanding items. Friday has gone, and the Office Co-ordinator would like an update for next month's minutes."
+        "ask": "The minutes say that you are to \"progress the outstanding item\", of which there are several. Friday has gone, and the Office Co-ordinator would like an update for next month's minutes."
       },
       {
         "id": "minutes-fire-doors",
         "title": "Thanks for picking this up",
-        "body": "In your absence, the meeting agreed that you were best placed to take this forward. The minutes do not say what this is. Someone who was there thinks it may be to do with the fire doors. It is due on Friday.",
+        "body": "In your absence, the meeting agreed that you were best placed to take this forward, although the minutes do not say what this is, and someone who was there thinks it may be to do with the fire doors. It is due on Friday.",
         "from": "From: The Office Co-ordinator, Marjorie Tull",
         "subject": "ACTION: the thing you are taking forward",
         "ask": "You are recorded as taking this forward. It does seem to be to do with the fire doors, and the fire doors have asked for a named owner."
@@ -458,12 +458,12 @@
         "body": "The meeting asked for a volunteer, and looked round the room. Your chair was the only one that did not object. You will find your name in the minutes against the Christmas party.",
         "from": "From: The Office Co-ordinator, Marjorie Tull",
         "subject": "ACTION: the Christmas party",
-        "ask": "You own the Christmas party. It is not clear which Christmas. Someone from Facilities would like to know your numbers."
+        "ask": "You own the Christmas party, although it is not clear which Christmas, and someone from Facilities would like to know your numbers."
       },
       {
         "id": "minutes-summary",
         "title": "Matters arising",
-        "body": "The minutes record that you will circulate a summary of the discussion. You were not at the discussion. They also record that you spoke well.",
+        "body": "The minutes record that you will circulate a summary of a discussion you were not at, and also that you spoke well.",
         "from": "From: The Office Co-ordinator, Marjorie Tull",
         "subject": "ACTION: your summary of the discussion",
         "ask": "Your summary of a discussion you did not attend is now overdue. Two people have asked to see it before it goes out, in case it mentions them."
@@ -471,7 +471,7 @@
       {
         "id": "minutes-drive",
         "title": "Any other business",
-        "body": "Under Any Other Business, someone said that the shared drive was a mess. Someone else said that you knew about the shared drive. The minutes say that you are reviewing it.",
+        "body": "Under Any Other Business, someone said that the shared drive was a mess and someone else said that you knew about the shared drive, so the minutes say that you are reviewing it.",
         "from": "From: The Office Co-ordinator, Marjorie Tull",
         "subject": "ACTION: the review of the shared drive",
         "ask": "Your review of the shared drive is expected. The drive has eleven years in it, and a folder called DO NOT DELETE, which is empty."
@@ -495,7 +495,7 @@
       {
         "id": "minutes-register",
         "title": "A note of thanks",
-        "body": "The minutes thank you for your kind offer to review the risk register. You have made no such offer. It has been noted that you were not there to withdraw it.",
+        "body": "The minutes thank you for your kind offer to review the risk register, which you never made, and note that you were not there to withdraw it.",
         "from": "From: The Office Co-ordinator, Marjorie Tull",
         "subject": "ACTION: review the risk register",
         "ask": "You kindly offered to review the risk register. It is due, and it has a new risk on it, which is that nobody has reviewed the risk register."
@@ -511,7 +511,7 @@
       {
         "id": "minutes-lessons",
         "title": "Lessons have been learned",
-        "body": "The minutes record that lessons were learned at the meeting, and that you are to write them down. Nobody minuted what they were. It is due on Friday.",
+        "body": "The minutes record that lessons were learned at the meeting and that you are to write them down, although nobody minuted what they were. It is due on Friday.",
         "from": "From: The Office Co-ordinator, Marjorie Tull",
         "subject": "ACTION: write down the lessons",
         "ask": "The lessons you are to write down are still unknown. The Office Co-ordinator suggests you write down some lessons, and see whether anyone objects."
@@ -519,7 +519,7 @@
       {
         "id": "minutes-champion",
         "title": "You are now a champion",
-        "body": "The meeting needed a champion for the new values, and you were the only person not there to look busy. The badge is on your desk. It is due on Friday.",
+        "body": "The meeting needed a champion for the new values, and since you were the only person not there to look busy, the badge is on your desk. It is due on Friday.",
         "from": "From: The Office Co-ordinator, Marjorie Tull",
         "subject": "ACTION: champion the values",
         "ask": "As a values champion, you are to report on how the values are landing. There are five of them, and nobody can name the fourth."
@@ -527,15 +527,15 @@
       {
         "id": "minutes-survey",
         "title": "The survey is yours",
-        "body": "The meeting agreed to survey everybody about meetings, and that you would run it. The survey has eleven questions, one of which is about this meeting. It is due on Friday.",
+        "body": "The meeting agreed to survey everybody about meetings, with you running it, in eleven questions, one of which is about this meeting. It is due on Friday.",
         "from": "From: The Office Co-ordinator, Marjorie Tull",
         "subject": "ACTION: the survey about meetings",
-        "ask": "Your survey about meetings has had three replies. One of them is a complaint about the survey. The Office Co-ordinator would like the findings."
+        "ask": "Your survey about meetings has had three replies, one of them a complaint about the survey, and the Office Co-ordinator would like the findings."
       },
       {
         "id": "minutes-sign-off",
         "title": "Awaiting your sign-off",
-        "body": "In your absence, a document was agreed subject to your sign-off. Nobody has told you which document, and the document has gone ahead without you. It is due on Friday.",
+        "body": "In your absence, a document was agreed subject to your sign-off, although nobody has told you which document, and it has gone ahead without you. It is due on Friday.",
         "from": "From: The Office Co-ordinator, Marjorie Tull",
         "subject": "ACTION: sign this off",
         "ask": "The document awaiting your sign-off has already been signed off by someone else, on your behalf. Your sign-off is still awaited, for the record."
@@ -551,7 +551,7 @@
       {
         "id": "minutes-follow-up",
         "title": "A follow-up has been scheduled",
-        "body": "The meeting scheduled a follow-up meeting to cover what this one did not, and you are to organise it. Nobody knows what this one did not cover. It is due on Friday.",
+        "body": "The meeting scheduled a follow-up meeting, for you to organise, to cover what this one did not, although nobody knows what that was. It is due on Friday.",
         "from": "From: The Office Co-ordinator, Marjorie Tull",
         "subject": "ACTION: organise the follow-up",
         "ask": "Your follow-up has been booked into a room that is being refurbished. The Office Co-ordinator would like to know whether to book another, or the same one, later."
@@ -559,10 +559,10 @@
       {
         "id": "minutes-risk-owner",
         "title": "You own a risk",
-        "body": "The meeting found a new risk, and assigned it to the person who was not there to discuss it. The risk is that nobody owns the risks. It is due on Friday.",
+        "body": "The meeting found a new risk, that nobody owns the risks, and assigned it to the person who was not there to discuss it. It is due on Friday.",
         "from": "From: The Office Co-ordinator, Marjorie Tull",
         "subject": "ACTION: own the risk",
-        "ask": "As owner of the risk that nobody owns the risks, you are to report on its status. It is now owned."
+        "ask": "As owner of the risk that nobody owns the risks, you are to report on its status, which is that it is now owned."
       },
       {
         "id": "minutes-catch-up",
