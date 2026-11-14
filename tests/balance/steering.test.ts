@@ -5,27 +5,8 @@ import { readHiddenTruth } from "../../src/engine/hidden-truth";
 import { attendsEverything, walk } from "../engine/walk";
 import { behavioursIn } from "../engine/scene-view";
 
-describe("the whole run", () => {
-  it("always says what the player can do, on every seed and pick", () => {
-    for (let seed = 1; seed <= 40; seed++) {
-      const { views } = walk(seed, (view, turn) => {
-        const choice =
-          view.choices[(seed * 7 + turn * 3) % view.choices.length];
-        if (!choice) throw new Error("No choice.");
-        return choice;
-      });
-
-      for (const view of views) {
-        expect(view.hint.trim()).not.toBe("");
-        expect(JSON.stringify(view)).not.toMatch(
-          /\{(holder|ignored|bystander|subject|who|name|fact|source|said)\}/,
-        );
-      }
-      expect(views.at(-1)?.step.kind).toBe("results");
-    }
-  });
-});
-
+// That every step of a run gives a hint and finished text is checked over
+// many more runs, and more ways of playing, in the ways-*.test.ts files.
 describe("the balance of the deal", () => {
   // Half the seeds move each average below by under 0.01. Their thin limit is
   // `perfect`, at 0.36 against 0.40, and that is about the limit and not the count.
